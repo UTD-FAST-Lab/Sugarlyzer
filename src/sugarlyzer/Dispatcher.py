@@ -1,12 +1,14 @@
 import argparse
 import logging
 
+import docker as docker
+
 logging.basicConfig(level=logging.DEBUG)
 import os
 import importlib.resources
 import subprocess
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Optional, Container
 
 
 def get_dirs_in_package(package: str) -> List[str]:
@@ -28,7 +30,8 @@ p.add_argument('-p', '--programs', help='Programs to run on', nargs='+',
                choices=(programs :=
                         list(filter(lambda x: not x.startswith('__'), get_dirs_in_package('resources.programs')))),
                default=programs)
-p.add_argument('--no-cache', help="Build all images fresh without using Docker's cache.")
+p.add_argument('-r', '--results', help='Location to put results', default='results')
+p.add_argument('--no-cache', help="Build all images fresh without using Docker's cache.", action='store_true')
 args = p.parse_args()
 
 logger = logging.getLogger(__name__)
@@ -75,6 +78,28 @@ def build_images(tools: List[str], nocache: bool = False) -> None:
         logging.debug(ps.stdout)
 
 
+def start_tester(t, args) -> None:
+    """
+    :param t: The name of the tool.
+    :param args: The command-line arguments # TODO Limit only to those we need.
+    """
+    Path(os.path.abspath(args.results)).mkdir(exist_ok=True, parents=True)
+    for p in args.programs:
+        command = f"tester {t} {p}"
+        cntr : Container = docker.from_env().containers.run(
+            image = get_image_name(t),
+            command = "/bin/bash",
+            detach = True,
+            tty = True,
+            volumes = {os.path.abspath(args.results) : {"bind": "/results", "mode": "rw"}},
+            auto_remove=True
+        )
+        _, log_stream = cntr.exec_run(cmd = command, stream = True)
+        logger.info(f"Started container with cmd {command}")
+        for l in log_stream():
+            print(l.decode())
+
+
 class Dispatcher:
 
     def main(self, args) -> None:
@@ -83,6 +108,8 @@ class Dispatcher:
         :param args: The command-line arguments.
         """
         build_images(args.tools)
+        for t in tools:
+            start_tester(t, args)
 
 
 if __name__ == '__main__':
