@@ -2,13 +2,14 @@ import argparse
 import logging
 
 import docker as docker
+from docker.models.containers import Container
 
 logging.basicConfig(level=logging.DEBUG)
 import os
 import importlib.resources
 import subprocess
 from pathlib import Path
-from typing import List, Optional, Container
+from typing import List, Optional
 
 
 def get_dirs_in_package(package: str) -> List[str]:
@@ -17,6 +18,7 @@ def get_dirs_in_package(package: str) -> List[str]:
     :param package: The name of the package.
     :return: A list of directories.
     """
+    # noinspection PyTypeChecker
     _, dirs, _ = next(os.walk(importlib.resources.path(package, '')))
     return dirs
 
@@ -49,6 +51,7 @@ def get_image_name(tool: Optional[str]) -> str:
         return f"sugarlyzer/{tool}"
 
 
+# noinspection PyListCreation
 def build_images(tools: List[str], nocache: bool = False) -> None:
     """
     Builds the Docker images for the base image and any provided tools.
@@ -100,17 +103,14 @@ def start_tester(t, args) -> None:
             print(l.decode())
 
 
-class Dispatcher:
-
-    def main(self, args) -> None:
-        """
-        Build images, and start the Sugarlyzer process within each container.
-        :param args: The command-line arguments.
-        """
-        build_images(args.tools)
-        for t in tools:
-            start_tester(t, args)
+def main() -> None:
+    """
+    Build images, and start the Sugarlyzer process within each container.
+    """
+    build_images(args.tools)
+    for t in tools:
+        start_tester(t, args)
 
 
 if __name__ == '__main__':
-    Dispatcher().main(args)
+    main()
