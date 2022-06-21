@@ -1,0 +1,2 @@
+scanbuild=~/Documents/Research/llvm12/llvm-project-llvmorg-12.0.1/build/bin/scan-build
+clang=~/Documents/Research/llvm12/llvm-project-llvmorg-12.0.1/build/bin/clang
