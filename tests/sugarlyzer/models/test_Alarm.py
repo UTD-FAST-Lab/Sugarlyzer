@@ -30,3 +30,7 @@ def test_alarm_sanitize_no_var_names_invariant(alarm: Alarm):
 @given(build_alarm(strings=from_regex(r" \[.*\]$")))
 def test_alarm_sanitize_no_brackets(alarm: Alarm):
     assert (not re.match(r" \[.*\]$", alarm.sanitized_message))
+
+@given(build_alarm(), build_alarm())
+def test_alarm_unique_ids(alarm1: Alarm, alarm2: Alarm):
+    assert(alarm1.id != alarm2.id)
