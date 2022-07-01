@@ -1,7 +1,9 @@
-import typing
+from typing import List, Dict, ClassVar, Optional
 from dataclasses import dataclass, field
 import itertools
 import re
+
+from z3.z3 import ModelRef
 
 
 @dataclass
@@ -14,11 +16,15 @@ class Alarm:
     message: str
 
     # -- Class variables
-    __id_generator: typing.ClassVar[itertools.count] = itertools.count()
+    __id_generator: ClassVar[itertools.count] = itertools.count()
 
     # -- Instance variables that should not be initialized in the constructor.
     id: int = field(init=False)
     __sanitized_message: str = field(init=False, default=None)
+    asserts: List[Dict[str, str | bool]] = field(init=False, default_factory=list)
+    feasible: Optional[bool] = field(init=False, default=None)
+    model: Optional[ModelRef] = field(init=False, default=None)
+    correlated_lines: Optional[str] = field(init=False, default="")
 
     def __post_init__(self):
         self.id = next(Alarm.__id_generator)
