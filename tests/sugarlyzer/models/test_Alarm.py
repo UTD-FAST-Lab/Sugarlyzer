@@ -10,11 +10,11 @@ from src.sugarlyzer.models.Alarm import Alarm
 def build_alarm(draw,
                 strings=text(),
                 nums=integers()):
-    return Alarm(file = draw(strings),
-                 start_line = draw(nums),
-                 end_line = draw(nums),
-                 alarm_type = draw(strings),
-                 message = draw(strings))
+    return Alarm(file=draw(strings),
+                 start_line=draw(nums),
+                 end_line=draw(nums),
+                 alarm_type=draw(strings),
+                 message=draw(strings))
 
 
 @given(build_alarm())
@@ -31,6 +31,7 @@ def test_alarm_sanitize_no_var_names_invariant(alarm: Alarm):
 def test_alarm_sanitize_no_brackets(alarm: Alarm):
     assert (not re.match(r" \[.*\]$", alarm.sanitized_message))
 
+
 @given(build_alarm(), build_alarm())
 def test_alarm_unique_ids(alarm1: Alarm, alarm2: Alarm):
-    assert(alarm1.id != alarm2.id)
+    assert (alarm1.id != alarm2.id)
