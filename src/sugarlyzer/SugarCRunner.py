@@ -1,302 +1,320 @@
 import os
-import subprocess
-from typing import Tuple, Optional
 import re
+import subprocess
+from dataclasses import dataclass, field
+from typing import Tuple, List, Optional, Dict
 
-userDefs = '/tmp/__sugarlyzerPredefs.h'
+from z3.z3 import Solver, sat
 
+from src.sugarlyzer.models.Alarm import Alarm
 
-class SugarCRunner:
-    def desugar(self, source_location) -> str:
-        """
-        Given a file, desugar it.
-        :param source_location: The location of the C source file.
-        :return: The location of the desugared file.
-        """
-
-        # TODO: Does SugarC need any other parameters? Does it edit files in-place?
-        pass
+USER_DEFS = '/tmp/__sugarlyzerPredefs.h'
 
 
-class Sugarlyzer:
-    def __init__(self):
-        self._file_name = ''
-        self.userDefinedMacros = ''
-        self.desugared_file = ''
+def get_recommended_space(file: str) -> str:
+    """
+    Explores the provided file. Looks for inclusion guards or other
+    macros that would be assumed to be false and recommends them to be turned off.
+    Also grabs the default conditions of the machine provided by gcc.
 
-    @property
-    def file_name(self):
-        return self._file_name
+    :param file: The file to read and determines the recommended configuration space.
+    :return: A string to be added to an included file in desugaring
+    """
 
-    @file_name.setter
-    def file_name(self, file_name: str):
-        """
-        Specifies the file that will be desugared and analyzed.
-
-        :param file_name: absolute path of the file
-        :return: None
-        """
-        self._file_name = os.path.abspath(file_name)
-
-    def get_recommended_space(self) -> str:
-        """
-        Explores the file provided in setFile. Looks for inclusion guards or other
-        macros that would be assumed to be false and recommends them to be turned off.
-        Also grabs the default conditions of the machine provided by gcc.
-
-        :return: A string to be added to an included file in desugaring
-        """
-
-        # still need to create the code to search for inclusion guards
-        return os.popen('echo | gcc -dM -E -').read()
-
-    def desugar_file(self,
-                     user_defined_space: str,
-                     output_file='',
-                     log_file='',
-                     remove_errors=False,
-                     no_stdlibs=False,
-                     commandline_args=[],
-                     included_files=[],
-                     included_directories=[]) -> Tuple[str, str]:
-        """
-        Runs the SugarC command.
-
-        :param user_defined_space: defines and undefs to be assumed while desugaring
-        :param output_file: If provided, will specify the location of the output. Otherwise tacks on .desugared.c to the end of the base file name
-        :param log_file: If provided will specify the location of the logged data. Otherwise tacks on .Log to the end of the base file name
-        :param remove_errors: Whether or not the desugared output should be re-run to remove bad configurations
-        :param no_stdlibs: If this machine's standard library should be used or not.
-        :param commandline_args: A list of other commandline arguments SugarC is to use.
-        :param included_files: A list of individual files to be included. (The config space is always included, and does not need to be specified)
-        :param included_directories: A list of directories to be included.
-        :return:
-        """
-
-        included_files = list(zip(['-include']*len(included_files), included_files))
-        included_directories = list(zip(['-I']*len(included_directories), included_directories))
-        commandline_args = ['-nostdinc', *commandline_args] if no_stdlibs else commandline_args
-
-        match output_file:
-            case '' | None: self.desugared_file = self.file_name + '.desugared.c'
-            case _ : self.desugared_file = os.path.abspath(output_file)
-
-        match log_file:
-            case '' | None: log_file = self.file_name + '.log'
-            case _ : log_file = os.path.abspath(log_file)
-
-        cmd = ['java', 'superc.Sugar', *commandline_args, *included_files, *included_directories, self.file_name, ">",
-               self.desugared_file, "2>", log_file]
-
-        with open(userDefs, 'w') as outFile:
-            outFile.write(user_defined_space + "\n")
-            if remove_errors:
-                toAppend = ['']
-                while len(toAppend) > 0:
-                    for d in toAppend:
-                        outFile.write(d + "\n")
-                    subprocess.run(cmd)
-                    toAppend = getBadConstraints(self.desugared_file)
-
-        subprocess.run(cmd)
-        return self.desugared_file, log_file
-
-    def analyze(self, report_location: Optional[str]) -> str:
-        """
-        Runs the analysis, and compiles the results into a report.
-
-        :param report_location: If provided, will specify the location of the report. Otherwise, we will just
-        tack .report to the end of the base file name.
-        :return: A report containing all results.
-        """
-
-        ids = {}
-        replacers = {}
-        ls = []
-        varis = {}
-        fl = open(self.desugared_file, 'r')
-        for l in fl:
-            ls.append(l)
-            getConditionMapping(l, ids, varis, replacers, False)
-        fl.close()
-        alarms = self.runAnalyzer(self.desugared_file, True)
-        reportstr = ''
-        for w in alarms:
-            checkNonFlow(w, self.desugared_file)
-            s = Solver()
-            for a in w['asserts']:
-                if a['val']:
-                    s.add(eval(replacers[a['var']]))
-                else:
-                    s.add(eval('Not(' + replacers[a['var']] + ')'))
-            if s.check() == sat:
-                m = s.model()
-                w['feasible'] = True
-                w['model'] = m
-                w['correNum'] = getCorrelateLine(self.desugared_file, w['loc'])
-                reportstr += str(w) + '\n'
-            else:
-                print('impossible constraints')
-                w['feasible'] = False
-                w['correNum'] = '-1'
-        return reportstr
-
-    # Clean up Analyzer calls
-
-    @abstractmethod
-    def runAnalyzer(self, fileName: str, isDesugared: bool) -> list:
-        '''Runs the command to analyze the file. isDesugared is marked as True or False
-    specifying whether or not the file being analyzed is the desugared output. This way
-    a different approach can be used for both. Alarms are then to be broken down and
-    returned.
-
-    Parameters:
-    fileName (str):The file to be analyzed, absolute path
-    isDesugared (bool): whether or not the file to be analyzed is the desugared output or not
-
-    Returns:
-    list: a list of alarm objects
-    '''
-        pass
-
-def getCorrelateLine(fpa, loc):
-    lin = int(loc.split(',')[0][5:])
-    fl = open(fpa, 'r')
-    lines = fl.read().split('\n')
-    theLine = lines[lin - 1]
-    if '// L' not in theLine:
-        return '0'
-    return theLine.split('// L')[1]
+    # still need to create the code to search for inclusion guards
+    return os.popen('echo | gcc -dM -E -').read()
 
 
-def checkNonFlow(w, fpa):
-    '''
-  Logic is as follows, we take advantage off the fact that we always use braces
-  We start at our line number and reverse search up. Whenever we find a }
-  we skip lines until we match {. This way we can only explore up a scope level
-  If we find a __static_condition_renaming, we are in logically true,
-  global scope, or in a function without an explicit condition in the body
-  '''
-    if len(w['lines']) == 1:
-        ff = open(fpa, 'r')
-        lines = ff.read().split('\n')
-        Rs = 0
-        l = int(w['lines'][0]) - 1
-        while l >= 0:
-            Rs += lines[l].count('}')
-            m = re.match('if \((__static_condition_default_\d+)\).*', lines[l])
-            if Rs == 0 and m:
-                w['asserts'].append({'var': str(m.group(1)), 'val': True})
-            Rs -= lines[l].count('{')
-            if Rs < 0:
-                Rs = 0
-            l -= 1
-        ff.close()
+def desugar_file(file_to_desugar: str,
+                 user_defined_space: str,
+                 output_file: str = '',
+                 log_file: str = '',
+                 remove_errors: bool = False,
+                 no_stdlibs: bool = False,
+                 commandline_args: Optional[List[str]] = None,
+                 included_files: Optional[List[str]] = None,
+                 included_directories: Optional[List[str]] = None) -> Tuple[str, str]:
+    """
+    Runs the SugarC command.
+
+    :param file_to_desugar: The C source code file to desugar.
+    :param user_defined_space: defines and undefs to be assumed while desugaring
+    :param output_file: If provided, will specify the location of the output. Otherwise tacks on .desugared.c to the end of the base file name
+    :param log_file: If provided will specify the location of the logged data. Otherwise tacks on .Log to the end of the base file name
+    :param remove_errors: Whether or not the desugared output should be re-run to remove bad configurations
+    :param no_stdlibs: If this machine's standard library should be used or not.
+    :param commandline_args: A list of other commandline arguments SugarC is to use.
+    :param included_files: A list of individual files to be included. (The config space is always included, and does not need to be specified)
+    :param included_directories: A list of directories to be included.
+    :return: (desugared_file_location, log_file_location)
+    """
+
+    if included_directories is None:
+        included_directories = []
+    if included_files is None:
+        included_files = []
+    if commandline_args is None:
+        commandline_args = []
+
+    included_files = list(zip(['-include'] * len(included_files), included_files))
+    included_directories = list(zip(['-I'] * len(included_directories), included_directories))
+    commandline_args = ['-nostdinc', *commandline_args] if no_stdlibs else commandline_args
+
+    match output_file:
+        case '' | None:
+            desugared_file = file_to_desugar + '.desugared.c'
+        case _:
+            desugared_file = os.path.abspath(output_file)
+
+    match log_file:
+        case '' | None:
+            log_file = file_to_desugar + '.log'
+        case _:
+            log_file = os.path.abspath(log_file)
+
+    cmd = ['java', 'superc.Sugar', *commandline_args, *included_files, *included_directories,
+           file_to_desugar, ">",
+           desugared_file, "2>", log_file]
+
+    with open(USER_DEFS, 'w') as outfile:
+        outfile.write(user_defined_space + "\n")
+        if remove_errors:
+            to_append = ['']
+            while len(to_append) > 0:
+                for d in to_append:
+                    outfile.write(d + "\n")
+                subprocess.run(cmd)
+                to_append = get_bad_constraints(desugared_file)
+
+    subprocess.run(cmd)
+    return desugared_file, log_file
 
 
-def getBadConstraints(desugFile):
-    with open(desugFile, 'r') as infile:
-        ls = infile.readlines()
+def process_alarms(alarms: List[Alarm], desugared_file: str) -> str:
+    """
+    Runs the analysis, and compiles the results into a report.
+
+    :param alarms: The list of alarms.
+    :param desugared_file: The location of the desugared file.
+    :return: A report containing all results. TODO: Replace with some data structure?
+    """
 
     ids = {}
     replacers = {}
     varis = {}
-    fl = open(desugFile, 'r')
-    constraints = []
-    for l in ls:
-        getConditionMapping(l, ids, varis, replacers, True)
 
-    i = len(ls) - 1
-    isError = False
-    s = Solver()
-    while i > 0:
-        if not isError:
-            if ls[i].startswith('__static_parse_error') or ls[i].startswith('__static_type_error'):
-                isError = True
+    with open(desugared_file, 'r') as fl:
+        lines = list(map(lambda x: x.strip("\n"), fl.readlines()))
+
+    for line in lines:
+        condition_mapping: ConditionMapping = get_condition_mapping(line, False)
+        ids.update(condition_mapping.ids)
+        replacers.update(condition_mapping.replacers)
+        varis.update(condition_mapping.varis)
+
+    report = ''
+    for w in alarms:
+        w.asserts = check_non_flow(w, desugared_file)
+        s = Solver()
+        for a in w.asserts:
+            if a['val']:
+                s.add(eval(replacers[a['var']]))
+            else:
+                s.add(eval('Not(' + replacers[a['var']] + ')'))
+        if s.check() == sat:
+            m = s.model()
+            w.feasible = True
+            w.model = m
+            w.correlated_lines = get_correlate_line(desugared_file, w.start_line)
+            report += str(w) + '\n'
         else:
-            m = re.match('if \((__static_condition_default_\d+)\).*', ls[i])
-            if m:
-                s.add(eval(replacers[m.group(1)]))
-                isError = False
-        i -= 1
-    for k in ids.keys():
-        if k.startswith('defined '):
-            s.push()
-            s.add(eval(ids[k]))
-            if s.check() != sat:
-                constraints.append('#undef ' + k[len('defined '):])
-                s.pop()
+            print('impossible constraints')
+            w.feasible = False
+            # Use None and make correNum an Optional type
+            # w.correNum = '-1'
+    return report
+
+
+def get_correlate_line(desugared_output: str, desugared_location: int) -> str:
+    """
+    Given the desugared output and a location in the desugared output (given by an analysis tool),
+    opens the desugared output and finds the mapping back to the
+    :param desugared_output:
+    :param desugared_location:
+    :return:
+    """
+    with open(desugared_output, 'r') as infile:
+        lines: List[str] = list(map(lambda x: x.strip('\n'), infile.readlines()))
+        the_line: str = lines[desugared_location - 1]
+        match (mat := re.match(r"//L(.*)$", the_line)).lastindex:
+            case 1:
+                return mat.lastgroup
+            case x if x > 1:
+                raise ValueError(f"Line {the_line} has multiple matches for the pattern (this should not be"
+                                 f" possible!)")
+            case _:
+                raise ValueError(f"Line {the_line} has no correlated line.")
+
+
+def check_non_flow(alarm: Alarm, desugared_output: str) -> List[Dict[str, str | bool]]:
+    """
+    Logic is as follows, we take advantage of the fact that we always use braces
+    We start at our line number and reverse search up. Whenever we find a }
+    we skip lines until we match {. This way we can only explore up a scope level
+    If we find a __static_condition_renaming, we are in logically true,
+    global scope, or in a function without an explicit condition in the body
+
+    :param alarm:
+    :param desugared_output:
+    :return:
+    """
+
+    result = []
+    with open(desugared_output, 'r') as ff:
+        lines: List[str] = ff.readlines()
+        additional_scopes = 0
+        line_to_read: int = alarm.start_line
+        while line_to_read >= 0:
+            additional_scopes += lines[line_to_read].count('}')
+            if additional_scopes == 0:
+                m = re.match(r"if \((__static_condition_default_\d+)\).*", lines[line_to_read])
+                if m:
+                    result.append({'var': str(m.group(1)), 'val': True})
+            additional_scopes -= lines[line_to_read].count('{')
+            if additional_scopes < 0:
+                additional_scopes = 0
+            line_to_read -= 1
+    return result
+
+
+def get_bad_constraints(desugared_file: str) -> List[str]:
+    """
+    Given a desugared file, find conditions that will always result in an error. These conditions
+    are not worth exploring. TODO: Is this list a conjunction or disjunction?
+    :param desugared_file: The location of the desugared file.
+    :return: The list of constraints that always result in errors.
+    """
+    with open(desugared_file, 'r') as infile:
+        lines = infile.readlines()
+
+    ids = {}
+    replacers = {}
+    varis = {}
+    constraints = []
+    for l in lines:
+        get_condition_mapping(l, ids, varis, replacers, True)
+
+    line_index = len(lines) - 1
+    is_error = False
+    solver = Solver()
+    while line_index > 0:
+        if not is_error:
+            if lines[line_index].startswith('__static_parse_error') or \
+                    lines[line_index].startswith('__static_type_error'):
+                is_error = True
+        else:
+            condition = re.match('if \((__static_condition_default_\d+)\).*', lines[line_index])
+            if condition:
+                solver.add(eval(replacers[condition.group(1)]))
+                is_error = False
+        line_index -= 1
+    for key in ids.keys():
+        if key.startswith('defined '):
+            solver.push()
+            solver.add(eval(ids[key]))
+            if solver.check() != sat:
+                constraints.append('#undef ' + key[len('defined '):])
+                solver.pop()
                 continue
-            s.pop()
-            s.push()
-            s.add(eval('Not(' + ids[k] + ')'))
-            if s.check() != sat:
-                constraints.append('#define ' + k[len('defined '):])
-            s.pop()
+            solver.pop()
+            solver.push()
+            solver.add(eval('Not(' + ids[key] + ')'))
+            if solver.check() != sat:
+                constraints.append('#define ' + key[len('defined '):])
+            solver.pop()
     return constraints
 
 
-def getConditionMapping(l, ids, varis, replacers, invert):
-    # l looks like __static_condition_renaming(<discarded>, <condition>, <condition>, ..., <condition>, <-3>, <-2>, <-1>)
-    if l.startswith('__static_condition_renaming('):
-        cc = l.split(',')
-        conds = cc[1][:-3]
-        conds = re.sub(r'(&&|\|\|) !([a-zA-Z_0-9]+)( |")', r'\1 !(\2)\3', conds)
-        conds = re.sub(r'(&&|\|\|) ([a-zA-Z_0-9]+)( |")', r'\1 (\2)\3', conds)
-        conds = re.sub(r' "([a-zA-Z_0-9]+)', r' "(\1)', conds)
-        conds = re.sub(r' "!([a-zA-Z_0-9]+)', r' "!(\1)', conds)
-        conds = conds[:-1]
-        inds = conds.split('(')
-        inds = inds[1:]
-        for i in inds:
-            splits = i.split(' ')
-            if 'defined' == splits[0]:
-                v = 'DEF_' + splits[1][:-1]
-                ids['defined ' + splits[1][:-1]] = 'varis["' + v + '"]'
-                varis[v] = bool(v)
+@dataclass
+class ConditionMapping:
+    ids: Dict[str, str] = field(default_factory=dict)
+    replacers: Dict[str, str] = field(default_factory=dict)
+    varis: Dict[str, str] = field(default_factory=dict)
+    constraints: List[str] = field(default_factory=list)
+
+
+def get_condition_mapping(line, invert: bool = False) -> ConditionMapping:
+    """
+    TODO Document this function, I don't really get what it's doing.
+    :param line:
+    :param invert:
+    :return:
+    """
+    result = ConditionMapping()
+
+    if not line.startswith('__static_condition_renaming('):
+        return result
+
+    cc = line.split(',')
+    conditions = cc[1][:-3]
+    conditions = re.sub(r'(&&|\|\|) !([a-zA-Z_0-9]+)( |")', r'\1 !(\2)\3', conditions)
+    conditions = re.sub(r'(&&|\|\|) ([a-zA-Z_0-9]+)( |")', r'\1 (\2)\3', conditions)
+    conditions = re.sub(r' "([a-zA-Z_0-9]+)', r' "(\1)', conditions)
+    conditions = re.sub(r' "!([a-zA-Z_0-9]+)', r' "!(\1)', conditions)
+    conditions = conditions[:-1]
+    inds = conditions.split('(')
+    inds = inds[1:]
+    for i in inds:
+        splits = i.split(' ')
+        if 'defined' == splits[0]:
+            v = 'DEF_' + splits[1][:-1]
+            result.ids['defined ' + splits[1][:-1]] = 'varis["' + v + '"]'
+            result.varis[v] = bool(v)
+        else:
+            if splits[0][-1] == ')':
+                v = 'USE_' + splits[0][:-1]
+                result.ids[splits[0][:-1]] = 'varis["' + v + '"] != 0'
+                result.varis[v] = int(v)
             else:
-                if splits[0][-1] == ')':
-                    v = 'USE_' + splits[0][:-1]
-                    ids[splits[0][:-1]] = 'varis["' + v + '"] != 0'
-                    varis[v] = int(v)
-                else:
-                    v = 'USE_' + splits[0]
-                    ids[splits[0]] = 'varis["' + v + '"]'
-                    varis[v] = int(v)
-        condstr = conds[2:]
-        for x in sorted(list(ids.keys()), key=len, reverse=True):
-            if x.startswith('defined '):
-                condstr = condstr.replace(x, ids[x])
-            else:
-                condstr = condstr.replace('(' + x, '(' + ids[x])
-        condstr = condstr.replace('!(', 'Not(')
-        cs = re.split('&&|\|\|', condstr)
-        ops = []
-        for d in range(0, len(condstr)):
-            if condstr[d] == '&' and condstr[d + 1] == '&':
-                ops.append('And')
-            elif condstr[d] == '|' and condstr[d + 1] == '|':
-                ops.append('Or')
-        ncondstr = ''
-        ands = 0
-        ors = 0
-        for o in ops:
-            if o == 'And':
-                ands += 1
-                ncondstr = ncondstr + 'And (' + cs[0] + ','
-                cs = cs[1:]
-            else:
-                ncondstr = 'Or(' + ncondstr + cs[0] + ands * ')'
-                if ors > 0:
-                    ncondstr += ')'
-                ncondstr += ','
-                ands = 0
-                ors += 1
-                cs = cs[1:]
-        ncondstr += cs[0] + ands * ')'
-        if ors > 0:
-            ncondstr += ')'
-        ncondstr = ncondstr.rstrip()
-        if invert:
-            ncondstr = 'Not(' + ncondstr + ')'
-        replacers[cc[0][len('__static_condition_renaming("'):-1]] = ncondstr
+                v = 'USE_' + splits[0]
+                result.ids[splits[0]] = 'varis["' + v + '"]'
+                result.varis[v] = int(v)
+    condstr = conditions[2:]
+    for x in sorted(list(result.ids.keys()), key=len, reverse=True):
+        if x.startswith('defined '):
+            condstr = condstr.replace(x, result.ids[x])
+        else:
+            condstr = condstr.replace('(' + x, '(' + result.ids[x])
+    condstr = condstr.replace('!(', 'Not(')
+    cs = re.split('&&|\|\|', condstr)
+    ops = []
+    for d in range(0, len(condstr)):
+        if condstr[d] == '&' and condstr[d + 1] == '&':
+            ops.append('And')
+        elif condstr[d] == '|' and condstr[d + 1] == '|':
+            ops.append('Or')
+    ncondstr = ''
+    ands = 0
+    ors = 0
+    for o in ops:
+        if o == 'And':
+            ands += 1
+            ncondstr = ncondstr + 'And (' + cs[0] + ','
+            cs = cs[1:]
+        else:
+            ncondstr = 'Or(' + ncondstr + cs[0] + ands * ')'
+            if ors > 0:
+                ncondstr += ')'
+            ncondstr += ','
+            ands = 0
+            ors += 1
+            cs = cs[1:]
+    ncondstr += cs[0] + ands * ')'
+    if ors > 0:
+        ncondstr += ')'
+    ncondstr = ncondstr.rstrip()
+    if invert:
+        ncondstr = 'Not(' + ncondstr + ')'
+    result.replacers[cc[0][len('__static_condition_renaming("'):-1]] = ncondstr
+
+    return result
