@@ -50,11 +50,12 @@ class Clang(AbstractTool):
 
     def analyze(self, file: str) -> str:
         with (tempfile.TemporaryDirectory()) as output_location:
-            subprocess.run(cmd=["scan-build", "-o", output_location, "clang", "-c", os.path.abspath(file)])
+            subprocess.run(["scan-build", "-o", output_location, "clang", "-c", os.path.abspath(file)])
             reports = []
             for root, dirs, files in os.walk(output_location):
-                reports = list(filter(map(filter(lambda x: r))))
-            pass
+                reports.extend(list(map(lambda x: os.path.join(root, x),
+                                        filter(lambda r: r.startswith("report") and r.endswith(".html"))
+                                        )))
 
 
 if __name__ == '__main__':
