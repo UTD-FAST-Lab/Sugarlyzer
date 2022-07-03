@@ -7,10 +7,9 @@ import os
 import shutil
 import json
 import re
-from reportParser import atomize
 
-ScanBuild = ""
-Clang = ""
+from src.sugarlyzer.readers.ClangReader import ClangReader
+
 configFile = "~/Documents/Research/SugarCPostWork/scanBuildAtomizer/configs.txt"
 
 
@@ -47,6 +46,9 @@ def scan(projStr, fileStr, filePath):
 
 
 class Clang(AbstractTool):
+
+    def __init__(self):
+        super().__init__(ClangReader())
 
     def analyze(self, file: str) -> str:
         with (tempfile.TemporaryDirectory()) as output_location:

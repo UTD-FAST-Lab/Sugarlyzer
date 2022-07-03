@@ -7,7 +7,7 @@ from src.sugarlyzer.models.Alarm import Alarm
 class AbstractReader(ABC):
 
     @abstractmethod
-    def readOutput(self, file: str) -> Iterable[Alarm]:
+    def read_output(self, file: str) -> Iterable[Alarm]:
         """
         Given the output of an analysis tool, read in the file and return the alarms.
         :param file: The analysis tool result.

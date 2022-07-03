@@ -14,7 +14,7 @@ class ProgramSpecification:
     def download(self) -> int:
         """
         Runs the script to obtain the program's source code.
-        :return: The source code
+        :return: The return code
         """
         ps = subprocess.run(self.build_script)
         return ps.returncode

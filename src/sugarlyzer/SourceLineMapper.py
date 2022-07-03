@@ -1,4 +1,9 @@
+import logging
+
 from src.sugarlyzer.models.Alarm import VariabilityAlarm, Alarm
+
+logger = logging.getLogger(__name__
+                           )
 
 
 class SourceLineMapper:
@@ -9,4 +14,5 @@ class SourceLineMapper:
         :param alarm: The alarm to map.
         :return: A VariabilityAlarm (i.e., an alarm with an associated conditional)
         """
-        pass
+        logger.warning("Right now, the SourceLineMapper does absolutely nothing.")
+        return alarm
