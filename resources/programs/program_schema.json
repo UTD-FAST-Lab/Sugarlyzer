@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "program.schema.json",
+  "title": "Program",
+  "description": "A program specification",
+  "type": "object",
+  "required": [],
+  "properties": {
+    "build_script": {
+      "description": "The location of the build script.",
+      "type": "string"
+    },
+    "source_location": {
+      "description": "Where the source code will be after running the build_script.",
+      "type": "string"
+    },
+    "variable_specification": {
+      "description": "Variables that should be set when desugaring the code.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "variable": {
+            "description": "The name of the variable.",
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,4 +1,5 @@
-from src.sugarlyzer.readers.AbstractTool import AbstractReader
+from src.sugarlyzer.readers.AbstractReader import AbstractReader
+from src.sugarlyzer.readers.ClangReader import ClangReader
 
 
 class ReaderFactory:
@@ -10,4 +11,5 @@ class ReaderFactory:
         :param tool: The name of the tool.
         :return: The reader.
         """
-        pass
+        match tool.lower():
+            case "clang": return ClangReader()

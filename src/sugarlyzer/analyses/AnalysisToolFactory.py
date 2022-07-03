@@ -1,5 +1,5 @@
 from src.sugarlyzer.analyses.AbstractTool import AbstractTool
-from src.sugarlyzer.readers.AbstractTool import AbstractReader
+from src.sugarlyzer.readers.AbstractReader import AbstractReader
 from src.sugarlyzer.readers.ReaderFactory import ReaderFactory
 
 

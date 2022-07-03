@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from typing import Iterable
 
 from src.sugarlyzer.models.Alarm import Alarm
-from src.sugarlyzer.readers.AbstractTool import AbstractReader
+from src.sugarlyzer.readers.AbstractReader import AbstractReader
 
 
 class AbstractTool(ABC):
@@ -16,7 +16,7 @@ class AbstractTool(ABC):
         :param file: The file to analyze.
         :return: A collection of alarms.
         """
-        return self.reader.readOutput(self.analyze(file))
+        return self.reader.read_output(self.analyze(file))
 
     @abstractmethod
     def analyze(self, file: str) -> str:
