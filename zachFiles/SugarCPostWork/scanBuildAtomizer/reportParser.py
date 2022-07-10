@@ -72,11 +72,6 @@ def atomize(reportFile):
   ret['msgtype'] = parser.msgType
   ret['loc'] = parser.location
   ret['lines'] = parser.lines
-  '''
-  Separate the asserts to be a list of if locations and
-  assumptions, we parse this out automatically ourselves.
-  '''
-  ret['asserts'] = parser.asserts
   return ret
 
 if __name__ == '__main__':

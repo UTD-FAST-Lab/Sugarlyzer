@@ -136,7 +136,7 @@ class Sugarlyzer:
         alarms = self.runAnalyzer(self.desug, True)
         reportstr = ''
         for w in alarms:
-            checkNonFlow(w, self.desug)
+            w['asserts'] = calculateAsserts(w, self.desug)
             s = Solver()
             for a in w['asserts']:
                 if a['val']:
@@ -195,6 +195,93 @@ def getCorrelateLine(fpa, loc):
     if '// L' not in theLine:
         return '0'
     return theLine.split('// L')[1]
+
+def findConditionScope(start,fpa,goingUp):
+    '''
+    Finds the line that dictates start/end of the condition
+    associated with the starting line. If going down, finds
+    end of the scope defined by the first line. If going up
+    finds the line that dictates the condition associated with
+    the starting line
+
+    Parameters:
+    start (int):Line that the search starts from
+    fpa (str):File to search
+    goingUp (bool):Whether to search up in the file, or down
+
+    Returns:
+    int: line that ends the scope, -1 if not found
+    '''
+    result = -1
+    ff = open(fpa, 'r')
+    lines = ff.read().split('\n')
+    ff.close()
+    if goingUp:
+        Rs = 0
+        l = start
+        while l >= 0:
+            Rs += lines[l].count('}')
+            m = re.match('if \((__static_condition_default_\d+)\).*', lines[l])
+            if Rs == 0 and m:
+               result = l
+               break
+            Rs -= lines[l].count('{')
+            if Rs < 0:
+                Rs = 0
+            l -= 1
+    else:
+        Rs = 0
+        l = start
+        while l < len(lines):
+            Rs += lines[l].count('{')
+            Rs -= lines[l].count('}')
+            if Rs <= 0:
+                result = l
+                break
+            l += 1  
+    return result
+
+def calculateAsserts(w,fpa):
+    '''
+    Given the warning, the lines are gone over to find associated
+    presence conditions. If the line is an if statement, we check
+    if a line exists in it's scope, if it does not, we assert the
+    conidition is false. For any other line, we assume the parent
+    condition is true.
+    '''
+    ff = open(fpa, 'r')
+    lines = ff.read().split('\n')
+    ff.close()
+    w['asserts'] = []
+    for line in w['lines']:
+        line -= 1
+        fl = lines[line]
+        if 'static_condition_default' in fl:
+            start = line
+            end = findConditionScope(line,fpa,False)
+            if end == -1:
+                continue
+            found = False
+            for x in w['lines']:
+                if x-1 > start and x-1 < end:
+                    found = True
+                    break
+            if not found:
+                asrt = {}
+                asrt['var'] = fl.split("(")[1].split(')')[0]
+                asrt['val'] = False
+                w['asserts'].append(asrt)
+                    
+        else:
+            top = findConditionScope(line,fpa,True)
+            if top == -1 or 'static_condition_default' not in lines[top]:
+                continue
+            asrt = {}
+            asrt['var'] = lines[top].split("(")[1].split(')')[0]
+            asrt['val'] = True
+            
+            w['asserts'].append(asrt)
+        
 
 
 def checkNonFlow(w, fpa):
