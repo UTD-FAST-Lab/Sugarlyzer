@@ -76,7 +76,9 @@ class Tester:
         # (Optional) 6. Optional unsoundness checker
         pass
 
-
-if __name__ == '__main__':
+def main():
     t = Tester(args.tool, args.program)
     t.execute()
+
+if __name__ == '__main__':
+    main()
