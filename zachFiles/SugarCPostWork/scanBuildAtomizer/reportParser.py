@@ -48,7 +48,7 @@ class HTMLAtomizer(HTMLParser):
       self.msgType = data
       self.state = 'inBugSummary4'
     if self.state == 'inBugSummary5':
-      self.location = data
+      self.location = int(data.split(',')[0][5:])
       self.state = 'inBugSummary6'
     if self.state == 'inBugSummary7':
       self.state = 'empty'

@@ -188,10 +188,10 @@ class Sugarlyzer:
 
 
 def getCorrelateLine(fpa, loc):
-    lin = int(loc.split(',')[0][5:])
+    lin = loc-1
     fl = open(fpa, 'r')
     lines = fl.read().split('\n')
-    theLine = lines[lin - 1]
+    theLine = lines[lin]
     if '// L' not in theLine:
         return '0'
     return theLine.split('// L')[1]
@@ -252,7 +252,7 @@ def calculateAsserts(w,fpa):
     ff = open(fpa, 'r')
     lines = ff.read().split('\n')
     ff.close()
-    w['asserts'] = []
+    result = []
     for line in w['lines']:
         line -= 1
         fl = lines[line]
@@ -270,7 +270,7 @@ def calculateAsserts(w,fpa):
                 asrt = {}
                 asrt['var'] = fl.split("(")[1].split(')')[0]
                 asrt['val'] = False
-                w['asserts'].append(asrt)
+                result.append(asrt)
                     
         else:
             top = findConditionScope(line,fpa,True)
@@ -280,8 +280,8 @@ def calculateAsserts(w,fpa):
             asrt['var'] = lines[top].split("(")[1].split(')')[0]
             asrt['val'] = True
             
-            w['asserts'].append(asrt)
-        
+            result.append(asrt)
+    return result
 
 
 def checkNonFlow(w, fpa):
