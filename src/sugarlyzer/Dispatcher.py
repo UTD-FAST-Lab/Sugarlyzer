@@ -88,7 +88,7 @@ def start_tester(t, args) -> None:
     """
     Path(os.path.abspath(args.results)).mkdir(exist_ok=True, parents=True)
     for p in args.programs:
-        command = f"tester {t} {p}"
+        command = f"executor {t} {p}"
         cntr : Container = docker.from_env().containers.run(
             image = get_image_name(t),
             command = "/bin/bash",
