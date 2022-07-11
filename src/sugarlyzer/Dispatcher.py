@@ -99,7 +99,7 @@ def start_tester(t, args) -> None:
         )
         _, log_stream = cntr.exec_run(cmd = command, stream = True)
         logger.info(f"Started container with cmd {command}")
-        for l in log_stream():
+        for l in log_stream:
             print(l.decode())
 
 

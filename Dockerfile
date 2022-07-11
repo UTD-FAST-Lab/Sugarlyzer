@@ -19,10 +19,10 @@ RUN git clone https://github.com/appleseedlab/superc.git && \
 
 RUN . /root/.bashrc && cd superc && make configure && make
 
- RUN python3.10 -m venv /venv
- ENV PATH=/venv/bin:$PATH
- ADD . /Sugarlyzer
- WORKDIR /Sugarlyzer
- RUN python -m pip install -r requirements.txt
- RUN python -m pip install -e .
- WORKDIR /
+RUN python3.10 -m venv /venv
+ENV PATH=/venv/bin:$PATH
+ADD . /Sugarlyzer
+WORKDIR /Sugarlyzer
+RUN python -m pip install -r requirements.txt
+RUN python -m pip install -e .
+WORKDIR /
