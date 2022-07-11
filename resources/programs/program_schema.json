@@ -12,18 +12,16 @@
     },
     "source_location": {
       "description": "Where the source code will be after running the build_script.",
-      "type": "string"
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
     },
     "variable_specification": {
       "description": "Variables that should be set when desugaring the code.",
       "type": "array",
       "items": {
-        "type": "object",
-        "properties": {
-          "variable": {
-            "description": "The name of the variable.",
-            "type": "string"
-          }
+        "type": "string"
         }
       }
     }
