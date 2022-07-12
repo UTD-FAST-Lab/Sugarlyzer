@@ -1,5 +1,5 @@
 {
-  "build_script": "axtlsScript.sh",
+  "build_script": "axtlsBuild/axtlsScript.sh",
   "source_location": [
     "axtls-code/axtlswrap",
     "axtls-code/crypto",
