@@ -1,4 +1,4 @@
-import sys
+0;10;1c0;10;1cimport sys
 import os
 import shutil
 import json
@@ -14,7 +14,7 @@ class InferAlyzer(Sugarlyzer):
     
   def runAnalyzer(self,fileName: str,isDesugared: bool) -> list:
     outFi = fileName[:-2]+'.inferres'
-    os.system('infer --pulse-only --enable-issue-type NULLPTR_DEREFERENCE_LATENT -- clang -c ' + fileName + ' > ' + outFi)
+    os.system('infer --pulse-only --enable-issue-type NULLPTR_DEREFERENCE_LATENT --enable-issue-type MEMORY_LEAK_C --enable-issue-type USE_AFTER_FREE -- clang -c ' + fileName + ' > ' + outFi)
     fi = open(outFi,'r')
     lines = fi.read().split('\n')
     fi.close()
@@ -28,6 +28,30 @@ class InferAlyzer(Sugarlyzer):
         alarm['loc'] = int(lines[i].split(':')[1])
         alarm['lines'] = []
         m = re.search(r'last assigned on line (\d+)',lines[i+1])
+        print (m, lines[i+1])
+        if m:
+          alarm['lines'].append(int(m.group(1)))
+        alarm['lines'].append(alarm['loc'])
+        alarms.append(alarm)
+      elif lines[i].rstrip.endswith('error: Memory Leak') and lines[i+1].lstrip().startswith('Memory'):
+        alarm = {}
+        alarm['msg'] = 'Memory Leak'
+        alarm['msgtype'] = 'error'
+        alarm['loc'] = int(lines[i].split(':')[1])
+        alarm['lines'] = []
+        m = re.search(r'on line (\d+) is not freed',lines[i+1])
+        print (m, lines[i+1])
+        if m:
+          alarm['lines'].append(int(m.group(1)))
+        alarm['lines'].append(alarm['loc'])
+        alarms.append(alarm)
+      elif lines[i].rstrip.endswith('error: Use After Free') and lines[i+1].lstrip().startswith('accessing'):
+        alarm = {}
+        alarm['msg'] = 'Use After Free'
+        alarm['msgtype'] = 'error'
+        alarm['loc'] = int(lines[i].split(':')[1])
+        alarm['lines'] = []
+        m = re.search(r'on line (\d+)\.',lines[i+1])
         print (m, lines[i+1])
         if m:
           alarm['lines'].append(int(m.group(1)))
