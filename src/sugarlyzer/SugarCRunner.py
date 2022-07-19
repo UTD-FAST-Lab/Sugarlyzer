@@ -1,3 +1,4 @@
+import logging
 import os
 import re
 import subprocess
@@ -10,7 +11,7 @@ from src.sugarlyzer.models.Alarm import Alarm
 
 USER_DEFS = '/tmp/__sugarlyzerPredefs.h'
 
-
+logger = logging.getLogger(__name__)
 def get_recommended_space(file: str) -> str:
     """
     Explores the provided file. Looks for inclusion guards or other
@@ -72,9 +73,8 @@ def desugar_file(file_to_desugar: str,
         case _:
             log_file = os.path.abspath(log_file)
 
-    cmd = ['java', 'superc.Sugar', *commandline_args, *included_files, *included_directories,
-           file_to_desugar, ">",
-           desugared_file, "2>", log_file]
+    cmd = ['java', 'superc.SugarC', *commandline_args, *included_files, *included_directories,
+           file_to_desugar]
 
     with open(USER_DEFS, 'w') as outfile:
         outfile.write(user_defined_space + "\n")
@@ -83,11 +83,22 @@ def desugar_file(file_to_desugar: str,
             while len(to_append) > 0:
                 for d in to_append:
                     outfile.write(d + "\n")
-                subprocess.run(cmd)
+                method_name(cmd, desugared_file, log_file)
                 to_append = get_bad_constraints(desugared_file)
 
-    subprocess.run(cmd)
+    logger.info(f"Running cmd {' '.join(cmd)}")
+    method_name(cmd, desugared_file, log_file)
+    logger.info(f"Wrote to {log_file}")
     return desugared_file, log_file
+
+
+def method_name(cmd, desugared_file, log_file):
+    ps = subprocess.run(cmd, capture_output=True)
+    with open(desugared_file, 'wb') as f:
+        f.write(ps.stdout)
+    logger.info(f"Wrote to {desugared_file}")
+    with open(log_file, 'wb') as f:
+        f.write(ps.stderr)
 
 
 def process_alarms(alarms: List[Alarm], desugared_file: str) -> str:
@@ -202,7 +213,11 @@ def get_bad_constraints(desugared_file: str) -> List[str]:
     varis = {}
     constraints = []
     for l in lines:
-        get_condition_mapping(l, ids, varis, replacers, True)
+        cd: ConditionMapping = get_condition_mapping(l, True)
+        ids.update(cd.ids)
+        replacers.update(cd.replacers)
+        varis.update(cd.varis)
+        constraints.extend(cd.constraints)
 
     line_index = len(lines) - 1
     is_error = False
