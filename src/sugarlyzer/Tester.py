@@ -1,3 +1,4 @@
+import functools
 import logging
 logging.basicConfig(level=logging.INFO)
 
@@ -45,6 +46,8 @@ class Tester:
         self.program = ProgramSpecification(**program_as_json)
 
     def execute(self):
+
+        logger.info(f"Current environment is {os.environ}")
         # 1. Download target program.
         logger.info(f"Downloading target program {self.program}")
         if (returnCode := self.program.download()) != 0:
@@ -52,19 +55,18 @@ class Tester:
         logger.info(f"Finished downloading target program.")
 
         # 2. Run SugarC
-        logger.info(f"Desugaring the source code in {self.program.source_location}")
-        SugarCRunner.desugar(self.program.source_location)
+        logger.info(f"Desugaring the source code in {list(self.program.source_locations)}")
+
+        partial = functools.partial(SugarCRunner.desugar_file, user_defined_space=SugarCRunner.get_recommended_space(None),
+                                  remove_errors=True, no_stdlibs=True)
+        desugared_files: Iterable[str, str] = map(partial, self.program.get_source_files())
         logger.info(f"Finished desugaring the source code.")
 
         # 3/4. Run analysis tool, and read its results
-        all_c_files = []
-        for root, dirs, files in os.walk(self.program.source_location):
-            files_ending_in_dot_c = [os.path.join(root, f) for f in list(filter(lambda x: x.endswith('.c'), files))]
-            all_c_files.extend(files_ending_in_dot_c)
-        logger.info(f"Collected {len(all_c_files)} .c files to analyze.")
+        logger.info(f"Collected {len([c for c in self.program.get_source_files()])} .c files to analyze.")
 
         tool = AnalysisToolFactory().get_tool(self.tool)
-        alarm_collections: List[Iterable[Alarm]] = [tool.analyze_and_read(f) for f in all_c_files]
+        alarm_collections: List[Iterable[Alarm]] = [tool.analyze_and_read(f) for f, _ in desugared_files]
         alarms = set()
         for collec in alarm_collections:
             alarms.update(collec)
