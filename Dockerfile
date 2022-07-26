@@ -10,11 +10,15 @@ WORKDIR z3
 RUN mkdir build && cd build && cmake -DZ3_BUILD_JAVA_BINDINGS=ON .. &&  \
     make && make install
 WORKDIR /
-RUN git clone https://github.com/appleseedlab/superc.git
+RUN git clone https://github.com/appleseedlab/superc.git && cd /superc && git checkout mergingParseErrors && cd -
 ENV JAVA_DEV_ROOT=/superc
 ENV CLASSPATH=:/superc/classes:/superc/bin/json-simple-1.1.1.jar:/superc/bin/junit.jar:/superc/bin/antlr.jar:/superc/bin/javabdd.jar:/usr/share/java/org.sat4j.core.jar:/usr/local/share/java/com.microsoft.z3.jar:/usr/share/java/json-lib.jar
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
 RUN cd superc && make configure && make
+
+WORKDIR /
+ADD "https://api.github.com/repos/pattersonz/sugarlyzerconfig/commits?per_page=1" latest_commit
+RUN git clone https://github.com/pattersonz/SugarlyzerConfig
 
 RUN python3.10 -m venv /venv
 ENV PATH=/venv/bin:$PATH
