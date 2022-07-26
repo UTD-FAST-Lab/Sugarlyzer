@@ -63,6 +63,7 @@ class Tester:
                                     included_directories=["/SugarlyzerConfig/stdinc/usr/include/",
                                                           "/SugarlyzerConfig/stdinc/usr/include/x86_64-linux-gnu/",
                                                           "/SugarlyzerConfig/stdinc/usr/lib/gcc/x86_64-linux-gnu/9/include/"])
+        logger.info(f"Source files are {list(self.program.get_source_files())}")
         desugared_files: Iterable[str, str] = map(partial, self.program.get_source_files())
         logger.info(f"Finished desugaring the source code.")
 
