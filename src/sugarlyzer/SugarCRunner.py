@@ -2,10 +2,12 @@ import logging
 import os
 import re
 import subprocess
+import itertools
 from dataclasses import dataclass, field
 from typing import Tuple, List, Optional, Dict
 
-from z3.z3 import Solver, sat
+from z3 import *
+from z3.z3 import Solver, sat, Bool, Int
 
 from src.sugarlyzer.models.Alarm import Alarm
 
@@ -32,7 +34,7 @@ def desugar_file(file_to_desugar: str,
                  log_file: str = '',
                  remove_errors: bool = False,
                  no_stdlibs: bool = False,
-                 commandline_args: Optional[List[str]] = None,
+                 commandline_args: Optional[List[str]] = ['-keep-mem'],
                  included_files: Optional[List[str]] = None,
                  included_directories: Optional[List[str]] = None) -> Tuple[str, str]:
     """
@@ -49,7 +51,7 @@ def desugar_file(file_to_desugar: str,
     :param included_directories: A list of directories to be included.
     :return: (desugared_file_location, log_file_location)
     """
-
+    logger.info("In desugar file function")
     if included_directories is None:
         included_directories = []
     if included_files is None:
@@ -57,8 +59,8 @@ def desugar_file(file_to_desugar: str,
     if commandline_args is None:
         commandline_args = []
 
-    included_files = list(zip(['-include'] * len(included_files), included_files))
-    included_directories = list(zip(['-I'] * len(included_directories), included_directories))
+    included_files = list(itertools.chain(*zip(['-include'] * len(included_files), included_files)))
+    included_directories = list(itertools.chain(*zip(['-I'] * len(included_directories), included_directories)))
     commandline_args = ['-nostdinc', *commandline_args] if no_stdlibs else commandline_args
 
     match output_file:
@@ -75,6 +77,7 @@ def desugar_file(file_to_desugar: str,
 
     cmd = ['java', 'superc.SugarC', *commandline_args, *included_files, *included_directories,
            file_to_desugar]
+    logging.info(f"Cmd is {' '.join(cmd)}")
 
     with open(USER_DEFS, 'w') as outfile:
         outfile.write(user_defined_space + "\n")
@@ -83,16 +86,17 @@ def desugar_file(file_to_desugar: str,
             while len(to_append) > 0:
                 for d in to_append:
                     outfile.write(d + "\n")
-                method_name(cmd, desugared_file, log_file)
+                run_sugarc(cmd, desugared_file, log_file)
+                logging.info(f"Created desugared file {desugared_file}")
                 to_append = get_bad_constraints(desugared_file)
 
-    logger.info(f"Running cmd {' '.join(cmd)}")
-    method_name(cmd, desugared_file, log_file)
+    run_sugarc(cmd, desugared_file, log_file)
     logger.info(f"Wrote to {log_file}")
     return desugared_file, log_file
 
 
-def method_name(cmd, desugared_file, log_file):
+def run_sugarc(cmd, desugared_file, log_file):
+    logger.info("In run_sugarc function")
     ps = subprocess.run(cmd, capture_output=True)
     with open(desugared_file, 'wb') as f:
         f.write(ps.stdout)
@@ -109,7 +113,7 @@ def process_alarms(alarms: List[Alarm], desugared_file: str) -> str:
     :param desugared_file: The location of the desugared file.
     :return: A report containing all results. TODO: Replace with some data structure?
     """
-
+    logger.info("In process_alarms")
     ids = {}
     replacers = {}
     varis = {}
@@ -154,6 +158,7 @@ def get_correlate_line(desugared_output: str, desugared_location: int) -> str:
     :param desugared_location:
     :return:
     """
+    logger.info("In get_correlate_line")
     with open(desugared_output, 'r') as infile:
         lines: List[str] = list(map(lambda x: x.strip('\n'), infile.readlines()))
         the_line: str = lines[desugared_location - 1]
@@ -179,7 +184,7 @@ def check_non_flow(alarm: Alarm, desugared_output: str) -> List[Dict[str, str | 
     :param desugared_output:
     :return:
     """
-
+    logger.info("Inside check_non_flow")
     result = []
     with open(desugared_output, 'r') as ff:
         lines: List[str] = ff.readlines()
@@ -205,6 +210,7 @@ def get_bad_constraints(desugared_file: str) -> List[str]:
     :param desugared_file: The location of the desugared file.
     :return: The list of constraints that always result in errors.
     """
+    logger.info("In get_bad_constraints")
     with open(desugared_file, 'r') as infile:
         lines = infile.readlines()
 
@@ -230,7 +236,8 @@ def get_bad_constraints(desugared_file: str) -> List[str]:
         else:
             condition = re.match('if \((__static_condition_default_\d+)\).*', lines[line_index])
             if condition:
-                solver.add(eval(replacers[condition.group(1)]))
+                to_eval = replacers[condition.group(1)]
+                solver.add(eval(to_eval))
                 is_error = False
         line_index -= 1
     for key in ids.keys():
@@ -265,11 +272,13 @@ def get_condition_mapping(line, invert: bool = False) -> ConditionMapping:
     :param invert:
     :return:
     """
+    logger.info("In get_condition_mapping")
     result = ConditionMapping()
 
     if not line.startswith('__static_condition_renaming('):
         return result
 
+    logging.info(f"Line is {line}")
     cc = line.split(',')
     conditions = cc[1][:-3]
     conditions = re.sub(r'(&&|\|\|) !([a-zA-Z_0-9]+)( |")', r'\1 !(\2)\3', conditions)
@@ -284,22 +293,23 @@ def get_condition_mapping(line, invert: bool = False) -> ConditionMapping:
         if 'defined' == splits[0]:
             v = 'DEF_' + splits[1][:-1]
             result.ids['defined ' + splits[1][:-1]] = 'varis["' + v + '"]'
-            result.varis[v] = bool(v)
+            result.varis[v] = Bool(v)
         else:
             if splits[0][-1] == ')':
                 v = 'USE_' + splits[0][:-1]
                 result.ids[splits[0][:-1]] = 'varis["' + v + '"] != 0'
-                result.varis[v] = int(v)
+                result.varis[v] = Int(v)
             else:
                 v = 'USE_' + splits[0]
                 result.ids[splits[0]] = 'varis["' + v + '"]'
-                result.varis[v] = int(v)
+                result.varis[v] = Int(v)
     condstr = conditions[2:]
     for x in sorted(list(result.ids.keys()), key=len, reverse=True):
         if x.startswith('defined '):
             condstr = condstr.replace(x, result.ids[x])
         else:
             condstr = condstr.replace('(' + x, '(' + result.ids[x])
+    condstr = condstr.replace('0v', '0, v')
     condstr = condstr.replace('!(', 'Not(')
     cs = re.split('&&|\|\|', condstr)
     ops = []
@@ -311,6 +321,7 @@ def get_condition_mapping(line, invert: bool = False) -> ConditionMapping:
     ncondstr = ''
     ands = 0
     ors = 0
+    logging.info(f"Ops is {ops}")
     for o in ops:
         if o == 'And':
             ands += 1
