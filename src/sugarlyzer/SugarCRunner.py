@@ -96,7 +96,7 @@ def desugar_file(file_to_desugar: str,
 
 
 def run_sugarc(cmd, desugared_file, log_file):
-    logger.info("In run_sugarc function")
+    logger.info("In run_sugarc")
     ps = subprocess.run(cmd, capture_output=True)
     with open(desugared_file, 'wb') as f:
         f.write(ps.stdout)
