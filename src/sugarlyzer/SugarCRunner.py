@@ -84,6 +84,7 @@ def desugar_file(file_to_desugar: str,
         if remove_errors:
             to_append = ['']
             while len(to_append) > 0:
+                logger.info(f"to_append is {to_append}")
                 for d in to_append:
                     outfile.write(d + "\n")
                 run_sugarc(cmd, desugared_file, log_file)
