@@ -83,7 +83,9 @@ def desugar_file(file_to_desugar: str,
         outfile.write(user_defined_space + "\n")
         if remove_errors:
             to_append = ['']
-            while len(to_append) > 0:
+            its = 0
+            while len(to_append) > 0 and its < 2:
+                its += 1
                 logger.info(f"to_append is {to_append}")
                 for d in to_append:
                     outfile.write(d + "\n")
