@@ -1,4 +1,4 @@
-0;10;1c0;10;1cimport sys
+import sys
 import os
 import shutil
 import json
