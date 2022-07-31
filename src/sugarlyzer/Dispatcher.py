@@ -48,7 +48,7 @@ def get_image_name(tool: Optional[str]) -> str:
     if tool is None or tool == "":
         return "sugarlyzer/base"
     else:
-        return f"sugarlyzer/{tool}"
+        return f"sugarlyzer/{str.lower(tool)}"
 
 
 # noinspection PyListCreation
@@ -69,7 +69,7 @@ def build_images(tools: List[str], nocache: bool = False) -> None:
     # Add commands to build any images for tools.
     for t in tools:
         cmds.append(['docker', 'build', str(importlib.resources.path('resources.tools', t)),
-                     '-t', f'sugarlyzer/{t}'])
+                     '-t', get_image_name(t)])
 
     if nocache:
         map(lambda x: x.append('--no-cache'), cmds)
@@ -108,7 +108,7 @@ def main() -> None:
     Build images, and start the Sugarlyzer process within each container.
     """
     build_images(args.tools)
-    for t in tools:
+    for t in args.tools:
         start_tester(t, args)
 
 

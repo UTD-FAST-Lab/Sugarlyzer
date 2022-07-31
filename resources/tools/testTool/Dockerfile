@@ -1,1 +1,1 @@
-FROM sugarlyzer/base
+FROM sugarlyzer/base:latest
