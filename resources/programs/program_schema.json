@@ -16,13 +16,6 @@
       "items": {
         "type": "string"
       }
-    },
-    "variable_specification": {
-      "description": "Variables that should be set when desugaring the code.",
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
     }
   }
 }
