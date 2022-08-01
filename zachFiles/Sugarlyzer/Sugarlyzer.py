@@ -5,6 +5,7 @@ import json
 import re
 from z3 import *
 from abc import ABC, abstractmethod
+import unittest
 
 userDefs = '/tmp/__sugarlyzerPredefs.h'
 
@@ -46,22 +47,22 @@ class Sugarlyzer:
     def setFile(self, fileName: str):
         '''Specifies the file that will be desugared and analyzed.
      
-     Parameters:
-     fileName (str): absolute path of the file
-     
-     Returns:
-     void
-     '''
+        Parameters:
+        fileName (str): absolute path of the file
+        
+        Returns:
+        void
+        '''
         self.fil = os.path.abspath(fileName)
 
     def getRecommendedSpace(self) -> str:
         '''Explores the file provided in setFile. Looks for inclusion guards or other
-    macros that would be assumed to be false and recommends them to be turned off.
-    Also grabs the default conditions of the machine provided by gcc.
+        macros that would be assumed to be false and recommends them to be turned off.
+        Also grabs the default conditions of the machine provided by gcc.
      
-    Returns:
-    A string to be added to an included file in desugaring
-    '''
+        Returns:
+        A string to be added to an included file in desugaring
+        '''
         # still need to create the code to search for inclusion guards
         return os.popen('echo | gcc -dM -E -').read()
 
@@ -69,20 +70,20 @@ class Sugarlyzer:
                     commandline_args=[], included_files=[], included_directories=[]):
         '''Runs the SugarC command
     
-    Parameters:
-    output_file (str):If provided, will specify the location of the output. Otherwise tacks on .desugared.c to the end of the base file name
-    log_file (str):If provided will specify the location of the logged data. Otherwise tacks on .Log to the end of the base file name
-    no_stdlibs (bool):If this machine's standard library should be used or not.
-    commandline_args (list(str)):A list of other commandline arguments SugarC is to use.
-    included_files (list(str)):A list of individual files to be included. (The config space is always included, and does not need to be specified)
-    included_directories (list(str)): A list of directories to be included.
-    userDefinedSpace (str): defines and undefs to be assumed while desugaring
-    remove_errors (bool): whether or not the desugared output should be re-run to remove bad configurations
-
-    Returns:
-    str: desugared output file, absolute path
-    str: log file, absolute path
-    '''
+        Parameters:
+        output_file (str):If provided, will specify the location of the output. Otherwise tacks on .desugared.c to the end of the base file name
+        log_file (str):If provided will specify the location of the logged data. Otherwise tacks on .Log to the end of the base file name
+        no_stdlibs (bool):If this machine's standard library should be used or not.
+        commandline_args (list(str)):A list of other commandline arguments SugarC is to use.
+        included_files (list(str)):A list of individual files to be included. (The config space is always included, and does not need to be specified)
+        included_directories (list(str)): A list of directories to be included.
+        userDefinedSpace (str): defines and undefs to be assumed while desugaring
+        remove_errors (bool): whether or not the desugared output should be re-run to remove bad configurations
+        
+        Returns:
+        str: desugared output file, absolute path
+        str: log file, absolute path
+        '''
         incFilesStr = ' '
         if len(included_files) > 0:
             incFilesStr = ' -include ' + ' -include '.join(included_files) + ' '
@@ -116,14 +117,14 @@ class Sugarlyzer:
 
     def analyze(self, report_location='') -> str:
         '''Operates the pipeline of running the analyzer, and compiling the results
-    into a report.
+        into a report.
 
-    Parameters:
-    report_location (str):If provided will specify the location of the report. Otherwise tacks on .report to the end of the base file name
+        Parameters:
+        report_location (str):If provided will specify the location of the report. Otherwise tacks on .report to the end of the base file name
 
-    Returns:
-    str: a report containing all results
-    '''
+        Returns:
+        str: a report containing all results
+        '''
         ids = {}
         replacers = {}
         ls = []
@@ -160,30 +161,31 @@ class Sugarlyzer:
     @abstractmethod
     def runAnalyzer(self, fileName: str, isDesugared: bool) -> list:
         '''Runs the command to analyze the file. isDesugared is marked as True or False
-    specifying whether or not the file being analyzed is the desugared output. This way
-    a different approach can be used for both. Alarms are then to be broken down and 
-    returned.
+        specifying whether or not the file being analyzed is the desugared output. This way
+        a different approach can be used for both. Alarms are then to be broken down and 
+        returned.
 
-    Parameters:
-    fileName (str):The file to be analyzed, absolute path
-    isDesugared (bool): whether or not the file to be analyzed is the desugared output or not
+        Parameters:
+        fileName (str):The file to be analyzed, absolute path
+        isDesugared (bool): whether or not the file to be analyzed is the desugared output or not
 
-    Returns:
-    list: a list of alarm objects
-    '''
+        Returns:
+        list: a list of alarm objects
+        '''
         pass
 
     @abstractmethod
     def compareAlarms(self, alarmA: Alarm, alarmB: Alarm) -> bool:
-        '''Returns whether or not two Alarm objects reference the same alarm
-
-    Parameters:
-    alarmA (Alarm):The first alarm to be compared
-    alarmB (Alarm):The second alarm to be compared
-
-    Returns:
-    bool: whether or not the alarms reference the same alarm
-    '''
+        '''
+        Returns whether or not two Alarm objects reference the same alarm
+        
+        Parameters:
+        alarmA (Alarm):The first alarm to be compared
+        alarmB (Alarm):The second alarm to be compared
+        
+        Returns:
+        bool: whether or not the alarms reference the same alarm
+        '''
         pass
 
 
@@ -191,6 +193,7 @@ def getCorrelateLine(fpa, loc):
     lin = loc-1
     fl = open(fpa, 'r')
     lines = fl.read().split('\n')
+    fl.close()
     theLine = lines[lin]
     if '// L' not in theLine:
         return '0'
@@ -244,10 +247,10 @@ def findConditionScope(start,fpa,goingUp):
 def calculateAsserts(w,fpa):
     '''
     Given the warning, the lines are gone over to find associated
-    presence conditions. If the line is an if statement, we check
-    if a line exists in it's scope, if it does not, we assert the
-    conidition is false. For any other line, we assume the parent
-    condition is true.
+    presence conditions. If the line is a static condition if statement, 
+    we check if a line exists in it's scope, if it does not, we 
+    assert the conidition is false. For any other line, we assume 
+    the parent condition is true.
     '''
     ff = open(fpa, 'r')
     lines = ff.read().split('\n')
@@ -282,32 +285,6 @@ def calculateAsserts(w,fpa):
             
             result.append(asrt)
     return result
-
-
-def checkNonFlow(w, fpa):
-    '''
-  Logic is as follows, we take advantage off the fact that we always use braces
-  We start at our line number and reverse search up. Whenever we find a }
-  we skip lines until we match {. This way we can only explore up a scope level
-  If we find a __static_condition_renaming, we are in logically true,
-  global scope, or in a function without an explicit condition in the body
-  '''
-    if len(w['lines']) == 1:
-        ff = open(fpa, 'r')
-        lines = ff.read().split('\n')
-        Rs = 0
-        l = int(w['lines'][0]) - 1
-        while l >= 0:
-            Rs += lines[l].count('}')
-            m = re.match('if \((__static_condition_default_\d+)\).*', lines[l])
-            if Rs == 0 and m:
-                w['asserts'].append({'var': str(m.group(1)), 'val': True})
-            Rs -= lines[l].count('{')
-            if Rs < 0:
-                Rs = 0
-            l -= 1
-        ff.close()
-
 
 def getBadConstraints(desugFile):
     ids = {}
@@ -396,7 +373,7 @@ def getConditionMapping(l, ids, varis, replacers, invert):
         for o in ops:
             if o == 'And':
                 ands += 1
-                ncondstr = ncondstr + 'And (' + cs[0] + ','
+                ncondstr = ncondstr + 'And(' + cs[0] + ','
                 cs = cs[1:]
             else:
                 ncondstr = 'Or(' + ncondstr + cs[0] + ands * ')'
@@ -413,3 +390,157 @@ def getConditionMapping(l, ids, varis, replacers, invert):
         if invert:
             ncondstr = 'Not(' + ncondstr + ')'
         replacers[cc[0][len('__static_condition_renaming("'):-1]] = ncondstr
+
+
+class SugarlyzerTester(unittest.TestCase):
+    def test_getCorrelateLine_constantPropNegative(self):
+        f = "unitTestFiles/constantPropNegative.desugared.c"
+        self.assertEqual(getCorrelateLine(f,40),'3')
+        self.assertEqual(getCorrelateLine(f,49),'0')
+        self.assertEqual(getCorrelateLine(f,50),'9')
+        self.assertEqual(getCorrelateLine(f,54),'0')
+        self.assertEqual(getCorrelateLine(f,55),'14')
+        self.assertEqual(getCorrelateLine(f,63),'17')
+        self.assertEqual(getCorrelateLine(f,75),'0')
+        self.assertEqual(getCorrelateLine(f,77),'0')
+        self.assertEqual(getCorrelateLine(f,88),'0')
+        self.assertEqual(getCorrelateLine(f,95),'21')
+        
+    def test_findConditionScope_constantPropNegative(self):
+        f = "unitTestFiles/constantPropNegative.desugared.c"
+        #-1 is to use the array access point, rather than line number
+        self.assertEqual(findConditionScope(40-1,f,True),-1)
+        self.assertEqual(findConditionScope(49-1,f,False),51-1)
+        self.assertEqual(findConditionScope(50-1,f,True),49-1)
+        self.assertEqual(findConditionScope(54-1,f,False),56-1)
+        self.assertEqual(findConditionScope(55-1,f,True),54-1)
+        self.assertEqual(findConditionScope(63-1,f,True),-1)
+        self.assertEqual(findConditionScope(75-1,f,True),-1)
+        self.assertEqual(findConditionScope(77-1,f,False),87-1)
+        self.assertEqual(findConditionScope(88-1,f,False),109-1)
+        self.assertEqual(findConditionScope(95-1,f,True),88-1)
+    
+    def test_calculateAsserts_constantPropNegative(self):
+        f = "unitTestFiles/constantPropNegative.desugared.c"
+        alarm1 = {}
+        alarm2 = {}
+        alarm1['lines'] = [40,49,50,54,55,63,75,77,88,95]
+        alarm2['lines'] = [40,49,50,54,63,75,77,88,95]
+        rslt1 = calculateAsserts(alarm1,f)
+        rslt2 = calculateAsserts(alarm2,f)
+        #conds bug 1
+        self.assertEqual(rslt1[0]['var'],'__static_condition_default_6')
+        self.assertTrue(rslt1[0]['val'])
+        self.assertEqual(rslt1[1]['var'],'__static_condition_default_7')
+        self.assertTrue(rslt1[1]['val'])
+        self.assertEqual(rslt1[2]['var'],'__static_condition_default_9')
+        self.assertFalse(rslt1[2]['val'])
+        self.assertEqual(rslt1[3]['var'],'__static_condition_default_10')
+        self.assertTrue(rslt1[3]['val'])
+        #conds bug 2
+        self.assertEqual(rslt2[0]['var'],'__static_condition_default_6')
+        self.assertTrue(rslt2[0]['val'])
+        self.assertEqual(rslt2[1]['var'],'__static_condition_default_7')
+        self.assertFalse(rslt2[1]['val'])
+        self.assertEqual(rslt2[2]['var'],'__static_condition_default_9')
+        self.assertFalse(rslt2[2]['val'])
+        self.assertEqual(rslt2[3]['var'],'__static_condition_default_10')
+        self.assertTrue(rslt2[3]['val'])
+
+    def test_getConditionMapping_constantPropNegative(self):
+        varisRep = {}
+        replacersRep = {}
+        idsRep = {}
+        conditions = [
+        '__static_condition_renaming("__static_condition_default_5", "(defined READ_X)");\n',
+        '__static_condition_renaming("__static_condition_default_6", "!(defined READ_X)");\n',
+        '__static_condition_renaming("__static_condition_default_7", "(defined INC)");\n',
+        '__static_condition_renaming("__static_condition_default_8", "!(defined INC)");\n',
+        '__static_condition_renaming("__static_condition_default_9", "(defined READ_X)");\n',
+        '__static_condition_renaming("__static_condition_default_10", "!(defined READ_X)");\n',
+        ]
+        for l in conditions:
+            getConditionMapping(l,idsRep,varisRep,replacersRep,False)
+        self.assertEqual(idsRep['defined READ_X'], 'varis["DEF_READ_X"]')
+        self.assertEqual(idsRep['defined INC'], 'varis["DEF_INC"]')
+        self.assertEqual(replacersRep['__static_condition_default_5'],'(varis["DEF_READ_X"])')
+        self.assertEqual(replacersRep['__static_condition_default_6'],'Not(varis["DEF_READ_X"])')
+        self.assertEqual(replacersRep['__static_condition_default_7'],'(varis["DEF_INC"])')
+        self.assertEqual(replacersRep['__static_condition_default_8'],'Not(varis["DEF_INC"])')
+        self.assertEqual(replacersRep['__static_condition_default_9'],'(varis["DEF_READ_X"])')
+        self.assertEqual(replacersRep['__static_condition_default_10'],'Not(varis["DEF_READ_X"])')
+
+    def test_getCorrelateLine_constantPropPositive(self):
+        f = "unitTestFiles/constantPropPositive.desugared.c"
+        self.assertEqual(getCorrelateLine(f,36),'3')
+        self.assertEqual(getCorrelateLine(f,45),'0')
+        self.assertEqual(getCorrelateLine(f,46),'9')
+        self.assertEqual(getCorrelateLine(f,50),'0')
+        self.assertEqual(getCorrelateLine(f,51),'14')
+        self.assertEqual(getCorrelateLine(f,59),'17')
+        self.assertEqual(getCorrelateLine(f,71),'0')
+        self.assertEqual(getCorrelateLine(f,79),'20')
+        
+    def test_findConditionScope_constantPropPositive(self):
+        f = "unitTestFiles/constantPropPositive.desugared.c"
+        #-1 is to use the array access point, rather than line number
+        self.assertEqual(findConditionScope(36-1,f,True),-1)
+        self.assertEqual(findConditionScope(45-1,f,False),47-1)
+        self.assertEqual(findConditionScope(46-1,f,True),45-1)
+        self.assertEqual(findConditionScope(50-1,f,False),52-1)
+        self.assertEqual(findConditionScope(51-1,f,True),50-1)
+        self.assertEqual(findConditionScope(59-1,f,True),-1)
+        self.assertEqual(findConditionScope(71-1,f,True),-1)
+        self.assertEqual(findConditionScope(79-1,f,True),-1)
+
+    def test_calculateAsserts_constantPropPositive(self):
+        f = "unitTestFiles/constantPropPositive.desugared.c"
+        alarm1 = {}
+        alarm2 = {}
+        alarm1['lines'] = [36,45,46,50,51,59,71,79]
+        alarm2['lines'] = [36,45,46,59,71,79]
+        rslt1 = calculateAsserts(alarm1,f)
+        rslt2 = calculateAsserts(alarm2,f)
+        #conds bug 1
+        self.assertEqual(rslt1[0]['var'],'__static_condition_default_6')
+        self.assertTrue(rslt1[0]['val'])
+        self.assertEqual(rslt1[1]['var'],'__static_condition_default_7')
+        self.assertTrue(rslt1[1]['val'])
+        #conds bug 2
+        self.assertEqual(rslt2[0]['var'],'__static_condition_default_6')
+        self.assertTrue(rslt2[0]['val'])
+        
+    def test_getConditionMapping_constantPropPositive(self):
+        varisRep = {}
+        replacersRep = {}
+        idsRep = {}
+        conditions = [
+        '__static_condition_renaming("__static_condition_default_5", "(defined READ_X)");\n',
+        '__static_condition_renaming("__static_condition_default_6", "!(defined READ_X)");\n',
+        '__static_condition_renaming("__static_condition_default_7", "(defined INC)");\n',
+        '__static_condition_renaming("__static_condition_default_8", "!(defined INC)");\n',
+        ]
+        for l in conditions:
+            getConditionMapping(l,idsRep,varisRep,replacersRep,False)
+        self.assertEqual(idsRep['defined READ_X'], 'varis["DEF_READ_X"]')
+        self.assertEqual(idsRep['defined INC'], 'varis["DEF_INC"]')
+        self.assertEqual(replacersRep['__static_condition_default_5'],'(varis["DEF_READ_X"])')
+        self.assertEqual(replacersRep['__static_condition_default_6'],'Not(varis["DEF_READ_X"])')
+        self.assertEqual(replacersRep['__static_condition_default_7'],'(varis["DEF_INC"])')
+        self.assertEqual(replacersRep['__static_condition_default_8'],'Not(varis["DEF_INC"])')
+
+    def test_complexConditionMapping(self):
+        varisRep = {}
+        replacersRep = {}
+        idsRep = {}
+        conditions = [ '__static_condition_renaming("__static_condition_default_357", "!(defined __need___FILE) && (defined _FILE_OFFSET_BITS) && (_FILE_OFFSET_BITS == 64) && (defined _FORTIFY_SOURCE) && (_FORTIFY_SOURCE > 0) && (defined __OPTIMIZE__) && (__OPTIMIZE__ > 0) && (defined __FILE_defined)");\n',
+                       '__static_condition_renaming("__static_condition_default_433", "!(defined __need___FILE) && (defined __FILE_defined) && !(defined _ANSI_STDARG_H_) && (defined __GNUC_VA_LIST) || !(defined __need___FILE) && (defined __FILE_defined) && (defined _ANSI_STDARG_H_)");\n'
+            ]
+        for l in conditions:
+            getConditionMapping(l,idsRep,varisRep,replacersRep,False)
+        self.assertEqual(replacersRep['__static_condition_default_357'],'And(Not(varis["DEF___need___FILE"]) ,And( (varis["DEF__FILE_OFFSET_BITS"]) ,And( (varis["USE__FILE_OFFSET_BITS"] == 64) ,And( (varis["DEF__FORTIFY_SOURCE"]) ,And( (varis["USE__FORTIFY_SOURCE"] > 0) ,And( (varis["DEF___OPTIMIZE__"]) ,And( (varis["USE___OPTIMIZE__"] > 0) , (varis["DEF___FILE_defined"]))))))))')
+        self.assertEqual(replacersRep['__static_condition_default_433'],'Or(And(Not(varis["DEF___need___FILE"]) ,And( (varis["DEF___FILE_defined"]) ,And( Not(varis["DEF__ANSI_STDARG_H_"]) , (varis["DEF___GNUC_VA_LIST"]) ))),And( Not(varis["DEF___need___FILE"]) ,And( (varis["DEF___FILE_defined"]) , (varis["DEF__ANSI_STDARG_H_"]))))')
+
+        
+if __name__ == '__main__':
+    unittest.main()
