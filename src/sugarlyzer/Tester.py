@@ -58,8 +58,10 @@ class Tester:
         logger.info(f"Desugaring the source code in {list(self.program.source_locations)}")
 
         # TODO: Need an application-specific way to specify header files.
-        partial = functools.partial(SugarCRunner.desugar_file, user_defined_space=SugarCRunner.get_recommended_space(None),
-                                  remove_errors=True, no_stdlibs=True, included_files = ["/SugarlyzerConfig/axtlsInc.h"],
+        partial = functools.partial(SugarCRunner.desugar_file,
+                                    user_defined_space=SugarCRunner.get_recommended_space(None),
+                                    remove_errors=True, no_stdlibs=True,
+                                    included_files = ["/SugarlyzerConfig/axtlsInc.h"],
                                     included_directories=["/SugarlyzerConfig/stdinc/usr/include/",
                                                           "/SugarlyzerConfig/stdinc/usr/include/x86_64-linux-gnu/",
                                                           "/SugarlyzerConfig/stdinc/usr/lib/gcc/x86_64-linux-gnu/9/include/"])
