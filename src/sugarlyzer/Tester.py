@@ -6,6 +6,7 @@ import argparse
 import importlib
 import json
 import os
+from pathos.multiprocessing import ProcessPool
 from typing import Iterable, List, Dict, Any
 from jsonschema.validators import RefResolver, Draft7Validator
 
@@ -66,7 +67,7 @@ class Tester:
                                                           "/SugarlyzerConfig/stdinc/usr/include/x86_64-linux-gnu/",
                                                           "/SugarlyzerConfig/stdinc/usr/lib/gcc/x86_64-linux-gnu/9/include/"])
         logger.info(f"Source files are {list(self.program.get_source_files())}")
-        desugared_files: Iterable[str, str] = map(partial, self.program.get_source_files())
+        desugared_files: Iterable[str, str] = ProcessPool(8).map(partial, self.program.get_source_files())
         logger.info(f"Finished desugaring the source code.")
 
         # 3/4. Run analysis tool, and read its results

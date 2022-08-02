@@ -4,6 +4,7 @@ import re
 import subprocess
 import itertools
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Tuple, List, Optional, Dict
 
 from z3 import *
@@ -51,7 +52,7 @@ def desugar_file(file_to_desugar: str,
     :param included_directories: A list of directories to be included.
     :return: (desugared_file_location, log_file_location)
     """
-    logger.info("In desugar file function")
+    logger.debug("In desugar file function")
     if included_directories is None:
         included_directories = []
     if included_files is None:
@@ -86,20 +87,22 @@ def desugar_file(file_to_desugar: str,
             its = 0
             while len(to_append) > 0 and its < 2:
                 its += 1
-                logger.info(f"to_append is {to_append}")
+                logger.debug(f"to_append is {to_append}")
                 for d in to_append:
                     outfile.write(d + "\n")
                 run_sugarc(cmd, desugared_file, log_file)
-                logging.info(f"Created desugared file {desugared_file}")
+                logging.debug(f"Created desugared file {desugared_file}")
                 to_append = get_bad_constraints(desugared_file)
 
     run_sugarc(cmd, desugared_file, log_file)
-    logger.info(f"Wrote to {log_file}")
+    logger.debug(f"Wrote to {log_file}")
     return desugared_file, log_file
 
 
 def run_sugarc(cmd, desugared_file, log_file):
-    logger.info("In run_sugarc")
+    logger.debug("In run_sugarc")
+    if Path(desugared_file).exists():
+        logger.info(f"{desugared_file} already exists, using previous result.")
     ps = subprocess.run(cmd, capture_output=True)
     with open(desugared_file, 'wb') as f:
         f.write(ps.stdout)
@@ -116,7 +119,7 @@ def process_alarms(alarms: List[Alarm], desugared_file: str) -> str:
     :param desugared_file: The location of the desugared file.
     :return: A report containing all results. TODO: Replace with some data structure?
     """
-    logger.info("In process_alarms")
+    logger.debug("In process_alarms")
     ids = {}
     replacers = {}
     varis = {}
@@ -161,7 +164,7 @@ def get_correlate_line(desugared_output: str, desugared_location: int) -> str:
     :param desugared_location:
     :return:
     """
-    logger.info("In get_correlate_line")
+    logger.debug("In get_correlate_line")
     with open(desugared_output, 'r') as infile:
         lines: List[str] = list(map(lambda x: x.strip('\n'), infile.readlines()))
         the_line: str = lines[desugared_location - 1]
@@ -187,7 +190,7 @@ def check_non_flow(alarm: Alarm, desugared_output: str) -> List[Dict[str, str | 
     :param desugared_output:
     :return:
     """
-    logger.info("Inside check_non_flow")
+    logger.debug("Inside check_non_flow")
     result = []
     with open(desugared_output, 'r') as ff:
         lines: List[str] = ff.readlines()
@@ -213,7 +216,7 @@ def get_bad_constraints(desugared_file: str) -> List[str]:
     :param desugared_file: The location of the desugared file.
     :return: The list of constraints that always result in errors.
     """
-    logger.info("In get_bad_constraints")
+    logger.debug("In get_bad_constraints")
     with open(desugared_file, 'r') as infile:
         lines = infile.readlines()
 
@@ -275,7 +278,7 @@ def get_condition_mapping(line, invert: bool = False) -> ConditionMapping:
     :param invert:
     :return:
     """
-    logger.info("In get_condition_mapping")
+    logger.debug("In get_condition_mapping")
     result = ConditionMapping()
 
     if not line.startswith('__static_condition_renaming('):
