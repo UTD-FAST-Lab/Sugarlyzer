@@ -26,6 +26,10 @@ class Alarm:
     model: Optional[ModelRef] = field(init=False, default=None)
     correlated_lines: Optional[str] = field(init=False, default="")
 
+    def __hash__(self):
+        return hash((self.file, self.start_line, self.end_line, self.alarm_type, self.message, self.id,
+                     frozenset(self.asserts), self.feasible, self.model, self.correlated_lines))
+
     def __post_init__(self):
         self.id = next(Alarm.__id_generator)
 
@@ -63,3 +67,7 @@ class VariabilityAlarm(Alarm):
         return isinstance(other, VariabilityAlarm) and \
                self.conditional == other.conditional and \
                super().__eq__(other)
+
+    def __hash__(self):
+        return hash((self.file, self.start_line, self.end_line, self.alarm_type, self.message, self.id,
+                     frozenset(self.asserts), self.feasible, self.model, self.correlated_lines, self.conditional))
