@@ -1,4 +1,5 @@
-from typing import List, Dict, ClassVar, Optional
+import json
+from typing import List, Dict, ClassVar, Optional, Iterable
 from dataclasses import dataclass, field
 import itertools
 import re
@@ -6,68 +7,50 @@ import re
 from z3.z3 import ModelRef
 
 
+def sanitize(message: str):
+    san = message.rstrip()
+    if " '" in san:
+        san = re.sub(r" '\S+'", " 'x'", san)
+    if san.endswith(']'):
+        san = re.sub(r' \[.*\]$', '', san)
+    return san
+
+
 @dataclass
 class Alarm:
-    # -- Instance variables which we should initialize in the constructor.
+    # -- Instance variables which we should initialize in the constructor,
+    # --  and which we should use in comparison and hashing.
     file: str
     start_line: int
     end_line: int
     alarm_type: str
-    message: str
+
+    # We don't use message in hash, instead we use sanitized_message
+    message: str = field(compare=False)
 
     # -- Class variables
     __id_generator: ClassVar[itertools.count] = itertools.count()
 
     # -- Instance variables that should not be initialized in the constructor.
-    id: int = field(init=False)
-    __sanitized_message: str = field(init=False, default=None)
-    asserts: List[Dict[str, str | bool]] = field(init=False, default_factory=list)
-    feasible: Optional[bool] = field(init=False, default=None)
-    model: Optional[ModelRef] = field(init=False, default=None)
-    correlated_lines: Optional[str] = field(init=False, default="")
 
-    def __hash__(self):
-        return hash((self.file, self.start_line, self.end_line, self.alarm_type, self.message, self.id,
-                     frozenset(self.asserts), self.feasible, self.model, self.correlated_lines))
+    # Sanitized_message is computed in __post_init__ and is used in hashing and comparison instead of
+    #  message.
+    sanitized_message: str = field(init=False)
+
+    # Everything else here should not be used in hashing or comparison.
+    kw_only_no_hash = {'kw_only': True, 'compare': False}
+    id: int = field(init=False, compare=False)
+    lines: Iterable[int] = field(default_factory=list, **kw_only_no_hash)
+    asserts: List[Dict[str, str | bool]] = field(default_factory=list, **kw_only_no_hash)
+    feasible: Optional[bool] = field(default=None, **kw_only_no_hash)
+    model: Optional[ModelRef] = field(default=None, **kw_only_no_hash)
+    correlated_lines: Optional[str] = field(default_factory=list, **kw_only_no_hash)
 
     def __post_init__(self):
         self.id = next(Alarm.__id_generator)
-
-    @property
-    def sanitized_message(self) -> str:
-        if self.__sanitized_message is None:
-            san = self.message.rstrip()
-            if " '" in san:
-                san = re.sub(r" '\S+'", " 'x'", san)
-            if san.endswith(']'):
-                san = re.sub(r' \[.*\]$', '', san)
-            self.__sanitized_message = san
-        return self.__sanitized_message
-
-    def __str__(self):
-        return ' '.join(['(' + self.sanitized_message + ')', str(self.file),
-                         str(self.start_line), str(self.end_line)])
-
-    def includes(self, other):
-        """
-        Substitute for Zach's areEq method
-        :param other:
-        :return:
-        """
-        return self.sanitized_message == other.sanitized_message and \
-               self.start_line <= other.start_line and \
-               self.end_line >= other.end_line
+        self.sanitized_message = sanitize(self.message)
 
 
-@dataclass(eq=False, unsafe_hash=False)
+@dataclass
 class VariabilityAlarm(Alarm):
-    conditional: str  # TODO: How do we want to represent conditionals?
-
-    def __eq__(self, other):
-        return isinstance(other, VariabilityAlarm) and \
-               self.conditional == other.conditional and \
-               super().__eq__(other)
-
-    def __hash__(self):
-        return hash((self.file, self.start_line, self.end_line, self.alarm_type, self.message, self.id,
-                     frozenset(self.asserts), self.feasible, self.model, self.correlated_lines, self.conditional))
+    conditional: str = ""  # TODO: How do we want to represent conditionals?
