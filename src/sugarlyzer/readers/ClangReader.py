@@ -75,14 +75,15 @@ class ClangReader(AbstractReader):
             parser.feed(rf.read())
             logging.info(f"alarm is in {file}")
             logging.info(f"Lines is {parser.lines}")
-            ret = Alarm(alarm_type=parser.msgType,
+            try:
+                ret = Alarm(alarm_type=parser.msgType,
                         message=parser.msg,
                         start_line=(sorted_lines:=sorted(parser.lines))[0],
                         end_line=sorted_lines[1],
                         file=parser.location)
-            ret.asserts = parser.asserts
-            '''
-            Separate the asserts to be a list of if locations and
-            assumptions, we parse this out automatically ourselves.
-            '''
-            yield ret
+            except:
+                logger.exception(f"Couldn't create alarm. Fields were: msgType={parser.msgType}, message={parser.msg}, "
+                                 f"lines={parser.lines}, file={parser.location}")
+            else:
+                ret.lines = sorted_lines
+                yield ret

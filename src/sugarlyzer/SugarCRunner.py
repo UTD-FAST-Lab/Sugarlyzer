@@ -1,3 +1,4 @@
+import functools
 import logging
 import os
 import re
@@ -10,11 +11,14 @@ from typing import Tuple, List, Optional, Dict
 from z3 import *
 from z3.z3 import Solver, sat, Bool, Int
 
+from src.sugarlyzer.SourceLineMapper import SourceLineMapper
 from src.sugarlyzer.models.Alarm import Alarm
 
 USER_DEFS = '/tmp/__sugarlyzerPredefs.h'
 
 logger = logging.getLogger(__name__)
+
+
 def get_recommended_space(file: str) -> str:
     """
     Explores the provided file. Looks for inclusion guards or other
@@ -90,20 +94,19 @@ def desugar_file(file_to_desugar: str,
                 logger.debug(f"to_append is {to_append}")
                 for d in to_append:
                     outfile.write(d + "\n")
-                run_sugarc(cmd, desugared_file, log_file)
+                run_sugarc(" ".join(cmd), desugared_file, log_file)
                 logging.debug(f"Created desugared file {desugared_file}")
                 to_append = get_bad_constraints(desugared_file)
 
-    run_sugarc(cmd, desugared_file, log_file)
+    run_sugarc(" ".join(cmd), desugared_file, log_file)
     logger.debug(f"Wrote to {log_file}")
     return desugared_file, log_file
 
 
-def run_sugarc(cmd, desugared_file, log_file):
-    logger.debug("In run_sugarc")
-    if Path(desugared_file).exists():
-        logger.info(f"{desugared_file} already exists, using previous result.")
-    ps = subprocess.run(cmd, capture_output=True)
+@functools.cache
+def run_sugarc(cmd_str, desugared_file, log_file):
+    logger.debug(f"In run_sugarc, running cmd {cmd_str}")
+    ps = subprocess.run(cmd_str.split(" "), capture_output=True)
     with open(desugared_file, 'wb') as f:
         f.write(ps.stdout)
     logger.info(f"Wrote to {desugared_file}")
@@ -135,7 +138,7 @@ def process_alarms(alarms: List[Alarm], desugared_file: str) -> str:
 
     report = ''
     for w in alarms:
-        w.asserts = check_non_flow(w, desugared_file)
+        w.asserts = calculate_asserts(w, desugared_file)
         s = Solver()
         for a in w.asserts:
             if a['val']:
@@ -146,7 +149,8 @@ def process_alarms(alarms: List[Alarm], desugared_file: str) -> str:
             m = s.model()
             w.feasible = True
             w.model = m
-            w.correlated_lines = get_correlate_line(desugared_file, w.start_line)
+            w.correlated_lines = [SourceLineMapper.map_source_line(desugared_file, l)
+                                  for l in {w.start_line, *w.lines, w.end_line}]
             report += str(w) + '\n'
         else:
             print('impossible constraints')
@@ -156,26 +160,93 @@ def process_alarms(alarms: List[Alarm], desugared_file: str) -> str:
     return report
 
 
-def get_correlate_line(desugared_output: str, desugared_location: int) -> str:
-    """
-    Given the desugared output and a location in the desugared output (given by an analysis tool),
-    opens the desugared output and finds the mapping back to the
-    :param desugared_output:
-    :param desugared_location:
-    :return:
-    """
-    logger.debug("In get_correlate_line")
-    with open(desugared_output, 'r') as infile:
-        lines: List[str] = list(map(lambda x: x.strip('\n'), infile.readlines()))
-        the_line: str = lines[desugared_location - 1]
-        match (mat := re.match(r"//L(.*)$", the_line)).lastindex:
-            case 1:
-                return mat.lastgroup
-            case x if x > 1:
-                raise ValueError(f"Line {the_line} has multiple matches for the pattern (this should not be"
-                                 f" possible!)")
-            case _:
-                raise ValueError(f"Line {the_line} has no correlated line.")
+def find_condition_scope(start, fpa, goingUp):
+    '''
+    Finds the line that dictates start/end of the condition
+    associated with the starting line. If going down, finds
+    end of the scope defined by the first line. If going up
+    finds the line that dictates the condition associated with
+    the starting line
+
+    Parameters:
+    start (int):Line that the search starts from
+    fpa (str):File to search
+    goingUp (bool):Whether to search up in the file, or down
+
+    Returns:
+    int: line that ends the scope, -1 if not found
+    '''
+    result = -1
+    ff = open(fpa, 'r')
+    lines = ff.read().split('\n')
+    ff.close()
+    if goingUp:
+        Rs = 0
+        l = start
+        while l >= 0:
+            Rs += lines[l].count('}')
+            m = re.match('if \((__static_condition_default_\d+)\).*', lines[l])
+            if Rs == 0 and m:
+                result = l
+                break
+            Rs -= lines[l].count('{')
+            if Rs < 0:
+                Rs = 0
+            l -= 1
+    else:
+        Rs = 0
+        l = start
+        while l < len(lines):
+            Rs += lines[l].count('{')
+            Rs -= lines[l].count('}')
+            if Rs <= 0:
+                result = l
+                break
+            l += 1
+    return result
+
+
+def calculate_asserts(w, fpa):
+    '''
+    Given the warning, the lines are gone over to find associated
+    presence conditions. If the line is a static condition if statement,
+    we check if a line exists in it's scope, if it does not, we
+    assert the conidition is false. For any other line, we assume
+    the parent condition is true.
+    '''
+    ff = open(fpa, 'r')
+    lines = ff.read().split('\n')
+    ff.close()
+    result = []
+    for line in {w.start_line, w.end_line, *w.lines}:  # to prevent going over lines multiple times
+        line -= 1
+        fl = lines[line]
+        if 'static_condition_default' in fl:
+            start = line
+            end = find_condition_scope(line, fpa, False)
+            if end == -1:
+                continue
+            found = False
+            for x in w['lines']:
+                if x - 1 > start and x - 1 < end:
+                    found = True
+                    break
+            if not found:
+                asrt = {}
+                asrt['var'] = fl.split("(")[1].split(')')[0]
+                asrt['val'] = False
+                result.append(asrt)
+
+        else:
+            top = find_condition_scope(line, fpa, True)
+            if top == -1 or 'static_condition_default' not in lines[top]:
+                continue
+            asrt = {}
+            asrt['var'] = lines[top].split("(")[1].split(')')[0]
+            asrt['val'] = True
+
+            result.append(asrt)
+    return result
 
 
 def check_non_flow(alarm: Alarm, desugared_output: str) -> List[Dict[str, str | bool]]:

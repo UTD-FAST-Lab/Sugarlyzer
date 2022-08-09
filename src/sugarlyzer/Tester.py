@@ -1,8 +1,9 @@
-import functools
-import logging
-logging.basicConfig(level=logging.INFO)
-
 import argparse
+import dataclasses
+from pathlib import Path
+import logging
+import functools
+
 import importlib
 import json
 import os
@@ -15,11 +16,6 @@ from src.sugarlyzer.SourceLineMapper import SourceLineMapper
 from src.sugarlyzer.analyses.AnalysisToolFactory import AnalysisToolFactory
 from src.sugarlyzer.models.Alarm import Alarm
 from src.sugarlyzer.models.ProgramSpecification import ProgramSpecification
-
-p = argparse.ArgumentParser()
-p.add_argument("tool", help="The tool to run.")
-p.add_argument("program", help="The target program.")
-args = p.parse_args()
 
 logger = logging.getLogger(__name__)
 
@@ -43,7 +39,8 @@ class Tester:
             validator.validate(result)
             return result
 
-        program_as_json = read_json_and_validate(importlib.resources.path(f'resources.programs.{program}', 'program.json'))
+        program_as_json = read_json_and_validate(
+            importlib.resources.path(f'resources.programs.{program}', 'program.json'))
         self.program = ProgramSpecification(**program_as_json)
 
     def execute(self):
@@ -62,7 +59,7 @@ class Tester:
         partial = functools.partial(SugarCRunner.desugar_file,
                                     user_defined_space=SugarCRunner.get_recommended_space(None),
                                     remove_errors=True, no_stdlibs=True,
-                                    included_files = ["/SugarlyzerConfig/axtlsInc.h"],
+                                    included_files=["/SugarlyzerConfig/axtlsInc.h"],
                                     included_directories=["/SugarlyzerConfig/stdinc/usr/include/",
                                                           "/SugarlyzerConfig/stdinc/usr/include/x86_64-linux-gnu/",
                                                           "/SugarlyzerConfig/stdinc/usr/lib/gcc/x86_64-linux-gnu/9/include/"])
@@ -75,20 +72,48 @@ class Tester:
 
         tool = AnalysisToolFactory().get_tool(self.tool)
         alarm_collections: List[Iterable[Alarm]] = [tool.analyze_and_read(f) for f, _ in desugared_files]
-        alarms = set()
+        alarms = list()
         for collec in alarm_collections:
-            alarms.update(collec)
+            alarms.extend(collec)
         logger.info(f"Got {len(alarms)} unique alarms.")
 
-        # 5. Map desugared lines to source code lines.
-        variability_alarms = [SourceLineMapper.map_source_line(a) for a in alarms]
+        with open("/results/alarms.txt", 'w') as f:
+            json.dump(list(map(lambda x: dataclasses.asdict(x), alarms)), f)
 
+        [print(str(a)) for a in alarms]
         # (Optional) 6. Optional unsoundness checker
         pass
 
+def get_arguments() -> argparse.Namespace:
+    p = argparse.ArgumentParser()
+    p.add_argument("tool", help="The tool to run.")
+    p.add_argument("program", help="The target program.")
+    p.add_argument("-v", dest="verbosity", action="count", help="""Level of verbosity. No v's will print only WARNING or above messages. One 
+    v will print INFO and above. Two or more v's will print DEBUG or above.""")
+    return p.parse_args()
+
+def set_up_logging(args: argparse.Namespace) -> None:
+    match args.verbosity:
+        case 0:
+            logging_level = logging.WARNING
+        case 1:
+            logging_level = logging.INFO
+        case _:
+            logging_level = logging.DEBUG
+
+    logging_kwargs = {"level": logging_level, "format": '%(asctime)s %(name)s %(levelname)s %(message)s',
+                      "handlers": [logging.StreamHandler()]}
+    if (log_file := Path("/log.txt")).exists():
+        logging_kwargs["handlers"].append(logging.FileHandler(str(log_file)))
+
+    logging.basicConfig(**logging_kwargs)
+
 def main():
+    args = get_arguments()
+    set_up_logging(args)
     t = Tester(args.tool, args.program)
     t.execute()
+
 
 if __name__ == '__main__':
     main()
