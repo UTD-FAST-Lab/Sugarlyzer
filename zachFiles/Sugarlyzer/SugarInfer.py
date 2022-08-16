@@ -14,48 +14,25 @@ class InferAlyzer(Sugarlyzer):
     
   def runAnalyzer(self,fileName: str,isDesugared: bool) -> list:
     outFi = fileName[:-2]+'.inferres'
-    os.system('infer --pulse-only --enable-issue-type NULLPTR_DEREFERENCE_LATENT --enable-issue-type MEMORY_LEAK_C --enable-issue-type USE_AFTER_FREE -- clang -c ' + fileName + ' > ' + outFi)
+    os.system('infer --pulse-only  -- clang -c ' + fileName + ' > ' + outFi)
     fi = open(outFi,'r')
     lines = fi.read().split('\n')
     fi.close()
     i = 0
     alarms = []
     while i < len(lines):
-      if lines[i].rstrip().endswith('error: Null Dereference') and lines[i+1].lstrip().startswith("`"):
+      if ': error: ' in lines[i]:
         alarm = {}
-        alarm['msg'] = 'Null Dereference'
+        alarm['msg'] = lines[i].split(':')[3].lstrip().rstrip()
         alarm['msgtype'] = 'error'
         alarm['loc'] = int(lines[i].split(':')[1])
         alarm['lines'] = []
-        m = re.search(r'last assigned on line (\d+)',lines[i+1])
-        print (m, lines[i+1])
-        if m:
-          alarm['lines'].append(int(m.group(1)))
         alarm['lines'].append(alarm['loc'])
-        alarms.append(alarm)
-      elif lines[i].rstrip.endswith('error: Memory Leak') and lines[i+1].lstrip().startswith('Memory'):
-        alarm = {}
-        alarm['msg'] = 'Memory Leak'
-        alarm['msgtype'] = 'error'
-        alarm['loc'] = int(lines[i].split(':')[1])
-        alarm['lines'] = []
-        m = re.search(r'on line (\d+) is not freed',lines[i+1])
-        print (m, lines[i+1])
-        if m:
-          alarm['lines'].append(int(m.group(1)))
-        alarm['lines'].append(alarm['loc'])
-        alarms.append(alarm)
-      elif lines[i].rstrip.endswith('error: Use After Free') and lines[i+1].lstrip().startswith('accessing'):
-        alarm = {}
-        alarm['msg'] = 'Use After Free'
-        alarm['msgtype'] = 'error'
-        alarm['loc'] = int(lines[i].split(':')[1])
-        alarm['lines'] = []
-        m = re.search(r'on line (\d+)\.',lines[i+1])
-        print (m, lines[i+1])
-        if m:
-          alarm['lines'].append(int(m.group(1)))
-        alarm['lines'].append(alarm['loc'])
+        lins = re.findall(r'line \d+', lines[i+1])
+        for lin in lins:
+          linInt = int(lin.split(' ')[1])
+          if linInt not in alarm['lines']:
+            alarm['lines'].append(linInt)
         alarms.append(alarm)
       i += 1
     return alarms
@@ -64,8 +41,8 @@ class InferAlyzer(Sugarlyzer):
   def compareAlarms(self, alarmA: Alarm, alarmB: Alarm) -> bool:
     pass
 
-if __name__ == "__main__":
-  n = sys.argv[1]
+def main(argv):
+  n = argv[1]
   i = InferAlyzer()
   i.setFile(n)
   r = i.getRecommendedSpace()
@@ -73,4 +50,10 @@ if __name__ == "__main__":
   incf = ["~/SystemConfig/baseInc.h"]
   incd = ["~/SystemConfig/original/usr/include/", "~/SystemConfig/original/usr/include/x86_64-linux-gnu/", "~/SystemConfig/original/usr/lib/gcc/x86_64-linux-gnu/9/include/"] 
   df = i.desugarFile(r,remove_errors=True,no_stdlibs=True,commandline_args=cma,included_files=incf,included_directories=incd)
-  print (i.analyze()) 
+  print (i.analyze())
+  
+  
+  
+if __name__ == "__main__":
+  main(sys.argv)
+  
