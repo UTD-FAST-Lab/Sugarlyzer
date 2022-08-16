@@ -1,4 +1,7 @@
+import functools
+import operator
 from abc import ABC, abstractmethod
+from pathlib import Path
 from typing import Iterable
 
 from src.sugarlyzer.models.Alarm import Alarm
@@ -16,10 +19,10 @@ class AbstractTool(ABC):
         :param file: The file to analyze.
         :return: A collection of alarms.
         """
-        return self.reader.read_output(self.analyze(file))
+        return functools.reduce(operator.iconcat, [self.reader.read_output(f) for f in self.analyze(file)], [])
 
     @abstractmethod
-    def analyze(self, file: str) -> str:
+    def analyze(self, file: str) -> Iterable[Path]:
         """
         Analyzes a file and returns the location of its output.
         :param file: The file to run analysis on.
