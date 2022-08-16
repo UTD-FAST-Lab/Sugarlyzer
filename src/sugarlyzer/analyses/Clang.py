@@ -1,5 +1,7 @@
 import subprocess
 import tempfile
+from pathlib import Path
+from typing import Iterable
 
 from src.sugarlyzer.analyses.AbstractTool import AbstractTool
 import sys
@@ -45,19 +47,20 @@ def scan(projStr, fileStr, filePath):
     return reports
 
 
+
+
 class Clang(AbstractTool):
 
     def __init__(self):
         super().__init__(ClangReader())
 
-    def analyze(self, file: str) -> str:
-        with (tempfile.TemporaryDirectory()) as output_location:
-            subprocess.run(["scan-build", "-o", output_location, "clang", "-c", os.path.abspath(file)])
-            reports = []
-            for root, dirs, files in os.walk(output_location):
-                reports.extend(list(map(lambda x: os.path.join(root, x),
-                                        filter(lambda r: r.startswith("report") and r.endswith(".html"))
-                                        )))
+    def analyze(self, file: str) -> Iterable[Path]:
+        output_location = tempfile.mkdtemp()
+        subprocess.run(["scan-build", "-o", output_location, "clang", "-c", os.path.abspath(file)])
+        for root, dirs, files in os.walk(output_location):
+            for f in files:
+                if f.startswith("report") and f.endswith(".html"):
+                    yield Path(root)/f
 
 
 if __name__ == '__main__':

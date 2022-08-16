@@ -2,3 +2,4 @@ docker~=5.0.3
 hypothesis==6.48.2
 z3-solver~=4.8.17.0
 jsonschema~=4.6.1
+pathos~=0.2.9
