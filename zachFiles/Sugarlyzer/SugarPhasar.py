@@ -58,11 +58,12 @@ class PhasarAlyzer(Sugarlyzer):
 
 if __name__ == "__main__":
   n = sys.argv[1]
-  i = InferAlyzer()
+  i = PhasarAlyzer()
   i.setFile(n)
+  incf = ["~/SystemConfig/baseInc.h"]
+  incd = ["~/SystemConfig/original/use/include/", "~/SystemConfig/original/use/include/x86_64-linux-gnu/", "~/SystemConfig/original/usr/lib/gcc/x86_64-linux-gnu/9/include/"]
+  i.setInclusions(incf, incd, True)
   r = i.getRecommendedSpace()
   cma = ['-keep-mem']
-  incf = ["~/SystemConfig/baseInc.h"]
-  incd = ["~/SystemConfig/original/usr/include/", "~/SystemConfig/original/usr/include/x86_64-linux-gnu/", "~/SystemConfig/original/usr/lib/gcc/x86_64-linux-gnu/9/include/"] 
-  df = i.desugarFile(r,remove_errors=True,no_stdlibs=True,commandline_args=cma,included_files=incf,included_directories=incd)
+  df = i.desugarFile(r, remove_errors=True, commandline_args=cma)
   print (i.analyze()) 
