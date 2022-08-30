@@ -28,11 +28,11 @@ if __name__ == "__main__":
     n = sys.argv[1]
     c = ClangAlyzer()
     c.setFile(n)
-    r = c.getRecommendedSpace()
-    cma = ['-keep-mem']
     incf = ["~/SystemConfig/baseInc.h"]
     incd = ["~/SystemConfig/original/use/include/", "~/SystemConfig/original/use/include/x86_64-linux-gnu/",
             "~/SystemConfig/original/usr/lib/gcc/x86_64-linux-gnu/9/include/"]
-    df = c.desugarFile(r, remove_errors=True, no_stdlibs=True, commandline_args=cma, included_files=incf,
-                       included_directories=incd)
+    c.setInclusions(incf,incd,True)
+    r = c.getRecommendedSpace()
+    cma = ['-keep-mem']
+    df = c.desugarFile(r, remove_errors=True, commandline_args=cma)
     print(c.analyze())

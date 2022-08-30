@@ -1,5 +1,6 @@
 import sys
 import os
+import subprocess
 import shutil
 import json
 import re
@@ -43,6 +44,9 @@ class Sugarlyzer:
         self.fil = ''
         self.userDefinedMacros = ''
         self.desug = ''
+        self.included_files = []
+        self.included_directories = []
+        self.no_stdlibs = False
 
     def setFile(self, fileName: str):
         '''Specifies the file that will be desugared and analyzed.
@@ -55,6 +59,66 @@ class Sugarlyzer:
         '''
         self.fil = os.path.abspath(fileName)
 
+    def setInclusions(self, includedFiles: list, includedDirs: list, no_stdlibs: bool):
+        '''Specifies files to include, directories to include from, and if standard 
+        libraries should be used.
+        
+        Parameters:
+        no_stdlibs (bool):If this machine's standard library should be used or not.
+        commandline_args (list(str)):A list of other commandline arguments SugarC is to use.
+        included_files (list(str)):A list of individual files to be included. 
+        (The config space is always included, and does not need to be specified)
+        included_directories (list(str)): A list of directories to be included.
+        
+        Returns:
+        void
+        '''
+        self.included_files = includedFiles
+        self.included_directories = includedDirs
+        self.no_stdlibs = no_stdlibs
+
+    def parseFile(self, curFile:str) -> tuple:
+        '''Parses through a file line by line, on each line it searches for
+        inclusions of other files and potential guard macros. We define guard
+        macros as:
+        (#ifndef|!defined) X_H(_|__)
+        #ifndef X_defined
+        #defined(__need_X)
+        
+        Parameters:
+        curFle (str): file we are parsing
+
+        Returns:
+        List of all guard macros encountered
+        List of all files included
+        '''
+        included = []
+        guarded = []
+        Fil = open(curFile,'r')
+        #meant for match
+        for lin in Fil:
+            res = re.match(r'\s*#include\s*(<|")\s*([^\s>"]+)\s*("|>)\s*',lin)
+            if res:
+                included.append(res.group(2))
+            res = re.match(r'\s*#ifndef\s+(\S+)\s*',lin)
+            if res:
+                macro = res.group(1)
+                res = re.match(r'.*_(defined|DEFINED|h|H)_*',macro)
+                if res:
+                    guarded.append(macro)
+            res = re.findall(r'defined\s*\(([^\s\)]+)\)',lin)
+            if len(res) > 0:
+                macros = res
+                for m in macros:
+                    res = re.match(r'.*_(defined|DEFINED|h|H)_*',m)
+                    if res:
+                        guarded.append(m)
+                    res = re.match(r'__need_.*',m)
+                    if res:
+                        guarded.append(m)
+        Fil.close()
+        return guarded, included
+        
     def getRecommendedSpace(self) -> str:
         '''Explores the file provided in setFile. Looks for inclusion guards or other
         macros that would be assumed to be false and recommends them to be turned off.
@@ -63,20 +127,55 @@ class Sugarlyzer:
         Returns:
         A string to be added to an included file in desugaring
         '''
-        # still need to create the code to search for inclusion guards
-        return os.popen('echo | gcc -dM -E -').read()
+        guards = []
+        searchingDirs = self.included_directories
+        searchingDirs.append(os.getcwd())
+        if not self.no_stdlibs:
+            os.system('echo "int main () {return 0;}" > exampleInclude___.c')
+            gccOut = subprocess.Popen('gcc -v exampleInclude___.c', shell = True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            os.system('rm exampleInclude___.c')
+            out, err = gccOut.communicate()
+            gccOut = err.decode()
+            gccOut = gccOut.split('\n')
+            inRange = False
+            for lin in gccOut:
+                if 'End of search list.' in lin:
+                    inRange = False
+                elif inRange:
+                    searchingDirs.append(lin.lstrip().rstrip())
+                elif '#include <...> search starts here:' in lin:
+                    inRange = True
+        files = []
+        files.append(self.fil)
+        for f in self.included_files:
+            files.append(os.path.abspath(os.path.expanduser(f)))
+        fc = 0
+        while fc < len(files):
+            macros, includes = self.parseFile(files[fc])
+            for m in macros:
+                if m not in guards:
+                    guards.append(m)
+            for i in includes:
+                for sd in searchingDirs:
+                    comboFile = os.path.expanduser(os.path.join(sd,i))
+                    if os.path.exists(comboFile):
+                        trueFile = os.path.abspath(comboFile)
+                        if trueFile not in files:
+                            files.append(trueFile)
+            fc += 1
+        
+        gccDefs = os.popen('echo | gcc -dM -E -').read()
+        if len(guards) > 0:
+            return '\n#undef ' + '\n#undef '.join(guards) + '\n' + gccDefs
+        return gccDefs
 
-    def desugarFile(self, userDefinedSpace: str, output_file='', log_file='', remove_errors=False, no_stdlibs=False,
-                    commandline_args=[], included_files=[], included_directories=[]):
+    def desugarFile(self, userDefinedSpace: str, output_file='', log_file='', remove_errors=False,
+                    commandline_args=[]):
         '''Runs the SugarC command
     
         Parameters:
         output_file (str):If provided, will specify the location of the output. Otherwise tacks on .desugared.c to the end of the base file name
         log_file (str):If provided will specify the location of the logged data. Otherwise tacks on .Log to the end of the base file name
-        no_stdlibs (bool):If this machine's standard library should be used or not.
-        commandline_args (list(str)):A list of other commandline arguments SugarC is to use.
-        included_files (list(str)):A list of individual files to be included. (The config space is always included, and does not need to be specified)
-        included_directories (list(str)): A list of directories to be included.
         userDefinedSpace (str): defines and undefs to be assumed while desugaring
         remove_errors (bool): whether or not the desugared output should be re-run to remove bad configurations
         
@@ -85,14 +184,14 @@ class Sugarlyzer:
         str: log file, absolute path
         '''
         incFilesStr = ' '
-        if len(included_files) > 0:
-            incFilesStr = ' -include ' + ' -include '.join(included_files) + ' '
+        if len(self.included_files) > 0:
+            incFilesStr = ' -include ' + ' -include '.join(self.included_files) + ' '
         incFilesStr = incFilesStr + ' -include ' + userDefs + ' '
         incDirStr = ' '
-        if len(included_directories) > 0:
-            incDirStr = ' -I ' + ' -I '.join(included_directories) + ' '
+        if len(self.included_directories) > 0:
+            incDirStr = ' -I ' + ' -I '.join(self.included_directories) + ' '
         cmdArgs = ' '.join(commandline_args) + ' '
-        if no_stdlibs:
+        if self.no_stdlibs:
             cmdArgs = ' -nostdinc ' + cmdArgs + ' '
         if output_file == '':
             self.desug = self.fil + '.desugared.c'
@@ -539,8 +638,13 @@ class SugarlyzerTester(unittest.TestCase):
         for l in conditions:
             getConditionMapping(l,idsRep,varisRep,replacersRep,False)
         self.assertEqual(replacersRep['__static_condition_default_357'],'And(Not(varis["DEF___need___FILE"]) ,And( (varis["DEF__FILE_OFFSET_BITS"]) ,And( (varis["USE__FILE_OFFSET_BITS"] == 64) ,And( (varis["DEF__FORTIFY_SOURCE"]) ,And( (varis["USE__FORTIFY_SOURCE"] > 0) ,And( (varis["DEF___OPTIMIZE__"]) ,And( (varis["USE___OPTIMIZE__"] > 0) , (varis["DEF___FILE_defined"]))))))))')
-        self.assertEqual(replacersRep['__static_condition_default_433'],'Or(And(Not(varis["DEF___need___FILE"]) ,And( (varis["DEF___FILE_defined"]) ,And( Not(varis["DEF__ANSI_STDARG_H_"]) , (varis["DEF___GNUC_VA_LIST"]) ))),And( Not(varis["DEF___need___FILE"]) ,And( (varis["DEF___FILE_defined"]) , (varis["DEF__ANSI_STDARG_H_"]))))')
+        self.assertEqual(replacersRep['__static_condition_default_433'],'Or(And(Not(varis["DEF___need___FILE"]) ,And( (varis["DEF___FILE_defined"]) ,And( Not(varis["DEF__ANSI_STDARG_H_"]) , (varis["DEF___GNUC_VA_LIST"]) ))),And( Not(varis["DEF___need___FILE"]) ,And( (varis["DEF___FILE_defined"]) , (varis["DEF__ANSI_STDARG_H_"]))))')        
 
         
 if __name__ == '__main__':
-    unittest.main()
+    #unittest.main()
+    c = Sugarlyzer()
+    c.setFile("test.c")
+    r = c.getRecommendedSpace()
+    df = c.desugarFile(r, remove_errors=True, commandline_args=[])
+ 
