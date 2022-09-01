@@ -47,6 +47,19 @@ class Sugarlyzer:
         self.included_files = []
         self.included_directories = []
         self.no_stdlibs = False
+        self.debug = False
+
+    def setDebug(self, debug: bool):
+        '''Specifies whether or not debug info should be
+        displayed.
+
+        Parameters:
+        debug (bool): whether debug should be on(True) or off(False)
+
+        Returns:
+        void
+        '''
+        self.debug = debug
 
     def setFile(self, fileName: str):
         '''Specifies the file that will be desugared and analyzed.
@@ -57,6 +70,8 @@ class Sugarlyzer:
         Returns:
         void
         '''
+        if self.debug:
+            print('In setFile with file:', fileName)
         self.fil = os.path.abspath(fileName)
 
     def setInclusions(self, includedFiles: list, includedDirs: list, no_stdlibs: bool):
@@ -73,6 +88,9 @@ class Sugarlyzer:
         Returns:
         void
         '''
+        if self.debug:
+            print('In setInclusions: files', includedFiles, ' directories', 'using std libs', str(not no_stdlibs))
+
         self.included_files = includedFiles
         self.included_directories = includedDirs
         self.no_stdlibs = no_stdlibs
@@ -92,19 +110,26 @@ class Sugarlyzer:
         List of all guard macros encountered
         List of all files included
         '''
+        if self.debug:
+            print('Parsing '+ curFile +' for guard macros...')
+
         included = []
         guarded = []
         Fil = open(curFile,'r')
         #meant for match
         for lin in Fil:
-            res = re.match(r'\s*#include\s*(<|")\s*([^\s>"]+)\s*("|>)\s*',lin)
+            res = re.match(r'\s*#\s*include\s*(<|")\s*([^\s>"]+)\s*("|>)\s*',lin)
             if res:
+                if self.debug:
+                    print('adding file to check:',res.group(2))
                 included.append(res.group(2))
-            res = re.match(r'\s*#ifndef\s+(\S+)\s*',lin)
+            res = re.match(r'\s*#\s*ifndef\s+(\S+)\s*',lin)
             if res:
                 macro = res.group(1)
                 res = re.match(r'.*_(defined|DEFINED|h|H)_*',macro)
                 if res:
+                    if self.debug:
+                        print('undefining', macro)
                     guarded.append(macro)
             res = re.findall(r'defined\s*\(([^\s\)]+)\)',lin)
             if len(res) > 0:
@@ -112,9 +137,13 @@ class Sugarlyzer:
                 for m in macros:
                     res = re.match(r'.*_(defined|DEFINED|h|H)_*',m)
                     if res:
+                        if self.debug:
+                            print('undefining', m)
                         guarded.append(m)
                     res = re.match(r'__need_.*',m)
                     if res:
+                        if self.debug:
+                            print('undefining', m)
                         guarded.append(m)
         Fil.close()
         return guarded, included
@@ -127,6 +156,8 @@ class Sugarlyzer:
         Returns:
         A string to be added to an included file in desugaring
         '''
+        if self.debug:
+            print('In getRecommendedSpace')
         guards = []
         searchingDirs = self.included_directories
         searchingDirs.append(os.getcwd())
@@ -145,6 +176,8 @@ class Sugarlyzer:
                     searchingDirs.append(lin.lstrip().rstrip())
                 elif '#include <...> search starts here:' in lin:
                     inRange = True
+        if self.debug:
+            print('dirs to search:', searchingDirs)
         files = []
         files.append(self.fil)
         for f in self.included_files:
@@ -156,9 +189,13 @@ class Sugarlyzer:
                 if m not in guards:
                     guards.append(m)
             for i in includes:
+                if self.debug:
+                    print('searching for file:',i)
                 for sd in searchingDirs:
                     comboFile = os.path.expanduser(os.path.join(sd,i))
                     if os.path.exists(comboFile):
+                        if self.debug:
+                            print('file found:', comboFile)
                         trueFile = os.path.abspath(comboFile)
                         if trueFile not in files:
                             files.append(trueFile)
@@ -183,6 +220,8 @@ class Sugarlyzer:
         str: desugared output file, absolute path
         str: log file, absolute path
         '''
+        if self.debug:
+            print('starting desugarFile')
         incFilesStr = ' '
         if len(self.included_files) > 0:
             incFilesStr = ' -include ' + ' -include '.join(self.included_files) + ' '
@@ -203,14 +242,23 @@ class Sugarlyzer:
         else:
             log = os.path.abspath(log_file)
         desugarCommand = 'java superc.SugarC ' + cmdArgs + incFilesStr + incDirStr + self.fil + ' > ' + self.desug + ' 2> ' + log
+        if self.debug:
+            print('desugar command:', desugarCommand)
         os.system('echo "' + userDefinedSpace + '" > ' + userDefs)
         if remove_errors:
+            if self.debug:
+                print('removing errors')
             toAppend = ['']
-            while len(toAppend) > 0:
-                for d in toAppend:
-                    os.system('echo "' + d + '" >> ' + userDefs)
-                os.system(desugarCommand)
-                toAppend = getBadConstraints(self.desug)
+            #while len(toAppend) > 0:
+            os.system(desugarCommand)
+            if self.debug:
+                print('finding bad constraints')
+            toAppend = getBadConstraints(self.desug,self.debug)
+            if self.debug:
+                print('narrowing config space:', toAppend)
+            for d in toAppend:
+                os.system('echo "' + d + '" >> ' + userDefs)
+
         os.system(desugarCommand)
         return self.desug, log
 
@@ -224,17 +272,26 @@ class Sugarlyzer:
         Returns:
         str: a report containing all results
         '''
+        if self.debug:
+            print('in analyze')
         ids = {}
         replacers = {}
         ls = []
         varis = {}
         fl = open(self.desug, 'r')
+        if self.debug:
+            print('mapping conditions')
         for l in fl:
             ls.append(l)
-            getConditionMapping(l, ids, varis, replacers, False)
+            getConditionMapping(l, ids, varis, replacers, False, self.debug)
+        if self.debug:
+            print('conditions mapped')
+            print('ids:', ids)
         fl.close()
         alarms = self.runAnalyzer(self.desug, True)
         reportstr = ''
+        if self.debug:
+            print('resolving warnings')
         for w in alarms:
             w['asserts'] = calculateAsserts(w, self.desug)
             s = Solver()
@@ -253,6 +310,8 @@ class Sugarlyzer:
                 print('impossible constraints')
                 w['feasible'] = False
                 w['correNum'] = '-1'
+        if self.debug:
+            print('warnings resolved')
         return reportstr
 
     # Clean up Analyzer calls
@@ -385,20 +444,33 @@ def calculateAsserts(w,fpa):
             result.append(asrt)
     return result
 
-def getBadConstraints(desugFile):
+def getBadConstraints(desugFile,debug=False):
     ids = {}
     replacers = {}
     ls = []
     varis = {}
-    fl = open(desugFile, 'r')
+    fil = open(desugFile, 'r')
+    fl = fil.readlines()
     constraints = []
-    for l in fl:
+    lcount = 0
+    if debug:
+        print('getting line mappings')
+        print('0')
+    while lcount < len(fl):
+        if debug:
+            sys.stdout.write('\x1b[1A')
+            sys.stdout.write('\x1b[2K')
+            print(lcount, ':', len(fl))
+        l = fl[lcount]
         ls.append(l)
-        getConditionMapping(l, ids, varis, replacers, True)
-    fl.close()
+        getConditionMapping(l, ids, varis, replacers, True, debug)
+        lcount += 1
+    fil.close()
     i = len(ls) - 1
     isError = False
     s = Solver()
+    if debug:
+        print('error checks')
     while i > 0:
         if not isError:
             if ls[i].startswith('__static_parse_error') or ls[i].startswith('__static_type_error'):
@@ -409,6 +481,8 @@ def getBadConstraints(desugFile):
                 s.add(eval(replacers[m.group(1)]))
                 isError = False
         i -= 1
+    if debug:
+        print('solving constraints')
     for k in ids.keys():
         if k.startswith('defined '):
             s.push()
@@ -426,7 +500,7 @@ def getBadConstraints(desugFile):
     return constraints
 
 
-def getConditionMapping(l, ids, varis, replacers, invert):
+def getConditionMapping(l, ids, varis, replacers, invert, debug=False):
     if l.startswith('__static_condition_renaming('):
         cc = l.split(',')
         conds = cc[1][:-3]
@@ -437,8 +511,17 @@ def getConditionMapping(l, ids, varis, replacers, invert):
         conds = conds[:-1]
         inds = conds.split('(')
         inds = inds[1:]
+        if debug:
+            print('checking individual conditions 0:0')
+        indxx = 0
         for i in inds:
+            if debug:
+                sys.stdout.write('\x1b[1A')
+                sys.stdout.write('\x1b[2K')
+                print('checking individual conditions', indxx, ':', len(inds))
             splits = i.split(' ')
+            if len(splits) <= 1:
+                continue
             if 'defined' == splits[0]:
                 v = 'DEF_' + splits[1][:-1]
                 ids['defined ' + splits[1][:-1]] = 'varis["' + v + '"]'
@@ -452,7 +535,13 @@ def getConditionMapping(l, ids, varis, replacers, invert):
                     v = 'USE_' + splits[0]
                     ids[splits[0]] = 'varis["' + v + '"]'
                     varis[v] = Int(v)
+            indxx +=1
         condstr = conds[2:]
+        if debug:
+            sys.stdout.write('\x1b[1A')
+            sys.stdout.write('\x1b[2K')
+            print('replacing names in string')
+            
         for x in sorted(list(ids.keys()), key=len, reverse=True):
             if x.startswith('defined '):
                 condstr = condstr.replace(x, ids[x])
@@ -461,33 +550,50 @@ def getConditionMapping(l, ids, varis, replacers, invert):
         condstr = condstr.replace('!(', 'Not(')
         cs = re.split('&&|\|\|', condstr)
         ops = []
+        if debug:
+            sys.stdout.write('\x1b[1A')
+            sys.stdout.write('\x1b[2K')
+            print('rearranging ops 0:0')
+
         for d in range(0, len(condstr)):
             if condstr[d] == '&' and condstr[d + 1] == '&':
                 ops.append('And')
             elif condstr[d] == '|' and condstr[d + 1] == '|':
                 ops.append('Or')
-        ncondstr = ''
+        ncondlist = list()
         ands = 0
         ors = 0
+        opxx = 0
         for o in ops:
+            if debug:
+                sys.stdout.write('\x1b[1A')
+                sys.stdout.write('\x1b[2K')
+                print('rearranging ops', opxx, ':', len(ops))
             if o == 'And':
                 ands += 1
-                ncondstr = ncondstr + 'And(' + cs[0] + ','
-                cs = cs[1:]
+                ncondlist.append('And(' + cs[0] + ',')
+                cs.pop(0)
             else:
-                ncondstr = 'Or(' + ncondstr + cs[0] + ands * ')'
+                ncondlist.insert(0,'Or(')
+                ncondlist.append(cs[0] + ands * ')')
                 if ors > 0:
-                    ncondstr += ')'
-                ncondstr += ','
+                    ncondlist.append(')')
+                ncondlist.append(',')
                 ands = 0
                 ors += 1
-                cs = cs[1:]
-        ncondstr += cs[0] + ands * ')'
+                cs.pop(0)
+            opxx += 1
+        ncondlist.append(cs[0] + ands * ')')
         if ors > 0:
-            ncondstr += ')'
-        ncondstr = ncondstr.rstrip()
+            ncondlist.append(')')
+        ncondstr = ''.join(ncondlist).rstrip()
+        ncondlist.clear()
         if invert:
             ncondstr = 'Not(' + ncondstr + ')'
+        if debug:
+            sys.stdout.write('\x1b[1A')
+            sys.stdout.write('\x1b[2K')
+
         replacers[cc[0][len('__static_condition_renaming("'):-1]] = ncondstr
 
 

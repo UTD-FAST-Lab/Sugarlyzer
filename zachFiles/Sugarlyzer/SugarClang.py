@@ -7,7 +7,7 @@ from z3 import *
 from abc import ABC, abstractmethod
 from Sugarlyzer import *
 
-SLOC = "~/Documents/Research/SugarCPostWork/scanBuildAtomizer"
+SLOC = "/home/kisamefishfry/Documents/Research/SugarCPostWork/scanBuildAtomizer"
 sys.path.append(SLOC)
 from scanBuildAtomizer import scan
 
@@ -28,11 +28,14 @@ if __name__ == "__main__":
     n = sys.argv[1]
     c = ClangAlyzer()
     c.setFile(n)
-    incf = ["~/SystemConfig/baseInc.h"]
-    incd = ["~/SystemConfig/original/use/include/", "~/SystemConfig/original/use/include/x86_64-linux-gnu/",
-            "~/SystemConfig/original/usr/lib/gcc/x86_64-linux-gnu/9/include/"]
-    c.setInclusions(incf,incd,True)
+    c.setDebug(True)
+    #incf = ["~/SystemConfig/baseInc.h"]
+    #incd = ["~/SystemConfig/original/use/include/", "~/SystemConfig/original/use/include/x86_64-linux-gnu/",
+    #        "~/SystemConfig/original/usr/lib/gcc/x86_64-linux-gnu/9/include/"]
+    incf = []
+    incd = ['~/Documents/Research/VarBugsOriginals/APACHE/ecf18a4ac25b72861bce4b7b3f5b3883052ec4e3/httpd-ecf18a4ac25b72861bce4b7b3f5b3883052ec4e3/modules/experimental','~/Documents/Research/VarBugsOriginals/APACHE/ecf18a4ac25b72861bce4b7b3f5b3883052ec4e3/httpd-ecf18a4ac25b72861bce4b7b3f5b3883052ec4e3/include']
+    c.setInclusions(incf,incd,False)
     r = c.getRecommendedSpace()
     cma = ['-keep-mem']
-    df = c.desugarFile(r, remove_errors=True, commandline_args=cma)
+    df = c.desugarFile(r, remove_errors=False, commandline_args=cma)
     print(c.analyze())
