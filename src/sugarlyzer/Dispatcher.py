@@ -60,7 +60,6 @@ def build_images(tools: List[str], nocache: bool = False) -> None:
     :param tools: The list of tools for which Docker images should be constructed.
     :param nocache: If true, then we will direct Docker to rebuild everything from scratch.
     """
-    os.environ['DOCKER_BUILDKIT'] = '1'
 
     # Accumulator for commands.
     cmds = []
