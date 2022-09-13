@@ -2,6 +2,7 @@ import importlib.resources
 import logging
 import os
 import subprocess
+from pathlib import Path
 from typing import List, Iterable
 
 logger = logging.getLogger(__name__)
@@ -9,8 +10,9 @@ logger = logging.getLogger(__name__)
 
 class ProgramSpecification:
 
-    def __init__(self, build_script: str,
+    def __init__(self, name: str, build_script: str,
                  source_location: List[str]):
+        self.name = name
         self.__build_script = build_script
         self.__source_location = source_location
 
@@ -22,12 +24,12 @@ class ProgramSpecification:
     def source_locations(self) -> Iterable[str]:
         return map(lambda x: self.try_resolve_path(x, '/targets'), self.__source_location)
 
-    def get_source_files(self) -> Iterable[str]:
+    def get_source_files(self) -> Iterable[Path]:
         for s in self.source_locations:
             for root, dirs, files in os.walk(s):
                 for f in files:
                     if f.endswith(".c"):
-                        yield os.path.join(root, f)
+                        yield Path(root)/f
 
     def download(self) -> int:
         """
@@ -37,7 +39,7 @@ class ProgramSpecification:
         ps = subprocess.run(self.build_script)
         return ps.returncode
 
-    def try_resolve_path(self, path: str, root: str = "/") -> str:
+    def try_resolve_path(self, path: str, root: str = "/") -> Path:
         """
         Copied directly from ECSTATIC.
         :param root: The root from which to try to resolve the path.
@@ -48,7 +50,7 @@ class ProgramSpecification:
         logging.info(f'Trying to resolve {path} in {root}')
         if path.startswith("/"):
             path = path[1:]
-        if os.path.exists(joined_path := os.path.join(root, path)):
+        if os.path.exists(joined_path := Path(root)/path):
             return os.path.abspath(joined_path)
         results = set()
         for rootdir, dirs, _ in os.walk(os.path.join(root, "benchmarks")):

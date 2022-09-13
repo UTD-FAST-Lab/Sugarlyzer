@@ -24,7 +24,7 @@ def read_arguments() -> argparse.Namespace:
     p.add_argument('-r', '--results', help='Location to put results', default='results')
     p.add_argument('--no-cache', help="Build all images fresh without using Docker's cache.", action='store_true')
     p.add_argument('-v', dest='verbosity', action='count', help="""Level of verbosity. No v's will print only WARNING or above messages. One 
-v will print INFO and above. Two or more v's will print DEBUG or above.""")
+v will print INFO and above. Two or more v's will print DEBUG or above.""", default=0)
     p.add_argument('--log', help='If specified, logs will be printed to the specified file. Otherwise, logs are printed'
                                  ' to the console.')
     return p.parse_args()
