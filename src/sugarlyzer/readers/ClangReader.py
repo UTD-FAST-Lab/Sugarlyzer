@@ -1,5 +1,7 @@
 import logging
+import re
 from html.parser import HTMLParser
+from pathlib import Path
 from typing import List, Iterable
 
 from src.sugarlyzer.analyses.AbstractTool import AbstractTool
@@ -77,13 +79,10 @@ class ClangReader(AbstractReader):
             logging.info(f"Lines is {parser.lines}")
             try:
                 ret = Alarm(alarm_type=parser.msgType,
-                        message=parser.msg,
-                        start_line=(sorted_lines:=sorted(parser.lines))[0],
-                        end_line=sorted_lines[1],
-                        file=parser.location)
+                            message=parser.msg,
+                            desugared_lines=[int(re.match("line (.*),", parser.location).group(1))],
+                            file=None)
             except:
                 logger.exception(f"Couldn't create alarm. Fields were: msgType={parser.msgType}, message={parser.msg}, "
                                  f"lines={parser.lines}, file={parser.location}")
-            else:
-                ret.lines = sorted_lines
-                yield ret
+            return [ret]

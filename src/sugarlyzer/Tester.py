@@ -12,7 +12,6 @@ from typing import Iterable, List, Dict, Any
 from jsonschema.validators import RefResolver, Draft7Validator
 
 from src.sugarlyzer import SugarCRunner
-from src.sugarlyzer.SourceLineMapper import SourceLineMapper
 from src.sugarlyzer.analyses.AnalysisToolFactory import AnalysisToolFactory
 from src.sugarlyzer.models.Alarm import Alarm
 from src.sugarlyzer.models.ProgramSpecification import ProgramSpecification
@@ -41,11 +40,15 @@ class Tester:
 
         program_as_json = read_json_and_validate(
             importlib.resources.path(f'resources.programs.{program}', 'program.json'))
-        self.program = ProgramSpecification(**program_as_json)
+        self.program = ProgramSpecification(program, **program_as_json)
 
     def execute(self):
 
         logger.info(f"Current environment is {os.environ}")
+
+        output_folder = Path("/results") / Path(self.tool) / Path(self.program.name)
+        output_folder.mkdir(exist_ok=True, parents=True)
+
         # 1. Download target program.
         logger.info(f"Downloading target program {self.program}")
         if (returnCode := self.program.download()) != 0:
@@ -64,7 +67,7 @@ class Tester:
                                                           "/SugarlyzerConfig/stdinc/usr/include/x86_64-linux-gnu/",
                                                           "/SugarlyzerConfig/stdinc/usr/lib/gcc/x86_64-linux-gnu/9/include/"])
         logger.info(f"Source files are {list(self.program.get_source_files())}")
-        desugared_files: Iterable[str, str] = ProcessPool(8).map(partial, self.program.get_source_files())
+        desugared_files: Iterable[str] = ProcessPool(8).map(partial, self.program.get_source_files())
         logger.info(f"Finished desugaring the source code.")
 
         # 3/4. Run analysis tool, and read its results
@@ -77,20 +80,24 @@ class Tester:
             alarms.extend(collec)
         logger.info(f"Got {len(alarms)} unique alarms.")
 
-        with open("/results/alarms.txt", 'w') as f:
-            json.dump(list(map(lambda x: dataclasses.asdict(x), alarms)), f)
+        with open(output_folder / "results.json", 'w') as f:
+            json.dump(list(map(lambda x: {str(k): str(v) for k, v in x.items()},
+                               map(lambda x: x.as_dict(), alarms))), f)
 
         [print(str(a)) for a in alarms]
         # (Optional) 6. Optional unsoundness checker
         pass
 
+
 def get_arguments() -> argparse.Namespace:
     p = argparse.ArgumentParser()
     p.add_argument("tool", help="The tool to run.")
     p.add_argument("program", help="The target program.")
-    p.add_argument("-v", dest="verbosity", action="count", help="""Level of verbosity. No v's will print only WARNING or above messages. One 
-    v will print INFO and above. Two or more v's will print DEBUG or above.""")
+    p.add_argument("-v", dest="verbosity", action="count", default=0,
+                   help="""Level of verbosity. No v's will print only WARNING or above messages. One 
+                   v will print INFO and above. Two or more v's will print DEBUG or above.""")
     return p.parse_args()
+
 
 def set_up_logging(args: argparse.Namespace) -> None:
     match args.verbosity:
@@ -107,6 +114,7 @@ def set_up_logging(args: argparse.Namespace) -> None:
         logging_kwargs["handlers"].append(logging.FileHandler(str(log_file)))
 
     logging.basicConfig(**logging_kwargs)
+
 
 def main():
     args = get_arguments()
