@@ -112,7 +112,7 @@ def run_sugarc(cmd_str, desugared_file, log_file):
         f.write(ps.stderr)
 
 
-def process_alarms(alarms: List[Alarm], desugared_file: str) -> str:
+def process_alarms(alarms: List[Alarm], desugared_file: str) -> Iterable[Alarm]:
     """
     Runs the analysis, and compiles the results into a report.
 
@@ -129,16 +129,17 @@ def process_alarms(alarms: List[Alarm], desugared_file: str) -> str:
         lines = list(map(lambda x: x.strip("\n"), fl.readlines()))
 
     for line in lines:
-        condition_mapping: ConditionMapping = get_condition_mapping(line, False)
+        condition_mapping: ConditionMapping = get_condition_mapping(line)
         ids.update(condition_mapping.ids)
         replacers.update(condition_mapping.replacers)
         varis.update(condition_mapping.varis)
 
     report = ''
     for w in alarms:
-        w.asserts = calculate_asserts(w, desugared_file)
+        w: Alarm
+        w.presence_condition = calculate_asserts(w, desugared_file)
         s = Solver()
-        for a in w.asserts:
+        for a in w.presence_condition:
             if a['val']:
                 s.add(eval(replacers[a['var']]))
             else:
@@ -147,11 +148,11 @@ def process_alarms(alarms: List[Alarm], desugared_file: str) -> str:
             m = s.model()
             w.feasible = True
             w.model = m
-            w.original_lines = [map_source_line(desugared_file, l) for l in w.desugared_lines]
             report += str(w) + '\n'
         else:
             print('impossible constraints')
             w.feasible = False
+            w.model = None
             # Use None and make correNum an Optional type
             # w.correNum = '-1'
     return alarms
@@ -215,7 +216,7 @@ def calculate_asserts(w: Alarm, fpa):
     lines = ff.read().split('\n')
     ff.close()
     result = []
-    for line in w.desugared_lines:  # to prevent going over lines multiple times
+    for line in range(w.original_line_range.start_line, w.original_line_range.end_line):
         line -= 1
         fl = lines[line]
         if 'static_condition_default' in fl:
@@ -263,7 +264,7 @@ def check_non_flow(alarm: Alarm, desugared_output: str) -> List[Dict[str, str | 
     with open(desugared_output, 'r') as ff:
         lines: List[str] = ff.readlines()
         additional_scopes = 0
-        line_to_read: int = alarm.start_line
+        line_to_read: int = alarm.original_line_range.start_line
         while line_to_read >= 0:
             additional_scopes += lines[line_to_read].count('}')
             if additional_scopes == 0:
@@ -307,7 +308,10 @@ def get_bad_constraints(desugared_file: str) -> List[str]:
             if condition:
                 to_eval = condition_mapping.replacers[condition.group(1)]
                 print(f"to_eval is {to_eval}")
-                solver.add(eval(to_eval))
+                try:
+                    solver.add(eval(to_eval))
+                except NameError as ne:
+                    logger.exception(f"File is {desugared_file}")
                 is_error = False
         line_index -= 1
     for key in condition_mapping.ids.keys():
