@@ -1,6 +1,6 @@
 import logging
 from pathlib import Path
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Iterable
 from dataclasses import dataclass
 import itertools
 import re
@@ -54,6 +54,16 @@ class Alarm:
         self.presence_condition = List[Dict[str, str | bool]] = []
         self.feasible: Optional[bool] = None
         self.model: Optional[ModelRef] = None
+
+
+    @property
+    def all_desugared_lines(self) -> Iterable[int]:
+        """
+        Returns all desugared lines. Useful for use with :func:`src.sugarlyzer.SugarCRunner.calculate_asserts`
+
+        :return: An iterator of desugared lines.
+        """
+        return [self.desugared_line]
 
     # noinspection PyMethodMayBeStatic
     def sanitize(self, message: str):
