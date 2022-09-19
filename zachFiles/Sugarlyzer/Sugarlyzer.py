@@ -508,8 +508,10 @@ def getConditionMapping(l, ids, varis, replacers, invert, debug=False):
         conds = re.sub(r'(&&|\|\|) ([a-zA-Z_0-9]+)( |")', r'\1 (\2)\3', conds)
         conds = re.sub(r' "([a-zA-Z_0-9]+)', r' "(\1)', conds)
         conds = re.sub(r' "!([a-zA-Z_0-9]+)', r' "!(\1)', conds)
+        print(conds)
         conds = conds[:-1]
         inds = conds.split('(')
+        print (inds)
         inds = inds[1:]
         if debug:
             print('checking individual conditions 0:0')
@@ -520,13 +522,14 @@ def getConditionMapping(l, ids, varis, replacers, invert, debug=False):
                 sys.stdout.write('\x1b[2K')
                 print('checking individual conditions', indxx, ':', len(inds))
             splits = i.split(' ')
-            if len(splits) <= 1:
+            if len(splits) == 0:
                 continue
             if 'defined' == splits[0]:
                 v = 'DEF_' + splits[1][:-1]
                 ids['defined ' + splits[1][:-1]] = 'varis["' + v + '"]'
                 varis[v] = Bool(v)
             else:
+                print(splits)
                 if splits[0][-1] == ')':
                     v = 'USE_' + splits[0][:-1]
                     ids[splits[0][:-1]] = 'varis["' + v + '"] != 0'
@@ -749,8 +752,13 @@ class SugarlyzerTester(unittest.TestCase):
         
 if __name__ == '__main__':
     #unittest.main()
-    c = Sugarlyzer()
-    c.setFile("test.c")
-    r = c.getRecommendedSpace()
-    df = c.desugarFile(r, remove_errors=True, commandline_args=[])
- 
+    #c = Sugarlyzer()
+    #c.setFile("test.c")
+    #r = c.getRecommendedSpace()
+    #df = c.desugarFile(r, remove_errors=True, commandline_args=[])
+    l = '__static_condition_renaming("__static_condition_default_1", "!APR_HAVE_IPV6");\n'
+    ids = {}
+    varis = {}
+    replacers = {}
+    getConditionMapping(l,ids,varis,replacers,False)
+    print(ids,varis,replacers)
