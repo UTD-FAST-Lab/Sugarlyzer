@@ -14,17 +14,17 @@ class AbstractTool(ABC):
     def __init__(self, reader: AbstractReader):
         self.reader = reader
 
-    def analyze_and_read(self, file: Path) -> Iterable[Alarm]:
+    def analyze_and_read(self, desugared_file: Path) -> Iterable[Alarm]:
         """
         Analyzes a desugared .c file, and returns the alarms generated.
-        :param file: The file to analyze.
+        :param desugared_file: The file to analyze.
         :return: A collection of alarms.
         """
         alarms: Iterable[Alarm] =\
-            functools.reduce(operator.iconcat, [self.reader.read_output(f) for f in self.analyze(file)], [])
+            functools.reduce(operator.iconcat, [self.reader.read_output(f) for f in self.analyze(desugared_file)], [])
         for a in alarms:
-            a.file = file
-        return process_alarms(alarms, file)
+            a.desugared_file = desugared_file
+        return process_alarms(alarms, desugared_file)
 
 
     @abstractmethod

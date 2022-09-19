@@ -72,19 +72,19 @@ class HTMLAtomizer(HTMLParser):
 
 class ClangReader(AbstractReader):
 
-    def read_output(self, file: Path) -> Iterable[ClangAlarm]:
-        with open(file, 'r') as rf:
+    def read_output(self, report_file: Path) -> Iterable[ClangAlarm]:
+        with open(report_file, 'r') as rf:
             parser = HTMLAtomizer()
             parser.feed(rf.read())
-            logging.info(f"alarm is in {file}")
+            logging.info(f"alarm is in {report_file}")
             logging.info(f"Lines is {parser.lines}")
             try:
-                ret = ClangAlarm(file = file,
-                                desugared_line=int(re.match("line (.*),", parser.location).group(1)),
-                                message=parser.msg,
-                                alarm_type=parser.msgType,
-                                desugared_path=parser.lines)
+                ret = ClangAlarm(file = None,
+                                 desugared_line=int(re.match("line (.*),", parser.location).group(1)),
+                                 message=parser.msg,
+                                 alarm_type=parser.msgType,
+                                 desugared_path=parser.lines)
             except:
                 logger.exception(f"Couldn't create alarm. Fields were: msgType={parser.msgType}, message={parser.msg}, "
-                                 f"lines={parser.lines}, file={parser.location}")
+                                 f"lines={parser.lines}, location={parser.location}")
             return [ret]
