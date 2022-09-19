@@ -1,16 +1,17 @@
 import functools
+import itertools
 import logging
+import os
 import re
 import subprocess
-import itertools
+import sys
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Tuple, List, Optional, Dict
+from typing import Tuple, List, Optional, Dict, Iterable
 
-from z3 import *
 from z3.z3 import Solver, sat, Bool, Int
 
-from src.sugarlyzer.models.Alarm import Alarm, map_source_line
+from src.sugarlyzer.models.Alarm import Alarm
 
 USER_DEFS = '/tmp/__sugarlyzerPredefs.h'
 
@@ -37,9 +38,9 @@ def desugar_file(file_to_desugar: Path,
                  log_file: str = '',
                  remove_errors: bool = False,
                  no_stdlibs: bool = False,
-                 commandline_args: Optional[List[str]] = ['-keep-mem'],
+                 commandline_args=None,
                  included_files: Optional[List[str]] = None,
-                 included_directories: Optional[List[str]] = None) -> Tuple[str, str]:
+                 included_directories: Optional[List[str]] = None) -> tuple[Path, Path]:
     """
     Runs the SugarC command.
 
@@ -54,6 +55,8 @@ def desugar_file(file_to_desugar: Path,
     :param included_directories: A list of directories to be included.
     :return: (desugared_file_location, log_file_location)
     """
+    if commandline_args is None:
+        commandline_args = ['-keep-mem']
     if included_directories is None:
         included_directories = []
     if included_files is None:
@@ -159,7 +162,7 @@ def process_alarms(alarms: List[Alarm], desugared_file: str) -> Iterable[Alarm]:
 
 
 def find_condition_scope(start, fpa, goingUp):
-    '''
+    """
     Finds the line that dictates start/end of the condition
     associated with the starting line. If going down, finds
     end of the scope defined by the first line. If going up
@@ -173,7 +176,7 @@ def find_condition_scope(start, fpa, goingUp):
 
     Returns:
     int: line that ends the scope, -1 if not found
-    '''
+    """
     result = -1
     ff = open(fpa, 'r')
     lines = ff.read().split('\n')
@@ -216,7 +219,7 @@ def calculate_asserts(w: Alarm, fpa):
     lines = ff.read().split('\n')
     ff.close()
     result = []
-    for line in [w.desugared_line]:
+    for line in w.all_desugared_lines:
         line -= 1
         fl = lines[line]
         if 'static_condition_default' in fl:
@@ -225,23 +228,19 @@ def calculate_asserts(w: Alarm, fpa):
             if end == -1:
                 continue
             found = False
-            for x in w['lines']:
-                if x - 1 > start and x - 1 < end:
+            for x in w.all_desugared_lines:
+                if start < x - 1 < end:
                     found = True
                     break
             if not found:
-                asrt = {}
-                asrt['var'] = fl.split("(")[1].split(')')[0]
-                asrt['val'] = False
+                asrt = {'var': fl.split("(")[1].split(')')[0], 'val': False}
                 result.append(asrt)
 
         else:
             top = find_condition_scope(line, fpa, True)
             if top == -1 or 'static_condition_default' not in lines[top]:
                 continue
-            asrt = {}
-            asrt['var'] = lines[top].split("(")[1].split(')')[0]
-            asrt['val'] = True
+            asrt = {'var': lines[top].split("(")[1].split(')')[0], 'val': True}
 
             result.append(asrt)
     return result
@@ -278,7 +277,7 @@ def check_non_flow(alarm: Alarm, desugared_output: str) -> List[Dict[str, str | 
     return result
 
 
-def get_bad_constraints(desugared_file: str) -> List[str]:
+def get_bad_constraints(desugared_file: Path) -> List[str]:
     """
     Given a desugared file, find conditions that will always result in an error. These conditions
     are not worth exploring. TODO: Is this list a conjunction or disjunction?
@@ -344,6 +343,7 @@ class ConditionMapping:
         return f"ids: {self.ids}\nreplacers: {self.replacers}\n" \
                f"varis: {self.varis}\nconstraints: {self.constraints}"
 
+
 def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapping(),
                           invert: bool = False, debug: bool = False) -> ConditionMapping:
     """
@@ -374,7 +374,7 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
             sys.stdout.write('\x1b[2K')
             print('checking individual conditions', indxx, ':', len(inds))
         splits = i.split(' ')
-        if len(splits) <= 1:
+        if len(splits) == 0:
             continue
         if 'defined' == splits[0]:
             v = 'DEF_' + splits[1][:-1]
@@ -450,4 +450,3 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
 
     current_result.replacers[cc[0][len('__static_condition_renaming("'):-1]] = ncondstr
     return current_result
-

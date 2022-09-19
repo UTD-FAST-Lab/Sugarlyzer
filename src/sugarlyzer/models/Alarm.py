@@ -58,12 +58,12 @@ class Alarm:
     @property
     def all_desugared_lines(self) -> Iterable[int]:
         """
-        Returns all desugared lines.
+        Returns all desugared lines. Useful for use with :func:`src.sugarlyzer.SugarCRunner.calculate_asserts`
 
-        I wrote it this way so that in [[ 
+        :return: An iterator of desugared lines.
         """
         return [self.desugared_line]
-    
+
     # noinspection PyMethodMayBeStatic
     def sanitize(self, message: str):
         logger.warning("Sanitize is not implemented.")

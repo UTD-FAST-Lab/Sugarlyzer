@@ -1,3 +1,4 @@
 .git
 venv
 results
+**.log

@@ -30,3 +30,13 @@ class ClangAlarm(Alarm):
         if san.endswith(']'):
             san = re.sub(r' \[.*\]$', '', san)
         return san
+
+    @property
+    def all_desugared_lines(self) -> Iterable[int]:
+        """
+        Since in Clang, desugared path always includes the desugared line, we just return the desugared path.
+
+        :return: An iterator over the lines Clang returns as the path in the desugared file.
+        """
+        return self.desugared_path  ## Desugared path must include the
+
