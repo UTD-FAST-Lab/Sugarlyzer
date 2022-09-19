@@ -1,56 +1,85 @@
-import json
-from typing import List, Dict, ClassVar, Optional, Iterable
-from dataclasses import dataclass, field
+import logging
+from pathlib import Path
+from typing import List, Dict, Optional, Iterable
+from dataclasses import dataclass
 import itertools
 import re
 
 from z3.z3 import ModelRef
 
-
-def sanitize(message: str):
-    san = message.rstrip()
-    if " '" in san:
-        san = re.sub(r" '\S+'", " 'x'", san)
-    if san.endswith(']'):
-        san = re.sub(r' \[.*\]$', '', san)
-    return san
+logger = logging.getLogger(__name__)
 
 
 @dataclass
-class Alarm:
-    # -- Instance variables which we should initialize in the constructor,
-    # --  and which we should use in comparison and hashing.
-    file: str
+class IntegerRange:
     start_line: int
     end_line: int
-    alarm_type: str
 
-    # We don't use message in hash, instead we use sanitized_message
-    message: str = field(compare=False)
-
-    # -- Class variables
-    __id_generator: ClassVar[itertools.count] = itertools.count()
-
-    # -- Instance variables that should not be initialized in the constructor.
-
-    # Sanitized_message is computed in __post_init__ and is used in hashing and comparison instead of
-    #  message.
-    sanitized_message: str = field(init=False)
-
-    # Everything else here should not be used in hashing or comparison.
-    kw_only_no_hash = {'kw_only': True, 'compare': False}
-    id: int = field(init=False, compare=False)
-    lines: Iterable[int] = field(default_factory=list, **kw_only_no_hash)
-    asserts: List[Dict[str, str | bool]] = field(default_factory=list, **kw_only_no_hash)
-    feasible: Optional[bool] = field(default=None, **kw_only_no_hash)
-    model: Optional[ModelRef] = field(default=None, **kw_only_no_hash)
-    correlated_lines: Optional[str] = field(default_factory=list, **kw_only_no_hash)
-
-    def __post_init__(self):
-        self.id = next(Alarm.__id_generator)
-        self.sanitized_message = sanitize(self.message)
+    def __str__(self): return f"{self.start_line}:{self.end_line}"
 
 
-@dataclass
-class VariabilityAlarm(Alarm):
-    conditional: str = ""  # TODO: How do we want to represent conditionals?
+def map_source_line(desugared_file: Path, line: int) -> IntegerRange:
+    """
+    Given an alarm, map it back to original source and associate it with conditionals
+    :param line: The linenumber to map
+    :return: The source line
+    """
+    with open(desugared_file, 'r') as infile:
+        lines: List[str] = list(map(lambda x: x.strip('\n'), infile.readlines()))
+        the_line: str = lines[line - 1]
+        if mat := re.search("// L(.*):L(.*)$", the_line):
+            return IntegerRange(int(mat.group(1)), int(mat.group(2)))
+        if mat := re.search("// L(.*)$", the_line):
+            return IntegerRange(int(mat.group(1)), int(mat.group(1)))
+        else:
+            raise ValueError(f"Could not find source line for line {desugared_file}:{line} ({the_line})")
+
+
+class Alarm:
+    __id_generator = itertools.count()
+
+    def __init__(self,
+                 file: Path,
+                 desugared_line: int,
+                 message: str,
+                 ):
+        self.file: Path = file
+        self.desugared_line: int = desugared_line
+        self.original_line_range: IntegerRange = map_source_line(file, self.desugared_line)
+        self.message: str = message
+
+        self.id: int = next(Alarm.__id_generator)
+        self.sanitized_message: str = self.sanitize(self.message)
+
+        self.presence_condition = List[Dict[str, str | bool]] = []
+        self.feasible: Optional[bool] = None
+        self.model: Optional[ModelRef] = None
+
+
+    @property
+    def all_desugared_lines(self) -> Iterable[int]:
+        """
+        Returns all desugared lines. Useful for use with :func:`src.sugarlyzer.SugarCRunner.calculate_asserts`
+
+        :return: An iterator of desugared lines.
+        """
+        return [self.desugared_line]
+
+    # noinspection PyMethodMayBeStatic
+    def sanitize(self, message: str):
+        logger.warning("Sanitize is not implemented.")
+        return message
+
+    def as_dict(self) -> Dict[str, str]:
+        return {
+            "file": str(self.file.absolute()),
+            "original_lines": str(self.original_line_range),
+            "desugared_line": self.desugared_line,
+            "message": self.message,
+            "sanitized_message": self.sanitized_message,
+            "id": self.id,
+            "presence_condition": [{str(k): str(v) for k, v in f.items()} for f in self.presence_condition],
+            "model": str(self.model)
+        }
+
+
