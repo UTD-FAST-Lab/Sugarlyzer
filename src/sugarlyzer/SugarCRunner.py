@@ -1,17 +1,16 @@
 import functools
+import itertools
 import logging
 import os
 import re
 import subprocess
-import itertools
+import sys
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Tuple, List, Optional, Dict
+from typing import Tuple, List, Optional, Dict, Iterable
 
-from z3 import *
 from z3.z3 import Solver, sat, Bool, Int
 
-from src.sugarlyzer.SourceLineMapper import SourceLineMapper
 from src.sugarlyzer.models.Alarm import Alarm
 
 USER_DEFS = '/tmp/__sugarlyzerPredefs.h'
@@ -33,15 +32,15 @@ def get_recommended_space(file: str) -> str:
     return os.popen('echo | gcc -dM -E -').read()
 
 
-def desugar_file(file_to_desugar: str,
+def desugar_file(file_to_desugar: Path,
                  user_defined_space: str,
                  output_file: str = '',
                  log_file: str = '',
                  remove_errors: bool = False,
                  no_stdlibs: bool = False,
-                 commandline_args: Optional[List[str]] = ['-keep-mem'],
+                 commandline_args=None,
                  included_files: Optional[List[str]] = None,
-                 included_directories: Optional[List[str]] = None) -> Tuple[str, str]:
+                 included_directories: Optional[List[str]] = None) -> tuple[Path, Path]:
     """
     Runs the SugarC command.
 
@@ -56,7 +55,8 @@ def desugar_file(file_to_desugar: str,
     :param included_directories: A list of directories to be included.
     :return: (desugared_file_location, log_file_location)
     """
-    logger.debug("In desugar file function")
+    if commandline_args is None:
+        commandline_args = ['-keep-mem']
     if included_directories is None:
         included_directories = []
     if included_files is None:
@@ -70,18 +70,19 @@ def desugar_file(file_to_desugar: str,
 
     match output_file:
         case '' | None:
-            desugared_file = file_to_desugar + '.desugared.c'
+            desugared_file = Path(file_to_desugar).with_suffix('.desugared.c')
         case _:
-            desugared_file = os.path.abspath(output_file)
+            desugared_file = Path(output_file)
 
     match log_file:
         case '' | None:
-            log_file = file_to_desugar + '.log'
+            log_file = file_to_desugar.with_suffix('.log')
         case _:
-            log_file = os.path.abspath(log_file)
+            log_file = Path(log_file)
 
     cmd = ['java', 'superc.SugarC', *commandline_args, *included_files, *included_directories,
            file_to_desugar]
+    cmd = [str(s) for s in cmd]
     logging.info(f"Cmd is {' '.join(cmd)}")
 
     with open(USER_DEFS, 'w') as outfile:
@@ -114,7 +115,7 @@ def run_sugarc(cmd_str, desugared_file, log_file):
         f.write(ps.stderr)
 
 
-def process_alarms(alarms: List[Alarm], desugared_file: str) -> str:
+def process_alarms(alarms: List[Alarm], desugared_file: str) -> Iterable[Alarm]:
     """
     Runs the analysis, and compiles the results into a report.
 
@@ -131,16 +132,17 @@ def process_alarms(alarms: List[Alarm], desugared_file: str) -> str:
         lines = list(map(lambda x: x.strip("\n"), fl.readlines()))
 
     for line in lines:
-        condition_mapping: ConditionMapping = get_condition_mapping(line, False)
+        condition_mapping: ConditionMapping = get_condition_mapping(line)
         ids.update(condition_mapping.ids)
         replacers.update(condition_mapping.replacers)
         varis.update(condition_mapping.varis)
 
     report = ''
     for w in alarms:
-        w.asserts = calculate_asserts(w, desugared_file)
+        w: Alarm
+        w.presence_condition = calculate_asserts(w, desugared_file)
         s = Solver()
-        for a in w.asserts:
+        for a in w.presence_condition:
             if a['val']:
                 s.add(eval(replacers[a['var']]))
             else:
@@ -149,19 +151,18 @@ def process_alarms(alarms: List[Alarm], desugared_file: str) -> str:
             m = s.model()
             w.feasible = True
             w.model = m
-            w.correlated_lines = [SourceLineMapper.map_source_line(desugared_file, l)
-                                  for l in {w.start_line, *w.lines, w.end_line}]
             report += str(w) + '\n'
         else:
             print('impossible constraints')
             w.feasible = False
+            w.model = None
             # Use None and make correNum an Optional type
             # w.correNum = '-1'
-    return report
+    return alarms
 
 
 def find_condition_scope(start, fpa, goingUp):
-    '''
+    """
     Finds the line that dictates start/end of the condition
     associated with the starting line. If going down, finds
     end of the scope defined by the first line. If going up
@@ -175,7 +176,7 @@ def find_condition_scope(start, fpa, goingUp):
 
     Returns:
     int: line that ends the scope, -1 if not found
-    '''
+    """
     result = -1
     ff = open(fpa, 'r')
     lines = ff.read().split('\n')
@@ -206,7 +207,7 @@ def find_condition_scope(start, fpa, goingUp):
     return result
 
 
-def calculate_asserts(w, fpa):
+def calculate_asserts(w: Alarm, fpa):
     '''
     Given the warning, the lines are gone over to find associated
     presence conditions. If the line is a static condition if statement,
@@ -218,7 +219,7 @@ def calculate_asserts(w, fpa):
     lines = ff.read().split('\n')
     ff.close()
     result = []
-    for line in {w.start_line, w.end_line, *w.lines}:  # to prevent going over lines multiple times
+    for line in w.all_desugared_lines:
         line -= 1
         fl = lines[line]
         if 'static_condition_default' in fl:
@@ -227,23 +228,19 @@ def calculate_asserts(w, fpa):
             if end == -1:
                 continue
             found = False
-            for x in w['lines']:
-                if x - 1 > start and x - 1 < end:
+            for x in w.all_desugared_lines:
+                if start < x - 1 < end:
                     found = True
                     break
             if not found:
-                asrt = {}
-                asrt['var'] = fl.split("(")[1].split(')')[0]
-                asrt['val'] = False
+                asrt = {'var': fl.split("(")[1].split(')')[0], 'val': False}
                 result.append(asrt)
 
         else:
             top = find_condition_scope(line, fpa, True)
             if top == -1 or 'static_condition_default' not in lines[top]:
                 continue
-            asrt = {}
-            asrt['var'] = lines[top].split("(")[1].split(')')[0]
-            asrt['val'] = True
+            asrt = {'var': lines[top].split("(")[1].split(')')[0], 'val': True}
 
             result.append(asrt)
     return result
@@ -266,7 +263,7 @@ def check_non_flow(alarm: Alarm, desugared_output: str) -> List[Dict[str, str | 
     with open(desugared_output, 'r') as ff:
         lines: List[str] = ff.readlines()
         additional_scopes = 0
-        line_to_read: int = alarm.start_line
+        line_to_read: int = alarm.original_line_range.start_line
         while line_to_read >= 0:
             additional_scopes += lines[line_to_read].count('}')
             if additional_scopes == 0:
@@ -280,7 +277,7 @@ def check_non_flow(alarm: Alarm, desugared_output: str) -> List[Dict[str, str | 
     return result
 
 
-def get_bad_constraints(desugared_file: str) -> List[str]:
+def get_bad_constraints(desugared_file: Path) -> List[str]:
     """
     Given a desugared file, find conditions that will always result in an error. These conditions
     are not worth exploring. TODO: Is this list a conjunction or disjunction?
@@ -291,17 +288,12 @@ def get_bad_constraints(desugared_file: str) -> List[str]:
     with open(desugared_file, 'r') as infile:
         lines = infile.readlines()
 
-    ids = {}
-    replacers = {}
-    varis = {}
-    constraints = []
+    condition_mapping = ConditionMapping()
     for l in lines:
-        cd: ConditionMapping = get_condition_mapping(l, True)
-        ids.update(cd.ids)
-        replacers.update(cd.replacers)
-        varis.update(cd.varis)
-        constraints.extend(cd.constraints)
+        condition_mapping: ConditionMapping = get_condition_mapping(l, condition_mapping, True)
 
+    varis = condition_mapping.varis  # To make the evals work (Zach why did you do this to me)
+    print(f"Condition mapping is {str(condition_mapping)}")
     line_index = len(lines) - 1
     is_error = False
     solver = Solver()
@@ -313,25 +305,31 @@ def get_bad_constraints(desugared_file: str) -> List[str]:
         else:
             condition = re.match('if \((__static_condition_default_\d+)\).*', lines[line_index])
             if condition:
-                to_eval = replacers[condition.group(1)]
-                solver.add(eval(to_eval))
+                to_eval = condition_mapping.replacers[condition.group(1)]
+                print(f"to_eval is {to_eval}")
+                try:
+                    solver.add(eval(to_eval))
+                except NameError as ne:
+                    logger.exception(f"File is {desugared_file}")
                 is_error = False
         line_index -= 1
-    for key in ids.keys():
+    for key in condition_mapping.ids.keys():
         if key.startswith('defined '):
             solver.push()
-            solver.add(eval(ids[key]))
+            expr = eval(condition_mapping.ids[key])
+            logging.debug(f"Expr {condition_mapping.ids[key]} was evaluated to {expr}")
+            solver.add(eval(condition_mapping.ids[key]))
             if solver.check() != sat:
-                constraints.append('#undef ' + key[len('defined '):])
+                condition_mapping.constraints.append('#undef ' + key[len('defined '):])
                 solver.pop()
                 continue
             solver.pop()
             solver.push()
-            solver.add(eval('Not(' + ids[key] + ')'))
+            solver.add(eval('Not(' + condition_mapping.ids[key] + ')'))
             if solver.check() != sat:
-                constraints.append('#define ' + key[len('defined '):])
+                condition_mapping.constraints.append('#define ' + key[len('defined '):])
             solver.pop()
-    return constraints
+    return condition_mapping.constraints
 
 
 @dataclass
@@ -341,8 +339,13 @@ class ConditionMapping:
     varis: Dict[str, str] = field(default_factory=dict)
     constraints: List[str] = field(default_factory=list)
 
+    def __str__(self):
+        return f"ids: {self.ids}\nreplacers: {self.replacers}\n" \
+               f"varis: {self.varis}\nconstraints: {self.constraints}"
 
-def get_condition_mapping(line, invert: bool = False) -> ConditionMapping:
+
+def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapping(),
+                          invert: bool = False, debug: bool = False) -> ConditionMapping:
     """
     TODO Document this function, I don't really get what it's doing.
     :param line:
@@ -350,74 +353,100 @@ def get_condition_mapping(line, invert: bool = False) -> ConditionMapping:
     :return:
     """
     logger.debug("In get_condition_mapping")
-    result = ConditionMapping()
 
     if not line.startswith('__static_condition_renaming('):
-        return result
-
-    logging.info(f"Line is {line}")
+        return current_result
     cc = line.split(',')
-    conditions = cc[1][:-3]
-    conditions = re.sub(r'(&&|\|\|) !([a-zA-Z_0-9]+)( |")', r'\1 !(\2)\3', conditions)
-    conditions = re.sub(r'(&&|\|\|) ([a-zA-Z_0-9]+)( |")', r'\1 (\2)\3', conditions)
-    conditions = re.sub(r' "([a-zA-Z_0-9]+)', r' "(\1)', conditions)
-    conditions = re.sub(r' "!([a-zA-Z_0-9]+)', r' "!(\1)', conditions)
-    conditions = conditions[:-1]
-    inds = conditions.split('(')
+    conds = cc[1][:-3]
+    conds = re.sub(r'(&&|\|\|) !([a-zA-Z_0-9]+)( |")', r'\1 !(\2)\3', conds)
+    conds = re.sub(r'(&&|\|\|) ([a-zA-Z_0-9]+)( |")', r'\1 (\2)\3', conds)
+    conds = re.sub(r' "([a-zA-Z_0-9]+)', r' "(\1)', conds)
+    conds = re.sub(r' "!([a-zA-Z_0-9]+)', r' "!(\1)', conds)
+    conds = conds[:-1]
+    inds = conds.split('(')
     inds = inds[1:]
+    if debug:
+        print('checking individual conditions 0:0')
+    indxx = 0
     for i in inds:
+        if debug:
+            sys.stdout.write('\x1b[1A')
+            sys.stdout.write('\x1b[2K')
+            print('checking individual conditions', indxx, ':', len(inds))
         splits = i.split(' ')
+        if len(splits) <= 1:
+            continue
         if 'defined' == splits[0]:
             v = 'DEF_' + splits[1][:-1]
-            result.ids['defined ' + splits[1][:-1]] = 'varis["' + v + '"]'
-            result.varis[v] = Bool(v)
+            current_result.ids['defined ' + splits[1][:-1]] = 'varis["' + v + '"]'
+            current_result.varis[v] = Bool(v)
         else:
             if splits[0][-1] == ')':
                 v = 'USE_' + splits[0][:-1]
-                result.ids[splits[0][:-1]] = 'varis["' + v + '"] != 0'
-                result.varis[v] = Int(v)
+                current_result.ids[splits[0][:-1]] = 'varis["' + v + '"] != 0'
+                current_result.varis[v] = Int(v)
             else:
                 v = 'USE_' + splits[0]
-                result.ids[splits[0]] = 'varis["' + v + '"]'
-                result.varis[v] = Int(v)
-    condstr = conditions[2:]
-    for x in sorted(list(result.ids.keys()), key=len, reverse=True):
+                current_result.ids[splits[0]] = 'varis["' + v + '"]'
+                current_result.varis[v] = Int(v)
+        indxx += 1
+    condstr = conds[2:]
+    if debug:
+        sys.stdout.write('\x1b[1A')
+        sys.stdout.write('\x1b[2K')
+        print('replacing names in string')
+
+    for x in sorted(list(current_result.ids.keys()), key=len, reverse=True):
         if x.startswith('defined '):
-            condstr = condstr.replace(x, result.ids[x])
+            condstr = condstr.replace(x, current_result.ids[x])
         else:
-            condstr = condstr.replace('(' + x, '(' + result.ids[x])
-    condstr = condstr.replace('0v', '0, v')
+            condstr = condstr.replace('(' + x, '(' + current_result.ids[x])
     condstr = condstr.replace('!(', 'Not(')
     cs = re.split('&&|\|\|', condstr)
     ops = []
+    if debug:
+        sys.stdout.write('\x1b[1A')
+        sys.stdout.write('\x1b[2K')
+        print('rearranging ops 0:0')
+
     for d in range(0, len(condstr)):
         if condstr[d] == '&' and condstr[d + 1] == '&':
             ops.append('And')
         elif condstr[d] == '|' and condstr[d + 1] == '|':
             ops.append('Or')
-    ncondstr = ''
+    ncondlist = list()
     ands = 0
     ors = 0
-    logging.info(f"Ops is {ops}")
+    opxx = 0
     for o in ops:
+        if debug:
+            sys.stdout.write('\x1b[1A')
+            sys.stdout.write('\x1b[2K')
+            print('rearranging ops', opxx, ':', len(ops))
         if o == 'And':
             ands += 1
-            ncondstr = ncondstr + 'And (' + cs[0] + ','
-            cs = cs[1:]
+            ncondlist.append('And(' + cs[0] + ',')
+            cs.pop(0)
         else:
-            ncondstr = 'Or(' + ncondstr + cs[0] + ands * ')'
+            ncondlist.insert(0, 'Or(')
+            ncondlist.append(cs[0] + ands * ')')
             if ors > 0:
-                ncondstr += ')'
-            ncondstr += ','
+                ncondlist.append(')')
+            ncondlist.append(',')
             ands = 0
             ors += 1
-            cs = cs[1:]
-    ncondstr += cs[0] + ands * ')'
+            cs.pop(0)
+        opxx += 1
+    ncondlist.append(cs[0] + ands * ')')
     if ors > 0:
-        ncondstr += ')'
-    ncondstr = ncondstr.rstrip()
+        ncondlist.append(')')
+    ncondstr = ''.join(ncondlist).rstrip()
+    ncondlist.clear()
     if invert:
         ncondstr = 'Not(' + ncondstr + ')'
-    result.replacers[cc[0][len('__static_condition_renaming("'):-1]] = ncondstr
+    if debug:
+        sys.stdout.write('\x1b[1A')
+        sys.stdout.write('\x1b[2K')
 
-    return result
+    current_result.replacers[cc[0][len('__static_condition_renaming("'):-1]] = ncondstr
+    return current_result
