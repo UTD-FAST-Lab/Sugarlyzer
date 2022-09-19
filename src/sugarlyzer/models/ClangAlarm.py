@@ -26,7 +26,7 @@ class ClangAlarm(Alarm):
 
     def sanitize(self, message: str):
         san = message.rstrip()
-        san = re.sub("__(.*)_\d+", "\1", san)
+        san = re.sub("__(.*)_\d+", r"\1", san)
         if san.endswith(']'):
             san = re.sub(r' \[.*\]$', '', san)
         return san
