@@ -131,11 +131,9 @@ def process_alarms(alarms: List[Alarm], desugared_file: str) -> Iterable[Alarm]:
     with open(desugared_file, 'r') as fl:
         lines = list(map(lambda x: x.strip("\n"), fl.readlines()))
 
+    condition_mapping = ConditionMapping()
     for line in lines:
-        condition_mapping: ConditionMapping = get_condition_mapping(line)
-        ids.update(condition_mapping.ids)
-        replacers.update(condition_mapping.replacers)
-        varis.update(condition_mapping.varis)
+        condition_mapping: ConditionMapping = get_condition_mapping(line, condition_mapping)
 
     report = ''
     for w in alarms:
@@ -292,7 +290,9 @@ def get_bad_constraints(desugared_file: Path) -> List[str]:
     for l in lines:
         condition_mapping: ConditionMapping = get_condition_mapping(l, condition_mapping, True)
 
-    varis = condition_mapping.varis  # To make the evals work (Zach why did you do this to me)
+    # noinspection PyUnusedLocal
+    varis = condition_mapping.varis  # To make the evals work (why did you do this to me)
+
     print(f"Condition mapping is {str(condition_mapping)}")
     line_index = len(lines) - 1
     is_error = False
