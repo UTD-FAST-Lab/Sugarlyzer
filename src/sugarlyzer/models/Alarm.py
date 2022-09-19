@@ -1,6 +1,6 @@
 import logging
 from pathlib import Path
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Iterable
 from dataclasses import dataclass
 import itertools
 import re
@@ -55,6 +55,15 @@ class Alarm:
         self.feasible: Optional[bool] = None
         self.model: Optional[ModelRef] = None
 
+    @property
+    def all_desugared_lines(self) -> Iterable[int]:
+        """
+        Returns all desugared lines.
+
+        I wrote it this way so that in [[ 
+        """
+        return [self.desugared_line]
+    
     # noinspection PyMethodMayBeStatic
     def sanitize(self, message: str):
         logger.warning("Sanitize is not implemented.")
