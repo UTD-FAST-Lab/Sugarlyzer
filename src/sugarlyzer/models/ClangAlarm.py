@@ -8,25 +8,28 @@ from src.sugarlyzer.models.Alarm import Alarm
 class ClangAlarm(Alarm):
 
     def __init__(self,
-                 file: Path,
-                 desugared_line: int,
-                 message: str,
-                 desugared_path: Iterable[int],
-                 alarm_type: str
+                 original_file: Path = None,
+                 desugared_file: Path = None,
+                 desugared_line: int = None,
+                 message: str = None,
+                 desugared_code_path: Iterable[int] = None,
+                 alarm_type: str = None
                  ):
-        super().__init__(file, desugared_line, message)
-        self.desugared_path: Iterable[int] = desugared_path
+        super().__init__(original_file, desugared_file, desugared_line, message)
+        if desugared_code_path is None:
+            desugared_code_path = []
+        self.desugared_code_path: Iterable[int] = desugared_code_path
         self.alarm_type = alarm_type
 
     def as_dict(self) -> Dict[str, str]:
         result = super().as_dict()
-        result['desugared_path'] = str(self.desugared_path),
+        result['desugared_path'] = str(self.desugared_code_path),
         result['alarm_type'] = self.alarm_type
         return result
 
     def sanitize(self, message: str):
         san = message.rstrip()
-        san = re.sub("__(.*)_\d+", r"\1", san)
+        san = re.sub(r'__(.*)_\d+', r'\1', san)
         if san.endswith(']'):
             san = re.sub(r' \[.*\]$', '', san)
         return san
@@ -38,5 +41,5 @@ class ClangAlarm(Alarm):
 
         :return: An iterator over the lines Clang returns as the path in the desugared file.
         """
-        return self.desugared_path  ## Desugared path must include the
+        return self.desugared_code_path  ## We expect desugared_path to contain desugared_line
 
