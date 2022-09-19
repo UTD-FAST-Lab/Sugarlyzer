@@ -374,7 +374,7 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
             sys.stdout.write('\x1b[2K')
             print('checking individual conditions', indxx, ':', len(inds))
         splits = i.split(' ')
-        if len(splits) <= 1:
+        if len(splits) == 0:
             continue
         if 'defined' == splits[0]:
             v = 'DEF_' + splits[1][:-1]
