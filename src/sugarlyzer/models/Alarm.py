@@ -39,21 +39,42 @@ class Alarm:
     __id_generator = itertools.count()
 
     def __init__(self,
-                 file: Path,
-                 desugared_line: int,
-                 message: str,
+                 original_file: Path = None,
+                 desugared_file: Path = None,
+                 desugared_line: int = None,
+                 message: str = None,
                  ):
-        self.file: Path = file
+        self.desugared_file: Path = desugared_file
+        self.original_file: Path = original_file
         self.desugared_line: int = desugared_line
-        self.original_line_range: IntegerRange = map_source_line(file, self.desugared_line)
+        self.__original_line_range: IntegerRange = None
         self.message: str = message
 
         self.id: int = next(Alarm.__id_generator)
-        self.sanitized_message: str = self.sanitize(self.message)
+        self.__sanitized_message: str = self.sanitize(self.message)
 
         self.presence_condition = List[Dict[str, str | bool]] = []
         self.feasible: Optional[bool] = None
         self.model: Optional[ModelRef] = None
+
+    @property
+    def sanitized_message(self) -> str:
+        if self.message is None:
+            raise ValueError("Cannot compute sanitized message while self.message is None.")
+
+        if self.__sanitized_message is None:
+            self.__sanitized_message = self.sanitize(self.message)
+        return self.__sanitized_message
+
+    @property
+    def original_line_range(self) -> IntegerRange:
+        if self.desugared_file is None:
+            raise ValueError("Trying to set original line range when self.original_file is none.")
+
+        if self.__original_line_range is None:
+            self.__original_line_range = map_source_line(self.desugared_file, self.desugared_line)
+        return self.__original_line_range
+
 
     @property
     def all_desugared_lines(self) -> Iterable[int]:
