@@ -18,7 +18,7 @@ class ClangAlarm(Alarm):
         super().__init__(original_file, desugared_file, desugared_line, message)
         if desugared_code_path is None:
             desugared_code_path = []
-        self.desugared_code_path: Iterable[int] = desugared_code_path
+        self.desugared_code_path: Iterable[int] = [int(i) for i in desugared_code_path]
         self.alarm_type = alarm_type
 
     def as_dict(self) -> Dict[str, str]:

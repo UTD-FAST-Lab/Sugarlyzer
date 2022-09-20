@@ -124,9 +124,6 @@ def process_alarms(alarms: List[Alarm], desugared_file: str) -> Iterable[Alarm]:
     :return: A report containing all results. TODO: Replace with some data structure?
     """
     logger.debug("In process_alarms")
-    ids = {}
-    replacers = {}
-    varis = {}
 
     with open(desugared_file, 'r') as fl:
         lines = list(map(lambda x: x.strip("\n"), fl.readlines()))
@@ -136,15 +133,16 @@ def process_alarms(alarms: List[Alarm], desugared_file: str) -> Iterable[Alarm]:
         condition_mapping: ConditionMapping = get_condition_mapping(line, condition_mapping)
 
     report = ''
+    varis = condition_mapping.varis
     for w in alarms:
         w: Alarm
         w.presence_condition = calculate_asserts(w, desugared_file)
         s = Solver()
         for a in w.presence_condition:
             if a['val']:
-                s.add(eval(replacers[a['var']]))
+                s.add(eval(condition_mapping.replacers[a['var']]))
             else:
-                s.add(eval('Not(' + replacers[a['var']] + ')'))
+                s.add(eval('Not(' + condition_mapping.replacers[a['var']] + ')'))
         if s.check() == sat:
             m = s.model()
             w.feasible = True
@@ -357,7 +355,8 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
     if not line.startswith('__static_condition_renaming('):
         return current_result
     cc = line.split(',')
-    conds = cc[1][:-3]
+    conds = re.search('(.*").*?$', cc[1]).group(1)
+    print(f"Conds is {cc[1]} -> {conds}")
     conds = re.sub(r'(&&|\|\|) !([a-zA-Z_0-9]+)( |")', r'\1 !(\2)\3', conds)
     conds = re.sub(r'(&&|\|\|) ([a-zA-Z_0-9]+)( |")', r'\1 (\2)\3', conds)
     conds = re.sub(r' "([a-zA-Z_0-9]+)', r' "(\1)', conds)
@@ -447,6 +446,7 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
     if debug:
         sys.stdout.write('\x1b[1A')
         sys.stdout.write('\x1b[2K')
+
 
     current_result.replacers[cc[0][len('__static_condition_renaming("'):-1]] = ncondstr
     return current_result

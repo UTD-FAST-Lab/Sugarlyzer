@@ -46,14 +46,14 @@ class Alarm:
                  ):
         self.desugared_file: Path = desugared_file
         self.original_file: Path = original_file
-        self.desugared_line: int = desugared_line
-        self.__original_line_range: IntegerRange = None
+        self.desugared_line: int = int(desugared_line)
         self.message: str = message
-
         self.id: int = next(Alarm.__id_generator)
-        self.__sanitized_message: str = self.sanitize(self.message)
 
-        self.presence_condition = List[Dict[str, str | bool]] = []
+        self.__original_line_range: IntegerRange = None
+        self.__sanitized_message = None
+
+        self.presence_condition: List[Dict[str, str | bool]] = []
         self.feasible: Optional[bool] = None
         self.model: Optional[ModelRef] = None
 
