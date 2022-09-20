@@ -27,6 +27,9 @@ def read_arguments() -> argparse.Namespace:
 v will print INFO and above. Two or more v's will print DEBUG or above.""", default=0)
     p.add_argument('--log', help='If specified, logs will be printed to the specified file. Otherwise, logs are printed'
                                  ' to the console.')
+    p.add_argument("--baselines", action="store_true",
+                   help="""Run the baseline experiments. In these, we configure each 
+                   file with every possible configuration, and then run the experiments.""")
     return p.parse_args()
 
 
@@ -96,6 +99,8 @@ def start_tester(t, args) -> None:
         command = f"tester {t} {p}"
         if args.verbosity > 0:
             command = command + " -" + ("v" * args.verbosity)
+        if args.baselines:
+            command = command + " --baselines"
         cntr: Container = docker.from_env().containers.run(
             image=get_image_name(t),
             command="/bin/bash",
