@@ -26,7 +26,7 @@ the application, run
 
 `python -m pip install .`
 
-This installation will put three executables on your system PATH: `dispatcher`, and `tester`.
+This installation will put two executables on your system PATH: `dispatcher`, and `tester`.
 `dispatcher` is the command you run from your host, while `tester` is the command you run from inside the Docker container (under normal usage, a user
 will never invoke `tester` themselves, but it can be useful for debugging to skip
 container creation, which can take quite a while. especially for Clang which needs to clone and build LLVM.)
