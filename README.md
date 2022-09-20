@@ -3,7 +3,7 @@
 # Prerequisites
 This application is written for Python version >= 3.10.0. Furthermore, 
 Sugarlyzer runs its analyses in Docker containers in order to maintain consistent
-environments across runs, so you must have a working Docker installation.
+environments across runs, so you must have a working Docker installation. We suggest using PyEnv to manage multiple python versions.
 
 # Usage
 
@@ -42,4 +42,10 @@ To extend Sugarlyzer with new tools, the following steps must be performed.
 3. Add a new reader to `src/sugarlyzer/readers` that inherits from AbstractReader. The only function that must be implemented is `read_output`, which takes as input a report file as produced by the runner implemented in step 2. and returns Alarm objects.*
 
 
-\* Note that, depending on your needs, it may be necessary to derive your own subtype of `Alarm,` as we do for clang.
+\* Note that, depending on your needs, it may be necessary to derive your own subtype of `Alarm,` as we do for Clang.
+
+# Extending with New Programs
+
+To extend Sugarlyzer with new programs, the following steps must be performed:
+1. Add a new folder to `resources/programs` with the name of the program/set of programs you wish to use. Note that, like tools, Sugarlyzer will use the name of this folder to refer to the program.
+2. This folder must have two elements. First, a runnable script (make sure to update the permissions before you try to run Sugarlyzer) that places the program somewhere in the /targets folder. This will be run in the Docker container, so it won't modify your host system. Second, a `program.json` file which contains two fields. "build_script", which contains the name of the build script you just added, and "source_location", which is a list of folders to search for source files. If "source_location" is omitted, all .c files in the /results directory will be used.
