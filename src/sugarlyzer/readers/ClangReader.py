@@ -79,10 +79,10 @@ class ClangReader(AbstractReader):
             logging.info(f"alarm is in {report_file}")
             logging.info(f"Lines is {parser.lines}")
             try:
-                ret = ClangAlarm(desugared_line=int(re.match("line (.*),", parser.location).group(1)),
+                ret = ClangAlarm(line_in_source_file=int(re.match("line (.*),", parser.location).group(1)),
                                  message=parser.msg,
                                  alarm_type=parser.msgType,
-                                 desugared_code_path=parser.lines)
+                                 warning_path=parser.lines)
             except:
                 logger.exception(f"Couldn't create alarm. Fields were: msgType={parser.msgType}, message={parser.msg}, "
                                  f"lines={parser.lines}, location={parser.location}")

@@ -215,7 +215,7 @@ def calculate_asserts(w: Alarm, fpa):
     lines = ff.read().split('\n')
     ff.close()
     result = []
-    for line in w.all_desugared_lines:
+    for line in w.all_relevant_lines:
         line -= 1
         fl = lines[line]
         if 'static_condition_default' in fl:
@@ -224,7 +224,7 @@ def calculate_asserts(w: Alarm, fpa):
             if end == -1:
                 continue
             found = False
-            for x in w.all_desugared_lines:
+            for x in w.all_relevant_lines:
                 if start < x - 1 < end:
                     found = True
                     break

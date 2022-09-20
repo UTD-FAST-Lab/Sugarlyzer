@@ -26,7 +26,7 @@ class AbstractTool(ABC):
         alarms: Iterable[Alarm] =\
             functools.reduce(operator.iconcat, [self.reader.read_output(f) for f in self.analyze(desugared_file)], [])
         for a in alarms:
-            a.desugared_file = desugared_file
+            a.source_code_file = desugared_file
         try:
             return process_alarms(alarms, desugared_file)
         except Exception as ex:

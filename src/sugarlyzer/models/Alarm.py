@@ -39,12 +39,12 @@ class Alarm:
     __id_generator = itertools.count()
 
     def __init__(self,
-                 desugared_file: Path = None,
-                 desugared_line: int = None,
+                 source_code_file: Path = None,
+                 line_in_source_file: int = None,
                  message: str = None,
                  ):
-        self.desugared_file: Path = desugared_file
-        self.desugared_line: int = int(desugared_line)
+        self.source_code_file: Path = source_code_file
+        self.line_in_source_file: int = int(line_in_source_file)
         self.message: str = message
         self.id: int = next(Alarm.__id_generator)
 
@@ -66,22 +66,22 @@ class Alarm:
 
     @property
     def original_line_range(self) -> IntegerRange:
-        if self.desugared_file is None:
+        if self.source_code_file is None:
             raise ValueError("Trying to set original line range when self.original_file is none.")
 
         if self.__original_line_range is None:
-            self.__original_line_range = map_source_line(self.desugared_file, self.desugared_line)
+            self.__original_line_range = map_source_line(self.source_code_file, self.line_in_source_file)
         return self.__original_line_range
 
 
     @property
-    def all_desugared_lines(self) -> Iterable[int]:
+    def all_relevant_lines(self) -> Iterable[int]:
         """
         Returns all desugared lines. Useful for use with :func:`src.sugarlyzer.SugarCRunner.calculate_asserts`
 
         :return: An iterator of desugared lines.
         """
-        return [self.desugared_line]
+        return [self.line_in_source_file]
 
     # noinspection PyMethodMayBeStatic
     def sanitize(self, message: str):
