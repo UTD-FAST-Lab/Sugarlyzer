@@ -34,3 +34,12 @@ container creation, which can take quite a while. especially for Clang which nee
 Simply run `dispatcher --help` from anywhere in order to see the helpdoc on how to
 invoke Sugarlyzer.
 
+# Extending with New Tools
+
+To extend Sugarlyzer with new tools, the following steps must be performed.
+1. Add a new dockerfile to `resources/tools/<tool_name>/Dockerfile`. This Dockerfile *must* 1) Inherit from the sugarlyzer/base:latest image, which contains Sugarlyzer and its dependencies, and 2) install the tool so it can be invoked from the command line. *Please note that the tool name that is exposed to the user via the command line and the name of the tool as passed to AbstractTool is the exact same as whatever this folder is named.*
+2. Add a new class to `src/sugarlyzer/analyses` that inherits from AbstractTool. The only method that must be implemented is `analyze`, which takes as input a path to a code file and returns an iterable of result files, containing the analysis results. Also, update `src/sugarlyzer/analyses/AnalysisToolFactory` to correctly return an instance of your tool given its name.
+3. Add a new reader to `src/sugarlyzer/readers` that inherits from AbstractReader. The only function that must be implemented is `read_output`, which takes as input a report file as produced by the runner implemented in step 2. and returns Alarm objects.*
+
+
+\* Note that, depending on your needs, it may be necessary to derive your own subtype of `Alarm,` as we do for clang.
