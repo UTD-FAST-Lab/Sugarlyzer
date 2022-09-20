@@ -21,7 +21,7 @@ class ProgramSpecification:
         return self.try_resolve_path(self.__build_script, importlib.resources.path('resources.programs', ''))
 
     @property
-    def source_locations(self) -> Iterable[str]:
+    def source_locations(self) -> Iterable[Path]:
         return map(lambda x: self.try_resolve_path(x, '/targets'), self.__source_location)
 
     def get_source_files(self) -> Iterable[Path]:

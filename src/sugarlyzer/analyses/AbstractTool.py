@@ -1,4 +1,5 @@
 import functools
+import logging
 import operator
 from abc import ABC, abstractmethod
 from pathlib import Path
@@ -7,6 +8,8 @@ from typing import Iterable
 from src.sugarlyzer.SugarCRunner import process_alarms
 from src.sugarlyzer.models.Alarm import Alarm, map_source_line
 from src.sugarlyzer.readers.AbstractReader import AbstractReader
+
+logger = logging.getLogger(__name__)
 
 
 class AbstractTool(ABC):
@@ -24,7 +27,10 @@ class AbstractTool(ABC):
             functools.reduce(operator.iconcat, [self.reader.read_output(f) for f in self.analyze(desugared_file)], [])
         for a in alarms:
             a.desugared_file = desugared_file
-        return process_alarms(alarms, desugared_file)
+        try:
+            return process_alarms(alarms, desugared_file)
+        except Exception as ex:
+            logger.exception(f"File that failed was {desugared_file}")
 
 
     @abstractmethod
