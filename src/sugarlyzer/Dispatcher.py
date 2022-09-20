@@ -93,7 +93,7 @@ def start_tester(t, args) -> None:
         bind_volumes[Path(args.log).absolute()] = {"bind": "/log.txt", "mode": "rw"}
 
     for p in args.programs:
-        command = f"executor {t} {p}"
+        command = f"tester {t} {p}"
         if args.verbosity > 0:
             command = command + " -" + ("v" * args.verbosity)
         cntr: Container = docker.from_env().containers.run(
