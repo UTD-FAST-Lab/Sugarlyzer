@@ -92,11 +92,11 @@ class Alarm:
         base: Dict[str, str] = {}
 
         for attr in dir(self):
-            if not attr.startswith('__'):
+            if not attr.startswith('_'):
                 try:
-                    val = str(getattr(self, attr))
-                    if not isinstance(val, Callable):
-                        base[attr] = val
+                    val = getattr(self, attr)
+                    if not callable(val):
+                        base[attr] = str(val)
                 except Exception as ex:
                     logger.warning(f"Could not access attribute {attr} without exception.")
                     base[attr] = None
