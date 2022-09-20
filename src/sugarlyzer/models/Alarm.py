@@ -91,15 +91,4 @@ class Alarm:
         return message
 
     def as_dict(self) -> Dict[str, str]:
-        return {
-            "file": str(self.file.absolute()),
-            "original_lines": str(self.original_line_range),
-            "desugared_line": self.desugared_line,
-            "message": self.message,
-            "sanitized_message": self.sanitized_message,
-            "id": self.id,
-            "presence_condition": [{str(k): str(v) for k, v in f.items()} for f in self.presence_condition],
-            "model": str(self.model)
-        }
-
-
+        return {k: str(v) for k, v in vars(self).items()}
