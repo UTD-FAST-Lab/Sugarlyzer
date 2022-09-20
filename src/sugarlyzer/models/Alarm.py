@@ -1,6 +1,6 @@
 import logging
 from pathlib import Path
-from typing import List, Dict, Optional, Iterable
+from typing import List, Dict, Optional, Iterable, Callable, TypeVar
 from dataclasses import dataclass
 import itertools
 import re
@@ -39,13 +39,11 @@ class Alarm:
     __id_generator = itertools.count()
 
     def __init__(self,
-                 original_file: Path = None,
                  desugared_file: Path = None,
                  desugared_line: int = None,
                  message: str = None,
                  ):
         self.desugared_file: Path = desugared_file
-        self.original_file: Path = original_file
         self.desugared_line: int = int(desugared_line)
         self.message: str = message
         self.id: int = next(Alarm.__id_generator)
@@ -90,5 +88,19 @@ class Alarm:
         logger.warning("Sanitize is not implemented.")
         return message
 
-    def as_dict(self) -> Dict[str, str]:
-        return {k: str(v) for k, v in vars(self).items()}
+    def as_dict(self) -> Dict[str, Optional[str]]:
+        base: Dict[str, str] = {}
+
+        for attr in dir(self):
+            if not attr.startswith('__'):
+                try:
+                    val = str(getattr(self, attr))
+                    if not isinstance(val, Callable):
+                        base[attr] = val
+                except Exception as ex:
+                    logger.warning(f"Could not access attribute {attr} without exception.")
+                    base[attr] = None
+        return base
+
+
+
