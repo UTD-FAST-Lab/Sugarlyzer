@@ -345,28 +345,47 @@ class ConditionMapping:
 def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapping(),
                           invert: bool = False, debug: bool = False) -> ConditionMapping:
     """
-    TODO Document this function, I don't really get what it's doing.
-    :param line:
-    :param invert:
-    :return:
+    The method takese in a line and rewrites it into Z3 format, it simultaneously
+    creates Z3 variables for future reference, as well as maps the variables to their
+    renamings.
+    The method is broken into two parts, part 1 identifies all of the mappings and creates
+    the Z3 variables to be used. Part 2 rewrites the string to be in the Z3 format and 
+    maps it to the static_condition_default.
+    :param line: Line we will attempt to make a mapping of
+    :param ConditionMapping: A collection of dictionaries we use for Z3 solving, if none is provided, a new one is made
+    :param invert: If we want the inverse of this condition or not
+    :param debug: If debug information should be displayed
+    :return: The condition mapping variable passed in, with the new mappings added in
     """
+    #Example line:
+    #---Renaming text------------Static Condition ID we map to---Presence Condition
+    #__static_condition_renaming("__static_condition_default_5", "(defined READ_X)");
     logger.debug("In get_condition_mapping")
-
+    #All conditions start with the renaming, if the line doesn't have this text, we aren't interested
     if not line.startswith('__static_condition_renaming('):
         return current_result
+    #A comma will separate the __static_condition_default from the condition
     cc = line.split(',')
+    #Remove the tailend of the presence condition
     conds = re.search('(.*").*?$', cc[1]).group(1)
     print(f"Conds is {cc[1]} -> {conds}")
+    #We make some substitutions to enforce format consistency
     conds = re.sub(r'(&&|\|\|) !([a-zA-Z_0-9]+)( |")', r'\1 !(\2)\3', conds)
     conds = re.sub(r'(&&|\|\|) ([a-zA-Z_0-9]+)( |")', r'\1 (\2)\3', conds)
     conds = re.sub(r' "([a-zA-Z_0-9]+)', r' "(\1)', conds)
     conds = re.sub(r' "!([a-zA-Z_0-9]+)', r' "!(\1)', conds)
+    #Currently have:  "(defined READ_X)"
+    #remove the last ", and then seperate by ( to get each condition. We ensured these exist with our substituions
     conds = conds[:-1]
     inds = conds.split('(')
+    #inds[0] is ' "', so we ignore it
     inds = inds[1:]
     if debug:
         print('checking individual conditions 0:0')
+    #need to access id often, for performance we manually iterate
     indxx = 0
+    #each i is a condition
+    #This loop is the meat of Part 1
     for i in inds:
         if debug:
             sys.stdout.write('\x1b[1A')
@@ -375,10 +394,23 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
         splits = i.split(' ')
         if len(splits) == 0:
             continue
+        #Macros in IFs are used in one of three ways
+        #Check if it is defined, check if is a non 0 value, check an expression
+        #We separate these into a boolean for if it is defined, and an int value
+        #while the check for a non-zero value is written as #if X, we rewrite to be X != 0
+        #this makes it more consistant and allows us to use the same variable for comparisons
+
+        #if this is checking definition
         if 'defined' == splits[0]:
+            #we prepend DEF_ to the front
             v = 'DEF_' + splits[1][:-1]
+            #We need to be able to refer to this variable in Z3, to keep track of these
+            #we create a map. The variable usage (in this case defined X)  is mapped to a string.
+            #when evaluated, this string accesses our Z3 variable map. Allowing us to create
+            #an unknown number of conditions that we can easily refer to in different equations
             current_result.ids['defined ' + splits[1][:-1]] = 'varis["' + v + '"]'
             current_result.varis[v] = Bool(v)
+        #the else follows the same logic, but it is with USE prepended instead of DEF
         else:
             if splits[0][-1] == ')':
                 v = 'USE_' + splits[0][:-1]
@@ -389,25 +421,32 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
                 current_result.ids[splits[0]] = 'varis["' + v + '"]'
                 current_result.varis[v] = Int(v)
         indxx += 1
+    #accessing our string again, removing the ' "'
     condstr = conds[2:]
     if debug:
         sys.stdout.write('\x1b[1A')
         sys.stdout.write('\x1b[2K')
         print('replacing names in string')
 
+    
+    #replace all of our variable names with their varis references (the Z3 mappings)
+    #this starts Part 2
     for x in sorted(list(current_result.ids.keys()), key=len, reverse=True):
         if x.startswith('defined '):
             condstr = condstr.replace(x, current_result.ids[x])
         else:
             condstr = condstr.replace('(' + x, '(' + current_result.ids[x])
+    #replace ! with the Not method
     condstr = condstr.replace('!(', 'Not(')
+    #we treat this like RPN solvers with stacks, we need a stack of operators and operands
+    #being boolean logic and conditions respectively
     cs = re.split('&&|\|\|', condstr)
     ops = []
     if debug:
         sys.stdout.write('\x1b[1A')
         sys.stdout.write('\x1b[2K')
         print('rearranging ops 0:0')
-
+    #or and and methods need to be called in plae of the binary operators
     for d in range(0, len(condstr)):
         if condstr[d] == '&' and condstr[d + 1] == '&':
             ops.append('And')
@@ -417,6 +456,13 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
     ands = 0
     ors = 0
     opxx = 0
+    #In this loop we look for And and Or statements on our stack. We set this up in a way
+    #such that something like X & Y & Z ends up -> And( X, And(Y, Z))
+    #If our current operator is And, we pop it off the stack along with the next operand
+    #If our current operator is Or, We add one more Operand to close out the most recent
+    #And, and then right paren close all of the ands, we prepend our OR to the front and
+    #continue
+    #if we were to add all strings, it would be an N^2 alg, so we append to a list and join later
     for o in ops:
         if debug:
             sys.stdout.write('\x1b[1A')
@@ -436,17 +482,22 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
             ors += 1
             cs.pop(0)
         opxx += 1
+    #we close our ands same as when we find an Or
     ncondlist.append(cs[0] + ands * ')')
+    #we close our ors
     if ors > 0:
         ncondlist.append(')')
+    #conjoin our strings
     ncondstr = ''.join(ncondlist).rstrip()
     ncondlist.clear()
+    #if we are looking for the inverse (say we specifically do not take an if statement)
+    #we want the inverse, so wrap it all in a Not method
     if invert:
         ncondstr = 'Not(' + ncondstr + ')'
     if debug:
         sys.stdout.write('\x1b[1A')
         sys.stdout.write('\x1b[2K')
 
-
+    #Finally map the static condition renaming to the re-written presence condition
     current_result.replacers[cc[0][len('__static_condition_renaming("'):-1]] = ncondstr
     return current_result
