@@ -1,6 +1,7 @@
 import argparse
 import dataclasses
 import itertools
+import re
 from enum import Enum, auto
 from pathlib import Path
 import logging
@@ -18,7 +19,6 @@ from src.sugarlyzer.SugarCRunner import process_alarms
 from src.sugarlyzer.analyses.AnalysisToolFactory import AnalysisToolFactory
 from src.sugarlyzer.models.Alarm import Alarm
 from src.sugarlyzer.models.ProgramSpecification import ProgramSpecification
-from zachFiles.SugarCPostWork import defSearcher
 
 logger = logging.getLogger(__name__)
 
@@ -92,7 +92,7 @@ class Tester:
             baseline_alarms: List[Alarm] = []
             # 2. Collect files and their macros.
             for source_file in self.program.get_source_files():
-                macros: Iterable[str] = defSearcher.getAllMacros(source_file)
+                macros: Iterable[str] = getAllMacros(source_file)
                 logging.info(f"Macros for file {source_file} are {macros}")
 
                 T = TypeVar('T')
@@ -121,6 +121,10 @@ class Tester:
                             case DefUndef.UNDEF:
                                 config_builder.append('-U' + s)
 
+                    alarms = tool.analyze_and_read(source_file, config_builder)
+                    for a in alarms:
+                        a.presence_condition = [{"var": v, "val": "True" if k == DefUndef.DEF else "False"} for
+                                                k, v in config]
                     baseline_alarms.extend(tool.analyze_and_read(source_file, config_builder))
             alarms = baseline_alarms
 
@@ -172,3 +176,34 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+def getAllMacros(fpa):
+    ff = open(fpa, 'r')
+    lines = ff.read().split('\n')
+    defs = []
+    for l in lines:
+        if '#if' in l:
+            m = re.match(' *#ifdef *([a-zA-Z0-9_]+).*', l)
+            if m:
+                v = m.group(1)
+                if v not in defs:
+                    defs.append(v)
+                continue
+            m = re.match(' *#ifndef *([a-zA-Z0-9_]+).*', l)
+            if m:
+                v = m.group(1)
+                if v not in defs:
+                    defs.append(v)
+                continue
+            m = re.match(' *#if *([a-zA-Z0-9_]+).*', l)
+            if m:
+                v = m.group(1)
+                if v not in defs:
+                    defs.append(v)
+                continue
+            ds = re.findall(r'defined *([a-zA-Z0-9_]+?)', l)
+            for d in ds:
+                if d not in defs:
+                    defs.append(d)
+    return defs
+
