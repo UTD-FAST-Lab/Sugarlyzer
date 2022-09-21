@@ -136,9 +136,9 @@ def process_alarms(alarms: List[Alarm], desugared_file: str) -> Iterable[Alarm]:
     varis = condition_mapping.varis
     for w in alarms:
         w: Alarm
-        w.presence_condition = calculate_asserts(w, desugared_file)
+        w.static_condition_results = calculate_asserts(w, desugared_file)
         s = Solver()
-        for a in w.presence_condition:
+        for a in w.static_condition_results:
             if a['val']:
                 s.add(eval(condition_mapping.replacers[a['var']]))
             else:
@@ -147,6 +147,10 @@ def process_alarms(alarms: List[Alarm], desugared_file: str) -> Iterable[Alarm]:
             m = s.model()
             w.feasible = True
             w.model = m
+            allConditions = []
+            for a in w.static_condition_results:
+                allConditions.append(condition_mapping.replacers[a['var']])
+            w.presence_condition = "And(" + allConditions.join(',') + ')'
             report += str(w) + '\n'
         else:
             print('impossible constraints')
