@@ -115,7 +115,7 @@ def run_sugarc(cmd_str, desugared_file, log_file):
         f.write(ps.stderr)
 
 
-def process_alarms(alarms: List[Alarm], desugared_file: str) -> Iterable[Alarm]:
+def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Alarm]:
     """
     Runs the analysis, and compiles the results into a report.
 
