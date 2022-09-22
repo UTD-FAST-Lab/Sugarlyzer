@@ -150,7 +150,7 @@ def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Al
             allConditions = []
             for a in w.static_condition_results:
                 allConditions.append(condition_mapping.replacers[a['var']])
-            w.presence_condition = "And(" + allConditions.join(',') + ')'
+            w.presence_condition = "And(" + ','.join(allConditions) + ')'
             report += str(w) + '\n'
         else:
             print('impossible constraints')
