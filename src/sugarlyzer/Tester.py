@@ -1,18 +1,20 @@
 import argparse
-import dataclasses
+import functools
+import importlib
 import itertools
+import json
+import logging
+import os
 import re
 from enum import Enum, auto
 from pathlib import Path
-import logging
-import functools
-
-import importlib
-import json
-import os
-from pathos.multiprocessing import ProcessPool
 from typing import Iterable, List, Dict, Any, TypeVar, Tuple
+
 from jsonschema.validators import RefResolver, Draft7Validator
+from pathos.multiprocessing import ProcessPool
+# noinspection PyUnresolvedReferences
+from dill import pickle
+from tqdm import tqdm
 
 from src.sugarlyzer import SugarCRunner
 from src.sugarlyzer.SugarCRunner import process_alarms
@@ -91,12 +93,13 @@ class Tester:
         else:
             baseline_alarms: List[Alarm] = []
             # 2. Collect files and their macros.
-            for source_file in self.program.get_source_files():
+            for source_file in tqdm(self.program.get_source_files()):
                 macros: Iterable[str] = getAllMacros(source_file)
                 logging.info(f"Macros for file {source_file} are {macros}")
 
                 T = TypeVar('T')
                 G = TypeVar('G')
+
                 def cross_product(set_a: Iterable[T], set_b: Iterable[G]) -> Iterable[Tuple[T, G]]:
                     return ((a, b) for a in set_a for b in set_b)
 
@@ -105,27 +108,27 @@ class Tester:
                     "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
                     s = list(iterable)
                     return itertools.chain.from_iterable(itertools.combinations(s, r) for r in range(len(s) + 1))
-                # 3. Construct every possible configuration.
-                class DefUndef(Enum):
-                    DEF = auto()
-                    UNDEF = auto()
 
-                config_space = powerset(cross_product([DefUndef.DEF, DefUndef.UNDEF], macros))
-                for config in config_space:
+                # 3. Construct every possible configuration.
+                config_space = powerset(cross_product(["DEF", "UNDEF"], macros))
+
+                def run_config_and_get_alarms(config: Iterable[Tuple[str, str]]) -> Iterable[Alarm]:
                     config_builder = []
-                    config: Iterable[Tuple[DefUndef, str]]
+                    config: Iterable[Tuple[str, str]]
                     for d, s in config:
-                        match d:
-                            case DefUndef.DEF:
-                                config_builder.append('-D' + s + '=1')
-                            case DefUndef.UNDEF:
-                                config_builder.append('-U' + s)
+                        if d == "DEF":
+                            config_builder.append('-D' + s + '=1')
+                        elif d == "UNDEF":
+                            config_builder.append('-U' + s)
 
                     alarms = tool.analyze_and_read(source_file, config_builder)
                     for a in alarms:
-                        a.presence_condition = [{"var": v, "val": "True" if k == DefUndef.DEF else "False"} for
+                        a.presence_condition = [{"var": v, "val": "True" if k == "DEF" else "False"} for
                                                 k, v in config]
-                    baseline_alarms.extend(tool.analyze_and_read(source_file, config_builder))
+                    return alarms
+
+                baseline_alarms.extend(itertools.chain.from_iterable(ProcessPool(32).map(
+                    run_config_and_get_alarms, config_space)))
             alarms = baseline_alarms
 
         with open(output_folder / "results.json", 'w') as f:
@@ -177,6 +180,7 @@ def main():
 if __name__ == '__main__':
     main()
 
+
 def getAllMacros(fpa):
     ff = open(fpa, 'r')
     lines = ff.read().split('\n')
@@ -206,4 +210,3 @@ def getAllMacros(fpa):
                 if d not in defs:
                     defs.append(d)
     return defs
-
