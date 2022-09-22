@@ -4,8 +4,43 @@
   "title": "Program",
   "description": "A program specification",
   "type": "object",
-  "required": [],
+  "required": ["build_script"],
   "properties": {
+    "remove_errors": {
+      "description": "Whether to enable SugarC's remove_errors functionality (default False).",
+      "type": "boolean"
+    },
+    "no_std_libs": {
+      "description": "Whether to enable SugarC's no_std_libs (default False).",
+      "type": "boolean"
+    },
+    "get_recommended_space": {
+      "description": "Specification for get_recommended_space.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "file_pattern": {
+            "description": "A regular expression to apply to the filename. If the regular expression is found within the filename, then we use the specified included directories and files. Note that patterns are applied in the order specified here.",
+            "type": "string"
+          },
+          "included_files": {
+            "description": "The header files to include.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "included_directories": {
+            "description": "The directories to include.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
     "build_script": {
       "description": "The location of the build script.",
       "type": "string"
