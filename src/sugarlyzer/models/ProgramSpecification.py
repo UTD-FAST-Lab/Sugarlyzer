@@ -10,7 +10,8 @@ logger = logging.getLogger(__name__)
 
 class ProgramSpecification:
 
-    def __init__(self, name: str, build_script: str,
+    def __init__(self, name: str,
+                 build_script: str,
                  source_location: List[str]):
         self.name = name
         self.__build_script = build_script
@@ -25,10 +26,13 @@ class ProgramSpecification:
         return map(lambda x: self.try_resolve_path(x, '/targets'), self.__source_location)
 
     def get_source_files(self) -> Iterable[Path]:
+        """
+        :return: All .c or .i files that are in the program's source locations.
+        """
         for s in self.source_locations:
             for root, dirs, files in os.walk(s):
                 for f in files:
-                    if f.endswith(".c"):
+                    if f.endswith(".c") or f.endswith(".i"):
                         yield Path(root)/f
 
     def download(self) -> int:
