@@ -14,14 +14,15 @@
       "description": "Whether to enable SugarC's no_std_libs (default False).",
       "type": "boolean"
     },
-    "get_recommended_space": {
-      "description": "Specification for get_recommended_space.",
+    "included_files_and_directories": {
+      "description": "Specification for the files and directories to include, on a per-file basis if necessary.",
       "type": "array",
       "items": {
         "type": "object",
+        "required": ["included_files", "included_directories"],
         "properties": {
           "file_pattern": {
-            "description": "A regular expression to apply to the filename. If the regular expression is found within the filename, then we use the specified included directories and files. Note that patterns are applied in the order specified here.",
+            "description": "A regular expression to apply to the filename. If the regular expression is found within the filename, then we use the specified included directories and files. Note that patterns are applied in the order specified here. If this is not included, the rule will match every file.",
             "type": "string"
           },
           "included_files": {
