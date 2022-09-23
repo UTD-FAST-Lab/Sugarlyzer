@@ -29,7 +29,7 @@ class AbstractTool(ABC):
         alarms: Iterable[Alarm] =\
             functools.reduce(operator.iconcat, [self.reader.read_output(f) for f in self.analyze(desugared_file, includes)], [])
         for a in alarms:
-            a.source_code_file = desugared_file
+            a.input_file = desugared_file
         return alarms
 
     @abstractmethod

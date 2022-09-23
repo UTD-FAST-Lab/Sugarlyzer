@@ -9,6 +9,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Tuple, List, Optional, Dict, Iterable
 
+# noinspection PyUnresolvedReferences
 from z3.z3 import Solver, sat, Bool, Int, Not, And, Or
 
 from src.sugarlyzer.models.Alarm import Alarm
