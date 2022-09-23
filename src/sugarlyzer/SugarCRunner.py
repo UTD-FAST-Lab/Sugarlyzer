@@ -137,7 +137,7 @@ def desugar_file(file_to_desugar: Path,
                  log_file: str = '',
                  remove_errors: bool = False,
                  no_stdlibs: bool = False,
-                 commandline_args=None,
+                 commandline_args: List[str] =None,
                  included_files: Optional[Iterable[Path]] = None,
                  included_directories: Optional[Iterable[Path]] = None) -> tuple[Path, Path]:
     """
@@ -155,7 +155,7 @@ def desugar_file(file_to_desugar: Path,
     :return: (desugared_file_location, log_file_location)
     """
     if commandline_args is None:
-        commandline_args = ['-keep-mem']
+        commandline_args = []
     if included_directories is None:
         included_directories = []
     if included_files is None:
