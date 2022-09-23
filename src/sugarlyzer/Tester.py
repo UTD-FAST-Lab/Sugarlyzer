@@ -144,7 +144,7 @@ class Tester:
 
                     # If we get here, then there wasn't a bucket that this could fit into,
                     #  So it gets its own bucket and we add a new one to the end of the list.
-                    bucket[-1].append(ba)
+                    buckets[-1].append(ba)
                     buckets.append([])
 
             alarms = []
