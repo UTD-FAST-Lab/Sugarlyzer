@@ -1,0 +1,236 @@
+{
+      "aes.c": {
+            "buildLocation": "crypto",
+            "includedDirectories": [
+                  "-I../config",
+                  "-I../ssl",
+                  "-I../crypto"
+            ],
+            "includedFiles": []
+      },
+      "bigint.c": {
+            "buildLocation": "crypto",
+            "includedDirectories": [
+                  "-I../config",
+                  "-I../ssl",
+                  "-I../crypto"
+            ],
+            "includedFiles": []
+      },
+      "crypto_misc.c": {
+            "buildLocation": "crypto",
+            "includedDirectories": [
+                  "-I../config",
+                  "-I../ssl",
+                  "-I../crypto"
+            ],
+            "includedFiles": []
+      },
+      "hmac.c": {
+            "buildLocation": "crypto",
+            "includedDirectories": [
+                  "-I../config",
+                  "-I../ssl",
+                  "-I../crypto"
+            ],
+            "includedFiles": []
+      },
+      "md5.c": {
+            "buildLocation": "crypto",
+            "includedDirectories": [
+                  "-I../config",
+                  "-I../ssl",
+                  "-I../crypto"
+            ],
+            "includedFiles": []
+      },
+      "rc4.c": {
+            "buildLocation": "crypto",
+            "includedDirectories": [
+                  "-I../config",
+                  "-I../ssl",
+                  "-I../crypto"
+            ],
+            "includedFiles": []
+      },
+      "rsa.c": {
+            "buildLocation": "crypto",
+            "includedDirectories": [
+                  "-I../config",
+                  "-I../ssl",
+                  "-I../crypto"
+            ],
+            "includedFiles": []
+      },
+      "sha1.c": {
+            "buildLocation": "crypto",
+            "includedDirectories": [
+                  "-I../config",
+                  "-I../ssl",
+                  "-I../crypto"
+            ],
+            "includedFiles": []
+      },
+      "sha256.c": {
+            "buildLocation": "crypto",
+            "includedDirectories": [
+                  "-I../config",
+                  "-I../ssl",
+                  "-I../crypto"
+            ],
+            "includedFiles": []
+      },
+      "sha384.c": {
+            "buildLocation": "crypto",
+            "includedDirectories": [
+                  "-I../config",
+                  "-I../ssl",
+                  "-I../crypto"
+            ],
+            "includedFiles": []
+      },
+      "sha512.c": {
+            "buildLocation": "crypto",
+            "includedDirectories": [
+                  "-I../config",
+                  "-I../ssl",
+                  "-I../crypto"
+            ],
+            "includedFiles": []
+      },
+      "asn1.c": {
+            "buildLocation": "ssl",
+            "includedDirectories": [
+                  "-I../config",
+                  "-I../ssl",
+                  "-I../crypto"
+            ],
+            "includedFiles": []
+      },
+      "gen_cert.c": {
+            "buildLocation": "ssl",
+            "includedDirectories": [
+                  "-I../config",
+                  "-I../ssl",
+                  "-I../crypto"
+            ],
+            "includedFiles": []
+      },
+      "loader.c": {
+            "buildLocation": "ssl",
+            "includedDirectories": [
+                  "-I../config",
+                  "-I../ssl",
+                  "-I../crypto"
+            ],
+            "includedFiles": []
+      },
+      "openssl.c": {
+            "buildLocation": "ssl",
+            "includedDirectories": [
+                  "-I../config",
+                  "-I../ssl",
+                  "-I../crypto"
+            ],
+            "includedFiles": []
+      },
+      "os_port.c": {
+            "buildLocation": "ssl",
+            "includedDirectories": [
+                  "-I../config",
+                  "-I../ssl",
+                  "-I../crypto"
+            ],
+            "includedFiles": []
+      },
+      "p12.c": {
+            "buildLocation": "ssl",
+            "includedDirectories": [
+                  "-I../config",
+                  "-I../ssl",
+                  "-I../crypto"
+            ],
+            "includedFiles": []
+      },
+      "tls1.c": {
+            "buildLocation": "ssl",
+            "includedDirectories": [
+                  "-I../config",
+                  "-I../ssl",
+                  "-I../crypto"
+            ],
+            "includedFiles": []
+      },
+      "tls1_svr.c": {
+            "buildLocation": "ssl",
+            "includedDirectories": [
+                  "-I../config",
+                  "-I../ssl",
+                  "-I../crypto"
+            ],
+            "includedFiles": []
+      },
+      "tls1_clnt.c": {
+            "buildLocation": "ssl",
+            "includedDirectories": [
+                  "-I../config",
+                  "-I../ssl",
+                  "-I../crypto"
+            ],
+            "includedFiles": []
+      },
+      "x509.c": {
+            "buildLocation": "ssl",
+            "includedDirectories": [
+                  "-I../config",
+                  "-I../ssl",
+                  "-I../crypto"
+            ],
+            "includedFiles": []
+      },
+      "axhttpd.c": {
+            "buildLocation": "httpd",
+            "includedDirectories": [
+                  "-I../config",
+                  "-I../ssl",
+                  "-I../crypto"
+            ],
+            "includedFiles": []
+      },
+      "proc.c": {
+            "buildLocation": "httpd",
+            "includedDirectories": [
+                  "-I../config",
+                  "-I../ssl",
+                  "-I../crypto"
+            ],
+            "includedFiles": []
+      },
+      "tdate_parse.c": {
+            "buildLocation": "httpd",
+            "includedDirectories": [
+                  "-I../config",
+                  "-I../ssl",
+                  "-I../crypto"
+            ],
+            "includedFiles": []
+      },
+      "htpasswd.c": {
+            "buildLocation": "httpd",
+            "includedDirectories": [
+                  "-I../config",
+                  "-I../ssl",
+                  "-I../crypto"
+            ],
+            "includedFiles": []
+      },
+      "axssl.c": {
+            "buildLocation": "samples/c",
+            "includedDirectories": [
+                  "-I../../config",
+                  "-I../../ssl",
+                  "-I../../crypto"
+            ],
+            "includedFiles": []
+      }
+}
