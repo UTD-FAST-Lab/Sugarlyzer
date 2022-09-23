@@ -6,14 +6,13 @@ import json
 import logging
 import os
 import re
-from enum import Enum, auto
 from pathlib import Path
 from typing import Iterable, List, Dict, Any, TypeVar, Tuple
 
-from jsonschema.validators import RefResolver, Draft7Validator
-from pathos.multiprocessing import ProcessPool
 # noinspection PyUnresolvedReferences
 from dill import pickle
+from jsonschema.validators import RefResolver, Draft7Validator
+from pathos.multiprocessing import ProcessPool
 from tqdm import tqdm
 
 from src.sugarlyzer import SugarCRunner
@@ -34,6 +33,7 @@ class Tester:
             """
             Given a JSON file that corresponds to a program specification,
             we read it in and validate that it conforms to the schema (resources.programs.program_schema.json)
+
             :param file: The program file to read.
             :return: The JSON representation of the program file. Throws an exception if the file is malformed.
             """
@@ -123,15 +123,37 @@ class Tester:
 
                     alarms = tool.analyze_and_read(source_file, config_builder)
                     for a in alarms:
-                        a.presence_condition = [{"var": v, "val": "True" if k == "DEF" else "False"} for
-                                                k, v in config]
+                        a.model = [config]
                     return alarms
 
                 baseline_alarms.extend(itertools.chain.from_iterable(ProcessPool(32).map(
                     run_config_and_get_alarms, config_space)))
+
+            buckets: List[List[Alarm]] = [[]]
+            def alarm_match(a: Alarm, b: Alarm):
+                return a.line_in_source_file == b.line_in_source_file and a.message == b.message and a.source_code_file == b.source_code_file
+
+            # Collect alarms into "buckets" based on equivalence.
+            # Then, for each bucket, we will return one alarm, combining all of the
+            #  models into a list.
+            for ba in baseline_alarms:
+                for bucket in buckets:
+                    if len(bucket) > 0 and alarm_match(bucket[0], ba):
+                        bucket.append(ba)
+                        break
+
+                    # If we get here, then there wasn't a bucket that this could fit into,
+                    #  So it gets its own bucket and we add a new one to the end of the list.
+                    buckets[-1].append(ba)
+                    buckets.append([])
+
+            alarms = []
+            for bucket in (b for b in buckets if len(b) > 0):
+                alarms.append(bucket[0])
+                alarms[-1].model = list(itertools.chain.from_iterable(m.model for m in bucket))
             alarms = baseline_alarms
 
-        with open(output_folder / "results.json", 'w') as f:
+        with open("/results.json", 'w') as f:
             json.dump(list(map(lambda x: {str(k): str(v) for k, v in x.items()},
                                map(lambda x: x.as_dict(), alarms))), f)
 
@@ -163,9 +185,7 @@ def set_up_logging(args: argparse.Namespace) -> None:
             logging_level = logging.DEBUG
 
     logging_kwargs = {"level": logging_level, "format": '%(asctime)s %(name)s %(levelname)s %(message)s',
-                      "handlers": [logging.StreamHandler()]}
-    if (log_file := Path("/log.txt")).exists():
-        logging_kwargs["handlers"].append(logging.FileHandler(str(log_file)))
+                      "handlers": [logging.StreamHandler(), logging.FileHandler("/log", 'w')]}
 
     logging.basicConfig(**logging_kwargs)
 

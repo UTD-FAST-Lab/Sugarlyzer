@@ -79,7 +79,7 @@ class ClangReader(AbstractReader):
             logging.info(f"alarm is in {report_file}")
             logging.info(f"Lines is {parser.lines}")
             try:
-                ret = ClangAlarm(line_in_source_file=int(re.match("line (.*),", parser.location).group(1)),
+                ret = ClangAlarm(line_in_input_file=int(re.match("line (.*),", parser.location).group(1)),
                                  message=parser.msg,
                                  alarm_type=parser.msgType,
                                  warning_path=parser.lines)
