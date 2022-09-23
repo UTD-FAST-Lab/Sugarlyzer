@@ -93,7 +93,7 @@ def start_tester(t, args) -> None:
     """
 
     bind_volumes = {}
-    bind_volumes[Path(args.results).absolute()] = {"bind": "/results.json", "mode": "rw"}
+    bind_volumes[Path(args.result).absolute()] = {"bind": "/results.json", "mode": "rw"}
     bind_volumes[Path(args.log).absolute()] = {"bind": "/log", "mode": "rw"}
 
     for p in args.programs:
