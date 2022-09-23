@@ -150,7 +150,9 @@ def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Al
             allConditions = []
             for a in w.static_condition_results:
                 allConditions.append(condition_mapping.replacers[a['var']])
-            w.presence_condition = "And(" + allConditions.join(',') + ')'
+            varisUseRemoved = re.sub(r'varis\[\"USE_([a-zA-Z_0-9]+)\"\]', r'\1', "And(" + allConditions.join(',') + ')')
+            varisDefRemoved = re.sub(r'varis\[\"DEF_([a-zA-Z_0-9]+)\"\]', r'defined \1', varisUseRemoved)
+            w.presence_condition = defPrefixReplaced
             report += str(w) + '\n'
         else:
             print('impossible constraints')
