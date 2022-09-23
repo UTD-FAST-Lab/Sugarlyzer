@@ -68,15 +68,19 @@ class Tester:
             logger.info(f"Desugaring the source code in {list(self.program.source_locations)}")
 
             # TODO: Need an application-specific way to specify header files.
-            partial = functools.partial(SugarCRunner.desugar_file,
-                                        user_defined_space=SugarCRunner.get_recommended_space(None),
-                                        remove_errors=True, no_stdlibs=True,
-                                        included_files=["/SugarlyzerConfig/axtlsInc.h"],
-                                        included_directories=["/SugarlyzerConfig/stdinc/usr/include/",
-                                                              "/SugarlyzerConfig/stdinc/usr/include/x86_64-linux-gnu/",
-                                                              "/SugarlyzerConfig/stdinc/usr/lib/gcc/x86_64-linux-gnu/9/include/"])
+            def desugarer(src: Path) -> Tuple[Path, Path]:
+                inc_files, inc_dirs = self.program.get_inc_files_and_dirs(src)
+                return SugarCRunner.desugar_file(
+                    file_to_desugar=src,
+                    user_defined_space=SugarCRunner.get_recommended_space(src, inc_files, inc_dirs),
+                    remove_errors=self.program.remove_errors,
+                    no_stdlibs=self.program.no_std_libs,
+                    included_files=inc_files,
+                    included_directories=inc_dirs
+                )
+
             logger.info(f"Source files are {list(self.program.get_source_files())}")
-            input_files: Iterable[str] = ProcessPool(8).map(partial, self.program.get_source_files())
+            input_files: Iterable[str] = ProcessPool(8).map(desugarer, self.program.get_source_files())
             logger.info(f"Finished desugaring the source code.")
             # 3/4. Run analysis tool, and read its results
             logger.info(f"Collected {len([c for c in self.program.get_source_files()])} .c files to analyze.")
