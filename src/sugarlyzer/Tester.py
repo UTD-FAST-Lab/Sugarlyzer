@@ -6,6 +6,7 @@ import json
 import logging
 import os
 import re
+from enum import Enum, auto
 from pathlib import Path
 from typing import Iterable, List, Dict, Any, TypeVar, Tuple
 
@@ -13,6 +14,8 @@ from typing import Iterable, List, Dict, Any, TypeVar, Tuple
 from dill import pickle
 from jsonschema.validators import RefResolver, Draft7Validator
 from pathos.multiprocessing import ProcessPool
+# noinspection PyUnresolvedReferences
+from dill import pickle
 from tqdm import tqdm
 
 from src.sugarlyzer import SugarCRunner
@@ -68,15 +71,20 @@ class Tester:
             logger.info(f"Desugaring the source code in {list(self.program.source_locations)}")
 
             # TODO: Need an application-specific way to specify header files.
-            partial = functools.partial(SugarCRunner.desugar_file,
-                                        user_defined_space=SugarCRunner.get_recommended_space(None),
-                                        remove_errors=True, no_stdlibs=True,
-                                        included_files=["/SugarlyzerConfig/axtlsInc.h"],
-                                        included_directories=["/SugarlyzerConfig/stdinc/usr/include/",
-                                                              "/SugarlyzerConfig/stdinc/usr/include/x86_64-linux-gnu/",
-                                                              "/SugarlyzerConfig/stdinc/usr/lib/gcc/x86_64-linux-gnu/9/include/"])
+
+            def desugar(file: Path) -> Tuple[Path, Path]:
+                included_files, included_directories = self.program.get_inc_files_and_dirs(file)
+                user_defined_space = SugarCRunner.get_recommended_space(file, included_files, included_directories,
+                                                                        self.program.no_std_libs)
+                return SugarCRunner.desugar_file(file,
+                                                 user_defined_space=user_defined_space,
+                                                 remove_errors=self.program.remove_errors,
+                                                 no_stdlibs=self.program.no_std_libs,
+                                                 included_files=included_files,
+                                                 included_directories=included_directories)
+
             logger.info(f"Source files are {list(self.program.get_source_files())}")
-            input_files: Iterable[str] = ProcessPool(8).map(partial, self.program.get_source_files())
+            input_files: Iterable[str] = ProcessPool(8).map(desugar, self.program.get_source_files())
             logger.info(f"Finished desugaring the source code.")
             # 3/4. Run analysis tool, and read its results
             logger.info(f"Collected {len([c for c in self.program.get_source_files()])} .c files to analyze.")
@@ -130,6 +138,7 @@ class Tester:
                     run_config_and_get_alarms, config_space)))
 
             buckets: List[List[Alarm]] = [[]]
+
             def alarm_match(a: Alarm, b: Alarm):
                 return a.line_in_source_file == b.line_in_source_file and a.message == b.message and a.source_code_file == b.source_code_file
 
