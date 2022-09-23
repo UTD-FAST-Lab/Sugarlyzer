@@ -160,7 +160,7 @@ def ensure_empty_file_ask_if_necessary(file: Path, force: bool):
         if force:
             os.remove(file)
         else:
-            while (char := input(f"{str(file.absolute())} exists. Delete? y/n") == 'y') not in ['y', 'n']:
+            while (char := input(f"{str(file.absolute())} exists. Delete? y/n ") == 'y') not in ['y', 'n']:
                 pass
             if char == 'y':
                 os.remove(file)
