@@ -1,9 +1,10 @@
 import importlib.resources
 import logging
 import os
+import re
 import subprocess
 from pathlib import Path
-from typing import List, Iterable
+from typing import List, Iterable, Optional, Dict, Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -12,10 +13,17 @@ class ProgramSpecification:
 
     def __init__(self, name: str,
                  build_script: str,
-                 source_location: List[str]):
+                 source_location: Optional[List[str]] = None,
+                 remove_errors: bool = False,
+                 no_std_libs: bool = False,
+                 recommended_space: Dict = None
+                 ):
         self.name = name
+        self.remove_errors = remove_errors
+        self.no_std_libs = no_std_libs
         self.__build_script = build_script
         self.__source_location = source_location
+        self.inc_dirs_and_files = {} if recommended_space is None else recommended_space
 
     @property
     def build_script(self):
@@ -23,7 +31,10 @@ class ProgramSpecification:
 
     @property
     def source_locations(self) -> Iterable[Path]:
-        return map(lambda x: self.try_resolve_path(x, '/targets'), self.__source_location)
+        if self.__source_location is None:
+            return [Path('/targets')]
+        else:
+            return map(lambda x: self.try_resolve_path(x, '/targets'), self.__source_location)
 
     def get_source_files(self) -> Iterable[Path]:
         """
@@ -34,6 +45,27 @@ class ProgramSpecification:
                 for f in files:
                     if f.endswith(".c") or f.endswith(".i"):
                         yield Path(root)/f
+
+    def get_inc_files_and_dirs(self, file: Path) -> Tuple[Iterable[Path], Iterable[Path]]:
+        """
+        Iterates through the program.json's get_recommended_space field,
+        returning the first match. See program_schema.json for more info.
+        :param file: The source file to search for.
+        :return: included_files, included_directories for the first object in
+        get_recommended_space with a regular expression that matches the **absolute** file name.
+        """
+        for spec in self.inc_dirs_and_files:
+
+            # Note the difference between s[a] and s.get(a) is the former will
+            #  raise an exception if a is not in s, while s.get will return None.
+            inc_files = (Path(p) for p in spec['included_files'])
+            inc_dirs = (Path(p) for p in spec['included_directories'])
+
+            if spec.get('file_pattern') is None or re.match(spec.get('file_pattern'), str(file.absolute())):
+                logging.info(f"File {file} matched specification {spec}")
+                return inc_files, inc_dirs
+
+        return [], []
 
     def download(self) -> int:
         """
