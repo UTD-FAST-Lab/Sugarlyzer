@@ -15,7 +15,7 @@ from src.sugarlyzer.models.Alarm import Alarm, map_source_line
 def build_alarm(draw,
                 strings=st.text(),
                 lines=st.lists(st.integers())):
-    return Alarm(source_code_file=draw(strings),
+    return Alarm(input_file=draw(strings),
                  desugared_lines=draw(lines),
                  alarm_type=draw(strings),
                  message=draw(strings))

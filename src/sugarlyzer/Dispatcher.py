@@ -21,12 +21,13 @@ def read_arguments() -> argparse.Namespace:
                    choices=(programs :=
                             list(filter(lambda x: not x.startswith('__'), get_dirs_in_package('resources.programs')))),
                    default=programs)
-    p.add_argument('-r', '--results', help='Location to put results', default='results')
+    p.add_argument('-r', '--result', help='File to put results', default='results.json')
     p.add_argument('--no-cache', help="Build all images fresh without using Docker's cache.", action='store_true')
     p.add_argument('-v', dest='verbosity', action='count', help="""Level of verbosity. No v's will print only WARNING or above messages. One 
 v will print INFO and above. Two or more v's will print DEBUG or above.""", default=0)
     p.add_argument('--log', help='If specified, logs will be printed to the specified file. Otherwise, logs are printed'
-                                 ' to the console.')
+                                 ' to the console.', default='sugarlyzer.log')
+    p.add_argument('--force', action='store_true', help='Do not ask permission to delete existing log and results files.')
     p.add_argument("--baselines", action="store_true",
                    help="""Run the baseline experiments. In these, we configure each 
                    file with every possible configuration, and then run the experiments.""")
@@ -90,10 +91,10 @@ def start_tester(t, args) -> None:
     :param t: The name of the tool.
     :param args: The command-line arguments # TODO Limit only to those we need.
     """
-    Path(os.path.abspath(args.results)).mkdir(exist_ok=True, parents=True)
-    bind_volumes = {os.path.abspath(args.results): {"bind": "/results", "mode": "rw"}}
-    if args.log not in [None, '']:
-        bind_volumes[Path(args.log).absolute()] = {"bind": "/log.txt", "mode": "rw"}
+
+    bind_volumes = {}
+    bind_volumes[Path(args.result).absolute()] = {"bind": "/results.json", "mode": "rw"}
+    bind_volumes[Path(args.log).absolute()] = {"bind": "/log", "mode": "rw"}
 
     for p in args.programs:
         command = f"tester {t} {p}"
@@ -129,8 +130,12 @@ def main() -> None:
         case _:
             logging_level = logging.DEBUG
 
+    for fi in (Path(p) for p in [args.log, args.result]):
+        ensure_empty_file_ask_if_necessary(fi, args.force)
+
     logging_format = '%(asctime)s %(name)s %(levelname)s %(message)s'
-    kwargs = {"format": logging_format, "level": logging_level}
+    kwargs = {"format": logging_format, "level": logging_level, "filename": args.log}
+
     if args.log not in ['', None]:
         kwargs["filename"] = args.log
 
@@ -138,6 +143,31 @@ def main() -> None:
     build_images(args.tools)
     for t in args.tools:
         start_tester(t, args)
+
+
+def ensure_empty_file_ask_if_necessary(file: Path, force: bool):
+    """
+    Given a file, checks if it exists. If it does and force is true, it deletes it and
+    creates an empty one. If it does and force is false, it will ask the user permission
+    to delete. Will exit the program if user says no. After this function, if the program
+    is still running, the file is guaranteed to exist and be empty.
+
+    :param file: The file to check.
+    :param force: Whether to delete without permission.
+    :return:
+    """
+    if file.exists():
+        if force:
+            os.remove(file)
+        else:
+            while (char := input(f"{str(file.absolute())} exists. Delete? y/n ")) not in ['y', 'n']:
+                logger.debug(f"Char is {char}")
+                pass
+            if char == 'y':
+                os.remove(file)
+            else:
+                exit(-1)
+    file.touch()
 
 
 if __name__ == '__main__':

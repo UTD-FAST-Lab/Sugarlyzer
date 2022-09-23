@@ -8,13 +8,13 @@ from src.sugarlyzer.models.Alarm import Alarm
 class ClangAlarm(Alarm):
 
     def __init__(self,
-                 source_code_file: Path = None,
-                 line_in_source_file: int = None,
+                 input_file: Path = None,
+                 line_in_input_file: int = None,
                  message: str = None,
                  warning_path: Iterable[int] = None,
                  alarm_type: str = None
                  ):
-        super().__init__(source_code_file, line_in_source_file, message)
+        super().__init__(input_file, line_in_input_file, message)
         if warning_path is None:
             warning_path = []
         self.warning_path: Iterable[int] = [int(i) for i in warning_path]
