@@ -39,12 +39,12 @@ class Alarm:
     __id_generator = itertools.count()
 
     def __init__(self,
-                 source_code_file: Path = None,
-                 line_in_source_file: int = None,
+                 input_file: Path = None,
+                 line_in_input_file: int = None,
                  message: str = None,
                  ):
-        self.source_code_file: Path = source_code_file
-        self.line_in_source_file: int = int(line_in_source_file)
+        self.input_file: Path = input_file
+        self.line_in_input_file: int = int(line_in_input_file)
         self.message: str = message
         self.id: int = next(Alarm.__id_generator)
 
@@ -66,11 +66,11 @@ class Alarm:
 
     @property
     def original_line_range(self) -> IntegerRange:
-        if self.source_code_file is None:
+        if self.input_file is None:
             raise ValueError("Trying to set original line range when self.original_file is none.")
 
         if self.__original_line_range is None:
-            self.__original_line_range = map_source_line(self.source_code_file, self.line_in_source_file)
+            self.__original_line_range = map_source_line(self.input_file, self.line_in_input_file)
         return self.__original_line_range
 
 
@@ -81,7 +81,7 @@ class Alarm:
 
         :return: An iterator of desugared lines.
         """
-        return [self.line_in_source_file]
+        return [self.line_in_input_file]
 
     # noinspection PyMethodMayBeStatic
     def sanitize(self, message: str):
