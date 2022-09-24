@@ -1,6 +1,4 @@
 {
-      "title": "axTLS",
-      "description": "contains information for building axTLS files",
       "remove_errors": false,
       "no_std_libs": true,
       "included_files_and_directories": [
@@ -21,8 +19,7 @@
                         "-I../config",
                         "-I../ssl",
                         "-I../crypto"
-                  ],
-                  "build_location": "crypto"
+                  ]
             },
             {
                   "file_pattern": "bigint\\.c$",
@@ -31,8 +28,7 @@
                         "-I../config",
                         "-I../ssl",
                         "-I../crypto"
-                  ],
-                  "build_location": "crypto"
+                  ]
             },
             {
                   "file_pattern": "crypto_misc\\.c$",
@@ -41,8 +37,7 @@
                         "-I../config",
                         "-I../ssl",
                         "-I../crypto"
-                  ],
-                  "build_location": "crypto"
+                  ]
             },
             {
                   "file_pattern": "hmac\\.c$",
@@ -51,8 +46,7 @@
                         "-I../config",
                         "-I../ssl",
                         "-I../crypto"
-                  ],
-                  "build_location": "crypto"
+                  ]
             },
             {
                   "file_pattern": "md5\\.c$",
@@ -61,8 +55,7 @@
                         "-I../config",
                         "-I../ssl",
                         "-I../crypto"
-                  ],
-                  "build_location": "crypto"
+                  ]
             },
             {
                   "file_pattern": "rc4\\.c$",
@@ -71,8 +64,7 @@
                         "-I../config",
                         "-I../ssl",
                         "-I../crypto"
-                  ],
-                  "build_location": "crypto"
+                  ]
             },
             {
                   "file_pattern": "rsa\\.c$",
@@ -81,8 +73,7 @@
                         "-I../config",
                         "-I../ssl",
                         "-I../crypto"
-                  ],
-                  "build_location": "crypto"
+                  ]
             },
             {
                   "file_pattern": "sha1\\.c$",
@@ -91,8 +82,7 @@
                         "-I../config",
                         "-I../ssl",
                         "-I../crypto"
-                  ],
-                  "build_location": "crypto"
+                  ]
             },
             {
                   "file_pattern": "sha256\\.c$",
@@ -101,8 +91,7 @@
                         "-I../config",
                         "-I../ssl",
                         "-I../crypto"
-                  ],
-                  "build_location": "crypto"
+                  ]
             },
             {
                   "file_pattern": "sha384\\.c$",
@@ -111,8 +100,7 @@
                         "-I../config",
                         "-I../ssl",
                         "-I../crypto"
-                  ],
-                  "build_location": "crypto"
+                  ]
             },
             {
                   "file_pattern": "sha512\\.c$",
@@ -121,8 +109,7 @@
                         "-I../config",
                         "-I../ssl",
                         "-I../crypto"
-                  ],
-                  "build_location": "crypto"
+                  ]
             },
             {
                   "file_pattern": "asn1\\.c$",
@@ -131,8 +118,7 @@
                         "-I../config",
                         "-I../ssl",
                         "-I../crypto"
-                  ],
-                  "build_location": "ssl"
+                  ]
             },
             {
                   "file_pattern": "gen_cert\\.c$",
@@ -141,8 +127,7 @@
                         "-I../config",
                         "-I../ssl",
                         "-I../crypto"
-                  ],
-                  "build_location": "ssl"
+                  ]
             },
             {
                   "file_pattern": "loader\\.c$",
@@ -151,8 +136,7 @@
                         "-I../config",
                         "-I../ssl",
                         "-I../crypto"
-                  ],
-                  "build_location": "ssl"
+                  ]
             },
             {
                   "file_pattern": "openssl\\.c$",
@@ -161,8 +145,7 @@
                         "-I../config",
                         "-I../ssl",
                         "-I../crypto"
-                  ],
-                  "build_location": "ssl"
+                  ]
             },
             {
                   "file_pattern": "os_port\\.c$",
@@ -171,8 +154,7 @@
                         "-I../config",
                         "-I../ssl",
                         "-I../crypto"
-                  ],
-                  "build_location": "ssl"
+                  ]
             },
             {
                   "file_pattern": "p12\\.c$",
@@ -181,8 +163,7 @@
                         "-I../config",
                         "-I../ssl",
                         "-I../crypto"
-                  ],
-                  "build_location": "ssl"
+                  ]
             },
             {
                   "file_pattern": "tls1\\.c$",
@@ -191,8 +172,7 @@
                         "-I../config",
                         "-I../ssl",
                         "-I../crypto"
-                  ],
-                  "build_location": "ssl"
+                  ]
             },
             {
                   "file_pattern": "tls1_svr\\.c$",
@@ -201,8 +181,7 @@
                         "-I../config",
                         "-I../ssl",
                         "-I../crypto"
-                  ],
-                  "build_location": "ssl"
+                  ]
             },
             {
                   "file_pattern": "tls1_clnt\\.c$",
@@ -211,8 +190,7 @@
                         "-I../config",
                         "-I../ssl",
                         "-I../crypto"
-                  ],
-                  "build_location": "ssl"
+                  ]
             },
             {
                   "file_pattern": "x509\\.c$",
@@ -221,8 +199,7 @@
                         "-I../config",
                         "-I../ssl",
                         "-I../crypto"
-                  ],
-                  "build_location": "ssl"
+                  ]
             },
             {
                   "file_pattern": "axhttpd\\.c$",
@@ -231,8 +208,7 @@
                         "-I../config",
                         "-I../ssl",
                         "-I../crypto"
-                  ],
-                  "build_location": "httpd"
+                  ]
             },
             {
                   "file_pattern": "proc\\.c$",
@@ -241,8 +217,7 @@
                         "-I../config",
                         "-I../ssl",
                         "-I../crypto"
-                  ],
-                  "build_location": "httpd"
+                  ]
             },
             {
                   "file_pattern": "tdate_parse\\.c$",
@@ -251,8 +226,7 @@
                         "-I../config",
                         "-I../ssl",
                         "-I../crypto"
-                  ],
-                  "build_location": "httpd"
+                  ]
             },
             {
                   "file_pattern": "htpasswd\\.c$",
@@ -261,8 +235,7 @@
                         "-I../config",
                         "-I../ssl",
                         "-I../crypto"
-                  ],
-                  "build_location": "httpd"
+                  ]
             },
             {
                   "file_pattern": "axssl\\.c$",
@@ -271,10 +244,9 @@
                         "-I../../config",
                         "-I../../ssl",
                         "-I../../crypto"
-                  ],
-                  "build_location": "samples/c"
+                  ]
             }
       ],
-      "build_script": ".",
+      "build_script": "axtlsScript.sh",
       "source_location": "axtls-code"
 }
