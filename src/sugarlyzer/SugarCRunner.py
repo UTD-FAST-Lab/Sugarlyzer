@@ -35,7 +35,7 @@ def get_recommended_space(file: Path, inc_files: Iterable[Path], inc_dirs: Itera
     # still need to create the code to search for inclusion guards
     logger.debug('In getRecommendedSpace')
 
-    def parse_file(self, curFile: str) -> tuple:
+    def parse_file(curFile: str) -> tuple:
         '''Parses through a file line by line, on each line it searches for
         inclusions of other files and potential guard macros. We define guard
         macros as:
@@ -50,8 +50,6 @@ def get_recommended_space(file: Path, inc_files: Iterable[Path], inc_dirs: Itera
         List of all guard macros encountered
         List of all files included
         '''
-        if self.debug:
-            print('Parsing ' + curFile + ' for guard macros...')
 
         included = []
         guarded = []
