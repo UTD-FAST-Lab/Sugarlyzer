@@ -95,58 +95,7 @@ class Sugarlyzer:
         self.included_directories = includedDirs
         self.no_stdlibs = no_stdlibs
 
-    def parseFile(self, curFile:str) -> tuple:
-        '''Parses through a file line by line, on each line it searches for
-        inclusions of other files and potential guard macros. We define guard
-        macros as:
-        (#ifndef|!defined) X_H(_|__)
-        #ifndef X_defined
-        #defined(__need_X)
-        
-        Parameters:
-        curFle (str): file we are parsing
 
-        Returns:
-        List of all guard macros encountered
-        List of all files included
-        '''
-        if self.debug:
-            print('Parsing '+ curFile +' for guard macros...')
-
-        included = []
-        guarded = []
-        Fil = open(curFile,'r')
-        #meant for match
-        for lin in Fil:
-            res = re.match(r'\s*#\s*include\s*(<|")\s*([^\s>"]+)\s*("|>)\s*',lin)
-            if res:
-                if self.debug:
-                    print('adding file to check:',res.group(2))
-                included.append(res.group(2))
-            res = re.match(r'\s*#\s*ifndef\s+(\S+)\s*',lin)
-            if res:
-                macro = res.group(1)
-                res = re.match(r'.*_(defined|DEFINED|h|H)_*',macro)
-                if res:
-                    if self.debug:
-                        print('undefining', macro)
-                    guarded.append(macro)
-            res = re.findall(r'defined\s*\(([^\s\)]+)\)',lin)
-            if len(res) > 0:
-                macros = res
-                for m in macros:
-                    res = re.match(r'.*_(defined|DEFINED|h|H)_*',m)
-                    if res:
-                        if self.debug:
-                            print('undefining', m)
-                        guarded.append(m)
-                    res = re.match(r'__need_.*',m)
-                    if res:
-                        if self.debug:
-                            print('undefining', m)
-                        guarded.append(m)
-        Fil.close()
-        return guarded, included
         
     def getRecommendedSpace(self) -> str:
         '''Explores the file provided in setFile. Looks for inclusion guards or other
