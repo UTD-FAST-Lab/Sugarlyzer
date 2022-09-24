@@ -94,7 +94,7 @@ def start_tester(t, args) -> None:
     :param args: The command-line arguments # TODO Limit only to those we need.
     """
 
-    bind_volumes = {Path(args.results).absolute(): {"bind": "/results.json", "mode": "rw"},
+    bind_volumes = {Path(args.result).absolute(): {"bind": "/results.json", "mode": "rw"},
                     Path(args.log).absolute(): {"bind": "/log", "mode": "rw"}}
 
     for p in args.programs:
