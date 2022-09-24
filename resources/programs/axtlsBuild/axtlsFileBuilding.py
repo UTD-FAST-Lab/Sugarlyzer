@@ -9,6 +9,13 @@ def main():
   makeOutput = open('makeOut.txt', 'r')
   currentBuildingDirectory = ''
   fileBuilds = {}
+  fileBuilds['title'] = 'axTLS'
+  fileBuilds['description'] = 'contains information for building axTLS files'
+  fileBuilds['remove_errors'] = False
+  fileBuilds['no_std_libs'] = True
+  fileBuilds['included_files_and_directories'] = [{'included_files' : [], 'included_directories' : []}]
+  fileBuilds['build_script'] = '.'
+  fileBuilds['source_location'] = '.'
   for l in makeOutput:
     if 'Entering directory' in l:
       currentBuildingDirectory = l.split("'")[1]
@@ -17,10 +24,12 @@ def main():
       fileNameMatch = re.search(r' (\S+\.c)',l)
       if fileNameMatch:
         fileNameText = fileNameMatch.group(1)
-        fileBuilds[fileNameText] = {}
-        fileBuilds[fileNameText]['buildLocation'] = currentBuildingDirectory
-        fileBuilds[fileNameText]['includedDirectories'] = re.findall(r'-I ?\S+',l)
-        fileBuilds[fileNameText]['includedFiles'] = re.findall(r'-include ?\S+',l)
+        newFileToAdd = {}
+        newFileToAdd['file_pattern'] = fileNameText.replace('.','\.') + '$'
+        newFileToAdd['included_files'] = re.findall(r'-include ?\S+',l)
+        newFileToAdd['included_directories'] = re.findall(r'-I ?\S+',l)
+        newFileToAdd['build_location'] = currentBuildingDirectory
+        fileBuilds['included_files_and_directories'].append(newFileToAdd)
   makeOutput.close()
   with open('axtlsBuilds.json','w',encoding='utf8') as axtlsBuildsJsonFile:
     json.dump(fileBuilds, axtlsBuildsJsonFile, indent=6)
