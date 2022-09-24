@@ -101,7 +101,7 @@ def get_recommended_space(file: Path, inc_files: Iterable[Path], inc_dirs: Itera
                 searchingDirs.append(lin.lstrip().rstrip())
             elif '#include <...> search starts here:' in lin:
                 inRange = True
-        logger.debug('dirs to search:' + searchingDirs)
+        logger.debug('dirs to search:' + str(searchingDirs))
     files = []
     files.append(file)
     for f in inc_files:
