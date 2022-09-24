@@ -28,6 +28,8 @@ v will print INFO and above. Two or more v's will print DEBUG or above.""", defa
     p.add_argument('--log', help='If specified, logs will be printed to the specified file. Otherwise, logs are printed'
                                  ' to the console.', default='sugarlyzer.log')
     p.add_argument('--force', action='store_true', help='Do not ask permission to delete existing log and results files.')
+    p.add_argument('--keep-mem', action="store_true", help="Whether to run SugarC with the keep-mem option (i.e., do not rename functions like malloc)")
+    p.add_argument('--make-main', action='store_true', help='Whether to run SugarC with the make-main option (i.e., create an artificial main method)')
     p.add_argument("--baselines", action="store_true",
                    help="""Run the baseline experiments. In these, we configure each 
                    file with every possible configuration, and then run the experiments.""")
@@ -92,9 +94,8 @@ def start_tester(t, args) -> None:
     :param args: The command-line arguments # TODO Limit only to those we need.
     """
 
-    bind_volumes = {}
-    bind_volumes[Path(args.result).absolute()] = {"bind": "/results.json", "mode": "rw"}
-    bind_volumes[Path(args.log).absolute()] = {"bind": "/log", "mode": "rw"}
+    bind_volumes = {Path(args.results).absolute(): {"bind": "/results.json", "mode": "rw"},
+                    Path(args.log).absolute(): {"bind": "/log", "mode": "rw"}}
 
     for p in args.programs:
         command = f"tester {t} {p}"
@@ -102,6 +103,10 @@ def start_tester(t, args) -> None:
             command = command + " -" + ("v" * args.verbosity)
         if args.baselines:
             command = command + " --baselines"
+        if args.keep_mem:
+            command += " --keep-mem"
+        if args.make_main:
+            command += " --make-main"
         cntr: Container = docker.from_env().containers.run(
             image=get_image_name(t),
             command="/bin/bash",
