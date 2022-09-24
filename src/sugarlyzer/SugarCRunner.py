@@ -58,14 +58,14 @@ def get_recommended_space(file: Path, inc_files: Iterable[Path], inc_dirs: Itera
         for lin in Fil:
             res = re.match(r'\s*#\s*include\s*(<|")\s*([^\s>"]+)\s*("|>)\s*', lin)
             if res:
-                logger.debug('adding file to check:', res.group(2))
+                logger.debug('adding file to check:' + res.group(2))
                 included.append(res.group(2))
             res = re.match(r'\s*#\s*ifndef\s+(\S+)\s*', lin)
             if res:
                 macro = res.group(1)
                 res = re.match(r'.*_(defined|DEFINED|h|H)_*', macro)
                 if res:
-                    logger.debug('undefining', macro)
+                    logger.debug('undefining' + macro)
                     guarded.append(macro)
             res = re.findall(r'defined\s*\(([^\s\)]+)\)', lin)
             if len(res) > 0:
@@ -73,11 +73,11 @@ def get_recommended_space(file: Path, inc_files: Iterable[Path], inc_dirs: Itera
                 for m in macros:
                     res = re.match(r'.*_(defined|DEFINED|h|H)_*', m)
                     if res:
-                        logger.debug('undefining', m)
+                        logger.debug('undefining' + m)
                         guarded.append(m)
                     res = re.match(r'__need_.*', m)
                     if res:
-                        logger.debug('undefining', m)
+                        logger.debug('undefining' + m)
                         guarded.append(m)
         Fil.close()
         return guarded, included
@@ -101,7 +101,7 @@ def get_recommended_space(file: Path, inc_files: Iterable[Path], inc_dirs: Itera
                 searchingDirs.append(lin.lstrip().rstrip())
             elif '#include <...> search starts here:' in lin:
                 inRange = True
-        logger.debug('dirs to search:', searchingDirs)
+        logger.debug('dirs to search:' + searchingDirs)
     files = []
     files.append(file)
     for f in inc_files:
@@ -113,11 +113,11 @@ def get_recommended_space(file: Path, inc_files: Iterable[Path], inc_dirs: Itera
             if m not in guards:
                 guards.append(m)
         for i in includes:
-            logger.debug('searching for file:', i)
+            logger.debug('searching for file:' + i)
             for sd in searchingDirs:
                 comboFile = os.path.expanduser(os.path.join(sd, i))
                 if os.path.exists(comboFile):
-                    logger.debug('file found:', comboFile)
+                    logger.debug('file found:' + comboFile)
                     trueFile = os.path.abspath(comboFile)
                     if trueFile not in files:
                         files.append(trueFile)
