@@ -194,24 +194,29 @@ def desugar_file(file_to_desugar: Path,
                 logger.debug(f"to_append is {to_append}")
                 for d in to_append:
                     outfile.write(d + "\n")
-                run_sugarc(" ".join(cmd), desugared_file, log_file)
+                run_sugarc(" ".join(cmd), file_to_desugar, desugared_file, log_file)
                 logging.debug(f"Created desugared file {desugared_file}")
                 to_append = get_bad_constraints(desugared_file)
 
-    run_sugarc(" ".join(cmd), desugared_file, log_file)
+    run_sugarc(" ".join(cmd), file_to_desugar, desugared_file, log_file)
     logger.debug(f"Wrote to {log_file}")
     return desugared_file, log_file
 
 
 @functools.cache
-def run_sugarc(cmd_str, desugared_file, log_file):
-    logger.debug(f"In run_sugarc, running cmd {cmd_str}")
-    ps = subprocess.run(cmd_str.split(" "), capture_output=True)
-    with open(desugared_file, 'wb') as f:
-        f.write(ps.stdout)
-    logger.info(f"Wrote to {desugared_file}")
-    with open(log_file, 'wb') as f:
-        f.write(ps.stderr)
+def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output, log_file):
+    current_directory = os.curdir
+    os.chdir(file_to_desugar.parent)
+    logger.debug(f"In run_sugarc, running cmd {cmd_str} from directory {os.curdir}")
+    try:
+        ps = subprocess.run(cmd_str.split(" "), capture_output=True)
+        with open(desugared_output, 'wb') as f:
+            f.write(ps.stdout)
+        logger.info(f"Wrote to {desugared_output}")
+        with open(log_file, 'wb') as f:
+            f.write(ps.stderr)
+    finally:
+        os.chdir(current_directory)
 
 
 def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Alarm]:
@@ -249,7 +254,9 @@ def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Al
             allConditions = []
             for a in w.static_condition_results:
                 allConditions.append(condition_mapping.replacers[a['var']])
-            w.presence_condition = "And(" + ','.join(allConditions) + ')'
+            varisUseRemoved = re.sub(r'varis\[\"USE_([a-zA-Z_0-9]+)\"\]', r'\1', "And(" + allConditions.join(',') + ')')
+            varisDefRemoved = re.sub(r'varis\[\"DEF_([a-zA-Z_0-9]+)\"\]', r'defined \1', varisUseRemoved)
+            w.presence_condition = varisDefRemoved
             report += str(w) + '\n'
         else:
             print('impossible constraints')
