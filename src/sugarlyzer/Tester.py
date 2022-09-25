@@ -147,7 +147,6 @@ class Tester:
             logger.info(f"Found {len(baseline_alarms)} baseline alarms.")
             logger.debug(f"Baseline alarms are: {str(baseline_alarms)}")
 
-            buckets: List[List[Alarm]] = [[]]
 
             def alarm_match(a: Alarm, b: Alarm):
                 logger.debug(f"Comparing alarms {str(a)} and {str(b)}")
@@ -156,6 +155,8 @@ class Tester:
             # Collect alarms into "buckets" based on equivalence.
             # Then, for each bucket, we will return one alarm, combining all of the
             #  models into a list.
+            buckets: List[List[Alarm]] = [[]]
+
             for ba in baseline_alarms:
                 for bucket in buckets:
                     if len(bucket) > 0 and alarm_match(bucket[0], ba):
@@ -163,11 +164,11 @@ class Tester:
                         bucket.append(ba)
                         break
 
-                    # If we get here, then there wasn't a bucket that this could fit into,
-                    #  So it gets its own bucket and we add a new one to the end of the list.
-                    buckets[-1].append(ba)
-                    buckets.append([])
-                    logger.debug(f"Creating new bucket. Now we have {len(buckets)} buckets.")
+                # If we get here, then there wasn't a bucket that this could fit into,
+                #  So it gets its own bucket and we add a new one to the end of the list.
+                buckets[-1].append(ba)
+                buckets.append([])
+                logger.debug(f"Creating new bucket. Now we have {len(buckets)} buckets.")
 
             alarms = []
             for bucket in (b for b in buckets if len(b) > 0):
