@@ -41,7 +41,7 @@ def main():
                    e['input_file'].split('.')[0] == b['input_file'].split('.')[0]]
         exact_matches = [m['id'] for m in matches if b['message'] == m['sanitized_message']]
         partial_matches = [m['id'] for m in matches if m not in exact_matches]
-        vals = b.values()
+        vals = list(b.values())
 
         vals.extend([exact_matches, partial_matches, len(exact_matches), len(partial_matches)])
         print('\t'.join([str(s) for s in vals]))
