@@ -91,7 +91,7 @@ class Tester:
                                                  commandline_args=command_line)
 
             logger.info(f"Source files are {list(self.program.get_source_files())}")
-            input_files: Iterable[str] = ProcessPool(8).map(desugar, self.program.get_source_files())
+            input_files: Iterable[str] = ProcessPool(8).map(desugar, filter(lambda s: "APACHE" in str(s) or "BUSYBOX" in str(s), self.program.get_source_files()))
             logger.info(f"Finished desugaring the source code.")
             # 3/4. Run analysis tool, and read its results
             logger.info(f"Collected {len([c for c in self.program.get_source_files()])} .c files to analyze.")
