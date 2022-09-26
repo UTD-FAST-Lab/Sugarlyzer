@@ -1,3 +1,4 @@
+import collections
 import logging
 from pathlib import Path
 from typing import List, Dict, Optional, Iterable, Callable, TypeVar
@@ -51,9 +52,36 @@ class Alarm:
         self.__original_line_range: IntegerRange = None
         self.__sanitized_message = None
 
-        self.presence_condition: List[Dict[str, str | bool]] = []
+        self.presence_condition: Optional[str] = None
         self.feasible: Optional[bool] = None
-        self.model: Optional[ModelRef] = None
+        self.model: Optional[ModelRef | str] = None  # TODO: More elegant way to handle the two possible types of model.
+
+        self.string_methods = {
+
+        }
+
+    Printable = TypeVar('Printable')
+    def as_dict(self) -> Dict[str, Printable]:
+        executor = {
+            "id": lambda _: str(self.id),
+            "input_file": lambda _: str(self.input_file.absolute()),
+            "input_line": lambda _: self.line_in_input_file,
+            "original_line": lambda _: str(self.original_line_range),
+            "message": lambda _: self.message,
+            "sanitized_message": lambda _: self.sanitized_message,
+            "presence_condition": lambda _: self.presence_condition,
+            "feasible": lambda _: self.feasible,
+            "configuration": lambda _: str(self.model)
+        }
+
+        result = {}
+        for k, v in executor.items():
+            try:
+                result[k] = v()
+            except Exception:
+                result[k] = "ERROR"
+
+        return result
 
     @property
     def sanitized_message(self) -> str:
@@ -88,19 +116,6 @@ class Alarm:
         logger.warning("Sanitize is not implemented.")
         return message
 
-    def as_dict(self) -> Dict[str, Optional[str]]:
-        base: Dict[str, str] = {}
-
-        for attr in dir(self):
-            if not attr.startswith('_'):
-                try:
-                    val = getattr(self, attr)
-                    if not callable(val):
-                        base[attr] = str(val)
-                except Exception as ex:
-                    logger.warning(f"Could not access attribute {attr} without exception.")
-                    base[attr] = None
-        return base
 
 
 
