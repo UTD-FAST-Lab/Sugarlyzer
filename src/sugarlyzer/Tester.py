@@ -105,6 +105,10 @@ class Tester:
                 alarms.extend(collec)
             logger.info(f"Got {len(alarms)} unique alarms.")
 
+            with open("/results.json", 'w') as f:
+                json.dump([a.as_dict() for a in alarms], f)
+
+
         else:
             baseline_alarms: List[Alarm] = []
             # 2. Collect files and their macros.
@@ -138,7 +142,7 @@ class Tester:
 
                     alarms = tool.analyze_and_read(source_file, config_builder)
                     for a in alarms:
-                        a.model = [config]
+                        a.model = config
                     return alarms
 
                 baseline_alarms.extend(itertools.chain.from_iterable(ProcessPool(32).map(
@@ -172,12 +176,11 @@ class Tester:
 
             alarms = []
             for bucket in (b for b in buckets if len(b) > 0):
-                alarms.append(bucket[0])
-                alarms[-1].model = list(itertools.chain.from_iterable(m.model for m in bucket))
+                alarms.append(bucket[0].as_dict())
+                alarms[-1]["model"] = list(itertools.chain.from_iterable(str(m.model) for m in bucket))
 
-        with open("/results.json", 'w') as f:
-            json.dump(list(map(lambda x: {str(k): str(v) for k, v in x.items()},
-                               map(lambda x: x.as_dict(), alarms))), f)
+            with open("/results.json", 'w') as f:
+                json.dump(alarms, f)
 
         [print(str(a)) for a in alarms]
         # (Optional) 6. Optional unsoundness checker
