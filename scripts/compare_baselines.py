@@ -33,7 +33,7 @@ def main():
             raise ValueError("Need to implement handling for original line ranges.")
         else:
             e['original_line'] = int(toks[0])
-        print('\t'.join([str(s) for s in e.values()]))
+        print('\t'.join(["experimental", *[str(s) for s in e.values()]]))
 
     results = []
     for b in baselines:
@@ -44,7 +44,7 @@ def main():
         vals = list(b.values())
 
         vals.extend([exact_matches, partial_matches, len(exact_matches), len(partial_matches)])
-        print('\t'.join([str(s) for s in vals]))
+        print('\t'.join(["baseline", *[str(s) for s in vals]]))
 
 
 
