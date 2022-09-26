@@ -61,17 +61,18 @@ class Alarm:
         }
 
     Printable = TypeVar('Printable')
+
     def as_dict(self) -> Dict[str, Printable]:
         executor = {
-            "id": lambda _: str(self.id),
-            "input_file": lambda _: str(self.input_file.absolute()),
-            "input_line": lambda _: self.line_in_input_file,
-            "original_line": lambda _: str(self.original_line_range),
-            "message": lambda _: self.message,
-            "sanitized_message": lambda _: self.sanitized_message,
-            "presence_condition": lambda _: self.presence_condition,
-            "feasible": lambda _: self.feasible,
-            "configuration": lambda _: str(self.model)
+            "id": lambda: str(self.id),
+            "input_file": lambda: str(self.input_file.absolute()),
+            "input_line": lambda: self.line_in_input_file,
+            "original_line": lambda: str(self.original_line_range),
+            "message": lambda: self.message,
+            "sanitized_message": lambda: self.sanitized_message,
+            "presence_condition": lambda: self.presence_condition,
+            "feasible": lambda: self.feasible,
+            "configuration": lambda: str(self.model)
         }
 
         result = {}
@@ -101,7 +102,6 @@ class Alarm:
             self.__original_line_range = map_source_line(self.input_file, self.line_in_input_file)
         return self.__original_line_range
 
-
     @property
     def all_relevant_lines(self) -> Iterable[int]:
         """
@@ -115,7 +115,3 @@ class Alarm:
     def sanitize(self, message: str):
         logger.warning("Sanitize is not implemented.")
         return message
-
-
-
-
