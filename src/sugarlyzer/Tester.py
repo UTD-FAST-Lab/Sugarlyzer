@@ -177,7 +177,7 @@ class Tester:
             alarms = []
             for bucket in (b for b in buckets if len(b) > 0):
                 alarms.append(bucket[0].as_dict())
-                alarms[-1]["model"] = list(itertools.chain(str(m.model) for m in bucket))
+                alarms[-1]["configuration"] = list(itertools.chain(str(m.model) for m in bucket))
 
             with open("/results.json", 'w') as f:
                 json.dump(alarms, f)

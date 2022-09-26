@@ -22,7 +22,7 @@ class ClangAlarm(Alarm):
 
     def as_dict(self) -> Dict[str, str]:
         result = super().as_dict()
-        result['warning_path'] = str(self.warning_path),
+        result['warning_path'] = self.warning_path,
         result['alarm_type'] = self.alarm_type
         return result
 
