@@ -202,7 +202,7 @@ def desugar_file(file_to_desugar: Path,
 
 
 @functools.cache
-def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output, log_file):
+def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file):
     current_directory = os.curdir
     os.chdir(file_to_desugar.parent)
     logger.debug(f"In run_sugarc, running cmd {cmd_str} from directory {os.curdir}")
@@ -214,6 +214,8 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output, log_file):
         with open(log_file, 'wb') as f:
             f.write(ps.stderr)
     finally:
+        if (not desugared_output.exists()) or (desugared_output.stat().st_size == 0):
+            logging.error(f"Could not desugar file {file_to_desugar}")
         os.chdir(current_directory)
 
 
