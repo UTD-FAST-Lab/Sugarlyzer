@@ -135,7 +135,8 @@ def desugar_file(file_to_desugar: Path,
                  log_file: str = '',
                  remove_errors: bool = False,
                  no_stdlibs: bool = False,
-                 commandline_args: List[str] =None,
+                 keep_mem: bool = False,
+                 make_main: bool = False,
                  included_files: Optional[Iterable[Path]] = None,
                  included_directories: Optional[Iterable[Path]] = None) -> tuple[Path, Path]:
     """
@@ -152,18 +153,17 @@ def desugar_file(file_to_desugar: Path,
     :param included_directories: A list of directories to be included.
     :return: (desugared_file_location, log_file_location)
     """
-    if commandline_args is None:
-        commandline_args = []
     if included_directories is None:
         included_directories = []
     if included_files is None:
         included_files = []
-    if commandline_args is None:
-        commandline_args = []
 
     included_files = list(itertools.chain(*zip(['-include'] * len(included_files), included_files)))
     included_directories = list(itertools.chain(*zip(['-I'] * len(included_directories), included_directories)))
+    commandline_args = []
     commandline_args = ['-nostdinc', *commandline_args] if no_stdlibs else commandline_args
+    commandline_args = ['-keep-mem', *commandline_args] if keep_mem else commandline_args
+    commandline_args = ['-make-main', *commandline_args] if make_main else commandline_args
 
     match output_file:
         case '' | None:
