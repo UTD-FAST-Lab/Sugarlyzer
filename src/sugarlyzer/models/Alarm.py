@@ -1,3 +1,4 @@
+import collections
 import logging
 from pathlib import Path
 from typing import List, Dict, Optional, Iterable, Callable, TypeVar
@@ -51,9 +52,37 @@ class Alarm:
         self.__original_line_range: IntegerRange = None
         self.__sanitized_message = None
 
-        self.presence_condition: List[Dict[str, str | bool]] = []
+        self.presence_condition: Optional[str] = None
         self.feasible: Optional[bool] = None
-        self.model: Optional[ModelRef] = None
+        self.model: Optional[ModelRef | str] = None  # TODO: More elegant way to handle the two possible types of model.
+
+        self.string_methods = {
+
+        }
+
+    Printable = TypeVar('Printable')
+
+    def as_dict(self) -> Dict[str, Printable]:
+        executor = {
+            "id": lambda: str(self.id),
+            "input_file": lambda: str(self.input_file.absolute()),
+            "input_line": lambda: self.line_in_input_file,
+            "original_line": lambda: str(self.original_line_range),
+            "message": lambda: self.message,
+            "sanitized_message": lambda: self.sanitized_message,
+            "presence_condition": lambda: self.presence_condition,
+            "feasible": lambda: self.feasible,
+            "configuration": lambda: str(self.model)
+        }
+
+        result = {}
+        for k, v in executor.items():
+            try:
+                result[k] = v()
+            except Exception:
+                result[k] = "ERROR"
+
+        return result
 
     @property
     def sanitized_message(self) -> str:
@@ -73,7 +102,6 @@ class Alarm:
             self.__original_line_range = map_source_line(self.input_file, self.line_in_input_file)
         return self.__original_line_range
 
-
     @property
     def all_relevant_lines(self) -> Iterable[int]:
         """
@@ -87,20 +115,3 @@ class Alarm:
     def sanitize(self, message: str):
         logger.warning("Sanitize is not implemented.")
         return message
-
-    def as_dict(self) -> Dict[str, Optional[str]]:
-        base: Dict[str, str] = {}
-
-        for attr in dir(self):
-            if not attr.startswith('_'):
-                try:
-                    val = getattr(self, attr)
-                    if not callable(val):
-                        base[attr] = str(val)
-                except Exception as ex:
-                    logger.warning(f"Could not access attribute {attr} without exception.")
-                    base[attr] = None
-        return base
-
-
-
