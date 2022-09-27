@@ -146,8 +146,8 @@ class Tester:
                         a.model = config
                     return alarms
 
-                baseline_alarms.extend(itertools.chain.from_iterable(ProcessPool(32).map(
-                    run_config_and_get_alarms, config_space)))
+                baseline_alarms.extend(itertools.chain.from_iterable(ProcessPool(4).map(
+                    run_config_and_get_alarms, config_space))) # TODO Make configurable.
 
             logger.info(f"Found {len(baseline_alarms)} baseline alarms.")
             logger.debug(f"Baseline alarms are: {str(baseline_alarms)}")
