@@ -144,29 +144,6 @@ class Tester:
                 baseline_alarms.extend(itertools.chain.from_iterable(ProcessPool(32).map(
                     run_config_and_get_alarms, config_space)))
 
-            buckets: List[List[Alarm]] = [[]]
-
-            def alarm_match(a: Alarm, b: Alarm):
-                return a.line_in_source_file == b.line_in_source_file and a.message == b.message and a.source_code_file == b.source_code_file
-
-            # Collect alarms into "buckets" based on equivalence.
-            # Then, for each bucket, we will return one alarm, combining all of the
-            #  models into a list.
-            for ba in baseline_alarms:
-                for bucket in buckets:
-                    if len(bucket) > 0 and alarm_match(bucket[0], ba):
-                        bucket.append(ba)
-                        break
-
-                    # If we get here, then there wasn't a bucket that this could fit into,
-                    #  So it gets its own bucket and we add a new one to the end of the list.
-                    buckets[-1].append(ba)
-                    buckets.append([])
-
-            alarms = []
-            for bucket in (b for b in buckets if len(b) > 0):
-                alarms.append(bucket[0])
-                alarms[-1].model = list(itertools.chain.from_iterable(m.model for m in bucket))
             alarms = baseline_alarms
 
         with open("/results.json", 'w') as f:
