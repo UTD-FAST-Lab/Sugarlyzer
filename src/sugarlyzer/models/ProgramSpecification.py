@@ -66,7 +66,7 @@ class ProgramSpecification:
                 inc_files.extend(Path(p) for p in spec['included_files'])
                 inc_dirs.extend(Path(p) for p in spec['included_directories'])
 
-        return inc_dirs, inc_files
+        return inc_files, inc_dirs
 
     def download(self) -> int:
         """
