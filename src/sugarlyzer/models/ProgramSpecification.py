@@ -16,14 +16,14 @@ class ProgramSpecification:
                  source_location: Optional[List[str]] = None,
                  remove_errors: bool = False,
                  no_std_libs: bool = False,
-                 recommended_space: Dict = None
+                 included_files_and_directories: Iterable[Dict] = None
                  ):
         self.name = name
         self.remove_errors = remove_errors
         self.no_std_libs = no_std_libs
         self.__build_script = build_script
         self.__source_location = source_location
-        self.inc_dirs_and_files = {} if recommended_space is None else recommended_space
+        self.inc_dirs_and_files = [] if included_files_and_directories is None else included_files_and_directories
 
     @property
     def build_script(self):
