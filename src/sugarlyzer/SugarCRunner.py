@@ -35,7 +35,7 @@ def get_recommended_space(file: Path, inc_files: Iterable[Path], inc_dirs: Itera
     # still need to create the code to search for inclusion guards
     logger.debug('In getRecommendedSpace')
 
-    def parse_file(self, curFile: str) -> tuple:
+    def parse_file(curFile: str) -> tuple:
         '''Parses through a file line by line, on each line it searches for
         inclusions of other files and potential guard macros. We define guard
         macros as:
@@ -50,8 +50,6 @@ def get_recommended_space(file: Path, inc_files: Iterable[Path], inc_dirs: Itera
         List of all guard macros encountered
         List of all files included
         '''
-        if self.debug:
-            print('Parsing ' + curFile + ' for guard macros...')
 
         included = []
         guarded = []
@@ -60,14 +58,14 @@ def get_recommended_space(file: Path, inc_files: Iterable[Path], inc_dirs: Itera
         for lin in Fil:
             res = re.match(r'\s*#\s*include\s*(<|")\s*([^\s>"]+)\s*("|>)\s*', lin)
             if res:
-                logger.debug('adding file to check:', res.group(2))
+                logger.debug('adding file to check:' + res.group(2))
                 included.append(res.group(2))
             res = re.match(r'\s*#\s*ifndef\s+(\S+)\s*', lin)
             if res:
                 macro = res.group(1)
                 res = re.match(r'.*_(defined|DEFINED|h|H)_*', macro)
                 if res:
-                    logger.debug('undefining', macro)
+                    logger.debug('undefining' + macro)
                     guarded.append(macro)
             res = re.findall(r'defined\s*\(([^\s\)]+)\)', lin)
             if len(res) > 0:
@@ -75,11 +73,11 @@ def get_recommended_space(file: Path, inc_files: Iterable[Path], inc_dirs: Itera
                 for m in macros:
                     res = re.match(r'.*_(defined|DEFINED|h|H)_*', m)
                     if res:
-                        logger.debug('undefining', m)
+                        logger.debug('undefining' + m)
                         guarded.append(m)
                     res = re.match(r'__need_.*', m)
                     if res:
-                        logger.debug('undefining', m)
+                        logger.debug('undefining' + m)
                         guarded.append(m)
         Fil.close()
         return guarded, included
@@ -103,7 +101,7 @@ def get_recommended_space(file: Path, inc_files: Iterable[Path], inc_dirs: Itera
                 searchingDirs.append(lin.lstrip().rstrip())
             elif '#include <...> search starts here:' in lin:
                 inRange = True
-        logger.debug('dirs to search:', searchingDirs)
+        logger.debug('dirs to search:' + str(searchingDirs))
     files = []
     files.append(file)
     for f in inc_files:
@@ -115,11 +113,11 @@ def get_recommended_space(file: Path, inc_files: Iterable[Path], inc_dirs: Itera
             if m not in guards:
                 guards.append(m)
         for i in includes:
-            logger.debug('searching for file:', i)
+            logger.debug('searching for file:' + i)
             for sd in searchingDirs:
                 comboFile = os.path.expanduser(os.path.join(sd, i))
                 if os.path.exists(comboFile):
-                    logger.debug('file found:', comboFile)
+                    logger.debug('file found:' + comboFile)
                     trueFile = os.path.abspath(comboFile)
                     if trueFile not in files:
                         files.append(trueFile)
@@ -137,7 +135,8 @@ def desugar_file(file_to_desugar: Path,
                  log_file: str = '',
                  remove_errors: bool = False,
                  no_stdlibs: bool = False,
-                 commandline_args: List[str] =None,
+                 keep_mem: bool = False,
+                 make_main: bool = False,
                  included_files: Optional[Iterable[Path]] = None,
                  included_directories: Optional[Iterable[Path]] = None) -> tuple[Path, Path]:
     """
@@ -154,18 +153,17 @@ def desugar_file(file_to_desugar: Path,
     :param included_directories: A list of directories to be included.
     :return: (desugared_file_location, log_file_location)
     """
-    if commandline_args is None:
-        commandline_args = []
     if included_directories is None:
         included_directories = []
     if included_files is None:
         included_files = []
-    if commandline_args is None:
-        commandline_args = []
 
     included_files = list(itertools.chain(*zip(['-include'] * len(included_files), included_files)))
     included_directories = list(itertools.chain(*zip(['-I'] * len(included_directories), included_directories)))
+    commandline_args = []
     commandline_args = ['-nostdinc', *commandline_args] if no_stdlibs else commandline_args
+    commandline_args = ['-keep-mem', *commandline_args] if keep_mem else commandline_args
+    commandline_args = ['-make-main', *commandline_args] if make_main else commandline_args
 
     match output_file:
         case '' | None:
@@ -204,7 +202,7 @@ def desugar_file(file_to_desugar: Path,
 
 
 @functools.cache
-def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output, log_file):
+def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file):
     current_directory = os.curdir
     os.chdir(file_to_desugar.parent)
     logger.debug(f"In run_sugarc, running cmd {cmd_str} from directory {os.curdir}")
@@ -216,6 +214,8 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output, log_file):
         with open(log_file, 'wb') as f:
             f.write(ps.stderr)
     finally:
+        if (not desugared_output.exists()) or (desugared_output.stat().st_size == 0):
+            logging.error(f"Could not desugar file {file_to_desugar}")
         os.chdir(current_directory)
 
 
@@ -253,7 +253,10 @@ def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Al
             w.model = m
             allConditions = []
             for a in w.static_condition_results:
-                allConditions.append(condition_mapping.replacers[a['var']])
+                if a['val']:
+                    allConditions.append(condition_mapping.replacers[a['var']])
+                else:
+                    allConditions.append('Not(' + condition_mapping.replacers[a['var']] + ')')
             varisUseRemoved = re.sub(r'varis\[\"USE_([a-zA-Z_0-9]+)\"\]', r'\1', "And(" + ','.join(allConditions) + ')')
             varisDefRemoved = re.sub(r'varis\[\"DEF_([a-zA-Z_0-9]+)\"\]', r'defined \1', varisUseRemoved)
             w.presence_condition = varisDefRemoved

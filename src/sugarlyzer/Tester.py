@@ -74,21 +74,24 @@ class Tester:
 
             command_line = []
             if self.keep_mem:
-                command_line.append('--keep-mem')
+                command_line.append('-keep-mem')
             if self.make_main:
-                command_line.append('--make-main')
+                command_line.append('-make-main')
 
             def desugar(file: Path) -> Tuple[Path, Path]:
                 included_files, included_directories = self.program.get_inc_files_and_dirs(file)
+                logger.info(f"Included files, included directories for {file}: {included_files} {included_directories}")
                 user_defined_space = SugarCRunner.get_recommended_space(file, included_files, included_directories,
                                                                         self.program.no_std_libs)
+                logger.info(f"User defined space for file {file} is {user_defined_space}")
                 return SugarCRunner.desugar_file(file,
                                                  user_defined_space=user_defined_space,
                                                  remove_errors=self.program.remove_errors,
                                                  no_stdlibs=self.program.no_std_libs,
                                                  included_files=included_files,
                                                  included_directories=included_directories,
-                                                 commandline_args=command_line)
+                                                 keep_mem = self.keep_mem,
+                                                 make_main = self.make_main)
 
             logger.info(f"Source files are {list(self.program.get_source_files())}")
             input_files: Iterable[str] = ProcessPool(8).map(desugar, self.program.get_source_files())
@@ -138,17 +141,16 @@ class Tester:
 
                     alarms = tool.analyze_and_read(source_file, config_builder)
                     for a in alarms:
-                        a.model = [config]
+                        a.model = config
                     return alarms
 
-                baseline_alarms.extend(itertools.chain.from_iterable(ProcessPool(32).map(
-                    run_config_and_get_alarms, config_space)))
+                baseline_alarms.extend(itertools.chain.from_iterable(ProcessPool(4).map(
+                    run_config_and_get_alarms, config_space))) # TODO Make configurable.
 
             alarms = baseline_alarms
 
         with open("/results.json", 'w') as f:
-            json.dump(list(map(lambda x: {str(k): str(v) for k, v in x.items()},
-                               map(lambda x: x.as_dict(), alarms))), f)
+            json.dump([a.as_dict() for a in alarms], f)
 
         [print(str(a)) for a in alarms]
         # (Optional) 6. Optional unsoundness checker
