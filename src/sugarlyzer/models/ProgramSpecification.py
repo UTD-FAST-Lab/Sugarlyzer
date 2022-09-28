@@ -16,14 +16,14 @@ class ProgramSpecification:
                  source_location: Optional[List[str]] = None,
                  remove_errors: bool = False,
                  no_std_libs: bool = False,
-                 recommended_space: Dict = None
+                 included_files_and_directories: Iterable[Dict] = None
                  ):
         self.name = name
         self.remove_errors = remove_errors
         self.no_std_libs = no_std_libs
         self.__build_script = build_script
         self.__source_location = source_location
-        self.inc_dirs_and_files = {} if recommended_space is None else recommended_space
+        self.inc_dirs_and_files = [] if included_files_and_directories is None else included_files_and_directories
 
     @property
     def build_script(self):
@@ -54,18 +54,19 @@ class ProgramSpecification:
         :return: included_files, included_directories for the first object in
         get_recommended_space with a regular expression that matches the **absolute** file name.
         """
+
+        inc_dirs, inc_files = [], []
         for spec in self.inc_dirs_and_files:
 
             # Note the difference between s[a] and s.get(a) is the former will
             #  raise an exception if a is not in s, while s.get will return None.
-            inc_files = (Path(p) for p in spec['included_files'])
-            inc_dirs = (Path(p) for p in spec['included_directories'])
 
             if spec.get('file_pattern') is None or re.match(spec.get('file_pattern'), str(file.absolute())):
                 logging.info(f"File {file} matched specification {spec}")
-                return inc_files, inc_dirs
+                inc_files.extend(Path(p) for p in spec['included_files'])
+                inc_dirs.extend(Path(p) for p in spec['included_directories'])
 
-        return [], []
+        return inc_files, inc_dirs
 
     def download(self) -> int:
         """
