@@ -80,8 +80,10 @@ class Tester:
 
             def desugar(file: Path) -> Tuple[Path, Path]:
                 included_files, included_directories = self.program.get_inc_files_and_dirs(file)
+                logger.info(f"Included files, included directories for {file}: {included_files} {included_directories}")
                 user_defined_space = SugarCRunner.get_recommended_space(file, included_files, included_directories,
                                                                         self.program.no_std_libs)
+                logger.info(f"User defined space for file {file} is {user_defined_space}")
                 return SugarCRunner.desugar_file(file,
                                                  user_defined_space=user_defined_space,
                                                  remove_errors=self.program.remove_errors,
