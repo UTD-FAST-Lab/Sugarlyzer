@@ -30,7 +30,10 @@ def main():
     ## Transformations
     for e in experimental_results:
         toks = e['original_line'].split(':')
-        e['original_line'] = list(range(int(toks[0]), int(toks[1]) + 1))
+        try:
+            e['original_line'] = list(range(int(toks[0]), int(toks[1]) + 1))
+        except Exception:
+            e['original_line'] = []
         print('\t'.join(["experimental", *[str(s) for s in e.values()]]).replace("\n", ""))
 
     results = []
