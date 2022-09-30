@@ -10,6 +10,7 @@ WORKDIR z3
 RUN mkdir build && cd build && cmake -DZ3_BUILD_JAVA_BINDINGS=ON .. &&  \
     make && make install
 WORKDIR /
+ADD "https://api.github.com/repos/appleseedlab/superc/commits?sha=mergingParseErrors&per_page=1" latest_commit
 RUN git clone https://github.com/appleseedlab/superc.git && cd /superc && git checkout mergingParseErrors && cd -
 ENV JAVA_DEV_ROOT=/superc
 ENV CLASSPATH=:/superc/classes:/superc/bin/json-simple-1.1.1.jar:/superc/bin/junit.jar:/superc/bin/antlr.jar:/superc/bin/javabdd.jar:/usr/share/java/org.sat4j.core.jar:/usr/local/share/java/com.microsoft.z3.jar:/usr/share/java/json-lib.jar
