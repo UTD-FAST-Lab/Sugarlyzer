@@ -141,7 +141,7 @@ class Tester:
 
                     alarms = tool.analyze_and_read(source_file, config_builder)
                     for a in alarms:
-                        a.model = config
+                        a.model = [f"{du}_{op}" for du, op in config]
                     return alarms
 
                 baseline_alarms.extend(itertools.chain.from_iterable(ProcessPool(4).map(
