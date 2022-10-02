@@ -118,29 +118,21 @@ class Alarm:
         if self.input_file is None:
             raise ValueError
 
-        if self.__function_line_range is None:
+        if self.__method_mapping is None:
+            self.__method_mapping = {}
             with open(self.input_file) as f:
                 lines = f.readlines()
 
-            lines_to_reverse_iterate_over = lines[:self.line_in_input_file]
-            lines_to_reverse_iterate_over.reverse()
-
-            found = False
-            for l in lines_to_reverse_iterate_over:
+            for l in lines:
                 if mat := re.search(r"(.*)//\s?M:L(\d*):L(\d*)$", l.strip()):
-                    found = True
-                    self.__function_line_range = (mat.group(1), IntegerRange(int(mat.group(2)), int(mat.group(3))))
-                    break
-            if not found:
-                raise RuntimeError(f"Could not find function line mapping {self.input_file}:{self.line_in_input_file}")
+                    self.__method_mapping[mat.group(1)] = IntegerRange(int(mat.group(2)), int(mat.group(3)))
 
-            # Sanity Check
-            try:
-                if not self.__function_line_range[1].includes(self.original_line_range):
-                    raise RuntimeError(f"Sanity check failed. Warning ({self.input_file}:{self.line_in_input_file}) has both original line range {self.original_line_range} and "
-                                       f"function line range {self.__function_line_range} but the former is not included in the latter.")
-            except ValueError as ve:
-                logging.info("Ignoring value error likely caused by trying to access self.original_line_range")
+        for sig, intrange in self.__method_mapping.items():
+            if intrange.includes(self.original_line_range):
+                self.__function_line_range = (sig, intrange)
+            break
+        if self.__function_line_range is None:
+            self.__function_line_range = ("GLOBAL", IntegerRange(1, len(lines)))
 
         return self.__function_line_range
 
