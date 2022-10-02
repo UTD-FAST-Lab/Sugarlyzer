@@ -120,7 +120,7 @@ class Tester:
 
                 def all_configurations(options: List[str]) -> List[List[Tuple[str, str]]]:
                     if len(options) == 0:
-                        yield []
+                        return [[]]
                     else:
                         result = [a + [(b, options[-1])] for a in all_configurations(options[:-1]) for b in ["DEF", "UNDEF"]]
                         logger.debug(f"2^{len(options)} = {len(result)}")
