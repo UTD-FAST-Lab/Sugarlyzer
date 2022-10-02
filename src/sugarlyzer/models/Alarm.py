@@ -78,7 +78,7 @@ class Alarm:
             "input_file": lambda: str(self.input_file.absolute()),
             "input_line": lambda: self.line_in_input_file,
             "original_line": lambda: str(self.original_line_range),
-            "function_line_range": lambda: str(self.function_line_range),
+            "function_line_range": lambda: f"{self.function_line_range[0]}:{str(self.function_line_range[1])}",
             "message": lambda: self.message,
             "sanitized_message": lambda: self.sanitized_message,
             "presence_condition": lambda: self.presence_condition,
