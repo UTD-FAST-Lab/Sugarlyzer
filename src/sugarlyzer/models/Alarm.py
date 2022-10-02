@@ -126,7 +126,7 @@ class Alarm:
             lines_to_reverse_iterate_over.reverse()
 
             for l in lines_to_reverse_iterate_over:
-                if mat := re.match(r"(.*)//\s?M:L(\d*):L(\d*)$", l.strip()):
+                if mat := re.search(r"(.*)//\s?M:L(\d*):L(\d*)$", l.strip()):
                     self.__function_line_range = (mat.group(1), IntegerRange(int(mat.group(2)), int(mat.group(3))))
                     break
                 raise RuntimeError(f"Could not find function line mapping {self.input_file}:{self.line_in_input_file}")
