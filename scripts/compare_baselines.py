@@ -3,7 +3,7 @@ import json
 import logging
 import re
 
-from z3 import Solver, And, Or, Not, Bool
+from z3.z3 import Solver, And, Or, Not, Bool
 
 import argparse
 
