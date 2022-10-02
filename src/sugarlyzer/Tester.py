@@ -8,7 +8,7 @@ import os
 import re
 from enum import Enum, auto
 from pathlib import Path
-from typing import Iterable, List, Dict, Any, TypeVar, Tuple
+from typing import Iterable, List, Dict, Any, TypeVar, Tuple, Set
 
 # noinspection PyUnresolvedReferences
 from dill import pickle
@@ -112,23 +112,19 @@ class Tester:
             baseline_alarms: List[Alarm] = []
             # 2. Collect files and their macros.
             for source_file in tqdm(self.program.get_source_files()):
-                macros: Iterable[str] = getAllMacros(source_file)
+                macros: List[str] = getAllMacros(source_file)
                 logging.info(f"Macros for file {source_file} are {macros}")
 
                 T = TypeVar('T')
                 G = TypeVar('G')
 
-                def cross_product(set_a: Iterable[T], set_b: Iterable[G]) -> Iterable[Tuple[T, G]]:
-                    return ((a, b) for a in set_a for b in set_b)
-
-                def powerset(iterable: Iterable[Tuple[T, G]]) -> Iterable[Iterable[Tuple[T, G]]]:
-                    # Recipe from https://docs.python.org/3/library/itertools.html#itertools-recipes
-                    "powerset([1,2,3]) --> () (1,) (2,) (3,) (1,2) (1,3) (2,3) (1,2,3)"
-                    s = list(iterable)
-                    return itertools.chain.from_iterable(itertools.combinations(s, r) for r in range(len(s) + 1))
-
-                # 3. Construct every possible configuration.
-                config_space = powerset(cross_product(["DEF", "UNDEF"], macros))
+                def all_configurations(options: List[str]) -> List[List[Tuple[str, str]]]:
+                    if len(options) == 0:
+                        yield []
+                    else:
+                        result = [a + [(b, options[-1])] for a in all_configurations(options[:-1]) for b in ["DEF", "UNDEF"]]
+                        logger.debug(f"2^{len(options)} = {len(result)}")
+                        return result
 
                 def run_config_and_get_alarms(config: Iterable[Tuple[str, str]]) -> Iterable[Alarm]:
                     config_builder = []
@@ -145,7 +141,7 @@ class Tester:
                     return alarms
 
                 baseline_alarms.extend(itertools.chain.from_iterable(ProcessPool(4).map(
-                    run_config_and_get_alarms, config_space))) # TODO Make configurable.
+                    run_config_and_get_alarms, all_configurations(macros)))) # TODO Make configurable.
 
             alarms = baseline_alarms
 
