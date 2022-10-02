@@ -1,7 +1,7 @@
 import collections
 import logging
 from pathlib import Path
-from typing import List, Dict, Optional, Iterable, Callable, TypeVar
+from typing import List, Dict, Optional, Iterable, Callable, TypeVar, Tuple
 from dataclasses import dataclass
 import itertools
 import re
@@ -16,12 +16,20 @@ class IntegerRange:
     start_line: int
     end_line: int
 
-    def __str__(self): return f"{self.start_line}:{self.end_line}"
+    def __str__(self):
+        return f"{self.start_line}:{self.end_line}"
+
+    def is_in(self, i) -> bool:
+        return self.start_line >= i.start_line and self.end_line <= i.end_line
+
+    def includes(self, i) -> bool:
+        return i.start_line >= self.start_line and i.end_line <= self.end_line
 
 
 def map_source_line(desugared_file: Path, line: int) -> IntegerRange:
     """
     Given an alarm, map it back to original source and associate it with conditionals
+
     :param line: The linenumber to map
     :return: The source line
     """
@@ -50,6 +58,8 @@ class Alarm:
         self.id: int = next(Alarm.__id_generator)
 
         self.__original_line_range: IntegerRange = None
+        self.__function_line_range = None
+        self.__method_mapping = None
         self.__sanitized_message = None
 
         self.presence_condition: Optional[str] = None
@@ -68,6 +78,7 @@ class Alarm:
             "input_file": lambda: str(self.input_file.absolute()),
             "input_line": lambda: self.line_in_input_file,
             "original_line": lambda: str(self.original_line_range),
+            "function_line_range": lambda: str(self.function_line_range),
             "message": lambda: self.message,
             "sanitized_message": lambda: self.sanitized_message,
             "presence_condition": lambda: self.presence_condition,
@@ -79,7 +90,7 @@ class Alarm:
         for k, v in executor.items():
             try:
                 result[k] = v()
-            except Exception:
+            except ValueError as ve:
                 result[k] = "ERROR"
 
         return result
@@ -101,6 +112,37 @@ class Alarm:
         if self.__original_line_range is None:
             self.__original_line_range = map_source_line(self.input_file, self.line_in_input_file)
         return self.__original_line_range
+
+    @property
+    def function_line_range(self) -> Tuple[str, IntegerRange]:
+        if self.input_file is None:
+            raise ValueError
+
+        if self.__function_line_range is None:
+            with open(self.input_file) as f:
+                lines = f.readlines()
+
+            lines_to_reverse_iterate_over = lines[:self.line_in_input_file]
+            lines_to_reverse_iterate_over.reverse()
+
+            for l in lines_to_reverse_iterate_over:
+                if mat := re.match(r"(.*)//\s?M:L(\d*):L(\d*)$"):
+                    self.__function_line_range = (mat.group(1), IntegerRange(int(mat.group(2)), int(mat.group(3))))
+                    break
+                raise RuntimeError(f"Could not find function line mapping {self.input_file}:{self.line_in_input_file}")
+
+            # Sanity Check
+            try:
+                if not self.__function_line_range[1].includes(self.original_line_range):
+                    raise RuntimeError(f"Sanity check failed. Warning has both original line range {self.original_line_range} and "
+                                       f"function line range {self.__function_line_range} but the former is not included in the latter.")
+            except ValueError as ve:
+                logging.info("Ignoring value error likely caused by trying to access self.original_line_range")
+
+        return self.__function_line_range
+
+
+
 
     @property
     def all_relevant_lines(self) -> Iterable[int]:

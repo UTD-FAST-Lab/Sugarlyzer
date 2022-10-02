@@ -258,7 +258,7 @@ def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Al
                 else:
                     allConditions.append('Not(' + condition_mapping.replacers[a['var']] + ')')
             varisUseRemoved = re.sub(r'varis\[\"USE_([a-zA-Z_0-9]+)\"\]', r'\1', "And(" + ','.join(allConditions) + ')')
-            varisDefRemoved = re.sub(r'varis\[\"DEF_([a-zA-Z_0-9]+)\"\]', r'defined \1', varisUseRemoved)
+            varisDefRemoved = re.sub(r'varis\[\"(DEF_[a-zA-Z_0-9]+)\"\]', r'\1', varisUseRemoved)
             w.presence_condition = varisDefRemoved
             report += str(w) + '\n'
         else:
