@@ -83,7 +83,7 @@ class Alarm:
             "sanitized_message": lambda: self.sanitized_message,
             "presence_condition": lambda: self.presence_condition,
             "feasible": lambda: self.feasible,
-            "configuration": lambda: str(self.model)
+            "configuration": lambda: self.model
         }
 
         result = {}
