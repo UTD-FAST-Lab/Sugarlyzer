@@ -137,7 +137,7 @@ class Alarm:
             # Sanity Check
             try:
                 if not self.__function_line_range[1].includes(self.original_line_range):
-                    raise RuntimeError(f"Sanity check failed. Warning has both original line range {self.original_line_range} and "
+                    raise RuntimeError(f"Sanity check failed. Warning ({self.input_file}:{self.line_in_input_file}) has both original line range {self.original_line_range} and "
                                        f"function line range {self.__function_line_range} but the former is not included in the latter.")
             except ValueError as ve:
                 logging.info("Ignoring value error likely caused by trying to access self.original_line_range")
