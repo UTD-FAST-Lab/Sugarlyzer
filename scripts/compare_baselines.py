@@ -1,4 +1,5 @@
 import collections
+import copy
 import itertools
 import json
 import logging
@@ -24,6 +25,9 @@ def main():
     with open(args.experimental_results) as f:
         experimental_results = json.load(f)
 
+    lonely_baselines = copy.deepcopy(baselines)
+    lonely_experimental_results = copy.deepcopy(experimental_results)
+
     def match_stats(baseline_result: dict, experimental_result: dict) -> Tuple:
         """
         Returns a vector of different match information.
@@ -42,6 +46,7 @@ def main():
              baseline_result['input_file'].split('.')[0] == experimental_result['input_file'].split('.')[0])
 
         c = False
+
         if experimental_result['presence_condition'] != 'None' and (a or b):  # Don't bother doing this expensive step when the file and line number are different.
             baseline_var_mapping = {}
             for var in baseline_result['configuration']:
@@ -104,8 +109,13 @@ def main():
             summary[r] = []
         summary[r].append(input)
 
-    print(json.dumps({"summary": {k: len(summary[k]) for k in summary.keys()}, **{k: v for k, v in summary.items if k != str((False, False, False))}))
+        match result:
+            case (a, b, _) if a or b:
+                lonely_baselines = [l for l in lonely_baselines if l != input[0]]
+                lonely_experimental_results = [l for l in lonely_experimental_results if l != input[1]]
 
+    print(json.dumps({"summary": {k: len(summary[k]) for k in summary.keys()}, **{k: v for k, v in summary.items() if k != str((False, False, False))}}))
+    print(f"Lonely baselines: {len(lonely_baselines)}, Lonely exps: {len(lonely_experimental_results)}")
 
 if __name__ == '__main__':
     main()

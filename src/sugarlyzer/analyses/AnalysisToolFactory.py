@@ -1,5 +1,6 @@
 from src.sugarlyzer.analyses.AbstractTool import AbstractTool
 from src.sugarlyzer.analyses.Clang import Clang
+from src.sugarlyzer.analyses.Infer import Infer
 from src.sugarlyzer.analyses.TestTool import TestTool
 from src.sugarlyzer.readers.AbstractReader import AbstractReader
 from src.sugarlyzer.readers.ReaderFactory import ReaderFactory
@@ -19,4 +20,5 @@ class AnalysisToolFactory:
         match tool.lower():
             case "clang": return Clang()
             case "testtool": return TestTool()
+            case "infer": return Infer()
             case _: raise ValueError(f"No tool for {tool}")
