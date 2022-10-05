@@ -138,7 +138,7 @@ class Alarm:
             if not found:
                 self.__function_line_range = ("GLOBAL", IntegerRange(1, len(lines)))
 
-
+        return self.__function_line_range
 
     @property
     def all_relevant_lines(self) -> Iterable[int]:
