@@ -111,6 +111,11 @@ class Alarm:
 
         if self.__original_line_range is None:
             self.__original_line_range = map_source_line(self.input_file, self.line_in_input_file)
+            if self.__original_line_range is not None and not self.__original_line_range.is_in(self.function_line_range[1]):
+                raise ValueError(f"Sanity check failed. Warning ({self.input_file}:{self.line_in_input_file}) has both original line range {self.original_line_range} and "
+                                   f"function line range {self.__function_line_range} but the former is not included in the latter. As of now, this method should only be compared "
+                                 f"using function line range.")
+                # self.__original_line_range = IntegerRange(-1, 0)  # TODO Is there a better way to represent null values without using None?
         return self.__original_line_range
 
     @property
@@ -134,16 +139,7 @@ class Alarm:
             if not found:
                 self.__function_line_range = ("GLOBAL", IntegerRange(1, len(lines)))
 
-            # Sanity Check
-            try:
-                if not self.__function_line_range[1].includes(self.original_line_range):
-                    raise RuntimeError(f"Sanity check failed. Warning ({self.input_file}:{self.line_in_input_file}) has both original line range {self.original_line_range} and "
-                                       f"function line range {self.__function_line_range} but the former is not included in the latter.")
-            except ValueError as ve:
-                logging.info("Ignoring value error likely caused by trying to access self.original_line_range")
-
-
-
+        return self.__function_line_range
 
     @property
     def all_relevant_lines(self) -> Iterable[int]:
