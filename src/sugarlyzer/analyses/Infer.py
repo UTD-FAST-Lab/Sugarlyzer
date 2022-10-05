@@ -20,7 +20,13 @@ class Infer(AbstractTool):
         if includes is None:
             includes = []
         output_location = tempfile.mkdtemp()
-        cmd = ["infer", "--pulse-only", '-o, output_location', '--', "clang", *includes, "-c", file.absolute()]
+        cmd = ["infer", "--pulse-only", '-o', output_location, '--', "clang", *includes, "-c", file.absolute()]
         logger.info(f"Running cmd {cmd}")
         subprocess.run(cmd)
-        return Path.join(output_location,'report.json')
+        report = os.path.join(output_location,'report.json')
+        if Path(report).exists():
+            fff = open(report,'r')
+            for lll in fff:
+                logging.info(f'{lll}')
+            fff.close()
+        yield report
