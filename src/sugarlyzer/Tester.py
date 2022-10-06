@@ -125,22 +125,28 @@ class Tester:
                         result = [a + [(b, options[-1])] for a in all_configurations(options[:-1]) for b in ["DEF", "UNDEF"]]
                         return result
 
-                def run_config_and_get_alarms(config: Iterable[Tuple[str, str]]) -> Iterable[Alarm]:
-                    config_builder = []
-                    config: Iterable[Tuple[str, str]]
-                    for d, s in config:
-                        if d == "DEF":
-                            config_builder.append('-D' + s + '=1')
-                        elif d == "UNDEF":
-                            config_builder.append('-U' + s)
 
-                    alarms = tool.analyze_and_read(source_file, config_builder)
-                    for a in alarms:
-                        a.model = [f"{du}_{op}" for du, op in config]
-                    return alarms
+            def run_config_and_get_alarms(b: ProgramSpecification.BaselineConfig) -> Iterable[Alarm]:
+                config_builder = []
+                config: Iterable[Tuple[str, str]]
+                for d, s in b.configuration :
+                    if d == "DEF":
+                        config_builder.append('-D' + (s + '=1') if '=' not in s else s)
+                    elif d == "UNDEF":
+                        config_builder.append('-U' + s)
 
-                baseline_alarms.extend(itertools.chain.from_iterable(ProcessPool(4).map(
-                    run_config_and_get_alarms, all_configurations(macros)))) # TODO Make configurable.
+                alarms = tool.analyze_and_read(source_file, config_builder)
+                for a in alarms:
+                    a.model = [f"{du}_{op}" for du, op in b.configuration]
+                return alarms
+
+            def log_it(it):
+                for i in it:
+                    logger.debug(i)
+                    yield i
+
+            baseline_alarms.extend(itertools.chain.from_iterable(
+                ProcessPool(4).map(run_config_and_get_alarms, log_it(self.program.get_baseline_configurations())))) # TODO Make configurable.
 
             alarms = baseline_alarms
 
