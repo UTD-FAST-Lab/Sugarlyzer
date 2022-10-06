@@ -121,7 +121,7 @@ class ProgramSpecification:
     def get_baseline_configurations(self) -> Iterable[BaselineConfig]:
         if self.sample_directory is None:
             # If we don't have a sample directory, we use the get_all_macros function to get every possible configuration.
-            for source_file in tqdm(self.try_resolve_path(self.get_source_files())):
+            for source_file in tqdm(self.get_source_files()):
                 macros: List[str] = self.get_all_macros(source_file)
                 logging.info(f"Macros for file {source_file} are {macros}")
 
@@ -138,7 +138,7 @@ class ProgramSpecification:
                 return (ProgramSpecification.BaselineConfig(source_file, c) for c in all_configurations(macros))
         else:
             configs = []
-            for s in self.sample_directory.iterdir():
+            for s in self.try_resolve_path(self.sample_directory).iterdir():
                 with open(s) as f:
                     lines = f.readlines()
                 config = [("UNDEF" if s.startswith('#') else "DEF", s.strip()) for s in lines]
