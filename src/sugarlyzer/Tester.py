@@ -110,21 +110,6 @@ class Tester:
 
         else:
             baseline_alarms: List[Alarm] = []
-            # 2. Collect files and their macros.
-            for source_file in tqdm(self.program.get_source_files()):
-                macros: List[str] = get_all_macros(source_file)
-                logging.info(f"Macros for file {source_file} are {macros}")
-
-                T = TypeVar('T')
-                G = TypeVar('G')
-
-                def all_configurations(options: List[str]) -> List[List[Tuple[str, str]]]:
-                    if len(options) == 0:
-                        return [[]]
-                    else:
-                        result = [a + [(b, options[-1])] for a in all_configurations(options[:-1]) for b in ["DEF", "UNDEF"]]
-                        return result
-
 
             def run_config_and_get_alarms(b: ProgramSpecification.BaselineConfig) -> Iterable[Alarm]:
                 config_builder = []
@@ -135,7 +120,7 @@ class Tester:
                     elif d == "UNDEF":
                         config_builder.append('-U' + s)
 
-                alarms = tool.analyze_and_read(source_file, config_builder)
+                alarms = tool.analyze_and_read(b.source_file, config_builder)
                 for a in alarms:
                     a.model = [f"{du}_{op}" for du, op in b.configuration]
                 return alarms
