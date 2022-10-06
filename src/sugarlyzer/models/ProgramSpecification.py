@@ -21,7 +21,7 @@ class ProgramSpecification:
                  remove_errors: bool = False,
                  no_std_libs: bool = False,
                  included_files_and_directories: Iterable[Dict] = None,
-                 sample_directory: Path = None
+                 sample: Path = None
                  ):
         self.name = name
         self.remove_errors = remove_errors
@@ -29,7 +29,7 @@ class ProgramSpecification:
         self.__build_script = build_script
         self.__source_location = source_location
         self.inc_dirs_and_files = [] if included_files_and_directories is None else included_files_and_directories
-        self.sample_directory = sample_directory
+        self.sample_directory = sample
 
     @property
     def build_script(self):
@@ -121,7 +121,7 @@ class ProgramSpecification:
     def get_baseline_configurations(self) -> Iterable[BaselineConfig]:
         if self.sample_directory is None:
             # If we don't have a sample directory, we use the get_all_macros function to get every possible configuration.
-            for source_file in tqdm(self.get_source_files()):
+            for source_file in tqdm(self.try_resolve_path(self.get_source_files())):
                 macros: List[str] = self.get_all_macros(source_file)
                 logging.info(f"Macros for file {source_file} are {macros}")
 
