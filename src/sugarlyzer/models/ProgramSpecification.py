@@ -96,8 +96,8 @@ class ProgramSpecification:
         if os.path.exists(joined_path := Path(root)/path):
             return os.path.abspath(joined_path)
         results = set()
-        for rootdir, dirs, _ in os.walk(os.path.join(root, "benchmarks")):
-            cur = os.path.join(os.path.join(root, "benchmarks"), rootdir)
+        for rootdir, dirs, _ in os.walk(root):
+            cur = root
             if os.path.exists(os.path.join(cur, path)):
                 results.add(os.path.join(cur, path))
             for d in dirs:
@@ -145,7 +145,7 @@ class ProgramSpecification:
                 configs.append(config)
             return (ProgramSpecification.BaselineConfig(file, config) for file in self.get_source_files() for config in configs)
 
-    def get_all_macros(fpa):
+    def get_all_macros(self, fpa):
         ff = open(fpa, 'r')
         lines = ff.read().split('\n')
         defs = []
