@@ -1,10 +1,17 @@
 import importlib.resources
+import itertools
 import logging
 import os
 import re
 import subprocess
+from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Iterable, Optional, Dict, Tuple
+from typing import List, Iterable, Optional, Dict, Tuple, TypeVar
+
+from tqdm import tqdm
+
+from src.sugarlyzer.Tester import get_all_macros
+from src.sugarlyzer.models.Alarm import Alarm
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +23,8 @@ class ProgramSpecification:
                  source_location: Optional[List[str]] = None,
                  remove_errors: bool = False,
                  no_std_libs: bool = False,
-                 included_files_and_directories: Iterable[Dict] = None
+                 included_files_and_directories: Iterable[Dict] = None,
+                 sample_directory: Path = None
                  ):
         self.name = name
         self.remove_errors = remove_errors
@@ -24,6 +32,7 @@ class ProgramSpecification:
         self.__build_script = build_script
         self.__source_location = source_location
         self.inc_dirs_and_files = [] if included_files_and_directories is None else included_files_and_directories
+        self.sample_directory = sample_directory
 
     @property
     def build_script(self):
@@ -106,3 +115,35 @@ class ProgramSpecification:
                 raise RuntimeError(f"Path {path} in root {root} is ambiguous. Found the following potential results: "
                                    f"{results}. Try adding more context information to the index.json file, "
                                    f"so that the path is unique.")
+
+    @dataclass
+    class BaselineConfig:
+        source_file: Path
+        configuration: List[Tuple[str, str]]
+
+    def get_baseline_configurations(self) -> Iterable[BaselineConfig]:
+        if self.sample_directory is None:
+            # If we don't have a sample directory, we use the get_all_macros function to get every possible configuration.
+            for source_file in tqdm(self.get_source_files()):
+                macros: List[str] = get_all_macros(source_file)
+                logging.info(f"Macros for file {source_file} are {macros}")
+
+                T = TypeVar('T')
+                G = TypeVar('G')
+
+                def all_configurations(options: List[str]) -> List[List[Tuple[str, str]]]:
+                    if len(options) == 0:
+                        return [[]]
+                    else:
+                        result = [a + [(b, options[-1])] for a in all_configurations(options[:-1]) for b in ["DEF", "UNDEF"]]
+                        return result
+
+                return (ProgramSpecification.BaselineConfig(source_file, c) for c in all_configurations(macros))
+        else:
+            configs = []
+            for s in self.sample_directory.iterdir():
+                with open(s) as f:
+                    lines = f.readlines()
+                config = [("UNDEF" if s.startswith('#') else "DEF", s.strip()) for s in lines]
+                configs.append(config)
+            return (ProgramSpecification.BaselineConfig(file, config) for file in self.get_source_files() for config in configs)

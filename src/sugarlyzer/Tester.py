@@ -112,7 +112,7 @@ class Tester:
             baseline_alarms: List[Alarm] = []
             # 2. Collect files and their macros.
             for source_file in tqdm(self.program.get_source_files()):
-                macros: List[str] = getAllMacros(source_file)
+                macros: List[str] = get_all_macros(source_file)
                 logging.info(f"Macros for file {source_file} are {macros}")
 
                 T = TypeVar('T')
@@ -123,7 +123,6 @@ class Tester:
                         return [[]]
                     else:
                         result = [a + [(b, options[-1])] for a in all_configurations(options[:-1]) for b in ["DEF", "UNDEF"]]
-                        logger.debug(f"2^{len(options)} = {len(result)}")
                         return result
 
                 def run_config_and_get_alarms(config: Iterable[Tuple[str, str]]) -> Iterable[Alarm]:
@@ -194,7 +193,7 @@ if __name__ == '__main__':
     main()
 
 
-def getAllMacros(fpa):
+def get_all_macros(fpa):
     ff = open(fpa, 'r')
     lines = ff.read().split('\n')
     defs = []
