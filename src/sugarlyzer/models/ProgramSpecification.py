@@ -10,9 +10,6 @@ from typing import List, Iterable, Optional, Dict, Tuple, TypeVar
 
 from tqdm import tqdm
 
-from src.sugarlyzer.Tester import get_all_macros
-from src.sugarlyzer.models.Alarm import Alarm
-
 logger = logging.getLogger(__name__)
 
 
@@ -125,7 +122,7 @@ class ProgramSpecification:
         if self.sample_directory is None:
             # If we don't have a sample directory, we use the get_all_macros function to get every possible configuration.
             for source_file in tqdm(self.get_source_files()):
-                macros: List[str] = get_all_macros(source_file)
+                macros: List[str] = self.get_all_macros(source_file)
                 logging.info(f"Macros for file {source_file} are {macros}")
 
                 T = TypeVar('T')
@@ -147,3 +144,33 @@ class ProgramSpecification:
                 config = [("UNDEF" if s.startswith('#') else "DEF", s.strip()) for s in lines]
                 configs.append(config)
             return (ProgramSpecification.BaselineConfig(file, config) for file in self.get_source_files() for config in configs)
+
+    def get_all_macros(fpa):
+        ff = open(fpa, 'r')
+        lines = ff.read().split('\n')
+        defs = []
+        for l in lines:
+            if '#if' in l:
+                m = re.match(' *#ifdef *([a-zA-Z0-9_]+).*', l)
+                if m:
+                    v = m.group(1)
+                    if v not in defs:
+                        defs.append(v)
+                    continue
+                m = re.match(' *#ifndef *([a-zA-Z0-9_]+).*', l)
+                if m:
+                    v = m.group(1)
+                    if v not in defs:
+                        defs.append(v)
+                    continue
+                m = re.match(' *#if *([a-zA-Z0-9_]+).*', l)
+                if m:
+                    v = m.group(1)
+                    if v not in defs:
+                        defs.append(v)
+                    continue
+                ds = re.findall(r'defined *([a-zA-Z0-9_]+?)', l)
+                for d in ds:
+                    if d not in defs:
+                        defs.append(d)
+        return defs
