@@ -100,7 +100,7 @@ class ProgramSpecification:
         results = set()
         for rootdir, _, _ in os.walk(root):
             if (cur := Path(rootdir) / path).exists():
-                logging.debug(f"Checking if {cur} exists.")
+                logger.debug(f"Checking if {cur} exists.")
                 results.add(cur)
         match len(results):
             case 0:
