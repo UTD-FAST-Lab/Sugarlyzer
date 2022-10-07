@@ -82,27 +82,25 @@ class ProgramSpecification:
         ps = subprocess.run(self.build_script)
         return ps.returncode
 
-    def try_resolve_path(self, path: str, root: str = "/") -> Path:
+    def try_resolve_path(self, path: Path, root: str = "/") -> Path:
         """
         Copied directly from ECSTATIC.
         :param root: The root from which to try to resolve the path.
         :return: The fully resolved path.
         """
+        if not isinstance(path, Path):
+            path = Path(path)
         if path is None:
-            return None
+            raise ValueError("Supplied path is None")
         logging.info(f'Trying to resolve {path} in {root}')
-        if path.startswith("/"):
-            path = path[1:]
+        if path.is_absolute():
+            return path
         if os.path.exists(joined_path := Path(root)/path):
-            return os.path.abspath(joined_path)
+            return joined_path.absolute()
         results = set()
-        for rootdir, dirs, _ in os.walk(root):
-            cur = root
-            if os.path.exists(os.path.join(cur, path)):
-                results.add(os.path.join(cur, path))
-            for d in dirs:
-                if os.path.exists(os.path.join(os.path.join(cur, d), path)):
-                    results.add(os.path.join(os.path.join(cur, d), path))
+        for rootdir, _, _ in os.walk(root):
+            if (cur := Path(rootdir) / path).exists():
+                results.add(cur)
         match len(results):
             case 0:
                 raise FileNotFoundError(f"Could not resolve path {path} from root {root}")
