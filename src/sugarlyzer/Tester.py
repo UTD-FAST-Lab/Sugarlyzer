@@ -116,7 +116,7 @@ class Tester:
                 config: Iterable[Tuple[str, str]]
                 for d, s in b.configuration :
                     if d == "DEF":
-                        config_builder.append('-D' + (s + '=1') if '=' not in s else s)
+                        config_builder.append('-D' + ((s + '=1') if '=' not in s else s))
                     elif d == "UNDEF":
                         config_builder.append('-U' + s)
 
