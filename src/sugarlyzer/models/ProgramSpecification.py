@@ -140,7 +140,12 @@ class ProgramSpecification:
             for s in self.try_resolve_path(self.sample_directory).iterdir():
                 with open(s) as f:
                     lines = f.readlines()
-                config = [("UNDEF" if s.startswith('#') else "DEF", s.strip()) for s in lines]
+                config = []
+                for s in lines:
+                    if s.startswith("#"):
+                        config.append(("UNDEF", s.strip().split(" ")[1]))
+                    else:
+                        config.append(("DEF", s.strip()))
                 configs.append(config)
             return (ProgramSpecification.BaselineConfig(file, config) for file in self.get_source_files() for config in configs)
 
