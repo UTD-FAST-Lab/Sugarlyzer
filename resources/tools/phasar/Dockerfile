@@ -1,5 +1,3 @@
-# SHELL ["/bin/bash", "-c"]
-
 FROM sugarlyzer/base:latest
 
 ARG PHASAR=/phasar
@@ -9,10 +7,10 @@ ADD include/llvm-12 ${LLVM_INSTALL_DIR}
 
 RUN mkdir -p ${PHASAR}
 
-ENV CC="/usr/local/llvm-12/bin/clang" \
-CXX="/usr/local/llvm-12/bin/clang++" \
-CFLAGS="" \
-CXXFLAGS=""
+ENV CC="/usr/local/llvm-12/bin/clang"
+ENV CXX="/usr/local/llvm-12/bin/clang++"
+ENV CFLAGS=""
+ENV CXXFLAGS=""
 
 RUN apt-get update && \
 DEBIAN_FRONTEND=noninteractive TZ="America/New_York" apt-get -y install tzdata && \
@@ -28,7 +26,8 @@ RUN git submodule init && git submodule update
 
 RUN mkdir -p ${PHASAR}/build
 WORKDIR ${PHASAR}/build
-RUN export PATH=${LLVM_INSTALL_DIR}:$$PATH
+ENV PATH="${LLVM_INSTALL_DIR}:$PATH"
+RUN echo $PATH
 RUN cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ..
 RUN cmake --build .
 RUN cmake -DCMAKE_INSTALL_PREFIX=${PHASAR_INSTALL_DIR} -P cmake_install.cmake
@@ -46,7 +45,7 @@ RUN ldconfig
 
 RUN pip3 install wllvm
 
-ENV LLVM_COMPILER=clang \
-    LLVM_COMPILER_PATH=${LLVM_INSTALL_DIR}/bin
+ENV LLVM_COMPILER=clang
+ENV LLVM_COMPILER_PATH=${LLVM_INSTALL_DIR}/bin
 
 WORKDIR /
