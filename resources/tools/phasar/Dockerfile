@@ -3,7 +3,7 @@ FROM sugarlyzer/base:latest
 ARG PHASAR=/phasar
 ARG PHASAR_INSTALL_DIR=/usr/local/phasar
 ARG LLVM_INSTALL_DIR=/usr/local/llvm-12
-ADD include/llvm-12 ${LLVM_INSTALL_DIR}
+ADD llvm-12.tar.gz ${LLVM_INSTALL_DIR}/..
 
 RUN mkdir -p ${PHASAR}
 
@@ -26,7 +26,7 @@ RUN git submodule init && git submodule update
 
 RUN mkdir -p ${PHASAR}/build
 WORKDIR ${PHASAR}/build
-ENV PATH="${LLVM_INSTALL_DIR}:$PATH"
+ENV PATH="${LLVM_INSTALL_DIR}/bin/:$PATH"
 RUN echo $PATH
 RUN cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ..
 RUN cmake --build .
