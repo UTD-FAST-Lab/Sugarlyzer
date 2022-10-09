@@ -9,8 +9,6 @@ from src.sugarlyzer.models.Alarm import Alarm
 from src.sugarlyzer.models.InferAlarm import InferAlarm
 from src.sugarlyzer.readers.AbstractReader import AbstractReader
 
-from src.sugarlyzer.readers.AbstractReader import AbstractReader
-
 logger = logging.getLogger(__name__)
 
 class InferReader(AbstractReader):
@@ -36,5 +34,4 @@ class InferReader(AbstractReader):
                     warning_path=warningLines)
         alarmList.append(ret)
         
-      print('ALarms:',alarmList)
       return alarmList
