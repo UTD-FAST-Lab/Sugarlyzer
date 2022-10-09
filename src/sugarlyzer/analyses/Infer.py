@@ -24,9 +24,4 @@ class Infer(AbstractTool):
         logger.info(f"Running cmd {cmd}")
         subprocess.run(cmd)
         report = os.path.join(output_location,'report.json')
-        if Path(report).exists():
-            fff = open(report,'r')
-            for lll in fff:
-                logging.info(f'{lll}')
-            fff.close()
         yield report
