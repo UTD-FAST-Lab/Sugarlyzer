@@ -32,7 +32,7 @@ class Clang(AbstractTool):
             included_files = []
 
         if not (user_defined_space in [None, '']):
-            f = tempfile.TemporaryFile(mode='rw')
+            f = tempfile.TemporaryFile(mode='w')
             f.write(user_defined_space)
             included_files = included_files.append(f)
 
