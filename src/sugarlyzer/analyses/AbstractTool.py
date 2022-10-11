@@ -29,8 +29,12 @@ class AbstractTool(ABC):
         """
         alarms: Iterable[Alarm] =\
             functools.reduce(operator.iconcat, [self.reader.read_output(f) for f in
-                                                self.analyze(desugared_file, command_line_defs, included_dirs,
-                                                             included_files, user_defined_space)], [])
+                                                self.analyze(file=desugared_file,
+                                                             command_line_defs=command_line_defs,
+                                                             included_dirs=included_dirs,
+                                                             included_files=included_files,
+                                                             user_defined_space=user_defined_space,
+                                                             no_std_libs=no_std_libs)], [])
         for a in alarms:
             a.input_file = desugared_file
         return alarms
