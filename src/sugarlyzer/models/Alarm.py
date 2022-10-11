@@ -66,9 +66,7 @@ class Alarm:
         self.feasible: Optional[bool] = None
         self.model: Optional[ModelRef | str] = None  # TODO: More elegant way to handle the two possible types of model.
 
-        self.string_methods = {
-
-        }
+        self.time: float = None
 
     Printable = TypeVar('Printable')
 
@@ -83,7 +81,8 @@ class Alarm:
             "sanitized_message": lambda: self.sanitized_message,
             "presence_condition": lambda: self.presence_condition,
             "feasible": lambda: self.feasible,
-            "configuration": lambda: str(self.model)
+            "configuration": lambda: str(self.model),
+            "time": lambda: str(self.time)
         }
 
         result = {}

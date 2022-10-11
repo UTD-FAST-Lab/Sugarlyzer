@@ -1,6 +1,7 @@
 import functools
 import logging
 import operator
+import time
 from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Iterable, Optional
@@ -27,6 +28,7 @@ class AbstractTool(ABC):
         :param desugared_file: The file to analyze.
         :return: A collection of alarms.
         """
+        start_time = time.time()
         alarms: Iterable[Alarm] =\
             functools.reduce(operator.iconcat, [self.reader.read_output(f) for f in
                                                 self.analyze(file=desugared_file,
@@ -35,8 +37,10 @@ class AbstractTool(ABC):
                                                              included_files=included_files,
                                                              user_defined_space=user_defined_space,
                                                              no_std_libs=no_std_libs)], [])
+        total_time = time.time() - start_time
         for a in alarms:
             a.input_file = desugared_file
+            a.time = total_time
         return alarms
 
     @abstractmethod

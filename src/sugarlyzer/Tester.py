@@ -118,7 +118,6 @@ class Tester:
 
             def run_config_and_get_alarms(b: ProgramSpecification.BaselineConfig) -> Iterable[Alarm]:
                 config_builder = []
-                config: Iterable[Tuple[str, str]]
                 for d, s in b.configuration :
                     if d == "DEF":
                         config_builder.append('-D' + ((s + '=1') if '=' not in s else s))
@@ -129,19 +128,15 @@ class Tester:
                 alarms = tool.analyze_and_read(b.source_file, command_line_defs=config_builder,
                                                included_files=inc_files,
                                                included_dirs=inc_dirs,
-                                               user_defined_space=SugarCRunner.get_recommended_space(b.source_file, inc_files, inc_dirs, no_stdlibs=self.program.no_std_libs),
+                                               user_defined_space=SugarCRunner.get_recommended_space(b.source_file,
+                                                                                                     inc_files, inc_dirs, no_stdlibs=self.program.no_std_libs),
                                                no_std_libs=self.program.no_std_libs)
                 for a in alarms:
                     a.model = [f"{du}_{op}" for du, op in config_builder]
                 return alarms
-              
-            def log_it(it):
-                for i in it:
-                    logger.debug(i)
-                    yield i
 
             baseline_alarms.extend(itertools.chain.from_iterable(
-                ProcessPool(4).map(run_config_and_get_alarms, log_it(self.program.get_baseline_configurations())))) # TODO Make configurable.
+                ProcessPool(4).map(run_config_and_get_alarms, self.program.get_baseline_configurations()))) # TODO Make configurable.
 
             alarms = baseline_alarms
 
