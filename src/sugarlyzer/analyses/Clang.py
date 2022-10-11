@@ -9,6 +9,7 @@ from src.sugarlyzer.analyses.AbstractTool import AbstractTool
 import os
 
 from src.sugarlyzer.readers.ClangReader import ClangReader
+from src.sugarlyzer.util.decorators import log_all_params
 
 logger = logging.getLogger(__name__)
 
@@ -18,12 +19,13 @@ class Clang(AbstractTool):
     def __init__(self):
         super().__init__(ClangReader())
 
+    @log_all_params
     def analyze(self, file: Path,
                 command_line_defs: Iterable[str] = None,
                 included_dirs: Iterable[Path] = None,
                 included_files: Iterable[Path] = None,
-                user_defined_space=None,
-                no_std_libs = False) -> Path:
+                user_defined_space: str = None,
+                no_std_libs: bool = False) -> Path:
         if command_line_defs is None:
             command_line_defs = []
         if included_dirs is None:
