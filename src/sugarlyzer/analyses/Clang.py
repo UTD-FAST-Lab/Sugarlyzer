@@ -34,7 +34,7 @@ class Clang(AbstractTool):
         if not (user_defined_space in [None, '']):
             f = tempfile.TemporaryFile(mode='w')
             f.write(user_defined_space)
-            included_files = included_files.append(f)
+            included_files.append(f)
 
         output_location = tempfile.mkdtemp()
         cmd = ["scan-build", "-o", output_location, "clang",
