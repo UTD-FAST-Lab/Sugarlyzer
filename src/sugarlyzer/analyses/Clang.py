@@ -41,7 +41,7 @@ class Clang(AbstractTool):
                *(zip(itertools.cycle(["-I"]), included_dirs)),
                *(zip(itertools.cycle(["--include"]), included_files)),
                *command_line_defs,
-               *(['-nobuiltininc'] if no_std_libs else []),
+               *(['-nostdinc'] if no_std_libs else []),
                "-c", file.absolute()]
         logger.info(f"Running cmd {cmd}")
         subprocess.run(cmd)
