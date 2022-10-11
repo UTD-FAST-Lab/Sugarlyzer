@@ -54,6 +54,14 @@ class Tester:
             importlib.resources.path(f'resources.programs.{program}', 'program.json'))
         self.program = ProgramSpecification(program, **program_as_json)
 
+    def get_inc_files_and_dirs_for_file(self, file: Path):
+        included_files, included_directories = self.program.get_inc_files_and_dirs(file)
+        logger.info(f"Included files, included directories for {file}: {included_files} {included_directories}")
+        user_defined_space = SugarCRunner.get_recommended_space(file, included_files, included_directories,
+                                                                self.program.no_std_libs)
+        logger.info(f"User defined space for file {file} is {user_defined_space}")
+        return included_directories, included_files, user_defined_space
+
     def execute(self):
 
         logger.info(f"Current environment is {os.environ}")
@@ -79,11 +87,7 @@ class Tester:
                 command_line.append('-make-main')
 
             def desugar(file: Path) -> Tuple[Path, Path]:
-                included_files, included_directories = self.program.get_inc_files_and_dirs(file)
-                logger.info(f"Included files, included directories for {file}: {included_files} {included_directories}")
-                user_defined_space = SugarCRunner.get_recommended_space(file, included_files, included_directories,
-                                                                        self.program.no_std_libs)
-                logger.info(f"User defined space for file {file} is {user_defined_space}")
+                included_directories, included_files, user_defined_space = self.get_inc_files_and_dirs_for_file(file)
                 return SugarCRunner.desugar_file(file,
                                                  user_defined_space=user_defined_space,
                                                  remove_errors=self.program.remove_errors,
@@ -92,6 +96,7 @@ class Tester:
                                                  included_directories=included_directories,
                                                  keep_mem = self.keep_mem,
                                                  make_main = self.make_main)
+
 
             logger.info(f"Source files are {list(self.program.get_source_files())}")
             input_files: Iterable[str] = ProcessPool(8).map(desugar, self.program.get_source_files())
@@ -120,11 +125,16 @@ class Tester:
                     elif d == "UNDEF":
                         config_builder.append('-U' + s)
 
-                alarms = tool.analyze_and_read(b.source_file, config_builder)
+                inc_files, inc_dirs = self.program.get_inc_files_and_dirs()
+                alarms = tool.analyze_and_read(source_file, command_line_defs=config_builder,
+                                               included_files=inc_files,
+                                               included_dirs=inc_dirs,
+                                               user_defined_space=SugarCRunner.get_recommended_space(source_file, inc_files, inc_dirs),
+                                               no_std_libs = self.program.no_std_libs)
                 for a in alarms:
-                    a.model = [f"{du}_{op}" for du, op in b.configuration]
+                    a.model = [f"{du}_{op}" for du, op in config]
                 return alarms
-
+              
             def log_it(it):
                 for i in it:
                     logger.debug(i)
@@ -182,3 +192,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
