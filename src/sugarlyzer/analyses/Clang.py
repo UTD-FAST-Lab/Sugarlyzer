@@ -38,8 +38,8 @@ class Clang(AbstractTool):
 
         output_location = tempfile.mkdtemp()
         cmd = ["scan-build", "-o", output_location, "clang",
-               *(zip(itertools.cycle(["-I"]), included_dirs)),
-               *(zip(itertools.cycle(["--include"]), included_files)),
+               *list(itertools.chain(*zip(itertools.cycle(["-I"]), included_dirs))),
+               *list(itertools.chain(*zip(itertools.cycle(["--include"]), included_files))),
                *command_line_defs,
                *(['-nostdinc'] if no_std_libs else []),
                "-c", file.absolute()]
