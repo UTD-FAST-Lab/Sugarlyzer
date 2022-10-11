@@ -115,40 +115,33 @@ class Tester:
 
         else:
             baseline_alarms: List[Alarm] = []
-            # 2. Collect files and their macros.
-            for source_file in tqdm(self.program.get_source_files()):
-                macros: List[str] = get_all_macros(source_file)
-                logging.info(f"Macros for file {source_file} are {macros}")
 
-                def all_configurations(options: List[str]) -> List[List[Tuple[str, str]]]:
-                    if len(options) == 0:
-                        return [[]]
-                    else:
-                        result = [a + [(b, options[-1])] for a in all_configurations(options[:-1]) for b in ["DEF", "UNDEF"]]
-                        logger.debug(f"2^{len(options)} = {len(result)}")
-                        return result
+            def run_config_and_get_alarms(b: ProgramSpecification.BaselineConfig) -> Iterable[Alarm]:
+                config_builder = []
+                config: Iterable[Tuple[str, str]]
+                for d, s in b.configuration :
+                    if d == "DEF":
+                        config_builder.append('-D' + ((s + '=1') if '=' not in s else s))
+                    elif d == "UNDEF":
+                        config_builder.append('-U' + s)
 
-                def run_config_and_get_alarms(config: Iterable[Tuple[str, str]]) -> Iterable[Alarm]:
-                    config_builder = []
-                    config: Iterable[Tuple[str, str]]
-                    for d, s in config:
-                        if d == "DEF":
-                            config_builder.append('-D' + s + '=1')
-                        elif d == "UNDEF":
-                            config_builder.append('-U' + s)
+                inc_files, inc_dirs = self.program.get_inc_files_and_dirs()
+                alarms = tool.analyze_and_read(source_file, command_line_defs=config_builder,
+                                               included_files=inc_files,
+                                               included_dirs=inc_dirs,
+                                               user_defined_space=SugarCRunner.get_recommended_space(source_file, inc_files, inc_dirs),
+                                               no_std_libs = self.program.no_std_libs)
+                for a in alarms:
+                    a.model = [f"{du}_{op}" for du, op in config]
+                return alarms
+              
+            def log_it(it):
+                for i in it:
+                    logger.debug(i)
+                    yield i
 
-                    inc_files, inc_dirs = self.program.get_inc_files_and_dirs()
-                    alarms = tool.analyze_and_read(source_file, command_line_defs=config_builder,
-                                                   included_files=inc_files,
-                                                   included_dirs=inc_dirs,
-                                                   user_defined_space=SugarCRunner.get_recommended_space(source_file, inc_files, inc_dirs),
-                                                   no_std_libs = self.program.no_std_libs)
-                    for a in alarms:
-                        a.model = [f"{du}_{op}" for du, op in config]
-                    return alarms
-
-                baseline_alarms.extend(itertools.chain.from_iterable(ProcessPool(4).map(
-                    run_config_and_get_alarms, all_configurations(macros)))) # TODO Make configurable.
+            baseline_alarms.extend(itertools.chain.from_iterable(
+                ProcessPool(4).map(run_config_and_get_alarms, log_it(self.program.get_baseline_configurations())))) # TODO Make configurable.
 
             alarms = baseline_alarms
 
@@ -200,33 +193,3 @@ def main():
 if __name__ == '__main__':
     main()
 
-
-def get_all_macros(fpa):
-    ff = open(fpa, 'r')
-    lines = ff.read().split('\n')
-    defs = []
-    for l in lines:
-        if '#if' in l:
-            m = re.match(' *#ifdef *([a-zA-Z0-9_]+).*', l)
-            if m:
-                v = m.group(1)
-                if v not in defs:
-                    defs.append(v)
-                continue
-            m = re.match(' *#ifndef *([a-zA-Z0-9_]+).*', l)
-            if m:
-                v = m.group(1)
-                if v not in defs:
-                    defs.append(v)
-                continue
-            m = re.match(' *#if *([a-zA-Z0-9_]+).*', l)
-            if m:
-                v = m.group(1)
-                if v not in defs:
-                    defs.append(v)
-                continue
-            ds = re.findall(r'defined *([a-zA-Z0-9_]+?)', l)
-            for d in ds:
-                if d not in defs:
-                    defs.append(d)
-    return defs
