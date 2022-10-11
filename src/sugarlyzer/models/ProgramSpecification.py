@@ -1,10 +1,14 @@
 import importlib.resources
+import itertools
 import logging
 import os
 import re
 import subprocess
+from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Iterable, Optional, Dict, Tuple
+from typing import List, Iterable, Optional, Dict, Tuple, TypeVar
+
+from tqdm import tqdm
 
 logger = logging.getLogger(__name__)
 
@@ -16,7 +20,8 @@ class ProgramSpecification:
                  source_location: Optional[List[str]] = None,
                  remove_errors: bool = False,
                  no_std_libs: bool = False,
-                 included_files_and_directories: Iterable[Dict] = None
+                 included_files_and_directories: Iterable[Dict] = None,
+                 sample: Path = None
                  ):
         self.name = name
         self.remove_errors = remove_errors
@@ -24,6 +29,7 @@ class ProgramSpecification:
         self.__build_script = build_script
         self.__source_location = source_location
         self.inc_dirs_and_files = [] if included_files_and_directories is None else included_files_and_directories
+        self.sample_directory = sample
 
     @property
     def build_script(self):
@@ -76,27 +82,26 @@ class ProgramSpecification:
         ps = subprocess.run(self.build_script)
         return ps.returncode
 
-    def try_resolve_path(self, path: str, root: str = "/") -> Path:
+    def try_resolve_path(self, path: Path, root: str = "/") -> Path:
         """
         Copied directly from ECSTATIC.
         :param root: The root from which to try to resolve the path.
         :return: The fully resolved path.
         """
+        if not isinstance(path, Path):
+            path = Path(path)
         if path is None:
-            return None
+            raise ValueError("Supplied path is None")
         logging.info(f'Trying to resolve {path} in {root}')
-        if path.startswith("/"):
-            path = path[1:]
+        if path.is_absolute():
+            return path
         if os.path.exists(joined_path := Path(root)/path):
-            return os.path.abspath(joined_path)
+            return joined_path.absolute()
         results = set()
-        for rootdir, dirs, _ in os.walk(os.path.join(root, "benchmarks")):
-            cur = os.path.join(os.path.join(root, "benchmarks"), rootdir)
-            if os.path.exists(os.path.join(cur, path)):
-                results.add(os.path.join(cur, path))
-            for d in dirs:
-                if os.path.exists(os.path.join(os.path.join(cur, d), path)):
-                    results.add(os.path.join(os.path.join(cur, d), path))
+        for rootdir, _, _ in os.walk(root):
+            if (cur := Path(rootdir) / path).exists():
+                logger.debug(f"Checking if {cur} exists.")
+                results.add(cur)
         match len(results):
             case 0:
                 raise FileNotFoundError(f"Could not resolve path {path} from root {root}")
@@ -106,3 +111,70 @@ class ProgramSpecification:
                 raise RuntimeError(f"Path {path} in root {root} is ambiguous. Found the following potential results: "
                                    f"{results}. Try adding more context information to the index.json file, "
                                    f"so that the path is unique.")
+
+    @dataclass
+    class BaselineConfig:
+        source_file: Path
+        configuration: List[Tuple[str, str]]
+
+    def get_baseline_configurations(self) -> Iterable[BaselineConfig]:
+        if self.sample_directory is None:
+            # If we don't have a sample directory, we use the get_all_macros function to get every possible configuration.
+            for source_file in tqdm(self.get_source_files()):
+                macros: List[str] = self.get_all_macros(source_file)
+                logging.info(f"Macros for file {source_file} are {macros}")
+
+                T = TypeVar('T')
+                G = TypeVar('G')
+
+                def all_configurations(options: List[str]) -> List[List[Tuple[str, str]]]:
+                    if len(options) == 0:
+                        return [[]]
+                    else:
+                        result = [a + [(b, options[-1])] for a in all_configurations(options[:-1]) for b in ["DEF", "UNDEF"]]
+                        return result
+
+                return (ProgramSpecification.BaselineConfig(source_file, c) for c in all_configurations(macros))
+        else:
+            configs = []
+            for s in self.try_resolve_path(self.sample_directory).iterdir():
+                with open(s) as f:
+                    lines = f.readlines()
+                config = []
+                for s in lines:
+                    if s.startswith("#"):
+                        config.append(("UNDEF", s.strip().split(" ")[1]))
+                    else:
+                        config.append(("DEF", s.strip()))
+                configs.append(config)
+            return (ProgramSpecification.BaselineConfig(file, config) for file in self.get_source_files() for config in configs)
+
+    def get_all_macros(self, fpa):
+        ff = open(fpa, 'r')
+        lines = ff.read().split('\n')
+        defs = []
+        for l in lines:
+            if '#if' in l:
+                m = re.match(' *#ifdef *([a-zA-Z0-9_]+).*', l)
+                if m:
+                    v = m.group(1)
+                    if v not in defs:
+                        defs.append(v)
+                    continue
+                m = re.match(' *#ifndef *([a-zA-Z0-9_]+).*', l)
+                if m:
+                    v = m.group(1)
+                    if v not in defs:
+                        defs.append(v)
+                    continue
+                m = re.match(' *#if *([a-zA-Z0-9_]+).*', l)
+                if m:
+                    v = m.group(1)
+                    if v not in defs:
+                        defs.append(v)
+                    continue
+                ds = re.findall(r'defined *([a-zA-Z0-9_]+?)', l)
+                for d in ds:
+                    if d not in defs:
+                        defs.append(d)
+        return defs

@@ -52,6 +52,10 @@
       "items": {
         "type": "string"
       }
+    },
+    "samples": {
+      "description": "A directory containing configuration samples.",
+      "type": "string"
     }
   }
 }
