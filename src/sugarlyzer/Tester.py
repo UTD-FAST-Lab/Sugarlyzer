@@ -130,7 +130,7 @@ class Tester:
                                                included_files=inc_files,
                                                included_dirs=inc_dirs,
                                                user_defined_space=SugarCRunner.get_recommended_space(b.source_file, inc_files, inc_dirs, no_stdlibs=self.program.no_std_libs),
-                                               no_std_libs = self.program.no_std_libs)
+                                               no_std_libs=self.program.no_std_libs)
                 for a in alarms:
                     a.model = [f"{du}_{op}" for du, op in config_builder]
                 return alarms
