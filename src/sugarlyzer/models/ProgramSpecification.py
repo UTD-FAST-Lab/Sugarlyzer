@@ -68,8 +68,13 @@ class ProgramSpecification:
             #  raise an exception if a is not in s, while s.get will return None.
             if spec.get('file_pattern') is None or re.search(spec.get('file_pattern'), str(file.absolute())):
                 logging.info(f"File {file} matched specification {spec}")
-                inc_files.extend(Path(p) for p in spec['included_files'])
-                inc_dirs.extend(Path(p) for p in spec['included_directories'])
+                if (rt := spec.get('relative_to')) is not None:
+                    relative_to = Path(rt)
+                else:
+                    relative_to = file.parent
+
+                inc_files.extend(self.try_resolve_path(Path(p), relative_to) for p in spec['included_files'])
+                inc_dirs.extend(self.try_resolve_path(Path(p), relative_to) for p in spec['included_directories'])
 
         return inc_files, inc_dirs
 
@@ -81,7 +86,7 @@ class ProgramSpecification:
         ps = subprocess.run(self.build_script)
         return ps.returncode
 
-    def try_resolve_path(self, path: Path, root: str = "/") -> Path:
+    def try_resolve_path(self, path: Path, root: Path = Path("/")) -> Path:
         """
         Copied directly from ECSTATIC.
         :param root: The root from which to try to resolve the path.
@@ -91,6 +96,8 @@ class ProgramSpecification:
             path = Path(path)
         if path is None:
             raise ValueError("Supplied path is None")
+        assert(isinstance(path, Path) and isinstance(root, Path))
+
         logging.info(f'Trying to resolve {path} in {root}')
         if path.is_absolute():
             return path
