@@ -66,8 +66,7 @@ class ProgramSpecification:
 
             # Note the difference between s[a] and s.get(a) is the former will
             #  raise an exception if a is not in s, while s.get will return None.
-
-            if spec.get('file_pattern') is None or re.match(spec.get('file_pattern'), str(file.absolute())):
+            if spec.get('file_pattern') is None or re.search(spec.get('file_pattern'), str(file.absolute())):
                 logging.info(f"File {file} matched specification {spec}")
                 inc_files.extend(Path(p) for p in spec['included_files'])
                 inc_dirs.extend(Path(p) for p in spec['included_directories'])
