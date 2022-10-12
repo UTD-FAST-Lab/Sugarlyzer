@@ -45,7 +45,7 @@ class Clang(AbstractTool):
                *command_line_defs,
                *(['-nostdinc'] if no_std_libs else []),
                "-c", file.absolute()]
-        logger.info(f"Running cmd {cmd}")
+        logger.info(f"Running cmd {' '.join(cmd)}")
         subprocess.run(cmd)
         try:
             f.close()
