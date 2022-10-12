@@ -96,7 +96,6 @@ class ProgramSpecification:
             path = Path(path)
         if path is None:
             raise ValueError("Supplied path is None")
-        assert(isinstance(path, Path) and isinstance(root, Path))
 
         logging.info(f'Trying to resolve {path} in {root}')
         if path.is_absolute():
