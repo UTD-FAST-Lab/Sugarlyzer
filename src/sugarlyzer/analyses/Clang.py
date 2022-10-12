@@ -47,7 +47,11 @@ class Clang(AbstractTool):
                "-c", file.absolute()]
         logger.info(f"Running cmd {cmd}")
         subprocess.run(cmd)
-        f.close()
+        try:
+            f.close()
+        except UnboundLocalError:
+            pass
+
         for root, dirs, files in os.walk(output_location):
             for f in files:
                 if f.startswith("report") and f.endswith(".html"):
