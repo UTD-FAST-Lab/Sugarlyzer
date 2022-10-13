@@ -138,8 +138,9 @@ class Tester:
                 logger.debug(f"Returning {str(alarms)})")
                 return alarms
 
-            baseline_alarms.extend(itertools.chain.from_iterable(
-                ProcessPool(4).map(run_config_and_get_alarms, self.program.get_baseline_configurations())))# TODO Make configurable.
+            for i in tqdm(ProcessPool().imap(run_config_and_get_alarms(), i:=list(self.program.get_baseline_configurations()),
+                                              total=len(list(i)))):
+                baseline_alarms.extend(i)
 
             alarms = baseline_alarms
 

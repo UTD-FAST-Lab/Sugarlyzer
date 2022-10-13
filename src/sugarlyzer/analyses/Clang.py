@@ -46,7 +46,10 @@ class Clang(AbstractTool):
                *(['-nostdinc'] if no_std_libs else []),
                "-c", file.absolute()]
         logger.info(f"Running cmd {' '.join(str(s) for s in cmd)}")
-        subprocess.run(cmd)
+        ps = subprocess.run(cmd, stderr=subprocess.PIPE, stdout=subprocess.STDOUT)
+        if (ps.returncode != 0) or ("error" in ps.stdout):
+            logger.warning(f"Running clang on file {str(file)} potentially failed.")
+            logger.warning(ps.stdout)
         try:
             f.close()
         except UnboundLocalError:
