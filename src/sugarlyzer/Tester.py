@@ -135,18 +135,11 @@ class Tester:
                                                no_std_libs=self.program.no_std_libs)
                 for a in alarms:
                     a.model = [f"{du}_{op}" for du, op in config_builder]
-                print(f"Returning {' '.join(str(s) for s in alarms)})")
+                logger.debug(f"Returning {str(alarms)})")
                 return alarms
 
-            def limiter(it):
-                count = 0
-                for i in it:
-                    count += 1
-                    if count < 100:
-                        yield i
-
             baseline_alarms.extend(itertools.chain.from_iterable(
-                ProcessPool(4).map(run_config_and_get_alarms, limiter(self.program.get_baseline_configurations()))))# TODO Make configurable.
+                ProcessPool(4).map(run_config_and_get_alarms, self.program.get_baseline_configurations())))# TODO Make configurable.
 
             alarms = baseline_alarms
 
