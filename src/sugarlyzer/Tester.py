@@ -144,6 +144,7 @@ class Tester:
 
             alarms = baseline_alarms
 
+        # TODO: Deduplicate results.
         with open("/results.json", 'w') as f:
             json.dump([a.as_dict() for a in alarms], f)
 
