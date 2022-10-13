@@ -135,6 +135,7 @@ class Tester:
                                                no_std_libs=self.program.no_std_libs)
                 for a in alarms:
                     a.model = [f"{du}_{op}" for du, op in config_builder]
+                print(f"Returning {' '.join(str(s) for s in alarms)})")
                 return alarms
 
             def limiter(it):
