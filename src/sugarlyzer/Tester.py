@@ -138,7 +138,7 @@ class Tester:
                 logger.debug(f"Returning {str(alarms)})")
                 return alarms
 
-            for i in tqdm(ProcessPool().imap(run_config_and_get_alarms(), i:=list(self.program.get_baseline_configurations()),
+            for i in tqdm(ProcessPool().imap(run_config_and_get_alarms, i:=list(self.program.get_baseline_configurations()),
                                               total=len(list(i)))):
                 baseline_alarms.extend(i)
 
