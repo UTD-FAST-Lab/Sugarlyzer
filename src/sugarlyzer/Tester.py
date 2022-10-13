@@ -116,6 +116,8 @@ class Tester:
         else:
             baseline_alarms: List[Alarm] = []
 
+            count = 0
+            count += 1
             def run_config_and_get_alarms(b: ProgramSpecification.BaselineConfig) -> Iterable[Alarm]:
                 config_builder = []
                 for d, s in b.configuration :
@@ -135,8 +137,15 @@ class Tester:
                     a.model = [f"{du}_{op}" for du, op in config_builder]
                 return alarms
 
+            def limiter(it):
+                count = 0
+                for i in it:
+                    count += 1
+                    if count < 100:
+                        yield i
+
             baseline_alarms.extend(itertools.chain.from_iterable(
-                ProcessPool(4).map(run_config_and_get_alarms, self.program.get_baseline_configurations()))) # TODO Make configurable.
+                ProcessPool(4).map(run_config_and_get_alarms, limiter(self.program.get_baseline_configurations()))))# TODO Make configurable.
 
             alarms = baseline_alarms
 
