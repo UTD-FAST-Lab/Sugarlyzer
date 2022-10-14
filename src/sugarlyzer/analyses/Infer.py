@@ -1,3 +1,4 @@
+import itertools
 import logging
 import subprocess
 import tempfile
@@ -14,13 +15,25 @@ logger = logging.getLogger(__name__)
 class Infer(AbstractTool):
 
     def __init__(self):
-        super().__init__(InferReader())
+        super().__init__(InferReader(), make_main=True, keep_mem=True, remove_errors=True)
 
-    def analyze(self, file: Path, includes: Optional[Iterable[str]] = None) -> Iterable[Path]:
-        if includes is None:
-            includes = []
+    def analyze(self, file: Path,
+                included_dirs: Iterable[Path] = None,
+                included_files: Iterable[Path] = None,
+                command_line_defs: Iterable[str] = None) -> Iterable[Path]:
+        if included_files is None:
+            included_files = []
+        if included_dirs is None:
+            included_dirs = []
+        if command_line_defs is None:
+            command_line_defs = []
+
         output_location = tempfile.mkdtemp()
-        cmd = ["infer", "--pulse-only", '-o', output_location, '--', "clang", *includes, "-c", file.absolute()]
+        cmd = ["infer", "--pulse-only", '-o', output_location, '--', "clang",
+               *list(itertools.chain(*zip(itertools.cycle(["-I"]), included_dirs))),
+               *list(itertools.chain(*zip(itertools.cycle(["--include"]), included_files))),
+               *command_line_defs,
+               "-nostdinc", "-c", file.absolute()]
         logger.info(f"Running cmd {cmd}")
         subprocess.run(cmd)
         report = os.path.join(output_location,'report.json')

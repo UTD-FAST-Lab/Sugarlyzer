@@ -28,8 +28,6 @@ v will print INFO and above. Two or more v's will print DEBUG or above.""", defa
     p.add_argument('--log', help='If specified, logs will be printed to the specified file. Otherwise, logs are printed'
                                  ' to the console.', default='sugarlyzer.log')
     p.add_argument('--force', action='store_true', help='Do not ask permission to delete existing log and results files.')
-    p.add_argument('--keep-mem', action="store_true", help="Whether to run SugarC with the keep-mem option (i.e., do not rename functions like malloc)")
-    p.add_argument('--make-main', action='store_true', help='Whether to run SugarC with the make-main option (i.e., create an artificial main method)')
     p.add_argument("--baselines", action="store_true",
                    help="""Run the baseline experiments. In these, we configure each 
                    file with every possible configuration, and then run the experiments.""")

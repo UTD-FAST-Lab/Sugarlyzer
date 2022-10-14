@@ -90,12 +90,12 @@ class Tester:
                 included_directories, included_files, user_defined_space = self.get_inc_files_and_dirs_for_file(file)
                 return SugarCRunner.desugar_file(file,
                                                  user_defined_space=user_defined_space,
-                                                 remove_errors=self.program.remove_errors,
-                                                 no_stdlibs=self.program.no_std_libs,
+                                                 remove_errors=tool.remove_errors,
+                                                 no_stdlibs=True,
                                                  included_files=included_files,
                                                  included_directories=included_directories,
-                                                 keep_mem = self.keep_mem,
-                                                 make_main = self.make_main)
+                                                 keep_mem = tool.keep_mem,
+                                                 make_main = tool.make_main)
 
 
             logger.info(f"Source files are {list(self.program.get_source_files())}")
@@ -187,8 +187,6 @@ def get_arguments() -> argparse.Namespace:
     p.add_argument("--baselines", action="store_true",
                    help="""Run the baseline experiments. In these, we configure each 
                    file with every possible configuration, and then run the experiments.""")
-    p.add_argument('--keep-mem', action="store_true", help="Whether to run SugarC with the keep-mem option (i.e., do not rename functions like malloc)")
-    p.add_argument('--make-main', action='store_true', help='Whether to run SugarC with the make-main option (i.e., create an artificial main method)')
     return p.parse_args()
 
 

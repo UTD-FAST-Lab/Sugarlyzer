@@ -15,8 +15,11 @@ logger = logging.getLogger(__name__)
 
 class AbstractTool(ABC):
 
-    def __init__(self, reader: AbstractReader):
+    def __init__(self, reader: AbstractReader, keep_mem: bool, make_main: bool, remove_errors: bool):
         self.reader = reader
+        self.keep_mem = keep_mem,
+        self.make_main = make_main
+        self.remove_errors = remove_errors
 
     @log_all_params_and_return
     def analyze_and_read(self, desugared_file: Path, command_line_defs: Iterable[str] = None,
@@ -46,11 +49,9 @@ class AbstractTool(ABC):
 
     @abstractmethod
     def analyze(self, file: Path,
-                command_line_defs: Iterable[str] = None,
                 included_dirs: Iterable[Path] = None,
                 included_files: Iterable[Path] = None,
-                user_defined_space=None,
-                no_std_libs: bool = False) -> Iterable[Path]:
+                command_line_defs: Iterable[str] = None) -> Iterable[Path]:
         """
         Analyzes a file and returns the location of its output.
         :param file: The file to run analysis on.
