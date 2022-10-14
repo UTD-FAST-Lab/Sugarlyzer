@@ -135,7 +135,7 @@ class Tester:
                                                no_std_libs=self.program.no_std_libs)
                 for a in alarms:
                     a.model = [f"{du}_{op}" for du, op in config_builder]
-                logger.debug(f"Returning {str(alarms)})")
+                logger.debug(f"Returning {alarms})")
                 return alarms
 
             for i in tqdm(ProcessPool().imap(run_config_and_get_alarms, i:=list(self.program.get_baseline_configurations()),
