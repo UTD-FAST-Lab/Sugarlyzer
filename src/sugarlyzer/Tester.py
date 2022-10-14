@@ -78,12 +78,6 @@ class Tester:
             # 2. Run SugarC
             logger.info(f"Desugaring the source code in {list(self.program.source_locations)}")
 
-            command_line = []
-            if self.keep_mem:
-                command_line.append('-keep-mem')
-            if self.make_main:
-                command_line.append('-make-main')
-
             def desugar(file: Path) -> Tuple[Path, Path]:
                 included_directories, included_files, user_defined_space = self.get_inc_files_and_dirs_for_file(file)
                 return SugarCRunner.desugar_file(file,
