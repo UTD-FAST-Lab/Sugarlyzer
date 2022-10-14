@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 from pathlib import Path
 from typing import Iterable, Optional
 
-from src.sugarlyzer.SugarCRunner import process_alarms
+from src.sugarlyzer.util.decorators import log_all_params_and_return
 from src.sugarlyzer.models.Alarm import Alarm, map_source_line
 from src.sugarlyzer.readers.AbstractReader import AbstractReader
 
@@ -18,6 +18,7 @@ class AbstractTool(ABC):
     def __init__(self, reader: AbstractReader):
         self.reader = reader
 
+    @log_all_params_and_return
     def analyze_and_read(self, desugared_file: Path, command_line_defs: Iterable[str] = None,
                          included_dirs: Iterable[Path] = None, included_files: Iterable[Path] = None,
                          user_defined_space=None, no_std_libs=False) -> Iterable[Alarm]:
