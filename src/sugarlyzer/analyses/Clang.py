@@ -60,6 +60,4 @@ class Clang(AbstractTool):
                 if f.startswith("report") and f.endswith(".html"):
                     r = Path(root) / f
                     logger.debug(f"Yielding report file {r}")
-                    with open(r) as f:
-                        logger.debug(f"Report file says {f.readlines()}")
                     yield Path(root) / f
