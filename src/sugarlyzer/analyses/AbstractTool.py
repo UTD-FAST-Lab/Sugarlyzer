@@ -1,6 +1,7 @@
 import functools
 import logging
 import operator
+import tempfile
 import time
 from abc import ABC, abstractmethod
 from pathlib import Path
@@ -24,7 +25,7 @@ class AbstractTool(ABC):
     @log_all_params_and_return
     def analyze_and_read(self, desugared_file: Path, command_line_defs: Iterable[str] = None,
                          included_dirs: Iterable[Path] = None, included_files: Iterable[Path] = None,
-                         user_defined_space=None, no_std_libs=False) -> Iterable[Alarm]:
+                         user_defined_space=None) -> Iterable[Alarm]:
         """
         Analyzes a desugared .c file, and returns the alarms generated.
         :param no_std_libs:
@@ -32,19 +33,30 @@ class AbstractTool(ABC):
         :param desugared_file: The file to analyze.
         :return: A collection of alarms.
         """
+        if user_defined_space is not None:
+            with tempfile.TemporaryFile('w') as uds:
+                uds.write(user_defined_space)
+                if included_files is None:
+                    included_files = []
+                included_files.append(uds)
+
         start_time = time.time()
         alarms =\
             functools.reduce(operator.iconcat, [self.reader.read_output(f) for f in
                                                 self.analyze(file=desugared_file,
                                                              command_line_defs=command_line_defs,
                                                              included_dirs=included_dirs,
-                                                             included_files=included_files,
-                                                             user_defined_space=user_defined_space,
-                                                             no_std_libs=no_std_libs)], [])
+                                                             included_files=included_files)], [])
         total_time = time.time() - start_time
         for a in alarms:
             a.input_file = desugared_file
             a.time = total_time
+
+        try:
+            uds.close()
+        except UnboundLocalError:
+            pass
+
         return alarms
 
     @abstractmethod
