@@ -29,7 +29,7 @@ class AbstractTool(ABC):
         :return: A collection of alarms.
         """
         start_time = time.time()
-        alarms: Iterable[Alarm] =\
+        alarms =\
             functools.reduce(operator.iconcat, [self.reader.read_output(f) for f in
                                                 self.analyze(file=desugared_file,
                                                              command_line_defs=command_line_defs,

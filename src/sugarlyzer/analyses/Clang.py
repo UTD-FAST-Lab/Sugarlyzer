@@ -34,9 +34,9 @@ class Clang(AbstractTool):
             included_files = []
 
         if not (user_defined_space in [None, '']):
-            f = tempfile.NamedTemporaryFile(mode='w')
-            f.write(user_defined_space)
-            included_files.append(Path(f.name).absolute())
+            temporary_file = tempfile.NamedTemporaryFile(mode='w')
+            temporary_file.write(user_defined_space)
+            included_files.append(Path(temporary_file.name).absolute())
 
         output_location = tempfile.mkdtemp()
         cmd = ["scan-build", "-o", output_location, "clang",
@@ -47,17 +47,17 @@ class Clang(AbstractTool):
                "-c", file.absolute()]
         logger.info(f"Running cmd {' '.join(str(s) for s in cmd)}")
         ps = subprocess.run(cmd, stderr=subprocess.STDOUT, stdout=subprocess.PIPE, text=True)
-        if (ps.returncode != 0) or ("error" in ps.stdout):
+        if (ps.returncode != 0) or ("error" in ps.stdout.lower()):
             logger.warning(f"Running clang on file {str(file)} potentially failed.")
             logger.warning(ps.stdout)
         try:
-            f.close()
+            temporary_file.close()
         except UnboundLocalError:
             pass
 
         for root, dirs, files in os.walk(output_location):
-            for f in files:
-                if f.startswith("report") and f.endswith(".html"):
-                    r = Path(root) / f
+            for fil in files:
+                if fil.startswith("report") and fil.endswith(".html"):
+                    r = Path(root) / fil
                     logger.debug(f"Yielding report file {r}")
-                    yield Path(root) / f
+                    yield Path(root) / fil
