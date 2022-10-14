@@ -23,7 +23,7 @@
                   ]
             },
             {
-                  "file_pattern": "bigint\\.c$",
+                  "file_pattern": "crypto/bigint\\.c$",
                   "included_files": [],
                   "included_directories": [
                         "../config",
