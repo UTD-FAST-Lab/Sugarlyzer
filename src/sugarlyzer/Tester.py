@@ -113,6 +113,30 @@ class Tester:
                 alarms.extend(collec)
             logger.info(f"Got {len(alarms)} unique alarms.")
 
+            buckets: List[List[Alarm]] = [[]]
+
+            def alarm_match(a: Alarm, b: Alarm):
+                return a.line_in_input_file == b.line_in_input_file and a.message == b.message and a.input_file == b.input_file
+
+            # Collect alarms into "buckets" based on equivalence.
+            # Then, for each bucket, we will return one alarm, combining all of the
+            #  models into a list.
+            for ba in alarms:
+                for bucket in buckets:
+                    if len(bucket) > 0 and alarm_match(bucket[0], ba):
+                        bucket.append(ba)
+                        break
+
+                    # If we get here, then there wasn't a bucket that this could fit into,
+                    #  So it gets its own bucket and we add a new one to the end of the list.
+                    buckets[-1].append(ba)
+                    buckets.append([])
+
+            alarms = []
+            for bucket in (b for b in buckets if len(b) > 0):
+                alarms.append(bucket[0])
+                alarms[-1].presence_condition = f"Or({','.join(m.presence_condition for m in bucket)})"
+
         else:
             baseline_alarms: List[Alarm] = []
 
