@@ -54,6 +54,14 @@ class Tester:
             importlib.resources.path(f'resources.programs.{program}', 'program.json'))
         self.program = ProgramSpecification(program, **program_as_json)
 
+    def get_inc_files_and_dirs_for_file(self, file: Path):
+        included_files, included_directories = self.program.get_inc_files_and_dirs(file)
+        logger.info(f"Included files, included directories for {file}: {included_files} {included_directories}")
+        user_defined_space = SugarCRunner.get_recommended_space(file, included_files, included_directories,
+                                                                self.program.no_std_libs)
+        logger.info(f"User defined space for file {file} is {user_defined_space}")
+        return included_directories, included_files, user_defined_space
+
     def execute(self):
 
         logger.info(f"Current environment is {os.environ}")
@@ -79,11 +87,7 @@ class Tester:
                 command_line.append('-make-main')
 
             def desugar(file: Path) -> Tuple[Path, Path]:
-                included_files, included_directories = self.program.get_inc_files_and_dirs(file)
-                logger.info(f"Included files, included directories for {file}: {included_files} {included_directories}")
-                user_defined_space = SugarCRunner.get_recommended_space(file, included_files, included_directories,
-                                                                        self.program.no_std_libs)
-                logger.info(f"User defined space for file {file} is {user_defined_space}")
+                included_directories, included_files, user_defined_space = self.get_inc_files_and_dirs_for_file(file)
                 return SugarCRunner.desugar_file(file,
                                                  user_defined_space=user_defined_space,
                                                  remove_errors=self.program.remove_errors,
@@ -92,6 +96,7 @@ class Tester:
                                                  included_directories=included_directories,
                                                  keep_mem = self.keep_mem,
                                                  make_main = self.make_main)
+
 
             logger.info(f"Source files are {list(self.program.get_source_files())}")
             input_files: Iterable[str] = ProcessPool(8).map(desugar, self.program.get_source_files())
@@ -108,43 +113,62 @@ class Tester:
                 alarms.extend(collec)
             logger.info(f"Got {len(alarms)} unique alarms.")
 
+            buckets: List[List[Alarm]] = [[]]
+
+            def alarm_match(a: Alarm, b: Alarm):
+                return a.line_in_input_file == b.line_in_input_file and a.message == b.message and a.input_file == b.input_file
+
+            # Collect alarms into "buckets" based on equivalence.
+            # Then, for each bucket, we will return one alarm, combining all of the
+            #  models into a list.
+            for ba in alarms:
+                for bucket in buckets:
+                    if len(bucket) > 0 and alarm_match(bucket[0], ba):
+                        bucket.append(ba)
+                        break
+
+                    # If we get here, then there wasn't a bucket that this could fit into,
+                    #  So it gets its own bucket and we add a new one to the end of the list.
+                    buckets[-1].append(ba)
+                    buckets.append([])
+
+            alarms = []
+            for bucket in (b for b in buckets if len(b) > 0):
+                alarms.append(bucket[0])
+                alarms[-1].presence_condition = f"Or({','.join(m.presence_condition for m in bucket)})"
+
         else:
             baseline_alarms: List[Alarm] = []
-            # 2. Collect files and their macros.
-            for source_file in tqdm(self.program.get_source_files()):
-                macros: List[str] = getAllMacros(source_file)
-                logging.info(f"Macros for file {source_file} are {macros}")
 
-                T = TypeVar('T')
-                G = TypeVar('G')
+            count = 0
+            count += 1
+            def run_config_and_get_alarms(b: ProgramSpecification.BaselineConfig) -> Iterable[Alarm]:
+                config_builder = []
+                for d, s in b.configuration :
+                    if d == "DEF":
+                        config_builder.append('-D' + ((s + '=1') if '=' not in s else s))
+                    elif d == "UNDEF":
+                        config_builder.append('-U' + s)
 
-                def all_configurations(options: List[str]) -> List[List[Tuple[str, str]]]:
-                    if len(options) == 0:
-                        return [[]]
-                    else:
-                        result = [a + [(b, options[-1])] for a in all_configurations(options[:-1]) for b in ["DEF", "UNDEF"]]
-                        logger.debug(f"2^{len(options)} = {len(result)}")
-                        return result
+                inc_files, inc_dirs = self.program.get_inc_files_and_dirs(b.source_file)
+                alarms = tool.analyze_and_read(b.source_file, command_line_defs=config_builder,
+                                               included_files=inc_files,
+                                               included_dirs=inc_dirs,
+                                               user_defined_space=SugarCRunner.get_recommended_space(b.source_file,
+                                                                                                     inc_files, inc_dirs, no_stdlibs=self.program.no_std_libs),
+                                               no_std_libs=self.program.no_std_libs)
+                for a in alarms:
+                    a.model = [f"{du}_{op}" for du, op in b.configuration]
+                logger.debug(f"Returning {alarms})")
+                return alarms
 
-                def run_config_and_get_alarms(config: Iterable[Tuple[str, str]]) -> Iterable[Alarm]:
-                    config_builder = []
-                    config: Iterable[Tuple[str, str]]
-                    for d, s in config:
-                        if d == "DEF":
-                            config_builder.append('-D' + s + '=1')
-                        elif d == "UNDEF":
-                            config_builder.append('-U' + s)
-
-                    alarms = tool.analyze_and_read(source_file, config_builder)
-                    for a in alarms:
-                        a.model = [f"{du}_{op}" for du, op in config]
-                    return alarms
-
-                baseline_alarms.extend(itertools.chain.from_iterable(ProcessPool(4).map(
-                    run_config_and_get_alarms, all_configurations(macros)))) # TODO Make configurable.
+            for i in tqdm(ProcessPool().imap(run_config_and_get_alarms, i:=list(self.program.get_baseline_configurations()),
+                                              total=len(list(i)))):
+                baseline_alarms.extend(i)
 
             alarms = baseline_alarms
 
+        # TODO: Deduplicate results.
         with open("/results.json", 'w') as f:
             json.dump([a.as_dict() for a in alarms], f)
 
@@ -193,33 +217,3 @@ def main():
 if __name__ == '__main__':
     main()
 
-
-def getAllMacros(fpa):
-    ff = open(fpa, 'r')
-    lines = ff.read().split('\n')
-    defs = []
-    for l in lines:
-        if '#if' in l:
-            m = re.match(' *#ifdef *([a-zA-Z0-9_]+).*', l)
-            if m:
-                v = m.group(1)
-                if v not in defs:
-                    defs.append(v)
-                continue
-            m = re.match(' *#ifndef *([a-zA-Z0-9_]+).*', l)
-            if m:
-                v = m.group(1)
-                if v not in defs:
-                    defs.append(v)
-                continue
-            m = re.match(' *#if *([a-zA-Z0-9_]+).*', l)
-            if m:
-                v = m.group(1)
-                if v not in defs:
-                    defs.append(v)
-                continue
-            ds = re.findall(r'defined *([a-zA-Z0-9_]+?)', l)
-            for d in ds:
-                if d not in defs:
-                    defs.append(d)
-    return defs
