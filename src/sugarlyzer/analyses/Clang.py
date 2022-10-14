@@ -46,7 +46,7 @@ class Clang(AbstractTool):
                *(['-nostdinc'] if no_std_libs else []),
                "-c", file.absolute()]
         logger.info(f"Running cmd {' '.join(str(s) for s in cmd)}")
-        ps = subprocess.run(cmd, stderr=subprocess.STDOUT, stdout=subprocess.PIPE)
+        ps = subprocess.run(cmd, stderr=subprocess.STDOUT, stdout=subprocess.PIPE, text=True)
         if (ps.returncode != 0) or ("error" in ps.stdout):
             logger.warning(f"Running clang on file {str(file)} potentially failed.")
             logger.warning(ps.stdout)
