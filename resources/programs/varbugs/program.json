@@ -1,6 +1,4 @@
 {
-    "remove_errors": false,
-    "no_std_libs": true,
     "included_files_and_directories": [
         {
             "included_files": [

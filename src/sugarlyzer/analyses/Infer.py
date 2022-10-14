@@ -9,6 +9,7 @@ from src.sugarlyzer.analyses.AbstractTool import AbstractTool
 import os
 
 from src.sugarlyzer.readers.InferReader import InferReader
+from src.sugarlyzer.util.decorators import log_all_params_and_return
 
 logger = logging.getLogger(__name__)
 
@@ -17,6 +18,7 @@ class Infer(AbstractTool):
     def __init__(self):
         super().__init__(InferReader(), make_main=True, keep_mem=True, remove_errors=True)
 
+    @log_all_params_and_return
     def analyze(self, file: Path,
                 included_dirs: Iterable[Path] = None,
                 included_files: Iterable[Path] = None,
