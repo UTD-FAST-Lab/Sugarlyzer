@@ -43,7 +43,6 @@ class AbstractTool(ABC):
             a.input_file = desugared_file
             a.time = total_time
             yield a
-        return alarms
 
     @abstractmethod
     def analyze(self, file: Path,
