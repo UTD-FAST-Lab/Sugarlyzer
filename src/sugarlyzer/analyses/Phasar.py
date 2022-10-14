@@ -1,3 +1,4 @@
+import itertools
 import logging
 import subprocess
 import tempfile
@@ -15,13 +16,24 @@ class Phasar(AbstractTool):
     def __init__(self):
         super().__init__(PhasarReader())
 
-    def analyze(self, file: Path, includes: Optional[Iterable[str]] = None) -> Iterable[Path]:
-        if includes is None:
-            includes = []
+    def analyze(self, file: Path,
+                included_dirs: Iterable[Path] = None,
+                included_files: Iterable[Path] = None,
+                command_line_defs: Iterable[str] = None) -> Iterable[Path]:
+        if included_files is None:
+            included_files = []
+        if included_dirs is None:
+            included_dirs = []
+        if command_line_defs is None:
+            command_line_defs = []
         output_location = tempfile.mkdtemp()
         #create ll file
         llFile = str(file)[:-2]+'.ll'
-        cmd = ['clang-12','-emit-llvm','-S','-fno-discard-value-names','-c','-g',*includes,str(file.absolute()),'-o',llFile]
+        cmd = ['clang-12','-emit-llvm','-S','-fno-discard-value-names','-c','-g',
+               *list(itertools.chain(*zip(itertools.cycle(["-I"]), included_dirs))),
+               *list(itertools.chain(*zip(itertools.cycle(["--include"]), included_files))),
+               *command_line_defs,
+               "-nostdinc", "-c", file.absolute(), '-o', llFile]
         logger.info(f"Running cmd {cmd}")
         subprocess.run(cmd)
         #run phasar on ll

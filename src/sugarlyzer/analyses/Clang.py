@@ -17,15 +17,13 @@ logger = logging.getLogger(__name__)
 class Clang(AbstractTool):
 
     def __init__(self):
-        super().__init__(ClangReader())
+        super().__init__(ClangReader(), keep_mem=True, make_main=True, remove_errors=False)
 
     @log_all_params_and_return
     def analyze(self, file: Path,
-                command_line_defs: Iterable[str] = None,
                 included_dirs: Iterable[Path] = None,
                 included_files: Iterable[Path] = None,
-                user_defined_space: str = None,
-                no_std_libs: bool = False) -> Path:
+                command_line_defs: Iterable[str] = None):
         if command_line_defs is None:
             command_line_defs = []
         if included_dirs is None:
@@ -33,27 +31,18 @@ class Clang(AbstractTool):
         if included_files is None:
             included_files = []
 
-        if not (user_defined_space in [None, '']):
-            temporary_file = tempfile.NamedTemporaryFile(mode='w')
-            temporary_file.write(user_defined_space)
-            included_files.append(Path(temporary_file.name).absolute())
-
         output_location = tempfile.mkdtemp()
         cmd = ["scan-build", "-o", output_location, "clang",
                *list(itertools.chain(*zip(itertools.cycle(["-I"]), included_dirs))),
                *list(itertools.chain(*zip(itertools.cycle(["--include"]), included_files))),
                *command_line_defs,
-               *(['-nostdinc'] if no_std_libs else []),
+               '-nostdinc'
                "-c", file.absolute()]
         logger.info(f"Running cmd {' '.join(str(s) for s in cmd)}")
         ps = subprocess.run(cmd, stderr=subprocess.STDOUT, stdout=subprocess.PIPE, text=True)
         if (ps.returncode != 0) or ("error" in ps.stdout.lower()):
             logger.warning(f"Running clang on file {str(file)} potentially failed.")
             logger.warning(ps.stdout)
-        try:
-            temporary_file.close()
-        except UnboundLocalError:
-            pass
 
         for root, dirs, files in os.walk(output_location):
             for fil in files:
