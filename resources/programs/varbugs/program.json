@@ -17,7 +17,7 @@
             "file_pattern": ".*MARLIN.*",
             "included_files": [],
             "included_directories": [
-                "targets/VarBugsPatches/MARLIN/util/"
+                "/targets/VarBugsPatches/MARLIN/util/"
             ]
         }
     ],
