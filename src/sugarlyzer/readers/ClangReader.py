@@ -73,6 +73,7 @@ class HTMLAtomizer(HTMLParser):
 class ClangReader(AbstractReader):
 
     def read_output(self, report_file: Path) -> Iterable[ClangAlarm]:
+        res = []
         with open(report_file, 'r') as rf:
             parser = HTMLAtomizer()
             parser.feed(rf.read())
@@ -83,7 +84,10 @@ class ClangReader(AbstractReader):
                                  message=parser.msg,
                                  alarm_type=parser.msgType,
                                  warning_path=parser.lines)
+                res.append(ret)
             except:
                 logger.exception(f"Couldn't create alarm. Fields were: msgType={parser.msgType}, message={parser.msg}, "
                                  f"lines={parser.lines}, location={parser.location}")
-            return [ret]
+            finally:
+                return res
+
