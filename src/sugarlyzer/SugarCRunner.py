@@ -404,7 +404,7 @@ def get_bad_constraints(desugared_file: Path) -> List[str]:
     # noinspection PyUnusedLocal
     varis = condition_mapping.varis  # To make the evals work (why did you do this to me)
 
-    print(f"Condition mapping is {str(condition_mapping)}")
+    logger.debug(f"Condition mapping is {str(condition_mapping)}")
     line_index = len(lines) - 1
     is_error = False
     solver = Solver()
@@ -417,7 +417,7 @@ def get_bad_constraints(desugared_file: Path) -> List[str]:
             condition = re.match('if \((__static_condition_default_\d+)\).*', lines[line_index])
             if condition:
                 to_eval = condition_mapping.replacers[condition.group(1)]
-                print(f"to_eval is {to_eval}")
+                logger.debug(f"to_eval is {to_eval}")
                 try:
                     solver.add(eval(to_eval))
                 except NameError as ne:
@@ -481,7 +481,7 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
     cc = line.split(',')
     # Remove the tailend of the presence condition
     conds = re.search('(.*").*?$', cc[1]).group(1)
-    print(f"Conds is {cc[1]} -> {conds}")
+    logger.debug(f"Conds is {cc[1]} -> {conds}")
     # We make some substitutions to enforce format consistency
     conds = re.sub(r'(&&|\|\|) !([a-zA-Z_0-9]+)( |")', r'\1 !(\2)\3', conds)
     conds = re.sub(r'(&&|\|\|) ([a-zA-Z_0-9]+)( |")', r'\1 (\2)\3', conds)
@@ -493,17 +493,13 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
     inds = conds.split('(')
     # inds[0] is ' "', so we ignore it
     inds = inds[1:]
-    if debug:
-        print('checking individual conditions 0:0')
+    logger.debug('checking individual conditions 0:0')
     # need to access id often, for performance we manually iterate
     indxx = 0
     # each i is a condition
     # This loop is the meat of Part 1
     for i in inds:
-        if debug:
-            sys.stdout.write('\x1b[1A')
-            sys.stdout.write('\x1b[2K')
-            print('checking individual conditions', indxx, ':', len(inds))
+        logger.debug('checking individual conditions' + str(indxx) + ':' + str(len(inds)))
         splits = i.split(' ')
         if len(splits) == 0:
             continue
@@ -536,10 +532,7 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
         indxx += 1
     # accessing our string again, removing the ' "'
     condstr = conds[2:]
-    if debug:
-        sys.stdout.write('\x1b[1A')
-        sys.stdout.write('\x1b[2K')
-        print('replacing names in string')
+    logger.debug('replacing names in string')
 
     # replace all of our variable names with their varis references (the Z3 mappings)
     # this starts Part 2
@@ -554,10 +547,7 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
     # being boolean logic and conditions respectively
     cs = re.split('&&|\|\|', condstr)
     ops = []
-    if debug:
-        sys.stdout.write('\x1b[1A')
-        sys.stdout.write('\x1b[2K')
-        print('rearranging ops 0:0')
+    logger.debug('rearranging ops 0:0')
     # or and and methods need to be called in plae of the binary operators
     for d in range(0, len(condstr)):
         if condstr[d] == '&' and condstr[d + 1] == '&':
@@ -576,10 +566,7 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
     # continue
     # if we were to add all strings, it would be an N^2 alg, so we append to a list and join later
     for o in ops:
-        if debug:
-            sys.stdout.write('\x1b[1A')
-            sys.stdout.write('\x1b[2K')
-            print('rearranging ops', opxx, ':', len(ops))
+        logger.debug('rearranging ops' + str(opxx) + ':' + str(len(ops)))
         if o == 'And':
             ands += 1
             ncondlist.append('And(' + cs[0] + ',')
@@ -606,10 +593,6 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
     # we want the inverse, so wrap it all in a Not method
     if invert:
         ncondstr = 'Not(' + ncondstr + ')'
-    if debug:
-        sys.stdout.write('\x1b[1A')
-        sys.stdout.write('\x1b[2K')
-
     # Finally map the static condition renaming to the re-written presence condition
     current_result.replacers[cc[0][len('__static_condition_renaming("'):-1]] = ncondstr
     return current_result
