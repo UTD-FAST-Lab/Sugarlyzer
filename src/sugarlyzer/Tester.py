@@ -134,7 +134,7 @@ class Tester:
                                                                                                      inc_files, inc_dirs, no_stdlibs=self.program.no_std_libs),
                                                no_std_libs=self.program.no_std_libs)
                 for a in alarms:
-                    a.model = [f"{du}_{op}" for du, op in config_builder]
+                    a.model = [f"{du}_{op}" for du, op in b.configuration]
                 logger.debug(f"Returning {alarms})")
                 return alarms
 
