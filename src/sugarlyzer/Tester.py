@@ -23,6 +23,7 @@ from src.sugarlyzer.SugarCRunner import process_alarms
 from src.sugarlyzer.analyses.AnalysisToolFactory import AnalysisToolFactory
 from src.sugarlyzer.models.Alarm import Alarm
 from src.sugarlyzer.models.ProgramSpecification import ProgramSpecification
+from src.sugarlyzer.util.decorators import log_all_params_and_return
 
 logger = logging.getLogger(__name__)
 
@@ -52,6 +53,7 @@ class Tester:
             importlib.resources.path(f'resources.programs.{program}', 'program.json'))
         self.program = ProgramSpecification(program, **program_as_json)
 
+    @log_all_params_and_return
     def get_inc_files_and_dirs_for_file(self, file: Path):
         included_files, included_directories = self.program.get_inc_files_and_dirs(file)
         logger.info(f"Included files, included directories for {file}: {included_files} {included_directories}")
