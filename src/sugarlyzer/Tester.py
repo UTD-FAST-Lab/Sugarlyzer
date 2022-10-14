@@ -28,11 +28,9 @@ logger = logging.getLogger(__name__)
 
 
 class Tester:
-    def __init__(self, tool: str, program: str, baselines: bool, keep_mem: bool, make_main: bool):
+    def __init__(self, tool: str, program: str, baselines: bool):
         self.tool: str = tool
         self.baselines = baselines
-        self.keep_mem = keep_mem
-        self.make_main = make_main
 
         def read_json_and_validate(file: str) -> Dict[str, Any]:
             """
@@ -208,7 +206,7 @@ def set_up_logging(args: argparse.Namespace) -> None:
 def main():
     args = get_arguments()
     set_up_logging(args)
-    t = Tester(args.tool, args.program, args.baselines, args.keep_mem, args.make_main)
+    t = Tester(args.tool, args.program, args.baselines)
     t.execute()
 
 

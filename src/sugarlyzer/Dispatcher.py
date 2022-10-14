@@ -101,10 +101,6 @@ def start_tester(t, args) -> None:
             command = command + " -" + ("v" * args.verbosity)
         if args.baselines:
             command = command + " --baselines"
-        if args.keep_mem:
-            command += " --keep-mem"
-        if args.make_main:
-            command += " --make-main"
         cntr: Container = docker.from_env().containers.run(
             image=get_image_name(t),
             command="/bin/bash",
