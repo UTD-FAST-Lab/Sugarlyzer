@@ -54,6 +54,7 @@ class Tester:
         self.program = ProgramSpecification(program, **program_as_json)
 
     @log_all_params_and_return(logger.info)
+    @functools.cache()
     def get_inc_files_and_dirs_for_file(self, file: Path):
         included_files, included_directories = self.program.get_inc_files_and_dirs(file)
         logger.info(f"Included files, included directories for {file}: {included_files} {included_directories}")
@@ -99,7 +100,8 @@ class Tester:
             logger.info(f"Collected {len([c for c in self.program.get_source_files()])} .c files to analyze.")
 
             def analyze_read_and_process(input_file: Path) -> Iterable[Alarm]:
-                return process_alarms(tool.analyze_and_read(input_file), input_file)
+                included_directories, included_files, user_defined_space = self.get_inc_files_and_dirs_for_file(Path(str(input_file).replace(".desugared", "")))
+                return process_alarms(tool.analyze_and_read(input_file, included_files=included_files, included_directories=included_directories, user_defined_space=user_defined_space), input_file)
 
             alarm_collections: List[Iterable[Alarm]] = [analyze_read_and_process(f) for f, _ in input_files]
             alarms = list()
