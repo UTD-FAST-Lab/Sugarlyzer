@@ -54,7 +54,7 @@ class Tester:
         self.program = ProgramSpecification(program, **program_as_json)
 
     @log_all_params_and_return(logger.info)
-    @functools.cache()
+    @functools.cache
     def get_inc_files_and_dirs_for_file(self, file: Path):
         included_files, included_directories = self.program.get_inc_files_and_dirs(file)
         logger.info(f"Included files, included directories for {file}: {included_files} {included_directories}")
