@@ -101,7 +101,9 @@ class Tester:
 
             def analyze_read_and_process(desugared_file: Path, original_file: Path) -> Iterable[Alarm]:
                 included_directories, included_files, user_defined_space = self.get_inc_files_and_dirs_for_file(original_file)
-                return process_alarms(tool.analyze_and_read(desugared_file, included_files=included_files, included_directories=included_directories, user_defined_space=user_defined_space), input_file)
+                return process_alarms(tool.analyze_and_read(desugared_file, included_files=included_files,
+                                                            included_dirs=included_directories,
+                                                            user_defined_space=user_defined_space), desugared_file)
 
             alarm_collections: List[Iterable[Alarm]] = [analyze_read_and_process(desugared_file=d, original_file=o) for d, _, o in input_files]
             alarms = list()
