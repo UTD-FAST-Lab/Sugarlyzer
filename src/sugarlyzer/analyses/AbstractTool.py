@@ -38,7 +38,7 @@ class AbstractTool(ABC):
                 uds.write(user_defined_space)
                 if included_files is None:
                     included_files = []
-                included_files.append(uds)
+                included_files.append(uds.name)
 
         start_time = time.time()
         alarms =\
