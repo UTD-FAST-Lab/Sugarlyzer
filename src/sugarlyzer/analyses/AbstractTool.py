@@ -34,7 +34,7 @@ class AbstractTool(ABC):
         :return: A collection of alarms.
         """
         if user_defined_space is not None:
-            with tempfile.NamedTemporaryFile('w') as uds:
+            with tempfile.NamedTemporaryFile('w', delete=False) as uds:
                 uds.write(user_defined_space)
                 if included_files is None:
                     included_files = []
