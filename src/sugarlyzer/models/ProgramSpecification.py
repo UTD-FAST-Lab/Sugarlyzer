@@ -10,7 +10,11 @@ from typing import List, Iterable, Optional, Dict, Tuple, TypeVar
 
 from tqdm import tqdm
 
+from src.sugarlyzer.util.decorators import log_all_params_and_return
+
 logger = logging.getLogger(__name__)
+
+
 
 
 class ProgramSpecification:
@@ -42,6 +46,7 @@ class ProgramSpecification:
         else:
             return map(lambda x: self.try_resolve_path(x, '/targets'), self.__source_location)
 
+    @log_all_params_and_return(logger.info)
     def get_source_files(self) -> Iterable[Path]:
         """
         :return: All .c or .i files that are in the program's source locations.
