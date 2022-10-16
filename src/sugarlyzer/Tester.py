@@ -85,14 +85,13 @@ class Tester:
                 included_directories, included_files, user_defined_space = self.get_inc_files_and_dirs_for_file(file)
                 # noinspection PyTypeChecker
                 return (*SugarCRunner.desugar_file(file,
-                                                 user_defined_space=user_defined_space,
-                                                 remove_errors=tool.remove_errors,
-                                                 no_stdlibs=True,
-                                                 included_files=included_files,
-                                                 included_directories=included_directories,
-                                                 keep_mem = tool.keep_mem,
-                                                 make_main = tool.make_main), file)
-
+                                                   user_defined_space=user_defined_space,
+                                                   remove_errors=tool.remove_errors,
+                                                   no_stdlibs=True,
+                                                   included_files=included_files,
+                                                   included_directories=included_directories,
+                                                   keep_mem=tool.keep_mem,
+                                                   make_main=tool.make_main), file)
 
             logger.info(f"Source files are {list(self.program.get_source_files())}")
             input_files: Iterable[str] = ProcessPool(8).map(desugar, self.program.get_source_files())
@@ -101,12 +100,14 @@ class Tester:
             logger.info(f"Collected {len([c for c in self.program.get_source_files()])} .c files to analyze.")
 
             def analyze_read_and_process(desugared_file: Path, original_file: Path) -> Iterable[Alarm]:
-                included_directories, included_files, user_defined_space = self.get_inc_files_and_dirs_for_file(original_file)
+                included_directories, included_files, user_defined_space = self.get_inc_files_and_dirs_for_file(
+                    original_file)
                 return process_alarms(tool.analyze_and_read(desugared_file, included_files=included_files,
                                                             included_dirs=included_directories,
                                                             user_defined_space=user_defined_space), desugared_file)
 
-            alarm_collections: List[Iterable[Alarm]] = [analyze_read_and_process(desugared_file=d, original_file=o) for d, _, o in input_files]
+            alarm_collections: List[Iterable[Alarm]] = [analyze_read_and_process(desugared_file=d, original_file=o) for
+                                                        d, _, o in input_files]
             alarms = list()
             for collec in alarm_collections:
                 alarms.extend(collec)
@@ -146,9 +147,10 @@ class Tester:
 
             count = 0
             count += 1
+
             def run_config_and_get_alarms(b: ProgramSpecification.BaselineConfig) -> Iterable[Alarm]:
                 config_builder = []
-                for d, s in b.configuration :
+                for d, s in b.configuration:
                     if d == "DEF":
                         config_builder.append('-D' + ((s + '=1') if '=' not in s else s))
                     elif d == "UNDEF":
@@ -159,15 +161,16 @@ class Tester:
                                                included_files=inc_files,
                                                included_dirs=inc_dirs,
                                                user_defined_space=SugarCRunner.get_recommended_space(b.source_file,
-                                                                                                     inc_files, inc_dirs, no_stdlibs=self.program.no_std_libs),
-                                               no_std_libs=self.program.no_std_libs)
+                                                                                                     inc_files,
+                                                                                                     inc_dirs))
                 for a in alarms:
                     a.model = [f"{du}_{op}" for du, op in b.configuration]
                 logger.debug(f"Returning {alarms})")
                 return alarms
 
-            for i in tqdm(ProcessPool().imap(run_config_and_get_alarms, i:=list(self.program.get_baseline_configurations()),
-                                              total=len(list(i)))):
+            for i in tqdm(
+                    ProcessPool().imap(run_config_and_get_alarms, i := list(self.program.get_baseline_configurations()),
+                                       total=len(list(i)))):
                 baseline_alarms.extend(i)
 
             alarms = baseline_alarms
@@ -217,4 +220,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
