@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_recommended_space(file: Path, inc_files: Iterable[Path], inc_dirs: Iterable[Path],
-                          no_stdlibs: bool) -> str:
+                          no_stdlibs: bool = True) -> str:
     """
     Explores the provided file. Looks for inclusion guards or other
     macros that would be assumed to be false and recommends them to be turned off.
