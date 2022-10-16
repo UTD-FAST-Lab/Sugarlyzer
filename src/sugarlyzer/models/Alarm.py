@@ -6,6 +6,7 @@ from dataclasses import dataclass
 import itertools
 import re
 
+import z3
 from z3.z3 import ModelRef
 
 logger = logging.getLogger(__name__)
@@ -81,7 +82,7 @@ class Alarm:
             "sanitized_message": lambda: self.sanitized_message,
             "presence_condition": lambda: self.presence_condition,
             "feasible": lambda: self.feasible,
-            "configuration": lambda: str(self.model),
+            "configuration": lambda: str(self.model) if isinstance(self.model, z3.ModelRef) else self.model,
             "time": lambda: str(self.time)
         }
 
