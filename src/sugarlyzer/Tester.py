@@ -128,11 +128,11 @@ class Tester:
                         bucket.append(ba)
                         break
 
-                    # If we get here, then there wasn't a bucket that this could fit into,
-                    #  So it gets its own bucket and we add a new one to the end of the list.
-                    logger.debug("Creating a new bucket.")
-                    buckets[-1].append(ba)
-                    buckets.append([])
+                # If we get here, then there wasn't a bucket that this could fit into,
+                #  So it gets its own bucket and we add a new one to the end of the list.
+                logger.debug("Creating a new bucket.")
+                buckets[-1].append(ba)
+                buckets.append([])
 
             logger.debug("Now aggregating alarms.")
             alarms = []
