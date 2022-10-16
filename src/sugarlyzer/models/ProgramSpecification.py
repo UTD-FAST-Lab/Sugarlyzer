@@ -46,7 +46,6 @@ class ProgramSpecification:
         else:
             return map(lambda x: self.try_resolve_path(x, '/targets'), self.__source_location)
 
-    @log_all_params_and_return(logger.info)
     def get_source_files(self) -> Iterable[Path]:
         """
         :return: All .c or .i files that are in the program's source locations.
@@ -131,8 +130,9 @@ class ProgramSpecification:
         if self.sample_directory is None:
             # If we don't have a sample directory, we use the get_all_macros function to get every possible configuration.
             for source_file in tqdm(self.get_source_files()):
+                logger.debug(f"Source file is {source_file}")
                 macros: List[str] = self.get_all_macros(source_file)
-                logging.info(f"Macros for file {source_file} are {macros}")
+                logging.debug(f"Macros for file {source_file} are {macros}")
 
                 T = TypeVar('T')
                 G = TypeVar('G')
@@ -144,7 +144,7 @@ class ProgramSpecification:
                         result = [a + [(b, options[-1])] for a in all_configurations(options[:-1]) for b in ["DEF", "UNDEF"]]
                         return result
 
-                return (ProgramSpecification.BaselineConfig(source_file, c) for c in all_configurations(macros))
+                yield from (ProgramSpecification.BaselineConfig(source_file, c) for c in all_configurations(macros))
         else:
             configs = []
             for s in self.try_resolve_path(self.sample_directory).iterdir():
