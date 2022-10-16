@@ -83,6 +83,7 @@ class Tester:
 
             def desugar(file: Path) -> Tuple[Path, Path, Path]:
                 included_directories, included_files, user_defined_space = self.get_inc_files_and_dirs_for_file(file)
+                # noinspection PyTypeChecker
                 return (*SugarCRunner.desugar_file(file,
                                                  user_defined_space=user_defined_space,
                                                  remove_errors=tool.remove_errors,
@@ -119,21 +120,26 @@ class Tester:
             # Collect alarms into "buckets" based on equivalence.
             # Then, for each bucket, we will return one alarm, combining all of the
             #  models into a list.
+            logger.debug("Now deduplicating results.")
             for ba in alarms:
                 for bucket in buckets:
                     if len(bucket) > 0 and alarm_match(bucket[0], ba):
+                        logger.debug("Found matching bucket.")
                         bucket.append(ba)
                         break
 
                     # If we get here, then there wasn't a bucket that this could fit into,
                     #  So it gets its own bucket and we add a new one to the end of the list.
+                    logger.debug("Creating a new bucket.")
                     buckets[-1].append(ba)
                     buckets.append([])
 
+            logger.debug("Now aggregating alarms.")
             alarms = []
             for bucket in (b for b in buckets if len(b) > 0):
                 alarms.append(bucket[0])
                 alarms[-1].presence_condition = f"Or({','.join(m.presence_condition for m in bucket)})"
+            logger.debug("Done.")
 
         else:
             baseline_alarms: List[Alarm] = []
@@ -166,11 +172,10 @@ class Tester:
 
             alarms = baseline_alarms
 
-        # TODO: Deduplicate results.
+        logger.debug("Writing alarms to file.")
         with open("/results.json", 'w') as f:
             json.dump([a.as_dict() for a in alarms], f)
 
-        [print(str(a)) for a in alarms]
         # (Optional) 6. Optional unsoundness checker
         pass
 
