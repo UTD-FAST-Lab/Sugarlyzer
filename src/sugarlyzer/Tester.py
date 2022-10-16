@@ -138,7 +138,7 @@ class Tester:
             alarms = []
             for bucket in (b for b in buckets if len(b) > 0):
                 alarms.append(bucket[0])
-                alarms[-1].presence_condition = f"Or({','.join(m.presence_condition for m in bucket)})"
+                alarms[-1].presence_condition = f"Or({','.join(str(m.presence_condition) for m in bucket)})"
             logger.debug("Done.")
 
         else:
