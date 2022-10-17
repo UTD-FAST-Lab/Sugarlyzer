@@ -157,7 +157,12 @@ class ProgramSpecification:
                     else:
                         config.append(("DEF", s.strip()))
                 configs.append(config)
-            return (ProgramSpecification.BaselineConfig(file, config) for file in self.get_source_files() for config in configs)
+            def log_it(it: i, message, log_func = logger.debug):
+                for i in it:
+                    log_func(f"{message} {i}")
+                    yield i
+
+            yield from (ProgramSpecification.BaselineConfig(file, config) for file in log_it(self.get_source_files(), "file is") for config in configs)
 
     def get_all_macros(self, fpa):
         ff = open(fpa, 'r')
