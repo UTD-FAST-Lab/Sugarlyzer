@@ -157,7 +157,7 @@ class ProgramSpecification:
                     else:
                         config.append(("DEF", s.strip()))
                 configs.append(config)
-            def log_it(it: i, message, log_func = logger.debug):
+            def log_it(it, message, log_func = logger.debug):
                 for i in it:
                     log_func(f"{message} {i}")
                     yield i
