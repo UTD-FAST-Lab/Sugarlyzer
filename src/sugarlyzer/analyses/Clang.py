@@ -19,7 +19,6 @@ class Clang(AbstractTool):
     def __init__(self):
         super().__init__(ClangReader(), keep_mem=True, make_main=True, remove_errors=False)
 
-    @log_all_params_and_return
     def analyze(self, file: Path,
                 included_dirs: Iterable[Path] = None,
                 included_files: Iterable[Path] = None,

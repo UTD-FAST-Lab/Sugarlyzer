@@ -18,7 +18,6 @@ class Infer(AbstractTool):
     def __init__(self):
         super().__init__(InferReader(), make_main=True, keep_mem=True, remove_errors=True)
 
-    @log_all_params_and_return(logger.info)
     def analyze(self, file: Path,
                 included_dirs: Iterable[Path] = None,
                 included_files: Iterable[Path] = None,
