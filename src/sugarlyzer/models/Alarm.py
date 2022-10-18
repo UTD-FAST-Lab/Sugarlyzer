@@ -36,7 +36,11 @@ def map_source_line(desugared_file: Path, line: int) -> IntegerRange:
     """
     with open(desugared_file, 'r') as infile:
         lines: List[str] = list(map(lambda x: x.strip('\n'), infile.readlines()))
-        the_line: str = lines[line - 1]
+        try:
+            the_line: str = lines[line - 1]
+        except IndexError as ie:
+            logger.exception(f"Trying to find {line} in file {desugared_file}.")
+            raise
         if mat := re.search("// L(.*):L(.*)$", the_line):
             return IntegerRange(int(mat.group(1)), int(mat.group(2)))
         if mat := re.search("// L(.*)$", the_line):
@@ -90,7 +94,7 @@ class Alarm:
         for k, v in executor.items():
             try:
                 result[k] = v()
-            except ValueError as ve:
+            except ValueError | IndexError as ve:
                 result[k] = "ERROR"
 
         return result
