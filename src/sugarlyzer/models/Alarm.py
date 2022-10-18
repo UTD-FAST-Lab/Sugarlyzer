@@ -94,7 +94,7 @@ class Alarm:
         for k, v in executor.items():
             try:
                 result[k] = v()
-            except ValueError | IndexError as ve:
+            except (ValueError, IndexError):
                 result[k] = "ERROR"
 
         return result
