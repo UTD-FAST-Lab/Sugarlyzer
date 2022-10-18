@@ -85,7 +85,7 @@ class Tester:
                 # noinspection PyTypeChecker
                 return (*SugarCRunner.desugar_file(file,
                                                    user_defined_space=user_defined_space,
-                                                   remove_errors=tool.remove_errors,
+                                                   remove_errors=tool.remove_errors if self.program.remove_errors is None else self.program.remove_errors,
                                                    no_stdlibs=True,
                                                    included_files=included_files,
                                                    included_directories=included_directories,

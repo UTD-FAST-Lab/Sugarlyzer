@@ -22,7 +22,7 @@ class ProgramSpecification:
     def __init__(self, name: str,
                  build_script: str,
                  source_location: Optional[List[str]] = None,
-                 remove_errors: bool = False,
+                 remove_errors: bool = None,
                  no_std_libs: bool = False,
                  included_files_and_directories: Iterable[Dict] = None,
                  sample: Path = None
