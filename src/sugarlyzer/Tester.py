@@ -53,7 +53,6 @@ class Tester:
             importlib.resources.path(f'resources.programs.{program}', 'program.json'))
         self.program = ProgramSpecification(program, **program_as_json)
 
-    @log_all_params_and_return(logger.info)
     @functools.cache
     def get_inc_files_and_dirs_for_file(self, file: Path):
         included_files, included_directories = self.program.get_inc_files_and_dirs(file)
@@ -83,15 +82,15 @@ class Tester:
 
             def desugar(file: Path) -> Tuple[Path, Path, Path]:
                 included_directories, included_files, user_defined_space = self.get_inc_files_and_dirs_for_file(file)
+                # noinspection PyTypeChecker
                 return (*SugarCRunner.desugar_file(file,
-                                                 user_defined_space=user_defined_space,
-                                                 remove_errors=tool.remove_errors,
-                                                 no_stdlibs=True,
-                                                 included_files=included_files,
-                                                 included_directories=included_directories,
-                                                 keep_mem = tool.keep_mem,
-                                                 make_main = tool.make_main), file)
-
+                                                   user_defined_space=user_defined_space,
+                                                   remove_errors=tool.remove_errors if self.program.remove_errors is None else self.program.remove_errors,
+                                                   no_stdlibs=True,
+                                                   included_files=included_files,
+                                                   included_directories=included_directories,
+                                                   keep_mem=tool.keep_mem,
+                                                   make_main=tool.make_main), file)
 
             logger.info(f"Source files are {list(self.program.get_source_files())}")
             input_files: Iterable[str] = ProcessPool(8).map(desugar, self.program.get_source_files())
@@ -100,12 +99,14 @@ class Tester:
             logger.info(f"Collected {len([c for c in self.program.get_source_files()])} .c files to analyze.")
 
             def analyze_read_and_process(desugared_file: Path, original_file: Path) -> Iterable[Alarm]:
-                included_directories, included_files, user_defined_space = self.get_inc_files_and_dirs_for_file(original_file)
+                included_directories, included_files, user_defined_space = self.get_inc_files_and_dirs_for_file(
+                    original_file)
                 return process_alarms(tool.analyze_and_read(desugared_file, included_files=included_files,
                                                             included_dirs=included_directories,
                                                             user_defined_space=user_defined_space), desugared_file)
 
-            alarm_collections: List[Iterable[Alarm]] = [analyze_read_and_process(desugared_file=d, original_file=o) for d, _, o in input_files]
+            alarm_collections: List[Iterable[Alarm]] = [analyze_read_and_process(desugared_file=d, original_file=o) for
+                                                        d, _, o in input_files]
             alarms = list()
             for collec in alarm_collections:
                 alarms.extend(collec)
@@ -119,30 +120,36 @@ class Tester:
             # Collect alarms into "buckets" based on equivalence.
             # Then, for each bucket, we will return one alarm, combining all of the
             #  models into a list.
+            logger.debug("Now deduplicating results.")
             for ba in alarms:
                 for bucket in buckets:
                     if len(bucket) > 0 and alarm_match(bucket[0], ba):
+                        logger.debug("Found matching bucket.")
                         bucket.append(ba)
                         break
 
-                    # If we get here, then there wasn't a bucket that this could fit into,
-                    #  So it gets its own bucket and we add a new one to the end of the list.
-                    buckets[-1].append(ba)
-                    buckets.append([])
+                # If we get here, then there wasn't a bucket that this could fit into,
+                #  So it gets its own bucket and we add a new one to the end of the list.
+                logger.debug("Creating a new bucket.")
+                buckets[-1].append(ba)
+                buckets.append([])
 
+            logger.debug("Now aggregating alarms.")
             alarms = []
             for bucket in (b for b in buckets if len(b) > 0):
                 alarms.append(bucket[0])
-                alarms[-1].presence_condition = f"Or({','.join(m.presence_condition for m in bucket)})"
+                alarms[-1].presence_condition = f"Or({','.join(str(m.presence_condition) for m in bucket)})"
+            logger.debug("Done.")
 
         else:
             baseline_alarms: List[Alarm] = []
 
             count = 0
             count += 1
+
             def run_config_and_get_alarms(b: ProgramSpecification.BaselineConfig) -> Iterable[Alarm]:
                 config_builder = []
-                for d, s in b.configuration :
+                for d, s in b.configuration:
                     if d == "DEF":
                         config_builder.append('-D' + ((s + '=1') if '=' not in s else s))
                     elif d == "UNDEF":
@@ -153,24 +160,24 @@ class Tester:
                                                included_files=inc_files,
                                                included_dirs=inc_dirs,
                                                user_defined_space=SugarCRunner.get_recommended_space(b.source_file,
-                                                                                                     inc_files, inc_dirs, no_stdlibs=self.program.no_std_libs),
-                                               no_std_libs=self.program.no_std_libs)
+                                                                                                     inc_files,
+                                                                                                     inc_dirs))
                 for a in alarms:
                     a.model = [f"{du}_{op}" for du, op in b.configuration]
                 logger.debug(f"Returning {alarms})")
                 return alarms
 
-            for i in tqdm(ProcessPool().imap(run_config_and_get_alarms, i:=list(self.program.get_baseline_configurations()),
-                                              total=len(list(i)))):
+            for i in tqdm(
+                    ProcessPool().imap(run_config_and_get_alarms, i := list(self.program.get_baseline_configurations())),
+                                       total=len(list(i))):
                 baseline_alarms.extend(i)
 
             alarms = baseline_alarms
 
-        # TODO: Deduplicate results.
+        logger.debug("Writing alarms to file.")
         with open("/results.json", 'w') as f:
             json.dump([a.as_dict() for a in alarms], f)
 
-        [print(str(a)) for a in alarms]
         # (Optional) 6. Optional unsoundness checker
         pass
 
@@ -212,4 +219,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
