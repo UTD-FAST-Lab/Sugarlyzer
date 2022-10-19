@@ -10,7 +10,11 @@ from typing import List, Iterable, Optional, Dict, Tuple, TypeVar
 
 from tqdm import tqdm
 
+from src.sugarlyzer.util.decorators import log_all_params_and_return
+
 logger = logging.getLogger(__name__)
+
+
 
 
 class ProgramSpecification:
@@ -18,7 +22,7 @@ class ProgramSpecification:
     def __init__(self, name: str,
                  build_script: str,
                  source_location: Optional[List[str]] = None,
-                 remove_errors: bool = False,
+                 remove_errors: bool = None,
                  no_std_libs: bool = False,
                  included_files_and_directories: Iterable[Dict] = None,
                  sample: Path = None
@@ -126,8 +130,9 @@ class ProgramSpecification:
         if self.sample_directory is None:
             # If we don't have a sample directory, we use the get_all_macros function to get every possible configuration.
             for source_file in tqdm(self.get_source_files()):
+                logger.debug(f"Source file is {source_file}")
                 macros: List[str] = self.get_all_macros(source_file)
-                logging.info(f"Macros for file {source_file} are {macros}")
+                logging.debug(f"Macros for file {source_file} are {macros}")
 
                 T = TypeVar('T')
                 G = TypeVar('G')
@@ -139,7 +144,7 @@ class ProgramSpecification:
                         result = [a + [(b, options[-1])] for a in all_configurations(options[:-1]) for b in ["DEF", "UNDEF"]]
                         return result
 
-                return (ProgramSpecification.BaselineConfig(source_file, c) for c in all_configurations(macros))
+                yield from (ProgramSpecification.BaselineConfig(source_file, c) for c in all_configurations(macros))
         else:
             configs = []
             for s in self.try_resolve_path(self.sample_directory).iterdir():
@@ -152,7 +157,7 @@ class ProgramSpecification:
                     else:
                         config.append(("DEF", s.strip()))
                 configs.append(config)
-            return (ProgramSpecification.BaselineConfig(file, config) for file in self.get_source_files() for config in configs)
+            yield from (ProgramSpecification.BaselineConfig(file, config) for file in self.get_source_files() for config in configs)
 
     def get_all_macros(self, fpa):
         ff = open(fpa, 'r')

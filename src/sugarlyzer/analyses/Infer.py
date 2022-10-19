@@ -18,7 +18,6 @@ class Infer(AbstractTool):
     def __init__(self):
         super().__init__(InferReader(), make_main=True, keep_mem=True, remove_errors=True)
 
-    @log_all_params_and_return(logger.info)
     def analyze(self, file: Path,
                 included_dirs: Iterable[Path] = None,
                 included_files: Iterable[Path] = None,
@@ -37,6 +36,9 @@ class Infer(AbstractTool):
                *command_line_defs,
                "-nostdinc", "-c", file.absolute()]
         logger.info(f"Running cmd {cmd}")
-        subprocess.run(cmd)
+        ps = subprocess.run(cmd, stderr=subprocess.STDOUT, stdout=subprocess.PIPE, text=True)
+        if (ps.returncode != 0) or ("error" in ps.stdout.lower()):
+            logger.warning(f"Running infer on file {str(file)} potentially failed.")
+            logger.warning(ps.stdout)
         report = os.path.join(output_location,'report.json')
         yield report

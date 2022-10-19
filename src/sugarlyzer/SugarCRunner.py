@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_recommended_space(file: Path, inc_files: Iterable[Path], inc_dirs: Iterable[Path],
-                          no_stdlibs: bool) -> str:
+                          no_stdlibs: bool = True) -> str:
     """
     Explores the provided file. Looks for inclusion guards or other
     macros that would be assumed to be false and recommends them to be turned off.
@@ -195,7 +195,7 @@ def desugar_file(file_to_desugar: Path,
                 run_sugarc(" ".join(cmd), file_to_desugar, desugared_file, log_file)
                 logging.debug(f"Created desugared file {desugared_file}")
                 to_append = get_bad_constraints(desugared_file)
-
+                logging.info(f'removed errors: {to_append}')
     run_sugarc(" ".join(cmd), file_to_desugar, desugared_file, log_file)
     logger.debug(f"Wrote to {log_file}")
     return desugared_file, log_file

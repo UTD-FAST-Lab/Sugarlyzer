@@ -19,7 +19,6 @@ class Clang(AbstractTool):
     def __init__(self):
         super().__init__(ClangReader(), keep_mem=True, make_main=True, remove_errors=False)
 
-    @log_all_params_and_return
     def analyze(self, file: Path,
                 included_dirs: Iterable[Path] = None,
                 included_files: Iterable[Path] = None,
@@ -36,7 +35,7 @@ class Clang(AbstractTool):
                *list(itertools.chain(*zip(itertools.cycle(["-I"]), included_dirs))),
                *list(itertools.chain(*zip(itertools.cycle(["--include"]), included_files))),
                *command_line_defs,
-               '-nostdinc'
+               '-nostdinc',
                "-c", file.absolute()]
         logger.info(f"Running cmd {' '.join(str(s) for s in cmd)}")
         ps = subprocess.run(cmd, stderr=subprocess.STDOUT, stdout=subprocess.PIPE, text=True)

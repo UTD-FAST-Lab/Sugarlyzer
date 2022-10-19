@@ -6,6 +6,7 @@ from dataclasses import dataclass
 import itertools
 import re
 
+import z3
 from z3.z3 import ModelRef
 
 logger = logging.getLogger(__name__)
@@ -35,7 +36,11 @@ def map_source_line(desugared_file: Path, line: int) -> IntegerRange:
     """
     with open(desugared_file, 'r') as infile:
         lines: List[str] = list(map(lambda x: x.strip('\n'), infile.readlines()))
-        the_line: str = lines[line - 1]
+        try:
+            the_line: str = lines[line - 1]
+        except IndexError as ie:
+            logger.exception(f"Trying to find {line} in file {desugared_file}.")
+            raise
         if mat := re.search("// L(.*):L(.*)$", the_line):
             return IntegerRange(int(mat.group(1)), int(mat.group(2)))
         if mat := re.search("// L(.*)$", the_line):
@@ -81,7 +86,7 @@ class Alarm:
             "sanitized_message": lambda: self.sanitized_message,
             "presence_condition": lambda: self.presence_condition,
             "feasible": lambda: self.feasible,
-            "configuration": lambda: str(self.model),
+            "configuration": lambda: str(self.model) if isinstance(self.model, z3.ModelRef) else self.model,
             "time": lambda: str(self.time)
         }
 
@@ -89,7 +94,7 @@ class Alarm:
         for k, v in executor.items():
             try:
                 result[k] = v()
-            except ValueError as ve:
+            except (ValueError, IndexError):
                 result[k] = "ERROR"
 
         return result
@@ -110,10 +115,9 @@ class Alarm:
 
         if self.__original_line_range is None:
             self.__original_line_range = map_source_line(self.input_file, self.line_in_input_file)
-            if self.__original_line_range is not None and not self.__original_line_range.is_in(self.function_line_range[1]):
-                raise ValueError(f"Sanity check failed. Warning ({self.input_file}:{self.line_in_input_file}) has both original line range {self.original_line_range} and "
-                                   f"function line range {self.__function_line_range} but the former is not included in the latter. As of now, this method should only be compared "
-                                 f"using function line range.")
+            if self.__original_line_range is not None and not self.function_line_range[0] == "GLOBAL" and not self.__original_line_range.is_in(self.function_line_range[1]):
+                logger.critical(f"Sanity check failed. Warning ({self.input_file}:{self.line_in_input_file} {self.message}) original line range {self.original_line_range} and "
+                                   f"function line range {self.__function_line_range}, and the former is not included in the latter, which is not a global scope. Please double check that our line mapping is correct.")
                 # self.__original_line_range = IntegerRange(-1, 0)  # TODO Is there a better way to represent null values without using None?
         return self.__original_line_range
 

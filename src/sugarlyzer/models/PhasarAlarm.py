@@ -22,7 +22,7 @@ class PhasarAlarm(Alarm):
 
     def as_dict(self) -> Dict[str, str]:
         result = super().as_dict()
-        result['warning_path'] = str(self.warning_path),
+        result['warning_path'] = self.warning_path,
         result['function'] = self.function
         result['variable'] = self.variable_name
         return result

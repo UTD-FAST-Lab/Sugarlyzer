@@ -22,7 +22,6 @@ class AbstractTool(ABC):
         self.make_main = make_main
         self.remove_errors = remove_errors
 
-    @log_all_params_and_return(logger.info)
     def analyze_and_read(self, desugared_file: Path, command_line_defs: Iterable[str] = None,
                          included_dirs: Iterable[Path] = None, included_files: Iterable[Path] = None,
                          user_defined_space=None) -> Iterable[Alarm]:
@@ -34,7 +33,7 @@ class AbstractTool(ABC):
         :return: A collection of alarms.
         """
         if user_defined_space is not None:
-            with tempfile.TemporaryFile('w') as uds:
+            with tempfile.NamedTemporaryFile('w', delete=False) as uds:
                 uds.write(user_defined_space)
                 if included_files is None:
                     included_files = []
