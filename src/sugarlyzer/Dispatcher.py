@@ -121,9 +121,8 @@ def main() -> None:
     """
     args = read_arguments()
 
-    log = args.log
     if args.log in ['', None]:
-        log = args.result + '.log'
+        args.log = args.result + '.log'
 
     match args.verbosity:
         case 0:
