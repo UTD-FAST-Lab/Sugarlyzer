@@ -71,7 +71,8 @@ class Alarm:
         self.feasible: Optional[bool] = None
         self.model: Optional[ModelRef | str] = None  # TODO: More elegant way to handle the two possible types of model.
 
-        self.time: float = None
+        self.analysis_time: float = None
+        self.desugaring_time: float = None
 
     Printable = TypeVar('Printable')
 
@@ -87,7 +88,8 @@ class Alarm:
             "presence_condition": lambda: self.presence_condition,
             "feasible": lambda: self.feasible,
             "configuration": lambda: str(self.model) if isinstance(self.model, z3.ModelRef) else self.model,
-            "time": lambda: str(self.time)
+            "analysis_time": lambda: str(self.analysis_time),
+            "desugaring_time": lambda: str(self.desugaring_time)
         }
 
         result = {}
