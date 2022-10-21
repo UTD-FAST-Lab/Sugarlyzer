@@ -49,7 +49,7 @@ class AbstractTool(ABC):
         total_time = time.time() - start_time
         for a in alarms:
             a.input_file = desugared_file
-            a.time = total_time
+            a.analysis_time = total_time
 
         try:
             uds.close()

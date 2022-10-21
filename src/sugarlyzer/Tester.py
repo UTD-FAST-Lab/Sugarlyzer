@@ -6,6 +6,7 @@ import json
 import logging
 import os
 import re
+import time
 from enum import Enum, auto
 from pathlib import Path
 from typing import Iterable, List, Dict, Any, TypeVar, Tuple, Set
@@ -80,8 +81,9 @@ class Tester:
             # 2. Run SugarC
             logger.info(f"Desugaring the source code in {list(self.program.source_locations)}")
 
-            def desugar(file: Path) -> Tuple[Path, Path, Path]:
+            def desugar(file: Path) -> Tuple[Path, Path, Path, float]: # God, what an ugly tuple
                 included_directories, included_files, user_defined_space = self.get_inc_files_and_dirs_for_file(file)
+                start = time.time()
                 # noinspection PyTypeChecker
                 return (*SugarCRunner.desugar_file(file,
                                                    user_defined_space=user_defined_space,
@@ -90,7 +92,7 @@ class Tester:
                                                    included_files=included_files,
                                                    included_directories=included_directories,
                                                    keep_mem=tool.keep_mem,
-                                                   make_main=tool.make_main), file)
+                                                   make_main=tool.make_main), file, time.time() - start)
 
             logger.info(f"Source files are {list(self.program.get_source_files())}")
             input_files: Iterable[str] = ProcessPool(8).map(desugar, self.program.get_source_files())
@@ -98,15 +100,18 @@ class Tester:
             # 3/4. Run analysis tool, and read its results
             logger.info(f"Collected {len([c for c in self.program.get_source_files()])} .c files to analyze.")
 
-            def analyze_read_and_process(desugared_file: Path, original_file: Path) -> Iterable[Alarm]:
+            def analyze_read_and_process(desugared_file: Path, original_file: Path, desugaring_time: float = None) -> Iterable[Alarm]:
                 included_directories, included_files, user_defined_space = self.get_inc_files_and_dirs_for_file(
                     original_file)
-                return process_alarms(tool.analyze_and_read(desugared_file, included_files=included_files,
+                alarms = process_alarms(tool.analyze_and_read(desugared_file, included_files=included_files,
                                                             included_dirs=included_directories,
                                                             user_defined_space=user_defined_space), desugared_file)
+                for a in alarms:
+                    a.desugaring_time = desugaring_time
+                return alarms
 
-            alarm_collections: List[Iterable[Alarm]] = [analyze_read_and_process(desugared_file=d, original_file=o) for
-                                                        d, _, o in input_files]
+            alarm_collections: List[Iterable[Alarm]] = [analyze_read_and_process(desugared_file=d, original_file=o, desugaring_time=dt) for
+                                                        d, _, o, dt in input_files]
             alarms = list()
             for collec in alarm_collections:
                 alarms.extend(collec)
