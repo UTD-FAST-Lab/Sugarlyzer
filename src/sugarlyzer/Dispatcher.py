@@ -122,7 +122,7 @@ def main() -> None:
     args = read_arguments()
 
     log = args.log
-    if args.log not in ['', None]:
+    if args.log in ['', None]:
         log = args.result + '.log'
 
     match args.verbosity:
