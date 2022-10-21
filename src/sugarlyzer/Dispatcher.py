@@ -26,7 +26,7 @@ def read_arguments() -> argparse.Namespace:
     p.add_argument('-v', dest='verbosity', action='count', help="""Level of verbosity. No v's will print only WARNING or above messages. One 
 v will print INFO and above. Two or more v's will print DEBUG or above.""", default=0)
     p.add_argument('--log', help='If specified, logs will be printed to the specified file. Otherwise, logs are printed'
-                                 ' to the console.', default='sugarlyzer.log')
+                                 ' to the console.')
     p.add_argument('--force', action='store_true', help='Do not ask permission to delete existing log and results files.')
     p.add_argument("--baselines", action="store_true",
                    help="""Run the baseline experiments. In these, we configure each 
@@ -121,6 +121,10 @@ def main() -> None:
     """
     args = read_arguments()
 
+    log = args.log
+    if args.log not in ['', None]:
+        log = args.result + '.log'
+
     match args.verbosity:
         case 0:
             logging_level = logging.WARNING
@@ -135,8 +139,6 @@ def main() -> None:
     logging_format = '%(asctime)s %(name)s %(levelname)s %(message)s'
     kwargs = {"format": logging_format, "level": logging_level, "filename": args.log}
 
-    if args.log not in ['', None]:
-        kwargs["filename"] = args.log
 
     logging.basicConfig(**kwargs)
     build_images(args.tools)
