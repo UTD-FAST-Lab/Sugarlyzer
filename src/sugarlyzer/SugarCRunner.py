@@ -295,7 +295,7 @@ def find_condition_scope(start, fpa, goingUp):
         l = start
         while l >= 0:
             Rs += lines[l].count('}')
-            m = re.match('if \((__static_condition_default_\d+)\).*', lines[l])
+            m = re.match('if \((__static_condition_default_\d+)\(\)\).*', lines[l])
             if Rs == 0 and m:
                 result = l
                 break
@@ -376,7 +376,7 @@ def check_non_flow(alarm: Alarm, desugared_output: str) -> List[Dict[str, str | 
         while line_to_read >= 0:
             additional_scopes += lines[line_to_read].count('}')
             if additional_scopes == 0:
-                m = re.match(r"if \((__static_condition_default_\d+)\).*", lines[line_to_read])
+                m = re.match(r"if \((__static_condition_default_\d+)\(\)\).*", lines[line_to_read])
                 if m:
                     result.append({'var': str(m.group(1)), 'val': True})
             additional_scopes -= lines[line_to_read].count('{')
@@ -414,7 +414,7 @@ def get_bad_constraints(desugared_file: Path) -> List[str]:
                     lines[line_index].startswith('__static_type_error'):
                 is_error = True
         else:
-            condition = re.match('if \((__static_condition_default_\d+)\).*', lines[line_index])
+            condition = re.match('if \((__static_condition_default_\d+)\(\)\).*', lines[line_index])
             if condition:
                 to_eval = condition_mapping.replacers[condition.group(1)]
                 logger.debug(f"to_eval is {to_eval}")
