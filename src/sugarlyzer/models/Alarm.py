@@ -74,6 +74,9 @@ class Alarm:
         self.analysis_time: float = None
         self.desugaring_time: float = None
 
+        self.get_recommended_space: bool = None
+        self.remove_errors: bool = None
+
     Printable = TypeVar('Printable')
 
     def as_dict(self) -> Dict[str, Printable]:
@@ -88,8 +91,10 @@ class Alarm:
             "presence_condition": lambda: self.presence_condition,
             "feasible": lambda: self.feasible,
             "configuration": lambda: str(self.model) if isinstance(self.model, z3.ModelRef) else self.model,
-            "analysis_time": lambda: str(self.analysis_time),
-            "desugaring_time": lambda: str(self.desugaring_time)
+            "analysis_time": lambda: self.analysis_time,
+            "desugaring_time": lambda: self.desugaring_time,
+            "get_recommended_space": lambda: self.get_recommended_space,
+            "remove_errors": lambda: self.remove_errors,
         }
 
         result = {}

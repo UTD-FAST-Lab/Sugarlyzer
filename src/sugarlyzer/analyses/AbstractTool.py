@@ -24,7 +24,7 @@ class AbstractTool(ABC):
 
     def analyze_and_read(self, desugared_file: Path, command_line_defs: Iterable[str] = None,
                          included_dirs: Iterable[Path] = None, included_files: Iterable[Path] = None,
-                         user_defined_space=None) -> Iterable[Alarm]:
+                         recommended_space=None) -> Iterable[Alarm]:
         """
         Analyzes a desugared .c file, and returns the alarms generated.
         :param no_std_libs:
@@ -32,9 +32,9 @@ class AbstractTool(ABC):
         :param desugared_file: The file to analyze.
         :return: A collection of alarms.
         """
-        if user_defined_space is not None:
+        if recommended_space is not None:
             with tempfile.NamedTemporaryFile('w', delete=False) as uds:
-                uds.write(user_defined_space)
+                uds.write(recommended_space)
                 if included_files is None:
                     included_files = []
                 included_files.append(uds.name)

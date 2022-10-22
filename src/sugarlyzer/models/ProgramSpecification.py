@@ -15,21 +15,18 @@ from src.sugarlyzer.util.decorators import log_all_params_and_return
 logger = logging.getLogger(__name__)
 
 
-
-
 class ProgramSpecification:
 
     def __init__(self, name: str,
                  build_script: str,
                  source_location: Optional[List[str]] = None,
                  remove_errors: bool = None,
-                 no_std_libs: bool = False,
                  included_files_and_directories: Iterable[Dict] = None,
                  sample: Path = None
                  ):
         self.name = name
         self.remove_errors = remove_errors
-        self.no_std_libs = no_std_libs
+        self.no_std_libs = True
         self.__build_script = build_script
         self.__source_location = source_location
         self.inc_dirs_and_files = [] if included_files_and_directories is None else included_files_and_directories
@@ -54,7 +51,7 @@ class ProgramSpecification:
             for root, dirs, files in os.walk(s):
                 for f in files:
                     if f.endswith(".c") or f.endswith(".i"):
-                        yield Path(root)/f
+                        yield Path(root) / f
 
     def get_inc_files_and_dirs(self, file: Path) -> Tuple[Iterable[Path], Iterable[Path]]:
         """
@@ -104,7 +101,7 @@ class ProgramSpecification:
         logging.info(f'Trying to resolve {path} in {root}')
         if path.is_absolute():
             return path
-        if os.path.exists(joined_path := Path(root)/path):
+        if os.path.exists(joined_path := Path(root) / path):
             return joined_path.absolute()
         results = set()
         for rootdir, _, _ in os.walk(root):
@@ -141,7 +138,8 @@ class ProgramSpecification:
                     if len(options) == 0:
                         return [[]]
                     else:
-                        result = [a + [(b, options[-1])] for a in all_configurations(options[:-1]) for b in ["DEF", "UNDEF"]]
+                        result = [a + [(b, options[-1])] for a in all_configurations(options[:-1]) for b in
+                                  ["DEF", "UNDEF"]]
                         return result
 
                 yield from (ProgramSpecification.BaselineConfig(source_file, c) for c in all_configurations(macros))
@@ -157,7 +155,8 @@ class ProgramSpecification:
                     else:
                         config.append(("DEF", s.strip()))
                 configs.append(config)
-            yield from (ProgramSpecification.BaselineConfig(file, config) for file in self.get_source_files() for config in configs)
+            yield from (ProgramSpecification.BaselineConfig(file, config) for file in self.get_source_files() for config
+                        in configs)
 
     def get_all_macros(self, fpa):
         ff = open(fpa, 'r')
