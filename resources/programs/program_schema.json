@@ -10,10 +10,6 @@
       "description": "Whether to enable SugarC's remove_errors functionality (default False).",
       "type": "boolean"
     },
-    "no_std_libs": {
-      "description": "Whether to enable SugarC's no_std_libs (default False).",
-      "type": "boolean"
-    },
     "included_files_and_directories": {
       "description": "Specification for the files and directories to include, on a per-file basis if necessary.",
       "type": "array",
