@@ -85,7 +85,7 @@ def get_recommended_space(file: Path, inc_files: Iterable[Path], inc_dirs: Itera
     guards = []
     searchingDirs = list(inc_dirs)
     searchingDirs.append(os.getcwd())
-    if not no_stdlibs:
+    if no_stdlibs:
         os.system('echo "int main () {return 0;}" > exampleInclude___.c')
         gccOut = subprocess.Popen('gcc -v exampleInclude___.c', shell=True, stdout=subprocess.PIPE,
                                   stderr=subprocess.PIPE)
@@ -130,7 +130,7 @@ def get_recommended_space(file: Path, inc_files: Iterable[Path], inc_dirs: Itera
 
 
 def desugar_file(file_to_desugar: Path,
-                 user_defined_space: str,
+                 recommended_space: str,
                  output_file: str = '',
                  log_file: str = '',
                  remove_errors: bool = False,
@@ -143,7 +143,7 @@ def desugar_file(file_to_desugar: Path,
     Runs the SugarC command.
 
     :param file_to_desugar: The C source code file to desugar.
-    :param user_defined_space: defines and undefs to be assumed while desugaring
+    :param recommended_space: defines and undefs to be assumed while desugaring
     :param output_file: If provided, will specify the location of the output. Otherwise tacks on .desugared.c to the end of the base file name
     :param log_file: If provided will specify the location of the logged data. Otherwise tacks on .Log to the end of the base file name
     :param remove_errors: Whether or not the desugared output should be re-run to remove bad configurations
@@ -183,7 +183,7 @@ def desugar_file(file_to_desugar: Path,
     logging.info(f"Cmd is {' '.join(cmd)}")
 
     with open(USER_DEFS, 'w') as outfile:
-        outfile.write(user_defined_space + "\n")
+        outfile.write(recommended_space + "\n")
         if remove_errors:
             to_append = ['']
             its = 0
