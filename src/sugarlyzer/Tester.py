@@ -30,10 +30,11 @@ logger = logging.getLogger(__name__)
 
 
 class Tester:
-    def __init__(self, tool: str, program: str, baselines: bool, no_recommended_space: bool):
+    def __init__(self, tool: str, program: str, baselines: bool, no_recommended_space: bool, validate: bool):
         self.tool: str = tool
         self.baselines = baselines
         self.no_recommended_space = no_recommended_space
+        self.validate = validate
 
         def read_json_and_validate(file: str) -> Dict[str, Any]:
             """
@@ -150,6 +151,23 @@ class Tester:
                 alarms[-1].presence_condition = f"Or({','.join(str(m.presence_condition) for m in bucket)})"
             logger.debug("Done.")
 
+            if self.validate:
+                for a in alarms:
+                    for m in a.model:
+                        config: List[Tuple[str, str]] = []
+                        #  "configuration" : "[USE___OPTIMIZE__ = 1,\n USE__FORTIFY_SOURCE = 1,\n DEF_CONFIG_PLATFORM_SOLARIS = False,\n DEF___malloc_and_calloc_defined = False,\n DEF__STDLIB_H = False,\n DEF___OPTIMIZE__ = True,\n DEF__FORTIFY_SOURCE = True,\n DEF___STRICT_ANSI__ = False,\n DEF___need___FILE = True,\n DEF___int8_t_defined = False,\n DEF___time_t_defined = False,\n DEF__BITS_TYPESIZES_H = False]",
+                        m = m.replace(' ', '')
+                        config.append(m[:3], m[4:])  # Skip the middle _
+                    logger.info(f"Constructed validation model {config} from {m}")
+
+                    for a in
+
+
+
+
+
+
+
         else:
             baseline_alarms: List[Alarm] = []
 
@@ -205,6 +223,8 @@ def get_arguments() -> argparse.Namespace:
                    help="""Run the baseline experiments. In these, we configure each 
                    file with every possible configuration, and then run the experiments.""")
     p.add_argument("--no-recommended-space", help="""Do not generate a recommended space.""", action='store_true')
+    p.add_argument("--validate", help="""Try running desugared alarms with Z3's configuration to see if they are retained.""",
+                   action='store_true')
     return p.parse_args()
 
 
@@ -226,7 +246,7 @@ def set_up_logging(args: argparse.Namespace) -> None:
 def main():
     args = get_arguments()
     set_up_logging(args)
-    t = Tester(args.tool, args.program, args.baselines, args.no_recommended_space)
+    t = Tester(args.tool, args.program, args.baselines, args.no_recommended_space, args.validate)
     t.execute()
 
 

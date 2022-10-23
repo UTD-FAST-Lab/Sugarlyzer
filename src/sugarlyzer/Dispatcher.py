@@ -32,6 +32,8 @@ v will print INFO and above. Two or more v's will print DEBUG or above.""", defa
                    help="""Run the baseline experiments. In these, we configure each 
                    file with every possible configuration, and then run the experiments.""")
     p.add_argument("--no-recommended-space", help="""Do not generate a recommended space.""", action='store_true')
+    p.add_argument("--validate", help="""Try running desugared alarms with Z3's configuration to see if they are retained.""",
+                   action='store_true')
     return p.parse_args()
 
 
@@ -104,6 +106,8 @@ def start_tester(t, args) -> None:
             command = command + " --baselines"
         if args.no_recommended_space:
             command += " --no-recommended-space"
+        if args.validate:
+            command += " --validate"
         cntr: Container = docker.from_env().containers.run(
             image=get_image_name(t),
             command="/bin/bash",
