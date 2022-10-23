@@ -11,6 +11,7 @@ from enum import Enum, auto
 from pathlib import Path
 from typing import Iterable, List, Dict, Any, TypeVar, Tuple, Set
 
+import z3
 # noinspection PyUnresolvedReferences
 from dill import pickle
 from jsonschema.validators import RefResolver, Draft7Validator
@@ -174,10 +175,12 @@ class Tester:
             if self.validate:
                 for a in alarms:
                     for m in a.model:
+                        m = str(m)
+                        logger.debug(f"model is {m}")
                         config: List[Tuple[str, str]] = []
                         #  "configuration" : "[USE___OPTIMIZE__ = 1,\n USE__FORTIFY_SOURCE = 1,\n DEF_CONFIG_PLATFORM_SOLARIS = False,\n DEF___malloc_and_calloc_defined = False,\n DEF__STDLIB_H = False,\n DEF___OPTIMIZE__ = True,\n DEF__FORTIFY_SOURCE = True,\n DEF___STRICT_ANSI__ = False,\n DEF___need___FILE = True,\n DEF___int8_t_defined = False,\n DEF___time_t_defined = False,\n DEF__BITS_TYPESIZES_H = False]",
                         m = m.replace(' ', '')
-                        config.append(m[:3], m[4:])  # Skip the middle _
+                        config.append((m[:3], m[4:])) # Skip the middle _
                     logger.info(f"Constructed validation model {config} from {m}")
                     b = ProgramSpecification.BaselineConfig(source_file=Path(str(a.input_file.absolute()).replace('.desugared', '')),
                                                             configuration=config)
