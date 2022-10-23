@@ -20,7 +20,7 @@ class AnalysisToolFactory:
 
         match tool.lower():
             case "clang": return Clang()
-            case "testtool": return TestTool()
+            case "testTool": return TestTool()
             case "infer": return Infer()
             case "phasar": return Phasar()
             case _: raise ValueError(f"No tool for {tool}")

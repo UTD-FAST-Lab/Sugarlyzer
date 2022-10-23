@@ -72,7 +72,7 @@ class Tester:
 
         logger.info(f"Current environment is {os.environ}")
 
-        output_folder = Path("/results") / Path(self.tool) / Path(self.program.name)
+        output_folder = Path("/results") / Path(self.tool.name) / Path(self.program.name)
         output_folder.mkdir(exist_ok=True, parents=True)
 
         # 1. Download target program.
