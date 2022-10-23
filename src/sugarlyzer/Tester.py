@@ -69,6 +69,26 @@ class Tester:
         logger.info(f"User defined space for file {file} is {recommended_space}")
         return included_directories, included_files, recommended_space
 
+    def run_config_and_get_alarms(self, b: ProgramSpecification.BaselineConfig) -> Iterable[Alarm]:
+        config_builder = []
+        for d, s in b.configuration:
+            if d == "DEF":
+                config_builder.append('-D' + ((s + '=1') if '=' not in s else s))
+            elif d == "UNDEF":
+                config_builder.append('-U' + s)
+
+        inc_files, inc_dirs = self.program.get_inc_files_and_dirs(b.source_file)
+        alarms = self.tool.analyze_and_read(b.source_file, command_line_defs=config_builder,
+                                            included_files=inc_files,
+                                            included_dirs=inc_dirs,
+                                            recommended_space=SugarCRunner.get_recommended_space(b.source_file,
+                                                                                                 inc_files,
+                                                                                                 inc_dirs))
+        for a in alarms:
+            a.model = [f"{du}_{op}" for du, op in b.configuration]
+        logger.debug(f"Returning {alarms})")
+        return alarms
+
     def execute(self):
 
         logger.info(f"Current environment is {os.environ}")
@@ -159,14 +179,17 @@ class Tester:
                         m = m.replace(' ', '')
                         config.append(m[:3], m[4:])  # Skip the middle _
                     logger.info(f"Constructed validation model {config} from {m}")
+                    b = ProgramSpecification.BaselineConfig(source_file=Path(str(a.input_file.absolute()).replace('.desugared', '')),
+                                                            configuration=config)
+                    logger.info(f"Now running validation on {b}")
 
-                    for a in
-
-
-
-
-
-
+                    verify = self.run_config_and_get_alarms(b)
+                    for v in verify:
+                        if a.sanitized_message == v.sanitized_message:
+                            if a.function_line_range[1].includes(v.line_in_input_file):
+                                a.verified = "PARTIAL"
+                            if a.original_line_range.includes(v.line_in_input_file):
+                                a.verified = "FULL"
 
         else:
             baseline_alarms: List[Alarm] = []
@@ -174,28 +197,9 @@ class Tester:
             count = 0
             count += 1
 
-            def run_config_and_get_alarms(b: ProgramSpecification.BaselineConfig) -> Iterable[Alarm]:
-                config_builder = []
-                for d, s in b.configuration:
-                    if d == "DEF":
-                        config_builder.append('-D' + ((s + '=1') if '=' not in s else s))
-                    elif d == "UNDEF":
-                        config_builder.append('-U' + s)
-
-                inc_files, inc_dirs = self.program.get_inc_files_and_dirs(b.source_file)
-                alarms = self.tool.analyze_and_read(b.source_file, command_line_defs=config_builder,
-                                               included_files=inc_files,
-                                               included_dirs=inc_dirs,
-                                               recommended_space=SugarCRunner.get_recommended_space(b.source_file,
-                                                                                                    inc_files,
-                                                                                                    inc_dirs))
-                for a in alarms:
-                    a.model = [f"{du}_{op}" for du, op in b.configuration]
-                logger.debug(f"Returning {alarms})")
-                return alarms
 
             for i in tqdm(
-                    ProcessPool().imap(run_config_and_get_alarms, i := list(self.program.get_baseline_configurations())),
+                    ProcessPool().imap(self.run_config_and_get_alarms, i := list(self.program.get_baseline_configurations())),
                                        total=len(list(i))):
                 baseline_alarms.extend(i)
 
