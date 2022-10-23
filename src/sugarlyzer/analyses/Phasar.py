@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 class Phasar(AbstractTool):
 
     def __init__(self):
-        super().__init__(PhasarReader(), keep_mem=True, make_main=True, remove_errors=False)
+        super().__init__(PhasarReader(), name='phasar', keep_mem=True, make_main=True, remove_errors=False)
 
     def analyze(self, file: Path,
                 included_dirs: Iterable[Path] = None,

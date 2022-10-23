@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 class Infer(AbstractTool):
 
     def __init__(self):
-        super().__init__(InferReader(), make_main=True, keep_mem=True, remove_errors=True)
+        super().__init__(InferReader(), name='infer', make_main=True, keep_mem=True, remove_errors=True)
 
     def analyze(self, file: Path,
                 included_dirs: Iterable[Path] = None,

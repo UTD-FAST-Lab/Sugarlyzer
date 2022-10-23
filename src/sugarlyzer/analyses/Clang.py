@@ -17,7 +17,7 @@ logger = logging.getLogger(__name__)
 class Clang(AbstractTool):
 
     def __init__(self):
-        super().__init__(ClangReader(), keep_mem=True, make_main=True, remove_errors=False)
+        super().__init__(ClangReader(), name='clang', keep_mem=True, make_main=True, remove_errors=False)
 
     def analyze(self, file: Path,
                 included_dirs: Iterable[Path] = None,
