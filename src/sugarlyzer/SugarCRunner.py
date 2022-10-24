@@ -244,7 +244,7 @@ def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Al
         s = Solver()
         missingCondition = False
         for a in w.static_condition_results:
-            if not a['var'] in condition_mapping.replacers.keys():
+            if a['var'] == '' or not a['var'] in condition_mapping.replacers.keys():
                 missingCondition = True
                 break
             if a['val']:
