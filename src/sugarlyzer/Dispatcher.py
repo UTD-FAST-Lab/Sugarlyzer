@@ -159,6 +159,7 @@ def ensure_empty_file_ask_if_necessary(file: Path, force: bool):
     :param force: Whether to delete without permission.
     :return:
     """
+    file.parent.mkdir(parents=True, exist_ok=True)
     if file.exists():
         if force:
             os.remove(file)
