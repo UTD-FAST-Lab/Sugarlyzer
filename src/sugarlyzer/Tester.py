@@ -174,10 +174,11 @@ class Tester:
 
             if self.validate:
                 for a in alarms:
+                    logger.debug(f"Model is {a.model}")
                     if a.model is not None:
                         for m in a.model:
                             m = str(m)
-                            logger.debug(f"model is {m}")
+                            logger.debug(f"Current element of model is {m}")
                             config: List[Tuple[str, str]] = []
                             #  "configuration" : "[USE___OPTIMIZE__ = 1,\n USE__FORTIFY_SOURCE = 1,\n DEF_CONFIG_PLATFORM_SOLARIS = False,\n DEF___malloc_and_calloc_defined = False,\n DEF__STDLIB_H = False,\n DEF___OPTIMIZE__ = True,\n DEF__FORTIFY_SOURCE = True,\n DEF___STRICT_ANSI__ = False,\n DEF___need___FILE = True,\n DEF___int8_t_defined = False,\n DEF___time_t_defined = False,\n DEF__BITS_TYPESIZES_H = False]",
                             m = m.replace(' ', '')
