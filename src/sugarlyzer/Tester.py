@@ -174,25 +174,27 @@ class Tester:
 
             if self.validate:
                 for a in alarms:
-                    for m in a.model:
-                        m = str(m)
-                        logger.debug(f"model is {m}")
-                        config: List[Tuple[str, str]] = []
-                        #  "configuration" : "[USE___OPTIMIZE__ = 1,\n USE__FORTIFY_SOURCE = 1,\n DEF_CONFIG_PLATFORM_SOLARIS = False,\n DEF___malloc_and_calloc_defined = False,\n DEF__STDLIB_H = False,\n DEF___OPTIMIZE__ = True,\n DEF__FORTIFY_SOURCE = True,\n DEF___STRICT_ANSI__ = False,\n DEF___need___FILE = True,\n DEF___int8_t_defined = False,\n DEF___time_t_defined = False,\n DEF__BITS_TYPESIZES_H = False]",
-                        m = m.replace(' ', '')
-                        config.append((m[:3], m[4:])) # Skip the middle _
-                    logger.info(f"Constructed validation model {config} from {m}")
-                    b = ProgramSpecification.BaselineConfig(source_file=Path(str(a.input_file.absolute()).replace('.desugared', '')),
+                    if a.model is not None:
+                        for m in a.model:
+                            m = str(m)
+                            logger.debug(f"model is {m}")
+                            config: List[Tuple[str, str]] = []
+                            #  "configuration" : "[USE___OPTIMIZE__ = 1,\n USE__FORTIFY_SOURCE = 1,\n DEF_CONFIG_PLATFORM_SOLARIS = False,\n DEF___malloc_and_calloc_defined = False,\n DEF__STDLIB_H = False,\n DEF___OPTIMIZE__ = True,\n DEF__FORTIFY_SOURCE = True,\n DEF___STRICT_ANSI__ = False,\n DEF___need___FILE = True,\n DEF___int8_t_defined = False,\n DEF___time_t_defined = False,\n DEF__BITS_TYPESIZES_H = False]",
+                            m = m.replace(' ', '')
+                            config.append((m[:3], m[4:])) # Skip the middle _
+                        logger.info(f"Constructed validation model {config} from {m}")
+                        b = ProgramSpecification.BaselineConfig(source_file=Path(str(a.input_file.absolute()).replace('.desugared', '')),
                                                             configuration=config)
-                    logger.info(f"Now running validation on {b}")
+                        logger.info(f"Now running validation on {b}")
 
-                    verify = self.run_config_and_get_alarms(b)
-                    for v in verify:
-                        if a.sanitized_message == v.sanitized_message:
-                            if a.function_line_range[1].includes(v.line_in_input_file):
-                                a.verified = "PARTIAL"
-                            if a.original_line_range.includes(v.line_in_input_file):
-                                a.verified = "FULL"
+                        verify = self.run_config_and_get_alarms(b)
+                        for v in verify:
+                            if a.sanitized_message == v.sanitized_message:
+                                if a.function_line_range[1].includes(v.line_in_input_file):
+                                    a.verified = "PARTIAL"
+                                if a.original_line_range.includes(v.line_in_input_file):
+                                    a.verified = "FULL"
+                                    break  # no need to continue
 
         else:
             baseline_alarms: List[Alarm] = []
