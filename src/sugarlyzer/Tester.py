@@ -11,13 +11,13 @@ from enum import Enum, auto
 from pathlib import Path
 from typing import Iterable, List, Dict, Any, TypeVar, Tuple, Set
 
+import dill
 import z3
 # noinspection PyUnresolvedReferences
-from dill import pickle
+import dill as pickle
 from jsonschema.validators import RefResolver, Draft7Validator
 from pathos.multiprocessing import ProcessPool
 # noinspection PyUnresolvedReferences
-from dill import pickle
 from tqdm import tqdm
 
 from src.sugarlyzer import SugarCRunner
@@ -104,73 +104,80 @@ class Tester:
         logger.info(f"Finished downloading target program.")
 
         if not self.baselines:
+            if (p:=Path("/results.pickle")).exists():
+                with open(p, 'rb') as f:
+                    alarms = pickle.load(f)
+            else:
             # 2. Run SugarC
-            logger.info(f"Desugaring the source code in {list(self.program.source_locations)}")
+                logger.info(f"Desugaring the source code in {list(self.program.source_locations)}")
 
-            def desugar(file: Path) -> Tuple[Path, Path, Path, float]: # God, what an ugly tuple
-                included_directories, included_files, recommended_space = self.get_inc_files_and_dirs_for_file(file)
-                start = time.time()
-                # noinspection PyTypeChecker
-                return (*SugarCRunner.desugar_file(file,
-                                                   recommended_space=recommended_space,
-                                                   remove_errors=self.remove_errors,
-                                                   no_stdlibs=True,
-                                                   included_files=included_files,
-                                                   included_directories=included_directories,
-                                                   keep_mem=self.tool.keep_mem,
-                                                   make_main=self.tool.make_main), file, time.time() - start)
+                def desugar(file: Path) -> Tuple[Path, Path, Path, float]: # God, what an ugly tuple
+                    included_directories, included_files, recommended_space = self.get_inc_files_and_dirs_for_file(file)
+                    start = time.time()
+                    # noinspection PyTypeChecker
+                    return (*SugarCRunner.desugar_file(file,
+                                                       recommended_space=recommended_space,
+                                                       remove_errors=self.remove_errors,
+                                                       no_stdlibs=True,
+                                                       included_files=included_files,
+                                                       included_directories=included_directories,
+                                                       keep_mem=self.tool.keep_mem,
+                                                       make_main=self.tool.make_main), file, time.time() - start)
 
-            logger.info(f"Source files are {list(self.program.get_source_files())}")
-            input_files: Iterable[str] = ProcessPool(8).map(desugar, self.program.get_source_files())
-            logger.info(f"Finished desugaring the source code.")
-            # 3/4. Run analysis tool, and read its results
-            logger.info(f"Collected {len([c for c in self.program.get_source_files()])} .c files to analyze.")
+                logger.info(f"Source files are {list(self.program.get_source_files())}")
+                input_files: Iterable[str] = ProcessPool(8).map(desugar, self.program.get_source_files())
+                logger.info(f"Finished desugaring the source code.")
+                # 3/4. Run analysis tool, and read its results
+                logger.info(f"Collected {len([c for c in self.program.get_source_files()])} .c files to analyze.")
 
-            def analyze_read_and_process(desugared_file: Path, original_file: Path, desugaring_time: float = None) -> Iterable[Alarm]:
-                included_directories, included_files, user_defined_space = self.get_inc_files_and_dirs_for_file(
-                    original_file)
-                alarms = process_alarms(self.tool.analyze_and_read(desugared_file, included_files=included_files,
-                                                              included_dirs=included_directories,
-                                                              recommended_space=user_defined_space), desugared_file)
-                for a in alarms:
-                    a.desugaring_time = desugaring_time
-                return alarms
+                def analyze_read_and_process(desugared_file: Path, original_file: Path, desugaring_time: float = None) -> Iterable[Alarm]:
+                    included_directories, included_files, user_defined_space = self.get_inc_files_and_dirs_for_file(
+                        original_file)
+                    alarms = process_alarms(self.tool.analyze_and_read(desugared_file, included_files=included_files,
+                                                                  included_dirs=included_directories,
+                                                                  recommended_space=user_defined_space), desugared_file)
+                    for a in alarms:
+                        a.desugaring_time = desugaring_time
+                    return alarms
 
-            alarm_collections: List[Iterable[Alarm]] = [analyze_read_and_process(desugared_file=d, original_file=o, desugaring_time=dt) for
-                                                        d, _, o, dt in input_files]
-            alarms = list()
-            for collec in alarm_collections:
-                alarms.extend(collec)
-            logger.info(f"Got {len(alarms)} unique alarms.")
+                alarm_collections: List[Iterable[Alarm]] = [analyze_read_and_process(desugared_file=d, original_file=o, desugaring_time=dt) for
+                                                            d, _, o, dt in input_files]
+                alarms = list()
+                for collec in alarm_collections:
+                    alarms.extend(collec)
+                logger.info(f"Got {len(alarms)} unique alarms.")
 
-            buckets: List[List[Alarm]] = [[]]
+                buckets: List[List[Alarm]] = [[]]
 
-            def alarm_match(a: Alarm, b: Alarm):
-                return a.line_in_input_file == b.line_in_input_file and a.message == b.message and a.input_file == b.input_file
+                def alarm_match(a: Alarm, b: Alarm):
+                    return a.line_in_input_file == b.line_in_input_file and a.message == b.message and a.input_file == b.input_file
 
-            # Collect alarms into "buckets" based on equivalence.
-            # Then, for each bucket, we will return one alarm, combining all of the
-            #  models into a list.
-            logger.debug("Now deduplicating results.")
-            for ba in alarms:
-                for bucket in buckets:
-                    if len(bucket) > 0 and alarm_match(bucket[0], ba):
-                        logger.debug("Found matching bucket.")
-                        bucket.append(ba)
-                        break
+                # Collect alarms into "buckets" based on equivalence.
+                # Then, for each bucket, we will return one alarm, combining all of the
+                #  models into a list.
+                logger.debug("Now deduplicating results.")
+                for ba in alarms:
+                    for bucket in buckets:
+                        if len(bucket) > 0 and alarm_match(bucket[0], ba):
+                            logger.debug("Found matching bucket.")
+                            bucket.append(ba)
+                            break
 
-                # If we get here, then there wasn't a bucket that this could fit into,
-                #  So it gets its own bucket and we add a new one to the end of the list.
-                logger.debug("Creating a new bucket.")
-                buckets[-1].append(ba)
-                buckets.append([])
+                    # If we get here, then there wasn't a bucket that this could fit into,
+                    #  So it gets its own bucket and we add a new one to the end of the list.
+                    logger.debug("Creating a new bucket.")
+                    buckets[-1].append(ba)
+                    buckets.append([])
 
-            logger.debug("Now aggregating alarms.")
-            alarms = []
-            for bucket in (b for b in buckets if len(b) > 0):
-                alarms.append(bucket[0])
-                alarms[-1].presence_condition = f"Or({','.join(str(m.presence_condition) for m in bucket)})"
-            logger.debug("Done.")
+                logger.debug("Now aggregating alarms.")
+                alarms = []
+                for bucket in (b for b in buckets if len(b) > 0):
+                    alarms.append(bucket[0])
+                    alarms[-1].presence_condition = f"Or({','.join(str(m.presence_condition) for m in bucket)})"
+                logger.debug("Done.")
+
+                with open("/results.pickle", "wb") as f:
+                    pickle.dump(alarms, f)
 
             if self.validate:
                 for a in alarms:
