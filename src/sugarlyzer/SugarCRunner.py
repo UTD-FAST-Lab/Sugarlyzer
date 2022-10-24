@@ -242,12 +242,20 @@ def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Al
         w: Alarm
         w.static_condition_results = calculate_asserts(w, desugared_file)
         s = Solver()
+        missingCondition = False
         for a in w.static_condition_results:
+            if not a['var'] in condition_mapping.replacers.keys():
+                missingCondition = True
+                break
             if a['val']:
                 s.add(eval(condition_mapping.replacers[a['var']]))
             else:
                 s.add(eval('Not(' + condition_mapping.replacers[a['var']] + ')'))
-        if s.check() == sat:
+        if missingCondition:
+            print('broken condition')
+            w.feasible = False
+            w.model = None
+        elif s.check() == sat:
             m = s.model()
             w.feasible = True
             w.model = m
