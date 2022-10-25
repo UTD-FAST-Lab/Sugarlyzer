@@ -5,6 +5,7 @@ import os
 import re
 import subprocess
 import sys
+import tempfile
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Tuple, List, Optional, Dict, Iterable
@@ -180,10 +181,10 @@ def desugar_file(file_to_desugar: Path,
     cmd = ['java', 'superc.SugarC', *commandline_args, *included_files, *included_directories,
            file_to_desugar]
     cmd = [str(s) for s in cmd]
-    logging.info(f"Cmd is {' '.join(cmd)}")
 
-    with open(USER_DEFS, 'w') as outfile:
-        outfile.write(recommended_space if recommended_space is not None else "" + "\n")
+    with tempfile.NamedTemporaryFile(delete=False, mode="w") as outfile:
+        outfile.write(recommended_space if recommended_space not in ['', None] else "\\empty" + "\n")
+        included_files.append(outfile.name)
         if remove_errors:
             to_append = ['']
             its = 0
@@ -196,6 +197,7 @@ def desugar_file(file_to_desugar: Path,
                 logging.debug(f"Created desugared file {desugared_file}")
                 to_append = get_bad_constraints(desugared_file)
                 logging.info(f'removed errors: {to_append}')
+    logging.info(f"Cmd is {' '.join(cmd)}")
     run_sugarc(" ".join(cmd), file_to_desugar, desugared_file, log_file)
     logger.debug(f"Wrote to {log_file}")
     return desugared_file, log_file
