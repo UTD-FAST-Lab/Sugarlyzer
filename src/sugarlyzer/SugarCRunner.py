@@ -178,13 +178,13 @@ def desugar_file(file_to_desugar: Path,
         case _:
             log_file = Path(log_file)
 
-    cmd = ['java', 'superc.SugarC', *commandline_args, *included_files, *included_directories,
-           file_to_desugar]
-    cmd = [str(s) for s in cmd]
 
     with tempfile.NamedTemporaryFile(delete=False, mode="w") as outfile:
         outfile.write(recommended_space if recommended_space not in ['', None] else "\\empty" + "\n")
         included_files.append(outfile.name)
+        cmd = ['java', 'superc.SugarC', *commandline_args, *included_files, *included_directories,
+               file_to_desugar]
+        cmd = [str(s) for s in cmd]
         if remove_errors:
             to_append = ['']
             its = 0
