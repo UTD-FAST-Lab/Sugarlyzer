@@ -159,6 +159,11 @@ def desugar_file(file_to_desugar: Path,
     if included_files is None:
         included_files = []
 
+    if recommended_space not in ['', None]:
+        with tempfile.NamedTemporaryFile(delete=False, mode="w") as outfile:
+            outfile.write(recommended_space)
+            included_files.append(outfile.name)
+
     included_files = list(itertools.chain(*zip(['-include'] * len(included_files), included_files)))
     included_directories = list(itertools.chain(*zip(['-I'] * len(included_directories), included_directories)))
     commandline_args = []
@@ -178,25 +183,22 @@ def desugar_file(file_to_desugar: Path,
         case _:
             log_file = Path(log_file)
 
+    cmd = ['java', 'superc.SugarC', *commandline_args, *included_files, *included_directories,
+           file_to_desugar]
+    cmd = [str(s) for s in cmd]
+    if remove_errors:
+        to_append = ['']
+        its = 0
+        while len(to_append) > 0 and its < 2:
+            its += 1
+            logger.debug(f"to_append is {to_append}")
+            for d in to_append:
+                outfile.write(d + "\n")
+            run_sugarc(" ".join(cmd), file_to_desugar, desugared_file, log_file)
+            logging.debug(f"Created desugared file {desugared_file}")
+            to_append = get_bad_constraints(desugared_file)
+            logging.info(f'removed errors: {to_append}')
 
-    with tempfile.NamedTemporaryFile(delete=False, mode="w") as outfile:
-        outfile.write(recommended_space if recommended_space not in ['', None] else "\\empty" + "\n")
-        included_files.append(outfile.name)
-        cmd = ['java', 'superc.SugarC', *commandline_args, *included_files, *included_directories,
-               file_to_desugar]
-        cmd = [str(s) for s in cmd]
-        if remove_errors:
-            to_append = ['']
-            its = 0
-            while len(to_append) > 0 and its < 2:
-                its += 1
-                logger.debug(f"to_append is {to_append}")
-                for d in to_append:
-                    outfile.write(d + "\n")
-                run_sugarc(" ".join(cmd), file_to_desugar, desugared_file, log_file)
-                logging.debug(f"Created desugared file {desugared_file}")
-                to_append = get_bad_constraints(desugared_file)
-                logging.info(f'removed errors: {to_append}')
     logging.info(f"Cmd is {' '.join(cmd)}")
     run_sugarc(" ".join(cmd), file_to_desugar, desugared_file, log_file)
     logger.debug(f"Wrote to {log_file}")
