@@ -183,7 +183,7 @@ def desugar_file(file_to_desugar: Path,
     logging.info(f"Cmd is {' '.join(cmd)}")
 
     with open(USER_DEFS, 'w') as outfile:
-        outfile.write(recommended_space + "\n")
+        outfile.write(recommended_space if recommended_space is not None else "" + "\n")
         if remove_errors:
             to_append = ['']
             its = 0
