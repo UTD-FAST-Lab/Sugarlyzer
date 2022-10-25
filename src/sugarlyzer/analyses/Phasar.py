@@ -40,7 +40,7 @@ class Phasar(AbstractTool):
             logger.warning(f"Running clang on file {str(file)} potentially failed.")
             logger.warning(ps.stdout)
         #run phasar on ll
-        cmd = ['/phasar/build/tools/phasar-llvm/phasar-llvm','-D','IFDSUninitializedVariables','-m',llFile,'-O',output_location]
+        cmd = ['/phasar/build/tools/phasar-llvm/phasar-llvm','-D','IFDSUninitializedVariables','--entry-points=__ALL__','-m',llFile,'-O',output_location]
         logger.info(f"Running cmd {cmd}")
         ps = subprocess.run(cmd, stderr=subprocess.STDOUT, stdout=subprocess.PIPE, text=True)
         if (ps.returncode != 0) or ("error" in ps.stdout.lower()):
