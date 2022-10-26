@@ -99,7 +99,7 @@ class Tester:
                                                    make_main=self.tool.make_main), file, time.time() - start)
 
             logger.info(f"Source files are {list(self.program.get_source_files())}")
-            input_files: Iterable[str] = ProcessPool(8).map(desugar, self.program.get_source_files())
+            input_files: Iterable[str] = ProcessPool().map(desugar, self.program.get_source_files())
             logger.info(f"Finished desugaring the source code.")
             # 3/4. Run analysis tool, and read its results
             logger.info(f"Collected {len([c for c in self.program.get_source_files()])} .c files to analyze.")
@@ -114,8 +114,10 @@ class Tester:
                     a.desugaring_time = desugaring_time
                 return alarms
 
-            alarm_collections: List[Iterable[Alarm]] = [analyze_read_and_process(desugared_file=d, original_file=o, desugaring_time=dt) for
-                                                        d, _, o, dt in input_files]
+            def detupleize(t):
+                return analyze_read_and_process(t[0], t[1], t[2])
+
+            alarm_collections: List[Iterable[Alarm]] = ProcessPool().map(detupleize, ((d, o, dt) for d, _, o, dt in input_files))
             alarms = list()
             for collec in alarm_collections:
                 alarms.extend(collec)
