@@ -159,10 +159,10 @@ def desugar_file(file_to_desugar: Path,
     if included_files is None:
         included_files = []
 
+    outfile = tempfile.NamedTemporaryFile(delete=False, mode="w")
     if recommended_space not in ['', None]:
-        with tempfile.NamedTemporaryFile(delete=False, mode="w") as outfile:
-            outfile.write(recommended_space)
-            included_files.append(outfile.name)
+        outfile.write(recommended_space)
+    included_files.append(outfile.name)
 
     included_files = list(itertools.chain(*zip(['-include'] * len(included_files), included_files)))
     included_directories = list(itertools.chain(*zip(['-I'] * len(included_directories), included_directories)))
@@ -202,6 +202,7 @@ def desugar_file(file_to_desugar: Path,
     logging.info(f"Cmd is {' '.join(cmd)}")
     run_sugarc(" ".join(cmd), file_to_desugar, desugared_file, log_file)
     logger.debug(f"Wrote to {log_file}")
+    outfile.close()
     return desugared_file, log_file
 
 
