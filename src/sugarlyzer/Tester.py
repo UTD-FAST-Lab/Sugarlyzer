@@ -30,10 +30,11 @@ logger = logging.getLogger(__name__)
 
 
 class Tester:
-    def __init__(self, tool: str, program: str, baselines: bool, no_recommended_space: bool):
+    def __init__(self, tool: str, program: str, baselines: bool, no_recommended_space: bool, jobs: int = None):
         self.tool: str = tool
         self.baselines = baselines
         self.no_recommended_space = no_recommended_space
+        self.jobs: int = jobs
 
         def read_json_and_validate(file: str) -> Dict[str, Any]:
             """
@@ -65,7 +66,7 @@ class Tester:
             recommended_space = None
         else:
             recommended_space = SugarCRunner.get_recommended_space(file, included_files, included_directories)
-        logger.info(f"User defined space for file {file} is {recommended_space}")
+        logger.debug(f"User defined space for file {file} is {recommended_space}")
         return included_directories, included_files, recommended_space
 
     def execute(self):
@@ -99,7 +100,7 @@ class Tester:
                                                    make_main=self.tool.make_main), file, time.time() - start)
 
             logger.info(f"Source files are {list(self.program.get_source_files())}")
-            input_files: Iterable[str] = ProcessPool().map(desugar, self.program.get_source_files())
+            input_files: Iterable[str] = ProcessPool(self.jobs).map(desugar, self.program.get_source_files())
             logger.info(f"Finished desugaring the source code.")
             # 3/4. Run analysis tool, and read its results
             logger.info(f"Collected {len([c for c in self.program.get_source_files()])} .c files to analyze.")
@@ -117,7 +118,7 @@ class Tester:
             def detupleize(t):
                 return analyze_read_and_process(t[0], t[1], t[2])
 
-            alarm_collections: List[Iterable[Alarm]] = ProcessPool().map(detupleize, ((d, o, dt) for d, _, o, dt in input_files))
+            alarm_collections: List[Iterable[Alarm]] = ProcessPool(self.jobs).map(detupleize, ((d, o, dt) for d, _, o, dt in input_files))
             alarms = list()
             for collec in alarm_collections:
                 alarms.extend(collec)
@@ -179,7 +180,7 @@ class Tester:
                 return alarms
 
             for i in tqdm(
-                    ProcessPool().imap(run_config_and_get_alarms, i := list(self.program.get_baseline_configurations())),
+                    ProcessPool(self.jobs).imap(run_config_and_get_alarms, i := list(self.program.get_baseline_configurations())),
                                        total=len(list(i))):
                 baseline_alarms.extend(i)
 
@@ -207,6 +208,7 @@ def get_arguments() -> argparse.Namespace:
                    help="""Run the baseline experiments. In these, we configure each 
                    file with every possible configuration, and then run the experiments.""")
     p.add_argument("--no-recommended-space", help="""Do not generate a recommended space.""", action='store_true')
+    p.add_argument("--jobs", help="The number of jobs to use. If None, will use all CPUs", type=int)
     return p.parse_args()
 
 
@@ -228,7 +230,7 @@ def set_up_logging(args: argparse.Namespace) -> None:
 def main():
     args = get_arguments()
     set_up_logging(args)
-    t = Tester(args.tool, args.program, args.baselines, args.no_recommended_space)
+    t = Tester(args.tool, args.program, args.baselines, args.no_recommended_space, args.jobs)
     t.execute()
 
 
