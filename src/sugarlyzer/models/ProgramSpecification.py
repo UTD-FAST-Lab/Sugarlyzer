@@ -108,7 +108,6 @@ class ProgramSpecification:
             if (cur := Path(rootdir) / path).exists():
                 logger.debug(f"Checking if {cur} exists.")
                 results.add(cur)
-        logging.info('xxxxx', path, root, cur)
         match len(results):
             case 0:
                 raise FileNotFoundError(f"Could not resolve path {path} from root {root}")
