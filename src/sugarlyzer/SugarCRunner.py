@@ -266,7 +266,13 @@ def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Al
         elif s.check() == sat:
             m = s.model()
             w.feasible = True
-            w.model = str(m)
+            model = str(m)
+            # Make model string representation nicer.
+            model = model.strip("[]")
+            model = model.replace("\\n", "\n")
+            w.model = []
+            for var in model.strip("\n"):
+                w.model.append(var.strip())
             allConditions = []
             for a in w.static_condition_results:
                 if a['val']:
