@@ -87,10 +87,10 @@ def get_recommended_space(file: Path, inc_files: Iterable[Path], inc_dirs: Itera
     searchingDirs = list(inc_dirs)
     searchingDirs.append(os.getcwd())
     if no_stdlibs:
-        with tempfile.NamedTemporaryFile(mode='w') as f:
-            f.write("int main() {return 0;}")
-            f.seek(0)
-            gccOut = subprocess.Popen(f'gcc -v {f.name}', shell=True, stdout=subprocess.PIPE,
+        fd, fil = tempfile.mkstemp(suffix=".c", text=True)
+        with os.fdopen(fd, 'w') as f:
+            f.write("int main() {return 0;}\n")
+        gccOut = subprocess.Popen(f'gcc -v {fil}', shell=True, stdout=subprocess.PIPE,
                                   stderr=subprocess.PIPE)
         out, err = gccOut.communicate()
         gccOut = err.decode()
