@@ -221,7 +221,7 @@ def set_up_logging(args: argparse.Namespace) -> None:
         case _:
             logging_level = logging.DEBUG
 
-    logging_kwargs = {"level": logging_level, "format": '%(asctime)s %(name)s %(levelname)s %(message)s',
+    logging_kwargs = {"level": logging_level, "format": '%(asctime)s %(name)s [%(levelname)s - %(process)d] %(message)s',
                       "handlers": [logging.StreamHandler(), logging.FileHandler("/log", 'w')]}
 
     logging.basicConfig(**logging_kwargs)
