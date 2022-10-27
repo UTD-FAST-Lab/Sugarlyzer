@@ -87,15 +87,18 @@ def get_recommended_space(file: Path, inc_files: Iterable[Path], inc_dirs: Itera
     searchingDirs = list(inc_dirs)
     searchingDirs.append(os.getcwd())
     if no_stdlibs:
-        os.system('echo "int main () {return 0;}" > exampleInclude___.c')
-        gccOut = subprocess.Popen('gcc -v exampleInclude___.c', shell=True, stdout=subprocess.PIPE,
+        with tempfile.NamedTemporaryFile(mode='w') as f:
+            f.write("int main() {return 0;}")
+            f.seek(0)
+            gccOut = subprocess.Popen(f'gcc -v {f.name}', shell=True, stdout=subprocess.PIPE,
                                   stderr=subprocess.PIPE)
-        os.system('rm exampleInclude___.c')
         out, err = gccOut.communicate()
         gccOut = err.decode()
         gccOut = gccOut.split('\n')
         inRange = False
+        logger.debug(f"GCC's output for file {f.name}")
         for lin in gccOut:
+            logger.debug(lin)
             if 'End of search list.' in lin:
                 inRange = False
             elif inRange:
