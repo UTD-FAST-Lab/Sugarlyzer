@@ -60,7 +60,7 @@ def get_image_name(tool: Optional[str]) -> str:
 
 
 # noinspection PyListCreation
-def build_images(tools: List[str], nocache: bool = False) -> None:
+def build_images(tools: List[str], nocache: bool = False, jobs: int = None) -> None:
     """
     Builds the Docker images for the base image and any provided tools.
     :param tools: The list of tools for which Docker images should be constructed.
@@ -80,6 +80,12 @@ def build_images(tools: List[str], nocache: bool = False) -> None:
 
     if nocache:
         map(lambda x: x.append('--no-cache'), cmds)
+    if jobs is None:
+        import multiprocessing
+        jobs = multiprocessing.cpu_count()
+
+    map(lambda x: x.extend(["--build-arg", f"JOBS={jobs}"]), cmds)
+
     logger.info('Building images....')
 
     for cmd in cmds:
