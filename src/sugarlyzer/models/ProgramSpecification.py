@@ -4,6 +4,7 @@ import logging
 import os
 import re
 import subprocess
+import sys
 from dataclasses import dataclass
 from io import StringIO
 from pathlib import Path
@@ -164,7 +165,6 @@ class ProgramSpecification:
         parser = MacroDiscoveryPreprocessor()
         with open(fpa, 'r') as f:
             parser.parse(f.readlines())
-        m = StringIO()
-        parser.write(oh=m)
+        parser.write(oh=sys.stderr)
         logger.info(f"Discovered the following macros in file {fpa}: {parser.collected}")
         return parser.collected
