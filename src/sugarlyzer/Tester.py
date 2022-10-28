@@ -100,7 +100,11 @@ class Tester:
                                                    make_main=self.tool.make_main), file, time.time() - start)
 
             logger.info(f"Source files are {list(self.program.get_source_files())}")
-            input_files: Iterable[str] = ProcessPool(self.jobs).map(desugar, self.program.get_source_files())
+            input_files: List[Tuple]= []
+            print("Desugaring files....")
+            for result in tqdm(ProcessPool(self.jobs).imap(desugar, self.program.get_source_files()),
+                               total=len(list(self.program.get_source_files()))):
+                input_files.append(result)
             logger.info(f"Finished desugaring the source code.")
             # 3/4. Run analysis tool, and read its results
             logger.info(f"Collected {len([c for c in self.program.get_source_files()])} .c files to analyze.")
@@ -118,10 +122,12 @@ class Tester:
             def detupleize(t):
                 return analyze_read_and_process(t[0], t[1], t[2])
 
-            alarm_collections: List[Iterable[Alarm]] = ProcessPool(self.jobs).map(detupleize, ((d, o, dt) for d, _, o, dt in input_files))
-            alarms = list()
-            for collec in alarm_collections:
-                alarms.extend(collec)
+            alarms = []
+            print("Running analysis....")
+            for result in tqdm(ProcessPool(self.jobs).map(detupleize, ((d, o, dt) for d, _, o, dt in input_files)),
+                               total = len(input_files)):
+                alarms.extend(result)
+
             logger.info(f"Got {len(alarms)} unique alarms.")
 
             buckets: List[List[Alarm]] = [[]]
