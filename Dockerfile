@@ -3,7 +3,7 @@ RUN apt-get update -y && apt-get upgrade -y && \
     apt-get install -y software-properties-common gcc apt-transport-https
 RUN add-apt-repository -y ppa:deadsnakes/ppa &&  \
     apt-get install -y cmake z3 python3.10 python3-distutils python3-pip python3-apt python3.10-venv git \
-    bison libjson-java sat4j openjdk-8-jdk default-jdk gcc g++ make libz3-java
+    bison libjson-java sat4j openjdk-8-jdk default-jdk gcc g++ make libz3-java emacs
 
 RUN git clone https://github.com/Z3Prover/z3.git
 WORKDIR z3
