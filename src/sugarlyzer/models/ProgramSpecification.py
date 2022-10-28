@@ -165,6 +165,6 @@ class ProgramSpecification:
         with open(fpa, 'r') as f:
             parser.parse(f.readlines())
         m = StringIO()
-        parser.write(m)
+        parser.write(oh=m)
         logger.info(f"Discovered the following macros in file {fpa}: {parser.collected}")
         return parser.collected
