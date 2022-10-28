@@ -124,7 +124,7 @@ class Tester:
 
             alarms = []
             print("Running analysis....")
-            for result in tqdm(ProcessPool(self.jobs).map(detupleize, ((d, o, dt) for d, _, o, dt in input_files)),
+            for result in tqdm(ProcessPool(self.jobs).imap(detupleize, ((d, o, dt) for d, _, o, dt in input_files)),
                                total = len(input_files)):
                 alarms.extend(result)
 
