@@ -112,20 +112,25 @@ def get_recommended_space(file: Path, inc_files: Iterable[Path], inc_dirs: Itera
         files.append(os.path.abspath(os.path.expanduser(f)))
     fc = 0
     while fc < len(files):
-        macros, includes = parse_file(files[fc])
-        for m in macros:
-            if m not in guards:
-                guards.append(m)
-        for i in includes:
-            logger.debug('searching for file:' + i)
-            for sd in searchingDirs:
-                comboFile = os.path.expanduser(os.path.join(sd, i))
-                if os.path.exists(comboFile):
-                    logger.debug('file found:' + comboFile)
-                    trueFile = os.path.abspath(comboFile)
-                    if trueFile not in files:
-                        files.append(trueFile)
-        fc += 1
+        try:
+            macros, includes = parse_file(files[fc])
+        except UnicodeDecodeError as ude:
+            logger.exception("Could not decode file {files[fc]}")
+        else:
+            for m in macros:
+                if m not in guards:
+                    guards.append(m)
+            for i in includes:
+                logger.debug('searching for file:' + i)
+                for sd in searchingDirs:
+                    comboFile = os.path.expanduser(os.path.join(sd, i))
+                    if os.path.exists(comboFile):
+                        logger.debug('file found:' + comboFile)
+                        trueFile = os.path.abspath(comboFile)
+                        if trueFile not in files:
+                            files.append(trueFile)
+        finally:
+            fc += 1
 
     gccDefs = os.popen('echo | gcc -dM -E -').read()
     if len(guards) > 0:
