@@ -164,7 +164,7 @@ class ProgramSpecification:
     def get_all_macros(self, fpa):
         parser = MacroDiscoveryPreprocessor()
         with open(fpa, 'r') as f:
-            parser.parse(f.readlines())
+            parser.parse(f.read())
         parser.write()
         logger.info(f"Discovered the following macros in file {fpa}: {parser.collected}")
         return parser.collected
