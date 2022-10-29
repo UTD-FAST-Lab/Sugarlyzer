@@ -1,8 +1,34 @@
+import logging
+
 import pcpp
-from pcpp import OutputDirective
+from pcpp import OutputDirective, Action
+
+logger = logging.getLogger(__name__)
 
 
 class MacroDiscoveryPreprocessor(pcpp.Preprocessor):
+
+    def on_include_not_found(self, is_malformed, is_system_include, curdir, includepath):
+        """Called when a #include wasn't found.
+
+        Raise OutputDirective to pass through or remove, else return
+        a suitable path. Remember that Preprocessor.add_path() lets you add search paths.
+
+        The default calls ``self.on_error()`` with a suitable error message about the
+        include file not found if ``is_malformed`` is False, else a suitable error
+        message about a malformed #include, and in both cases raises OutputDirective
+        (pass through).
+        """
+        if is_malformed:
+            self.on_error(self.lastdirective.source if self.lastdirective is not None else self.lastdirective,
+                          self.lastdirective.lineno if self.lastdirective is not None else 0,
+                          "Malformed #include statement: %s" % includepath)
+        else:
+            self.on_error(self.lastdirective.source if self.lastdirective is not None else self.lastdirective,
+                          self.lastdirective.lineno if self.lastdirective is not None else 0,
+                          "Include file '%s' not found" % includepath)
+        raise OutputDirective(Action.IgnoreAndPassThrough)
+
     def on_directive_handle(self, directive, toks, ifpassthru, precedingtoks):
         if directive.value == 'define':
             self.defined.extend([t.value for t in toks])
@@ -14,16 +40,18 @@ class MacroDiscoveryPreprocessor(pcpp.Preprocessor):
         self.__collected = collected
         super(MacroDiscoveryPreprocessor, self).__init__(*args, **kwargs)
 
-
     @property
     def collected(self):
-        return [*[m for m in self.macros if m not in ['__DATE__', '__TIME__', '__PCPP__', '__FILE__', *self.defined]],
-                *self.__collected]
+        return set([*[m for m in self.macros if m not in ['__DATE__', '__TIME__', '__PCPP__', '__FILE__', *self.defined]],
+                *self.__collected])
 
     def on_unknown_macro_in_defined_expr(self, tok):
         self.__collected.append(tok.value)
         return None  # Pass through as expanded as possible
 
-    def on_unknown_macro_in_expr(self, tok):
-        self.__collected.append(tok.value)
+    def on_unknown_macro_in_expr(self, tok: str):
+        if isinstance(tok, str):
+            self.__collected.append(tok)
+        else:
+            self.__collected.append(tok.value)
         return None  # Pass through as expanded as possible
