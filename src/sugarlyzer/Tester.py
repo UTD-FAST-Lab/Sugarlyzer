@@ -31,10 +31,11 @@ logger = logging.getLogger(__name__)
 
 
 class Tester:
-    def __init__(self, tool: str, program: str, baselines: bool, no_recommended_space: bool, validate: bool):
+    def __init__(self, tool: str, program: str, baselines: bool, no_recommended_space: bool, jobs: int = None, validate: bool):
         self.tool: str = tool
         self.baselines = baselines
         self.no_recommended_space = no_recommended_space
+        self.jobs: int = jobs
         self.validate = validate
 
         def read_json_and_validate(file: str) -> Dict[str, Any]:
@@ -67,7 +68,7 @@ class Tester:
             recommended_space = None
         else:
             recommended_space = SugarCRunner.get_recommended_space(file, included_files, included_directories)
-        logger.info(f"User defined space for file {file} is {recommended_space}")
+        logger.debug(f"User defined space for file {file} is {recommended_space}")
         return included_directories, included_files, recommended_space
 
     def run_config_and_get_alarms(self, b: ProgramSpecification.BaselineConfig) -> Iterable[Alarm]:
@@ -121,7 +122,11 @@ class Tester:
                                                    make_main=self.tool.make_main), file, time.time() - start)
 
             logger.info(f"Source files are {list(self.program.get_source_files())}")
-            input_files: Iterable[str] = ProcessPool(8).map(desugar, self.program.get_source_files())
+            input_files: List[Tuple]= []
+            print("Desugaring files....")
+            for result in tqdm(ProcessPool(self.jobs).imap(desugar, self.program.get_source_files()),
+                               total=len(list(self.program.get_source_files()))):
+                input_files.append(result)
             logger.info(f"Finished desugaring the source code.")
             # 3/4. Run analysis tool, and read its results
             logger.info(f"Collected {len([c for c in self.program.get_source_files()])} .c files to analyze.")
@@ -136,11 +141,15 @@ class Tester:
                     a.desugaring_time = desugaring_time
                 return alarms
 
-            alarm_collections: List[Iterable[Alarm]] = [analyze_read_and_process(desugared_file=d, original_file=o, desugaring_time=dt) for
-                                                        d, _, o, dt in input_files]
-            alarms = list()
-            for collec in alarm_collections:
-                alarms.extend(collec)
+            def detupleize(t):
+                return analyze_read_and_process(t[0], t[1], t[2])
+
+            alarms = []
+            print("Running analysis....")
+            for result in tqdm(ProcessPool(self.jobs).imap(detupleize, ((d, o, dt) for d, _, o, dt in input_files)),
+                               total = len(input_files)):
+                alarms.extend(result)
+
             logger.info(f"Got {len(alarms)} unique alarms.")
 
             buckets: List[List[Alarm]] = [[]]
@@ -205,7 +214,7 @@ class Tester:
 
 
             for i in tqdm(
-                    ProcessPool().imap(self.run_config_and_get_alarms, i := list(self.program.get_baseline_configurations())),
+                    ProcessPool(self.jobs).imap(run_config_and_get_alarms, i := list(self.program.get_baseline_configurations())),
                                        total=len(list(i))):
                 baseline_alarms.extend(i)
 
@@ -233,6 +242,7 @@ def get_arguments() -> argparse.Namespace:
                    help="""Run the baseline experiments. In these, we configure each 
                    file with every possible configuration, and then run the experiments.""")
     p.add_argument("--no-recommended-space", help="""Do not generate a recommended space.""", action='store_true')
+    p.add_argument("--jobs", help="The number of jobs to use. If None, will use all CPUs", type=int)
     p.add_argument("--validate", help="""Try running desugared alarms with Z3's configuration to see if they are retained.""",
                    action='store_true')
     return p.parse_args()
@@ -247,7 +257,7 @@ def set_up_logging(args: argparse.Namespace) -> None:
         case _:
             logging_level = logging.DEBUG
 
-    logging_kwargs = {"level": logging_level, "format": '%(asctime)s %(name)s %(levelname)s %(message)s',
+    logging_kwargs = {"level": logging_level, "format": '%(asctime)s %(name)s [%(levelname)s - %(process)d] %(message)s',
                       "handlers": [logging.StreamHandler(), logging.FileHandler("/log", 'w')]}
 
     logging.basicConfig(**logging_kwargs)
@@ -256,7 +266,7 @@ def set_up_logging(args: argparse.Namespace) -> None:
 def main():
     args = get_arguments()
     set_up_logging(args)
-    t = Tester(args.tool, args.program, args.baselines, args.no_recommended_space, args.validate)
+    t = Tester(args.tool, args.program, args.baselines, args.no_recommended_space, args.jobs, args.validate)
     t.execute()
 
 

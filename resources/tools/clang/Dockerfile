@@ -1,4 +1,5 @@
 FROM ubuntu:20.04 AS base-setup
+ARG JOBS
 # SHELL ["/bin/bash", "-c"]
 RUN apt-get update -y && apt-get upgrade -y && \
     apt-get install -y software-properties-common gcc apt-transport-https
@@ -10,7 +11,7 @@ RUN apt-get install -y cmake gcc make zlib1g-dev git
 RUN git clone https://github.com/llvm/llvm-project.git
 RUN cd llvm-project && mkdir build && cd build && \
     cmake -DLLVM_ENABLE_PROJECTS=clang -DCMAKE_BUILD_TYPE=Release -G "Unix Makefiles" ../llvm && \
-    make -j 8
+    make -j ${JOBS}
 
 FROM sugarlyzer/base:latest
 

@@ -3,12 +3,13 @@ RUN apt-get update -y && apt-get upgrade -y && \
     apt-get install -y software-properties-common gcc apt-transport-https
 RUN add-apt-repository -y ppa:deadsnakes/ppa &&  \
     apt-get install -y cmake z3 python3.10 python3-distutils python3-pip python3-apt python3.10-venv git \
-    bison libjson-java sat4j openjdk-8-jdk default-jdk gcc g++ make libz3-java
+    bison libjson-java sat4j openjdk-8-jdk default-jdk gcc g++ make libz3-java emacs
 
+ARG JOBS
 RUN git clone https://github.com/Z3Prover/z3.git
 WORKDIR z3
 RUN mkdir build && cd build && cmake -DZ3_BUILD_JAVA_BINDINGS=ON .. &&  \
-    make && make install
+    make -j ${JOBS} && make install
 WORKDIR /
 ADD "https://api.github.com/repos/appleseedlab/superc/commits?sha=mergingParseErrors&per_page=1" latest_commit
 RUN git clone https://github.com/appleseedlab/superc.git && cd /superc && git checkout mergingParseErrors && cd -
