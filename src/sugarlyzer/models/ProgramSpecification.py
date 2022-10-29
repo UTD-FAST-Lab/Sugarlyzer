@@ -165,6 +165,6 @@ class ProgramSpecification:
         parser = MacroDiscoveryPreprocessor()
         with open(fpa, 'r') as f:
             parser.parse(f.read())
-        parser.write()
+        parser.write(StringIO())
         logger.info(f"Discovered the following macros in file {fpa}: {parser.collected}")
         return parser.collected
