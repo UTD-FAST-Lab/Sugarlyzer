@@ -209,7 +209,7 @@ class Tester:
 
                         verify = self.run_config_and_get_alarms(b)
                         for v in verify:
-                            logger.info(f"Comparing alarms {a} and {v}")
+                            logger.info(f"Comparing alarms {a.as_dict()} and {v.as_dict()}")
                             if a.sanitized_message == v.sanitized_message:
                                 a.verified = "MESSAGE_ONLY"
                             if a.sanitized_message == v.sanitized_message and \
