@@ -27,13 +27,15 @@ def read_arguments() -> argparse.Namespace:
 v will print INFO and above. Two or more v's will print DEBUG or above.""", default=0)
     p.add_argument('--log', help='If specified, logs will be printed to the specified file. Otherwise, logs are printed'
                                  ' to the console.')
-    p.add_argument('--force', action='store_true', help='Do not ask permission to delete existing log and results files.')
+    p.add_argument('--force', action='store_true',
+                   help='Do not ask permission to delete existing log and results files.')
     p.add_argument("--baselines", action="store_true",
                    help="""Run the baseline experiments. In these, we configure each 
                    file with every possible configuration, and then run the experiments.""")
     p.add_argument("--no-recommended-space", help="""Do not generate a recommended space.""", action='store_true')
     p.add_argument("--jobs", help="The number of jobs to use. If None, will use all CPUs", type=int)
-    p.add_argument("--validate", help="""Try running desugared alarms with Z3's configuration to see if they are retained.""",
+    p.add_argument("--validate",
+                   help="""Try running desugared alarms with Z3's configuration to see if they are retained.""",
                    action='store_true')
     return p.parse_args()
 
@@ -153,7 +155,6 @@ def main() -> None:
 
     logging_format = '%(asctime)s %(name)s %(levelname)s %(message)s'
     kwargs = {"format": logging_format, "level": logging_level, "filename": args.log}
-
 
     logging.basicConfig(**kwargs)
     build_images(args.tools)

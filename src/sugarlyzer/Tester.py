@@ -110,7 +110,7 @@ class Tester:
             # 2. Run SugarC
             logger.info(f"Desugaring the source code in {list(self.program.source_locations)}")
 
-            def desugar(file: Path) -> Tuple[Path, Path, Path, float]: # God, what an ugly tuple
+            def desugar(file: Path) -> Tuple[Path, Path, Path, float]:  # God, what an ugly tuple
                 included_directories, included_files, recommended_space = self.get_inc_files_and_dirs_for_file(file)
                 start = time.time()
                 # noinspection PyTypeChecker
@@ -124,7 +124,7 @@ class Tester:
                                                    make_main=self.tool.make_main), file, time.time() - start)
 
             logger.info(f"Source files are {list(self.program.get_source_files())}")
-            input_files: List[Tuple]= []
+            input_files: List[Tuple] = []
             print("Desugaring files....")
             for result in tqdm(ProcessPool(self.jobs).imap(desugar, self.program.get_source_files()),
                                total=len(list(self.program.get_source_files()))):
@@ -133,12 +133,14 @@ class Tester:
             # 3/4. Run analysis tool, and read its results
             logger.info(f"Collected {len([c for c in self.program.get_source_files()])} .c files to analyze.")
 
-            def analyze_read_and_process(desugared_file: Path, original_file: Path, desugaring_time: float = None) -> Iterable[Alarm]:
+            def analyze_read_and_process(desugared_file: Path, original_file: Path, desugaring_time: float = None) -> \
+            Iterable[Alarm]:
                 included_directories, included_files, user_defined_space = self.get_inc_files_and_dirs_for_file(
                     original_file)
                 alarms = process_alarms(self.tool.analyze_and_read(desugared_file, included_files=included_files,
-                                                              included_dirs=included_directories,
-                                                              recommended_space=user_defined_space), desugared_file)
+                                                                   included_dirs=included_directories,
+                                                                   recommended_space=user_defined_space),
+                                        desugared_file)
                 for a in alarms:
                     a.desugaring_time = desugaring_time
                 return alarms
@@ -149,7 +151,7 @@ class Tester:
             alarms = []
             print("Running analysis....")
             for result in tqdm(ProcessPool(self.jobs).imap(detupleize, ((d, o, dt) for d, _, o, dt in input_files)),
-                               total = len(input_files)):
+                               total=len(input_files)):
                 alarms.extend(result)
 
             logger.info(f"Got {len(alarms)} unique alarms.")
@@ -186,24 +188,28 @@ class Tester:
             if self.validate:
                 print("Now validating....")
                 for a in tqdm(alarms):
+                    a.verified = "UNVERIFIED"
                     logger.debug(f"Model is {a.model}")
                     if a.model is not None:
                         config: List[Tuple[str, str]] = []
                         for k, v in a.model.items():
                             if k.startswith('DEF_'):
                                 match v.lower():
-                                    case 'true': config.append(('DEF', k[4:]))
-                                    case 'false': config.append(('UNDEF', k[4:]))
+                                    case 'true':
+                                        config.append(('DEF', k[4:]))
+                                    case 'false':
+                                        config.append(('UNDEF', k[4:]))
                             elif k.startswith('USE_'):
                                 config.append(('DEF', f"{k[4:]}={v}"))
                         print(f"Constructed validation model {config} from {a.model}")
-                        b = ProgramSpecification.BaselineConfig(source_file=Path(str(a.input_file.absolute()).replace('.desugared', '')),
-                                                            configuration=config)
+                        b = ProgramSpecification.BaselineConfig(
+                            source_file=Path(str(a.input_file.absolute()).replace('.desugared', '')),
+                            configuration=config)
                         logger.info(f"Now running validation on {b}")
 
                         verify = self.run_config_and_get_alarms(b)
-                        a.verified = "UNVERIFIED"
                         for v in verify:
+                            logger.info(f"Comparing alarms {a} and {v}")
                             if a.sanitized_message == v.sanitized_message:
                                 a.verified = "MESSAGE_ONLY"
                             if a.sanitized_message == v.sanitized_message and \
@@ -220,10 +226,10 @@ class Tester:
             count = 0
             count += 1
 
-
             for i in tqdm(
-                    ProcessPool(self.jobs).imap(self.run_config_and_get_alarms, i := list(self.program.get_baseline_configurations())),
-                                       total=len(list(i))):
+                    ProcessPool(self.jobs).imap(self.run_config_and_get_alarms,
+                                                i := list(self.program.get_baseline_configurations())),
+                    total=len(list(i))):
                 baseline_alarms.extend(i)
 
             alarms = baseline_alarms
@@ -251,7 +257,8 @@ def get_arguments() -> argparse.Namespace:
                    file with every possible configuration, and then run the experiments.""")
     p.add_argument("--no-recommended-space", help="""Do not generate a recommended space.""", action='store_true')
     p.add_argument("--jobs", help="The number of jobs to use. If None, will use all CPUs", type=int)
-    p.add_argument("--validate", help="""Try running desugared alarms with Z3's configuration to see if they are retained.""",
+    p.add_argument("--validate",
+                   help="""Try running desugared alarms with Z3's configuration to see if they are retained.""",
                    action='store_true')
     return p.parse_args()
 
@@ -265,7 +272,8 @@ def set_up_logging(args: argparse.Namespace) -> None:
         case _:
             logging_level = logging.DEBUG
 
-    logging_kwargs = {"level": logging_level, "format": '%(asctime)s %(name)s [%(levelname)s - %(process)d] %(message)s',
+    logging_kwargs = {"level": logging_level,
+                      "format": '%(asctime)s %(name)s [%(levelname)s - %(process)d] %(message)s',
                       "handlers": [logging.StreamHandler(), logging.FileHandler("/log", 'w')]}
 
     logging.basicConfig(**logging_kwargs)
