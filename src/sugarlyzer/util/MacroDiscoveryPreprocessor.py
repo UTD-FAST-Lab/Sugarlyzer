@@ -1,8 +1,7 @@
 import logging
-from argparse import Action
 
 import pcpp
-from pcpp import OutputDirective
+from pcpp import OutputDirective, Action
 
 logger = logging.getLogger(__name__)
 
