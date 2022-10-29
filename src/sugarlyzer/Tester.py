@@ -233,9 +233,8 @@ class Tester:
             count += 1
 
             for i in tqdm(
-                    ProcessPool(self.jobs).imap(self.run_config_and_get_alarms,
-                                                i := list(self.program.get_baseline_configurations())),
-                    total=len(list(i))):
+                    ProcessPool(self.jobs).imap(self.run_config_and_get_alarms, i := list(self.program.get_baseline_configurations())),
+                                       total=len(list(i))):
                 baseline_alarms.extend(i)
 
             alarms = baseline_alarms
