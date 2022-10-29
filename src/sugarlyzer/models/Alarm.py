@@ -77,6 +77,8 @@ class Alarm:
         self.get_recommended_space: bool = None
         self.remove_errors: bool = None
 
+        self.verified: str = None
+
     Printable = TypeVar('Printable')
 
     def as_dict(self) -> Dict[str, Printable]:
@@ -95,6 +97,7 @@ class Alarm:
             "desugaring_time": lambda: self.desugaring_time,
             "get_recommended_space": lambda: self.get_recommended_space,
             "remove_errors": lambda: self.remove_errors,
+            "verified": lambda: self.verified
         }
 
         result = {}

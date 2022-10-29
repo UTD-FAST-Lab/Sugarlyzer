@@ -11,6 +11,7 @@ from enum import Enum, auto
 from pathlib import Path
 from typing import Iterable, List, Dict, Any, TypeVar, Tuple, Set
 
+import z3
 # noinspection PyUnresolvedReferences
 from dill import pickle
 from jsonschema.validators import RefResolver, Draft7Validator
@@ -30,11 +31,12 @@ logger = logging.getLogger(__name__)
 
 
 class Tester:
-    def __init__(self, tool: str, program: str, baselines: bool, no_recommended_space: bool, jobs: int = None):
+    def __init__(self, tool: str, program: str, baselines: bool, no_recommended_space: bool, jobs: int = None, validate: bool):
         self.tool: str = tool
         self.baselines = baselines
         self.no_recommended_space = no_recommended_space
         self.jobs: int = jobs
+        self.validate = validate
 
         def read_json_and_validate(file: str) -> Dict[str, Any]:
             """
@@ -68,6 +70,26 @@ class Tester:
             recommended_space = SugarCRunner.get_recommended_space(file, included_files, included_directories)
         logger.debug(f"User defined space for file {file} is {recommended_space}")
         return included_directories, included_files, recommended_space
+
+    def run_config_and_get_alarms(self, b: ProgramSpecification.BaselineConfig) -> Iterable[Alarm]:
+        config_builder = []
+        for d, s in b.configuration:
+            if d == "DEF":
+                config_builder.append('-D' + ((s + '=1') if '=' not in s else s))
+            elif d == "UNDEF":
+                config_builder.append('-U' + s)
+
+        inc_files, inc_dirs = self.program.get_inc_files_and_dirs(b.source_file)
+        alarms = self.tool.analyze_and_read(b.source_file, command_line_defs=config_builder,
+                                            included_files=inc_files,
+                                            included_dirs=inc_dirs,
+                                            recommended_space=SugarCRunner.get_recommended_space(b.source_file,
+                                                                                                 inc_files,
+                                                                                                 inc_dirs))
+        for a in alarms:
+            a.model = [f"{du}_{op}" for du, op in b.configuration]
+        logger.debug(f"Returning {alarms})")
+        return alarms
 
     def execute(self):
 
@@ -159,31 +181,37 @@ class Tester:
                 alarms[-1].presence_condition = f"Or({','.join(str(m.presence_condition) for m in bucket)})"
             logger.debug("Done.")
 
+            if self.validate:
+                for a in alarms:
+                    logger.debug(f"Model is {a.model}")
+                    if a.model is not None:
+                        for m in a.model:
+                            m = str(m)
+                            logger.debug(f"Current element of model is {m}")
+                            config: List[Tuple[str, str]] = []
+                            #  "configuration" : "[USE___OPTIMIZE__ = 1,\n USE__FORTIFY_SOURCE = 1,\n DEF_CONFIG_PLATFORM_SOLARIS = False,\n DEF___malloc_and_calloc_defined = False,\n DEF__STDLIB_H = False,\n DEF___OPTIMIZE__ = True,\n DEF__FORTIFY_SOURCE = True,\n DEF___STRICT_ANSI__ = False,\n DEF___need___FILE = True,\n DEF___int8_t_defined = False,\n DEF___time_t_defined = False,\n DEF__BITS_TYPESIZES_H = False]",
+                            m = m.replace(' ', '')
+                            config.append((m[:3], m[4:])) # Skip the middle _
+                        logger.info(f"Constructed validation model {config} from {m}")
+                        b = ProgramSpecification.BaselineConfig(source_file=Path(str(a.input_file.absolute()).replace('.desugared', '')),
+                                                            configuration=config)
+                        logger.info(f"Now running validation on {b}")
+
+                        verify = self.run_config_and_get_alarms(b)
+                        for v in verify:
+                            if a.sanitized_message == v.sanitized_message:
+                                if a.function_line_range[1].includes(v.line_in_input_file):
+                                    a.verified = "PARTIAL"
+                                if a.original_line_range.includes(v.line_in_input_file):
+                                    a.verified = "FULL"
+                                    break  # no need to continue
+
         else:
             baseline_alarms: List[Alarm] = []
 
             count = 0
             count += 1
 
-            def run_config_and_get_alarms(b: ProgramSpecification.BaselineConfig) -> Iterable[Alarm]:
-                config_builder = []
-                for d, s in b.configuration:
-                    if d == "DEF":
-                        config_builder.append('-D' + ((s + '=1') if '=' not in s else s))
-                    elif d == "UNDEF":
-                        config_builder.append('-U' + s)
-
-                inc_files, inc_dirs = self.program.get_inc_files_and_dirs(b.source_file)
-                alarms = self.tool.analyze_and_read(b.source_file, command_line_defs=config_builder,
-                                               included_files=inc_files,
-                                               included_dirs=inc_dirs,
-                                               recommended_space=SugarCRunner.get_recommended_space(b.source_file,
-                                                                                                    inc_files,
-                                                                                                    inc_dirs))
-                for a in alarms:
-                    a.model = [f"{du}_{op}" for du, op in b.configuration]
-                logger.debug(f"Returning {alarms})")
-                return alarms
 
             for i in tqdm(
                     ProcessPool(self.jobs).imap(run_config_and_get_alarms, i := list(self.program.get_baseline_configurations())),
@@ -215,6 +243,8 @@ def get_arguments() -> argparse.Namespace:
                    file with every possible configuration, and then run the experiments.""")
     p.add_argument("--no-recommended-space", help="""Do not generate a recommended space.""", action='store_true')
     p.add_argument("--jobs", help="The number of jobs to use. If None, will use all CPUs", type=int)
+    p.add_argument("--validate", help="""Try running desugared alarms with Z3's configuration to see if they are retained.""",
+                   action='store_true')
     return p.parse_args()
 
 
@@ -236,7 +266,7 @@ def set_up_logging(args: argparse.Namespace) -> None:
 def main():
     args = get_arguments()
     set_up_logging(args)
-    t = Tester(args.tool, args.program, args.baselines, args.no_recommended_space, args.jobs)
+    t = Tester(args.tool, args.program, args.baselines, args.no_recommended_space, args.jobs, args.validate)
     t.execute()
 
 
