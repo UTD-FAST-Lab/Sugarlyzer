@@ -212,9 +212,12 @@ class Tester:
                             logger.info(f"Comparing alarms {a.as_dict()} and {v.as_dict()}")
                             if a.sanitized_message == v.sanitized_message:
                                 a.verified = "MESSAGE_ONLY"
-                            if a.sanitized_message == v.sanitized_message and \
-                                    a.function_line_range[1].includes(v.line_in_input_file):
-                                a.verified = "FUNCTION_LEVEL"
+                            try:
+                                if a.sanitized_message == v.sanitized_message and \
+                                        a.function_line_range[1].includes(v.line_in_input_file):
+                                    a.verified = "FUNCTION_LEVEL"
+                            except ValueError as ve:
+                                pass
                             if a.sanitized_message == v.sanitized_message and \
                                     a.original_line_range.includes(v.line_in_input_file):
                                 a.verified = "FULL"
