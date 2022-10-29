@@ -187,12 +187,14 @@ class Tester:
                 for a in tqdm(alarms):
                     logger.debug(f"Model is {a.model}")
                     if a.model is not None:
+                        config: List[Tuple[str, str]] = []
                         for k, v in a.model.items():
-                            config: List[Tuple[str, str]] = []
-                            if v.upper() == 'FALSE':
-                                config.append(("UNDEF", k))
-                            else:
-                                config.append(("DEF", k))
+                            if k.startswith('DEF_'):
+                                match v.lower():
+                                    case 'true': config.append(('DEF', k[4:]))
+                                    case 'false': config.append(('UNDEF', k[4:]))
+                            elif k.startswith('USE_'):
+                                config.append(('DEF', f"{k[4:]}={v}"))
                         logger.info(f"Constructed validation model {config} from {a.model}")
                         b = ProgramSpecification.BaselineConfig(source_file=Path(str(a.input_file.absolute()).replace('.desugared', '')),
                                                             configuration=config)
