@@ -34,6 +34,9 @@ class InferAlarm(Alarm):
         san = re.sub(r'__(.*)_\d+', r'\1', san)
         if san.endswith(']'):
             san = re.sub(r' \[.*\]$', '', san)
+
+        san = re.sub("line \d*", "SANITIZED", san)
+        san = re.sub("column \d*", "SANITIZED", san)
         return san
 
     @property
