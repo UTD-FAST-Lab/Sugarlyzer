@@ -81,6 +81,7 @@ class Tester:
                 config_builder.append('-U' + s)
 
         inc_files, inc_dirs = self.program.get_inc_files_and_dirs(b.source_file)
+        logger.info(f"Running analysis on file {b.source_file} with config {' '.join(config_builder)}")
         alarms = self.tool.analyze_and_read(b.source_file, command_line_defs=config_builder,
                                             included_files=inc_files,
                                             included_dirs=inc_dirs,
@@ -109,7 +110,7 @@ class Tester:
             # 2. Run SugarC
             logger.info(f"Desugaring the source code in {list(self.program.source_locations)}")
 
-            def desugar(file: Path) -> Tuple[Path, Path, Path, float]: # God, what an ugly tuple
+            def desugar(file: Path) -> Tuple[Path, Path, Path, float]:  # God, what an ugly tuple
                 included_directories, included_files, recommended_space = self.get_inc_files_and_dirs_for_file(file)
                 start = time.time()
                 # noinspection PyTypeChecker
@@ -123,7 +124,7 @@ class Tester:
                                                    make_main=self.tool.make_main), file, time.time() - start)
 
             logger.info(f"Source files are {list(self.program.get_source_files())}")
-            input_files: List[Tuple]= []
+            input_files: List[Tuple] = []
             print("Desugaring files....")
             for result in tqdm(ProcessPool(self.jobs).imap(desugar, self.program.get_source_files()),
                                total=len(list(self.program.get_source_files()))):
@@ -132,12 +133,14 @@ class Tester:
             # 3/4. Run analysis tool, and read its results
             logger.info(f"Collected {len([c for c in self.program.get_source_files()])} .c files to analyze.")
 
-            def analyze_read_and_process(desugared_file: Path, original_file: Path, desugaring_time: float = None) -> Iterable[Alarm]:
+            def analyze_read_and_process(desugared_file: Path, original_file: Path, desugaring_time: float = None) -> \
+            Iterable[Alarm]:
                 included_directories, included_files, user_defined_space = self.get_inc_files_and_dirs_for_file(
                     original_file)
                 alarms = process_alarms(self.tool.analyze_and_read(desugared_file, included_files=included_files,
-                                                              included_dirs=included_directories,
-                                                              recommended_space=user_defined_space), desugared_file)
+                                                                   included_dirs=included_directories,
+                                                                   recommended_space=user_defined_space),
+                                        desugared_file)
                 for a in alarms:
                     a.desugaring_time = desugaring_time
                 return alarms
@@ -148,7 +151,7 @@ class Tester:
             alarms = []
             print("Running analysis....")
             for result in tqdm(ProcessPool(self.jobs).imap(detupleize, ((d, o, dt) for d, _, o, dt in input_files)),
-                               total = len(input_files)):
+                               total=len(input_files)):
                 alarms.extend(result)
 
             logger.info(f"Got {len(alarms)} unique alarms.")
@@ -183,36 +186,51 @@ class Tester:
             logger.debug("Done.")
 
             if self.validate:
-                for a in alarms:
+                print("Now validating....")
+                for a in tqdm(alarms):
+                    a.verified = "UNVERIFIED"
                     logger.debug(f"Model is {a.model}")
                     if a.model is not None:
-                        for m in a.model:
-                            m = str(m)
-                            logger.debug(f"Current element of model is {m}")
-                            config: List[Tuple[str, str]] = []
-                            #  "configuration" : "[USE___OPTIMIZE__ = 1,\n USE__FORTIFY_SOURCE = 1,\n DEF_CONFIG_PLATFORM_SOLARIS = False,\n DEF___malloc_and_calloc_defined = False,\n DEF__STDLIB_H = False,\n DEF___OPTIMIZE__ = True,\n DEF__FORTIFY_SOURCE = True,\n DEF___STRICT_ANSI__ = False,\n DEF___need___FILE = True,\n DEF___int8_t_defined = False,\n DEF___time_t_defined = False,\n DEF__BITS_TYPESIZES_H = False]",
-                            m = m.replace(' ', '')
-                            config.append((m[:3], m[4:])) # Skip the middle _
-                        logger.info(f"Constructed validation model {config} from {m}")
-                        b = ProgramSpecification.BaselineConfig(source_file=Path(str(a.input_file.absolute()).replace('.desugared', '')),
-                                                            configuration=config)
+                        config: List[Tuple[str, str]] = []
+                        for k, v in a.model.items():
+                            if k.startswith('DEF_'):
+                                match v.lower():
+                                    case 'true':
+                                        config.append(('DEF', k[4:]))
+                                    case 'false':
+                                        config.append(('UNDEF', k[4:]))
+                            elif k.startswith('USE_'):
+                                config.append(('DEF', f"{k[4:]}={v}"))
+                        print(f"Constructed validation model {config} from {a.model}")
+                        b = ProgramSpecification.BaselineConfig(
+                            source_file=Path(str(a.input_file.absolute()).replace('.desugared', '')),
+                            configuration=config)
                         logger.info(f"Now running validation on {b}")
 
                         verify = self.run_config_and_get_alarms(b)
                         for v in verify:
+                            logger.info(f"Comparing alarms {a.as_dict()} and {v.as_dict()}")
                             if a.sanitized_message == v.sanitized_message:
-                                if a.function_line_range[1].includes(v.line_in_input_file):
-                                    a.verified = "PARTIAL"
-                                if a.original_line_range.includes(v.line_in_input_file):
+                                a.verified = "MESSAGE_ONLY"
+                            try:
+                                if a.sanitized_message == v.sanitized_message and \
+                                        a.function_line_range[1].includes(v.line_in_input_file):
+                                    a.verified = "FUNCTION_LEVEL"
+                            except ValueError as ve:
+                                pass
+                            try:
+                                if a.sanitized_message == v.sanitized_message and \
+                                        a.original_line_range.includes(v.line_in_input_file):
                                     a.verified = "FULL"
                                     break  # no need to continue
+                            except ValueError as ve:
+                                pass
 
         else:
             baseline_alarms: List[Alarm] = []
 
             count = 0
             count += 1
-
 
             for i in tqdm(
                     ProcessPool(self.jobs).imap(self.run_config_and_get_alarms, i := list(self.program.get_baseline_configurations())),
@@ -244,7 +262,8 @@ def get_arguments() -> argparse.Namespace:
                    file with every possible configuration, and then run the experiments.""")
     p.add_argument("--no-recommended-space", help="""Do not generate a recommended space.""", action='store_true')
     p.add_argument("--jobs", help="The number of jobs to use. If None, will use all CPUs", type=int)
-    p.add_argument("--validate", help="""Try running desugared alarms with Z3's configuration to see if they are retained.""",
+    p.add_argument("--validate",
+                   help="""Try running desugared alarms with Z3's configuration to see if they are retained.""",
                    action='store_true')
     return p.parse_args()
 
@@ -258,7 +277,8 @@ def set_up_logging(args: argparse.Namespace) -> None:
         case _:
             logging_level = logging.DEBUG
 
-    logging_kwargs = {"level": logging_level, "format": '%(asctime)s %(name)s [%(levelname)s - %(process)d] %(message)s',
+    logging_kwargs = {"level": logging_level,
+                      "format": '%(asctime)s %(name)s [%(levelname)s - %(process)d] %(message)s',
                       "handlers": [logging.StreamHandler(), logging.FileHandler("/log", 'w')]}
 
     logging.basicConfig(**logging_kwargs)
