@@ -195,7 +195,7 @@ class Tester:
                                     case 'false': config.append(('UNDEF', k[4:]))
                             elif k.startswith('USE_'):
                                 config.append(('DEF', f"{k[4:]}={v}"))
-                        logger.info(f"Constructed validation model {config} from {a.model}")
+                        print(f"Constructed validation model {config} from {a.model}")
                         b = ProgramSpecification.BaselineConfig(source_file=Path(str(a.input_file.absolute()).replace('.desugared', '')),
                                                             configuration=config)
                         logger.info(f"Now running validation on {b}")
