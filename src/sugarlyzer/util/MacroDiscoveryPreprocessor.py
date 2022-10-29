@@ -19,17 +19,15 @@ class MacroDiscoveryPreprocessor(pcpp.Preprocessor):
         message about a malformed #include, and in both cases raises OutputDirective
         (pass through).
         """
-        try:
-            if is_malformed:
-                self.on_error(self.lastdirective.source, self.lastdirective.lineno,
-                                  "Malformed #include statement: %s" % includepath)
-            else:
-                self.on_error(self.lastdirective.source, self.lastdirective.lineno,
-                              "Include file '%s' not found" % includepath)
-        except AttributeError as ae:
-            logger.exception("Exception encountered while trying to raise error.")
-        finally:
-            raise OutputDirective(Action.IgnoreAndPassThrough)
+        if is_malformed:
+            self.on_error(self.lastdirective.source if self.lastdirective is not None else self.lastdirective,
+                          self.lastdirective.lineno if self.lastdirective is not None else 0,
+                          "Malformed #include statement: %s" % includepath)
+        else:
+            self.on_error(self.lastdirective.source if self.lastdirective is not None else self.lastdirective,
+                          self.lastdirective.lineno if self.lastdirective is not None else 0,
+                          "Include file '%s' not found" % includepath)
+        raise OutputDirective(Action.IgnoreAndPassThrough)
 
     def on_directive_handle(self, directive, toks, ifpassthru, precedingtoks):
         if directive.value == 'define':
@@ -44,13 +42,16 @@ class MacroDiscoveryPreprocessor(pcpp.Preprocessor):
 
     @property
     def collected(self):
-        return [*[m for m in self.macros if m not in ['__DATE__', '__TIME__', '__PCPP__', '__FILE__', *self.defined]],
-                *self.__collected]
+        return set([*[m for m in self.macros if m not in ['__DATE__', '__TIME__', '__PCPP__', '__FILE__', *self.defined]],
+                *self.__collected])
 
     def on_unknown_macro_in_defined_expr(self, tok):
         self.__collected.append(tok.value)
         return None  # Pass through as expanded as possible
 
-    def on_unknown_macro_in_expr(self, tok):
-        self.__collected.append(tok.value)
+    def on_unknown_macro_in_expr(self, tok: str):
+        if isinstance(tok, str):
+            self.__collected.append(tok)
+        else:
+            self.__collected.append(tok.value)
         return None  # Pass through as expanded as possible
