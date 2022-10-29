@@ -201,6 +201,7 @@ class Tester:
                         logger.info(f"Now running validation on {b}")
 
                         verify = self.run_config_and_get_alarms(b)
+                        a.verified = "UNVERIFIED"
                         for v in verify:
                             if a.sanitized_message == v.sanitized_message:
                                 if a.function_line_range[1].includes(v.line_in_input_file):
