@@ -5,6 +5,7 @@ import os
 import re
 import subprocess
 import sys
+import tempfile
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Tuple, List, Optional, Dict, Iterable
@@ -86,15 +87,18 @@ def get_recommended_space(file: Path, inc_files: Iterable[Path], inc_dirs: Itera
     searchingDirs = list(inc_dirs)
     searchingDirs.append(os.getcwd())
     if no_stdlibs:
-        os.system('echo "int main () {return 0;}" > exampleInclude___.c')
-        gccOut = subprocess.Popen('gcc -v exampleInclude___.c', shell=True, stdout=subprocess.PIPE,
+        fd, fil = tempfile.mkstemp(suffix=".c", text=True)
+        with os.fdopen(fd, 'w') as f:
+            f.write("int main() {return 0;}\n")
+        gccOut = subprocess.Popen(f'gcc -v {fil}', shell=True, stdout=subprocess.PIPE,
                                   stderr=subprocess.PIPE)
-        os.system('rm exampleInclude___.c')
         out, err = gccOut.communicate()
         gccOut = err.decode()
         gccOut = gccOut.split('\n')
         inRange = False
+        logger.debug(f"GCC's output for file {f.name}")
         for lin in gccOut:
+            logger.debug(lin)
             if 'End of search list.' in lin:
                 inRange = False
             elif inRange:
@@ -108,20 +112,25 @@ def get_recommended_space(file: Path, inc_files: Iterable[Path], inc_dirs: Itera
         files.append(os.path.abspath(os.path.expanduser(f)))
     fc = 0
     while fc < len(files):
-        macros, includes = parse_file(files[fc])
-        for m in macros:
-            if m not in guards:
-                guards.append(m)
-        for i in includes:
-            logger.debug('searching for file:' + i)
-            for sd in searchingDirs:
-                comboFile = os.path.expanduser(os.path.join(sd, i))
-                if os.path.exists(comboFile):
-                    logger.debug('file found:' + comboFile)
-                    trueFile = os.path.abspath(comboFile)
-                    if trueFile not in files:
-                        files.append(trueFile)
-        fc += 1
+        try:
+            macros, includes = parse_file(files[fc])
+        except UnicodeDecodeError as ude:
+            logger.exception("Could not decode file {files[fc]}")
+        else:
+            for m in macros:
+                if m not in guards:
+                    guards.append(m)
+            for i in includes:
+                logger.debug('searching for file:' + i)
+                for sd in searchingDirs:
+                    comboFile = os.path.expanduser(os.path.join(sd, i))
+                    if os.path.exists(comboFile):
+                        logger.debug('file found:' + comboFile)
+                        trueFile = os.path.abspath(comboFile)
+                        if trueFile not in files:
+                            files.append(trueFile)
+        finally:
+            fc += 1
 
     gccDefs = os.popen('echo | gcc -dM -E -').read()
     if len(guards) > 0:
@@ -158,6 +167,11 @@ def desugar_file(file_to_desugar: Path,
     if included_files is None:
         included_files = []
 
+    outfile = tempfile.NamedTemporaryFile(delete=False, mode="w")
+    if recommended_space not in ['', None]:
+        outfile.write(recommended_space)
+    included_files.append(outfile.name)
+
     included_files = list(itertools.chain(*zip(['-include'] * len(included_files), included_files)))
     included_directories = list(itertools.chain(*zip(['-I'] * len(included_directories), included_directories)))
     commandline_args = []
@@ -180,24 +194,23 @@ def desugar_file(file_to_desugar: Path,
     cmd = ['java', 'superc.SugarC', *commandline_args, *included_files, *included_directories,
            file_to_desugar]
     cmd = [str(s) for s in cmd]
-    logging.info(f"Cmd is {' '.join(cmd)}")
+    if remove_errors:
+        to_append = ['']
+        its = 0
+        while len(to_append) > 0 and its < 2:
+            its += 1
+            logger.debug(f"to_append is {to_append}")
+            for d in to_append:
+                outfile.write(d + "\n")
+            run_sugarc(" ".join(cmd), file_to_desugar, desugared_file, log_file)
+            logging.debug(f"Created desugared file {desugared_file}")
+            to_append = get_bad_constraints(desugared_file)
+            logging.info(f'removed errors: {to_append}')
 
-    with open(USER_DEFS, 'w') as outfile:
-        outfile.write(recommended_space + "\n")
-        if remove_errors:
-            to_append = ['']
-            its = 0
-            while len(to_append) > 0 and its < 2:
-                its += 1
-                logger.debug(f"to_append is {to_append}")
-                for d in to_append:
-                    outfile.write(d + "\n")
-                run_sugarc(" ".join(cmd), file_to_desugar, desugared_file, log_file)
-                logging.debug(f"Created desugared file {desugared_file}")
-                to_append = get_bad_constraints(desugared_file)
-                logging.info(f'removed errors: {to_append}')
+    logging.info(f"Cmd is {' '.join(cmd)}")
     run_sugarc(" ".join(cmd), file_to_desugar, desugared_file, log_file)
     logger.debug(f"Wrote to {log_file}")
+    outfile.close()
     return desugared_file, log_file
 
 
@@ -215,7 +228,10 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
             f.write(ps.stderr)
     finally:
         if (not desugared_output.exists()) or (desugared_output.stat().st_size == 0):
-            logging.error(f"Could not desugar file {file_to_desugar}")
+            try:
+                logging.error(f"Could not desugar file {file_to_desugar}")  # \n\tSugarC stdout: {ps.stdout}\n\tSugarC stderr: {ps.stderr}")
+            except UnboundLocalError:
+                logging.error(f"Could not desugar file {file_to_desugar}. Tried to output what went wrong but couldn't access subprocess output.")
         os.chdir(current_directory)
 
 
@@ -242,15 +258,25 @@ def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Al
         w: Alarm
         w.static_condition_results = calculate_asserts(w, desugared_file)
         s = Solver()
+        missingCondition = False
         for a in w.static_condition_results:
+            if a['var'] == '' or not a['var'] in condition_mapping.replacers.keys():
+                missingCondition = True
+                break
             if a['val']:
                 s.add(eval(condition_mapping.replacers[a['var']]))
             else:
                 s.add(eval('Not(' + condition_mapping.replacers[a['var']] + ')'))
-        if s.check() == sat:
+        if missingCondition:
+            print('broken condition')
+            w.feasible = False
+            w.model = None
+        elif s.check() == sat:
             m = s.model()
             w.feasible = True
-            w.model = m
+            w.model = {}
+            for decl in m.decls():
+                w.model[str(decl)] = str(m[decl])
             allConditions = []
             for a in w.static_condition_results:
                 if a['val']:

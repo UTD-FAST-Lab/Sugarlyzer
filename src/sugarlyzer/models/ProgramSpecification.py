@@ -4,12 +4,15 @@ import logging
 import os
 import re
 import subprocess
+import sys
 from dataclasses import dataclass
+from io import StringIO
 from pathlib import Path
 from typing import List, Iterable, Optional, Dict, Tuple, TypeVar
 
 from tqdm import tqdm
 
+from src.sugarlyzer.util.MacroDiscoveryPreprocessor import MacroDiscoveryPreprocessor
 from src.sugarlyzer.util.decorators import log_all_params_and_return
 
 logger = logging.getLogger(__name__)
@@ -108,7 +111,6 @@ class ProgramSpecification:
             if (cur := Path(rootdir) / path).exists():
                 logger.debug(f"Checking if {cur} exists.")
                 results.add(cur)
-        logging.info('xxxxx', path, root, cur)
         match len(results):
             case 0:
                 raise FileNotFoundError(f"Could not resolve path {path} from root {root}")
@@ -160,31 +162,9 @@ class ProgramSpecification:
                         in configs)
 
     def get_all_macros(self, fpa):
-        ff = open(fpa, 'r')
-        lines = ff.read().split('\n')
-        defs = []
-        for l in lines:
-            if '#if' in l:
-                m = re.match(' *#ifdef *([a-zA-Z0-9_]+).*', l)
-                if m:
-                    v = m.group(1)
-                    if v not in defs:
-                        defs.append(v)
-                    continue
-                m = re.match(' *#ifndef *([a-zA-Z0-9_]+).*', l)
-                if m:
-                    v = m.group(1)
-                    if v not in defs:
-                        defs.append(v)
-                    continue
-                m = re.match(' *#if *([a-zA-Z0-9_]+).*', l)
-                if m:
-                    v = m.group(1)
-                    if v not in defs:
-                        defs.append(v)
-                    continue
-                ds = re.findall(r'defined *([a-zA-Z0-9_]+?)', l)
-                for d in ds:
-                    if d not in defs:
-                        defs.append(d)
-        return defs
+        parser = MacroDiscoveryPreprocessor()
+        with open(fpa, 'r') as f:
+            parser.parse(f.read())
+        parser.write()
+        logger.info(f"Discovered the following macros in file {fpa}: {parser.collected}")
+        return parser.collected

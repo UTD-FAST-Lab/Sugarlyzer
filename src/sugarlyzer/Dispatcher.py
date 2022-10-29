@@ -32,6 +32,7 @@ v will print INFO and above. Two or more v's will print DEBUG or above.""", defa
                    help="""Run the baseline experiments. In these, we configure each 
                    file with every possible configuration, and then run the experiments.""")
     p.add_argument("--no-recommended-space", help="""Do not generate a recommended space.""", action='store_true')
+    p.add_argument("--jobs", help="The number of jobs to use. If None, will use all CPUs", type=int)
     p.add_argument("--validate", help="""Try running desugared alarms with Z3's configuration to see if they are retained.""",
                    action='store_true')
     return p.parse_args()
@@ -61,7 +62,7 @@ def get_image_name(tool: Optional[str]) -> str:
 
 
 # noinspection PyListCreation
-def build_images(tools: List[str], nocache: bool = False) -> None:
+def build_images(tools: List[str], nocache: bool = False, jobs: int = None) -> None:
     """
     Builds the Docker images for the base image and any provided tools.
     :param tools: The list of tools for which Docker images should be constructed.
@@ -81,6 +82,12 @@ def build_images(tools: List[str], nocache: bool = False) -> None:
 
     if nocache:
         map(lambda x: x.append('--no-cache'), cmds)
+    if jobs is None:
+        import multiprocessing
+        jobs = multiprocessing.cpu_count()
+
+    map(lambda x: x.extend(["--build-arg", f"JOBS={jobs}"]), cmds)
+
     logger.info('Building images....')
 
     for cmd in cmds:
@@ -106,6 +113,8 @@ def start_tester(t, args) -> None:
             command = command + " --baselines"
         if args.no_recommended_space:
             command += " --no-recommended-space"
+        if args.jobs is not None:
+            command += f" --jobs {args.jobs}"
         if args.validate:
             command += " --validate"
         cntr: Container = docker.from_env().containers.run(
