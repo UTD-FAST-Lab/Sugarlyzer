@@ -21,10 +21,16 @@ class IntegerRange:
         return f"{self.start_line}:{self.end_line}"
 
     def is_in(self, i) -> bool:
-        return self.start_line >= i.start_line and self.end_line <= i.end_line
+        if isinstance(i, IntegerRange):
+            return self.start_line >= i.start_line and self.end_line <= i.end_line
+        else:
+            return self.start_line == i == self.end_line
 
     def includes(self, i) -> bool:
-        return i.start_line >= self.start_line and i.end_line <= self.end_line
+        if isinstance(i, IntegerRange):
+            return i.start_line >= self.start_line and i.end_line <= self.end_line
+        else:
+            return self.start_line <= i <= self.end_line
 
 
 def map_source_line(desugared_file: Path, line: int) -> IntegerRange:
