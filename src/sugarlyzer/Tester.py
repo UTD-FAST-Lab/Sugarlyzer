@@ -81,6 +81,7 @@ class Tester:
                 config_builder.append('-U' + s)
 
         inc_files, inc_dirs = self.program.get_inc_files_and_dirs(b.source_file)
+        logger.info(f"Running analysis on file {b.source_file} with config {' '.join(config_builder)}")
         alarms = self.tool.analyze_and_read(b.source_file, command_line_defs=config_builder,
                                             included_files=inc_files,
                                             included_dirs=inc_dirs,
@@ -204,11 +205,14 @@ class Tester:
                         a.verified = "UNVERIFIED"
                         for v in verify:
                             if a.sanitized_message == v.sanitized_message:
-                                if a.function_line_range[1].includes(v.line_in_input_file):
-                                    a.verified = "PARTIAL"
-                                if a.original_line_range.includes(v.line_in_input_file):
-                                    a.verified = "FULL"
-                                    break  # no need to continue
+                                a.verified = "MESSAGE_ONLY"
+                            if a.sanitized_message == v.sanitized_message and \
+                                    a.function_line_range[1].includes(v.line_in_input_file):
+                                a.verified = "FUNCTION_LEVEL"
+                            if a.sanitized_message == v.sanitized_message and \
+                                    a.original_line_range.includes(v.line_in_input_file):
+                                a.verified = "FULL"
+                                break  # no need to continue
 
         else:
             baseline_alarms: List[Alarm] = []
