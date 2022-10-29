@@ -218,10 +218,13 @@ class Tester:
                                     a.verified = "FUNCTION_LEVEL"
                             except ValueError as ve:
                                 pass
-                            if a.sanitized_message == v.sanitized_message and \
-                                    a.original_line_range.includes(v.line_in_input_file):
-                                a.verified = "FULL"
-                                break  # no need to continue
+                            try:
+                                if a.sanitized_message == v.sanitized_message and \
+                                        a.original_line_range.includes(v.line_in_input_file):
+                                    a.verified = "FULL"
+                                    break  # no need to continue
+                            except ValueError as ve:
+                                pass
 
         else:
             baseline_alarms: List[Alarm] = []
