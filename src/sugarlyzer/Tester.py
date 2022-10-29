@@ -31,7 +31,8 @@ logger = logging.getLogger(__name__)
 
 
 class Tester:
-    def __init__(self, tool: str, program: str, baselines: bool, no_recommended_space: bool, jobs: int = None, validate: bool):
+    def __init__(self, tool: str, program: str, baselines: bool, no_recommended_space: bool, jobs: int = None,
+                 validate: bool = False):
         self.tool: str = tool
         self.baselines = baselines
         self.no_recommended_space = no_recommended_space
