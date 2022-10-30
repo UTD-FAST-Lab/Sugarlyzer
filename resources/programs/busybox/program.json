@@ -7,10 +7,11 @@
 	      "/SugarlyzerConfig/busyboxInc.h"
 	  ],
           "included_directories": [
-	    "/targets/busybox-1_28_0",
-            "/SugarlyzerConfig/stdinc/usr/include/",
-            "/SugarlyzerConfig/stdinc/usr/include/x86_64-linux-gnu/",
-            "/SugarlyzerConfig/stdinc/usr/lib/gcc/x86_64-linux-gnu/9/include/"
+	      "/targets/busybox-1_28_0",
+	      "/SugarlyzerConfig/stdinc/usr/include/",
+	      "/SugarlyzerConfig/stdinc/usr/include/",
+              "/SugarlyzerConfig/stdinc/usr/include/x86_64-linux-gnu/",
+              "/SugarlyzerConfig/stdinc/usr/lib/gcc/x86_64-linux-gnu/9/include/"
          ]
       },
       {
