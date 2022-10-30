@@ -195,17 +195,12 @@ def desugar_file(file_to_desugar: Path,
            file_to_desugar]
     cmd = [str(s) for s in cmd]
     if remove_errors:
-        to_append = ['']
-        its = 0
-        while len(to_append) > 0 and its < 2:
-            its += 1
-            logger.debug(f"to_append is {to_append}")
-            for d in to_append:
-                outfile.write(d + "\n")
-            run_sugarc(" ".join(cmd), file_to_desugar, desugared_file, log_file)
-            logging.debug(f"Created desugared file {desugared_file}")
-            to_append = get_bad_constraints(desugared_file)
-            logging.info(f'removed errors: {to_append}')
+        run_sugarc(" ".join(cmd), file_to_desugar, desugared_file, log_file)
+        logging.debug(f"Created desugared file {desugared_file}")
+        to_append = get_bad_constraints(desugared_file)
+        for d in to_append:
+            outfile.write(d + "\n")
+        logging.info(f'removed errors: {to_append}')
 
     logging.info(f"Cmd is {' '.join(cmd)}")
     run_sugarc(" ".join(cmd), file_to_desugar, desugared_file, log_file)
