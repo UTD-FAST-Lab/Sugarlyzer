@@ -138,6 +138,7 @@ class ProgramSpecification:
                 G = TypeVar('G')
 
                 def all_configurations(options: List[str]) -> List[List[Tuple[str, str]]]:
+                    options = list(options)
                     if len(options) == 0:
                         return [[]]
                     else:
