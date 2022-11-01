@@ -56,30 +56,32 @@ def get_recommended_space(file: Path, inc_files: Iterable[Path], inc_dirs: Itera
         guarded = []
         Fil = open(curFile, 'r')
         # meant for match
+        continued = False
         for lin in Fil:
+            lin = lin.lstrip().rstrip()
             res = re.match(r'\s*#\s*include\s*(<|")\s*([^\s>"]+)\s*("|>)\s*', lin)
             if res:
                 logger.debug('adding file to check:' + res.group(2))
                 included.append(res.group(2))
-            res = re.match(r'\s*#\s*ifndef\s+(\S+)\s*', lin)
-            if res:
-                macro = res.group(1)
-                res = re.match(r'.*_(defined|DEFINED|h|H)_*', macro)
+            res = re.search(r'#\s*(ifndef|if|ifdef)', lin)
+            if res or continued:
+                if lin.endswith('\\'):
+                    continued = True
+                else:
+                    continued = False
+                res = re.findall(r'\s([^(\s]+_+(defined|DEFINED|h|H)_*)', lin)
                 if res:
-                    logger.debug('undefining' + macro)
-                    guarded.append(macro)
-            res = re.findall(r'defined\s*\(([^\s\)]+)\)', lin)
-            if len(res) > 0:
-                macros = res
-                for m in macros:
-                    res = re.match(r'.*_(defined|DEFINED|h|H)_*', m)
-                    if res:
-                        logger.debug('undefining' + m)
-                        guarded.append(m)
-                    res = re.match(r'__need_.*', m)
-                    if res:
-                        logger.debug('undefining' + m)
-                        guarded.append(m)
+                    for macro in res:
+                        macro = macro[0].lstrip().rstrip()
+                        if macro != '__H':
+                            logger.debug('undefining' + macro)
+                            guarded.append(macro)
+                res = re.findall(r'\s(__need_[^)\s]+)(\s|\)?)', lin)
+                if res:
+                    for macro in res:
+                        logger.debug('undefining' + macro[0])
+                        guarded.append(macro[0])
+
         Fil.close()
         return guarded, included
 
@@ -353,18 +355,19 @@ def calculate_asserts(w: Alarm, fpa):
         line -= 1
         fl = lines[line]
         if 'static_condition_default' in fl:
-            start = line
-            end = find_condition_scope(line, fpa, False)
-            if end == -1:
-                continue
-            found = False
-            for x in w.all_relevant_lines:
-                if start < x - 1 < end:
-                    found = True
-                    break
-            if not found:
-                asrt = {'var': fl.split("(")[1].split(')')[0], 'val': False}
-                result.append(asrt)
+            if line != w.line_in_input_file-1:
+                start = line
+                end = find_condition_scope(line, fpa, False)
+                if end == -1:
+                    continue
+                found = False
+                for x in w.all_relevant_lines:
+                    if start < x - 1 < end:
+                        found = True
+                        break
+                if not found:
+                    asrt = {'var': fl.split("(")[1].split(')')[0], 'val': False}
+                    result.append(asrt)
 
         else:
             top = find_condition_scope(line, fpa, True)
