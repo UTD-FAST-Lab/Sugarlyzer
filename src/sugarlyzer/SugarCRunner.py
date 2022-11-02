@@ -233,10 +233,12 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
     digest = hasher.digest()
     try:
         if (digest_file := (Path("/cached_desugared") / Path(digest))).exists():
+            print("Cache hit!")
             with open(desugared_output, 'wb') as outfile:
                 with open(digest_file, 'rb') as infile:
                     outfile.write(infile.read())
         else:
+            print("Cache miss")
             ps = subprocess.run(cmd_str.split(" "), capture_output=True)
             with open(desugared_output, 'wb') as f:
                 f.write(ps.stdout)

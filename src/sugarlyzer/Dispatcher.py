@@ -104,7 +104,7 @@ def start_tester(t, args) -> None:
     :param args: The command-line arguments # TODO Limit only to those we need.
     """
 
-    cache_dir = Path(args.results).parent / Path("cached_desugared")
+    cache_dir = Path(args.result).parent / Path("cached_desugared")
     cache_dir.mkdir(parents=True, exist_ok=True)
     bind_volumes = {Path(args.result).absolute(): {"bind": "/results.json", "mode": "rw"},
                     Path(args.log).absolute(): {"bind": "/log", "mode": "rw"},
