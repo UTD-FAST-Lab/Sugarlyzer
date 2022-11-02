@@ -7,6 +7,7 @@ import subprocess
 import sys
 import tempfile
 from dataclasses import dataclass, field
+from hashlib import sha256
 from pathlib import Path
 from typing import Tuple, List, Optional, Dict, Iterable
 
@@ -216,13 +217,34 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
     current_directory = os.curdir
     os.chdir(file_to_desugar.parent)
     logger.debug(f"In run_sugarc, running cmd {cmd_str} from directory {os.curdir}")
+
+    to_hash = list()
+    for tok in cmd_str:
+        if (path := Path(tok)).exists():
+            with open(path, 'r') as infile:
+                to_hash.extend(infile.readlines())
+        else:
+            to_hash.extend(tok)
+
+    hasher = sha256()
+    for st in sorted(to_hash):
+        hasher.update(bytes(st), 'utf-8')
+
+    digest = hasher.digest()
     try:
-        ps = subprocess.run(cmd_str.split(" "), capture_output=True)
-        with open(desugared_output, 'wb') as f:
-            f.write(ps.stdout)
-        logger.info(f"Wrote to {desugared_output}")
-        with open(log_file, 'wb') as f:
-            f.write(ps.stderr)
+        if (digest_file := (Path("/cached_desugared") / Path(digest))).exists():
+            with open(desugared_output, 'wb') as outfile:
+                with open(digest_file, 'rb') as infile:
+                    outfile.write(infile.read())
+        else:
+            ps = subprocess.run(cmd_str.split(" "), capture_output=True)
+            with open(desugared_output, 'wb') as f:
+                f.write(ps.stdout)
+            with open(digest_file, 'wb') as f:
+                f.write(ps.stdout)
+            logger.info(f"Wrote to {desugared_output}")
+            with open(log_file, 'wb') as f:
+                f.write(ps.stderr)
     finally:
         if (not desugared_output.exists()) or (desugared_output.stat().st_size == 0):
             try:
