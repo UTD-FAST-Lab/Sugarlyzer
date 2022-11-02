@@ -230,9 +230,9 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
     for st in sorted(to_hash):
         hasher.update(bytes(st, 'utf-8'))
 
-    digest = hasher.digest()
+    digest = hasher.hexdigest()
     try:
-        if (digest_file := (Path("/cached_desugared") / Path(digest))).exists():
+        if (digest_file := (Path("/cached_desugared") / Path((digest + desugared_output.name)))).exists():
             print("Cache hit!")
             with open(desugared_output, 'wb') as outfile:
                 with open(digest_file, 'rb') as infile:
