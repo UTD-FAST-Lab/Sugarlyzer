@@ -219,8 +219,8 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
     logger.debug(f"In run_sugarc, running cmd {cmd_str} from directory {os.curdir}")
 
     to_hash = list()
-    for tok in cmd_str:
-        if (path := Path(tok)).exists():
+    for tok in cmd_str.split(' '):
+        if (path := Path(tok)).exists() and path.is_file():
             with open(path, 'r') as infile:
                 to_hash.extend(infile.readlines())
         else:
