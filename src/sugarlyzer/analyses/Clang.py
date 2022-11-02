@@ -31,6 +31,12 @@ class Clang(AbstractTool):
             included_files = []
 
         output_location = tempfile.mkdtemp()
+        #checkers = ['core.CallAndMessage','core.DivideZero','core.NonNullParamChecker','core.NullDereference','core.StackAddressEscape',
+        # 'core.UndefinedBinaryOperatorResult','core.VLASize','core.uninitialized.ArraySubscript','core.uninitialized.Assign',
+        # 'core.uninitialized.Branch','core.uninitialized.CapturedBlockVariable','core.uninitialized.UndefReturn'
+        # 'unix.API','unix.Malloc','unix.MallocSizeof','unix.MismatchedDeallocator','unix.Vfork','unix.cstring.BadSizeArg','unix.cstring.NullArg']
+        #for checker in checkers:
+            #cmd = ["scan-build", "-o", output_location, "clang", '--analyze', '--analyzer-no-default-checks', '-Xanalyzer', '-analyzer-checker=' + checker,
         cmd = ["scan-build", "-o", output_location, "clang",
                *list(itertools.chain(*zip(itertools.cycle(["-I"]), included_dirs))),
                *list(itertools.chain(*zip(itertools.cycle(["--include"]), included_files))),
