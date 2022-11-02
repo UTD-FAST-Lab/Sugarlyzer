@@ -86,9 +86,11 @@ def build_images(tools: List[str], nocache: bool, jobs: int) -> None:
                      '-t', get_image_name(t)])
 
     if nocache:
-        map(lambda x: x.append('--no-cache'), cmds)
+        for c in cmds:
+            c.append('--no-cache')
 
-    map(lambda x: x.extend(["--build-arg", f"JOBS={jobs}"]), cmds)
+    for c in cmds:
+        c.extend(["--build-arg", f"JOBS={jobs}"])
 
     logger.info('Building images....')
 
