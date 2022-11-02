@@ -249,9 +249,9 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
     finally:
         if (not desugared_output.exists()) or (desugared_output.stat().st_size == 0):
             try:
-                logging.error(f"Could not desugar file {file_to_desugar}")  # \n\tSugarC stdout: {ps.stdout}\n\tSugarC stderr: {ps.stderr}")
+                logger.error(f"Could not desugar file {file_to_desugar}")  # \n\tSugarC stdout: {ps.stdout}\n\tSugarC stderr: {ps.stderr}")
             except UnboundLocalError:
-                logging.error(f"Could not desugar file {file_to_desugar}. Tried to output what went wrong but couldn't access subprocess output.")
+                logger.error(f"Could not desugar file {file_to_desugar}. Tried to output what went wrong but couldn't access subprocess output.")
         os.chdir(current_directory)
 
 
