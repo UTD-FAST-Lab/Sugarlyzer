@@ -228,7 +228,7 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
 
     hasher = sha256()
     for st in sorted(to_hash):
-        hasher.update(bytes(st), 'utf-8')
+        hasher.update(bytes(st, 'utf-8'))
 
     digest = hasher.digest()
     try:
