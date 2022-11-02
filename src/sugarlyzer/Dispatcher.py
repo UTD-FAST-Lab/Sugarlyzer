@@ -23,7 +23,7 @@ def read_arguments() -> argparse.Namespace:
                             list(filter(lambda x: not x.startswith('__'), get_dirs_in_package('resources.programs')))),
                    default=programs)
     p.add_argument('-r', '--result', help='File to put results', default='results.json')
-    p.add_argument('--cache-folder', helpb='Where to cache desugared files.')
+    p.add_argument('--cache-folder', help='Where to cache desugared files.')
     p.add_argument('--no-docker-cache', help="Build all images fresh without using Docker's cache.", action='store_true')
     p.add_argument('-v', dest='verbosity', action='count', help="""Level of verbosity. No v's will print only WARNING or above messages. One 
 v will print INFO and above. Two or more v's will print DEBUG or above.""", default=0)
