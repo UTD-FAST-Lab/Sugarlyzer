@@ -1,11 +1,12 @@
 {
-      "remove_errors": false,
+      "remove_errors": true,
       "included_files_and_directories": [
             {
                 "included_files": [
                     "/SugarlyzerConfig/toyboxInc.h"
                 ],
                 "included_directories": [
+		    "/SugarlyzerConfig/",
                     "/SugarlyzerConfig/stdinc/usr/include/",
                     "/SugarlyzerConfig/stdinc/usr/include/x86_64-linux-gnu/",
                     "/SugarlyzerConfig/stdinc/usr/lib/gcc/x86_64-linux-gnu/9/include/",
