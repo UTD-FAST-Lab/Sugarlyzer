@@ -9,6 +9,6 @@ tar -xf busybox.tar.gz
 cd busybox-1_28_0
 make allyesconfig
 make
-echo "" > include/autoconf.h
+cp /SugarlyzerConfig/busyboxautoconf.h include/autoconf.h
 cd $CURDIR
 

@@ -63,14 +63,14 @@ class Tester:
 
     @functools.cache
     def get_inc_files_and_dirs_for_file(self, file: Path):
-        included_files, included_directories = self.program.get_inc_files_and_dirs(file)
+        included_files, included_directories, cmd_decs = self.program.get_inc_files_and_dirs(file)
         logger.info(f"Included files, included directories for {file}: {included_files} {included_directories}")
         if self.no_recommended_space:
             recommended_space = None
         else:
             recommended_space = SugarCRunner.get_recommended_space(file, included_files, included_directories)
         logger.debug(f"User defined space for file {file} is {recommended_space}")
-        return included_directories, included_files, recommended_space
+        return included_directories, included_files, cmd_decs, recommended_space
 
     def run_config_and_get_alarms(self, b: ProgramSpecification.BaselineConfig) -> Iterable[Alarm]:
         config_builder = []
@@ -80,9 +80,9 @@ class Tester:
             elif d == "UNDEF":
                 config_builder.append('-U' + s)
 
-        inc_files, inc_dirs = self.program.get_inc_files_and_dirs(b.source_file)
+        inc_files, inc_dirs, cmd_decs = self.program.get_inc_files_and_dirs(b.source_file)
         logger.info(f"Running analysis on file {b.source_file} with config {' '.join(config_builder)}")
-        alarms = self.tool.analyze_and_read(b.source_file, command_line_defs=config_builder,
+        alarms = self.tool.analyze_and_read(b.source_file, command_line_defs=config_builder + cmd_decs,
                                             included_files=inc_files,
                                             included_dirs=inc_dirs,
                                             recommended_space=SugarCRunner.get_recommended_space(b.source_file,
@@ -111,7 +111,7 @@ class Tester:
             logger.info(f"Desugaring the source code in {list(self.program.source_locations)}")
 
             def desugar(file: Path) -> Tuple[Path, Path, Path, float]:  # God, what an ugly tuple
-                included_directories, included_files, recommended_space = self.get_inc_files_and_dirs_for_file(file)
+                included_directories, included_files, cmd_decs, recommended_space = self.get_inc_files_and_dirs_for_file(file)
                 start = time.time()
                 # noinspection PyTypeChecker
                 return (*SugarCRunner.desugar_file(file,
@@ -120,6 +120,7 @@ class Tester:
                                                    no_stdlibs=True,
                                                    included_files=included_files,
                                                    included_directories=included_directories,
+                                                   commandline_declarations=cmd_decs,
                                                    keep_mem=self.tool.keep_mem,
                                                    make_main=self.tool.make_main), file, time.time() - start)
 
