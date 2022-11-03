@@ -136,7 +136,7 @@ class Tester:
 
             def analyze_read_and_process(desugared_file: Path, original_file: Path, desugaring_time: float = None) -> \
             Iterable[Alarm]:
-                included_directories, included_files, user_defined_space = self.get_inc_files_and_dirs_for_file(
+                included_directories, included_files, cmd_decs, user_defined_space = self.get_inc_files_and_dirs_for_file(
                     original_file)
                 alarms = process_alarms(self.tool.analyze_and_read(desugared_file, included_files=included_files,
                                                                    included_dirs=included_directories,
