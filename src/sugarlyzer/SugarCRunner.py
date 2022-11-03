@@ -508,6 +508,8 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
     # Remove the tailend of the presence condition
     conds = re.search('(.*").*?$', cc[1]).group(1)
     logger.debug(f"Conds is {cc[1]} -> {conds}")
+    #Replace bit shift with something python friendly
+    conds = re.sub(r'<<',r'*2**',conds)
     # We make some substitutions to enforce format consistency
     conds = re.sub(r'(&&|\|\|) !([a-zA-Z_0-9]+)( |")', r'\1 !(\2)\3', conds)
     conds = re.sub(r'(&&|\|\|) ([a-zA-Z_0-9]+)( |")', r'\1 (\2)\3', conds)
@@ -527,7 +529,7 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
     for i in inds:
         logger.debug('checking individual conditions' + str(indxx) + ':' + str(len(inds)))
         splits = i.split(' ')
-        if len(splits) == 0:
+        if len(splits) == 0 or splits[0] == '':
             continue
         # Macros in IFs are used in one of three ways
         # Check if it is defined, check if is a non 0 value, check an expression
