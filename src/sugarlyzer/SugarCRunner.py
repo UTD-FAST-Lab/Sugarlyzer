@@ -149,7 +149,8 @@ def desugar_file(file_to_desugar: Path,
                  keep_mem: bool = False,
                  make_main: bool = False,
                  included_files: Optional[Iterable[Path]] = None,
-                 included_directories: Optional[Iterable[Path]] = None) -> tuple[Path, Path]:
+                 included_directories: Optional[Iterable[Path]] = None,
+                 commandline_declarations: Optional[Iterable[str]] = None) -> tuple[Path, Path]:
     """
     Runs the SugarC command.
 
@@ -180,6 +181,7 @@ def desugar_file(file_to_desugar: Path,
     commandline_args = ['-nostdinc', *commandline_args] if no_stdlibs else commandline_args
     commandline_args = ['-keep-mem', *commandline_args] if keep_mem else commandline_args
     commandline_args = ['-make-main', *commandline_args] if make_main else commandline_args
+    commandline_args = [*commandline_declarations, *commandline_args] if commandline_declarations else commandline_args
 
     match output_file:
         case '' | None:
@@ -193,7 +195,7 @@ def desugar_file(file_to_desugar: Path,
         case _:
             log_file = Path(log_file)
 
-    cmd = ['java', 'superc.SugarC', *commandline_args, *included_files, *included_directories,
+    cmd = ['java', '-Xmx32g', 'superc.SugarC', *commandline_args, *included_files, *included_directories,
            file_to_desugar]
     cmd = [str(s) for s in cmd]
     if remove_errors:

@@ -56,7 +56,7 @@ class ProgramSpecification:
                     if f.endswith(".c") or f.endswith(".i"):
                         yield Path(root) / f
 
-    def get_inc_files_and_dirs(self, file: Path) -> Tuple[Iterable[Path], Iterable[Path]]:
+    def get_inc_files_and_dirs(self, file: Path) -> Tuple[Iterable[Path], Iterable[Path], Iterable[str]]:
         """
         Iterates through the program.json's get_recommended_space field,
         returning the first match. See program_schema.json for more info.
@@ -65,7 +65,7 @@ class ProgramSpecification:
         get_recommended_space with a regular expression that matches the **absolute** file name.
         """
 
-        inc_dirs, inc_files = [], []
+        inc_dirs, inc_files, cmd_decs = [], [], []
         for spec in self.inc_dirs_and_files:
 
             # Note the difference between s[a] and s.get(a) is the former will
@@ -79,8 +79,10 @@ class ProgramSpecification:
 
                 inc_files.extend(self.try_resolve_path(Path(p), relative_to) for p in spec['included_files'])
                 inc_dirs.extend(self.try_resolve_path(Path(p), relative_to) for p in spec['included_directories'])
+                if 'macro_definitions' in spec.keys():
+                    cmd_decs.extend(spec['macro_definitions'])
 
-        return inc_files, inc_dirs
+        return inc_files, inc_dirs, cmd_decs
 
     def download(self) -> int:
         """
