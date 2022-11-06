@@ -160,7 +160,7 @@ class Tester:
             buckets: List[List[Alarm]] = [[]]
 
             def alarm_match(a: Alarm, b: Alarm):
-                return a.line_in_input_file == b.line_in_input_file and a.message == b.message and a.input_file == b.input_file and a.feasible == b.feasible
+                return a.line_in_input_file == b.line_in_input_file and a.sanitized_message == b.sanitized_message and a.input_file == b.input_file and a.feasible == b.feasible
 
             # Collect alarms into "buckets" based on equivalence.
             # Then, for each bucket, we will return one alarm, combining all of the

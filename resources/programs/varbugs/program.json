@@ -1,5 +1,5 @@
 {
-    "remove_errors": false,
+    "remove_errors": true,
     "included_files_and_directories": [
         {
             "included_files": [

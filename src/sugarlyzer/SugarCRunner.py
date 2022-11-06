@@ -321,12 +321,12 @@ def find_condition_scope(start, fpa, goingUp):
         while l >= 0:
             Rs += lines[l].count('}')
             Rs -= lines[l].count('{')
-            if Rs < 0:
-                Rs = 0
             m = re.match('if \((__static_condition_default_\d+)\(\)\).*', lines[l])
-            if Rs == 0 and m:
+            if Rs < 0 and m:
                 result = l
                 break
+            if Rs < 0:
+                Rs = 0
             l -= 1
     else:
         Rs = 0
