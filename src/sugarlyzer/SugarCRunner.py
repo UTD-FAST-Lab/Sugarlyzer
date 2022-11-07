@@ -175,8 +175,10 @@ def desugar_file(file_to_desugar: Path,
         outfile.write(recommended_space)
     included_files.append(outfile.name)
 
-    included_files = list(itertools.chain(*zip(['-include'] * len(included_files), included_files)))
-    included_directories = list(itertools.chain(*zip(['-I'] * len(included_directories), included_directories)))
+    included_files = list(itertools.chain(*zip(['-include'] * len(included_files),
+                                               (Path(i).relative_to(file_to_desugar.parent) for i in included_files))))
+    included_directories = list(itertools.chain(*zip(['-I'] * len(included_directories),
+                                                     (Path(i).relative_to(file_to_desugar.parent) for i in included_directories))))
     commandline_args = []
     commandline_args = ['-nostdinc', *commandline_args] if no_stdlibs else commandline_args
     commandline_args = ['-keep-mem', *commandline_args] if keep_mem else commandline_args
