@@ -195,7 +195,7 @@ def desugar_file(file_to_desugar: Path,
         case _:
             log_file = Path(log_file)
 
-    cmd = ['java', '-Xmx32g', 'superc.SugarC', *commandline_args, *included_files, *included_directories,
+    cmd = ['timeout 60m', 'java', '-Xmx32g', 'superc.SugarC', *commandline_args, *included_files, *included_directories,
            file_to_desugar]
     cmd = [str(s) for s in cmd]
     if remove_errors:
