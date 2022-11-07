@@ -213,20 +213,15 @@ def desugar_file(file_to_desugar: Path,
     return desugared_file, log_file
 
 
-@functools.cache
 def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file):
     current_directory = os.curdir
     os.chdir(file_to_desugar.parent)
     logger.debug(f"In run_sugarc, running cmd {cmd_str} from directory {os.curdir}")
+    redirect_cmd = [*cmd,f'> {str(desugared_output)}', f'2> {str(log_file)}']
     try:
-        ps = subprocess.run(cmd_str.split(" "), capture_output=True)
-        with open(desugared_output, 'wb') as f:
-            f.write(ps.stdout)
-        logger.info(f"Wrote to {desugared_output}")
-        with open(log_file, 'wb') as f:
-            f.write(ps.stderr)
+        ps = subprocess.run(redirect_cmd.split(" "), capture_output=False)
     finally:
-        if (not desugared_output.exists()) or (desugared_output.stat().st_size == 0):
+        if (not desugared_output.exists()) or (os.path.getsize(desugared_output) == 0):
             try:
                 logging.error(f"Could not desugar file {file_to_desugar}")  # \n\tSugarC stdout: {ps.stdout}\n\tSugarC stderr: {ps.stderr}")
             except UnboundLocalError:
