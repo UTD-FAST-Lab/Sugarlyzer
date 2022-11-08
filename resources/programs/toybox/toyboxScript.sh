@@ -5,9 +5,9 @@ CURDIR=$(pwd)
 cd /targets
 git clone https://github.com/landley/toybox.git
 cd toybox/
-git checkout 78289203031afc23585035c362beec10db54958dcd busybox-1_28_0
+git checkout 78289203031afc23585035c362beec10db54958d
 make defconfig
 make
-echo "" > generated/config.h
+cp /SugarlyzerConfig/toyboxconfig.h generated/config.h
 cd $CURDIR
 

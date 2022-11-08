@@ -31,26 +31,27 @@ class Clang(AbstractTool):
             included_files = []
 
         output_location = tempfile.mkdtemp()
-        checkers = ['core.CallAndMessage','core.DivideZero','core.NonNullParamChecker','core.NullDereference','core.StackAddressEscape',
-         'core.UndefinedBinaryOperatorResult','core.VLASize','core.uninitialized.ArraySubscript','core.uninitialized.Assign',
-         'core.uninitialized.Branch','core.uninitialized.CapturedBlockVariable','core.uninitialized.UndefReturn'
-         'unix.API','unix.Malloc','unix.MallocSizeof','unix.MismatchedDeallocator','unix.Vfork','unix.cstring.BadSizeArg','unix.cstring.NullArg']
-        for checker in checkers:
-            cmd = ["scan-build", "-o", output_location, "clang", '--analyze', '--analyzer-no-default-checks', '-Xanalyzer', '-analyzer-checker=' + checker,
+        cmd = ["clang", '--analyze', "-Xanalyzer", "-analyzer-output=text",
                *list(itertools.chain(*zip(itertools.cycle(["-I"]), included_dirs))),
                *list(itertools.chain(*zip(itertools.cycle(["--include"]), included_files))),
                *command_line_defs,
                '-nostdinc',
                "-c", file.absolute()]
-            logger.info(f"Running cmd {' '.join(str(s) for s in cmd)}")
-            ps = subprocess.run(cmd, stderr=subprocess.STDOUT, stdout=subprocess.PIPE, text=True)
-            if (ps.returncode != 0) or ("error" in ps.stdout.lower()):
-                logger.warning(f"Running clang on file {str(file)} potentially failed.")
-                logger.warning(ps.stdout)
+        logger.info(f"Running cmd {' '.join(str(s) for s in cmd)}")
+        pipes = subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+        stdout, stderr = pipes.communicate()
+        stdout = str(stdout, 'UTF-8')
+        stderr = str(stderr, 'UTF-8')
+        if (pipes.returncode != 0) or ("error" in stdout.lower()):
+            logger.warning(f"Running clang on file {str(file)} potentially failed.")
+            logger.warning(stdout)
 
+        with open(output_location + '/report.report','w') as o:
+            o.write(stderr)
+            
         for root, dirs, files in os.walk(output_location):
             for fil in files:
-                if fil.startswith("report") and fil.endswith(".html"):
+                if fil.startswith("report") and fil.endswith(".report"):
                     r = Path(root) / fil
                     logger.debug(f"Yielding report file {r}")
                     yield Path(root) / fil
