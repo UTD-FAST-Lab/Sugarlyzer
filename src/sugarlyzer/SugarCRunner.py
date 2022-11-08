@@ -213,7 +213,6 @@ def desugar_file(file_to_desugar: Path,
     return desugared_file, log_file
 
 
-@functools.cache
 def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file):
     current_directory = os.curdir
     os.chdir(file_to_desugar.parent)
