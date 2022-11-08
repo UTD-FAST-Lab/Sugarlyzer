@@ -195,7 +195,7 @@ def desugar_file(file_to_desugar: Path,
         case _:
             log_file = Path(log_file)
 
-    cmd = ['java', '-Xmx32g', 'superc.SugarC', *commandline_args, *included_files, *included_directories,
+    cmd = ['timeout 60m', 'java', '-Xmx32g', 'superc.SugarC', *commandline_args, *included_files, *included_directories,
            file_to_desugar]
     cmd = [str(s) for s in cmd]
     if remove_errors:
@@ -213,7 +213,6 @@ def desugar_file(file_to_desugar: Path,
     return desugared_file, log_file
 
 
-@functools.cache
 def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file):
     current_directory = os.curdir
     os.chdir(file_to_desugar.parent)
@@ -320,11 +319,11 @@ def find_condition_scope(start, fpa, goingUp):
         l = start
         while l >= 0:
             Rs += lines[l].count('}')
+            Rs -= lines[l].count('{')
             m = re.match('if \((__static_condition_default_\d+)\(\)\).*', lines[l])
-            if Rs == 0 and m:
+            if Rs < 0 and m:
                 result = l
                 break
-            Rs -= lines[l].count('{')
             if Rs < 0:
                 Rs = 0
             l -= 1
@@ -435,20 +434,17 @@ def get_bad_constraints(desugared_file: Path) -> List[str]:
     is_error = False
     solver = Solver()
     while line_index > 0:
-        if not is_error:
-            if lines[line_index].startswith('__static_parse_error') or \
-                    lines[line_index].startswith('__static_type_error'):
-                is_error = True
-        else:
-            condition = re.match('if \((__static_condition_default_\d+)\(\)\).*', lines[line_index])
+        if lines[line_index].startswith('__static_parse_error') or \
+           lines[line_index].startswith('__static_type_error'):
+            errorLine = find_condition_scope(line_index,desugared_file,True)
+            condition = re.match('if \((__static_condition_default_\d+)\(\)\).*', lines[errorLine])
             if condition:
-                to_eval = condition_mapping.replacers[condition.group(1)]
+                to_eval = 'Not('+condition_mapping.replacers[condition.group(1)]+')'
                 logger.debug(f"to_eval is {to_eval}")
                 try:
                     solver.add(eval(to_eval))
                 except NameError as ne:
                     logger.exception(f"File is {desugared_file}")
-                is_error = False
         line_index -= 1
     for key in condition_mapping.ids.keys():
         if key.startswith('defined '):
