@@ -209,6 +209,7 @@ class Tester:
                         logger.info(f"Now running validation on {b}")
 
                         verify = self.run_config_and_get_alarms(b)
+                        logger.info(f"Got the following alarms {[str(b) for b in verify]} when trying to verify alarm {a}")
                         for v in verify:
                             logger.info(f"Comparing alarms {a.as_dict()} and {v.as_dict()}")
                             if a.sanitized_message == v.sanitized_message:
