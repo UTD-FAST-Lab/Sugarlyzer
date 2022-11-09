@@ -7,6 +7,7 @@ import subprocess
 import sys
 import tempfile
 from dataclasses import dataclass, field
+from hashlib import sha256
 from pathlib import Path
 from typing import Tuple, List, Optional, Dict, Iterable
 
@@ -217,19 +218,42 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
     current_directory = os.curdir
     os.chdir(file_to_desugar.parent)
     logger.debug(f"In run_sugarc, running cmd {cmd_str} from directory {os.curdir}")
+
+    to_hash = list()
+    for tok in cmd_str.split(' '):
+        if (path := Path(tok)).exists() and path.is_file():
+            with open(path, 'r') as infile:
+                to_hash.extend(infile.readlines())
+        else:
+            to_hash.extend(tok)
+
+    hasher = sha256()
+    for st in sorted(to_hash):
+        hasher.update(bytes(st, 'utf-8'))
+
+    digest = hasher.hexdigest()
     try:
-        ps = subprocess.run(cmd_str.split(" "), capture_output=True)
-        with open(desugared_output, 'wb') as f:
-            f.write(ps.stdout)
-        logger.info(f"Wrote to {desugared_output}")
-        with open(log_file, 'wb') as f:
-            f.write(ps.stderr)
+        if (digest_file := (Path("/cached_desugared") / Path((digest + desugared_output.name)))).exists():
+            logger.debug("Cache hit!")
+            with open(desugared_output, 'wb') as outfile:
+                with open(digest_file, 'rb') as infile:
+                    outfile.write(infile.read())
+        else:
+            logger.debug("Cache miss")
+            ps = subprocess.run(cmd_str.split(" "), capture_output=True)
+            with open(desugared_output, 'wb') as f:
+                f.write(ps.stdout)
+            with open(digest_file, 'wb') as f:
+                f.write(ps.stdout)
+            logger.info(f"Wrote to {desugared_output}")
+            with open(log_file, 'wb') as f:
+                f.write(ps.stderr)
     finally:
         if (not desugared_output.exists()) or (desugared_output.stat().st_size == 0):
             try:
-                logging.error(f"Could not desugar file {file_to_desugar}")  # \n\tSugarC stdout: {ps.stdout}\n\tSugarC stderr: {ps.stderr}")
+                logger.error(f"Could not desugar file {file_to_desugar}")  # \n\tSugarC stdout: {ps.stdout}\n\tSugarC stderr: {ps.stderr}")
             except UnboundLocalError:
-                logging.error(f"Could not desugar file {file_to_desugar}. Tried to output what went wrong but couldn't access subprocess output.")
+                logger.error(f"Could not desugar file {file_to_desugar}. Tried to output what went wrong but couldn't access subprocess output.")
         os.chdir(current_directory)
 
 
