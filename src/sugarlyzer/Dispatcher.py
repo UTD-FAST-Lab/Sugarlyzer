@@ -9,6 +9,7 @@ import importlib.resources
 import subprocess
 from pathlib import Path
 from typing import List, Optional
+import multiprocessing
 
 
 def read_arguments() -> argparse.Namespace:
@@ -22,7 +23,8 @@ def read_arguments() -> argparse.Namespace:
                             list(filter(lambda x: not x.startswith('__'), get_dirs_in_package('resources.programs')))),
                    default=programs)
     p.add_argument('-r', '--result', help='File to put results', default='results.json')
-    p.add_argument('--no-cache', help="Build all images fresh without using Docker's cache.", action='store_true')
+    p.add_argument('--cache-folder', help='Where to cache desugared files.')
+    p.add_argument('--no-docker-cache', help="Build all images fresh without using Docker's cache.", action='store_true')
     p.add_argument('-v', dest='verbosity', action='count', help="""Level of verbosity. No v's will print only WARNING or above messages. One 
 v will print INFO and above. Two or more v's will print DEBUG or above.""", default=0)
     p.add_argument('--log', help='If specified, logs will be printed to the specified file. Otherwise, logs are printed'
@@ -33,7 +35,8 @@ v will print INFO and above. Two or more v's will print DEBUG or above.""", defa
                    help="""Run the baseline experiments. In these, we configure each 
                    file with every possible configuration, and then run the experiments.""")
     p.add_argument("--no-recommended-space", help="""Do not generate a recommended space.""", action='store_true')
-    p.add_argument("--jobs", help="The number of jobs to use. If None, will use all CPUs", type=int)
+    p.add_argument("--jobs", help="The number of jobs to use. If None, will use all CPUs", type=int,
+                   default=multiprocessing.cpu_count())
     p.add_argument("--validate",
                    help="""Try running desugared alarms with Z3's configuration to see if they are retained.""",
                    action='store_true')
@@ -64,7 +67,7 @@ def get_image_name(tool: Optional[str]) -> str:
 
 
 # noinspection PyListCreation
-def build_images(tools: List[str], nocache: bool = False, jobs: int = None) -> None:
+def build_images(tools: List[str], nocache: bool, jobs: int) -> None:
     """
     Builds the Docker images for the base image and any provided tools.
     :param tools: The list of tools for which Docker images should be constructed.
@@ -83,12 +86,11 @@ def build_images(tools: List[str], nocache: bool = False, jobs: int = None) -> N
                      '-t', get_image_name(t)])
 
     if nocache:
-        map(lambda x: x.append('--no-cache'), cmds)
-    if jobs is None:
-        import multiprocessing
-        jobs = multiprocessing.cpu_count()
+        for c in cmds:
+            c.append('--no-cache')
 
-    map(lambda x: x.extend(["--build-arg", f"JOBS={jobs}"]), cmds)
+    for c in cmds:
+        c.extend(["--build-arg", f"JOBS={jobs}"])
 
     logger.info('Building images....')
 
@@ -104,8 +106,12 @@ def start_tester(t, args) -> None:
     :param args: The command-line arguments # TODO Limit only to those we need.
     """
 
+    cache_dir = Path(args.result).parent / Path("cached_desugared") if \
+        args.cache_folder is None else Path(args.cache_folder)
+    cache_dir.mkdir(parents=True, exist_ok=True)
     bind_volumes = {Path(args.result).absolute(): {"bind": "/results.json", "mode": "rw"},
-                    Path(args.log).absolute(): {"bind": "/log", "mode": "rw"}}
+                    Path(args.log).absolute(): {"bind": "/log", "mode": "rw"},
+                    Path(cache_dir).absolute(): {"bind": "/cached_desugared", "mode": "rw"}}
 
     for p in args.programs:
         command = f"tester {t} {p}"
@@ -157,7 +163,7 @@ def main() -> None:
     kwargs = {"format": logging_format, "level": logging_level, "filename": args.log}
 
     logging.basicConfig(**kwargs)
-    build_images(args.tools)
+    build_images(args.tools, args.no_docker_cache, args.jobs)
     for t in args.tools:
         start_tester(t, args)
 

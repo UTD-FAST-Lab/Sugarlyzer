@@ -202,13 +202,14 @@ class Tester:
                                         config.append(('UNDEF', k[4:]))
                             elif k.startswith('USE_'):
                                 config.append(('DEF', f"{k[4:]}={v}"))
-                        print(f"Constructed validation model {config} from {a.model}")
+                        print(f"Constructed validation model {config} from {json.dumps(a.as_dict())}")
                         b = ProgramSpecification.BaselineConfig(
                             source_file=Path(str(a.input_file.absolute()).replace('.desugared', '')),
                             configuration=config)
                         logger.info(f"Now running validation on {b}")
 
                         verify = self.run_config_and_get_alarms(b)
+                        logger.info(f"Got the following alarms {[json.dumps(b.as_dict()) for b in verify]} when trying to verify alarm {json.dumps(a.as_dict())}")
                         for v in verify:
                             logger.info(f"Comparing alarms {a.as_dict()} and {v.as_dict()}")
                             if a.sanitized_message == v.sanitized_message:
