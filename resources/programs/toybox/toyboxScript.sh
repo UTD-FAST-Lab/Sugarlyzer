@@ -8,6 +8,6 @@ cd toybox/
 git checkout 78289203031afc23585035c362beec10db54958d
 make defconfig
 make
-cp /SugarlyzerConfig/toyboxconfig.h generated/config.h
+cp /SugarlyzerConfig/toyboxConfig.h generated/config.h
 cd $CURDIR
 
