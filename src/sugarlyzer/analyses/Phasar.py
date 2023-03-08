@@ -28,7 +28,7 @@ class Phasar(AbstractTool):
             command_line_defs = []
         output_location = tempfile.mkdtemp()
         #create ll file
-        llFile = str(file)[:-2]+'.ll'
+        llFile = os.path.join(output_location,str(file)[:-2]+'.ll')
         cmd = ['clang-12','-emit-llvm','-S','-fno-discard-value-names','-c','-g',
                *list(itertools.chain(*zip(itertools.cycle(["-I"]), included_dirs))),
                *list(itertools.chain(*zip(itertools.cycle(["--include"]), included_files))),

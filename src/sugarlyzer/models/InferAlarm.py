@@ -30,8 +30,8 @@ class InferAlarm(Alarm):
         return result
 
     def sanitize(self, message: str):
-        san = message.rstrip()
-        san = re.sub(r'__(.*)_\d+', r'\1', san)
+        san = message.rstrip().lstrip()
+        san = re.sub(r'__(\S*)_\d+', r'\1', san)
         if san.endswith(']'):
             san = re.sub(r' \[.*\]$', '', san)
 
