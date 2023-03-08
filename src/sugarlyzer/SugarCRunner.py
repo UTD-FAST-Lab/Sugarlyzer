@@ -226,7 +226,10 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
     for tok in cmd_str.split(' '):
         if (path := Path(tok)).exists() and path.is_file():
             with open(path, 'r') as infile:
-                to_hash.extend(infile.readlines())
+                try:
+                    to_hash.extend(infile.readlines())
+                except UnicodeError:
+                    print(f'failed to extend hash ::{infile.name}::')
         else:
             to_hash.extend(tok)
 
@@ -394,9 +397,9 @@ def calculate_asserts(w: Alarm, fpa):
                     if start < x - 1 <= end:
                         found = True
                         break
-                if not found:
-                    asrt = {'var': fl.split("(")[1].split(')')[0], 'val': False}
-                    result.append(asrt)
+                #if not found:
+                    #asrt = {'var': fl.split("(")[1].split(')')[0], 'val': False}
+                    #result.append(asrt)
 
         else:
             top = find_condition_scope(line, fpa, True)
