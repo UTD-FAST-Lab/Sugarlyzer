@@ -19,6 +19,7 @@ class PhasarAlarm(Alarm):
         self.warning_path: Iterable[int] = [int(i) for i in warning_path]
         self.variable_name = variable_name
         self.function = function
+        self.message = message.lstrip().rstrip() + ' ' + variable_name
 
     def as_dict(self) -> Dict[str, str]:
         result = super().as_dict()
@@ -28,7 +29,7 @@ class PhasarAlarm(Alarm):
         return result
 
     def sanitize(self, message: str):
-        san = message.rstrip()
+        san = re.sub(r'__(\S*)_\d+', r'\1',message)
         return san
 
     @property
