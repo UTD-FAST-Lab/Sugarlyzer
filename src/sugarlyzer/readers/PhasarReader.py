@@ -22,23 +22,22 @@ class PhasarReader(AbstractReader):
       warning = {}
       for l in rf:
         if 'Use  --------' in l:
-          if 'function' in warning.keys() and 'variable' in warning.keys() and 'line' in warning.keys():
-            alarmList.append(PhasarAlarm(function=warning['function'],
-                                         line_in_input_file=warning['line'],
-                                         variable_name=warning['variable']
-            ))
+          if 'function' in warning.keys() and 'variables' in warning.keys() and 'line' in warning.keys():
+            for var in warning['variables']:
+              alarmList.append(PhasarAlarm(function=warning['function'],
+                                           line_in_input_file=warning['line'],
+                                           variable_name=var))
           warning = {}
         elif 'Function   :' in l:
           warning['function'] = l.split('Function   : ')[1].lstrip().rstrip()
         elif 'Variable(s):' in l:
-          warning['variable'] = l.split('Variable(s):')[1].lstrip().rstrip()
+          warning['variables'] = l.split('Variable(s):')[1].lstrip().rstrip().split(',')
         elif 'Line       :' in l:
           warning['line'] = int(l.split('Line       : ')[1].lstrip().rstrip())
-      if 'function' in warning.keys() and 'variable' in warning.keys() and 'line' in warning.keys():
-        alarmList.append(PhasarAlarm(function=warning['function'],
-                                     line_in_input_file=warning['line'],
-                                     variable_name=warning['variable']
-        ))
-
-
+      if 'function' in warning.keys() and 'variables' in warning.keys() and 'line' in warning.keys():
+        for var in warning['variables']:
+          alarmList.append(PhasarAlarm(function=warning['function'],
+                                       line_in_input_file=warning['line'],
+                                       variable_name=var))
+          
       return alarmList
