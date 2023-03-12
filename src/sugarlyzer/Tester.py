@@ -102,7 +102,8 @@ class Tester:
             logger.info(f"Running analysis on configuration {b.configuration}....")
             alarms = list()
             with Pool(self.jobs) as p:
-                for i in tqdm(p.imap(analyze_one_file, sf:=self.program.get_source_files()), total=len(list(sf))):
+                sources = list(self.program.get_source_files())
+                for i in tqdm(p.imap(analyze_one_file, sources), total=len(sources)):
                     alarms.extend(i)
 
             def get_config_object(config: Path) -> List[Tuple[str,str]]:
