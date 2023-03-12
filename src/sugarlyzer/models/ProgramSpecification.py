@@ -35,7 +35,7 @@ class ProgramSpecification:
         self.__source_location = source_location
         self.inc_dirs_and_files = [] if included_files_and_directories is None else included_files_and_directories
         self.sample_directory = sample
-        self.makefile_location = Path(makefile_location)
+        self.makefile_location = self.try_resolve_path(Path(makefile_location))
 
     @property
     def build_script(self):
