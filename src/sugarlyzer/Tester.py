@@ -20,7 +20,6 @@ from dill import pickle
 from jsonschema.validators import RefResolver, Draft7Validator
 from pathos.multiprocessing import ProcessPool
 # noinspection PyUnresolvedReferences
-from dill import pickle
 from tqdm import tqdm
 
 from src.sugarlyzer import SugarCRunner
@@ -75,6 +74,16 @@ class Tester:
         logger.debug(f"User defined space for file {file} is {recommended_space}")
         return included_directories, included_files, cmd_decs, recommended_space
 
+    def analyze_one_file(self, fi: Path) -> Iterable[Alarm]:
+        inc_files, inc_dirs, cmd_decs = self.program.get_inc_files_and_dirs(fi)
+        alarms = self.tool.analyze_and_read(fi, command_line_defs=cmd_decs,
+                                            included_files=inc_files,
+                                            included_dirs=inc_dirs,
+                                            recommended_space=SugarCRunner.get_recommended_space(fi,
+                                                                                                 inc_files,
+                                                                                                 inc_dirs))
+        return alarms
+
     def run_config_and_get_alarms(self, b: ProgramSpecification.BaselineConfig) -> Iterable[Alarm]:
         if isinstance(sample:=b.configuration, Path):
             # Copy config to .config
@@ -89,21 +98,12 @@ class Tester:
                                                              text=True)
             logger.info("Output from running make oldconfig:\n" + cp.stdout)
 
-            def analyze_one_file(fi: Path) -> Iterable[Alarm]:
-                inc_files, inc_dirs, cmd_decs = self.program.get_inc_files_and_dirs(fi)
-                alarms = self.tool.analyze_and_read(fi, command_line_defs=cmd_decs,
-                                                    included_files=inc_files,
-                                                    included_dirs=inc_dirs,
-                                                    recommended_space=SugarCRunner.get_recommended_space(fi,
-                                                                                                         inc_files,
-                                                                                                         inc_dirs))
-                return alarms
 
             logger.info(f"Running analysis on configuration {b.configuration}....")
             alarms = list()
             with Pool(self.jobs) as p:
                 sources = list(self.program.get_source_files())
-                for i in tqdm(p.imap(analyze_one_file, sources), total=len(sources)):
+                for i in tqdm(p.imap(self.analyze_one_file, sources), total=len(sources)):
                     alarms.extend(i)
 
             def get_config_object(config: Path) -> List[Tuple[str,str]]:
