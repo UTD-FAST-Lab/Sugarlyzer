@@ -6,8 +6,11 @@ import json
 import logging
 import os
 import re
+import shutil
+import subprocess
 import time
 from enum import Enum, auto
+from multiprocessing import Pool
 from pathlib import Path
 from typing import Iterable, List, Dict, Any, TypeVar, Tuple, Set
 
@@ -73,25 +76,53 @@ class Tester:
         return included_directories, included_files, cmd_decs, recommended_space
 
     def run_config_and_get_alarms(self, b: ProgramSpecification.BaselineConfig) -> Iterable[Alarm]:
-        config_builder = []
-        for d, s in b.configuration:
-            if d == "DEF":
-                config_builder.append('-D' + ((s + '=1') if '=' not in s else s))
-            elif d == "UNDEF":
-                config_builder.append('-U' + s)
+        if self.program.sample_directory is None:
+            raise RuntimeError("Cannot handle this yet.")
+        else:
+            for sample in self.program.sample_directory.iterdir():
+                # Copy config to .config
+                logging.info(f"Making configuration in {b.source_file}")
+                shutil.copyfile(sample, self.program.makefile_location.parent / Path(".config"))
+                cwd = os.curdir
+                os.chdir(self.program.makefile_location.parent)
+                cp: subprocess.CompletedProcess = subprocess.run(["make", "oldconfig"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+                logger.info("Output from running make oldconfig:\n" + cp.stdout)
 
-        inc_files, inc_dirs, cmd_decs = self.program.get_inc_files_and_dirs(b.source_file)
-        logger.info(f"Running analysis on file {b.source_file} with config {' '.join(config_builder)}")
-        alarms = self.tool.analyze_and_read(b.source_file, command_line_defs=config_builder + cmd_decs,
-                                            included_files=inc_files,
-                                            included_dirs=inc_dirs,
-                                            recommended_space=SugarCRunner.get_recommended_space(b.source_file,
-                                                                                                 inc_files,
-                                                                                                 inc_dirs))
-        for a in alarms:
-            a.model = [f"{du}_{op}" for du, op in b.configuration]
-        logger.debug(f"Returning {alarms})")
-        return alarms
+                def analyze_one_file(fi: Path) -> Iterable[Alarm]:
+                    inc_files, inc_dirs, cmd_decs = self.program.get_inc_files_and_dirs(fi)
+                    alarms = self.tool.analyze_and_read(fi, command_line_defs=cmd_decs,
+                                                        included_files=inc_files,
+                                                        included_dirs=inc_dirs,
+                                                        recommended_space=SugarCRunner.get_recommended_space(fi,
+                                                                                                             inc_files,
+                                                                                                             inc_dirs))
+                    return alarms
+
+                logger.info(f"Running analysis on configuration {b.configuration}....")
+                alarms = list()
+                with Pool(self.jobs) as p:
+                    for i in tqdm(p.imap(analyze_one_file, sf:=self.program.get_source_files()), total=len(list(sf))):
+                        alarms.extend(i)
+
+                def get_config_object(config: Path) -> List[Tuple[str,str]]:
+                    with open(config, 'r') as f:
+                        lines = [l.strip() for l in f.readlines()]
+
+                    def process_config_lines(lines: Iterable[str]):
+                        match lines:
+                            case [x, *xs]:
+                                x: str
+                                if x.startswith("#"):
+                                    return [(x[1:].strip().split(" ")[0], False), *process_config_lines(xs)]
+                            case []:
+                                return []
+
+                    return process_config_lines(lines)
+
+                for a in alarms:
+                    a.model = get_config_object(sample)
+                logger.debug(f"Returning {alarms})")
+                return alarms
 
     def execute(self):
 
@@ -230,9 +261,12 @@ class Tester:
 
         else:
             baseline_alarms: List[Alarm] = []
-
             count = 0
             count += 1
+
+            for config in self.program.get_baseline_configurations():
+                config: ProgramSpecification.BaselineConfig
+                if config.source_file is None:
 
             for i in tqdm(
                     ProcessPool(self.jobs).imap(self.run_config_and_get_alarms, i := list(self.program.get_baseline_configurations())),
@@ -256,9 +290,7 @@ def get_arguments() -> argparse.Namespace:
     p = argparse.ArgumentParser()
     p.add_argument("tool", help="The tool to run.")
     p.add_argument("program", help="The target program.")
-    p.add_argument("-v", dest="verbosity", action="count", default=0,
-                   help="""Level of verbosity. No v's will print only WARNING or above messages. One 
-                   v will print INFO and above. Two or more v's will print DEBUG or above.""")
+    p.add_argument("-v", dest="verbosity", action="store_true", help="""Print debug messages.""")
     p.add_argument("--baselines", action="store_true",
                    help="""Run the baseline experiments. In these, we configure each 
                    file with every possible configuration, and then run the experiments.""")
@@ -271,13 +303,10 @@ def get_arguments() -> argparse.Namespace:
 
 
 def set_up_logging(args: argparse.Namespace) -> None:
-    match args.verbosity:
-        case 0:
-            logging_level = logging.WARNING
-        case 1:
-            logging_level = logging.INFO
-        case _:
-            logging_level = logging.DEBUG
+    if args.verbosity:
+        logging_level = logging.DEBUG
+    else:
+        logging_level = logging.INFO
 
     logging_kwargs = {"level": logging_level,
                       "format": '%(asctime)s %(name)s [%(levelname)s - %(process)d] %(message)s',
