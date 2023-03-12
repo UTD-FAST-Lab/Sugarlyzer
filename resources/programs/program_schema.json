@@ -44,7 +44,7 @@
     },
     "makefile_location": {
       "description": "Where the makefile is (note that we will write sample configurations to this directory/.config",
-      "type": "string",
+      "type": "string"
     },
     "source_location": {
       "description": "Where the source code will be after running the build_script.",
