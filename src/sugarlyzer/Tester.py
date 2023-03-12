@@ -111,6 +111,8 @@ class Tester:
                             x: str
                             if x.startswith("#"):
                                 return [(x[1:].strip().split(" ")[0], False), *process_config_lines(xs)]
+                            else:
+                                return [((toks:=x.strip().split("="))[0], toks[1]), *process_config_lines(xs)]
                         case []:
                             return []
 
