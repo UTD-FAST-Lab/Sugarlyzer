@@ -25,7 +25,8 @@ class ProgramSpecification:
                  source_location: Optional[List[str]] = None,
                  remove_errors: bool = None,
                  included_files_and_directories: Iterable[Dict] = None,
-                 sample: Path = None
+                 sample: Path = None,
+                 makefile_location: str = None
                  ):
         self.name = name
         self.remove_errors = remove_errors
@@ -34,6 +35,7 @@ class ProgramSpecification:
         self.__source_location = source_location
         self.inc_dirs_and_files = [] if included_files_and_directories is None else included_files_and_directories
         self.sample_directory = sample
+        self.makefile_location = Path(makefile_location)
 
     @property
     def build_script(self):
@@ -126,7 +128,7 @@ class ProgramSpecification:
     @dataclass
     class BaselineConfig:
         source_file: Path
-        configuration: List[Tuple[str, str]]
+        configuration: List[Tuple[str, str]] | Path
 
     def get_baseline_configurations(self) -> Iterable[BaselineConfig]:
         if self.sample_directory is None:
@@ -150,19 +152,21 @@ class ProgramSpecification:
 
                 yield from (ProgramSpecification.BaselineConfig(source_file, c) for c in all_configurations(macros))
         else:
-            configs = []
-            for s in self.try_resolve_path(self.sample_directory).iterdir():
-                with open(s) as f:
-                    lines = f.readlines()
-                config = []
-                for s in lines:
-                    if s.startswith("#"):
-                        config.append(("UNDEF", s.strip().split(" ")[1]))
-                    else:
-                        config.append(("DEF", s.strip()))
-                configs.append(config)
+            # configs = []
+            # for s in self.try_resolve_path(self.sample_directory).iterdir():
+            #     with open(s) as f:
+            #         lines = f.readlines()
+            #     config = []
+            #     for s in lines:
+            #         if s.startswith("#"):
+            #             config.append(("UNDEF", s.strip().split(" ")[1]))
+            #         else:
+            #             config.append(("DEF", s.strip()))
+            #     configs.append(config)
+
+            # Yield the cross product of configs and source files.
             yield from (ProgramSpecification.BaselineConfig(file, config) for file in self.get_source_files() for config
-                        in configs)
+                        in self.try_resolve_path(self.sample_directory).iterdir())
 
     def get_all_macros(self, fpa):
         parser = MacroDiscoveryPreprocessor()
