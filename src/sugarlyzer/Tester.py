@@ -78,8 +78,9 @@ class Tester:
     def run_config_and_get_alarms(self, b: ProgramSpecification.BaselineConfig) -> Iterable[Alarm]:
         if isinstance(sample:=b.configuration, Path):
             # Copy config to .config
-            logging.info(f"Making configuration in {b.source_file}")
-            shutil.copyfile(sample, self.program.makefile_location.parent / Path(".config"))
+            logging.info(f"Making configuration for {sample}")
+            (config_file := (Path(self.program.makefile_location.parent / Path(".config")))).touch()
+            shutil.copyfile(sample, config_file)
             cwd = os.curdir
             os.chdir(self.program.makefile_location.parent)
             cp: subprocess.CompletedProcess = subprocess.run(["make", "oldconfig"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
