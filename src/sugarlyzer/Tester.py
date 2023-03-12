@@ -83,7 +83,10 @@ class Tester:
             shutil.copyfile(sample, config_file)
             cwd = os.curdir
             os.chdir(self.program.makefile_location.parent)
-            cp: subprocess.CompletedProcess = subprocess.run(["make", "oldconfig"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            cp: subprocess.CompletedProcess = subprocess.run(["make", "oldconfig"],
+                                                             stdout=subprocess.PIPE,
+                                                             stderr=subprocess.STDOUT,
+                                                             text=True)
             logger.info("Output from running make oldconfig:\n" + cp.stdout)
 
             def analyze_one_file(fi: Path) -> Iterable[Alarm]:
