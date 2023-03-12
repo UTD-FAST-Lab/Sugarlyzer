@@ -76,53 +76,52 @@ class Tester:
         return included_directories, included_files, cmd_decs, recommended_space
 
     def run_config_and_get_alarms(self, b: ProgramSpecification.BaselineConfig) -> Iterable[Alarm]:
-        if self.program.sample_directory is None:
-            raise RuntimeError("Cannot handle this yet.")
-        else:
-            for sample in self.program.sample_directory.iterdir():
-                # Copy config to .config
-                logging.info(f"Making configuration in {b.source_file}")
-                shutil.copyfile(sample, self.program.makefile_location.parent / Path(".config"))
-                cwd = os.curdir
-                os.chdir(self.program.makefile_location.parent)
-                cp: subprocess.CompletedProcess = subprocess.run(["make", "oldconfig"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-                logger.info("Output from running make oldconfig:\n" + cp.stdout)
+        if isinstance(sample:=b.configuration, Path):
+            # Copy config to .config
+            logging.info(f"Making configuration in {b.source_file}")
+            shutil.copyfile(sample, self.program.makefile_location.parent / Path(".config"))
+            cwd = os.curdir
+            os.chdir(self.program.makefile_location.parent)
+            cp: subprocess.CompletedProcess = subprocess.run(["make", "oldconfig"], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            logger.info("Output from running make oldconfig:\n" + cp.stdout)
 
-                def analyze_one_file(fi: Path) -> Iterable[Alarm]:
-                    inc_files, inc_dirs, cmd_decs = self.program.get_inc_files_and_dirs(fi)
-                    alarms = self.tool.analyze_and_read(fi, command_line_defs=cmd_decs,
-                                                        included_files=inc_files,
-                                                        included_dirs=inc_dirs,
-                                                        recommended_space=SugarCRunner.get_recommended_space(fi,
-                                                                                                             inc_files,
-                                                                                                             inc_dirs))
-                    return alarms
-
-                logger.info(f"Running analysis on configuration {b.configuration}....")
-                alarms = list()
-                with Pool(self.jobs) as p:
-                    for i in tqdm(p.imap(analyze_one_file, sf:=self.program.get_source_files()), total=len(list(sf))):
-                        alarms.extend(i)
-
-                def get_config_object(config: Path) -> List[Tuple[str,str]]:
-                    with open(config, 'r') as f:
-                        lines = [l.strip() for l in f.readlines()]
-
-                    def process_config_lines(lines: Iterable[str]):
-                        match lines:
-                            case [x, *xs]:
-                                x: str
-                                if x.startswith("#"):
-                                    return [(x[1:].strip().split(" ")[0], False), *process_config_lines(xs)]
-                            case []:
-                                return []
-
-                    return process_config_lines(lines)
-
-                for a in alarms:
-                    a.model = get_config_object(sample)
-                logger.debug(f"Returning {alarms})")
+            def analyze_one_file(fi: Path) -> Iterable[Alarm]:
+                inc_files, inc_dirs, cmd_decs = self.program.get_inc_files_and_dirs(fi)
+                alarms = self.tool.analyze_and_read(fi, command_line_defs=cmd_decs,
+                                                    included_files=inc_files,
+                                                    included_dirs=inc_dirs,
+                                                    recommended_space=SugarCRunner.get_recommended_space(fi,
+                                                                                                         inc_files,
+                                                                                                         inc_dirs))
                 return alarms
+
+            logger.info(f"Running analysis on configuration {b.configuration}....")
+            alarms = list()
+            with Pool(self.jobs) as p:
+                for i in tqdm(p.imap(analyze_one_file, sf:=self.program.get_source_files()), total=len(list(sf))):
+                    alarms.extend(i)
+
+            def get_config_object(config: Path) -> List[Tuple[str,str]]:
+                with open(config, 'r') as f:
+                    lines = [l.strip() for l in f.readlines()]
+
+                def process_config_lines(lines: Iterable[str]):
+                    match lines:
+                        case [x, *xs]:
+                            x: str
+                            if x.startswith("#"):
+                                return [(x[1:].strip().split(" ")[0], False), *process_config_lines(xs)]
+                        case []:
+                            return []
+
+                return process_config_lines(lines)
+
+            for a in alarms:
+                a.model = get_config_object(sample)
+            logger.debug(f"Returning {alarms})")
+            return alarms
+        else:
+            raise RuntimeError("Can't handle non-file configurations yet.")
 
     def execute(self):
 
@@ -264,14 +263,8 @@ class Tester:
             count = 0
             count += 1
 
-            for config in self.program.get_baseline_configurations():
-                config: ProgramSpecification.BaselineConfig
-                if config.source_file is None:
-
-            for i in tqdm(
-                    ProcessPool(self.jobs).imap(self.run_config_and_get_alarms, i := list(self.program.get_baseline_configurations())),
-                                       total=len(list(i))):
-                baseline_alarms.extend(i)
+            for configuration in self.program.get_baseline_configurations():
+                baseline_alarms.extend(self.run_config_and_get_alarms(configuration))
 
             alarms = baseline_alarms
 
