@@ -88,7 +88,7 @@ class Tester:
         if isinstance(sample:=b.configuration, Path):
             # Copy config to .config
             logging.info(f"Making configuration for {sample}")
-            (config_file := (Path(self.program.makefile_location.parent / Path(".config")))).touch()
+            (config_file := (Path(self.program.makefile_location.parent / Path("config/.config")))).touch()
             shutil.copyfile(sample, config_file)
             cwd = os.curdir
             os.chdir(self.program.makefile_location.parent)
