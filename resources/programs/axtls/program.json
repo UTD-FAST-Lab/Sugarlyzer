@@ -1,6 +1,6 @@
 {
       "remove_errors": false,
-      "sample": "programs/axtls/configs",
+      "sample_dir": "axtls/configs",
       "included_files_and_directories": [
             {
                 "included_files": [
@@ -249,6 +249,5 @@
             }
       ],
       "build_script": "axtlsScript.sh",
-      "source_location": ["axtls-code"],
-      "makefile_location": "axtls-code/Makefile"
+      "project_root": "axtls-code"
 }

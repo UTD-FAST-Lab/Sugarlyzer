@@ -35,10 +35,10 @@ class Infer(AbstractTool):
                *list(itertools.chain(*zip(itertools.cycle(["--include"]), included_files))),
                *command_line_defs,
                "-nostdinc", "-c", file.absolute()]
-        logger.info(f"Running cmd {cmd}")
+        logger.debug(f"Running cmd {cmd}")
         ps = subprocess.run(cmd, stderr=subprocess.STDOUT, stdout=subprocess.PIPE, text=True)
-        if (ps.returncode != 0) or ("error" in ps.stdout.lower()):
-            logger.warning(f"Running infer on file {str(file)} potentially failed.")
+        if (ps.returncode != 0):
+            logger.warning(f"Running infer on file {str(file)} with command {' '.join(str(s) for s in cmd)} potentially failed (exit code {ps.returncode}).")
             logger.warning(ps.stdout)
         report = os.path.join(output_location,'report.json')
         yield report
