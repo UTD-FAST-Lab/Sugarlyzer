@@ -98,7 +98,7 @@ class Alarm:
             "sanitized_message": lambda: self.sanitized_message,
             "presence_condition": lambda: self.presence_condition,
             "feasible": lambda: self.feasible,
-            "configuration": lambda: str(self.model) if isinstance(self.model, z3.ModelRef) else self.model,
+            "configuration": lambda: str(self.model) if isinstance(self.model, ModelRef) else self.model,
             "analysis_time": lambda: self.analysis_time,
             "desugaring_time": lambda: self.desugaring_time,
             "get_recommended_space": lambda: self.get_recommended_space,
