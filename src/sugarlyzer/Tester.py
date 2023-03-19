@@ -240,16 +240,15 @@ class Tester:
                     logger.critical(f"Ignored constraint {str(k)}={str(v)}")
             loggable_config_string = config_string.replace("\n", ", ")
             logger.debug(f"Configuration is {loggable_config_string}")
-            ntf = tempfile.mkstemp()
-            with open(ntf, 'w') as f:
-                f.write(loggable_config_string)
+            ntf = tempfile.NamedTemporaryFile(delete=False)
+            ntf.write(loggable_config_string)
             ps: ProgramSpecification = self.clone_program_and_configure(self.program, Path(ntf.name))
             updated_file = alarm.input_file.relative_to(self.program.source_directory).relative_to(ps.source_directory)
             logger.debug(f"Mapped file {alarm.input_file} to {updated_file}")
-            verify = self.analyze_file_and_associate_configuration(updated_file, Path(ntf))
+            verify = self.analyze_file_and_associate_configuration(updated_file, Path(ntf.name))
             logger.debug(
                 f"Got the following alarms {[json.dumps(b.as_dict()) for b in verify]} when trying to verify alarm {json.dumps(alarm.as_dict())}")
-            os.remove(ntf)
+            ntf.close()
             for v in verify:
                 logger.debug(f"Comparing alarms {alarm.as_dict()} and {v.as_dict()}")
                 if alarm.sanitized_message == v.sanitized_message and \
