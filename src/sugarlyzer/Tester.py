@@ -291,6 +291,7 @@ class Tester:
 
         spec_config_pairs: List[Tuple[ProgramSpecification, Path]] = []
         all_configs = list(self.program.get_baseline_configurations())
+        logger.debug(f"All configs are {all_configs}")
         i = 0
 
         with ProcessPool(self.jobs) as p:
