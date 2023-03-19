@@ -1,18 +1,17 @@
-import functools
+import itertools
 import itertools
 import logging
 import os
 import re
 import subprocess
-import sys
 import tempfile
 import time
 from dataclasses import dataclass, field
 from hashlib import sha256
 from pathlib import Path
-from typing import Tuple, List, Optional, Dict, Iterable
+from typing import List, Optional, Dict, Iterable
 
-from z3.z3 import Solver, sat, Bool, Int, Not, And, Or
+from z3.z3 import Solver, sat, Bool, Int
 
 from src.sugarlyzer.models.Alarm import Alarm
 
@@ -206,6 +205,8 @@ def desugar_file(file_to_desugar: Path,
         cmd = ['', 'java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', *commandline_args, *included_files, *included_directories,file_to_desugar]
     cmd = [str(s) for s in cmd]
     logging.info(f'Command: {cmd}')
+
+    to_append = None
     if remove_errors:
         run_sugarc(" ".join(cmd), file_to_desugar, desugared_file, log_file)
         logger.debug(f"Created desugared file {desugared_file}")
