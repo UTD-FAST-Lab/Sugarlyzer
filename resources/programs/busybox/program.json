@@ -1,7 +1,7 @@
 {
     "remove_errors": false,
     "config_prefix": "KGENMACRO_",
-   "sample": "programs/busybox/configs",
+   "sample_dir": "busybox/configs",
    "included_files_and_directories": [
       {
           "included_files": [
@@ -11613,7 +11613,6 @@
       }
    ],
    "build_script": "busyboxScript.sh",
-   "source_location": [
-      "busybox-1_28_0"
-   ]
+   "project_root": "busybox-1_28_0"
+
 }

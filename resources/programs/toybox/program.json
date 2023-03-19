@@ -1,6 +1,7 @@
 {
     "remove_errors": false,
     "config_prefix": "KGENMACRO_",
+    "sample_dir": "toybox/configs",
     "included_files_and_directories": [
         {
             "included_files": [
@@ -16,5 +17,5 @@
         }
     ],
     "build_script": "toybox/toyboxScript.sh",
-    "source_location": ["toybox"]
+    "project_root": "toybox"
 }
