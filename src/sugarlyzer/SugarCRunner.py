@@ -147,6 +147,8 @@ def desugar_file(file_to_desugar: Path,
                  output_file: str = '',
                  log_file: str = '',
                  remove_errors: bool = False,
+                 config_prefix: str = None,
+                 whitelist: str = None,
                  no_stdlibs: bool = False,
                  keep_mem: bool = False,
                  make_main: bool = False,
@@ -196,10 +198,14 @@ def desugar_file(file_to_desugar: Path,
             log_file = file_to_desugar.with_suffix('.log')
         case _:
             log_file = Path(log_file)
-
-    cmd = ['timeout 60m', 'java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToPrefix', 'KGENMACRO_', *commandline_args, *included_files, *included_directories,
-           file_to_desugar]
+    if config_prefix != None:
+        cmd = ['', 'java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToPrefix', config_prefix, *commandline_args, *included_files, *included_directories,file_to_desugar]
+    elif whitelist != None:
+        cmd = ['', 'java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToWhitelist', whitelist, *commandline_args, *included_files, *included_directories,file_to_desugar]  
+    else:
+        cmd = ['', 'java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', *commandline_args, *included_files, *included_directories,file_to_desugar]
     cmd = [str(s) for s in cmd]
+    logging.info(f'Command: {cmd}')
     if remove_errors:
         run_sugarc(" ".join(cmd), file_to_desugar, desugared_file, log_file)
         logging.debug(f"Created desugared file {desugared_file}")

@@ -15,7 +15,6 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["included_files", "included_directories"],
         "properties": {
           "file_pattern": {
             "description": "A regular expression to apply to the filename. If the regular expression is found within the filename, then we use the specified included directories and files. Note that patterns are applied in the order specified here. If this is not included, the rule will match every file.",
