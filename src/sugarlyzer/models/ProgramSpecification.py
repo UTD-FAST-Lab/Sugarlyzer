@@ -53,7 +53,7 @@ class ProgramSpecification:
 
     @property
     def oldconfig_location(self):
-        return self.try_resolve_path(self.__oldconfig_location, self.search_context)
+        return self.try_resolve_path(self.__oldconfig_location, self.make_root)
 
     @property
     def search_context(self):
