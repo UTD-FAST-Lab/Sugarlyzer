@@ -94,13 +94,16 @@ class Tester:
     def configure_code(program: ProgramSpecification, config: Path):
         logger.info(f"Running configuration {config.name}")
         # Copy config to .config
+        logger.debug(f"Copying {config.name} to {program.oldconfig_location}")
         shutil.copyfile(config, program.oldconfig_location)
         cwd = os.curdir
         os.chdir(program.make_root)
+        logger.debug("Running make oldconfig")
         cp: subprocess.CompletedProcess = subprocess.run(make_cmd := ["make", "oldconfig"],
                                                          stdout=subprocess.PIPE,
                                                          stderr=subprocess.STDOUT,
                                                          text=True)
+        logger.debug("make oldconfig finished.")
         os.chdir(cwd)
         if cp.returncode != 0:
             logger.warning(f"Running command {' '.join(make_cmd)} resulted in a non-zero error code.\n"
@@ -116,7 +119,7 @@ class Tester:
         shutil.copytree(ps.project_root, code_dest)
         ps_copy = copy.deepcopy(ps)
         ps_copy.search_context = code_dest.parent
-        Tester.configure_code(ps, config)
+        Tester.configure_code(ps_copy, config)
         return ps_copy
 
     def execute(self):
@@ -308,7 +311,7 @@ class Tester:
                 i += 1
                 spec_config_pairs.append(result)
 
-        logger.debug(f"config pairs is {list((ps.search_context, x) for ps, x in spec_config_pairs)}")
+        logger.debug(f"Config pairs is {list((ps.search_context, x) for ps, x in spec_config_pairs)}")
         source_files_config_pairs: List[Tuple[Path, Path]] = []
         for spec, config in spec_config_pairs:
             source_files_config_pairs.extend((fi, config) for fi in spec.get_source_files())
