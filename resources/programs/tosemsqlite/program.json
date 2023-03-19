@@ -20,5 +20,5 @@
         }
     ],
     "build_script": "tosemsqlite/tosemsqliteScript.sh",
-    "source_location": ["sqlite"]
+    "project_root": "sqlite"
 }

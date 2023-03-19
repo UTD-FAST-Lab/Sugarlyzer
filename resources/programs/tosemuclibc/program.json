@@ -285,5 +285,5 @@
 	}
     ],
     "build_script": "tosemuclibc/tosemuclibcScript.sh",
-    "source_location": ["uClibc"]
+    "project_root": "uClibc"
 }
