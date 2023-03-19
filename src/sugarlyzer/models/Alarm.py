@@ -129,6 +129,9 @@ class Alarm:
         if self.input_file is None:
             raise ValueError("Trying to set original line range when self.original_file is none.")
 
+        if 'desugared' not in self.input_file.name:  ## Bad, bad, bad. TODO: Fix this with a more robust solution
+            return IntegerRange(self.line_in_input_file, self.line_in_input_file)
+
         if self.__original_line_range is None:
             self.__original_line_range = map_source_line(self.input_file, self.line_in_input_file)
             if self.__original_line_range is not None and not self.function_line_range[0] == "GLOBAL" and not self.__original_line_range.is_in(self.function_line_range[1]):
