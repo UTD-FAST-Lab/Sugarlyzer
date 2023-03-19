@@ -171,7 +171,7 @@ class Tester:
             alarms = []
             logger.info("Running analysis....")
             with ProcessPool(self.jobs) as p:
-                for result in tqdm(p.starmap(analyze_read_and_process, ((d, o, dt) for d, _, o, dt in input_files)),
+                for result in tqdm(p.imap(lambda x: analyze_read_and_process(*x), ((d, o, dt) for d, _, o, dt in input_files)),
                                    total=len(input_files)):
                     alarms.extend(result)
 
