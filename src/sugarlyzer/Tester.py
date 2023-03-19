@@ -240,7 +240,7 @@ class Tester:
                     logger.critical(f"Ignored constraint {str(k)}={str(v)}")
             loggable_config_string = config_string.replace("\n", ", ")
             logger.debug(f"Configuration is {loggable_config_string}")
-            ntf = tempfile.NamedTemporaryFile(delete=False)
+            ntf = tempfile.NamedTemporaryFile(delete=False, mode="w")
             ntf.write(loggable_config_string)
             ps: ProgramSpecification = self.clone_program_and_configure(self.program, Path(ntf.name))
             updated_file = alarm.input_file.relative_to(self.program.source_directory).relative_to(ps.source_directory)
