@@ -60,6 +60,8 @@ class Tester:
         self.program = ProgramSpecification(program, **program_as_json)
         self.tool = AnalysisToolFactory().get_tool(tool)
         self.remove_errors = self.tool.remove_errors if self.program.remove_errors is None else self.program.remove_errors
+        self.config_prefix = self.program.config_prefix
+        self.whitelist = self.program.whitelist
 
     @functools.cache
     def get_inc_files_and_dirs_for_file(self, file: Path):
@@ -117,6 +119,8 @@ class Tester:
                 return (*SugarCRunner.desugar_file(file,
                                                    recommended_space=recommended_space,
                                                    remove_errors=self.remove_errors,
+                                                   config_prefix=self.config_prefix,
+                                                   whitelist=self.whitelist,
                                                    no_stdlibs=True,
                                                    included_files=included_files,
                                                    included_directories=included_directories,
@@ -287,11 +291,12 @@ def set_up_logging(args: argparse.Namespace) -> None:
 
 
 def main():
+    start = time.time()
     args = get_arguments()
     set_up_logging(args)
     t = Tester(args.tool, args.program, args.baselines, args.no_recommended_space, args.jobs, args.validate)
     t.execute()
-
+    print(f'total time: {time.time() - start}')
 
 if __name__ == '__main__':
     main()

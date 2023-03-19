@@ -31,11 +31,11 @@ class Clang(AbstractTool):
             included_files = []
 
         output_location = tempfile.mkdtemp()
-        cmd = ["clang", '--analyze', "-Xanalyzer", "-analyzer-output=text",
-               *list(itertools.chain(*zip(itertools.cycle(["-I"]), included_dirs))),
-               *list(itertools.chain(*zip(itertools.cycle(["--include"]), included_files))),
-               *command_line_defs,
-               '-nostdinc',
+        cmd = ["clang-11", '--analyze', "-Xanalyzer", "-analyzer-output=text",
+               #*list(itertools.chain(*zip(itertools.cycle(["-I"]), included_dirs))),
+               #*list(itertools.chain(*zip(itertools.cycle(["--include"]), included_files))),
+               #*command_line_defs,
+               #'-nostdinc',
                "-c", file.absolute()]
         logger.info(f"Running cmd {' '.join(str(s) for s in cmd)}")
         pipes = subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE)

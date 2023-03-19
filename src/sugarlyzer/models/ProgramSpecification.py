@@ -24,11 +24,15 @@ class ProgramSpecification:
                  build_script: str,
                  source_location: Optional[List[str]] = None,
                  remove_errors: bool = None,
+                 config_prefix: str = None,
+                 whitelist: str = None,
                  included_files_and_directories: Iterable[Dict] = None,
                  sample: Path = None
                  ):
         self.name = name
         self.remove_errors = remove_errors
+        self.config_prefix = config_prefix
+        self.whitelist = whitelist
         self.no_std_libs = True
         self.__build_script = build_script
         self.__source_location = source_location
@@ -76,9 +80,11 @@ class ProgramSpecification:
                     relative_to = Path(rt)
                 else:
                     relative_to = file.parent
-
-                inc_files.extend(self.try_resolve_path(Path(p), relative_to) for p in spec['included_files'])
-                inc_dirs.extend(self.try_resolve_path(Path(p), relative_to) for p in spec['included_directories'])
+                    
+                if 'included_files' in spec.keys():
+                    inc_files.extend(self.try_resolve_path(Path(p), relative_to) for p in spec['included_files'])
+                if 'included_directories' in spec.keys():
+                    inc_dirs.extend(self.try_resolve_path(Path(p), relative_to) for p in spec['included_directories'])
                 if 'macro_definitions' in spec.keys():
                     cmd_decs.extend(spec['macro_definitions'])
 
