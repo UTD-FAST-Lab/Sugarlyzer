@@ -1,6 +1,7 @@
 {
-      "remove_errors": false,
-      "sample": "programs/axtls/configs",
+    "remove_errors": false,
+    "config_prefix": "KGENMACRO_",
+    "sample": "programs/axtls/configs",
       "included_files_and_directories": [
             {
                 "included_files": [

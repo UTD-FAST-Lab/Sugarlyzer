@@ -1,5 +1,6 @@
 {
-   "remove_errors": false,
+    "remove_errors": false,
+    "config_prefix": "KGENMACRO_",
    "sample": "programs/busybox/configs",
    "included_files_and_directories": [
       {

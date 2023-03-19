@@ -1,0 +1,24 @@
+{
+    "remove_errors": false,
+    "whitelist": "/TypeChef-Sampling-SQLite/openfeatures.txt",
+    "included_files_and_directories": [
+        {
+            "included_files": [
+		"/TypeChef-Sampling-SQLite/platform.h",
+		"/TypeChef-Sampling-SQLite/partial_configuration.h",
+		"/SugarlyzerConfig/tosemInc.h"
+		
+            ],
+            "included_directories": [
+		"/TypeChef-GNUCHeader/usr_include/x86_64-linux-gnu",
+		"/TypeChef-GNUCHeader/usr_include",
+		"/TypeChef-GNUCHeader/x86_64-linux-gnu/4.8/include",
+                "/TypeChef-GNUCHeader/x86_64-linux-gnu/4.8/include-fixed",
+                "/TypeChef-Sampling-SQLite/",
+                "/TypeChef-Sampling-SQLite/sqlite/"
+	    ]
+        }
+    ],
+    "build_script": "tosemsqlite/tosemsqliteScript.sh",
+    "source_location": ["sqlite"]
+}
