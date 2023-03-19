@@ -1,13 +1,18 @@
 import argparse
+import copy
 import functools
 import importlib
 import itertools
 import json
 import logging
+import multiprocessing
 import os
 import re
+import shutil
+import subprocess
 import time
 from enum import Enum, auto
+from multiprocessing import Pool
 from pathlib import Path
 from typing import Iterable, List, Dict, Any, TypeVar, Tuple, Set
 
@@ -15,25 +20,25 @@ import z3
 # noinspection PyUnresolvedReferences
 from dill import pickle
 from jsonschema.validators import RefResolver, Draft7Validator
-from pathos.multiprocessing import ProcessPool
+from pathos.pools import ProcessPool, ParallelPool
+
 # noinspection PyUnresolvedReferences
-from dill import pickle
 from tqdm import tqdm
 
 from src.sugarlyzer import SugarCRunner
 from src.sugarlyzer.SugarCRunner import process_alarms
+from src.sugarlyzer.analyses.AbstractTool import AbstractTool
 from src.sugarlyzer.analyses.AnalysisToolFactory import AnalysisToolFactory
 from src.sugarlyzer.models.Alarm import Alarm
 from src.sugarlyzer.models.ProgramSpecification import ProgramSpecification
-from src.sugarlyzer.util.decorators import log_all_params_and_return
 
+multiprocessing.set_start_method("spawn")
 logger = logging.getLogger(__name__)
 
 
 class Tester:
     def __init__(self, tool: str, program: str, baselines: bool, no_recommended_space: bool, jobs: int = None,
                  validate: bool = False):
-        self.tool: str = tool
         self.baselines = baselines
         self.no_recommended_space = no_recommended_space
         self.jobs: int = jobs
@@ -57,8 +62,8 @@ class Tester:
 
         program_as_json = read_json_and_validate(
             importlib.resources.path(f'resources.programs.{program}', 'program.json'))
-        self.program = ProgramSpecification(program, **program_as_json)
-        self.tool = AnalysisToolFactory().get_tool(tool)
+        self.program: ProgramSpecification = ProgramSpecification(program, **program_as_json)
+        self.tool: AbstractTool = AnalysisToolFactory().get_tool(tool)
         self.remove_errors = self.tool.remove_errors if self.program.remove_errors is None else self.program.remove_errors
         self.config_prefix = self.program.config_prefix
         self.whitelist = self.program.whitelist
@@ -66,7 +71,7 @@ class Tester:
     @functools.cache
     def get_inc_files_and_dirs_for_file(self, file: Path):
         included_files, included_directories, cmd_decs = self.program.get_inc_files_and_dirs(file)
-        logger.info(f"Included files, included directories for {file}: {included_files} {included_directories}")
+        logger.debug(f"Included files, included directories for {file}: {included_files} {included_directories}")
         if self.no_recommended_space:
             recommended_space = None
         else:
@@ -74,26 +79,31 @@ class Tester:
         logger.debug(f"User defined space for file {file} is {recommended_space}")
         return included_directories, included_files, cmd_decs, recommended_space
 
-    def run_config_and_get_alarms(self, b: ProgramSpecification.BaselineConfig) -> Iterable[Alarm]:
-        config_builder = []
-        for d, s in b.configuration:
-            if d == "DEF":
-                config_builder.append('-D' + ((s + '=1') if '=' not in s else s))
-            elif d == "UNDEF":
-                config_builder.append('-U' + s)
-
-        inc_files, inc_dirs, cmd_decs = self.program.get_inc_files_and_dirs(b.source_file)
-        logger.info(f"Running analysis on file {b.source_file} with config {' '.join(config_builder)}")
-        alarms = self.tool.analyze_and_read(b.source_file, command_line_defs=config_builder + cmd_decs,
+    def analyze_one_file(self, fi: Path) -> Iterable[Alarm]:
+        inc_files, inc_dirs, cmd_decs = self.program.inc_files_and_dirs_for_file(fi)
+        alarms = self.tool.analyze_and_read(fi, command_line_defs=cmd_decs,
                                             included_files=inc_files,
                                             included_dirs=inc_dirs,
-                                            recommended_space=SugarCRunner.get_recommended_space(b.source_file,
+                                            recommended_space=SugarCRunner.get_recommended_space(fi,
                                                                                                  inc_files,
                                                                                                  inc_dirs))
-        for a in alarms:
-            a.model = [f"{du}_{op}" for du, op in b.configuration]
-        logger.debug(f"Returning {alarms})")
         return alarms
+
+    @staticmethod
+    def configure_code_and_run_analysis(config: Path, program: ProgramSpecification):
+        logger.info(f"Running configuration {config.name}")
+        # Copy config to .config
+        shutil.copyfile(config, program.oldconfig_location)
+        cwd = os.curdir
+        os.chdir(program.make_root)
+        cp: subprocess.CompletedProcess = subprocess.run(make_cmd := ["make", "oldconfig"],
+                                                         stdout=subprocess.PIPE,
+                                                         stderr=subprocess.STDOUT,
+                                                         text=True)
+        os.chdir(cwd)
+        if cp.returncode != 0:
+            logger.warning(f"Running command {' '.join(make_cmd)} resulted in a non-zero error code.\n"
+                           f"Output was:\n" + cp.stdout)
 
     def execute(self):
 
@@ -110,10 +120,11 @@ class Tester:
 
         if not self.baselines:
             # 2. Run SugarC
-            logger.info(f"Desugaring the source code in {list(self.program.source_locations)}")
+            logger.info(f"Desugaring the source code in {list(self.program.source_location)}")
 
             def desugar(file: Path) -> Tuple[Path, Path, Path, float]:  # God, what an ugly tuple
-                included_directories, included_files, cmd_decs, recommended_space = self.get_inc_files_and_dirs_for_file(file)
+                included_directories, included_files, cmd_decs, recommended_space = self.get_inc_files_and_dirs_for_file(
+                    file)
                 start = time.time()
                 # noinspection PyTypeChecker
                 return (*SugarCRunner.desugar_file(file,
@@ -130,7 +141,7 @@ class Tester:
 
             logger.info(f"Source files are {list(self.program.get_source_files())}")
             input_files: List[Tuple] = []
-            print("Desugaring files....")
+            logger.info("Desugaring files....")
             for result in tqdm(ProcessPool(self.jobs).imap(desugar, self.program.get_source_files()),
                                total=len(list(self.program.get_source_files()))):
                 input_files.append(result)
@@ -139,7 +150,7 @@ class Tester:
             logger.info(f"Collected {len([c for c in self.program.get_source_files()])} .c files to analyze.")
 
             def analyze_read_and_process(desugared_file: Path, original_file: Path, desugaring_time: float = None) -> \
-            Iterable[Alarm]:
+                    Iterable[Alarm]:
                 included_directories, included_files, cmd_decs, user_defined_space = self.get_inc_files_and_dirs_for_file(
                     original_file)
                 alarms = process_alarms(self.tool.analyze_and_read(desugared_file, included_files=included_files,
@@ -154,7 +165,7 @@ class Tester:
                 return analyze_read_and_process(t[0], t[1], t[2])
 
             alarms = []
-            print("Running analysis....")
+            logger.info("Running analysis....")
             for result in tqdm(ProcessPool(self.jobs).imap(detupleize, ((d, o, dt) for d, _, o, dt in input_files)),
                                total=len(input_files)):
                 alarms.extend(result)
@@ -191,7 +202,7 @@ class Tester:
             logger.debug("Done.")
 
             if self.validate:
-                print("Now validating....")
+                logger.info("Now validating....")
                 for a in tqdm(alarms):
                     a.verified = "UNVERIFIED"
                     logger.debug(f"Model is {a.model}")
@@ -212,10 +223,11 @@ class Tester:
                             configuration=config)
                         logger.info(f"Now running validation on {b}")
 
-                        verify = self.run_config_and_get_alarms(b)
-                        logger.info(f"Got the following alarms {[json.dumps(b.as_dict()) for b in verify]} when trying to verify alarm {json.dumps(a.as_dict())}")
+                        verify = self.configure_code_and_run_analysis(b)
+                        logger.debug(
+                            f"Got the following alarms {[json.dumps(b.as_dict()) for b in verify]} when trying to verify alarm {json.dumps(a.as_dict())}")
                         for v in verify:
-                            logger.info(f"Comparing alarms {a.as_dict()} and {v.as_dict()}")
+                            logger.debug(f"Comparing alarms {a.as_dict()} and {v.as_dict()}")
                             if a.sanitized_message == v.sanitized_message:
                                 a.verified = "MESSAGE_ONLY"
                             try:
@@ -231,38 +243,95 @@ class Tester:
                                     break  # no need to continue
                             except ValueError as ve:
                                 pass
+                            logger.debug(f"Alarm with validation updated: {a.as_dict()}")
 
         else:
-            baseline_alarms: List[Alarm] = []
+            alarms = self.run_baseline_experiments()
 
-            count = 0
-            count += 1
-
-            for i in tqdm(
-                    ProcessPool(self.jobs).imap(self.run_config_and_get_alarms, i := list(self.program.get_baseline_configurations())),
-                                       total=len(list(i))):
-                baseline_alarms.extend(i)
-
-            alarms = baseline_alarms
-
-        for alarm in alarms:
-            alarm.get_recommended_space = (not self.no_recommended_space)
-            alarm.remove_errors = self.remove_errors
         logger.debug("Writing alarms to file.")
         with open("/results.json", 'w') as f:
             json.dump([a.as_dict() for a in alarms], f)
 
-        # (Optional) 6. Optional unsoundness checker
-        pass
+    def analyze_file_and_associate_configuration(self, file: Path, config: Path) -> Iterable[Alarm]:
+        def get_config_object(config: Path) -> List[Tuple[str, str]]:
+            with open(config, 'r') as f:
+                lines = [l.strip() for l in f.readlines()]
+
+            def process_config_lines(lines: Iterable[str]):
+                match lines:
+                    case [x, *xs]:
+                        x: str
+                        if x.startswith("#"):
+                            return [(x[1:].strip().split(" ")[0], False), *process_config_lines(xs)]
+                        else:
+                            return [((toks := x.strip().split("="))[0], toks[1]), *process_config_lines(xs)]
+                    case []:
+                        return []
+
+            return process_config_lines(lines)
+
+        alarms_from_one_file = self.analyze_one_file(file)
+        for a in alarms_from_one_file:
+            a.model = get_config_object(config)
+        return alarms_from_one_file
+
+    def run_baseline_experiments(self) -> Iterable[Alarm]:
+        alarms: List[Alarm] = []
+        count = 0
+        count += 1
+
+        def clone_program_specification(ps: ProgramSpecification, config: Path) -> ProgramSpecification:
+            """Clones a program spec to a new directory, and returns a program spec with updated search context."""
+            code_dest = Path("/targets") / Path(config.name) / Path(ps.project_root.name)
+            code_dest.parent.mkdir(parents=True)
+            logger.debug(f"Cloning {ps.project_root} to {code_dest}")
+
+            shutil.copytree(ps.project_root, code_dest)
+            ps_copy = copy.deepcopy(ps)
+            ps_copy.search_context = code_dest.parent
+            return ps_copy
+
+        logger.info("Performing code cloning for baseline experiments:")
+
+        spec_config_pairs: List[Tuple[ProgramSpecification, Path]] = []
+        all_configs = list(self.program.get_baseline_configurations())
+        logger.debug(f"All configs are {all_configs}")
+        i = 0
+
+        with ProcessPool(self.jobs) as p:
+            for result in tqdm(p.imap(lambda x: (clone_program_specification(self.program, x), x),
+                                      all_configs),
+                               total=len(all_configs)):
+                # logger.info(f"Copying configuration {i}/1000")
+                i += 1
+                spec_config_pairs.append(result)
+
+        logger.debug(f"config pairs is {list((ps.search_context, x) for ps, x in spec_config_pairs)}")
+        source_files_config_pairs: List[Tuple[Path, Path]] = []
+        for spec, config in spec_config_pairs:
+            source_files_config_pairs.extend((fi, config) for fi in spec.get_source_files())
+
+        logger.info("Running analysis:")
+        logger.debug(f"Running analysis on pairs {source_files_config_pairs}")
+        with ProcessPool(self.jobs) as p:
+            alarms = list()
+            for i in tqdm(
+                    p.imap(lambda x: self.analyze_file_and_associate_configuration(*x), source_files_config_pairs),
+                    total=len(source_files_config_pairs)):
+                alarms.extend(i)
+
+        for alarm in alarms:
+            alarm.get_recommended_space = (not self.no_recommended_space)
+            alarm.remove_errors = self.remove_errors
+
+        return alarms
 
 
 def get_arguments() -> argparse.Namespace:
     p = argparse.ArgumentParser()
     p.add_argument("tool", help="The tool to run.")
     p.add_argument("program", help="The target program.")
-    p.add_argument("-v", dest="verbosity", action="count", default=0,
-                   help="""Level of verbosity. No v's will print only WARNING or above messages. One 
-                   v will print INFO and above. Two or more v's will print DEBUG or above.""")
+    p.add_argument("-v", dest="verbosity", action="store_true", help="""Print debug messages.""")
     p.add_argument("--baselines", action="store_true",
                    help="""Run the baseline experiments. In these, we configure each 
                    file with every possible configuration, and then run the experiments.""")
@@ -275,13 +344,10 @@ def get_arguments() -> argparse.Namespace:
 
 
 def set_up_logging(args: argparse.Namespace) -> None:
-    match args.verbosity:
-        case 0:
-            logging_level = logging.WARNING
-        case 1:
-            logging_level = logging.INFO
-        case _:
-            logging_level = logging.DEBUG
+    if args.verbosity:
+        logging_level = logging.DEBUG
+    else:
+        logging_level = logging.INFO
 
     logging_kwargs = {"level": logging_level,
                       "format": '%(asctime)s %(name)s [%(levelname)s - %(process)d] %(message)s',
