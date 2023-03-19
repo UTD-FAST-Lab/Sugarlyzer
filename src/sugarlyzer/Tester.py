@@ -14,6 +14,7 @@ import time
 from enum import Enum, auto
 from multiprocessing import Pool
 from pathlib import Path
+from tempfile import NamedTemporaryFile
 from typing import Iterable, List, Dict, Any, TypeVar, Tuple, Set
 
 import z3
@@ -90,7 +91,7 @@ class Tester:
         return alarms
 
     @staticmethod
-    def configure_code_and_run_analysis(config: Path, program: ProgramSpecification):
+    def configure_code(program: ProgramSpecification, config: Path):
         logger.info(f"Running configuration {config.name}")
         # Copy config to .config
         shutil.copyfile(config, program.oldconfig_location)
@@ -104,6 +105,19 @@ class Tester:
         if cp.returncode != 0:
             logger.warning(f"Running command {' '.join(make_cmd)} resulted in a non-zero error code.\n"
                            f"Output was:\n" + cp.stdout)
+
+    @staticmethod
+    def clone_program_and_configure(ps: ProgramSpecification, config: Path) -> ProgramSpecification:
+        """Clones a program spec to a new directory, and returns a program spec with updated search context."""
+        code_dest = Path("/targets") / Path(config.name) / Path(ps.project_root.name)
+        code_dest.parent.mkdir(parents=True)
+        logger.debug(f"Cloning {ps.project_root} to {code_dest}")
+
+        shutil.copytree(ps.project_root, code_dest)
+        ps_copy = copy.deepcopy(ps)
+        ps_copy.search_context = code_dest.parent
+        Tester.configure_code(ps, config)
+        return ps_copy
 
     def execute(self):
 
@@ -128,7 +142,6 @@ class Tester:
                 start = time.time()
                 # noinspection PyTypeChecker
                 return (*SugarCRunner.desugar_file(file,
-                                                   recommended_space=recommended_space,
                                                    remove_errors=self.remove_errors,
                                                    config_prefix=self.config_prefix,
                                                    whitelist=self.whitelist,
@@ -154,21 +167,18 @@ class Tester:
                 included_directories, included_files, cmd_decs, user_defined_space = self.get_inc_files_and_dirs_for_file(
                     original_file)
                 alarms = process_alarms(self.tool.analyze_and_read(desugared_file, included_files=included_files,
-                                                                   included_dirs=included_directories,
-                                                                   recommended_space=user_defined_space),
+                                                                   included_dirs=included_directories),
                                         desugared_file)
                 for a in alarms:
                     a.desugaring_time = desugaring_time
                 return alarms
 
-            def detupleize(t):
-                return analyze_read_and_process(t[0], t[1], t[2])
-
             alarms = []
             logger.info("Running analysis....")
-            for result in tqdm(ProcessPool(self.jobs).imap(detupleize, ((d, o, dt) for d, _, o, dt in input_files)),
-                               total=len(input_files)):
-                alarms.extend(result)
+            with ProcessPool(self.jobs) as p:
+                for result in tqdm(p.starmap(analyze_read_and_process, ((d, o, dt) for d, _, o, dt in input_files)),
+                                   total=len(input_files)):
+                    alarms.extend(result)
 
             logger.info(f"Got {len(alarms)} unique alarms.")
 
@@ -205,45 +215,48 @@ class Tester:
                 logger.info("Now validating....")
                 for a in tqdm(alarms):
                     a.verified = "UNVERIFIED"
-                    logger.debug(f"Model is {a.model}")
+                    logger.debug(f"Constructing model {a.model}")
                     if a.model is not None:
-                        config: List[Tuple[str, str]] = []
+                        config_string = ""
                         for k, v in a.model.items():
                             if k.startswith('DEF_'):
                                 match v.lower():
                                     case 'true':
-                                        config.append(('DEF', k[4:]))
+                                        config_string += f"{k[4:]}=y\n"
                                     case 'false':
-                                        config.append(('UNDEF', k[4:]))
+                                        config_string += f"{k[4:]}=n\n"
                             elif k.startswith('USE_'):
-                                config.append(('DEF', f"{k[4:]}={v}"))
-                        print(f"Constructed validation model {config} from {json.dumps(a.as_dict())}")
-                        b = ProgramSpecification.BaselineConfig(
-                            source_file=Path(str(a.input_file.absolute()).replace('.desugared', '')),
-                            configuration=config)
-                        logger.info(f"Now running validation on {b}")
+                                config_string += f"{k[4:]}={v}\n"
+                        loggable_config_string = config_string.replace("\n", ", ")
+                        logger.debug(f"Configuration is {loggable_config_string}")
+                        with NamedTemporaryFile(mode="rw") as ntf:
+                            ntf.write(loggable_config_string)
+                            ntf.flush()
 
-                        verify = self.configure_code_and_run_analysis(b)
-                        logger.debug(
-                            f"Got the following alarms {[json.dumps(b.as_dict()) for b in verify]} when trying to verify alarm {json.dumps(a.as_dict())}")
-                        for v in verify:
-                            logger.debug(f"Comparing alarms {a.as_dict()} and {v.as_dict()}")
-                            if a.sanitized_message == v.sanitized_message:
-                                a.verified = "MESSAGE_ONLY"
-                            try:
-                                if a.sanitized_message == v.sanitized_message and \
-                                        a.function_line_range[1].includes(v.line_in_input_file):
-                                    a.verified = "FUNCTION_LEVEL"
-                            except ValueError as ve:
-                                pass
-                            try:
-                                if a.sanitized_message == v.sanitized_message and \
-                                        a.original_line_range.includes(v.line_in_input_file):
-                                    a.verified = "FULL"
-                                    break  # no need to continue
-                            except ValueError as ve:
-                                pass
-                            logger.debug(f"Alarm with validation updated: {a.as_dict()}")
+                            ps: ProgramSpecification = self.clone_program_and_configure(self.program, Path(ntf.name))
+                            updated_file = a.input_file.relative_to(self.program.source_directory).relative_to(ps.source_directory)
+                            logger.debug(f"Mapped file {a.input_file} to {updated_file}")
+                            verify = self.analyze_file_and_associate_configuration(updated_file, Path(ntf))
+                            logger.debug(
+                                f"Got the following alarms {[json.dumps(b.as_dict()) for b in verify]} when trying to verify alarm {json.dumps(a.as_dict())}")
+                            for v in verify:
+                                logger.debug(f"Comparing alarms {a.as_dict()} and {v.as_dict()}")
+                                if a.sanitized_message == v.sanitized_message:
+                                    a.verified = "MESSAGE_ONLY"
+                                try:
+                                    if a.sanitized_message == v.sanitized_message and \
+                                            a.function_line_range[1].includes(v.line_in_input_file):
+                                        a.verified = "FUNCTION_LEVEL"
+                                except ValueError as ve:
+                                    pass
+                                try:
+                                    if a.sanitized_message == v.sanitized_message and \
+                                            a.original_line_range.includes(v.line_in_input_file):
+                                        a.verified = "FULL"
+                                        break  # no need to continue
+                                except ValueError as ve:
+                                    pass
+                                logger.debug(f"Alarm with validation updated: {a.as_dict()}")
 
         else:
             alarms = self.run_baseline_experiments()
@@ -280,17 +293,6 @@ class Tester:
         count = 0
         count += 1
 
-        def clone_program_specification(ps: ProgramSpecification, config: Path) -> ProgramSpecification:
-            """Clones a program spec to a new directory, and returns a program spec with updated search context."""
-            code_dest = Path("/targets") / Path(config.name) / Path(ps.project_root.name)
-            code_dest.parent.mkdir(parents=True)
-            logger.debug(f"Cloning {ps.project_root} to {code_dest}")
-
-            shutil.copytree(ps.project_root, code_dest)
-            ps_copy = copy.deepcopy(ps)
-            ps_copy.search_context = code_dest.parent
-            return ps_copy
-
         logger.info("Performing code cloning for baseline experiments:")
 
         spec_config_pairs: List[Tuple[ProgramSpecification, Path]] = []
@@ -299,7 +301,7 @@ class Tester:
         i = 0
 
         with ProcessPool(self.jobs) as p:
-            for result in tqdm(p.imap(lambda x: (clone_program_specification(self.program, x), x),
+            for result in tqdm(p.imap(lambda x: (self.clone_program_and_configure(self.program, x), x),
                                       all_configs),
                                total=len(all_configs)):
                 # logger.info(f"Copying configuration {i}/1000")

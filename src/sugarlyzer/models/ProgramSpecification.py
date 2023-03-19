@@ -174,24 +174,6 @@ class ProgramSpecification:
         if self.sample_directory is None:
             # If we don't have a sample directory, we use the get_all_macros function to get every possible configuration.
             raise RuntimeError("Need to reimplement this.")
-            for source_file in tqdm(self.get_source_files()):
-                logger.debug(f"Source file is {source_file}")
-                macros: List[str] = self.get_all_macros(source_file)
-                logging.debug(f"Macros for file {source_file} are {macros}")
-
-                T = TypeVar('T')
-                G = TypeVar('G')
-
-                def all_configurations(options: List[str]) -> List[List[Tuple[str, str]]]:
-                    options = list(options)
-                    if len(options) == 0:
-                        return [[]]
-                    else:
-                        result = [a + [(b, options[-1])] for a in all_configurations(options[:-1]) for b in
-                                  ["DEF", "UNDEF"]]
-                        return result
-
-                yield from (ProgramSpecification.BaselineConfig(source_file, c) for c in all_configurations(macros))
         else:
             yield from self.try_resolve_path(self.sample_directory).iterdir()
 
