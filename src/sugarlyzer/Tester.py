@@ -212,59 +212,66 @@ class Tester:
 
             if self.validate:
                 logger.info("Now validating....")
-                for a in tqdm(alarms):
-                    a.verified = "UNVERIFIED"
-                    logger.debug(f"Constructing model {a.model}")
-                    if a.model is not None:
-                        config_string = ""
-                        for k, v in a.model.items():
-                            if k.startswith('DEF_'):
-                                match v.lower():
-                                    case 'true':
-                                        config_string += f"{k[4:]}=y\n"
-                                    case 'false':
-                                        config_string += f"{k[4:]}=n\n"
-                            elif k.startswith('USE_'):
-                                config_string += f"{k[4:]}={v}\n"
-                            else:
-                                logger.critical(f"Ignored constraint {str(k)}={str(v)}")
-                        loggable_config_string = config_string.replace("\n", ", ")
-                        logger.debug(f"Configuration is {loggable_config_string}")
-                        ntf = tempfile.mkdtemp()
-                        with open(ntf, 'w') as f:
-                            f.write(loggable_config_string)
-                        ps: ProgramSpecification = self.clone_program_and_configure(self.program, Path(ntf.name))
-                        updated_file = a.input_file.relative_to(self.program.source_directory).relative_to(ps.source_directory)
-                        logger.debug(f"Mapped file {a.input_file} to {updated_file}")
-                        verify = self.analyze_file_and_associate_configuration(updated_file, Path(ntf))
-                        logger.debug(
-                            f"Got the following alarms {[json.dumps(b.as_dict()) for b in verify]} when trying to verify alarm {json.dumps(a.as_dict())}")
-                        os.remove(ntf)
-                        for v in verify:
-                            logger.debug(f"Comparing alarms {a.as_dict()} and {v.as_dict()}")
-                            if a.sanitized_message == v.sanitized_message:
-                                a.verified = "MESSAGE_ONLY"
-                            try:
-                                if a.sanitized_message == v.sanitized_message and \
-                                        a.function_line_range[1].includes(v.line_in_input_file):
-                                    a.verified = "FUNCTION_LEVEL"
-                            except ValueError as ve:
-                                pass
-                            try:
-                                if a.sanitized_message == v.sanitized_message and \
-                                        a.original_line_range.includes(v.line_in_input_file):
-                                    a.verified = "FULL"
-                                    break  # no need to continue
-                            except ValueError as ve:
-                                pass
-                            logger.debug(f"Alarm with validation updated: {a.as_dict()}")
-
+                with ProcessPool(self.jobs) as p:
+                    alarms = list(p.imap(self.verify_alarm, alarms))
         else:
             alarms = self.run_baseline_experiments()
 
         logger.debug("Writing alarms to file.")
         with open("/results.json", 'w') as f:
             json.dump([a.as_dict() for a in alarms], f)
+
+    def verify_alarm(self, alarm):
+        alarm = copy.deepcopy(alarm)
+        alarm.verified = "UNVERIFIED"
+        logger.debug(f"Constructing model {alarm.model}")
+        if alarm.model is not None:
+            config_string = ""
+            for k, v in alarm.model.items():
+                if k.startswith('DEF_'):
+                    match v.lower():
+                        case 'true':
+                            config_string += f"{k[4:]}=y\n"
+                        case 'false':
+                            config_string += f"{k[4:]}=n\n"
+                elif k.startswith('USE_'):
+                    config_string += f"{k[4:]}={v}\n"
+                else:
+                    logger.critical(f"Ignored constraint {str(k)}={str(v)}")
+            loggable_config_string = config_string.replace("\n", ", ")
+            logger.debug(f"Configuration is {loggable_config_string}")
+            ntf = tempfile.mkdtemp()
+            with open(ntf, 'w') as f:
+                f.write(loggable_config_string)
+            ps: ProgramSpecification = self.clone_program_and_configure(self.program, Path(ntf.name))
+            updated_file = alarm.input_file.relative_to(self.program.source_directory).relative_to(ps.source_directory)
+            logger.debug(f"Mapped file {alarm.input_file} to {updated_file}")
+            verify = self.analyze_file_and_associate_configuration(updated_file, Path(ntf))
+            logger.debug(
+                f"Got the following alarms {[json.dumps(b.as_dict()) for b in verify]} when trying to verify alarm {json.dumps(alarm.as_dict())}")
+            os.remove(ntf)
+            for v in verify:
+                logger.debug(f"Comparing alarms {alarm.as_dict()} and {v.as_dict()}")
+                if alarm.sanitized_message == v.sanitized_message and \
+                        alarm.verified not in ["FUNCTION_LEVEL", "FULL"]:
+                    alarm.verified = "MESSAGE_ONLY"
+                try:
+                    if alarm.sanitized_message == v.sanitized_message and \
+                            alarm.function_line_range[1].includes(v.line_in_input_file) and \
+                            alarm.verified != "FULL":
+                        alarm.verified = "FUNCTION_LEVEL"
+                except ValueError as ve:
+                    pass
+                try:
+                    if alarm.sanitized_message == v.sanitized_message and \
+                            alarm.original_line_range.includes(v.line_in_input_file):
+                        alarm.verified = "FULL"
+                        break  # no need to continue
+                except ValueError as ve:
+                    pass
+            logger.debug(f"Alarm with validation updated: {alarm.as_dict()}")
+            return alarm
+
 
     def analyze_file_and_associate_configuration(self, file: Path, config: Path) -> Iterable[Alarm]:
         def get_config_object(config: Path) -> List[Tuple[str, str]]:
