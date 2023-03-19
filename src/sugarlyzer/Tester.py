@@ -84,10 +84,7 @@ class Tester:
         inc_files, inc_dirs, cmd_decs = self.program.inc_files_and_dirs_for_file(fi)
         alarms = self.tool.analyze_and_read(fi, command_line_defs=cmd_decs,
                                             included_files=inc_files,
-                                            included_dirs=inc_dirs,
-                                            recommended_space=SugarCRunner.get_recommended_space(fi,
-                                                                                                 inc_files,
-                                                                                                 inc_dirs))
+                                            included_dirs=inc_dirs)
         return alarms
 
     @staticmethod
