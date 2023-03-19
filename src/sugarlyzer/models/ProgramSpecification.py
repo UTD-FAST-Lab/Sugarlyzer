@@ -145,7 +145,7 @@ class ProgramSpecification:
 
         logger.debug(f'Trying to resolve {path} in {root}')
         if path.is_absolute():
-            logger.warning(f"Tried to resolve an absolute path {str(path)} from root {str(root)}. May lead to incorrect resolutions.")
+            ##logger.warning(f"Tried to resolve an absolute path {str(path)} from root {str(root)}. May lead to incorrect resolutions.")
             return path
         if os.path.exists(joined_path := Path(root) / path):
             return joined_path.absolute()
