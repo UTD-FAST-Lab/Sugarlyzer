@@ -225,11 +225,14 @@ class Tester:
                                         config_string += f"{k[4:]}=n\n"
                             elif k.startswith('USE_'):
                                 config_string += f"{k[4:]}={v}\n"
+                            else:
+                                logger.critical(f"Ignored constraint {str(k)}={str(v)}")
                         loggable_config_string = config_string.replace("\n", ", ")
                         logger.debug(f"Configuration is {loggable_config_string}")
-                        with NamedTemporaryFile(mode="rw") as ntf:
+                        with NamedTemporaryFile(mode="w") as ntf:
                             ntf.write(loggable_config_string)
                             ntf.flush()
+                            ntf.seek(0)
 
                             ps: ProgramSpecification = self.clone_program_and_configure(self.program, Path(ntf.name))
                             updated_file = a.input_file.relative_to(self.program.source_directory).relative_to(ps.source_directory)
