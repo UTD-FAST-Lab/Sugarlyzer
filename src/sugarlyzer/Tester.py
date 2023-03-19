@@ -213,7 +213,7 @@ class Tester:
             if self.validate:
                 logger.info("Now validating....")
                 with ProcessPool(self.jobs) as p:
-                    alarms = list(p.imap(self.verify_alarm, alarms))
+                    alarms = list(tqdm(p.imap(self.verify_alarm, alarms)))
         else:
             alarms = self.run_baseline_experiments()
 
