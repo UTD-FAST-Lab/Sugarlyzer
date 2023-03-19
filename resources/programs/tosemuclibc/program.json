@@ -1,0 +1,289 @@
+{
+    "remove_errors": false,
+    "whitelist": "/TypeChef-Sampling-uClibc/study/farce-uclibc/openFeaturesList.txt",
+    "included_files_and_directories": [
+        {
+            "included_files": [
+                "/TypeChef-Sampling-uClibc/study/farce-uclibc/header.h",
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/builtin.h",
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/include/libc-symbols.h",
+		"/SugarlyzerConfig/tosemInc.h",
+		"/TypeChef-GNUCHeader/platform.h"
+		
+            ],
+            "included_directories": [
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc",
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/include",
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/include/sys",
+		"/TypeChef-GNUCHeader/usr_include/x86_64-linux-gnu",
+		"/TypeChef-GNUCHeader/usr_include",
+		"/TypeChef-GNUCHeader/x86_64-linux-gnu/4.8/include",
+                "/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/libc/sysdeps/linux/x86_64",
+                "/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/libc/sysdeps/linux/x86_64/bits"
+	    ]
+        },
+	{
+            "file_pattern": "extra/locale",
+            "macro_definitions": [
+		"-D __SSP__",
+		"-D __UCLIBC_GEN_LOCALE"
+            ]
+	},
+	{
+            "file_pattern": "libc/",
+            "macro_definitions": [
+		"-D __SSP__"
+	    ],
+	    "included_directories": [
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/libpthread",
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/ldso/include",
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/ldso/ldso/x86_64"
+            ]
+	},
+	{
+            "file_pattern": "libc/inet/",
+            "macro_definitions": [
+		"-D __SSP__",
+		"-D RESOLVER=\"resolv.c\""
+            ]
+	},
+	{
+            "file_pattern": "libc/misc/internals/__uClibc_main",
+            "macro_definitions": [
+		"-U __SSP__"
+            ]
+	},
+	{
+            "file_pattern": "librt/",
+            "macro_definitions": [
+		"-D __SSP__",
+		"-D NOT_IN_libc",
+		"-D IS_IN_librt"
+	    ],
+	    "included_directories": [
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/ldso/include",
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/libpthread",
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/ldso/ldso/x86_64",
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/ldso/include",
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/libpthread/nptl/sysdeps/x86_64",
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/libpthread/nptl",
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/libpthread/nptl/sysdeps/pthread",
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64",
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/libpthread/nptl/sysdeps/unix/sysv/linux"
+	    ]
+	},
+	{
+            "file_pattern": "libintl/",
+            "macro_definitions": [
+		"-D __SSP__",
+		"-D NOT_IN_libc",
+		"-D IS_IN_libintl"
+            ]
+	},
+	{
+            "file_pattern": "libm/",
+            "macro_definitions": [
+		"-D __SSP__",
+		"-D NOT_IN_libc",
+		"-D IS_IN_libm",
+		"-D _IEEE_LIBM"
+            ]
+	},
+	{
+            "file_pattern": "libcrypt/",
+            "macro_definitions": [
+		"-D __SSP__",
+		"-D NOT_IN_libc",
+		"-D IS_IN_libcrypt"
+            ]
+	},
+	{
+            "file_pattern": "libresolv/",
+            "macro_definitions": [
+		"-D __SSP__",
+		"-D NOT_IN_libc",
+		"-D IS_IN_libresolv"
+            ]
+	},
+	{
+            "file_pattern": "libutil/",
+            "macro_definitions": [
+		"-D __SSP__",
+		"-D NOT_IN_libc",
+		"-D IS_IN_libutil"
+            ]
+	},
+	{
+            "file_pattern": "ldso/ldso/",
+            "macro_definitions": [
+		"-D __SSP__",
+		"-D NOT_IN_libc",
+		"-D IS_IN_rtld"
+            ],
+            "included_directories": [
+                "/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/ldso/include",
+                "/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/ldso/ldso/x86_64"
+            ]	    
+	},
+	{
+            "file_pattern": "ldso/libdl/",
+            "macro_definitions": [
+		"-D __SSP__",
+		"-D NOT_IN_libc",
+		"-D IS_IN_libdl"
+            ]
+	},
+	{
+            "file_pattern": "libnsl/",
+            "macro_definitions": [
+		"-D __SSP__",
+		"-D NOT_IN_libc",
+		"-D IS_IN_libdl"
+            ]
+	},
+	{
+            "file_pattern": "libubacktrace/",
+            "macro_definitions": [
+		"-D __SSP__",
+		"-D NOT_IN_libc",
+		"-D IS_IN_libubacktrace"
+	    ],
+            "included_directories": [
+                "/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/libpthread",
+                "/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/librt",
+                "/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/ldso/include"
+            ]	    
+	},
+	{
+            "file_pattern": "utils/",
+            "macro_definitions": [
+		"-D __SSP__",
+		"-D L_iconv_main"
+	    ],
+            "included_directories": [
+                "/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/ldso/include",
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/libc/misc/wchar"
+            ],
+	    "included_files": [
+                "/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/include/elf.h"
+            ]
+	},
+	{
+            "file_pattern": "libpthread/",
+            "macro_definitions": [
+		"-D __SSP__",
+		"-D NOT_IN_libc",
+		"-D IS_IN_libpthread"
+	    ],
+            "included_directories": [
+                "/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/libpthread"
+            ]
+	},
+	{
+            "file_pattern": "libpthread/nptl",
+            "macro_definitions": [
+		"-D _GNU_SOURCE"
+	    ],
+            "included_directories": [
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/ldso/include",
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/ldso/ldso/x86_64",
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/libc/stdlib",
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/libpthread/nptl",
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/libpthread/nptl/sysdeps/pthread",
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/libpthread/\nptl/sysdeps/x86_64",
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/libpthread/nptl/sysdeps/unix/sysv/linux",
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/libpthread/nptl/sysdeps/unix/sysv/linux/x86_64"
+            ]
+	},
+        {
+            "file_pattern": "libpthread/nptl/sysdeps/unix/sysv/linux/",
+            "included_directories": [
+                "/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/librt"
+            ]
+        },
+        {
+            "file_pattern": "pt-pread_pwrite\\.c",
+            "included_directories": [
+                "/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/libc/sysdeps/linux/x86_64",
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/libc/sysdeps/linux/common"
+            ]
+        },
+        {
+            "file_pattern": "mq_notify\\.c",
+	    "macro_definitions": [
+		"-D IS_IN_librt"
+            ]
+        },
+        {
+            "file_pattern": "timer_create\\.c",
+	    "macro_definitions": [
+		"-D IS_IN_librt"
+            ]
+        },
+        {
+            "file_pattern": "timer_delete\\.c",
+	    "macro_definitions": [
+		"-D IS_IN_librt"
+            ]
+        },
+        {
+            "file_pattern": "timer_getoverr\\.c",
+	    "macro_definitions": [
+		"-D IS_IN_librt"
+            ]
+        },
+        {
+            "file_pattern": "timer_gettime\\.c",
+	    "macro_definitions": [
+		"-D IS_IN_librt"
+            ]
+        },
+        {
+            "file_pattern": "timer_routines\\.c",
+	    "macro_definitions": [
+		"-D IS_IN_librt"
+            ]
+        },
+        {
+            "file_pattern": "timer_settime\\.c",
+	    "macro_definitions": [
+		"-D IS_IN_librt"
+            ]
+        },
+        {
+            "file_pattern": "librt-cancellation\\.c",
+	    "macro_definitions": [
+		"-D IS_IN_librt"
+            ]
+        },
+        {
+            "file_pattern": "rt-unwind-resume\\.c",
+	    "macro_definitions": [
+		"-D IS_IN_librt"
+            ]
+        },
+        {
+            "file_pattern": "libpthread/nptl_db",
+	    "macro_definitions": [
+		"-D IS_IN_libthread_db=1"
+            ]
+        },
+	{
+            "file_pattern": "libpthread/nptl",
+            "macro_definitions": [
+		"-D __SSP__"
+	    ],
+            "included_directories": [
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/libpthread/linuxthreads",
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/libpthread/linuxthreads/sysdeps/pthread",
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/libpthread/linuxthreads/sysdeps/$target",
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/libc/sysdeps/linux/x86_64",
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/libpthread/linuxthreads/sysdeps/unix/sysv/linux",
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/libpthread/linuxthreads/sysdeps/unix/sysv/linux/x86_64",
+		"/TypeChef-Sampling-uClibc/study/farce-uclibc/uClibc/librt"
+            ]
+	}
+    ],
+    "build_script": "tosemuclibc/tosemuclibcScript.sh",
+    "source_location": ["uClibc"]
+}
