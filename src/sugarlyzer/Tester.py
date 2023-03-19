@@ -20,6 +20,9 @@ from pathos.pools import ProcessPool
 # noinspection PyUnresolvedReferences
 from tqdm import tqdm
 
+# noinspection PyUnresolvedReferences
+from z3.z3 import Solver, sat, Bool, Int, Not, And, Or
+
 from src.sugarlyzer import SugarCRunner
 from src.sugarlyzer.SugarCRunner import process_alarms
 from src.sugarlyzer.analyses.AbstractTool import AbstractTool

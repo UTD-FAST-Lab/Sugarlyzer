@@ -11,7 +11,8 @@ from hashlib import sha256
 from pathlib import Path
 from typing import List, Optional, Dict, Iterable
 
-from z3.z3 import Solver, sat, Bool, Int
+# noinspection PyUnresolvedReferences
+from z3.z3 import Solver, sat, Bool, Int, Not, And, Or
 
 from src.sugarlyzer.models.Alarm import Alarm
 
