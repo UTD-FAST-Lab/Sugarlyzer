@@ -2,27 +2,21 @@ import argparse
 import copy
 import functools
 import importlib
-import itertools
 import json
 import logging
 import multiprocessing
 import os
-import re
 import shutil
 import subprocess
 import time
-from enum import Enum, auto
-from multiprocessing import Pool
 from pathlib import Path
 from tempfile import NamedTemporaryFile
-from typing import Iterable, List, Dict, Any, TypeVar, Tuple, Set
+from typing import Iterable, List, Dict, Any, Tuple
 
-import z3
 # noinspection PyUnresolvedReferences
 from dill import pickle
 from jsonschema.validators import RefResolver, Draft7Validator
-from pathos.pools import ProcessPool, ParallelPool
-
+from pathos.pools import ProcessPool
 # noinspection PyUnresolvedReferences
 from tqdm import tqdm
 
@@ -71,7 +65,7 @@ class Tester:
 
     @functools.cache
     def get_inc_files_and_dirs_for_file(self, file: Path):
-        included_files, included_directories, cmd_decs = self.program.get_inc_files_and_dirs(file)
+        included_files, included_directories, cmd_decs = self.program.inc_files_and_dirs_for_file(file)
         logger.debug(f"Included files, included directories for {file}: {included_files} {included_directories}")
         if self.no_recommended_space:
             recommended_space = None
@@ -134,7 +128,7 @@ class Tester:
 
         if not self.baselines:
             # 2. Run SugarC
-            logger.info(f"Desugaring the source code in {list(self.program.source_location)}")
+            logger.info(f"Desugaring the source code in {self.program.source_directory}")
 
             def desugar(file: Path) -> Tuple[Path, Path, Path, float]:  # God, what an ugly tuple
                 included_directories, included_files, cmd_decs, recommended_space = self.get_inc_files_and_dirs_for_file(
@@ -362,7 +356,7 @@ def main():
     start = time.time()
     args = get_arguments()
     set_up_logging(args)
-    t = Tester(args.tool, args.program, args.baselines, args.no_recommended_space, args.jobs, args.validate)
+    t = Tester(args.tool, args.program, args.baselines, True, args.jobs, args.validate)
     t.execute()
     print(f'total time: {time.time() - start}')
 
