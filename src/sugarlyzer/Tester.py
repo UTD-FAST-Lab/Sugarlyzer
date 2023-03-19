@@ -8,6 +8,7 @@ import multiprocessing
 import os
 import shutil
 import subprocess
+import tempfile
 import time
 from pathlib import Path
 from tempfile import NamedTemporaryFile
@@ -229,35 +230,34 @@ class Tester:
                                 logger.critical(f"Ignored constraint {str(k)}={str(v)}")
                         loggable_config_string = config_string.replace("\n", ", ")
                         logger.debug(f"Configuration is {loggable_config_string}")
-                        with NamedTemporaryFile(mode="w") as ntf:
-                            ntf.write(loggable_config_string)
-                            ntf.flush()
-                            ntf.seek(0)
-
-                            ps: ProgramSpecification = self.clone_program_and_configure(self.program, Path(ntf.name))
-                            updated_file = a.input_file.relative_to(self.program.source_directory).relative_to(ps.source_directory)
-                            logger.debug(f"Mapped file {a.input_file} to {updated_file}")
-                            verify = self.analyze_file_and_associate_configuration(updated_file, Path(ntf))
-                            logger.debug(
-                                f"Got the following alarms {[json.dumps(b.as_dict()) for b in verify]} when trying to verify alarm {json.dumps(a.as_dict())}")
-                            for v in verify:
-                                logger.debug(f"Comparing alarms {a.as_dict()} and {v.as_dict()}")
-                                if a.sanitized_message == v.sanitized_message:
-                                    a.verified = "MESSAGE_ONLY"
-                                try:
-                                    if a.sanitized_message == v.sanitized_message and \
-                                            a.function_line_range[1].includes(v.line_in_input_file):
-                                        a.verified = "FUNCTION_LEVEL"
-                                except ValueError as ve:
-                                    pass
-                                try:
-                                    if a.sanitized_message == v.sanitized_message and \
-                                            a.original_line_range.includes(v.line_in_input_file):
-                                        a.verified = "FULL"
-                                        break  # no need to continue
-                                except ValueError as ve:
-                                    pass
-                                logger.debug(f"Alarm with validation updated: {a.as_dict()}")
+                        ntf = tempfile.mkdtemp()
+                        with open(ntf, 'w') as f:
+                            f.write(loggable_config_string)
+                        ps: ProgramSpecification = self.clone_program_and_configure(self.program, Path(ntf.name))
+                        updated_file = a.input_file.relative_to(self.program.source_directory).relative_to(ps.source_directory)
+                        logger.debug(f"Mapped file {a.input_file} to {updated_file}")
+                        verify = self.analyze_file_and_associate_configuration(updated_file, Path(ntf))
+                        logger.debug(
+                            f"Got the following alarms {[json.dumps(b.as_dict()) for b in verify]} when trying to verify alarm {json.dumps(a.as_dict())}")
+                        os.remove(ntf)
+                        for v in verify:
+                            logger.debug(f"Comparing alarms {a.as_dict()} and {v.as_dict()}")
+                            if a.sanitized_message == v.sanitized_message:
+                                a.verified = "MESSAGE_ONLY"
+                            try:
+                                if a.sanitized_message == v.sanitized_message and \
+                                        a.function_line_range[1].includes(v.line_in_input_file):
+                                    a.verified = "FUNCTION_LEVEL"
+                            except ValueError as ve:
+                                pass
+                            try:
+                                if a.sanitized_message == v.sanitized_message and \
+                                        a.original_line_range.includes(v.line_in_input_file):
+                                    a.verified = "FULL"
+                                    break  # no need to continue
+                            except ValueError as ve:
+                                pass
+                            logger.debug(f"Alarm with validation updated: {a.as_dict()}")
 
         else:
             alarms = self.run_baseline_experiments()
