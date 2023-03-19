@@ -136,6 +136,7 @@ class Tester:
                 start = time.time()
                 # noinspection PyTypeChecker
                 return (*SugarCRunner.desugar_file(file,
+                                                   recommended_space=None,
                                                    remove_errors=self.remove_errors,
                                                    config_prefix=self.config_prefix,
                                                    whitelist=self.whitelist,
