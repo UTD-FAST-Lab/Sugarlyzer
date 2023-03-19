@@ -240,7 +240,7 @@ class Tester:
                     logger.critical(f"Ignored constraint {str(k)}={str(v)}")
             loggable_config_string = config_string.replace("\n", ", ")
             logger.debug(f"Configuration is {loggable_config_string}")
-            ntf = tempfile.mkdtemp()
+            ntf = tempfile.mkstemp()
             with open(ntf, 'w') as f:
                 f.write(loggable_config_string)
             ps: ProgramSpecification = self.clone_program_and_configure(self.program, Path(ntf.name))
