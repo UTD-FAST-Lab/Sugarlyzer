@@ -1,3 +1,4 @@
+import functools
 import importlib.resources
 import itertools
 import logging
@@ -20,47 +21,78 @@ logger = logging.getLogger(__name__)
 
 class ProgramSpecification:
 
-    def __init__(self, name: str,
+    def __init__(self,
+                 name: str,
                  build_script: str,
-                 source_location: Optional[List[str]] = None,
-                 remove_errors: bool = None,
+                 project_root: str,
                  config_prefix: str = None,
                  whitelist: str = None,
-                 included_files_and_directories: Iterable[Dict] = None,
-                 sample: Path = None
+                 remove_errors: bool = False,
+                 source_dir: Optional[str] = None,
+                 make_root: Optional[str] = None,
+                 included_files_and_directories: Optional[Iterable[Dict]] = None,
+                 sample_dir: Optional[str] = None,
+                 makefile_location: str = None,
+                 oldconfig_location: Optional[str] = None
                  ):
         self.name = name
         self.remove_errors = remove_errors
         self.config_prefix = config_prefix
         self.whitelist = whitelist
         self.no_std_libs = True
+        self.__project_root = project_root
+        self.__source_dir = source_dir
+        self.__make_root = make_root
         self.__build_script = build_script
-        self.__source_location = source_location
+        self.__source_location = source_dir
         self.inc_dirs_and_files = [] if included_files_and_directories is None else included_files_and_directories
-        self.sample_directory = sample
+        self.__sample_directory = sample_dir
+        self.__makefile_location = makefile_location
+        self.__search_context = "/targets"
+        self.__oldconfig_location = "config/.config" if oldconfig_location is None else oldconfig_location
+
+    @property
+    def oldconfig_location(self):
+        return self.try_resolve_path(self.__oldconfig_location, self.search_context)
+
+    @property
+    def search_context(self):
+        p = Path(self.__search_context)
+        if not p.exists():
+            raise RuntimeError(f"Search context {p} does not exist.")
+        else:
+            return p
+
+    @property
+    def project_root(self):
+        return self.try_resolve_path(self.__project_root, self.search_context)
+
+    @property
+    def source_directory(self):
+        return self.try_resolve_path(self.__source_dir, self.search_context) if self.__source_dir is not None else self.project_root
+
+    @property
+    def sample_directory(self):
+        return self.try_resolve_path(self.__sample_directory, importlib.resources.path('resources.programs', ''))
+
+    @property
+    def make_root(self):
+        return self.try_resolve_path(self.__make_root, self.search_context) if self.__make_root is not None else self.project_root
 
     @property
     def build_script(self):
         return self.try_resolve_path(self.__build_script, importlib.resources.path('resources.programs', ''))
 
-    @property
-    def source_locations(self) -> Iterable[Path]:
-        if self.__source_location is None:
-            return [Path('/targets')]
-        else:
-            return map(lambda x: self.try_resolve_path(x, '/targets'), self.__source_location)
-
     def get_source_files(self) -> Iterable[Path]:
         """
         :return: All .c or .i files that are in the program's source locations.
         """
-        for s in self.source_locations:
-            for root, dirs, files in os.walk(s):
-                for f in files:
-                    if f.endswith(".c") or f.endswith(".i"):
-                        yield Path(root) / f
+        for root, dirs, files in os.walk(self.source_directory):
+            for f in files:
+                if f.endswith(".c") or f.endswith(".i"):
+                    yield Path(root) / f
 
-    def get_inc_files_and_dirs(self, file: Path) -> Tuple[Iterable[Path], Iterable[Path], Iterable[str]]:
+    def inc_files_and_dirs_for_file(self, file: Path) -> Tuple[Iterable[Path], Iterable[Path], Iterable[str]]:
         """
         Iterates through the program.json's get_recommended_space field,
         returning the first match. See program_schema.json for more info.
@@ -75,12 +107,12 @@ class ProgramSpecification:
             # Note the difference between s[a] and s.get(a) is the former will
             #  raise an exception if a is not in s, while s.get will return None.
             if spec.get('file_pattern') is None or re.search(spec.get('file_pattern'), str(file.absolute())):
-                logging.info(f"File {file} matched specification {spec}")
+                logger.debug(f"File {file} matched specification {spec}")
                 if (rt := spec.get('relative_to')) is not None:
                     relative_to = Path(rt)
                 else:
                     relative_to = file.parent
-                    
+
                 if 'included_files' in spec.keys():
                     inc_files.extend(self.try_resolve_path(Path(p), relative_to) for p in spec['included_files'])
                 if 'included_directories' in spec.keys():
@@ -98,9 +130,11 @@ class ProgramSpecification:
         ps = subprocess.run(self.build_script)
         return ps.returncode
 
-    def try_resolve_path(self, path: Path, root: Path = Path("/")) -> Path:
+    @functools.cache
+    def try_resolve_path(self, path: str | Path, root: Path = Path("/")) -> Path:
         """
         Copied directly from ECSTATIC.
+        :param path: The path to resolve.
         :param root: The root from which to try to resolve the path.
         :return: The fully resolved path.
         """
@@ -109,8 +143,9 @@ class ProgramSpecification:
         if path is None:
             raise ValueError("Supplied path is None")
 
-        logging.info(f'Trying to resolve {path} in {root}')
+        logger.debug(f'Trying to resolve {path} in {root}')
         if path.is_absolute():
+            logger.warning(f"Tried to resolve an absolute path {str(path)} from root {str(root)}. May lead to incorrect resolutions.")
             return path
         if os.path.exists(joined_path := Path(root) / path):
             return joined_path.absolute()
@@ -123,6 +158,7 @@ class ProgramSpecification:
             case 0:
                 raise FileNotFoundError(f"Could not resolve path {path} from root {root}")
             case 1:
+                logger.debug(f"Result of trying to resolve {path} with {root} was {list(results)[0]}")
                 return results.pop()
             case _:
                 raise RuntimeError(f"Path {path} in root {root} is ambiguous. Found the following potential results: "
@@ -132,11 +168,12 @@ class ProgramSpecification:
     @dataclass
     class BaselineConfig:
         source_file: Path
-        configuration: List[Tuple[str, str]]
+        configuration: List[Tuple[str, str]] | Path
 
-    def get_baseline_configurations(self) -> Iterable[BaselineConfig]:
+    def get_baseline_configurations(self) -> Iterable[Path]:
         if self.sample_directory is None:
             # If we don't have a sample directory, we use the get_all_macros function to get every possible configuration.
+            raise RuntimeError("Need to reimplement this.")
             for source_file in tqdm(self.get_source_files()):
                 logger.debug(f"Source file is {source_file}")
                 macros: List[str] = self.get_all_macros(source_file)
@@ -156,24 +193,16 @@ class ProgramSpecification:
 
                 yield from (ProgramSpecification.BaselineConfig(source_file, c) for c in all_configurations(macros))
         else:
-            configs = []
-            for s in self.try_resolve_path(self.sample_directory).iterdir():
-                with open(s) as f:
-                    lines = f.readlines()
-                config = []
-                for s in lines:
-                    if s.startswith("#"):
-                        config.append(("UNDEF", s.strip().split(" ")[1]))
-                    else:
-                        config.append(("DEF", s.strip()))
-                configs.append(config)
-            yield from (ProgramSpecification.BaselineConfig(file, config) for file in self.get_source_files() for config
-                        in configs)
+            yield from self.try_resolve_path(self.sample_directory).iterdir()
 
     def get_all_macros(self, fpa):
         parser = MacroDiscoveryPreprocessor()
         with open(fpa, 'r') as f:
             parser.parse(f.read())
         parser.write(StringIO())
-        logger.info(f"Discovered the following macros in file {fpa}: {parser.collected}")
+        logger.debug(f"Discovered the following macros in file {fpa}: {parser.collected}")
         return parser.collected
+
+    @search_context.setter
+    def search_context(self, value):
+        self.__search_context = value

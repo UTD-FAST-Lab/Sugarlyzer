@@ -26,6 +26,6 @@ RUN python3.10 -m venv /venv
 ENV PATH=/venv/bin:$PATH
 ADD . /Sugarlyzer
 WORKDIR /Sugarlyzer
-RUN python -m pip install -r requirements.txt
+RUN python -m pip install -r requirements.txt --use-pep517
 RUN python -m pip install -e .
 WORKDIR /
