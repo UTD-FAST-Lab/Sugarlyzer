@@ -199,11 +199,11 @@ def desugar_file(file_to_desugar: Path,
         case _:
             log_file = Path(log_file)
     if config_prefix != None:
-        cmd = ['java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToPrefix', config_prefix, *commandline_args, *included_files, *included_directories,file_to_desugar]
+        cmd = ['timeout 10m','java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToPrefix', config_prefix, *commandline_args, *included_files, *included_directories,file_to_desugar]
     elif whitelist != None:
-        cmd = ['java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToWhitelist', whitelist, *commandline_args, *included_files, *included_directories,file_to_desugar]
+        cmd = ['timeout 10m','java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToWhitelist', whitelist, *commandline_args, *included_files, *included_directories,file_to_desugar]
     else:
-        cmd = ['java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', *commandline_args, *included_files, *included_directories,file_to_desugar]
+        cmd = ['timeout 10m','java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', *commandline_args, *included_files, *included_directories,file_to_desugar]
     cmd = [str(s) for s in cmd]
     logging.info(f'Command: {cmd}')
 
@@ -587,9 +587,12 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
                 current_result.ids[splits[0][:-1]] = 'varis["' + v + '"] != 0'
                 current_result.varis[v] = Int(v)
             else:
-                v = 'USE_' + splits[0]
-                current_result.ids[splits[0]] = 'varis["' + v + '"]'
-                current_result.varis[v] = Int(v)
+                for segment in splits:
+                    if re.match(r'\(?^[A-Za-z_][A-Za-z0-9_]+\)?$',segment):
+                        snipped = segment if segment[-1] != ")" else segment[:-1]
+                        v = 'USE_' + snipped
+                        current_result.ids[snipped] = 'varis["' + v + '"]'
+                        current_result.varis[v] = Int(v)
         indxx += 1
     # accessing our string again, removing the ' "'
     condstr = conds[2:]
@@ -602,6 +605,9 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
             condstr = condstr.replace(x, current_result.ids[x])
         else:
             condstr = condstr.replace('(' + x, '(' + current_result.ids[x])
+            condstr = condstr.replace(' ' + x + ' ', ' ' + current_result.ids[x] + ' ')
+            condstr = condstr.replace(' ' + x + ')', ' ' + current_result.ids[x] + ')')
+
     # replace ! with the Not method
     condstr = condstr.replace('!(', 'Not(')
     # we treat this like RPN solvers with stacks, we need a stack of operators and operands
