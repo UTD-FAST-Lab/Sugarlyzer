@@ -1,0 +1,264 @@
+{
+    "remove_errors": false,
+    "whitelist": "/TypeChef-Sampling-Linux/linux26333/pcs/x86.open",
+    "included_files_and_directories": [
+        {
+            "included_files": [
+                "/TypeChef-Sampling-Linux/linux26333/pcs/x86.completed.h",
+                "/TypeChef-Sampling-Linux/linux26333/pcs/x86.nonbool.h",
+                "/TypeChef-Sampling-Linux/linux26333/partialConf.h",
+		            "/SugarlyzerConfig/tosemInc.h",
+		            "/TypeChef-Sampling-Linux/linux26333/systems/redhat/platform-redhat.h"
+            ],
+            "included_directories": [
+                "/targets/linux/include",
+                "/targets/linux/arch/x86/include"
+            ],
+            "macro_definitions": [
+                "-D __KERNEL__",
+                "-D CONFIG_AS_CFI=1",
+                "-D CONFIG_AS_CFI_SIGNAL_FRAME=1",
+                "-D KBUILD_BASENAME=\"\\\"dummy\\\"\"",
+                "-D KBUILD_MODNAME=\"\\\"dummy\\\"\""
+            ]
+        },
+        { "file_pattern": "arch/x86/boot",
+          "macro_definitions": [
+              "-D _SETUP"
+              ]
+         },
+        { "file_pattern": "arch/x86/kvm",
+          "included_directories": [
+              "/targets/linux/virt/kvm",
+              "/targets/linux/arch/x86/kvm",
+              "/targets/linux"
+          ]
+},
+        { "file_pattern":"net/mac80211/driver-trace",
+          "included_directories": [
+              "/targets/linux/net/mac80211"
+          ]
+        },
+        { "file_pattern": "drivers/misc/sgi-gru/",
+          "macro_definitions": [
+              "-D CONIFG_X86_64"
+          ]
+        },
+        { "file_pattern": "fs/gfs2/", 
+          "included_directories": [
+              "/targets/linux/fs/gfs2"
+          ]
+        },
+        { "file_pattern": "fs/ocfs2/", 
+          "included_directories": [
+              "/targets/linux/fs/ocfs2"
+          ]
+          "macro_definitions": [
+              "-D CATCH_BH_JBD_RACES"
+          ]
+        },
+        { "file_pattern": "fs/xfs/", 
+          "included_directories": [
+              "/targets/linux/fs/xfs",
+              "/targets/linux/fs/xfs/linux-2.6"
+          ]
+        },
+        { "file_pattern": "fs/ntfs/", 
+          "macro_definitions": [
+              "-DNTFS_VERSION=\"\\\"2.1.29\"\\\""
+          ],
+          "included_files": [
+              "/targets/linux/fs/ntfs/ntfs.h"
+          ]
+        },
+        { "file_pattern": "drivers/gpu/drm/", 
+          "included_directories": [
+              "/targets/linux/include/drm"
+          ]
+        },
+        { "file_pattern": "drivers/block/", 
+          "macro_definitions": [
+              "-D CONFIG_BLOCK"
+          ]
+        },
+        { "file_pattern": "drivers/scsi/pcmcia/", 
+          "included_directories": [
+              "/targets/linux/drivers/scsi"
+          ]
+        },
+        { "file_pattern": "drivers/usb/storage/", 
+          "included_directories": [
+              "/targets/linux/drivers/scsi"
+          ]
+        },
+        { "file_pattern": "drivers/scsi/cxgb3i/", 
+          "included_directories": [
+              "/targets/linux/drivers/net/cxgb3"
+          ]
+        },
+        { "file_pattern": "drivers/isdn/hisax", 
+          "macro_definitions": [
+              "-D HISAX_MAX_CARDS=8"
+              ]
+        },
+        { "file_pattern": "drivers/infiniband/hw/cxgb3/", 
+          "included_directories": [
+              "/targets/linux/drivers/net/cxgb3"
+          ]
+        },
+        { "file_pattern": "drivers/net/skfp/", 
+          "included_directories": [
+              "/targets/linux/drivers/net/skfp"
+          ],
+          "macro_definitions": [
+              "-D PCI",
+              "-D MEM_MAPPED_IO"
+          ]
+        },
+        { "file_pattern": "drivers/staging/rt2860/", 
+          "macro_definitions": [
+              "-D LINUX",
+              "-D AGGREGATION_SUPPORT",
+              "-D PIGGYBACK_SUPPORT",
+              "-D WMM_SUPPORT",
+              "-D RTMP_MAC_PCI",
+              "-D RTMP_PCI_SUPPORT",
+              "-D RT2860",
+              "-D RTMP_RF_RW_SUPPORT",
+              "-D RTMP_EFUSE_SUPPORT",
+              "-D RT30xx",
+              "-D RT3090",
+              "-D DBG"
+          ]
+        },
+        { "file_pattern": "drivers/staging/otus/", 
+          "macro_definitions": [
+              "-D AMAC",
+              "-D GCCK",
+              "-D OFDM",
+              "-D TXQ_IN_ISR",
+              "-D WLAN_HOSTIF=0",
+              "-D ZM_USB_STREAM_MODE=1",
+              "-D ZM_USB_TX_STREAM_MODE=0",
+              "-D ZM_PCI_DMA_TEST=0",
+              "-D ZM_LARGEPAYLOAD_TEST=0",
+              "-D ZM_FW_LOOP_BACK=0",
+              "-D ZM_LINUX_TPC=1",
+              "-D ZM_HOSTAPD_SUPPORT",
+              "-D ZM_HALPLUS_LOCK",
+              "-D ZM_OTUS_LINUX_PHASE_2"
+          ]
+        },
+        { "file_pattern": "drivers/staging/rt2870/", 
+          "macro_definitions": [
+              "-D LINUX",
+              "-D AGGREGATION_SUPPORT",
+              "-D PIGGYBACK_SUPPORT",
+              "-D WMM_SUPPORT",
+              "-D RTMP_MAC_USB",
+              "-D RTMP_USB_SUPPORT",
+              "-D RT2870",
+              "-D RTMP_RF_RW_SUPPORT",
+              "-D RTMP_EFUSE_SUPPORT",
+              "-D RT30xx",
+              "-D RT3070",
+              "-D DBG"
+          ]
+        },
+        { "file_pattern": "drivers/staging/vt6656/", 
+          "macro_definitions": [
+              "-D HOSTAP"
+          ]
+        },
+        { "file_pattern": "drivers/staging/vt6655/", 
+          "macro_definitions": [
+              "-D HOSTAP"
+          ]
+        },
+        { "file_pattern": "drivers/staging/rtl8192u/", 
+          "macro_definitions": [
+              "-D JACKSON_NEW_8187",
+              "-D JACKSON_NEW_RX",
+              "-D THOMAS_BEACON",
+              "-D THOMAS_TASKLET",
+              "-D THOMAS_SKB",
+              "-D THOMAS_TURBO",
+              "-D USE_ONE_PIPE",
+              "-D ENABLE_DOT11D"
+          ]
+        },
+        { "file_pattern": "drivers/staging/rtl8192e/", 
+          "macro_definitions": [
+              "-D RTL8192E",
+              "-D THOMAS_TURBO",
+              "-D ENABLE_DOT11D"
+          ]
+        },
+        { "file_pattern": "drivers/net/wireless/iwlwifi/iwl-devtrace",
+          "included_directories": [
+              "/targets/linux/drivers/net/wireless/iwlwifi/"
+          ]
+        },
+        { "file_pattern": "drivers/scsi/bfa/", 
+          "included_directories": [
+              "/targets/linux/drivers/scsi/bfa",
+              "/targets/linux/drivers/scsi/bfa/include",
+              "/targets/linux/drivers/scsi/bfa/include/cna"
+          ]
+        },
+        { "file_pattern": "drivers/media/common/tuners/", 
+          "included_directories": [
+              "/targets/linux/drivers/media/dvb/dvb-core",
+              "/targets/linux/drivers/media/dvb/frontends"
+          ]
+        },
+        { "file_pattern": "drivers/staging/go7007/", 
+          "included_directories": [
+              "/targets/linux/drivers/media/dvb/dvb-core",
+              "/targets/linux/drivers/media/dvb/frontends"
+          ]
+        },
+        { "file_pattern": "drivers/staging/go7007/", 
+          "included_directories": [
+              "/targets/linux/drivers/media/dvb/dvb-usb"
+          ]
+        },
+        { "file_pattern": "drivers/media/video/gspca/", 
+          "included_directories": [
+              "/targets/linux/drivers/media/video/gspca"
+          ]
+        },
+        { "file_pattern": "drivers/media/dvb/", 
+          "included_directories": [
+              "/targets/linux/drivers/media/dvb/dvb-core",
+              "/targets/linux/drivers/media/dvb/frontends",
+              "/targets/linux/drivers/media/common/tuners",
+              "/targets/linux/drivers/ieee1394",
+              "/targets/linux/drivers/media/video/bt8xx",
+              "/targets/linux/drivers/media/video"
+          ]
+        },
+        { "file_pattern": "drivers/media/video/", 
+          "included_directories": [
+              "/targets/linux/drivers/media/dvb/dvb-core",
+              "/targets/linux/drivers/media/dvb/frontends",
+              "/targets/linux/drivers/media/common/tuners",
+              "/targets/linux/drivers/ieee1394",
+              "/targets/linux/drivers/media/video/bt8xx",
+              "/targets/linux/drivers/media/video"
+          ]
+        },
+        { "file_pattern": "drivers/staging/cx25821/", 
+          "included_directories": [
+              "/targets/linux/drivers/media/dvb/dvb-core",
+              "/targets/linux/drivers/media/dvb/frontends",
+              "/targets/linux/drivers/media/common/tuners",
+              "/targets/linux/drivers/ieee1394",
+              "/targets/linux/drivers/media/video/bt8xx",
+              "/targets/linux/drivers/media/video"
+          ]
+        }
+    ],
+    "build_script": "tosemuclibc/tosemlinuxScript.sh",
+    "project_root": "linux"
+}
