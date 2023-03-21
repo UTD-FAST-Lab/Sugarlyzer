@@ -7,12 +7,13 @@
                 "/TypeChef-Sampling-Linux/linux26333/pcs/x86.completed.h",
                 "/TypeChef-Sampling-Linux/linux26333/pcs/x86.nonbool.h",
                 "/TypeChef-Sampling-Linux/linux26333/partialConf.h",
-		            "/SugarlyzerConfig/tosemInc.h",
-		            "/TypeChef-Sampling-Linux/linux26333/systems/redhat/platform-redhat.h"
+		"/SugarlyzerConfig/tosemInc.h",
+		"/TypeChef-Sampling-Linux/linux26333/systems/redhat/platform-redhat.h"
             ],
             "included_directories": [
                 "/targets/linux/include",
-                "/targets/linux/arch/x86/include"
+                "/targets/linux/arch/x86/include",
+		"/TypeChef-Sampling-Linux/linux26333/systems/redhat/usr/lib/gcc/x86_64-redhat-linux/4.4.4/include"
             ],
             "macro_definitions": [
                 "-D __KERNEL__",
@@ -33,7 +34,7 @@
               "/targets/linux/arch/x86/kvm",
               "/targets/linux"
           ]
-},
+	},
         { "file_pattern":"net/mac80211/driver-trace",
           "included_directories": [
               "/targets/linux/net/mac80211"
@@ -52,7 +53,7 @@
         { "file_pattern": "fs/ocfs2/", 
           "included_directories": [
               "/targets/linux/fs/ocfs2"
-          ]
+          ],
           "macro_definitions": [
               "-D CATCH_BH_JBD_RACES"
           ]
@@ -259,6 +260,6 @@
           ]
         }
     ],
-    "build_script": "tosemuclibc/tosemlinuxScript.sh",
+    "build_script": "tosemlinux/tosemlinuxScript.sh",
     "project_root": "linux"
 }
