@@ -11613,6 +11613,6 @@
       }
    ],
    "build_script": "busyboxScript.sh",
-   "project_root": "busybox-1_28_0"
-
+   "project_root": "busybox-1_28_0",
+   "oldconfig_location": ".config"
 }
