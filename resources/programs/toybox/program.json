@@ -17,5 +17,6 @@
         }
     ],
     "build_script": "toybox/toyboxScript.sh",
-    "project_root": "toybox"
+    "project_root": "toybox",
+    "oldconfig_location": ".config"
 }
