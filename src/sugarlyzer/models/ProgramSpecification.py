@@ -111,7 +111,7 @@ class ProgramSpecification:
                 if (rt := spec.get('relative_to')) is not None:
                     relative_to = Path(rt)
                 else:
-                    relative_to = file.parent
+                    relative_to = self.project_root
 
                 if 'included_files' in spec.keys():
                     inc_files.extend(self.try_resolve_path(Path(p), relative_to) for p in spec['included_files'])
