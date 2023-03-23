@@ -78,8 +78,8 @@ class Tester:
         logger.debug(f"User defined space for file {file} is {recommended_space}")
         return included_directories, included_files, cmd_decs, recommended_space
 
-    def analyze_one_file(self, fi: Path) -> Iterable[Alarm]:
-        inc_files, inc_dirs, cmd_decs = self.program.inc_files_and_dirs_for_file(fi)
+    def analyze_one_file(self, fi: Path, ps: ProgramSpecification) -> Iterable[Alarm]:
+        inc_files, inc_dirs, cmd_decs = ps.inc_files_and_dirs_for_file(fi)
         alarms = self.tool.analyze_and_read(fi, command_line_defs=cmd_decs,
                                             included_files=inc_files,
                                             included_dirs=inc_dirs)
@@ -272,7 +272,7 @@ class Tester:
             return alarm
 
 
-    def analyze_file_and_associate_configuration(self, file: Path, config: Path) -> Iterable[Alarm]:
+    def analyze_file_and_associate_configuration(self, file: Path, config: Path, ps: ProgramSpecification) -> Iterable[Alarm]:
         def get_config_object(config: Path) -> List[Tuple[str, str]]:
             with open(config, 'r') as f:
                 lines = [l.strip() for l in f.readlines()]
@@ -290,7 +290,7 @@ class Tester:
 
             return process_config_lines(lines)
 
-        alarms_from_one_file = self.analyze_one_file(file)
+        alarms_from_one_file = self.analyze_one_file(file, ps)
         for a in alarms_from_one_file:
             a.model = get_config_object(config)
         return alarms_from_one_file
@@ -316,17 +316,17 @@ class Tester:
                 spec_config_pairs.append(result)
 
         logger.debug(f"Config pairs is {list((ps.search_context, x) for ps, x in spec_config_pairs)}")
-        source_files_config_pairs: List[Tuple[Path, Path]] = []
+        source_files_config_spec_triples: List[Tuple[Path, Path, ProgramSpecification]] = []
         for spec, config in spec_config_pairs:
-            source_files_config_pairs.extend((fi, config) for fi in spec.get_source_files())
+            source_files_config_spec_triples.extend((fi, config, spec) for fi in spec.get_source_files())
 
         logger.info("Running analysis:")
-        logger.debug(f"Running analysis on pairs {source_files_config_pairs}")
+        logger.debug(f"Running analysis on pairs {source_files_config_spec_triples}")
         with ProcessPool(self.jobs) as p:
             alarms = list()
             for i in tqdm(
-                    p.imap(lambda x: self.analyze_file_and_associate_configuration(*x), source_files_config_pairs),
-                    total=len(source_files_config_pairs)):
+                    p.imap(lambda x: self.analyze_file_and_associate_configuration(*x), source_files_config_spec_triples),
+                    total=len(source_files_config_spec_triples)):
                 alarms.extend(i)
 
         for alarm in alarms:

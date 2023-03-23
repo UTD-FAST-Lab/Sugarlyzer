@@ -112,7 +112,6 @@ class ProgramSpecification:
                     relative_to = Path(rt)
                 else:
                     relative_to = self.project_root
-
                 if 'included_files' in spec.keys():
                     inc_files.extend(self.try_resolve_path(Path(p), relative_to) for p in spec['included_files'])
                 if 'included_directories' in spec.keys():
@@ -144,6 +143,8 @@ class ProgramSpecification:
             raise ValueError("Supplied path is None")
 
         logger.debug(f'Trying to resolve {path} in {root}')
+        if path.name == root.name:
+            return root
         if path.is_absolute():
             ##logger.warning(f"Tried to resolve an absolute path {str(path)} from root {str(root)}. May lead to incorrect resolutions.")
             return path
