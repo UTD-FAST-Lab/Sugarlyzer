@@ -94,11 +94,25 @@ class Tester:
         cwd = os.curdir
         os.chdir(program.make_root)
         logger.debug("Running make oldconfig")
+        cp: subprocess.CompletedProcess = subprocess.run(make_cmd := ["make", "clean"],
+                                                         stdout=subprocess.PIPE,
+                                                         stderr=subprocess.STDOUT,
+                                                         text=True)
+        if cp.returncode != 0:
+            logger.warning(f"Running command {' '.join(make_cmd)} resulted in a non-zero error code.\n"
+                           f"Output was:\n" + cp.stdout)
         cp: subprocess.CompletedProcess = subprocess.run(make_cmd := ["make", "oldconfig"],
                                                          stdout=subprocess.PIPE,
                                                          stderr=subprocess.STDOUT,
                                                          text=True)
-        logger.debug("make oldconfig finished.")
+        if cp.returncode != 0:
+            logger.warning(f"Running command {' '.join(make_cmd)} resulted in a non-zero error code.\n"
+                           f"Output was:\n" + cp.stdout)
+        cp: subprocess.CompletedProcess = subprocess.run(make_cmd := ["make"],
+                                                         stdout=subprocess.PIPE,
+                                                         stderr=subprocess.STDOUT,
+                                                         text=True)
+        logger.debug("make finished.")
         os.chdir(cwd)
         if cp.returncode != 0:
             logger.warning(f"Running command {' '.join(make_cmd)} resulted in a non-zero error code.\n"
