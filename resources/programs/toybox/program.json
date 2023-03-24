@@ -12,7 +12,7 @@
                 "/SugarlyzerConfig/stdinc/usr/include/",
                 "/SugarlyzerConfig/stdinc/usr/include/x86_64-linux-gnu/",
                 "/SugarlyzerConfig/stdinc/usr/lib/gcc/x86_64-linux-gnu/9/include/",
-                "generated"
+                "toybox"
             ]
         }
     ],
