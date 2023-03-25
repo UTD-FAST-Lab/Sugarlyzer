@@ -89,11 +89,9 @@ class Tester:
     def configure_code(program: ProgramSpecification, config: Path):
         logger.info(f"Running configuration {config.name}")
         # Copy config to .config
-        logger.debug(f"Copying {config.name} to {program.oldconfig_location}")
-        shutil.copyfile(config, program.oldconfig_location)
         cwd = os.curdir
         os.chdir(program.make_root)
-        logger.debug("Running make oldconfig")
+        logger.debug("Running make clean")
         cp: subprocess.CompletedProcess = subprocess.run(make_cmd := ["make", "clean"],
                                                          stdout=subprocess.PIPE,
                                                          stderr=subprocess.STDOUT,
@@ -101,14 +99,11 @@ class Tester:
         if cp.returncode != 0:
             logger.warning(f"Running command {' '.join(make_cmd)} resulted in a non-zero error code.\n"
                            f"Output was:\n" + cp.stdout)
+        
+        logger.debug(f"Copying {config.name} to {program.oldconfig_location}")
+        shutil.copyfile(config, program.oldconfig_location)
+        logger.debug("Running make clean")
         cp: subprocess.CompletedProcess = subprocess.run(make_cmd := ["make", "oldconfig"],
-                                                         stdout=subprocess.PIPE,
-                                                         stderr=subprocess.STDOUT,
-                                                         text=True)
-        if cp.returncode != 0:
-            logger.warning(f"Running command {' '.join(make_cmd)} resulted in a non-zero error code.\n"
-                           f"Output was:\n" + cp.stdout)
-        cp: subprocess.CompletedProcess = subprocess.run(make_cmd := ["make"],
                                                          stdout=subprocess.PIPE,
                                                          stderr=subprocess.STDOUT,
                                                          text=True)
