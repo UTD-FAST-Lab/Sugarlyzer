@@ -291,18 +291,14 @@ class Tester:
             with open(config, 'r') as f:
                 lines = [l.strip() for l in f.readlines()]
 
-            def process_config_lines(lines: Iterable[str]):
-                match lines:
-                    case [x, *xs]:
-                        x: str
-                        if x.startswith("#"):
-                            return [(x[1:].strip().split(" ")[0], False), *process_config_lines(xs)]
-                        else:
-                            return [((toks := x.strip().split("="))[0], toks[1]), *process_config_lines(xs)]
-                    case []:
-                        return []
+            result = []
+            for x in lines:
+                if x.startswith("#"):
+                    result.append((x[1:].strip().split(" ")[0], False))
+                else:
+                    result.append(((toks := x.strip().split("="))[0], toks[1]))
 
-            return process_config_lines(lines)
+            return result
 
         alarms_from_one_file = self.analyze_one_file(file, ps)
         for a in alarms_from_one_file:

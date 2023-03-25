@@ -6966,7 +6966,7 @@
          "file_pattern": "scripts/kconfig/zconf\\.tab\\.c$",
          "included_files": [],
          "included_directories": [
-            "busybox-1_28_0/scripts/kconfig"
+            "scripts/kconfig"
          ],
          "macro_definitions": []
       },
