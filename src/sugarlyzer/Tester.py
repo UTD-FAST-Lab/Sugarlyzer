@@ -104,16 +104,12 @@ class Tester:
         logger.debug(f"Copying {config.name} to {program.oldconfig_location}")
         shutil.copyfile(config, program.oldconfig_location)
         logger.debug("Running make clean")
-        cp: subprocess.CompletedProcess = subprocess.run(make_cmd := ['yes "" | ',"make", "oldconfig"],
-                                                         stdout=subprocess.PIPE,
-                                                         stderr=subprocess.STDOUT,
-                                                         text=True,
-                                                         shell=True)
+        os.system('yes "" | make oldconfig')
         logger.debug("make finished.")
         os.chdir(cwd)
-        if cp.returncode != 0:
-            logger.warning(f"Running command {' '.join(make_cmd)} resulted in a non-zero error code.\n"
-                           f"Output was:\n" + cp.stdout)
+        #if cp.returncode != 0:
+        #    logger.warning(f"Running command {' '.join(make_cmd)} resulted in a non-zero error code.\n"
+        #                   f"Output was:\n" + cp.stdout)
 
     @staticmethod
     def clone_program_and_configure(ps: ProgramSpecification, config: Path) -> ProgramSpecification:
@@ -235,6 +231,9 @@ class Tester:
     def verify_alarm(self, alarm):
         alarm = copy.deepcopy(alarm)
         alarm.verified = "UNVERIFIED"
+        if not alarm.feasible:
+            logger.debug(f'infeasible alarm left unverified')
+            return alarm
         logger.debug(f"Constructing model {alarm.model}")
         if alarm.model is not None:
             config_string = ""
@@ -267,15 +266,18 @@ class Tester:
                 elif k.startswith('USE_'):
                     config_string += f"{mappedKey[4:]}={mappedValue}\n"
                 else:
-                    logger.critical(f"Ignored constraint {str(mapped)}={str(v)}")
+                    logger.critical(f"Ignored constraint {str(mappedKey)}={str(mappedValue)}")
+            if config_string == "":
+                return alarm
             loggable_config_string = config_string.replace("\n", ", ")
             logger.debug(f"Configuration is {loggable_config_string}")
             ntf = tempfile.NamedTemporaryFile(delete=False, mode="w")
             ntf.write(config_string)
             ps: ProgramSpecification = self.clone_program_and_configure(self.program, Path(ntf.name))
-            updated_file = alarm.input_file.relative_to(self.program.source_directory).relative_to(ps.source_directory).replace('.desugared','')
+            updated_file =  str(alarm.input_file.absolute()).replace('/targets',f'/targets/{Path(ntf.name).name}').replace('.desugared','')
+            updated_file = Path(updated_file)
             logger.debug(f"Mapped file {alarm.input_file} to {updated_file}")
-            verify = self.analyze_file_and_associate_configuration(updated_file, Path(ntf.name))
+            verify = self.analyze_file_and_associate_configuration(updated_file, Path(ntf.name), ps)
             logger.debug(
                 f"Got the following alarms {[json.dumps(b.as_dict()) for b in verify]} when trying to verify alarm {json.dumps(alarm.as_dict())}")
             ntf.close()
