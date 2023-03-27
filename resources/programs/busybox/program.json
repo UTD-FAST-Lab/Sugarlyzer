@@ -1,6 +1,7 @@
 {
     "remove_errors": false,
     "config_prefix": "KGENMACRO_",
+    "kgen_map": "busyboxMapping.json",
    "sample_dir": "busybox/configs",
    "included_files_and_directories": [
       {

@@ -1,7 +1,8 @@
 {
     "remove_errors": false,
     "config_prefix": "KGENMACRO_",
-      "sample_dir": "axtls/configs",
+    "kgen_map": "axtlsMapping.json",
+    "sample_dir": "axtls/configs",
       "included_files_and_directories": [
             {
                 "included_files": [
