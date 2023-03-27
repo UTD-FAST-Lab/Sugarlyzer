@@ -66,6 +66,7 @@ class Tester:
         self.remove_errors = self.tool.remove_errors if self.program.remove_errors is None else self.program.remove_errors
         self.config_prefix = self.program.config_prefix
         self.whitelist = self.program.whitelist
+        self.kgen_map = self.program.kgen_map
 
     @functools.cache
     def get_inc_files_and_dirs_for_file(self, file: Path):
@@ -103,10 +104,11 @@ class Tester:
         logger.debug(f"Copying {config.name} to {program.oldconfig_location}")
         shutil.copyfile(config, program.oldconfig_location)
         logger.debug("Running make clean")
-        cp: subprocess.CompletedProcess = subprocess.run(make_cmd := ["make", "oldconfig"],
+        cp: subprocess.CompletedProcess = subprocess.run(make_cmd := ['yes "" | ',"make", "oldconfig"],
                                                          stdout=subprocess.PIPE,
                                                          stderr=subprocess.STDOUT,
-                                                         text=True)
+                                                         text=True,
+                                                         shell=True)
         logger.debug("make finished.")
         os.chdir(cwd)
         if cp.returncode != 0:
@@ -237,22 +239,41 @@ class Tester:
         if alarm.model is not None:
             config_string = ""
             for k, v in alarm.model.items():
-                if k.startswith('DEF_'):
-                    match v.lower():
+                mappedKey = k
+                mappedValue = v
+                if self.kgen_map != None:
+                    with open(importlib.resources.path(f'resources.programs.{self.program.name}', self.kgen_map)) as mapping:
+                        map = json.load(mapping)
+                    kdef = k
+                    if v.lower() == 'false':
+                        kdef = '!'+kdef
+                    if kdef in map.keys():
+                        toParse = map[kdef]
+                        if toParse.startswith('DEF'):
+                            mappedKey = toParse
+                            mappedValue = 'True'
+                        elif toParse.startswith('!DEF'):
+                            mappedKey = toParse[1:]
+                            mappedValue = 'False'
+                        else:
+                            mappedKey = toParse.split(' == ')[0]
+                            mappedValue = toParse.split(' == ')[1]
+                if mappedKey.startswith('DEF_'):
+                    match mappedValue.lower():
                         case 'true':
-                            config_string += f"{k[4:]}=y\n"
+                            config_string += f"{mappedKey[4:]}=y\n"
                         case 'false':
-                            config_string += f"{k[4:]}=n\n"
+                            config_string += f"{mappedKey[4:]}=n\n"
                 elif k.startswith('USE_'):
-                    config_string += f"{k[4:]}={v}\n"
+                    config_string += f"{mappedKey[4:]}={mappedValue}\n"
                 else:
-                    logger.critical(f"Ignored constraint {str(k)}={str(v)}")
+                    logger.critical(f"Ignored constraint {str(mapped)}={str(v)}")
             loggable_config_string = config_string.replace("\n", ", ")
             logger.debug(f"Configuration is {loggable_config_string}")
             ntf = tempfile.NamedTemporaryFile(delete=False, mode="w")
-            ntf.write(loggable_config_string)
+            ntf.write(config_string)
             ps: ProgramSpecification = self.clone_program_and_configure(self.program, Path(ntf.name))
-            updated_file = alarm.input_file.relative_to(self.program.source_directory).relative_to(ps.source_directory)
+            updated_file = alarm.input_file.relative_to(self.program.source_directory).relative_to(ps.source_directory).replace('.desugared','')
             logger.debug(f"Mapped file {alarm.input_file} to {updated_file}")
             verify = self.analyze_file_and_associate_configuration(updated_file, Path(ntf.name))
             logger.debug(

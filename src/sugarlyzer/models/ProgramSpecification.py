@@ -27,6 +27,7 @@ class ProgramSpecification:
                  project_root: str,
                  config_prefix: str = None,
                  whitelist: str = None,
+                 kgen_map: str = None,
                  remove_errors: bool = False,
                  source_dir: Optional[str] = None,
                  make_root: Optional[str] = None,
@@ -39,6 +40,7 @@ class ProgramSpecification:
         self.remove_errors = remove_errors
         self.config_prefix = config_prefix
         self.whitelist = whitelist
+        self.kgen_map = kgen_map
         self.no_std_libs = True
         self.__project_root = project_root
         self.__source_dir = source_dir
