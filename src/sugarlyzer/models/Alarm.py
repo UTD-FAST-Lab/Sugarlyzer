@@ -98,7 +98,7 @@ class Alarm:
             "sanitized_message": lambda: self.sanitized_message,
             "presence_condition": lambda: self.presence_condition,
             "feasible": lambda: self.feasible,
-            "configuration": lambda: str(self.model) if isinstance(self.model, z3.ModelRef) else self.model,
+            "configuration": lambda: str(self.model) if isinstance(self.model, ModelRef) else self.model,
             "analysis_time": lambda: self.analysis_time,
             "desugaring_time": lambda: self.desugaring_time,
             "get_recommended_space": lambda: self.get_recommended_space,
@@ -128,6 +128,9 @@ class Alarm:
     def original_line_range(self) -> IntegerRange:
         if self.input_file is None:
             raise ValueError("Trying to set original line range when self.original_file is none.")
+
+        if 'desugared' not in self.input_file.name:  ## Bad, bad, bad. TODO: Fix this with a more robust solution
+            return IntegerRange(self.line_in_input_file, self.line_in_input_file)
 
         if self.__original_line_range is None:
             self.__original_line_range = map_source_line(self.input_file, self.line_in_input_file)

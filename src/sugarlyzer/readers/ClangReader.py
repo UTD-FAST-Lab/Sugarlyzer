@@ -25,6 +25,7 @@ class ClangReader(AbstractReader):
                     line = int(l.split(':')[1])
                     message = ':'.join(l.split(':')[4:])
                     message = '['.join(message.split('[')[:-1])
+                    logger.critical(f"l={l}; line={line}; message={message}")
                     currentAlarm = ClangAlarm(line_in_input_file=line,
                                               message=message,
                                               input_file=file,

@@ -24,7 +24,7 @@ Where `python` points to a Python executable of at least version 3.10.0.
 This will install all of the Python dependencies required. Then, in order to install
 the application, run
 
-`python -m pip install .`
+`python -m pip install -e .`
 
 This installation will put two executables on your system PATH: `dispatcher`, and `tester`.
 `dispatcher` is the command you run from your host, while `tester` is the command you run from inside the Docker container (under normal usage, a user

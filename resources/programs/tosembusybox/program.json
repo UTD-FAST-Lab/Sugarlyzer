@@ -1,0 +1,28 @@
+{
+    "remove_errors": false,
+    "config_prefix": "CONFIG_",
+    "included_files_and_directories": [
+        {
+            "included_files": [
+                "/TypeChef-Sampling-BusyBox/casestudy/config.h",
+                "/TypeChef-Sampling-BusyBox/casestudy/platform-redhat.h",
+		"/SugarlyzerConfig/tosemInc.h"
+	    ],
+            "included_directories": [
+		"/TypeChef-Sampling-BusyBox/busybox-1.18.5/include",
+		"/TypeChef-Sampling-BusyBox/casestudy/systems/redhat/usr/lib/gcc/x86_64-redhat-linux/4.4.4/include",
+		"/TypeChef-Sampling-BusyBox/casestudy/systems/redhat/usr/include"
+            ],
+	    "macro_definitions": [
+		"-U HAVE_LIBDMALLOC",
+		"-D CONFIG_FIND",
+		"-U CONFIG_FEATURE_WGET_LONG_OPTIONS",
+		"-U ENABLE_NC_110_COMPAT",
+		"-U CONFIG_EXTRA_COMPAT",
+		"-D _GNU_SOURCE"
+	    ]
+	}
+    ],
+    "build_script": "tosembusybox/tosembusyboxScript.sh",
+    "project_root": "busybox-1.18.5"
+}

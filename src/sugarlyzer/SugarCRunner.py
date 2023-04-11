@@ -1,17 +1,17 @@
-import functools
+import itertools
 import itertools
 import logging
 import os
 import re
 import subprocess
-import sys
 import tempfile
 import time
 from dataclasses import dataclass, field
 from hashlib import sha256
 from pathlib import Path
-from typing import Tuple, List, Optional, Dict, Iterable
+from typing import List, Optional, Dict, Iterable
 
+# noinspection PyUnresolvedReferences
 from z3.z3 import Solver, sat, Bool, Int, Not, And, Or
 
 from src.sugarlyzer.models.Alarm import Alarm
@@ -147,6 +147,8 @@ def desugar_file(file_to_desugar: Path,
                  output_file: str = '',
                  log_file: str = '',
                  remove_errors: bool = False,
+                 config_prefix: str = None,
+                 whitelist: str = None,
                  no_stdlibs: bool = False,
                  keep_mem: bool = False,
                  make_main: bool = False,
@@ -196,20 +198,26 @@ def desugar_file(file_to_desugar: Path,
             log_file = file_to_desugar.with_suffix('.log')
         case _:
             log_file = Path(log_file)
-
-    cmd = ['timeout 60m', 'java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToPrefix', 'KGENMACRO_', *commandline_args, *included_files, *included_directories,
-           file_to_desugar]
+    if config_prefix != None:
+        cmd = ['timeout -k 10 10m','java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToPrefix', config_prefix, *commandline_args, *included_files, *included_directories,file_to_desugar]
+    elif whitelist != None:
+        cmd = ['timeout -k 10 10m','java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToWhitelist', whitelist, *commandline_args, *included_files, *included_directories,file_to_desugar]
+    else:
+        cmd = ['timeout -k 10 10m','java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', *commandline_args, *included_files, *included_directories,file_to_desugar]
     cmd = [str(s) for s in cmd]
+    logging.info(f'Command: {cmd}')
+
+    to_append = None
     if remove_errors:
         run_sugarc(" ".join(cmd), file_to_desugar, desugared_file, log_file)
-        logging.debug(f"Created desugared file {desugared_file}")
+        logger.debug(f"Created desugared file {desugared_file}")
         to_append = get_bad_constraints(desugared_file)
         for d in to_append:
             outfile.write(d + "\n")
         outfile.flush()
-        logging.info(f'{desugared_file} removed errors: {to_append}')
+        logger.debug(f'{desugared_file} removed errors: {to_append}')
 
-    logging.info(f"Cmd is {' '.join(cmd)}")
+    logger.debug(f"Cmd is {' '.join(cmd)}")
     if not remove_errors or remove_errors and len(to_append) > 0:
         run_sugarc(" ".join(cmd), file_to_desugar, desugared_file, log_file)
     logger.debug(f"Wrote to {log_file}")
@@ -251,11 +259,11 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
                 f.write(ps.stdout)
             with open(digest_file, 'wb') as f:
                 f.write(ps.stdout)
-            logger.info(f"Wrote to {desugared_output}")
+            logger.debug(f"Wrote to {desugared_output}")
             with open(log_file, 'wb') as f:
                 f.write(ps.stderr)
     finally:
-        if (not desugared_output.exists()) or (desugared_output.stat().st_size == 0):
+        if (not desugared_output.exists()) or (os.path.getsize(desugared_output) == 0):
             try:
                 logger.error(f"Could not desugar file {file_to_desugar}")  # \n\tSugarC stdout: {ps.stdout}\n\tSugarC stderr: {ps.stderr}")
             except UnboundLocalError:
@@ -289,7 +297,7 @@ def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Al
         s = Solver()
         missingCondition = False
         for a in w.static_condition_results:
-            if a['var'] == '' or not a['var'] in condition_mapping.replacers.keys():
+            if a['var'] == '' or not a['var'] in condition_mapping.replacers.keys() or '"' in condition_mapping.replacers[a['var']]:
                 missingCondition = True
                 break
             if a['val']:
@@ -579,9 +587,12 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
                 current_result.ids[splits[0][:-1]] = 'varis["' + v + '"] != 0'
                 current_result.varis[v] = Int(v)
             else:
-                v = 'USE_' + splits[0]
-                current_result.ids[splits[0]] = 'varis["' + v + '"]'
-                current_result.varis[v] = Int(v)
+                for segment in splits:
+                    if re.match(r'\(?^[A-Za-z_][A-Za-z0-9_]+\)?$',segment):
+                        snipped = segment if segment[-1] != ")" else segment[:-1]
+                        v = 'USE_' + snipped
+                        current_result.ids[snipped] = 'varis["' + v + '"]'
+                        current_result.varis[v] = Int(v)
         indxx += 1
     # accessing our string again, removing the ' "'
     condstr = conds[2:]
@@ -594,6 +605,9 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
             condstr = condstr.replace(x, current_result.ids[x])
         else:
             condstr = condstr.replace('(' + x, '(' + current_result.ids[x])
+            condstr = condstr.replace(' ' + x + ' ', ' ' + current_result.ids[x] + ' ')
+            condstr = condstr.replace(' ' + x + ')', ' ' + current_result.ids[x] + ')')
+
     # replace ! with the Not method
     condstr = condstr.replace('!(', 'Not(')
     # we treat this like RPN solvers with stacks, we need a stack of operators and operands
