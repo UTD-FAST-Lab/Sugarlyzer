@@ -302,7 +302,8 @@ class Tester:
                     pass
             logger.debug(f"Alarm with validation updated: {alarm.as_dict()}")
             return alarm
-
+        else:
+            return alarm
 
     def analyze_file_and_associate_configuration(self, file: Path, config: Path, ps: ProgramSpecification) -> Iterable[Alarm]:
         def get_config_object(config: Path) -> List[Tuple[str, str]]:
