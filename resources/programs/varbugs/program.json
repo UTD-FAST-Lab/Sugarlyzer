@@ -21,8 +21,6 @@
         }
     ],
     "build_script": "varbugs/varbugsScript.sh",
-    "source_location": [
-        "VarBugsPatches"
-    ]
+    "project_root": "VarBugsPatches"
 
 }
