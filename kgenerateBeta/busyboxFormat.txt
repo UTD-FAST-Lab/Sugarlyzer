@@ -1,0 +1,15 @@
+:default:
+#define CONFIG_$0 $1
+#define ENABLE_$0 1
+#ifdef MAKE_SUID
+#define IF_$0(...) __VA_ARGS__ "CONFIG_$0"
+#else
+#define IF_$0(...) __VA_ARGS__
+#endif
+#define IF_NOT_$0(...) __VA_ARGS__
+#else
+#undef CONFIG_$0
+#define ENABLE_$0 0
+#define IF_$0(...)
+#define IF_NOT_$0(...)
+:end:
