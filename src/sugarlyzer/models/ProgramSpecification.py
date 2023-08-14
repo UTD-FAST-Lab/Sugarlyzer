@@ -27,6 +27,7 @@ class ProgramSpecification:
                  project_root: str,
                  config_prefix: str = None,
                  whitelist: str = None,
+                 kgen_map: str = None,
                  remove_errors: bool = False,
                  source_dir: Optional[str] = None,
                  make_root: Optional[str] = None,
@@ -39,6 +40,7 @@ class ProgramSpecification:
         self.remove_errors = remove_errors
         self.config_prefix = config_prefix
         self.whitelist = whitelist
+        self.kgen_map = kgen_map
         self.no_std_libs = True
         self.__project_root = project_root
         self.__source_dir = source_dir
@@ -111,8 +113,7 @@ class ProgramSpecification:
                 if (rt := spec.get('relative_to')) is not None:
                     relative_to = Path(rt)
                 else:
-                    relative_to = file.parent
-
+                    relative_to = self.project_root
                 if 'included_files' in spec.keys():
                     inc_files.extend(self.try_resolve_path(Path(p), relative_to) for p in spec['included_files'])
                 if 'included_directories' in spec.keys():
@@ -144,6 +145,8 @@ class ProgramSpecification:
             raise ValueError("Supplied path is None")
 
         logger.debug(f'Trying to resolve {path} in {root}')
+        if path.name == root.name:
+            return root
         if path.is_absolute():
             ##logger.warning(f"Tried to resolve an absolute path {str(path)} from root {str(root)}. May lead to incorrect resolutions.")
             return path
