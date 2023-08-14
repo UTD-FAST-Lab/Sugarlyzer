@@ -66,6 +66,7 @@ class Tester:
         self.remove_errors = self.tool.remove_errors if self.program.remove_errors is None else self.program.remove_errors
         self.config_prefix = self.program.config_prefix
         self.whitelist = self.program.whitelist
+        self.kgen_map = self.program.kgen_map
 
     @functools.cache
     def get_inc_files_and_dirs_for_file(self, file: Path):
@@ -78,8 +79,8 @@ class Tester:
         logger.debug(f"User defined space for file {file} is {recommended_space}")
         return included_directories, included_files, cmd_decs, recommended_space
 
-    def analyze_one_file(self, fi: Path) -> Iterable[Alarm]:
-        inc_files, inc_dirs, cmd_decs = self.program.inc_files_and_dirs_for_file(fi)
+    def analyze_one_file(self, fi: Path, ps: ProgramSpecification) -> Iterable[Alarm]:
+        inc_files, inc_dirs, cmd_decs = ps.inc_files_and_dirs_for_file(fi)
         alarms = self.tool.analyze_and_read(fi, command_line_defs=cmd_decs,
                                             included_files=inc_files,
                                             included_dirs=inc_dirs)
@@ -89,20 +90,26 @@ class Tester:
     def configure_code(program: ProgramSpecification, config: Path):
         logger.info(f"Running configuration {config.name}")
         # Copy config to .config
-        logger.debug(f"Copying {config.name} to {program.oldconfig_location}")
-        shutil.copyfile(config, program.oldconfig_location)
         cwd = os.curdir
         os.chdir(program.make_root)
-        logger.debug("Running make oldconfig")
-        cp: subprocess.CompletedProcess = subprocess.run(make_cmd := ["make", "oldconfig"],
+        logger.debug("Running make clean")
+        cp: subprocess.CompletedProcess = subprocess.run(make_cmd := ["make", "clean"],
                                                          stdout=subprocess.PIPE,
                                                          stderr=subprocess.STDOUT,
                                                          text=True)
-        logger.debug("make oldconfig finished.")
-        os.chdir(cwd)
         if cp.returncode != 0:
             logger.warning(f"Running command {' '.join(make_cmd)} resulted in a non-zero error code.\n"
                            f"Output was:\n" + cp.stdout)
+        
+        logger.debug(f"Copying {config.name} to {program.oldconfig_location}")
+        shutil.copyfile(config, program.oldconfig_location)
+        logger.debug("Running make clean")
+        os.system('yes "" | make oldconfig')
+        logger.debug("make finished.")
+        os.chdir(cwd)
+        #if cp.returncode != 0:
+        #    logger.warning(f"Running command {' '.join(make_cmd)} resulted in a non-zero error code.\n"
+        #                   f"Output was:\n" + cp.stdout)
 
     @staticmethod
     def clone_program_and_configure(ps: ProgramSpecification, config: Path) -> ProgramSpecification:
@@ -224,28 +231,53 @@ class Tester:
     def verify_alarm(self, alarm):
         alarm = copy.deepcopy(alarm)
         alarm.verified = "UNVERIFIED"
+        if not alarm.feasible:
+            logger.debug(f'infeasible alarm left unverified')
+            return alarm
         logger.debug(f"Constructing model {alarm.model}")
         if alarm.model is not None:
             config_string = ""
             for k, v in alarm.model.items():
-                if k.startswith('DEF_'):
-                    match v.lower():
+                mappedKey = k
+                mappedValue = v
+                if self.kgen_map != None:
+                    with open(importlib.resources.path(f'resources.programs.{self.program.name}', self.kgen_map)) as mapping:
+                        map = json.load(mapping)
+                    kdef = k
+                    if v.lower() == 'false':
+                        kdef = '!'+kdef
+                    if kdef in map.keys():
+                        toParse = map[kdef]
+                        if toParse.startswith('DEF'):
+                            mappedKey = toParse
+                            mappedValue = 'True'
+                        elif toParse.startswith('!DEF'):
+                            mappedKey = toParse[1:]
+                            mappedValue = 'False'
+                        else:
+                            mappedKey = toParse.split(' == ')[0]
+                            mappedValue = toParse.split(' == ')[1]
+                if mappedKey.startswith('DEF_'):
+                    match mappedValue.lower():
                         case 'true':
-                            config_string += f"{k[4:]}=y\n"
+                            config_string += f"{mappedKey[4:]}=y\n"
                         case 'false':
-                            config_string += f"{k[4:]}=n\n"
+                            config_string += f"{mappedKey[4:]}=n\n"
                 elif k.startswith('USE_'):
-                    config_string += f"{k[4:]}={v}\n"
+                    config_string += f"{mappedKey[4:]}={mappedValue}\n"
                 else:
-                    logger.critical(f"Ignored constraint {str(k)}={str(v)}")
+                    logger.critical(f"Ignored constraint {str(mappedKey)}={str(mappedValue)}")
+            if config_string == "":
+                return alarm
             loggable_config_string = config_string.replace("\n", ", ")
             logger.debug(f"Configuration is {loggable_config_string}")
             ntf = tempfile.NamedTemporaryFile(delete=False, mode="w")
-            ntf.write(loggable_config_string)
+            ntf.write(config_string)
             ps: ProgramSpecification = self.clone_program_and_configure(self.program, Path(ntf.name))
-            updated_file = alarm.input_file.relative_to(self.program.source_directory).relative_to(ps.source_directory)
+            updated_file =  str(alarm.input_file.absolute()).replace('/targets',f'/targets/{Path(ntf.name).name}').replace('.desugared','')
+            updated_file = Path(updated_file)
             logger.debug(f"Mapped file {alarm.input_file} to {updated_file}")
-            verify = self.analyze_file_and_associate_configuration(updated_file, Path(ntf.name))
+            verify = self.analyze_file_and_associate_configuration(updated_file, Path(ntf.name), ps)
             logger.debug(
                 f"Got the following alarms {[json.dumps(b.as_dict()) for b in verify]} when trying to verify alarm {json.dumps(alarm.as_dict())}")
             ntf.close()
@@ -270,27 +302,24 @@ class Tester:
                     pass
             logger.debug(f"Alarm with validation updated: {alarm.as_dict()}")
             return alarm
+        else:
+            return alarm
 
-
-    def analyze_file_and_associate_configuration(self, file: Path, config: Path) -> Iterable[Alarm]:
+    def analyze_file_and_associate_configuration(self, file: Path, config: Path, ps: ProgramSpecification) -> Iterable[Alarm]:
         def get_config_object(config: Path) -> List[Tuple[str, str]]:
             with open(config, 'r') as f:
                 lines = [l.strip() for l in f.readlines()]
 
-            def process_config_lines(lines: Iterable[str]):
-                match lines:
-                    case [x, *xs]:
-                        x: str
-                        if x.startswith("#"):
-                            return [(x[1:].strip().split(" ")[0], False), *process_config_lines(xs)]
-                        else:
-                            return [((toks := x.strip().split("="))[0], toks[1]), *process_config_lines(xs)]
-                    case []:
-                        return []
+            result = []
+            for x in lines:
+                if x.startswith("#"):
+                    result.append((x[1:].strip().split(" ")[0], False))
+                else:
+                    result.append(((toks := x.strip().split("="))[0], toks[1]))
 
-            return process_config_lines(lines)
+            return result
 
-        alarms_from_one_file = self.analyze_one_file(file)
+        alarms_from_one_file = self.analyze_one_file(file, ps)
         for a in alarms_from_one_file:
             a.model = get_config_object(config)
         return alarms_from_one_file
@@ -316,17 +345,17 @@ class Tester:
                 spec_config_pairs.append(result)
 
         logger.debug(f"Config pairs is {list((ps.search_context, x) for ps, x in spec_config_pairs)}")
-        source_files_config_pairs: List[Tuple[Path, Path]] = []
+        source_files_config_spec_triples: List[Tuple[Path, Path, ProgramSpecification]] = []
         for spec, config in spec_config_pairs:
-            source_files_config_pairs.extend((fi, config) for fi in spec.get_source_files())
+            source_files_config_spec_triples.extend((fi, config, spec) for fi in spec.get_source_files())
 
         logger.info("Running analysis:")
-        logger.debug(f"Running analysis on pairs {source_files_config_pairs}")
+        logger.debug(f"Running analysis on pairs {source_files_config_spec_triples}")
         with ProcessPool(self.jobs) as p:
             alarms = list()
             for i in tqdm(
-                    p.imap(lambda x: self.analyze_file_and_associate_configuration(*x), source_files_config_pairs),
-                    total=len(source_files_config_pairs)):
+                    p.imap(lambda x: self.analyze_file_and_associate_configuration(*x), source_files_config_spec_triples),
+                    total=len(source_files_config_spec_triples)):
                 alarms.extend(i)
 
         for alarm in alarms:
