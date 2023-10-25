@@ -157,7 +157,6 @@ def desugar_file(file_to_desugar: Path,
                  commandline_declarations: Optional[Iterable[str]] = None) -> tuple[Path, Path]:
     """
     Runs the SugarC command.
-
     :param file_to_desugar: The C source code file to desugar.
     :param recommended_space: defines and undefs to be assumed while desugaring
     :param output_file: If provided, will specify the location of the output. Otherwise tacks on .desugared.c to the end of the base file name
@@ -229,7 +228,7 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
     current_directory = os.curdir
     os.chdir(file_to_desugar.parent)
     logger.debug(f"In run_sugarc, running cmd {cmd_str} from directory {os.curdir}")
-    start = time.time()
+    start = time.monotonic()
     to_hash = list()
     for tok in cmd_str.split(' '):
         if (path := Path(tok)).exists() and path.is_file():
@@ -269,7 +268,7 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
             except UnboundLocalError:
                 logger.error(f"Could not desugar file {file_to_desugar}. Tried to output what went wrong but couldn't access subprocess output.")
         os.chdir(current_directory)
-    logger.info(f"{desugared_output} desugared in time:{time.time()-start} to file size:{desugared_output.stat().st_size}")
+    logger.info(f"{desugared_output} desugared in time:{time.monotonic()-start} to file size:{desugared_output.stat().st_size}")
         
 
 def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Alarm]:
