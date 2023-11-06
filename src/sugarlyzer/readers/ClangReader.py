@@ -19,6 +19,7 @@ class ClangReader(AbstractReader):
             for l in rf:
                 l = l.lstrip().rstrip()
                 if ': warning:' in l:
+
                     if currentAlarm != None:
                         res.append(currentAlarm)
                     file = l.split(':')[0]

@@ -2,6 +2,7 @@ import itertools
 import logging
 import subprocess
 import tempfile
+import time
 from pathlib import Path
 from typing import Iterable, Optional
 
@@ -22,7 +23,8 @@ class Clang(AbstractTool):
     def analyze(self, file: Path,
                 included_dirs: Iterable[Path] = None,
                 included_files: Iterable[Path] = None,
-                command_line_defs: Iterable[str] = None):
+                command_line_defs: Iterable[str] = None,
+                **kwargs):
         if command_line_defs is None:
             command_line_defs = []
         if included_dirs is None:
@@ -31,13 +33,14 @@ class Clang(AbstractTool):
             included_files = []
 
         output_location = tempfile.mkdtemp()
-        cmd = ["clang-11", '--analyze', "-Xanalyzer", "-analyzer-output=text",
+        cmd = ["time", "clang-11", '--analyze', "-Xanalyzer", "-analyzer-output=text",
                *list(itertools.chain(*zip(itertools.cycle(["-I"]), included_dirs))),
                *list(itertools.chain(*zip(itertools.cycle(["--include"]), included_files))),
                *command_line_defs,
                '-nostdinc',
                "-c", file.absolute()]
         logger.info(f"Running cmd {' '.join(str(s) for s in cmd)}")
+
         pipes = subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
         stdout, stderr = pipes.communicate()
         stdout = str(stdout, 'UTF-8')
@@ -48,6 +51,8 @@ class Clang(AbstractTool):
 
         with open(output_location + '/report.report','w') as o:
             o.write(stderr)
+
+        logger.critical(f"Analysis time: {stdout.split('\n')[-1]}")
             
         for root, dirs, files in os.walk(output_location):
             for fil in files:
