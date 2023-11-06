@@ -52,7 +52,8 @@ class Clang(AbstractTool):
         with open(output_location + '/report.report','w') as o:
             o.write(stderr)
 
-        logger.critical(f"Analysis time: {stdout.split('\n')[-1]}")
+        lines = stdout.split("\n")
+        logger.critical(f"Analysis time: {lines[-1]}")
             
         for root, dirs, files in os.walk(output_location):
             for fil in files:
