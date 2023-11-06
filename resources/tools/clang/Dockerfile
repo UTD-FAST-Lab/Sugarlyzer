@@ -5,7 +5,7 @@ RUN apt-get update -y && apt-get upgrade -y && \
     apt-get install -y software-properties-common gcc apt-transport-https
 RUN add-apt-repository -y ppa:deadsnakes/ppa &&  \
     apt-get install -y z3 python3.10 python3-distutils python3-pip python3-apt python3.10-venv git \
-    bison libjson-java sat4j openjdk-8-jdk default-jdk gcc g++ make libz3-java
+    bison libjson-java sat4j openjdk-8-jdk default-jdk gcc g++ make libz3-java time
 
 RUN apt-get install -y gcc make zlib1g-dev git
 RUN pip install cmake
