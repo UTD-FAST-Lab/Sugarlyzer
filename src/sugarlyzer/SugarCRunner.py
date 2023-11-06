@@ -198,11 +198,11 @@ def desugar_file(file_to_desugar: Path,
         case _:
             log_file = Path(log_file)
     if config_prefix != None:
-        cmd = ['timeout -k 10 10m','java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToPrefix', config_prefix, *commandline_args, *included_files, *included_directories,file_to_desugar]
+        cmd = ['time', 'timeout -k 10 10m','java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToPrefix', config_prefix, *commandline_args, *included_files, *included_directories,file_to_desugar]
     elif whitelist != None:
-        cmd = ['timeout -k 10 10m','java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToWhitelist', whitelist, *commandline_args, *included_files, *included_directories,file_to_desugar]
+        cmd = ['time', 'timeout -k 10 10m','java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToWhitelist', whitelist, *commandline_args, *included_files, *included_directories,file_to_desugar]
     else:
-        cmd = ['timeout -k 10 10m','java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', *commandline_args, *included_files, *included_directories,file_to_desugar]
+        cmd = ['time', 'timeout -k 10 10m','java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', *commandline_args, *included_files, *included_directories,file_to_desugar]
     cmd = [str(s) for s in cmd]
     logging.info(f'Command: {cmd}')
 
@@ -254,6 +254,8 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
         else:
             logger.debug("Cache miss")
             ps = subprocess.run(cmd_str.split(" "), capture_output=True)
+            lines = str(ps.stdout, 'UTF-8').split("\n")
+            logger.warning("Desugaring time: " + lines[-1])
             with open(desugared_output, 'wb') as f:
                 f.write(ps.stdout)
             with open(digest_file, 'wb') as f:
