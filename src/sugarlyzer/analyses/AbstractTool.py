@@ -40,14 +40,14 @@ class AbstractTool(ABC):
                     included_files = []
                 included_files.append(uds.name)
 
-        start_time = time.time()
+        start_time = time.monotonic()
         alarms =\
             functools.reduce(operator.iconcat, [self.reader.read_output(f) for f in
                                                 self.analyze(file=source_file,
                                                              command_line_defs=command_line_defs,
                                                              included_dirs=included_dirs,
                                                              included_files=included_files)], [])
-        total_time = time.time() - start_time
+        total_time = time.monotonic() - start_time
         logger.info(f"Analyzing file {source_file} took {total_time}s")
         for a in alarms:
             a.input_file = source_file
