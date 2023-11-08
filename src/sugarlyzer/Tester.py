@@ -307,23 +307,23 @@ class Tester:
         else:
             return alarm
 
+    def get_config_object(config: Path) -> List[Tuple[str, str]]:
+        with open(config, 'r') as f:
+            lines = [l.strip() for l in f.readlines()]
+
+        result = []
+        for x in lines:
+            if x.startswith("#"):
+                result.append((x[1:].strip().split(" ")[0], False))
+            else:
+                result.append(((toks := x.strip().split("="))[0], toks[1]))
+
+        return result
+
     def analyze_file_and_associate_configuration(self, file: Path, config: Path, ps: ProgramSpecification) -> Iterable[Alarm]:
-        def get_config_object(config: Path) -> List[Tuple[str, str]]:
-            with open(config, 'r') as f:
-                lines = [l.strip() for l in f.readlines()]
-
-            result = []
-            for x in lines:
-                if x.startswith("#"):
-                    result.append((x[1:].strip().split(" ")[0], False))
-                else:
-                    result.append(((toks := x.strip().split("="))[0], toks[1]))
-
-            return result
-
         alarms_from_one_file = self.analyze_one_file(file, ps)
         for a in alarms_from_one_file:
-            a.model = get_config_object(config)
+            a.model = self.get_config_object(config)
         return alarms_from_one_file
 
     def run_baseline_experiments(self) -> Iterable[Alarm]:
@@ -404,5 +404,44 @@ def main():
     t.execute()
     print(f'total time: {time.monotonic() - start}')
 
+import sys
+def main2():
+    # Two arguments: alarm file and configuration directory
+    alarm_file = sys.argv[1]
+    configuration_directory = sys.argv[2]
+    with open(alarm_file) as infile:
+        alarms = json.load(infile)
+    configurations = map(lambda x: Path(configuration_directory) / Path(x), os.listdir(configuration_directory))
+    #print("Configurations are " + str(list(configurations)))
+    configuration_models = zip(configurations, map(lambda x: Tester.get_config_object(x), configurations))
+    for a in [alarms[0]]:
+        alarm_keyset = set([elem[0] for elem in a['configuration']])
+        for config, model in configuration_models:
+            print(config)
+            print("--------------------------------")
+            model_keyset = set([elem[0] for elem in model])
+            if alarm_keyset == model_keyset:
+                num_diffs = 0
+                for key in alarm_keyset:
+                    alarm_value = [e[1] for e in a['configuration'] if e[0] == key][0]
+                    model_value = [e[1] for e in model if e[0] == key][0]
+                    if alarm_value != model_value:
+                        print({"Key": key, "Alarm value": alarm_value, "Model value": model_value})
+                        num_diffs += 1
+                print(str(num_diffs) + " diffs\n\n")
+            else:
+                print("Key sets don't match.")
+                print("Alarm is missing the following elements")
+                print(model_keyset - alarm_keyset)
+                print("Model is missing the following elements")
+                print(alarm_keyset - model_keyset)
+            # print(a['configuration'])
+            # print(model)
+            # if (x := set(map(lambda x: str(x), a['configuration']))) == (y := set(map(lambda x: str(x), (map(lambda x: list(x), model))))):
+            #     print(f"Alarm with id {a['id']} matches configuration {config}")
+            #     break
+            # else:
+            #     print(str(x) + "\n" + str(y) + "\n" + "don't match" + "\n\n")
+
 if __name__ == '__main__':
-    main()
+    main2()
