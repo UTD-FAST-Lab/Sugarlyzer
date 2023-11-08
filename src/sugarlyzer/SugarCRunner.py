@@ -198,11 +198,11 @@ def desugar_file(file_to_desugar: Path,
         case _:
             log_file = Path(log_file)
     if config_prefix != None:
-        cmd = ['time', 'timeout -k 10 10m','java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToPrefix', config_prefix, *commandline_args, *included_files, *included_directories,file_to_desugar]
+        cmd = ['ulimit -v 40000000;', 'time', 'timeout -k 10 10m', 'java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToPrefix', config_prefix, *commandline_args, *included_files, *included_directories,file_to_desugar]
     elif whitelist != None:
-        cmd = ['time', 'timeout -k 10 10m','java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToWhitelist', whitelist, *commandline_args, *included_files, *included_directories,file_to_desugar]
+        cmd = ['ulimit -v 40000000;', 'time', 'timeout -k 10 10m', 'java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToWhitelist', whitelist, *commandline_args, *included_files, *included_directories,file_to_desugar]
     else:
-        cmd = ['time', 'timeout -k 10 10m','java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', *commandline_args, *included_files, *included_directories,file_to_desugar]
+        cmd = ['ulimit -v 40000000;', 'time', 'timeout -k 10 10m', 'java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', *commandline_args, *included_files, *included_directories,file_to_desugar]
     cmd = [str(s) for s in cmd]
     logging.info(f'Command: {cmd}')
 
@@ -253,7 +253,7 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
                     outfile.write(infile.read())
         else:
             logger.debug("Cache miss")
-            ps = subprocess.run(cmd_str.split(" "), capture_output=True)
+            ps = subprocess.run(cmd_str, capture_output=True, shell=True, executable='/bin/bash')
             lines = str(ps.stdout, 'UTF-8').split("\n")
             logger.info("Stdout: " + str(ps.stdout, 'UTF-8'))
             logger.warning("Desugaring time: " + ' '.join(lines[-2:-1]))
