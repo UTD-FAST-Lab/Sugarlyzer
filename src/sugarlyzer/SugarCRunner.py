@@ -255,7 +255,7 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
             logger.debug("Cache miss")
             ps = subprocess.run(cmd_str, capture_output=True, shell=True, executable='/bin/bash')
             lines = str(ps.stdout, 'UTF-8').split("\n")
-            logger.info("Stdout: " + str(ps.stdout, 'UTF-8'))
+            logger.info("Stderr: " + str(ps.stderr, 'UTF-8'))
             logger.warning("Desugaring time: " + ' '.join(lines[-2:-1]))
             with open(desugared_output, 'wb') as f:
                 f.write(ps.stdout)
