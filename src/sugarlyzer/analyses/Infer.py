@@ -36,7 +36,7 @@ class Infer(AbstractTool):
                *command_line_defs,
                "-nostdinc", "-c", file.absolute()]
         logger.debug(f"Running cmd {cmd}")
-        ps = subprocess.run(" ".join(cmd), stderr=subprocess.STDOUT, stdout=subprocess.PIPE, text=True, shell=True, executable='/bin/bash')
+        ps = subprocess.run(" ".join([str(s) for s in cmd]), stderr=subprocess.STDOUT, stdout=subprocess.PIPE, text=True, shell=True, executable='/bin/bash')
         if (ps.returncode != 0):
             logger.warning(f"Running infer on file {str(file)} with command {' '.join(str(s) for s in cmd)} potentially failed (exit code {ps.returncode}).")
             logger.warning(ps.stdout)
