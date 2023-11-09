@@ -198,11 +198,11 @@ def desugar_file(file_to_desugar: Path,
         case _:
             log_file = Path(log_file)
     if config_prefix != None:
-        cmd = ['ulimit -v 40000000;', 'time', 'timeout -k 10 10m', 'java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToPrefix', config_prefix, *commandline_args, *included_files, *included_directories,file_to_desugar]
+        cmd = ['ulimit -v 100000000;', 'time', 'timeout -k 10 10m', 'java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToPrefix', config_prefix, *commandline_args, *included_files, *included_directories,file_to_desugar]
     elif whitelist != None:
-        cmd = ['ulimit -v 40000000;', 'time', 'timeout -k 10 10m', 'java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToWhitelist', whitelist, *commandline_args, *included_files, *included_directories,file_to_desugar]
+        cmd = ['ulimit -v 100000000;', 'time', 'timeout -k 10 10m', 'java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToWhitelist', whitelist, *commandline_args, *included_files, *included_directories,file_to_desugar]
     else:
-        cmd = ['ulimit -v 40000000;', 'time', 'timeout -k 10 10m', 'java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', *commandline_args, *included_files, *included_directories,file_to_desugar]
+        cmd = ['ulimit -v 100000000;', 'time', 'timeout -k 10 10m', 'java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', *commandline_args, *included_files, *included_directories,file_to_desugar]
     cmd = [str(s) for s in cmd]
     logging.info(f'Command: {cmd}')
 

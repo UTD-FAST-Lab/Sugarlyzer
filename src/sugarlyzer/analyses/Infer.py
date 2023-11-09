@@ -30,7 +30,7 @@ class Infer(AbstractTool):
             command_line_defs = []
 
         output_location = tempfile.mkdtemp()
-        cmd = ["ulimit -v 40000000;", "infer", "--pulse-only", '-o', output_location, '--', "clang",
+        cmd = ["ulimit -v 100000000;", "infer", "--pulse-only", '-o', output_location, '--', "clang",
                *list(itertools.chain(*zip(itertools.cycle(["-I"]), included_dirs))),
                *list(itertools.chain(*zip(itertools.cycle(["--include"]), included_files))),
                *command_line_defs,
