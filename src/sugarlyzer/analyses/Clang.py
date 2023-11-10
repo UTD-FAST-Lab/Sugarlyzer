@@ -5,6 +5,7 @@ import tempfile
 import time
 from pathlib import Path
 from typing import Iterable, Optional
+import re
 
 from src.sugarlyzer.analyses.AbstractTool import AbstractTool
 import os
@@ -41,10 +42,16 @@ class Clang(AbstractTool):
                "-c", file.absolute()]
         logger.info(f"Running cmd {' '.join(str(s) for s in cmd)}")
 
-        pipes = subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+        pipes = subprocess.Popen(" ".join(cmd), stderr=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
         stdout, stderr = pipes.communicate()
         stdout = str(stdout, 'UTF-8')
         stderr = str(stderr, 'UTF-8')
+        times = " ".join(stderr.split('\n')[-10:])
+        usr_time_match = re.search(r"user\\t([\d\.]*)m([\d\.]*)s", times)
+        usr_time = float(usr_time_match.group(1)) * 60 + float(usr_time_match.group(1))
+        sys_time_match = re.search(r"sys\\t([\d\.]*)m([\d\.]*)s", times)
+        sys_time = float(sys_time_match.group(1)) * 60 + float(sys_time_match.group(1))
+        logger.info(f"CPU time to analyze {file} was {usr_time + sys_time}")
         if (pipes.returncode != 0) or ("error" in stdout.lower()):
             logger.warning(f"Running clang on file {str(file)} potentially failed.")
             logger.warning(stdout)
