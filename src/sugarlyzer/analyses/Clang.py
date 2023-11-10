@@ -47,9 +47,9 @@ class Clang(AbstractTool):
         stdout = str(stdout, 'UTF-8')
         stderr = str(stderr, 'UTF-8')
         times = " ".join(stderr.split('\n')[-10:])
-        usr_time_match = re.search(r"user\\t([\d\.]*)m([\d\.]*)s", times)
+        usr_time_match = re.search(r"user.*?([\d\.]*)m([\d\.]*)s", times)
         usr_time = float(usr_time_match.group(1)) * 60 + float(usr_time_match.group(1))
-        sys_time_match = re.search(r"sys\\t([\d\.]*)m([\d\.]*)s", times)
+        sys_time_match = re.search(r"sys.*?([\d\.]*)m([\d\.]*)s", times)
         sys_time = float(sys_time_match.group(1)) * 60 + float(sys_time_match.group(1))
         logger.info(f"CPU time to analyze {file} was {usr_time + sys_time}")
         if (pipes.returncode != 0) or ("error" in stdout.lower()):
