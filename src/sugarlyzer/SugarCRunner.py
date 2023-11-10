@@ -263,7 +263,6 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
                 usr_time = float(usr_time_match.group(1)) * 60 + float(usr_time_match.group(1))
                 sys_time_match = re.search("sys.*?([\\d.]*)m([\\d.]*)s", times)
                 sys_time = float(sys_time_match.group(1)) * 60 + float(sys_time_match.group(1))
-                logger.info("end of stderr: " + str(str(ps.stderr, 'UTF-8').split('\n')[-10:]))
             except AttributeError as ae:
                 logger.exception(f"Couldn't match {times}")
 
