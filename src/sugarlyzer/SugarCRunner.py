@@ -204,7 +204,6 @@ def desugar_file(file_to_desugar: Path,
     else:
         cmd = ['ulimit -v 100000000;', 'time', 'timeout -k 10 10m', 'java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', *commandline_args, *included_files, *included_directories,file_to_desugar]
     cmd = [str(s) for s in cmd]
-    logging.info(f'Command: {cmd}')
 
     to_append = None
     if remove_errors:
@@ -253,6 +252,7 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
                     outfile.write(infile.read())
         else:
             logger.debug("Cache miss")
+            logger.debug("Cmd string is " + cmd_str)
             ps = subprocess.run(cmd_str, capture_output=True, shell=True, executable='/bin/bash')
             times = ' '.join(str(ps.stderr, 'UTF-8').split('\n')[-10:])
             usr_time_match = re.search(r"user\\t([\d\.]*)m([\d\.]*)s", times)
