@@ -254,7 +254,11 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
         else:
             logger.debug("Cache miss")
             ps = subprocess.run(cmd_str, capture_output=True, shell=True, executable='/bin/bash')
-            lines = str(ps.stdout, 'UTF-8').split("\n")
+            times = ' '.join(str(ps.stderr, 'UTF-8').split('\n')[-10:])
+            usr_time_match = re.search(r"user\\t([\d\.]*)m([\d\.]*)s")
+            usr_time = float(usr_time_match.group(1)) * 60 + float(usr_time_match.group(1))
+            sys_time_match = re.search(r"sys\\t([\d\.]*)m([\d\.]*)s")
+            sys_time = float(sys_time_match.group(1)) * 60 + float(sys_time_match.group(1))
             logger.info("end of stderr: " + str(str(ps.stderr, 'UTF-8').split('\n')[-10:]))
             logger.warning("Desugaring time: " + ' '.join(lines[-2:-1]))
             with open(desugared_output, 'wb') as f:
@@ -271,7 +275,7 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
             except UnboundLocalError:
                 logger.error(f"Could not desugar file {file_to_desugar}. Tried to output what went wrong but couldn't access subprocess output.")
         os.chdir(current_directory)
-    logger.info(f"{desugared_output} desugared in time:{time.monotonic()-start} to file size:{desugared_output.stat().st_size}")
+    logger.info(f"{desugared_output} desugared in time:{time.monotonic()-start} (cpu time {usr_time + sys_time}) to file size:{desugared_output.stat().st_size}")
         
 
 def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Alarm]:
