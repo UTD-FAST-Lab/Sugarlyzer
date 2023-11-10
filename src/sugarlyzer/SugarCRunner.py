@@ -255,8 +255,8 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
         else:
             logger.debug("Cache miss")
             logger.debug("Cmd string is " + cmd_str)
-            ps = subprocess.run(cmd_str, capture_output=True, shell=True, executable='/bin/bash')
-            times = ' '.join(str(ps.stderr, 'UTF-8').split('\n')[-10:])
+            ps = subprocess.run(cmd_str, capture_output=True, shell=True, text=True, executable='/bin/bash')
+            times = '\n'.join(ps.stderr.split('\n')[-10:])
             logger.info("times: " + times)
             try:
                 usr_time_match = re.search(r"user.*?([\d\.]*)m([\d\.]*)s", times)
