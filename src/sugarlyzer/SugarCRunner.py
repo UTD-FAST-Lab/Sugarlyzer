@@ -244,6 +244,8 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
         hasher.update(bytes(st, 'utf-8'))
 
     digest = hasher.hexdigest()
+    usr_time = 0
+    sys_time = 0
     try:
         if (digest_file := (Path("/cached_desugared") / Path((digest + desugared_output.name)))).exists():
             logger.debug("Cache hit!")
