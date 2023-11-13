@@ -42,9 +42,9 @@ class Clang(AbstractTool):
                "-c", file.absolute()]
         logger.info(f"Running cmd {' '.join(str(s) for s in cmd)}")
 
-        ps = subprocess.run(" ".join(cmd), capture_output=True, shell=True, executable="/bin/bash")
-        stdout = str(ps.stdout, 'UTF-8')
-        stderr = str(ps.stderr, 'UTF-8')
+        ps = subprocess.run(" ".join(cmd), capture_output=True, shell=True, text=True, executable="/bin/bash")
+        stdout = ps.stdout
+        stderr = ps.stderr
         times = " ".join(stderr.split('\n')[-10:])
         usr_time_match = re.search("user.*?([\\d.]*)m([\\d.]*)s", times)
         usr_time = float(usr_time_match.group(1)) * 60 + float(usr_time_match.group(2))
@@ -53,7 +53,7 @@ class Clang(AbstractTool):
         sys_time = float(sys_time_match.group(1)) * 60 + float(sys_time_match.group(2))
         logger.info("Sys time is " + str(sys_time))
         logger.info(f"CPU time to analyze {file} was {usr_time + sys_time}")
-        if (pipes.returncode != 0) or ("error" in stdout.lower()):
+        if (ps.returncode != 0) or ("error" in stdout.lower()):
             logger.warning(f"Running clang on file {str(file)} potentially failed.")
             logger.warning(stdout)
 
