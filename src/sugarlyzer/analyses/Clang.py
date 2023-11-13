@@ -42,10 +42,9 @@ class Clang(AbstractTool):
                "-c", file.absolute()]
         logger.info(f"Running cmd {' '.join(str(s) for s in cmd)}")
 
-        pipes = subprocess.Popen(" ".join(cmd), stderr=subprocess.PIPE, stdout=subprocess.PIPE, shell=True)
-        stdout, stderr = pipes.communicate()
-        stdout = str(stdout, 'UTF-8')
-        stderr = str(stderr, 'UTF-8')
+        ps = subprocess.run(" ".join(cmd), capture_output=True, shell=True, executable="/bin/bash")
+        stdout = str(ps.stdout, 'UTF-8')
+        stderr = str(ps.stderr, 'UTF-8')
         times = " ".join(stderr.split('\n')[-10:])
         usr_time_match = re.search("user.*?([\\d.]*)m([\\d.]*)s", times)
         usr_time = float(usr_time_match.group(1)) * 60 + float(usr_time_match.group(2))
