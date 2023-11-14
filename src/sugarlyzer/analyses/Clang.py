@@ -34,7 +34,7 @@ class Clang(AbstractTool):
             included_files = []
 
         output_location = tempfile.mkdtemp()
-        cmd = ["ulimit -v 100000000;", "time", "clang-11", '--analyze', "-Xanalyzer", "-analyzer-output=text",
+        cmd = ["time", "clang-11", '--analyze', "-Xanalyzer", "-analyzer-output=text",
                *list(itertools.chain(*zip(itertools.cycle(["-I"]), included_dirs))),
                *list(itertools.chain(*zip(itertools.cycle(["--include"]), included_files))),
                *command_line_defs,
