@@ -3,7 +3,8 @@ import logging
 import subprocess
 import tempfile
 from pathlib import Path
-from typing import Iterable, Optional, re
+from typing import Iterable, Optional
+import re
 
 from src.sugarlyzer.analyses.AbstractTool import AbstractTool
 import os
