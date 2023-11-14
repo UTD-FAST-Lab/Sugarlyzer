@@ -35,7 +35,7 @@ class Phasar(AbstractTool):
                *command_line_defs,
                "-nostdinc", "-c", file.absolute(), '-o', llFile]
         logger.info(f"Running cmd {cmd}")
-        ps = subprocess.run(" ".join(str(s) for s in cmd), text=True)
+        ps = subprocess.run(" ".join(str(s) for s in cmd), shell=True, executable="/bin/bash", text=True)
         if (ps.returncode != 0) or ("error" in ps.stdout.lower()):
             logger.warning(f"Running clang on file {str(file)} potentially failed.")
             logger.warning(ps.stderr)
@@ -51,7 +51,7 @@ class Phasar(AbstractTool):
         #run phasar on ll
         cmd = ['time', '/phasar/build/tools/phasar-llvm/phasar-llvm','-D','IFDSUninitializedVariables','-m',llFile,'-O',output_location]
         logger.info(f"Running cmd {cmd}")
-        ps = subprocess.run(cmd, capture_output=True, text=True, executable="/bin/bash")
+        ps = subprocess.run(" ".join(str(s) for s in cmd), capture_output=True, text=True, shell=True, executable="/bin/bash")
         if (ps.returncode != 0) or ("error" in ps.stdout.lower()):
             logger.warning(f"Running phasar on file {str(file)} potentially failed.")
             logger.warning(ps.stderr)
