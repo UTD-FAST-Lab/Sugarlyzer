@@ -42,7 +42,7 @@ class Clang(AbstractTool):
                "-c", file.absolute()]
         logger.info(f"Running cmd {' '.join(str(s) for s in cmd)}")
 
-        ps = subprocess.run(" ".join(cmd), capture_output=True, shell=True, text=True, executable="/bin/bash")
+        ps = subprocess.run(" ".join(str(s) for s in cmd), capture_output=True, shell=True, text=True, executable="/bin/bash")
         stdout = ps.stdout
         stderr = ps.stderr
         times = " ".join(stderr.split('\n')[-10:])
