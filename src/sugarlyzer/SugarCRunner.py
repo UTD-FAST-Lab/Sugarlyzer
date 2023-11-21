@@ -15,6 +15,7 @@ from typing import List, Optional, Dict, Iterable
 from z3.z3 import Solver, sat, Bool, Int, Not, And, Or
 
 from src.sugarlyzer.models.Alarm import Alarm
+from src.sugarlyzer.util.ParseBashTime import parse_bash_time
 
 USER_DEFS = '/tmp/__sugarlyzerPredefs.h'
 
@@ -259,14 +260,10 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
             times = '\n'.join(str(ps.stderr, 'UTF-8').split('\n')[-10:])
             logger.info("times: " + times)
             try:
-                usr_time_match = re.search("user.*?([\\d.]*)m([\\d.]*)s", times)
-                usr_time = float(usr_time_match.group(1)) * 60 + float(usr_time_match.group(2))
-                logger.info("Usr time is " + str(usr_time))
-                sys_time_match = re.search("sys.*?([\\d.]*)m([\\d.]*)s", times)
-                sys_time = float(sys_time_match.group(1)) * 60 + float(sys_time_match.group(2))
-                logger.info("Sys time is " + str(sys_time))
-            except AttributeError as ae:
-                logger.exception(f"Couldn't match {times}")
+                usr_time, sys_time = parse_bash_time(times)
+                logger.info(f"CPU time to desugar {str(file_to_desugar)} was {usr_time + sys_time}")
+            except Exception as ve:
+                logger.exception("Could not parse time in string " + times)
 
             with open(desugared_output, 'wb') as f:
                 f.write(ps.stdout)

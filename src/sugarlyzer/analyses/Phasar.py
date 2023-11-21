@@ -9,6 +9,7 @@ import re
 from src.sugarlyzer.analyses.AbstractTool import AbstractTool
 import os
 from src.sugarlyzer.readers.PhasarReader import PhasarReader
+from src.sugarlyzer.util.ParseBashTime import parse_bash_time
 
 logger = logging.getLogger(__name__)
 
@@ -42,12 +43,11 @@ class Phasar(AbstractTool):
             logger.warning(ps.stderr)
 
         times = " ".join(ps.stderr.split('\n')[-10:])
-        usr_time_match = re.search("user.*?([\\d.]*)m([\\d.]*)s", times)
-        usr_time = float(usr_time_match.group(1)) * 60 + float(usr_time_match.group(2))
-        logger.info("Usr time for clang is " + str(usr_time))
-        sys_time_match = re.search("sys.*?([\\d.]*)m([\\d.]*)s", times)
-        sys_time = float(sys_time_match.group(1)) * 60 + float(sys_time_match.group(2))
-        logger.info("Sys time for clang is " + str(sys_time))
+        try:
+            usr_time, sys_time = parse_bash_time(times)
+            logger.info(f"CPU time to compile {file} to bytecode was {usr_time + sys_time}")
+        except Exception as ve:
+            logger.exception("Could not parse time in string " + times)
 
         #run phasar on ll
         cmd = ['time', '/phasar/build/tools/phasar-llvm/phasar-llvm','-D','IFDSUninitializedVariables','-m',llFile,'-O',output_location]
@@ -58,13 +58,11 @@ class Phasar(AbstractTool):
             logger.warning(ps.stderr)
 
         times = " ".join(ps.stderr.split('\n')[-10:])
-        usr_time_match = re.search("user.*?([\\d.]*)m([\\d.]*)s", times)
-        usr_time += float(usr_time_match.group(1)) * 60 + float(usr_time_match.group(2))
-        logger.info("Usr time for phasar is " + str(usr_time))
-        sys_time_match = re.search("sys.*?([\\d.]*)m([\\d.]*)s", times)
-        sys_time += float(sys_time_match.group(1)) * 60 + float(sys_time_match.group(2))
-        logger.info("Sys time for phasar is " + str(sys_time))
-        logger.info(f"CPU time to analyze {file} was {usr_time + sys_time}")
+        try:
+            usr_time, sys_time = parse_bash_time(times)
+            logger.info(f"CPU time to analyze {file} was {usr_time + sys_time}")
+        except Exception as ve:
+            logger.exception("Could not parse time in string " + times)
 
         for root, dirs, files in os.walk(output_location):
             for f in files:
