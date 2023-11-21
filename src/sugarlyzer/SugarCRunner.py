@@ -258,7 +258,6 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
             logger.debug("Cmd string is " + cmd_str)
             ps = subprocess.run(cmd_str, capture_output=True, shell=True, executable='/bin/bash')
             times = '\n'.join(str(ps.stderr, 'UTF-8').split('\n')[-10:])
-            logger.info("times: " + times)
             try:
                 usr_time, sys_time = parse_bash_time(times)
                 logger.info(f"CPU time to desugar {str(file_to_desugar)} was {usr_time + sys_time}")
