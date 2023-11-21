@@ -42,11 +42,12 @@ class Infer(AbstractTool):
         if (ps.returncode != 0):
             logger.warning(f"Running infer on file {str(file)} with command {' '.join(str(s) for s in cmd)} potentially failed (exit code {ps.returncode}).")
             logger.warning(ps.stdout)
-        times = " ".join(ps.stderr.split('\n')[-10:])
-        try:
-            usr_time, sys_time = parse_bash_time(times)
-            logger.info(f"CPU time to analyze {file} was {usr_time + sys_time}")
-        except Exception as ve:
-            logger.exception("Could not parse time in string " + times)
+        if ps.returncode == 0:
+            try:
+                times = " ".join(ps.stderr.split("\n")[-10:])
+                usr_time, sys_time = parse_bash_time(times)
+                logger.info(f"CPU time to analyze {file} was {usr_time + sys_time}")
+            except Exception as ve:
+                logger.exception("Could not parse time in string " + times)
         report = os.path.join(output_location,'report.json')
         yield report

@@ -256,20 +256,21 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
         else:
             logger.debug("Cache miss")
             logger.debug("Cmd string is " + cmd_str)
-            ps = subprocess.run(cmd_str, capture_output=True, shell=True, executable='/bin/bash')
-            times = '\n'.join(str(ps.stderr, 'UTF-8').split('\n')[-10:])
-            try:
-                usr_time, sys_time = parse_bash_time(times)
-                logger.info(f"CPU time to desugar {str(file_to_desugar)} was {usr_time + sys_time}")
-            except Exception as ve:
-                logger.exception("Could not parse time in string " + times)
+            ps = subprocess.run(cmd_str, capture_output=True, text=True, shell=True, executable='/bin/bash')
+            if ps.returncode == 0:
+                try:
+                    times = " ".join(ps.stderr.split("\n")[-10:])
+                    usr_time, sys_time = parse_bash_time(times)
+                    logger.info(f"CPU time to analyze {file_to_desugar} was {usr_time + sys_time}")
+                except Exception as ve:
+                    logger.exception("Could not parse time in string " + times)
 
-            with open(desugared_output, 'wb') as f:
+            with open(desugared_output, 'w') as f:
                 f.write(ps.stdout)
-            with open(digest_file, 'wb') as f:
+            with open(digest_file, 'w') as f:
                 f.write(ps.stdout)
             logger.debug(f"Wrote to {desugared_output}")
-            with open(log_file, 'wb') as f:
+            with open(log_file, 'w') as f:
                 f.write(ps.stderr)
     finally:
         if (not desugared_output.exists()) or (os.path.getsize(desugared_output) == 0):

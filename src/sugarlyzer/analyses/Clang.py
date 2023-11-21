@@ -46,12 +46,13 @@ class Clang(AbstractTool):
         ps = subprocess.run(" ".join(str(s) for s in cmd), capture_output=True, shell=True, text=True, executable="/bin/bash")
         stdout = ps.stdout
         stderr = ps.stderr
-        times = " ".join(stderr.split("\n")[-10:])
-        try:
-            usr_time, sys_time = parse_bash_time(times)
-            logger.info(f"CPU time to analyze {file} was {usr_time + sys_time}")
-        except Exception as ve:
-            logger.exception("Could not parse time in string " + times)
+        if ps.returncode == 0:
+            try:
+                times = " ".join(stderr.split("\n")[-10:])
+                usr_time, sys_time = parse_bash_time(times)
+                logger.info(f"CPU time to analyze {file} was {usr_time + sys_time}")
+            except Exception as ve:
+                logger.exception("Could not parse time in string " + times)
         if (ps.returncode != 0) or ("error" in stdout.lower()):
             logger.warning(f"Running clang on file {str(file)} potentially failed.")
             logger.warning(stdout)
