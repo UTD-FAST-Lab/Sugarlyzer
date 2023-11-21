@@ -10,6 +10,7 @@ from src.sugarlyzer.analyses.AbstractTool import AbstractTool
 import os
 
 from src.sugarlyzer.readers.InferReader import InferReader
+from src.sugarlyzer.util.ParseBashTime import parse_bash_time
 from src.sugarlyzer.util.decorators import log_all_params_and_return
 
 logger = logging.getLogger(__name__)
@@ -42,12 +43,10 @@ class Infer(AbstractTool):
             logger.warning(f"Running infer on file {str(file)} with command {' '.join(str(s) for s in cmd)} potentially failed (exit code {ps.returncode}).")
             logger.warning(ps.stdout)
         times = " ".join(ps.stderr.split('\n')[-10:])
-        usr_time_match = re.search("user.*?([\\d.]*)m([\\d.]*)s", times)
-        usr_time = float(usr_time_match.group(1)) * 60 + float(usr_time_match.group(2))
-        logger.info("Usr time is " + str(usr_time))
-        sys_time_match = re.search("sys.*?([\\d.]*)m([\\d.]*)s", times)
-        sys_time = float(sys_time_match.group(1)) * 60 + float(sys_time_match.group(2))
-        logger.info("Sys time is " + str(sys_time))
-        logger.info(f"CPU time to analyze {file} was {usr_time + sys_time}")
+        try:
+            usr_time, sys_time = parse_bash_time(times)
+            logger.info(f"CPU time to analyze {file} was {usr_time + sys_time}")
+        except Exception as ve:
+            logger.exception("Could not parse time in string " + times)
         report = os.path.join(output_location,'report.json')
         yield report
