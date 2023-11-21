@@ -57,12 +57,13 @@ class Phasar(AbstractTool):
             logger.warning(f"Running phasar on file {str(file)} potentially failed.")
             logger.warning(ps.stderr)
 
-        times = " ".join(ps.stderr.split('\n')[-10:])
-        try:
-            usr_time, sys_time = parse_bash_time(times)
-            logger.info(f"CPU time to analyze {file} was {usr_time + sys_time}")
-        except Exception as ve:
-            logger.exception("Could not parse time in string " + times)
+        if ps.returncode == 0:
+            try:
+                times = " ".join(ps.stderr.split("\n")[-10:])
+                usr_time, sys_time = parse_bash_time(times)
+                logger.info(f"CPU time to analyze {file} was {usr_time + sys_time}")
+            except Exception as ve:
+                logger.exception("Could not parse time in string " + times)
 
         for root, dirs, files in os.walk(output_location):
             for f in files:
