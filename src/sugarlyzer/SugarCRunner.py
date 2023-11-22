@@ -199,11 +199,11 @@ def desugar_file(file_to_desugar: Path,
         case _:
             log_file = Path(log_file)
     if config_prefix != None:
-        cmd = ['time', 'timeout -k 10 10m', 'java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToPrefix', config_prefix, *commandline_args, *included_files, *included_directories,file_to_desugar]
+        cmd = ['/usr/bin/time', 'timeout -k 10 10m', 'java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToPrefix', config_prefix, *commandline_args, *included_files, *included_directories,file_to_desugar]
     elif whitelist != None:
-        cmd = ['time', 'timeout -k 10 10m', 'java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToWhitelist', whitelist, *commandline_args, *included_files, *included_directories,file_to_desugar]
+        cmd = ['/usr/bin/time', 'timeout -k 10 10m', 'java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToWhitelist', whitelist, *commandline_args, *included_files, *included_directories,file_to_desugar]
     else:
-        cmd = ['time', 'timeout -k 10 10m', 'java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', *commandline_args, *included_files, *included_directories,file_to_desugar]
+        cmd = ['/usr/bin/time', 'timeout -k 10 10m', 'java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', *commandline_args, *included_files, *included_directories,file_to_desugar]
     cmd = [str(s) for s in cmd]
 
     to_append = None
@@ -259,8 +259,8 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
             ps = subprocess.run(cmd_str, capture_output=True, text=True, shell=True, executable='/bin/bash')
             if ps.returncode == 0:
                 try:
-                    times = " ".join(ps.stderr.split("\n")[-10:])
-                    usr_time, sys_time = parse_bash_time(times)
+                    times = "\n".join(ps.stderr.split("\n")[-30:])
+                    usr_time, sys_time, max_memory = parse_bash_time(times)
                     logger.info(f"CPU time to analyze {file_to_desugar} was {usr_time + sys_time}")
                 except Exception as ve:
                     logger.exception("Could not parse time in string " + times)

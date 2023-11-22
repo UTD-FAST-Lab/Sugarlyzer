@@ -35,7 +35,7 @@ class Clang(AbstractTool):
             included_files = []
 
         output_location = tempfile.mkdtemp()
-        cmd = ["time", "clang-11", '--analyze', "-Xanalyzer", "-analyzer-output=text",
+        cmd = ["/usr/bin/time", "-v", "clang-11", '--analyze', "-Xanalyzer", "-analyzer-output=text",
                *list(itertools.chain(*zip(itertools.cycle(["-I"]), included_dirs))),
                *list(itertools.chain(*zip(itertools.cycle(["--include"]), included_files))),
                *command_line_defs,
@@ -44,15 +44,14 @@ class Clang(AbstractTool):
         logger.info(f"Running cmd {' '.join(str(s) for s in cmd)}")
 
         ps = subprocess.run(" ".join(str(s) for s in cmd), capture_output=True, shell=True, text=True, executable="/bin/bash")
-        stdout = ps.stdout
-        stderr = ps.stderr
         if ps.returncode == 0:
             try:
-                times = " ".join(stderr.split("\n")[-10:])
-                usr_time, sys_time = parse_bash_time(times)
+                times = "\n".join(ps.stderr.split("\n")[-30:])
+                usr_time, sys_time, max_memory = parse_bash_time(times)
                 logger.info(f"CPU time to analyze {file} was {usr_time + sys_time}")
             except Exception as ve:
                 logger.exception("Could not parse time in string " + times)
+
         if (ps.returncode != 0) or ("error" in stdout.lower()):
             logger.warning(f"Running clang on file {str(file)} potentially failed.")
             logger.warning(stdout)
