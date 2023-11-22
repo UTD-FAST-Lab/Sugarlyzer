@@ -4,7 +4,7 @@ RUN apt-get update -y && apt-get upgrade -y && \
 RUN add-apt-repository -y ppa:deadsnakes/ppa &&  \
     apt-get install -y z3 python3.10 python3-distutils python3-pip python3-apt python3.10-venv git \
     bison libjson-java sat4j openjdk-8-jdk default-jdk gcc g++ make libz3-java emacs curl clang-11 \
-    pkg-config selinux-basics selinux-utils libselinux* electric-fence
+    pkg-config selinux-basics selinux-utils libselinux* electric-fence time
 
 ARG JOBS
 RUN git clone https://github.com/Z3Prover/z3.git
