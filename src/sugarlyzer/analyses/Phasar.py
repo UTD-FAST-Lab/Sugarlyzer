@@ -50,7 +50,7 @@ class Phasar(AbstractTool):
             logger.exception("Could not parse time in string " + times)
 
         #run phasar on ll
-        cmd = ['time', '/phasar/build/tools/phasar-llvm/phasar-llvm','-D','IFDSUninitializedVariables','-m',llFile,'-O',output_location]
+        cmd = ['/usr/bin/time', '-v', '/phasar/build/tools/phasar-llvm/phasar-llvm','-D','IFDSUninitializedVariables','-m',llFile,'-O',output_location]
         logger.info(f"Running cmd {cmd}")
         ps = subprocess.run(" ".join(str(s) for s in cmd), capture_output=True, text=True, shell=True, executable="/bin/bash")
         if (ps.returncode != 0) or ("error" in ps.stdout.lower()):
