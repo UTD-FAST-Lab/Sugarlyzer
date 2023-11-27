@@ -257,14 +257,13 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
             logger.debug("Cache miss")
             logger.debug("Cmd string is " + cmd_str)
             ps = subprocess.run(cmd_str, capture_output=True, text=True, shell=True, executable='/bin/bash')
-            if ps.returncode == 0:
-                try:
-                    times = "\n".join(ps.stderr.split("\n")[-30:])
-                    usr_time, sys_time, max_memory = parse_bash_time(times)
-                    logger.info(f"CPU time to desugar {file_to_desugar} was {usr_time + sys_time}s")
-                    logger.info(f"Total memory usage to desugar {file_to_desugar} was {max_memory}kb")
-                except Exception as ve:
-                    logger.exception("Could not parse time in string " + times)
+            try:
+                times = "\n".join(ps.stderr.split("\n")[-30:])
+                usr_time, sys_time, max_memory = parse_bash_time(times)
+                logger.info(f"CPU time to desugar {file_to_desugar} was {usr_time + sys_time}s")
+                logger.info(f"Total memory usage to desugar {file_to_desugar} was {max_memory}kb")
+            except Exception as ve:
+                logger.exception("Could not parse time in string " + times)
 
             with open(desugared_output, 'w') as f:
                 f.write(ps.stdout)
