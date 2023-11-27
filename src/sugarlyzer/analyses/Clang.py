@@ -48,18 +48,19 @@ class Clang(AbstractTool):
             try:
                 times = "\n".join(ps.stderr.split("\n")[-30:])
                 usr_time, sys_time, max_memory = parse_bash_time(times)
-                logger.info(f"CPU time to analyze {file} was {usr_time + sys_time}")
+                logger.info(f"CPU time to analyze {file} was {usr_time + sys_time}s")
+                logger.info(f"Max memory to analyze {file} was {max_memory}kb")
             except Exception as ve:
                 logger.exception("Could not parse time in string " + times)
 
-        if (ps.returncode != 0) or ("error" in stdout.lower()):
+        if (ps.returncode != 0) or ("error" in ps.stdout.lower()):
             logger.warning(f"Running clang on file {str(file)} potentially failed.")
-            logger.warning(stdout)
+            logger.warning(ps.stdout)
 
         with open(output_location + '/report.report','w') as o:
-            o.write(stderr)
+            o.write(ps.stderr)
 
-        lines = stdout.split("\n")
+        lines = ps.stdout.split("\n")
         logger.critical(f"Analysis time: {lines[-1]}")
             
         for root, dirs, files in os.walk(output_location):
