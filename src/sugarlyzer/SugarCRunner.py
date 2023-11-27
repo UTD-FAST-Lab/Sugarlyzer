@@ -230,7 +230,7 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
     logger.debug(f"In run_sugarc, running cmd {cmd_str} from directory {os.curdir}")
     start = time.monotonic()
     to_hash = list()
-    for tok in cmd_str.split(' '):
+    for tok in cmd_str.split(' ')[1:]:  # Skip /usr/bin/time
         if (path := Path(tok)).exists() and path.is_file():
             with open(path, 'r') as infile:
                 try:
@@ -261,7 +261,8 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
                 try:
                     times = "\n".join(ps.stderr.split("\n")[-30:])
                     usr_time, sys_time, max_memory = parse_bash_time(times)
-                    logger.info(f"CPU time to analyze {file_to_desugar} was {usr_time + sys_time}")
+                    logger.info(f"CPU time to analyze {file_to_desugar} was {usr_time + sys_time}s")
+                    logger.info(f"Total memory usage to desugar {file_to_desugar} was {max_memory}kb")
                 except Exception as ve:
                     logger.exception("Could not parse time in string " + times)
 
