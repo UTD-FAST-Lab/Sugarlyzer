@@ -31,7 +31,7 @@ class Phasar(AbstractTool):
         output_location = tempfile.mkdtemp()
         #create ll file
         llFile = os.path.join(output_location,str(file)[:-2]+'.ll')
-        cmd = ['time', 'clang-12','-emit-llvm','-S','-fno-discard-value-names','-c','-g',
+        cmd = ['/usr/bin/time', '-v', 'clang-12','-emit-llvm','-S','-fno-discard-value-names','-c','-g',
                *list(itertools.chain(*zip(itertools.cycle(["-I"]), included_dirs))),
                *list(itertools.chain(*zip(itertools.cycle(["--include"]), included_files))),
                *command_line_defs,
