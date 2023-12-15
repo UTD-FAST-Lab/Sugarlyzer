@@ -42,7 +42,7 @@ class Phasar(AbstractTool):
             logger.warning(f"Running clang on file {str(file)} potentially failed.")
             logger.warning(ps.stderr)
 
-        times = " ".join(ps.stderr.split('\n')[-10:])
+        times = " ".join(ps.stderr.split('\n')[-30:])
         try:
             usr_time, sys_time = parse_bash_time(times)
             logger.info(f"CPU time to compile {file} to bytecode was {usr_time + sys_time}")
