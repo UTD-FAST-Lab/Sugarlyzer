@@ -1,0 +1,10 @@
+:bool:
+#define $0 1
+#else
+#undef $0
+:end:
+:default:
+#define $0 $1
+#else
+#define $0 $2
+:end:

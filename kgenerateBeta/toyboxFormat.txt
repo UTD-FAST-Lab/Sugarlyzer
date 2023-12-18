@@ -1,0 +1,13 @@
+:bool:
+#define CFG_$0 1
+#define USE_$0(...) __VA_ARGS__
+#else
+#define CFG_$0 0
+#define USE_$0(...)
+:end:
+:default:
+#define $0 $1
+#else
+#define $0 $2
+:end:
+

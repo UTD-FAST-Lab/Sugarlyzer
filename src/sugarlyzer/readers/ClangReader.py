@@ -19,13 +19,14 @@ class ClangReader(AbstractReader):
             for l in rf:
                 l = l.lstrip().rstrip()
                 if ': warning:' in l:
+
                     if currentAlarm != None:
                         res.append(currentAlarm)
                     file = l.split(':')[0]
                     line = int(l.split(':')[1])
                     message = ':'.join(l.split(':')[4:])
                     message = '['.join(message.split('[')[:-1])
-                    logger.critical(f"l={l}; line={line}; message={message}")
+                    logger.debug(f"l={l}; line={line}; message={message}")
                     currentAlarm = ClangAlarm(line_in_input_file=line,
                                               message=message,
                                               input_file=file,
