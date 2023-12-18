@@ -144,19 +144,21 @@ class Tester:
             def desugar(file: Path) -> Tuple[Path, Path, Path, float]:  # God, what an ugly tuple
                 included_directories, included_files, cmd_decs, recommended_space = self.get_inc_files_and_dirs_for_file(
                     file)
-                start = time.time()
+                start = time.monotonic()
                 # noinspection PyTypeChecker
-                return (*SugarCRunner.desugar_file(file,
-                                                   recommended_space=None,
-                                                   remove_errors=self.remove_errors,
-                                                   config_prefix=self.config_prefix,
-                                                   whitelist=self.whitelist,
-                                                   no_stdlibs=True,
-                                                   included_files=included_files,
-                                                   included_directories=included_directories,
-                                                   commandline_declarations=cmd_decs,
-                                                   keep_mem=self.tool.keep_mem,
-                                                   make_main=self.tool.make_main), file, time.time() - start)
+                desugared_file_location, log_file = SugarCRunner.desugar_file(file,
+                                                       recommended_space=None,
+                                                       remove_errors=self.remove_errors,
+                                                       config_prefix=self.config_prefix,
+                                                       whitelist=self.whitelist,
+                                                       no_stdlibs=True,
+                                                       included_files=included_files,
+                                                       included_directories=included_directories,
+                                                       commandline_declarations=cmd_decs,
+                                                       keep_mem=self.tool.keep_mem,
+                                                       make_main=self.tool.make_main)
+
+                return desugared_file_location, log_file, file, time.monotonic() - start
 
             logger.info(f"Source files are {list(self.program.get_source_files())}")
             input_files: List[Tuple] = []
@@ -395,12 +397,12 @@ def set_up_logging(args: argparse.Namespace) -> None:
 
 
 def main():
-    start = time.time()
+    start = time.monotonic()
     args = get_arguments()
     set_up_logging(args)
     t = Tester(args.tool, args.program, args.baselines, True, args.jobs, args.validate)
     t.execute()
-    print(f'total time: {time.time() - start}')
+    print(f'total time: {time.monotonic() - start}')
 
 if __name__ == '__main__':
     main()
