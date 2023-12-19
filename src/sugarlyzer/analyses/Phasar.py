@@ -44,7 +44,7 @@ class Phasar(AbstractTool):
 
         times = " ".join(ps.stderr.split('\n')[-30:])
         try:
-            usr_time, sys_time = parse_bash_time(times)
+            usr_time, sys_time, max_memory = parse_bash_time(times)
             logger.info(f"CPU time to compile {file} to bytecode was {usr_time + sys_time}")
         except Exception as ve:
             logger.exception("Could not parse time in string " + times)
