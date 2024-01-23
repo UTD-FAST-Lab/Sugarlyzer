@@ -92,18 +92,8 @@ class Tester:
         # Copy config to .config
         cwd = os.curdir
         os.chdir(program.make_root)
-        logger.debug("Running make clean")
-        cp: subprocess.CompletedProcess = subprocess.run(make_cmd := ["make", "clean"],
-                                                         stdout=subprocess.PIPE,
-                                                         stderr=subprocess.STDOUT,
-                                                         text=True)
-        if cp.returncode != 0:
-            logger.warning(f"Running command {' '.join(make_cmd)} resulted in a non-zero error code.\n"
-                           f"Output was:\n" + cp.stdout)
-        
         logger.debug(f"Copying {config.name} to {program.oldconfig_location}")
         shutil.copyfile(config, program.oldconfig_location)
-        logger.debug("Running make clean")
         os.system('yes "" | make oldconfig')
         logger.debug("make finished.")
         os.chdir(cwd)
