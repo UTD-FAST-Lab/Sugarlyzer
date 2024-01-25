@@ -1,20 +1,26 @@
 # Sugarlyzer
 
-# Prerequisites
-This application is written for Python version >= 3.10.0. Furthermore, 
-Sugarlyzer runs its analyses in Docker containers in order to maintain consistent
-environments across runs, so you must have a working Docker installation. We suggest using PyEnv to manage multiple python versions.
+Sugarlyzer is a framework for performing static analysis using off-the-shelf bug finders on C software product lines.
 
-# Usage
+# Prerequisites
+This application is written for Python version 3.10.0. We suggest using PyEnv to manage multiple Python versions.
+Furthermore, Sugarlyzer runs its analyses in Docker containers in order to maintain consistent
+environments across runs, so you must have a working Docker installation. 
+
+# Setup
 
 We recommend creating a virtual environment for Sugarlyzer. To do so, run
 
 `python -m venv <name_of_virtual_environment>`
 
-where 'python' points to a python 3.10.0 or higher installation. This will create a new folder. If, for example, you named your virtual environment 'venv', then
-you can activate it as follows:
+where 'python' points to a python 3.10.0 installation (note that this may be `python3` on your system.
+This will create a new folder.
+If, for example, you named your virtual environment 'venv', then you can activate it as follows:
 
 `source ./venv/bin/activate`
+
+Your shell prompt should now have a prefix with the name of the virtual environment.
+Now, when you install dependencies, they will be installed into this virtual environment instead of globally.
 
 In order to install Sugarlyzer's dependencies, from the root directory of the repository, run
 
@@ -33,6 +39,20 @@ container creation, which can take quite a while. especially for Clang which nee
 
 Simply run `dispatcher --help` from anywhere in order to see the helpdoc on how to
 invoke Sugarlyzer.
+
+# Usage
+
+`dispatcher` is the primary interface for interacting with Sugarlyzer. Using `dispatcher`, we can run two types of analysis.
+First, we can run static analysis on desugared code (our primary contribution).
+Second, we can run the sampling-based baseline, which uses configuration samples from Mordahl et al.'s 2019 work "An Empirical Study of Real-World Variability Bugs Detected by Variability-Oblivious Tools."
+
+An example of running static analysis on desugared code can be seen by running
+
+```
+dispatcher -t infer -p toybox --jobs <<number of jobs you want to run concurrently>>
+```
+
+This will run the Infer static analyzer on the desugared code of Toybox.
 
 # Extending with New Tools
 
