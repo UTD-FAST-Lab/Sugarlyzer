@@ -32,7 +32,6 @@ ENV CLASSPATH=:/superc/classes:/superc/bin/json-simple-1.1.1.jar:/superc/bin/jun
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
 RUN cd superc && make configure && make
 
-WORKDIR /
 ADD "https://api.github.com/repos/pattersonz/sugarlyzerconfig/commits?per_page=1" latest_commit
 RUN git clone https://github.com/pattersonz/SugarlyzerConfig
 
@@ -40,6 +39,7 @@ RUN python3.10 -m venv /venv
 ENV PATH=/venv/bin:$PATH
 ADD . /Sugarlyzer
 WORKDIR /Sugarlyzer
+RUN mv resources/SugarlyzerConfig /SugarlyzerConfig
 RUN python -m pip install -r requirements.txt --use-pep517
 RUN python -m pip install -e .
 WORKDIR /

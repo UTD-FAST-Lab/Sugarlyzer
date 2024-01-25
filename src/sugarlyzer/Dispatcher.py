@@ -40,6 +40,10 @@ v will print INFO and above. Two or more v's will print DEBUG or above.""", defa
     p.add_argument("--validate",
                    help="""Try running desugared alarms with Z3's configuration to see if they are retained.""",
                    action='store_true')
+    p.add_argument("--sample-size",
+                   help="""Sample size for how many configurations to run (default 1000)""",
+                   type=int,
+                   default=1000)
     return p.parse_args()
 
 
@@ -125,6 +129,7 @@ def start_tester(t, args) -> None:
             command += f" --jobs {args.jobs}"
         if args.validate:
             command += " --validate"
+        command += f" --sample-size {args.sample_size}"
         cntr: Container = docker.from_env().containers.run(
             image=get_image_name(t),
             command="/bin/bash",

@@ -6,6 +6,7 @@ import json
 import logging
 import multiprocessing
 import os
+import random
 import shutil
 import subprocess
 import tempfile
@@ -37,11 +38,12 @@ logger = logging.getLogger(__name__)
 
 class Tester:
     def __init__(self, tool: str, program: str, baselines: bool, no_recommended_space: bool, jobs: int = None,
-                 validate: bool = False):
+                 validate: bool = False, sample_size: int = 1000):
         self.baselines = baselines
         self.no_recommended_space = no_recommended_space
         self.jobs: int = jobs
         self.validate = validate
+        self.sample_size = sample_size
 
         def read_json_and_validate(file: str) -> Dict[str, Any]:
             """
@@ -323,7 +325,9 @@ class Tester:
 
         spec_config_pairs: List[Tuple[ProgramSpecification, Path]] = []
         all_configs = list(self.program.get_baseline_configurations())
-        logger.debug(f"All configs are {all_configs}")
+        if self.sample_size < 1000:
+            all_configs = random.sample(all_configs, self.sample_size)
+        logger.info(f"Selected configurations: {all_configs}")
         i = 0
 
         with ProcessPool(self.jobs) as p:
@@ -368,6 +372,8 @@ def get_arguments() -> argparse.Namespace:
     p.add_argument("--validate",
                    help="""Try running desugared alarms with Z3's configuration to see if they are retained.""",
                    action='store_true')
+    p.add_argument("--sample-size",
+                   help="The sample size to use for baselines (default 1000)", type=int)
     return p.parse_args()
 
 
@@ -388,7 +394,7 @@ def main():
     start = time.time()
     args = get_arguments()
     set_up_logging(args)
-    t = Tester(args.tool, args.program, args.baselines, True, args.jobs, args.validate)
+    t = Tester(args.tool, args.program, args.baselines, True, args.jobs, args.validate, args.sample_size)
     t.execute()
     print(f'total time: {time.time() - start}')
 
