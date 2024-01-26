@@ -356,8 +356,45 @@ class Tester:
             alarm.get_recommended_space = (not self.no_recommended_space)
             alarm.remove_errors = self.remove_errors
 
-        return alarms
+        return self.dedup_and_process_alarms(alarms)
 
+    def dedup_and_process_alarms(self, alarms: List[Alarm]) -> List[Alarm]:
+        import re
+
+        for b in alarms:
+            try:
+                b['original_configuration'] = [re.search(r"(\d*)\.config", b['input_file']).group(1)]
+            except AttributeError as ae:
+                b['original_configuration'] = []
+            assert (b['original_configuration'] is not None)
+            parts = b['input_file'].split('/')
+            b['input_file'] = '/' + '/'.join([parts[1], '/'.join(parts[3:])])
+
+        def eq(a, b):
+            for stat in ['input_file', 'input_line', 'message']:
+                if a[stat] != b[stat]:
+                    return False
+            if len(a['warning_path']) != len(b['warning_path']):
+                return False
+            for w in a['warning_path']:
+                if w not in b['warning_path']:
+                    return False
+            return True
+
+        deduped = []
+        for b in alarms:
+            assert (b['original_configuration'] is not None)
+            found = False
+            for d in deduped:
+                assert (d['original_configuration'] is not None)
+                if eq(b, d):
+                    found = True
+                    d['original_configuration'].extend(b['original_configuration'])
+                    break
+            if not found:
+                deduped.append(b)
+
+        return deduped
 
 def get_arguments() -> argparse.Namespace:
     p = argparse.ArgumentParser()
