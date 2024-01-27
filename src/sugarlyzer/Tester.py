@@ -405,7 +405,7 @@ class Tester:
         import re
 
         for b in alarms:
-            b['configuration'] = None
+            b['configuration'] = [b['configuration']]
             try:
                 b['original_configuration'] = [re.search(r"(\d*)\.config", b['input_file']).group(1)]
             except AttributeError as ae:
@@ -434,6 +434,7 @@ class Tester:
                 if eq(b, d):
                     found = True
                     d['original_configuration'].extend(b['original_configuration'])
+                    d['configuration'] = [b['configuration'], d['configuration']*]
                     break
             if not found:
                 deduped.append(b)
