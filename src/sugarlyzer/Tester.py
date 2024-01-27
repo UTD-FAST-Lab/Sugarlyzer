@@ -117,7 +117,6 @@ class Tester:
         return ps_copy
 
     def execute(self):
-
         logger.info(f"Current environment is {os.environ}")
 
         output_folder = Path("/results") / Path(self.tool.name) / Path(self.program.name)
@@ -213,14 +212,15 @@ class Tester:
                 logger.info("Now validating....")
                 with ProcessPool(self.jobs) as p:
                     alarms = list(tqdm(p.imap(self.verify_alarm, alarms)))
+            alarms = [a.as_dict() for a in alarms]
         else:
             alarms = self.run_baseline_experiments()
+            logger.info("Deduplicating alarms")
+            alarms = self.dedup_and_process_alarms([a.as_dict() for a in alarms])
 
-        logger.info("Deduplicating alarms")
-        alarms_as_dicts = self.dedup_and_process_alarms([a.as_dict() for a in alarms])
         logger.debug("Writing alarms to file.")
         with open("/results.json", 'w') as f:
-            json.dump(alarms_as_dicts, f)
+            json.dump(alarms, f, indent=2)
 
     def verify_alarm(self, alarm):
         alarm = copy.deepcopy(alarm)
@@ -360,7 +360,7 @@ class Tester:
 
         return alarms
 
-    def dedup_and_process_alarms(self, alarms: List[Alarm]) -> List[Alarm]:
+    def dedup_and_process_alarms(self, alarms: List[Dict]) -> List[Dict]:
         import re
 
         for b in alarms:
