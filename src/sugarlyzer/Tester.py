@@ -434,7 +434,7 @@ class Tester:
                 if eq(b, d):
                     found = True
                     d['original_configuration'].extend(b['original_configuration'])
-                    d['configuration'] = [b['configuration'], d['configuration']*]
+                    d['configuration'] = [b['configuration'], *d['configuration']]
                     break
             if not found:
                 deduped.append(b)
