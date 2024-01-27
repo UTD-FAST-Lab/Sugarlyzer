@@ -364,6 +364,7 @@ class Tester:
         import re
 
         for b in alarms:
+            b['configuration'] = None
             try:
                 b['original_configuration'] = [re.search(r"(\d*)\.config", b['input_file']).group(1)]
             except AttributeError as ae:
