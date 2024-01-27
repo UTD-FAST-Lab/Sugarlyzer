@@ -216,9 +216,11 @@ class Tester:
         else:
             alarms = self.run_baseline_experiments()
 
+        logger.info("Deduplicating alarms")
+        alarms_as_dicts = self.dedup_and_process_alarms([a.as_dict() for a in alarms])
         logger.debug("Writing alarms to file.")
         with open("/results.json", 'w') as f:
-            json.dump([a.as_dict() for a in alarms], f)
+            json.dump(alarms_as_dicts, f)
 
     def verify_alarm(self, alarm):
         alarm = copy.deepcopy(alarm)
@@ -356,7 +358,7 @@ class Tester:
             alarm.get_recommended_space = (not self.no_recommended_space)
             alarm.remove_errors = self.remove_errors
 
-        return self.dedup_and_process_alarms(alarms)
+        return alarms
 
     def dedup_and_process_alarms(self, alarms: List[Alarm]) -> List[Alarm]:
         import re
