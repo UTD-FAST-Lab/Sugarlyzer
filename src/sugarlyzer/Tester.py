@@ -212,15 +212,56 @@ class Tester:
                 logger.info("Now validating....")
                 with ProcessPool(self.jobs) as p:
                     alarms = list(tqdm(p.imap(self.verify_alarm, alarms)))
-            alarms = [a.as_dict() for a in alarms]
+            alarms = self.postprocess_experimental_results([a.as_dict() for a in alarms])
         else:
             alarms = self.run_baseline_experiments()
             logger.info("Deduplicating alarms")
             alarms = self.dedup_and_process_alarms([a.as_dict() for a in alarms])
 
+        # Now time to postprocess alarms
         logger.debug("Writing alarms to file.")
         with open("/results.json", 'w') as f:
             json.dump(alarms, f, indent=2)
+
+    def postprocess_experimental_results(self, experimental_results: List[Dict]) -> List[Dict]:
+        logger.info("Now postprocessing " + str(len(experimental_results)) + " alarms.")
+        def EQ(a, b):
+            if a['original_line'] != 'ERROR':
+                if 'verified' in a.keys() and 'verified' in b.keys():
+                    return a['sanitized_message'] == b['sanitized_message'] and a['input_file'] == b['input_file'] and a[
+                        'original_line'] == b['original_line'] and a['feasible'] == b['feasible'] and a['verified'] == b[
+                        'verified']
+                else:
+                    return a['sanitized_message'] == b['sanitized_message'] and a['input_file'] == b['input_file'] and a[
+                        'original_line'] == b['original_line'] and a['feasible'] == b['feasible']
+            a1 = a['function_line_range'].split(':')[-1]
+            a2 = a['function_line_range'].split(':')[-1]
+            b1 = b['function_line_range'].split(':')[-2]
+            b2 = b['function_line_range'].split(':')[-1]
+            return a1 == b1 and a2 == b2 and a['sanitized_message'] == b['sanitized_message'] and a['input_file'] == b[
+                'input_file'] and a['feasible'] == b['feasible']
+
+        original_length = len(experimental_results)
+        experimental_results = copy.deepcopy(experimental_results)
+        i = 0
+        while i < len(experimental_results):
+            # Remove infeasible results.
+            if not experimental_results[i]['feasible']:
+                logger.info("Removed infeasible alarm.")
+                experimental_results.pop(i)
+                continue
+            j = i + 1
+            # Merge configurations of equivalent results
+            while j < len(experimental_results):
+                if EQ(experimental_results[i], experimental_results[j]):
+                    experimental_results[i]['presence_condition'] = 'Or(' + experimental_results[i]['presence_condition'] + ',' + experimental_results[j][
+                        'presence_condition'] + ')'
+                    experimental_results.pop(j)
+                j += 1
+            i += 1
+        logger.info("Postprocessing resulted in " + str(len(experimental_results)) +
+                    " results compared to " + str(original_length) + " originally.")
+        return experimental_results
 
     def verify_alarm(self, alarm):
         alarm = copy.deepcopy(alarm)
