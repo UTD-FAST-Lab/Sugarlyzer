@@ -2,6 +2,11 @@
 
 Sugarlyzer is a framework for performing static analysis using off-the-shelf bug finders on C software product lines.
 
+This artifact is capable of running a subset of experiments from our paper. Specifically, this artifact is capable of 
+producing the results from Table 3 in RQ1, which show the comparison between our approach and the sampling-based approach. 
+Additionally, we can run analysis on the Varbugs database (column 4 of Table 2) and the TOSEM benchmarks (column 3 of 
+Table 6, as well as analysis time).
+
 # Prerequisites
 This application is written for Python version >= 3.10.0. We suggest using PyEnv to manage multiple Python versions.
 Furthermore, Sugarlyzer runs its analyses in Docker containers in order to maintain consistent
@@ -42,8 +47,8 @@ invoke Sugarlyzer.
 # Usage
 
 `dispatcher` is the primary interface for interacting with Sugarlyzer. Using `dispatcher`, we can run two types of analysis.
-First, we can run static analysis on desugared code (our primary contribution).
-Second, we can run the sampling-based baseline, which uses configuration samples from Mordahl et al.'s 2019 work [1].
+First, we can run static analysis on desugared code (our primary contribution) (Sections 5.2.1, 5.2.2, and 5.3).
+Second, we can run the sampling-based baseline, which uses configuration samples from Mordahl et al.'s 2019 work [1] (Section 5.2.2).
 
 An example of running static analysis on desugared code can be seen by running
 
@@ -62,7 +67,7 @@ dispatcher -t infer -p toybox --baselines --sample-size 10 --jobs <<number of jo
 
 Alternative analyzers and target programs can be specified with `-t` and `-p`, respectively.
 Currently, the Infer (infer), Clang (clang), and Phasar (phasar) static analyzers are implemented.
-We have also integrated seven target systems.
+We have also integrated seven target systems (per Section 
 From Mordahl et al.'s work [1], we integrated axTLS 2.1.4 (axtls), Toybox 0.7.5 (toybox), and Busybox 1.28.0 (busybox).
 From von Rhein et al's work [2], we integrated Busybox 1.18.5 (tosembusybox), OpenSSL 1.0.1c (tosemopenssl), uClibc 0.9.33.2 (tosemuclibc).
 Finally, from Abal et al's work we integrated the VarBugs (varbugs) benchmark [3].
@@ -85,7 +90,8 @@ Baseline alarms are formatted somewhat differently. Specifically, instead of pre
 
 # Processing Results
 
-We provide a Jupyter notebook, located at `scripts/comparison.ipynb`. This script can tell you the time that desugaring and analysis took, as well as compare baseline/desugared results to see their overlap. Instructions for using the notebook are embedded in the notebook.
+We provide a Jupyter notebook, located at `scripts/comparison.ipynb`. This script can tell you the time that desugaring and analysis took (Tables 2 and 6), as well as compare baseline/desugared results to see their overlap (Column 5 of Table 2). 
+Instructions for using the notebook are embedded in the notebook.
 
 # Extending with New Tools
 
@@ -93,7 +99,6 @@ To extend Sugarlyzer with new tools, the following steps must be performed.
 1. Add a new dockerfile to `resources/tools/<tool_name>/Dockerfile`. This Dockerfile *must* 1) Inherit from the sugarlyzer/base:latest image, which contains Sugarlyzer and its dependencies, and 2) install the tool so it can be invoked from the command line. *Please note that the tool name that is exposed to the user via the command line and the name of the tool as passed to AbstractTool is the exact same as whatever this folder is named.*
 2. Add a new class to `src/sugarlyzer/analyses` that inherits from AbstractTool. The only method that must be implemented is `analyze`, which takes as input a path to a code file and returns an iterable of result files, containing the analysis results. Also, update `src/sugarlyzer/analyses/AnalysisToolFactory` to correctly return an instance of your tool given its name.
 3. Add a new reader to `src/sugarlyzer/readers` that inherits from AbstractReader. The only function that must be implemented is `read_output`, which takes as input a report file as produced by the runner implemented in step 2. and returns Alarm objects.*
-
 
 \* Note that, depending on your needs, it may be necessary to derive your own subtype of `Alarm,` as we do for Clang.
 
