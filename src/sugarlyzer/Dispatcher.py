@@ -5,7 +5,7 @@ logger = logging.getLogger(__name__)
 import docker as docker
 from docker.models.containers import Container
 import os
-import importlib.resources
+from importlib.resources import as_file, files
 import subprocess
 from pathlib import Path
 from typing import List, Optional
@@ -54,8 +54,9 @@ def get_dirs_in_package(package: str) -> List[str]:
     :return: A list of directories.
     """
     # noinspection PyTypeChecker
-    _, dirs, _ = next(os.walk(importlib.resources.path(package, '')))
-    return dirs
+    with as_file(files(package)) as f:
+        _, dirs, _ = next(os.walk(f))
+        return dirs
 
 
 def get_image_name(tool: Optional[str]) -> str:
@@ -85,9 +86,10 @@ def build_images(tools: List[str], nocache: bool, jobs: int) -> None:
     cmds.append(['docker', 'build', '.', '-t', 'sugarlyzer/base'])
 
     # Add commands to build any images for tools.
+
     for t in tools:
-        cmds.append(['docker', 'build', str(importlib.resources.path('resources.tools', t)),
-                     '-t', get_image_name(t)])
+        with as_file(files('resources.tools').joinpath(t)) as f:
+            cmds.append(['docker', 'build', str(f), '-t', get_image_name(t)])
 
     if nocache:
         for c in cmds:

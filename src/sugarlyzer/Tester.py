@@ -1,7 +1,7 @@
 import argparse
 import copy
 import functools
-import importlib
+from importlib.resources import as_file, files
 import json
 import logging
 import multiprocessing
@@ -53,16 +53,17 @@ class Tester:
             :param file: The program file to read.
             :return: The JSON representation of the program file. Throws an exception if the file is malformed.
             """
-            with open(importlib.resources.path(f'resources.programs', 'program_schema.json'), 'r') as schema_file:
-                resolver = RefResolver.from_schema(schema := json.load(schema_file))
-                validator = Draft7Validator(schema, resolver)
-            with open(file, 'r') as program_file:
-                result = json.load(program_file)
-            validator.validate(result)
-            return result
+            with as_file(files("resources.programs").joinpath("program_schema.json")) as f:
+                with open(f, 'r') as schema_file:
+                    resolver = RefResolver.from_schema(schema := json.load(schema_file))
+                    validator = Draft7Validator(schema, resolver)
+                with open(file, 'r') as program_file:
+                    result = json.load(program_file)
+                validator.validate(result)
+                return result
 
-        program_as_json = read_json_and_validate(
-            importlib.resources.path(f'resources.programs.{program}', 'program.json'))
+        with as_file(files(f'resources.programs.{program}').joinpath("program.json")) as f:
+            program_as_json = read_json_and_validate(f)
         self.program: ProgramSpecification = ProgramSpecification(program, **program_as_json)
         self.tool: AbstractTool = AnalysisToolFactory().get_tool(tool)
         self.remove_errors = self.tool.remove_errors if self.program.remove_errors is None else self.program.remove_errors
@@ -276,8 +277,9 @@ class Tester:
                 mappedKey = k
                 mappedValue = v
                 if self.kgen_map != None:
-                    with open(importlib.resources.path(f'resources.programs.{self.program.name}', self.kgen_map)) as mapping:
-                        map = json.load(mapping)
+                    with as_file(files(f"resources.programs.{self.program.name}").joinpath(self.kgen_map)) as mapping:
+                        with open(mapping, 'r') as op:
+                            map = json.load(op)
                     kdef = k
                     if v.lower() == 'false':
                         kdef = '!'+kdef
