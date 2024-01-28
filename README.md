@@ -3,17 +3,17 @@
 Sugarlyzer is a framework for performing static analysis using off-the-shelf bug finders on C software product lines.
 
 # Prerequisites
-This application is written for Python version 3.10.0. We suggest using PyEnv to manage multiple Python versions.
+This application is written for Python version >= 3.10.0. We suggest using PyEnv to manage multiple Python versions.
 Furthermore, Sugarlyzer runs its analyses in Docker containers in order to maintain consistent
 environments across runs, so you must have a working Docker installation. 
 
 # Setup
 
-We recommend creating a virtual environment for Sugarlyzer. To do so, run
+First, create a virtual environment for Sugarlyzer. To do so, run
 
 `python -m venv <name_of_virtual_environment>`
 
-where 'python' points to a python 3.10.0 installation (note that this may be `python3` on your system.
+where 'python' points to a python 3.10.0 or higher installation (note that this may be `python3` on your system).
 This will create a new folder.
 If, for example, you named your virtual environment 'venv', then you can activate it as follows:
 
@@ -24,13 +24,12 @@ Now, when you install dependencies, they will be installed into this virtual env
 
 In order to install Sugarlyzer's dependencies, from the root directory of the repository, run
 
-`python -m pip install -r requirements.txt`
+`pip install -r requirements.txt`
 
-Where `python` points to a Python executable of at least version 3.10.0. 
 This will install all of the Python dependencies required. Then, in order to install
 the application, run
 
-`python -m pip install -e .`
+`pip install -e .`
 
 This installation will put two executables on your system PATH: `dispatcher`, and `tester`.
 `dispatcher` is the command you run from your host, while `tester` is the command you run from inside the Docker container (under normal usage, a user
@@ -44,7 +43,7 @@ invoke Sugarlyzer.
 
 `dispatcher` is the primary interface for interacting with Sugarlyzer. Using `dispatcher`, we can run two types of analysis.
 First, we can run static analysis on desugared code (our primary contribution).
-Second, we can run the sampling-based baseline, which uses configuration samples from Mordahl et al.'s 2019 work "An Empirical Study of Real-World Variability Bugs Detected by Variability-Oblivious Tools."
+Second, we can run the sampling-based baseline, which uses configuration samples from Mordahl et al.'s 2019 work [1].
 
 An example of running static analysis on desugared code can be seen by running
 
@@ -52,7 +51,41 @@ An example of running static analysis on desugared code can be seen by running
 dispatcher -t infer -p toybox --jobs <<number of jobs you want to run concurrently>>
 ```
 
-This will run the Infer static analyzer on the desugared code of Toybox.
+This will run the Infer static analyzer on the desugared code of Toybox. Run with 8 cores, this experiment took about 30 minutes.
+
+To run baseline experiments, simply pass the `--baseline` parameter. **However, note that this will, by default, run all 1000 configurations from Mordahl et al.'s FSE 2019 work.** To limit the number of configurations that are run, use the `--sample-size` parameter.
+For example, to run Infer's analysis on 10 random configurations of Toybox, use the following command:
+
+```
+dispatcher -t infer -p toybox --baselines --sample-size 10 --jobs <<number of jobs you want to run concurrently>
+```
+
+Alternative analyzers and target programs can be specified with `-t` and `-p`, respectively.
+Currently, the Infer (infer), Clang (clang), and Phasar (phasar) static analyzers are implemented.
+We have also integrated seven target systems.
+From Mordahl et al.'s work [1], we integrated axTLS 2.1.4 (axtls), Toybox 0.7.5 (toybox), and Busybox 1.28.0 (busybox).
+From von Rhein et al's work [2], we integrated Busybox 1.18.5 (tosembusybox), OpenSSL 1.0.1c (tosemopenssl), uClibc 0.9.33.2 (tosemuclibc).
+Finally, from Abal et al's work we integrated the VarBugs (varbugs) benchmark [3].
+
+**Note that baseline experiments only work on the target programs from Mordahl et al's work. The other experiments were run using different tooling that is not a part of this artifact.**
+# Results
+
+By default, results are written to a `results.json` file in the root directory, but this file can be modified with the `-r` option.
+The file is a JSON file, with a list of alarms that were detected during the analysis.
+Alarms on desugared inputs have the following relevant fields:
+
+- input_file: The file on which the report was detected.
+- input_line: The line in the desugared file on which the alarm was detected.
+- original_line: The line(s) in the original file that the input_line corresponds to.
+- message: The alarm message
+- bug_type: The type of check that was being performed (e.g., a memory leak).
+- presence_condition: The condition under which the alarm exists. A blank condition, like "Or(And())" indicates that the alarm is present in all variants of the SPL.
+
+Baseline alarms are formatted somewhat differently. Specifically, instead of presence_condition, they have a "configuration" field that lists configurations under which the alarm was detected.
+
+# Processing Results
+
+We provide a Jupyter notebook, located at `scripts/comparison.ipynb`. This script can tell you the time that desugaring and analysis took, as well as compare baseline/desugared results to see their overlap. Instructions for using the notebook are embedded in the notebook.
 
 # Extending with New Tools
 
@@ -69,3 +102,9 @@ To extend Sugarlyzer with new tools, the following steps must be performed.
 To extend Sugarlyzer with new programs, the following steps must be performed:
 1. Add a new folder to `resources/programs` with the name of the program/set of programs you wish to use. Note that, like tools, Sugarlyzer will use the name of this folder to refer to the program.
 2. This folder must have two elements. First, a runnable script (make sure to update the permissions before you try to run Sugarlyzer) that places the program somewhere in the /targets folder. This will be run in the Docker container, so it won't modify your host system. Second, a `program.json` file which contains two fields. "build_script", which contains the name of the build script you just added, and "source_location", which is a list of folders to search for source files. If "source_location" is omitted, all .c files in the /results directory will be used.
+
+[1] Mordahl, Austin, Jeho Oh, Ugur Koc, Shiyi Wei, and Paul Gazzillo. "An empirical study of real-world variability bugs detected by variability-oblivious tools." In Proceedings of the 2019 27th ACM Joint Meeting on European Software Engineering Conference and Symposium on the Foundations of Software Engineering, pp. 50-61. 2019.
+
+[2] Rhein, Alexander Von, Jörg Liebig, Andreas Janker, Christian Kästner, and Sven Apel. "Variability-aware static analysis at scale: An empirical study." ACM Transactions on Software Engineering and Methodology (TOSEM) 27, no. 4 (2018): 1-33.
+
+[3] Abal, Iago, Jean Melo, Ştefan Stănciulescu, Claus Brabrand, Márcio Ribeiro, and Andrzej Wąsowski. "Variability bugs in highly configurable systems: A qualitative analysis." ACM Transactions on Software Engineering and Methodology (TOSEM) 26, no. 3 (2018): 1-34.
