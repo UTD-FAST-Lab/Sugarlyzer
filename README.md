@@ -96,7 +96,7 @@ Instructions for using the notebook are embedded in the notebook.
 
 # Extending with New Tools
 
-To extend Sugarlyzer with new tools, the following steps must be performed.
+Extending Sugarlyzer with new analysis tools is straightforward. To extend Sugarlyzer with new tools, the following steps must be performed.
 1. Add a new dockerfile to `resources/tools/<tool_name>/Dockerfile`. This Dockerfile *must* 1) Inherit from the sugarlyzer/base:latest image, which contains Sugarlyzer and its dependencies, and 2) install the tool so it can be invoked from the command line. *Please note that the tool name that is exposed to the user via the command line and the name of the tool as passed to AbstractTool is the exact same as whatever this folder is named.*
 2. Add a new class to `src/sugarlyzer/analyses` that inherits from AbstractTool. The only method that must be implemented is `analyze`, which takes as input a path to a code file and returns an iterable of result files, containing the analysis results. Also, update `src/sugarlyzer/analyses/AnalysisToolFactory` to correctly return an instance of your tool given its name.
 3. Add a new reader to `src/sugarlyzer/readers` that inherits from AbstractReader. The only function that must be implemented is `read_output`, which takes as input a report file as produced by the runner implemented in step 2. and returns Alarm objects.*
@@ -105,9 +105,36 @@ To extend Sugarlyzer with new tools, the following steps must be performed.
 
 # Extending with New Programs
 
-To extend Sugarlyzer with new programs, the following steps must be performed:
+The process for extending Sugarlyzer with new programs is more involved, and we are happy to help with such an integration. Generally, the process looks like this:
 1. Add a new folder to `resources/programs` with the name of the program/set of programs you wish to use. Note that, like tools, Sugarlyzer will use the name of this folder to refer to the program.
-2. This folder must have two elements. First, a runnable script (make sure to update the permissions before you try to run Sugarlyzer) that places the program somewhere in the /targets folder. This will be run in the Docker container, so it won't modify your host system. Second, a `program.json` file which contains two fields. "build_script", which contains the name of the build script you just added, and "source_location", which is a list of folders to search for source files. If "source_location" is omitted, all .c files in the /results directory will be used.
+2. This folder must have two elements. First, a runnable script (make sure to update the permissions before you try to run Sugarlyzer) that places the program somewhere in the /targets folder. This will be run in the Docker container, so it won't modify your host system. Second, a `program.json` file. The program.json file must contain various fields which tell Sugarlyzer how the code is structures. We suggest looking at existing files for examples. The required fields are a "build_script," which contains the location of the aforementioned script. Next, a "project_root," which contains the name of the root folder of the source code. Next, an "included_files_and_directories," which will tell Sugarlyzer which files and directories need to be included to compile each file. This field is a list of records, where each record contains an "included_files" and "included_directories" field. For example, an excerpt of axTLS's file is shown below:
+  
+```
+"included_files_and_directories": [
+   {
+       "included_files": [
+             "/SugarlyzerConfig/axtlsInc.h"
+       ],
+       "included_directories": [
+             "/SugarlyzerConfig/",
+             "/SugarlyzerConfig/stdinc/usr/include/",
+             "/SugarlyzerConfig/stdinc/usr/include/x86_64-linux-gnu/",
+             "/SugarlyzerConfig/stdinc/usr/lib/gcc/x86_64-linux-gnu/9/include/"
+       ]
+   },
+   {
+         "file_pattern": "aes\\.c$",
+         "included_files": [],
+         "included_directories": [
+               "config",
+               "ssl",
+               "crypto"
+         ]
+   }
+]
+```
+
+The first entry applies to all files in axTLS -- i.e., every file should be compiled with the axtlsInc.h file, as well as the directories listed under included_directories. The second entry has a filter (`file_pattern`), which tells us that for any file that matches the regular expression `aes\.c`, we should additionally include the `config`, `ssl`, and `crypto` directories when we compile the file.
 
 [1] Mordahl, Austin, Jeho Oh, Ugur Koc, Shiyi Wei, and Paul Gazzillo. "An empirical study of real-world variability bugs detected by variability-oblivious tools." In Proceedings of the 2019 27th ACM Joint Meeting on European Software Engineering Conference and Symposium on the Foundations of Software Engineering, pp. 50-61. 2019.
 
