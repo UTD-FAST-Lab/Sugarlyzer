@@ -8,6 +8,10 @@ Additionally, we can run analysis on the the TOSEM benchmarks (column 3 of Table
 We are still working on integrating and testing the analysis for the family-based baseline (Column 2 of Table 6) as well as the 
 analyses for the Varbugs benchmark (Table 2), and these will be included in a future release of Sugarlyzer.
 
+# For Artifact Reviewers
+
+We have provided three scripts: `runDesugared.sh`, `runBaselines.sh`, and `runSmallExperiments.sh`. These run the desugared analysis, the sampling-based baseline, and a small subset of experiments respectively. The first two scripts take longer than a day to run when parallelized to 60 cores, so we recommend artifact reviewers run the `runSmallExperiments.sh` script, which takes approximately an hour if run with 8 jobs at a time.
+
 # Prerequisites
 This application is written for Python version >= 3.10.0. We suggest using PyEnv to manage multiple Python versions.
 Furthermore, Sugarlyzer runs its analyses in Docker containers in order to maintain consistent
