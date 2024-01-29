@@ -74,7 +74,7 @@ We have also integrated six target systems (per Section 5.1).
 From Mordahl et al.'s work [1], we integrated axTLS 2.1.4 (axtls), Toybox 0.7.5 (toybox), and Busybox 1.28.0 (busybox).
 From von Rhein et al's work [2], we integrated Busybox 1.18.5 (tosembusybox), OpenSSL 1.0.1c (tosemopenssl), uClibc 0.9.33.2 (tosemuclibc).
 
-**Note that baseline experiments only work on the target programs from Mordahl et al's work. The other experiments were run using different tooling that is not a part of this artifact. These experiments will be integrated in a future version of Sugarlyzer.**
+**Note that baseline experiments only work on the target programs from Mordahl et al's work [1]. The other experiments were run using different tooling that is not a part of this artifact. These experiments will be integrated in a future version of Sugarlyzer.**
 
 ## For Artifact Reviewers
 
