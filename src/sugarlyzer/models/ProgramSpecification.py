@@ -75,7 +75,10 @@ class ProgramSpecification:
 
     @property
     def sample_directory(self):
-        return self.try_resolve_path(self.__sample_directory, importlib.resources.path('resources.programs', ''))
+        if self.__sample_directory is not None:
+            return self.try_resolve_path(self.__sample_directory, importlib.resources.path('resources.programs', ''))
+        else:
+            return None
 
     @property
     def make_root(self):
