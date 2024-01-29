@@ -4,8 +4,9 @@ Sugarlyzer is a framework for performing static analysis using off-the-shelf bug
 
 This artifact is capable of running a subset of experiments from our paper. Specifically, this artifact is capable of 
 producing the results from Table 3 in RQ1, which show the comparison between our approach and the sampling-based approach. 
-Additionally, we can run analysis on the Varbugs database (column 4 of Table 2) and the TOSEM benchmarks (column 3 of 
-Table 6, as well as analysis time).
+Additionally, we can run analysis on the the TOSEM benchmarks (column 3 of Table 6, as well as analysis time).
+We are still working on integrating and testing the analysis for the family-based baseline (Column 2 of Table 6) as well as the 
+analyses for the Varbugs benchmark (Table 2), and these will be included in a future release of Sugarlyzer.
 
 # Prerequisites
 This application is written for Python version >= 3.10.0. We suggest using PyEnv to manage multiple Python versions.
@@ -47,7 +48,7 @@ invoke Sugarlyzer.
 # Usage
 
 `dispatcher` is the primary interface for interacting with Sugarlyzer. Using `dispatcher`, we can run two types of analysis.
-First, we can run static analysis on desugared code (our primary contribution) (Sections 5.2.1, 5.2.2, and 5.3).
+First, we can run static analysis on desugared code (our primary contribution) (Sections 5.2.2 and 5.3).
 Second, we can run the sampling-based baseline, which uses configuration samples from Mordahl et al.'s 2019 work [1] (Section 5.2.2).
 
 An example of running static analysis on desugared code can be seen by running
@@ -56,7 +57,7 @@ An example of running static analysis on desugared code can be seen by running
 dispatcher -t infer -p toybox --jobs <<number of jobs you want to run concurrently>>
 ```
 
-This will run the Infer static analyzer on the desugared code of Toybox. Run with 8 cores, this experiment took about 30 minutes.
+This will run the Infer static analyzer on the desugared code of Toybox. Run with 8 cores, this experiment took about 30 minutes, and produces 21 reports.
 
 To run baseline experiments, simply pass the `--baseline` parameter. **However, note that this will, by default, run all 1000 configurations from Mordahl et al.'s FSE 2019 work.** To limit the number of configurations that are run, use the `--sample-size` parameter.
 For example, to run Infer's analysis on 10 random configurations of Toybox, use the following command:
@@ -67,12 +68,12 @@ dispatcher -t infer -p toybox --baselines --sample-size 10 --jobs <<number of jo
 
 Alternative analyzers and target programs can be specified with `-t` and `-p`, respectively.
 Currently, the Infer (infer), Clang (clang), and Phasar (phasar) static analyzers are implemented.
-We have also integrated seven target systems (per Section 
+We have also integrated six target systems (per Section 5.1).
 From Mordahl et al.'s work [1], we integrated axTLS 2.1.4 (axtls), Toybox 0.7.5 (toybox), and Busybox 1.28.0 (busybox).
 From von Rhein et al's work [2], we integrated Busybox 1.18.5 (tosembusybox), OpenSSL 1.0.1c (tosemopenssl), uClibc 0.9.33.2 (tosemuclibc).
-Finally, from Abal et al's work we integrated the VarBugs (varbugs) benchmark [3].
 
-**Note that baseline experiments only work on the target programs from Mordahl et al's work. The other experiments were run using different tooling that is not a part of this artifact.**
+**Note that baseline experiments only work on the target programs from Mordahl et al's work. The other experiments were run using different tooling that is not a part of this artifact. These experiments will be integrated in a future version of Sugarlyzer.**
+
 # Results
 
 By default, results are written to a `results.json` file in the root directory, but this file can be modified with the `-r` option.
