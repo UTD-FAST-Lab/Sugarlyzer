@@ -66,6 +66,8 @@ For example, to run Infer's analysis on 10 random configurations of Toybox, use 
 dispatcher -t infer -p toybox --baselines --sample-size 10 --jobs <<number of jobs you want to run concurrently>
 ```
 
+This should produce about 17 reports (this may change depending on which configurations are sampled.)
+
 Alternative analyzers and target programs can be specified with `-t` and `-p`, respectively.
 Currently, the Infer (infer), Clang (clang), and Phasar (phasar) static analyzers are implemented.
 We have also integrated six target systems (per Section 5.1).
@@ -107,7 +109,7 @@ Extending Sugarlyzer with new analysis tools is straightforward. To extend Sugar
 
 The process for extending Sugarlyzer with new programs is more involved, and we are happy to help with such an integration. Generally, the process looks like this:
 1. Add a new folder to `resources/programs` with the name of the program/set of programs you wish to use. Note that, like tools, Sugarlyzer will use the name of this folder to refer to the program.
-2. This folder must have two elements. First, a runnable script (make sure to update the permissions before you try to run Sugarlyzer) that places the program somewhere in the /targets folder. This will be run in the Docker container, so it won't modify your host system. Second, a `program.json` file. The program.json file must contain various fields which tell Sugarlyzer how the code is structures. We suggest looking at existing files for examples. The required fields are a "build_script," which contains the location of the aforementioned script. Next, a "project_root," which contains the name of the root folder of the source code. Next, an "included_files_and_directories," which will tell Sugarlyzer which files and directories need to be included to compile each file. This field is a list of records, where each record contains an "included_files" and "included_directories" field. For example, an excerpt of axTLS's file is shown below:
+2. This folder must have two elements. First, a runnable script (make sure to update the permissions before you try to run Sugarlyzer) that places the program somewhere in the /targets folder. This will be run in the Docker container, so it won't modify your host system. Second, a `program.json` file. The program.json file must contain various fields which tell Sugarlyzer how the code is structured. We suggest looking at existing files for examples. The required fields are a "build_script," which contains the location of the aforementioned script. Next, a "project_root," which contains the name of the root folder of the source code. Next, an "included_files_and_directories," which will tell Sugarlyzer which files and directories need to be included to compile each file. This field is a list of records, where each record contains an "included_files" and "included_directories" field. For example, an excerpt of axTLS's file is shown below:
   
 ```
 "included_files_and_directories": [
