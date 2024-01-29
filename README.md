@@ -10,7 +10,7 @@ analyses for the Varbugs benchmark (Table 2), and these will be included in a fu
 
 # For Artifact Reviewers
 
-We have provided three scripts: `runDesugared.sh`, `runBaselines.sh`, and `runSmallExperiments.sh`. These run the desugared analysis, the sampling-based baseline, and a small subset of experiments respectively. The first two scripts take longer than a day to run when parallelized to 60 cores, so we recommend artifact reviewers run the `runSmallExperiments.sh` script, which takes approximately an hour if run with 8 jobs at a time.
+We have provided three scripts: `runDesugared.sh`, `runBaselines.sh`, and `runSmallExperiments.sh`. These run the desugared analysis, the sampling-based baseline, and a small subset of experiments respectively. The first two scripts take longer than a day to run when parallelized to 60 cores, so we recommend artifact reviewers run the `runSmallExperiments.sh` script, which takes approximately an hour if run with 8 jobs at a time. This script will run the desguared analysis on Infer, as well as the sampling-based baseline on 10 configurations.
 
 # Prerequisites
 This application is written for Python version >= 3.10.0. We suggest using PyEnv to manage multiple Python versions.
