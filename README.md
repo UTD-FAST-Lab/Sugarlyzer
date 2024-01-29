@@ -66,6 +66,8 @@ For example, to run Infer's analysis on 10 random configurations of Toybox, use 
 dispatcher -t infer -p toybox --baselines --sample-size 10 --jobs <<number of jobs you want to run concurrently>
 ```
 
+This should produce about 17 reports (this may change depending on which configurations are sampled.)
+
 Alternative analyzers and target programs can be specified with `-t` and `-p`, respectively.
 Currently, the Infer (infer), Clang (clang), and Phasar (phasar) static analyzers are implemented.
 We have also integrated six target systems (per Section 5.1).
