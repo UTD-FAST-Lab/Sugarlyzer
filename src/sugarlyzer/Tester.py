@@ -389,7 +389,8 @@ class Tester:
                     alarms.extend(i)
 
             # Remove config directory
-            os.rmdir(Path("/targets") / Path(config.name))
+            import shutil
+            shutil.rmtree(Path("/targets") / Path(config.name), remove_errors=True)
 
         for alarm in alarms:
             alarm.get_recommended_space = (not self.no_recommended_space)
