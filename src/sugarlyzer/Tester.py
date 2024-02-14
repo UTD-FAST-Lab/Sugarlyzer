@@ -365,6 +365,7 @@ class Tester:
         alarms: List[Alarm] = []
         count = 0
         count += 1
+        flag = 0
 
         logger.info("Performing code cloning for baseline experiments:")
 
@@ -376,6 +377,10 @@ class Tester:
         for config in tqdm(all_configs):
             logger.info(f"Cloning and configuring code for config {config.name}")
             spec = self.clone_program_and_configure(self.program, config)
+            if flag == 1:
+                import sys
+                sys.exit(1)
+            flag += 1
 
             source_files_config_spec_triples: List[Tuple[Path, Path, ProgramSpecification]] = []
             source_files_config_spec_triples.extend((fi, config, spec) for fi in spec.get_source_files())
