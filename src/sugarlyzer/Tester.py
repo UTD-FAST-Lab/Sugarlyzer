@@ -390,7 +390,7 @@ class Tester:
             # Remove config directory
             import shutil
             path_to_remove = Path("/targets") / Path(config.name)
-            logger.info("Removing " + str(path_to_remove))
+            logger.info("Removing " + str(path_to_remove.absolute()))
             shutil.rmtree(Path("/targets") / Path(config.name), ignore_errors=True)
 
         for alarm in alarms:
