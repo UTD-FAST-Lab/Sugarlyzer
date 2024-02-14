@@ -375,27 +375,25 @@ class Tester:
         logger.info(f"Selected configurations: {all_configs}")
         i = 0
 
-        with ProcessPool(self.jobs) as p:
-            for result in tqdm(p.imap(lambda x: (self.clone_program_and_configure(self.program, x), x),
-                                      all_configs),
-                               total=len(all_configs)):
-                # logger.info(f"Copying configuration {i}/1000")
-                i += 1
-                spec_config_pairs.append(result)
+        for config in all_configs:
+            logger.info(f"Cloning and configuring code for config {config.name}")
+            spec = self.clone_program_and_configure(self.program, config)
 
-        logger.debug(f"Config pairs is {list((ps.search_context, x) for ps, x in spec_config_pairs)}")
-        source_files_config_spec_triples: List[Tuple[Path, Path, ProgramSpecification]] = []
-        for spec, config in spec_config_pairs:
+            source_files_config_spec_triples: List[Tuple[Path, Path, ProgramSpecification]] = []
             source_files_config_spec_triples.extend((fi, config, spec) for fi in spec.get_source_files())
 
-        logger.info("Running analysis:")
-        logger.debug(f"Running analysis on pairs {source_files_config_spec_triples}")
-        with ProcessPool(self.jobs) as p:
-            alarms = list()
-            for i in tqdm(
-                    p.imap(lambda x: self.analyze_file_and_associate_configuration(*x), source_files_config_spec_triples),
-                    total=len(source_files_config_spec_triples)):
-                alarms.extend(i)
+            logger.info(f"Running analysis on {config.name}:")
+            logger.debug(f"Running analysis on pairs {source_files_config_spec_triples}")
+            with ProcessPool(self.jobs) as p:
+                alarms = list()
+                for i in tqdm(
+                        p.imap(lambda x: self.analyze_file_and_associate_configuration(*x),
+                               source_files_config_spec_triples),
+                        total=len(source_files_config_spec_triples)):
+                    alarms.extend(i)
+
+            # Remove config directory
+            os.rmdir(Path("/targets") / Path(config.name))
 
         for alarm in alarms:
             alarm.get_recommended_space = (not self.no_recommended_space)
