@@ -342,7 +342,7 @@ class Tester:
         else:
             return alarm
 
-    def analyze_file_and_associate_configuration(self, file: Path, config: Path, ps: ProgramSpecification) -> Iterable[Alarm]:
+    def analyze_file_and_associate_configuration(self, file: Path, config: Path, ps: ProgramSpecification, delete=False) -> Iterable[Alarm]:
         def get_config_object(config: Path) -> List[Tuple[str, str]]:
             with open(config, 'r') as f:
                 lines = [l.strip() for l in f.readlines()]
@@ -359,13 +359,14 @@ class Tester:
         alarms_from_one_file = self.analyze_one_file(file, ps)
         for a in alarms_from_one_file:
             a.model = get_config_object(config)
+
+        if delete:
+            os.remove(file)
+
         return alarms_from_one_file
 
     def run_baseline_experiments(self) -> Iterable[Alarm]:
         alarms: List[Alarm] = []
-        count = 0
-        count += 1
-        flag = 0
 
         logger.info("Performing code cloning for baseline experiments:")
 
@@ -376,10 +377,18 @@ class Tester:
 
         for config in all_configs:
             logger.info(f"Cloning and configuring code for config {config.name}")
+            import os
+            logger.info(f"Tree structure before clone program: " + str(os.listdir("/targets")))
             spec = self.clone_program_and_configure(self.program, config)
-
-            source_files_config_spec_triples: List[Tuple[Path, Path, ProgramSpecification]] = []
-            source_files_config_spec_triples.extend((fi, config, spec) for fi in spec.get_source_files())
+            for root, dirs, files in os.walk("/targets/" + config.name, topdown=False):
+                for name in files:
+                    logger.info("File exists: " + str(os.path.join(root, name)))
+                for name in dirs:
+                    logger.info("Directory exists: " + str(os.path.join(root, name)))
+            import time
+            time.sleep(10)
+            source_files_config_spec_triples: List[Tuple[Path, Path, ProgramSpecification, bool]] = []
+            source_files_config_spec_triples.extend((fi, config, spec, True) for fi in spec.get_source_files())
 
             logger.info(f"Running analysis on {config.name}:")
             logger.debug(f"Running analysis on pairs {source_files_config_spec_triples}")
@@ -388,13 +397,6 @@ class Tester:
                                source_files_config_spec_triples):
                     alarms.extend(i)
 
-            # Remove config directory
-            import os
-            for root, dirs, files in os.walk("/targets/" + config.name, topdown=False):
-                for name in files:
-                    os.remove(os.path.join(root, name))
-                for name in dirs:
-                    os.rmdir(os.path.join(root, name))
 
         for alarm in alarms:
             alarm.get_recommended_space = (not self.no_recommended_space)
