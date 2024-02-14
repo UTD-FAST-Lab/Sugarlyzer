@@ -368,14 +368,12 @@ class Tester:
 
         logger.info("Performing code cloning for baseline experiments:")
 
-        spec_config_pairs: List[Tuple[ProgramSpecification, Path]] = []
         all_configs = list(self.program.get_baseline_configurations())
         if self.sample_size < 1000:
             all_configs = random.sample(all_configs, self.sample_size)
         logger.info(f"Selected configurations: {all_configs}")
-        i = 0
 
-        for config in all_configs:
+        for config in tqdm(all_configs):
             logger.info(f"Cloning and configuring code for config {config.name}")
             spec = self.clone_program_and_configure(self.program, config)
 
@@ -386,10 +384,8 @@ class Tester:
             logger.debug(f"Running analysis on pairs {source_files_config_spec_triples}")
             with ProcessPool(self.jobs) as p:
                 alarms = list()
-                for i in tqdm(
-                        p.imap(lambda x: self.analyze_file_and_associate_configuration(*x),
-                               source_files_config_spec_triples),
-                        total=len(source_files_config_spec_triples)):
+                for i in p.imap(lambda x: self.analyze_file_and_associate_configuration(*x),
+                               source_files_config_spec_triples):
                     alarms.extend(i)
 
             # Remove config directory
