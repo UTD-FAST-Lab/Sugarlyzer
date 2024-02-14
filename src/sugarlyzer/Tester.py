@@ -391,7 +391,7 @@ class Tester:
             import shutil
             path_to_remove = Path("/targets") / Path(config.name)
             logger.info("Removing " + str(path_to_remove.absolute()))
-            shutil.rmtree(Path("/targets") / Path(config.name), ignore_errors=True)
+            shutil.rmtree(Path("/targets") / Path(config.name))
 
         for alarm in alarms:
             alarm.get_recommended_space = (not self.no_recommended_space)
