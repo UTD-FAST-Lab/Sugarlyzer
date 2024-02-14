@@ -383,7 +383,6 @@ class Tester:
             logger.info(f"Running analysis on {config.name}:")
             logger.debug(f"Running analysis on pairs {source_files_config_spec_triples}")
             with ProcessPool(self.jobs) as p:
-                alarms = list()
                 for i in p.imap(lambda x: self.analyze_file_and_associate_configuration(*x),
                                source_files_config_spec_triples):
                     alarms.extend(i)
