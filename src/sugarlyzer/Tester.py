@@ -397,6 +397,12 @@ class Tester:
                 for file in files:
                     os.remove(os.path.join(root, file))
 
+            for root, dirs, files in os.walk("/tmp", topdown=False):
+                for file in files:
+                    os.remove(os.path.join(root, file))
+                for dir in dirs:
+                    os.rmdir(os.path.join(root, dir))
+
         for alarm in alarms:
             alarm.get_recommended_space = (not self.no_recommended_space)
             alarm.remove_errors = self.remove_errors
