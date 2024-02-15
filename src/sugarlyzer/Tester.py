@@ -178,8 +178,6 @@ class Tester:
                                    total=len(input_files)):
                     alarms.extend(result)
 
-            logger.info(f"Got {len(alarms)} unique alarms.")
-
             buckets: List[List[Alarm]] = [[]]
 
             def alarm_match(a: Alarm, b: Alarm):
@@ -220,6 +218,7 @@ class Tester:
             alarms = self.dedup_and_process_alarms([a.as_dict() for a in alarms])
 
         # Now time to postprocess alarms
+        logger.info("Got " + str(len(alarms)) + " alarms.")
         logger.debug("Writing alarms to file.")
         with open("/results.json", 'w') as f:
             json.dump(alarms, f, indent=2)
@@ -361,7 +360,14 @@ class Tester:
             a.model = get_config_object(config)
 
         if delete:
+            # Make sure we get the necessary information from the file before we delete it
+            for a in alarms_from_one_file:
+                x = a.function_line_range
             os.remove(file)
+            try:
+                os.remove(str(file.absolute())[:-2] + ".o")
+            except Exception:
+                pass
 
         return alarms_from_one_file
 
@@ -386,7 +392,10 @@ class Tester:
                 for i in p.imap(lambda x: self.analyze_file_and_associate_configuration(*x),
                                source_files_config_spec_triples):
                     alarms.extend(i)
-
+            import shutil
+            for root, dirs, files in os.walk("/targets/" + config.name):
+                for file in files:
+                    os.remove(os.path.join(root, file))
 
         for alarm in alarms:
             alarm.get_recommended_space = (not self.no_recommended_space)
