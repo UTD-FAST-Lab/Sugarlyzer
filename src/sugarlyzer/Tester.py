@@ -376,17 +376,7 @@ class Tester:
         logger.info(f"Selected configurations: {all_configs}")
 
         for config in all_configs:
-            logger.info(f"Cloning and configuring code for config {config.name}")
-            import os
-            logger.info(f"Tree structure before clone program: " + str(os.listdir("/targets")))
             spec = self.clone_program_and_configure(self.program, config)
-            for root, dirs, files in os.walk("/targets/" + config.name, topdown=False):
-                for name in files:
-                    logger.info("File exists: " + str(os.path.join(root, name)))
-                for name in dirs:
-                    logger.info("Directory exists: " + str(os.path.join(root, name)))
-            import time
-            time.sleep(10)
             source_files_config_spec_triples: List[Tuple[Path, Path, ProgramSpecification, bool]] = []
             source_files_config_spec_triples.extend((fi, config, spec, True) for fi in spec.get_source_files())
 
