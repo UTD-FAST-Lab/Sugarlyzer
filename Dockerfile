@@ -32,11 +32,23 @@ ENV CLASSPATH=:/superc/classes:/superc/bin/json-simple-1.1.1.jar:/superc/bin/jun
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
 RUN cd superc && make configure && make
 
+# fix to make docker not reinstall everything when the code changes
+# (cache fix)
 RUN python3.10 -m venv /venv
 ENV PATH=/venv/bin:$PATH
-ADD . /Sugarlyzer
+
+RUN mkdir /Sugarlyzer
 WORKDIR /Sugarlyzer
-RUN mv resources/SugarlyzerConfig /SugarlyzerConfig
+
+COPY requirements.txt .
+
 RUN python -m pip install -r requirements.txt --use-pep517
+
+ADD . .
+
+RUN mv resources/SugarlyzerConfig /SugarlyzerConfig
+
 RUN python -m pip install -e .
+
 WORKDIR /
+
