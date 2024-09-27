@@ -1,11 +1,12 @@
 import argparse
 import copy
 import functools
-import importlib
+from importlib.resources import as_file, files
 import json
 import logging
 import multiprocessing
 import os
+import random
 import shutil
 import subprocess
 import tempfile
@@ -37,11 +38,12 @@ logger = logging.getLogger(__name__)
 
 class Tester:
     def __init__(self, tool: str, program: str, baselines: bool, no_recommended_space: bool, jobs: int = None,
-                 validate: bool = False):
+                 validate: bool = False, sample_size: int = 1000):
         self.baselines = baselines
         self.no_recommended_space = no_recommended_space
         self.jobs: int = jobs
         self.validate = validate
+        self.sample_size = sample_size
 
         def read_json_and_validate(file: str) -> Dict[str, Any]:
             """
@@ -51,16 +53,17 @@ class Tester:
             :param file: The program file to read.
             :return: The JSON representation of the program file. Throws an exception if the file is malformed.
             """
-            with open(importlib.resources.path(f'resources.programs', 'program_schema.json'), 'r') as schema_file:
-                resolver = RefResolver.from_schema(schema := json.load(schema_file))
-                validator = Draft7Validator(schema, resolver)
-            with open(file, 'r') as program_file:
-                result = json.load(program_file)
-            validator.validate(result)
-            return result
+            with as_file(files("resources.programs").joinpath("program_schema.json")) as f:
+                with open(f, 'r') as schema_file:
+                    resolver = RefResolver.from_schema(schema := json.load(schema_file))
+                    validator = Draft7Validator(schema, resolver)
+                with open(file, 'r') as program_file:
+                    result = json.load(program_file)
+                validator.validate(result)
+                return result
 
-        program_as_json = read_json_and_validate(
-            importlib.resources.path(f'resources.programs.{program}', 'program.json'))
+        with as_file(files(f'resources.programs.{program}').joinpath("program.json")) as f:
+            program_as_json = read_json_and_validate(f)
         self.program: ProgramSpecification = ProgramSpecification(program, **program_as_json)
         self.tool: AbstractTool = AnalysisToolFactory().get_tool(tool)
         self.remove_errors = self.tool.remove_errors if self.program.remove_errors is None else self.program.remove_errors
@@ -115,7 +118,6 @@ class Tester:
         return ps_copy
 
     def execute(self):
-
         logger.info(f"Current environment is {os.environ}")
 
         output_folder = Path("/results") / Path(self.tool.name) / Path(self.program.name)
@@ -178,8 +180,6 @@ class Tester:
                                    total=len(input_files)):
                     alarms.extend(result)
 
-            logger.info(f"Got {len(alarms)} unique alarms.")
-
             buckets: List[List[Alarm]] = [[]]
 
             def alarm_match(a: Alarm, b: Alarm):
@@ -213,12 +213,57 @@ class Tester:
                 logger.info("Now validating....")
                 with ProcessPool(self.jobs) as p:
                     alarms = list(tqdm(p.imap(self.verify_alarm, alarms)))
+            alarms = self.postprocess_experimental_results([a.as_dict() for a in alarms])
         else:
             alarms = self.run_baseline_experiments()
+            logger.info("Deduplicating alarms")
+            alarms = self.dedup_and_process_alarms([a.as_dict() for a in alarms])
 
+        # Now time to postprocess alarms
+        logger.info("Got " + str(len(alarms)) + " alarms.")
         logger.debug("Writing alarms to file.")
         with open("/results.json", 'w') as f:
-            json.dump([a.as_dict() for a in alarms], f)
+            json.dump(alarms, f, indent=2)
+
+    def postprocess_experimental_results(self, experimental_results: List[Dict]) -> List[Dict]:
+        logger.info("Now postprocessing " + str(len(experimental_results)) + " alarms.")
+        def EQ(a, b):
+            if a['original_line'] != 'ERROR':
+                if 'verified' in a.keys() and 'verified' in b.keys():
+                    return a['sanitized_message'] == b['sanitized_message'] and a['input_file'] == b['input_file'] and a[
+                        'original_line'] == b['original_line'] and a['feasible'] == b['feasible'] and a['verified'] == b[
+                        'verified']
+                else:
+                    return a['sanitized_message'] == b['sanitized_message'] and a['input_file'] == b['input_file'] and a[
+                        'original_line'] == b['original_line'] and a['feasible'] == b['feasible']
+            a1 = a['function_line_range'].split(':')[-1]
+            a2 = a['function_line_range'].split(':')[-1]
+            b1 = b['function_line_range'].split(':')[-2]
+            b2 = b['function_line_range'].split(':')[-1]
+            return a1 == b1 and a2 == b2 and a['sanitized_message'] == b['sanitized_message'] and a['input_file'] == b[
+                'input_file'] and a['feasible'] == b['feasible']
+
+        original_length = len(experimental_results)
+        experimental_results = copy.deepcopy(experimental_results)
+        i = 0
+        while i < len(experimental_results):
+            # Remove infeasible results.
+            if not experimental_results[i]['feasible']:
+                logger.info("Removed infeasible alarm.")
+                experimental_results.pop(i)
+                continue
+            j = i + 1
+            # Merge configurations of equivalent results
+            while j < len(experimental_results):
+                if EQ(experimental_results[i], experimental_results[j]):
+                    experimental_results[i]['presence_condition'] = 'Or(' + experimental_results[i]['presence_condition'] + ',' + experimental_results[j][
+                        'presence_condition'] + ')'
+                    experimental_results.pop(j)
+                j += 1
+            i += 1
+        logger.info("Postprocessing resulted in " + str(len(experimental_results)) +
+                    " results compared to " + str(original_length) + " originally.")
+        return experimental_results
 
     def verify_alarm(self, alarm):
         alarm = copy.deepcopy(alarm)
@@ -233,8 +278,9 @@ class Tester:
                 mappedKey = k
                 mappedValue = v
                 if self.kgen_map != None:
-                    with open(importlib.resources.path(f'resources.programs.{self.program.name}', self.kgen_map)) as mapping:
-                        map = json.load(mapping)
+                    with as_file(files(f"resources.programs.{self.program.name}").joinpath(self.kgen_map)) as mapping:
+                        with open(mapping, 'r') as op:
+                            map = json.load(op)
                     kdef = k
                     if v.lower() == 'false':
                         kdef = '!'+kdef
@@ -297,7 +343,7 @@ class Tester:
         else:
             return alarm
 
-    def analyze_file_and_associate_configuration(self, file: Path, config: Path, ps: ProgramSpecification) -> Iterable[Alarm]:
+    def analyze_file_and_associate_configuration(self, file: Path, config: Path, ps: ProgramSpecification, delete=False) -> Iterable[Alarm]:
         def get_config_object(config: Path) -> List[Tuple[str, str]]:
             with open(config, 'r') as f:
                 lines = [l.strip() for l in f.readlines()]
@@ -314,41 +360,50 @@ class Tester:
         alarms_from_one_file = self.analyze_one_file(file, ps)
         for a in alarms_from_one_file:
             a.model = get_config_object(config)
+
+        if delete:
+            # Make sure we get the necessary information from the file before we delete it
+            for a in alarms_from_one_file:
+                x = a.function_line_range
+            os.remove(file)
+            try:
+                os.remove(str(file.absolute())[:-2] + ".o")
+            except Exception:
+                pass
+
         return alarms_from_one_file
 
     def run_baseline_experiments(self) -> Iterable[Alarm]:
         alarms: List[Alarm] = []
-        count = 0
-        count += 1
 
         logger.info("Performing code cloning for baseline experiments:")
 
-        spec_config_pairs: List[Tuple[ProgramSpecification, Path]] = []
         all_configs = list(self.program.get_baseline_configurations())
-        logger.debug(f"All configs are {all_configs}")
-        i = 0
+        if self.sample_size < 1000:
+            all_configs = random.sample(all_configs, self.sample_size)
+        logger.info(f"Selected configurations: {all_configs}")
 
-        with ProcessPool(self.jobs) as p:
-            for result in tqdm(p.imap(lambda x: (self.clone_program_and_configure(self.program, x), x),
-                                      all_configs),
-                               total=len(all_configs)):
-                # logger.info(f"Copying configuration {i}/1000")
-                i += 1
-                spec_config_pairs.append(result)
+        for config in all_configs:
+            spec = self.clone_program_and_configure(self.program, config)
+            source_files_config_spec_triples: List[Tuple[Path, Path, ProgramSpecification, bool]] = []
+            source_files_config_spec_triples.extend((fi, config, spec, True) for fi in spec.get_source_files())
 
-        logger.debug(f"Config pairs is {list((ps.search_context, x) for ps, x in spec_config_pairs)}")
-        source_files_config_spec_triples: List[Tuple[Path, Path, ProgramSpecification]] = []
-        for spec, config in spec_config_pairs:
-            source_files_config_spec_triples.extend((fi, config, spec) for fi in spec.get_source_files())
+            logger.info(f"Running analysis on {config.name}:")
+            logger.debug(f"Running analysis on pairs {source_files_config_spec_triples}")
+            with ProcessPool(self.jobs) as p:
+                for i in p.imap(lambda x: self.analyze_file_and_associate_configuration(*x),
+                               source_files_config_spec_triples):
+                    alarms.extend(i)
+            import shutil
+            for root, dirs, files in os.walk("/targets/" + config.name):
+                for file in files:
+                    os.remove(os.path.join(root, file))
 
-        logger.info("Running analysis:")
-        logger.debug(f"Running analysis on pairs {source_files_config_spec_triples}")
-        with ProcessPool(self.jobs) as p:
-            alarms = list()
-            for i in tqdm(
-                    p.imap(lambda x: self.analyze_file_and_associate_configuration(*x), source_files_config_spec_triples),
-                    total=len(source_files_config_spec_triples)):
-                alarms.extend(i)
+            for root, dirs, files in os.walk("/tmp", topdown=False):
+                for file in files:
+                    os.remove(os.path.join(root, file))
+                for dir in dirs:
+                    os.rmdir(os.path.join(root, dir))
 
         for alarm in alarms:
             alarm.get_recommended_space = (not self.no_recommended_space)
@@ -356,6 +411,45 @@ class Tester:
 
         return alarms
 
+    def dedup_and_process_alarms(self, alarms: List[Dict]) -> List[Dict]:
+        import re
+
+        for b in alarms:
+            b['configuration'] = [b['configuration']]
+            try:
+                b['original_configuration'] = [re.search(r"(\d*)\.config", b['input_file']).group(1)]
+            except AttributeError as ae:
+                b['original_configuration'] = []
+            assert (b['original_configuration'] is not None)
+            parts = b['input_file'].split('/')
+            b['input_file'] = '/' + '/'.join([parts[1], '/'.join(parts[3:])])
+
+        def eq(a, b):
+            for stat in ['input_file', 'input_line', 'message']:
+                if a[stat] != b[stat]:
+                    return False
+            if len(a['warning_path']) != len(b['warning_path']):
+                return False
+            for w in a['warning_path']:
+                if w not in b['warning_path']:
+                    return False
+            return True
+
+        deduped = []
+        for b in alarms:
+            assert (b['original_configuration'] is not None)
+            found = False
+            for d in deduped:
+                assert (d['original_configuration'] is not None)
+                if eq(b, d):
+                    found = True
+                    d['original_configuration'].extend(b['original_configuration'])
+                    d['configuration'] = [b['configuration'], *d['configuration']]
+                    break
+            if not found:
+                deduped.append(b)
+
+        return deduped
 
 def get_arguments() -> argparse.Namespace:
     p = argparse.ArgumentParser()
@@ -370,6 +464,8 @@ def get_arguments() -> argparse.Namespace:
     p.add_argument("--validate",
                    help="""Try running desugared alarms with Z3's configuration to see if they are retained.""",
                    action='store_true')
+    p.add_argument("--sample-size",
+                   help="The sample size to use for baselines (default 1000)", type=int)
     return p.parse_args()
 
 
@@ -390,7 +486,7 @@ def main():
     start = time.monotonic()
     args = get_arguments()
     set_up_logging(args)
-    t = Tester(args.tool, args.program, args.baselines, True, args.jobs, args.validate)
+    t = Tester(args.tool, args.program, args.baselines, True, args.jobs, args.validate, args.sample_size)
     t.execute()
     print(f'total time: {time.monotonic() - start}')
 
