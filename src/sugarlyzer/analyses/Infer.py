@@ -30,7 +30,7 @@ class Infer(AbstractTool):
             command_line_defs = []
 
         output_location = tempfile.mkdtemp()
-        cmd = ["infer", "--pulse-only", '-o', output_location, '--', "clang",
+        cmd = ["timeout", "--preserve-status", "2h", "infer", "--pulse-only", '-o', output_location, '--', "clang",
                *list(itertools.chain(*zip(itertools.cycle(["-I"]), included_dirs))),
                *list(itertools.chain(*zip(itertools.cycle(["--include"]), included_files))),
                *command_line_defs,

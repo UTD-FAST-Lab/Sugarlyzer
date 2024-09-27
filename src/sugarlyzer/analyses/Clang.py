@@ -31,7 +31,8 @@ class Clang(AbstractTool):
             included_files = []
 
         output_location = tempfile.mkdtemp()
-        cmd = ["clang-11", '--analyze', "-Xanalyzer", "-analyzer-output=text",
+        cmd = ["timeout", "--preserve-status", "2h", "clang-11", '--analyze', "-Xanalyzer",
+               "-analyzer-output=text",
                *list(itertools.chain(*zip(itertools.cycle(["-I"]), included_dirs))),
                *list(itertools.chain(*zip(itertools.cycle(["--include"]), included_files))),
                *command_line_defs,
@@ -42,8 +43,8 @@ class Clang(AbstractTool):
         stdout, stderr = pipes.communicate()
         stdout = str(stdout, 'UTF-8')
         stderr = str(stderr, 'UTF-8')
-        if (pipes.returncode != 0) or ("error" in stdout.lower()):
-            logger.warning(f"Running clang on file {str(file)} potentially failed.")
+        if (pipes.returncode != 0):
+            logger.warning(f"Running clang on file {str(file)} failed.")
             logger.warning(stdout)
 
         with open(output_location + '/report.report','w') as o:
