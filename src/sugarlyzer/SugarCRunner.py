@@ -15,6 +15,7 @@ from typing import List, Optional, Dict, Iterable
 from z3.z3 import Solver, sat, Bool, Int, Not, And, Or
 
 from src.sugarlyzer.models.Alarm import Alarm
+from src.sugarlyzer.util.ParseBashTime import parse_bash_time
 
 USER_DEFS = '/tmp/__sugarlyzerPredefs.h'
 
@@ -157,7 +158,6 @@ def desugar_file(file_to_desugar: Path,
                  commandline_declarations: Optional[Iterable[str]] = None) -> tuple[Path, Path]:
     """
     Runs the SugarC command.
-
     :param file_to_desugar: The C source code file to desugar.
     :param recommended_space: defines and undefs to be assumed while desugaring
     :param output_file: If provided, will specify the location of the output. Otherwise tacks on .desugared.c to the end of the base file name
@@ -199,13 +199,12 @@ def desugar_file(file_to_desugar: Path,
         case _:
             log_file = Path(log_file)
     if config_prefix != None:
-        cmd = ['timeout -k 10 10m','java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToPrefix', config_prefix, *commandline_args, *included_files, *included_directories,file_to_desugar]
+        cmd = ['/usr/bin/time', '-v', 'timeout -k 10 10m', 'java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToPrefix', config_prefix, *commandline_args, *included_files, *included_directories,file_to_desugar]
     elif whitelist != None:
-        cmd = ['timeout -k 10 10m','java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToWhitelist', whitelist, *commandline_args, *included_files, *included_directories,file_to_desugar]
+        cmd = ['/usr/bin/time', '-v', 'timeout -k 10 10m', 'java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToWhitelist', whitelist, *commandline_args, *included_files, *included_directories,file_to_desugar]
     else:
-        cmd = ['timeout -k 10 10m','java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', *commandline_args, *included_files, *included_directories,file_to_desugar]
+        cmd = ['/usr/bin/time', '-v', 'timeout -k 10 10m', 'java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', *commandline_args, *included_files, *included_directories,file_to_desugar]
     cmd = [str(s) for s in cmd]
-    logging.info(f'Command: {cmd}')
 
     to_append = None
     if remove_errors:
@@ -229,9 +228,9 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
     current_directory = os.curdir
     os.chdir(file_to_desugar.parent)
     logger.debug(f"In run_sugarc, running cmd {cmd_str} from directory {os.curdir}")
-    start = time.time()
+    start = time.monotonic()
     to_hash = list()
-    for tok in cmd_str.split(' '):
+    for tok in cmd_str.split(' ')[1:]:  # Skip /usr/bin/time
         if (path := Path(tok)).exists() and path.is_file():
             with open(path, 'r') as infile:
                 try:
@@ -246,6 +245,8 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
         hasher.update(bytes(st, 'utf-8'))
 
     digest = hasher.hexdigest()
+    usr_time = 0
+    sys_time = 0
     try:
         if (digest_file := (Path("/cached_desugared") / Path((digest + desugared_output.name)))).exists():
             logger.debug("Cache hit!")
@@ -254,13 +255,22 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
                     outfile.write(infile.read())
         else:
             logger.debug("Cache miss")
-            ps = subprocess.run(cmd_str.split(" "), capture_output=True)
-            with open(desugared_output, 'wb') as f:
+            logger.debug("Cmd string is " + cmd_str)
+            ps = subprocess.run(cmd_str, capture_output=True, text=True, shell=True, executable='/bin/bash')
+            try:
+                times = "\n".join(ps.stderr.split("\n")[-30:])
+                usr_time, sys_time, max_memory = parse_bash_time(times)
+                logger.info(f"CPU time to desugar {file_to_desugar} was {usr_time + sys_time}s")
+                logger.info(f"Total memory usage to desugar {file_to_desugar} was {max_memory}kb")
+            except Exception as ve:
+                logger.exception("Could not parse time in string " + times)
+
+            with open(desugared_output, 'w') as f:
                 f.write(ps.stdout)
-            with open(digest_file, 'wb') as f:
+            with open(digest_file, 'w') as f:
                 f.write(ps.stdout)
             logger.debug(f"Wrote to {desugared_output}")
-            with open(log_file, 'wb') as f:
+            with open(log_file, 'w') as f:
                 f.write(ps.stderr)
     finally:
         if (not desugared_output.exists()) or (os.path.getsize(desugared_output) == 0):
@@ -269,7 +279,7 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
             except UnboundLocalError:
                 logger.error(f"Could not desugar file {file_to_desugar}. Tried to output what went wrong but couldn't access subprocess output.")
         os.chdir(current_directory)
-    logger.info(f"{desugared_output} desugared in time:{time.time()-start} to file size:{desugared_output.stat().st_size}")
+    logger.info(f"{desugared_output} desugared in time:{time.monotonic()-start} (cpu time {usr_time + sys_time}) to file size:{desugared_output.stat().st_size}")
         
 
 def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Alarm]:
