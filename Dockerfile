@@ -19,6 +19,19 @@ RUN apt-get update \
                                       && rm /tmp/cmake-install.sh \
                                             && ln -s /opt/cmake-3.24.1/bin/* /usr/local/bin
 
+# Install cmake From https://www.softwarepronto.com/2022/09/dockerubuntu-installing-latest-cmake-on.html
+RUN apt-get update \
+  && apt-get -y install build-essential \
+    && apt-get install -y wget \
+      && rm -rf /var/lib/apt/lists/* \
+        && wget https://github.com/Kitware/CMake/releases/download/v3.24.1/cmake-3.24.1-Linux-x86_64.sh \
+              -q -O /tmp/cmake-install.sh \
+                    && chmod u+x /tmp/cmake-install.sh \
+                          && mkdir /opt/cmake-3.24.1 \
+                                && /tmp/cmake-install.sh --skip-license --prefix=/opt/cmake-3.24.1 \
+                                      && rm /tmp/cmake-install.sh \
+                                            && ln -s /opt/cmake-3.24.1/bin/* /usr/local/bin
+
 ARG JOBS
 RUN git clone https://github.com/Z3Prover/z3.git
 
@@ -46,14 +59,23 @@ ENV CLASSPATH=:/superc/classes:/superc/bin/json-simple-1.1.1.jar:/superc/bin/jun
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
 RUN cd superc && make configure && make
 
-WORKDIR /
-ADD "https://api.github.com/repos/pattersonz/sugarlyzerconfig/commits?per_page=1" latest_commit
-RUN git clone https://github.com/pattersonz/SugarlyzerConfig
-
+# fix to make docker not reinstall everything when the code changes
+# (cache fix)
 RUN python3.10 -m venv /venv
 ENV PATH=/venv/bin:$PATH
-ADD . /Sugarlyzer
+
+RUN mkdir /Sugarlyzer
 WORKDIR /Sugarlyzer
+
+COPY requirements.txt .
+
 RUN python -m pip install -r requirements.txt --use-pep517
+
+ADD . .
+
+RUN mv resources/SugarlyzerConfig /SugarlyzerConfig
+
 RUN python -m pip install -e .
+
 WORKDIR /
+

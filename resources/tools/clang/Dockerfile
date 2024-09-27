@@ -7,9 +7,8 @@ RUN add-apt-repository -y ppa:deadsnakes/ppa &&  \
     apt-get install -y z3 python3.10 python3-distutils python3-pip python3-apt python3.10-venv git \
     bison libjson-java sat4j openjdk-8-jdk default-jdk gcc g++ make libz3-java
 
-RUN apt-get install -y gcc make zlib1g-dev git curl
-
-# From https://www.softwarepronto.com/2022/09/dockerubuntu-installing-latest-cmake-on.html
+RUN apt-get install -y gcc make zlib1g-dev git
+# Install cmake From https://www.softwarepronto.com/2022/09/dockerubuntu-installing-latest-cmake-on.html
 RUN apt-get update \
   && apt-get -y install build-essential \
     && apt-get install -y wget \
