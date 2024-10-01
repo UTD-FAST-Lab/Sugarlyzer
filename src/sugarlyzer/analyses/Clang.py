@@ -43,13 +43,10 @@ class Clang(AbstractTool):
                '-nostdinc',
                "-c", file.absolute()]
         logger.info(f"Running cmd {' '.join(str(s) for s in cmd)}")
-        pipes = subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
-        stdout, stderr = pipes.communicate()
-        stdout = str(stdout, 'UTF-8')
-        stderr = str(stderr, 'UTF-8')
-        if (pipes.returncode != 0):
+        ps = subprocess.run(" ".join(str(s) for s in cmd), text=True, shell=True, capture_output=True, executable='/bin/bash')
+        if (ps.returncode != 0):
             logger.warning(f"Running clang on file {str(file)} failed.")
-            logger.warning(stdout)
+            logger.warning(ps.stdout)
 
         with open(output_location + '/report.report','w') as o:
             o.write(ps.stderr)
@@ -57,7 +54,7 @@ class Clang(AbstractTool):
         lines = ps.stdout.split("\n")
         logger.critical(f"Analysis time: {lines[-1]}")
             
-        for root, dirs, files in os.walk(output_location):
+        for root, _, files in os.walk(output_location):
             for fil in files:
                 if fil.startswith("report") and fil.endswith(".report"):
                     r = Path(root) / fil
