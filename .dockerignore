@@ -4,4 +4,6 @@ results
 **.log
 **/Dockerfile
 **/#*
-zachFiles
+test
+results.json
+results.json.log
