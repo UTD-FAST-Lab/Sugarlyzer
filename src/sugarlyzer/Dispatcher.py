@@ -43,7 +43,7 @@ v will print INFO and above. Two or more v's will print DEBUG or above.""", defa
     p.add_argument("--sample-size",
                    help="""Sample size for how many configurations to run (default 1000)""",
                    type=int,
-                   default=1000)
+                   default=100)
     return p.parse_args()
 
 

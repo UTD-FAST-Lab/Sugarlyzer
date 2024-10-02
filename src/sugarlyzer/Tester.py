@@ -465,7 +465,9 @@ def get_arguments() -> argparse.Namespace:
                    help="""Try running desugared alarms with Z3's configuration to see if they are retained.""",
                    action='store_true')
     p.add_argument("--sample-size",
-                   help="The sample size to use for baselines (default 1000)", type=int)
+                   help="The sample size to use for baselines (default 100)", type=int)
+    p.add_argument("--seed",
+                   help="The random seed to use for sampling baseline", type=int, default=1002)
     return p.parse_args()
 
 
@@ -485,6 +487,7 @@ def set_up_logging(args: argparse.Namespace) -> None:
 def main():
     start = time.monotonic()
     args = get_arguments()
+    random.seed(args.seed)
     set_up_logging(args)
     t = Tester(args.tool, args.program, args.baselines, True, args.jobs, args.validate, args.sample_size)
     t.execute()
