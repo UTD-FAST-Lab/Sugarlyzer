@@ -1,4 +1,4 @@
-docker~=7.0.0
+docker==7.1.0
 hypothesis==6.48.2
 z3-solver~=4.8.17.0
 jsonschema~=4.6.1
@@ -9,6 +9,4 @@ dill~=0.3.5.1
 z3~=0.2.0
 pcpp~=1.30
 urllib3<2.0
-# Until https://github.com/docker/docker-py/pull/3257 is published,
-# requests needs to be pinned to <2.32 to avoid a bug in docker-py.
-requests<2.32
+requests>=2.32
