@@ -379,31 +379,56 @@ class Tester:
         logger.info("Performing code cloning for baseline experiments:")
 
         all_configs = list(self.program.get_baseline_configurations())
-        if self.sample_size < 1000:
-            all_configs = random.sample(all_configs, self.sample_size)
-        logger.info(f"Selected configurations: {all_configs}")
+        if self.program.name.lower() == "varbugs":
+            # Need to restructure this and improve this code later, this is very hacky
+            alarms = []
 
-        for config in all_configs:
-            spec = self.clone_program_and_configure(self.program, config)
-            source_files_config_spec_triples: List[Tuple[Path, Path, ProgramSpecification, bool]] = []
-            source_files_config_spec_triples.extend((fi, config, spec, True) for fi in spec.get_source_files())
+            def varbugs_analyze_and_read(bc: ProgramSpecification.BaselineConfig) -> Iterable[Alarm]:
+                inc_files, inc_dirs, _ = self.program.inc_files_and_dirs_for_file(bc.source_file)
 
-            logger.info(f"Running analysis on {config.name}:")
-            logger.debug(f"Running analysis on pairs {source_files_config_spec_triples}")
+                def stringify_macro(tp: Tuple[str, str]) -> str:
+                    if tp[0].lower() == "def":
+                        return f"-D{tp[1]}"
+                    else:
+                        return f"-U{tp[1]}"
+                    
+                clds = [stringify_macro(tp) for tp in bc.macros]
+                alarms = self.tool.analyze_and_read(bc.source_file, command_line_defs=clds,
+                                                   included_dirs=inc_dirs, included_files=inc_files)
+                for a in alarms:
+                    a.model = [[f"{tp[0]} {tp[1]}" for tp in bc.macros]]
+                
+                return alarms
+            
             with ProcessPool(self.jobs) as p:
-                for i in p.imap(lambda x: self.analyze_file_and_associate_configuration(*x),
-                               source_files_config_spec_triples):
+                for i in p.imap(varbugs_analyze_and_read, all_configs):
                     alarms.extend(i)
-            import shutil
-            for root, dirs, files in os.walk("/targets/" + config.name):
-                for file in files:
-                    os.remove(os.path.join(root, file))
+        else:
+            if self.sample_size < 1000:
+                all_configs = random.sample(all_configs, self.sample_size)
+            logger.info(f"Selected configurations: {all_configs}")
 
-            for root, dirs, files in os.walk("/tmp", topdown=False):
-                for file in files:
-                    os.remove(os.path.join(root, file))
-                for dir in dirs:
-                    os.rmdir(os.path.join(root, dir))
+            for config in all_configs:
+                spec = self.clone_program_and_configure(self.program, config)
+                source_files_config_spec_triples: List[Tuple[Path, Path, ProgramSpecification, bool]] = []
+                source_files_config_spec_triples.extend((fi, config, spec, True) for fi in spec.get_source_files())
+
+                logger.info(f"Running analysis on {config.name}:")
+                logger.debug(f"Running analysis on pairs {source_files_config_spec_triples}")
+                with ProcessPool(self.jobs) as p:
+                    for i in p.imap(lambda x: self.analyze_file_and_associate_configuration(*x),
+                                source_files_config_spec_triples):
+                        alarms.extend(i)
+                import shutil
+                for root, dirs, files in os.walk("/targets/" + config.name):
+                    for file in files:
+                        os.remove(os.path.join(root, file))
+
+                for root, dirs, files in os.walk("/tmp", topdown=False):
+                    for file in files:
+                        os.remove(os.path.join(root, file))
+                    for dir in dirs:
+                        os.rmdir(os.path.join(root, dir))
 
         for alarm in alarms:
             alarm.get_recommended_space = (not self.no_recommended_space)
@@ -415,7 +440,6 @@ class Tester:
         import re
 
         for b in alarms:
-            b['configuration'] = [b['configuration']]
             try:
                 b['original_configuration'] = [re.search(r"(\d*)\.config", b['input_file']).group(1)]
             except AttributeError as ae:
@@ -444,7 +468,7 @@ class Tester:
                 if eq(b, d):
                     found = True
                     d['original_configuration'].extend(b['original_configuration'])
-                    d['configuration'] = [b['configuration'], *d['configuration']]
+                    d['configuration'].extend(b['configuration'])
                     break
             if not found:
                 deduped.append(b)

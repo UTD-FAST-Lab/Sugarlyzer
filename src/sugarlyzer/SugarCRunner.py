@@ -290,8 +290,6 @@ def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Al
     :param desugared_file: The location of the desugared file.
     :return: A report containing all results. TODO: Replace with some data structure?
     """
-    logger.debug("In process_alarms")
-
     with open(desugared_file, 'r') as fl:
         lines = list(map(lambda x: x.strip("\n"), fl.readlines()))
 
@@ -302,14 +300,26 @@ def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Al
     report = ''
     varis = condition_mapping.varis
     for w in alarms:
+        logger.debug(f"Processing condition for alarm detected in file {w.input_file}:{w.line_in_input_file}")
         w: Alarm
         w.static_condition_results = calculate_asserts(w, desugared_file)
+        logger.info(f"Result of calculate_asserts for warning {w.message} on file {w.input_file}:{w.line_in_input_file} is {w.static_condition_results}")
+        logger.info(f"Condition mapping replacers is {condition_mapping.replacers}")
         s = Solver()
         missingCondition = False
         for a in w.static_condition_results:
-            if a['var'] == '' or not a['var'] in condition_mapping.replacers.keys() or '"' in condition_mapping.replacers[a['var']]:
+            if a['var'] == '':
+                logger.debug(f"var is missing from {a}")
                 missingCondition = True
                 break
+            elif not a['var'] in condition_mapping.replacers.keys():
+                logger.debug(f"{a['var']} not in condition replacers.")
+                missingCondition = True
+                break
+#            elif '"' in condition_mapping.replacers[a['var']]:
+#                logger.debug(f"{condition_mapping.replacers[a['var']]} had a double quote in it.")
+#                missingCondition = True
+#                break
             if a['val']:
                 s.add(eval(condition_mapping.replacers[a['var']]))
             else:
@@ -542,7 +552,6 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
     # Example line:
     # ---Renaming text------------Static Condition ID we map to---Presence Condition
     # __static_condition_renaming("__static_condition_default_5", "(defined READ_X)");
-    logger.debug("In get_condition_mapping")
     # All conditions start with the renaming, if the line doesn't have this text, we aren't interested
     if not line.startswith('__static_condition_renaming('):
         return current_result
