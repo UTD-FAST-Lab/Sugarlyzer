@@ -174,9 +174,10 @@ class ProgramSpecification:
     @dataclass
     class BaselineConfig:
         source_file: Path
-        configuration: List[Tuple[str, str]] | Path
+        configuration: Optional[Path]
+        macros: Optional[List[Tuple[str, str]]]
 
-    def get_baseline_configurations(self) -> Iterable[Path]:
+    def get_baseline_configurations(self) -> Iterable[Path | BaselineConfig]:
         if self.sample_directory is None:
             # If we don't have a sample directory, we use the get_all_macros function to get every possible configuration.
             for source_file in tqdm(self.get_source_files()):
@@ -191,9 +192,10 @@ class ProgramSpecification:
                     else:
                         result = [a + [(b, options[-1])] for a in all_configurations(options[:-1]) for b in
                                   ["DEF", "UNDEF"]]
+                        logger.debug(f"Baseline configurations: {result}")
                         return result
 
-                yield from (ProgramSpecification.BaselineConfig(source_file, c) for c in all_configurations(macros))
+                yield from (ProgramSpecification.BaselineConfig(source_file, None, c) for c in all_configurations(macros)) 
         else:
             yield from self.try_resolve_path(self.sample_directory).iterdir()
 
