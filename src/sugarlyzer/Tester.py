@@ -160,7 +160,7 @@ class Tester:
                 input_files.append(result)
             logger.info(f"Finished desugaring the source code.")
             # 3/4. Run analysis tool, and read its results
-            logger.info(f"Collected {len([c for c in self.program.get_source_files()])} .c files to analyze.")
+            logger.info(f"Collected {len(fis := [c for c in self.program.get_source_files()])} .c files to analyze: {fis}.")
 
             def analyze_read_and_process(desugared_file: Path, original_file: Path, desugaring_time: float = None) -> \
                     Iterable[Alarm]:
@@ -228,20 +228,16 @@ class Tester:
     def postprocess_experimental_results(self, experimental_results: List[Dict]) -> List[Dict]:
         logger.info("Now postprocessing " + str(len(experimental_results)) + " alarms.")
         def EQ(a, b):
-            if a['original_line'] != 'ERROR':
-                if 'verified' in a.keys() and 'verified' in b.keys():
-                    return a['sanitized_message'] == b['sanitized_message'] and a['input_file'] == b['input_file'] and a[
-                        'original_line'] == b['original_line'] and a['feasible'] == b['feasible'] and a['verified'] == b[
-                        'verified']
-                else:
-                    return a['sanitized_message'] == b['sanitized_message'] and a['input_file'] == b['input_file'] and a[
-                        'original_line'] == b['original_line'] and a['feasible'] == b['feasible']
-            a1 = a['function_line_range'].split(':')[-1]
-            a2 = a['function_line_range'].split(':')[-1]
-            b1 = b['function_line_range'].split(':')[-2]
-            b2 = b['function_line_range'].split(':')[-1]
-            return a1 == b1 and a2 == b2 and a['sanitized_message'] == b['sanitized_message'] and a['input_file'] == b[
-                'input_file'] and a['feasible'] == b['feasible']
+            a_function_begin = a['function_line_range'].split(":")[-2]
+            a_function_end = a['function_line_range'].split(":")[-1]
+            b_function_begin = b['function_line_range'].split(":")[-2]
+            b_function_end = b['function_line_range'].split(":")[-1]
+            return a['original_line'] == b['original_line'] and \
+                   a_function_begin == b_function_begin and \
+                   a_function_end == b_function_end and\
+                   a['sanitized_message'] == b['sanitized_message'] and \
+                   a['input_file'] == b['input_file'] and \
+                   a['feasible'] == b['feasible']
 
         original_length = len(experimental_results)
         experimental_results = copy.deepcopy(experimental_results)
