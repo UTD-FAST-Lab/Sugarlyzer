@@ -12,7 +12,7 @@ from pathlib import Path
 from typing import List, Optional, Dict, Iterable
 
 # noinspection PyUnresolvedReferences
-from z3.z3 import Solver, sat, Bool, Int, Not, And, Or
+from z3.z3 import Solver, sat, Bool, Int, Not, And, Or, simplify
 
 from src.sugarlyzer.models.Alarm import Alarm
 from src.sugarlyzer.util.ParseBashTime import parse_bash_time
@@ -342,7 +342,10 @@ def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Al
                     allConditions.append('Not(' + condition_mapping.replacers[a['var']] + ')')
             varisUseRemoved = re.sub(r'varis\[\"(USE_[a-zA-Z_0-9]+)\"\]', r'\1', "And(" + ','.join(allConditions) + ')')
             varisDefRemoved = re.sub(r'varis\[\"(DEF_[a-zA-Z_0-9]+)\"\]', r'\1', varisUseRemoved)
-            w.presence_condition = varisDefRemoved
+            regex = re.compile("DEF[_A-Za-z0-9]*")
+            for match in re.findall(regex, varisDefRemoved):
+                exec(f"{match} = Bool('{match}')")
+            w.presence_condition = str(simplify(eval(varisDefRemoved)))
             report += str(w) + '\n'
         else:
             print('impossible constraints')

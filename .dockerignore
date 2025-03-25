@@ -5,5 +5,5 @@ results
 **/Dockerfile
 **/#*
 test
-results.json
-results.json.log
+results
+**/cached_desugared
