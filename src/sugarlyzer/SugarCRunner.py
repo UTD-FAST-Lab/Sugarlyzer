@@ -1,19 +1,21 @@
-import functools
+import itertools
 import itertools
 import logging
 import os
 import re
 import subprocess
-import sys
 import tempfile
+import time
 from dataclasses import dataclass, field
 from hashlib import sha256
 from pathlib import Path
-from typing import Tuple, List, Optional, Dict, Iterable
+from typing import List, Optional, Dict, Iterable
 
-from z3.z3 import Solver, sat, Bool, Int, Not, And, Or
+# noinspection PyUnresolvedReferences
+from z3.z3 import Solver, sat, Bool, Int, Not, And, Or, simplify
 
 from src.sugarlyzer.models.Alarm import Alarm
+from src.sugarlyzer.util.ParseBashTime import parse_bash_time
 
 USER_DEFS = '/tmp/__sugarlyzerPredefs.h'
 
@@ -146,6 +148,8 @@ def desugar_file(file_to_desugar: Path,
                  output_file: str = '',
                  log_file: str = '',
                  remove_errors: bool = False,
+                 config_prefix: str = None,
+                 whitelist: str = None,
                  no_stdlibs: bool = False,
                  keep_mem: bool = False,
                  make_main: bool = False,
@@ -154,7 +158,6 @@ def desugar_file(file_to_desugar: Path,
                  commandline_declarations: Optional[Iterable[str]] = None) -> tuple[Path, Path]:
     """
     Runs the SugarC command.
-
     :param file_to_desugar: The C source code file to desugar.
     :param recommended_space: defines and undefs to be assumed while desugaring
     :param output_file: If provided, will specify the location of the output. Otherwise tacks on .desugared.c to the end of the base file name
@@ -175,7 +178,7 @@ def desugar_file(file_to_desugar: Path,
     if recommended_space not in ['', None]:
         outfile.write(recommended_space)
     included_files.append(outfile.name)
-
+    outfile.flush()
     included_files = list(itertools.chain(*zip(['-include'] * len(included_files), included_files)))
     included_directories = list(itertools.chain(*zip(['-I'] * len(included_directories), included_directories)))
     commandline_args = []
@@ -195,20 +198,27 @@ def desugar_file(file_to_desugar: Path,
             log_file = file_to_desugar.with_suffix('.log')
         case _:
             log_file = Path(log_file)
-
-    cmd = ['timeout 60m', 'java', '-Xmx32g', 'superc.SugarC', *commandline_args, *included_files, *included_directories,
-           file_to_desugar]
+    if config_prefix != None:
+        cmd = ['/usr/bin/time', '-v', 'timeout -k 10 10m', 'java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToPrefix', config_prefix, *commandline_args, *included_files, *included_directories,file_to_desugar]
+    elif whitelist != None:
+        cmd = ['/usr/bin/time', '-v', 'timeout -k 10 10m', 'java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', '-restrictConfigToWhitelist', whitelist, *commandline_args, *included_files, *included_directories,file_to_desugar]
+    else:
+        cmd = ['/usr/bin/time', '-v', 'timeout -k 10 10m', 'java', '-Xmx32g', 'superc.SugarC', '-showActions', '-useBDD', *commandline_args, *included_files, *included_directories,file_to_desugar]
     cmd = [str(s) for s in cmd]
+
+    to_append = None
     if remove_errors:
         run_sugarc(" ".join(cmd), file_to_desugar, desugared_file, log_file)
-        logging.debug(f"Created desugared file {desugared_file}")
+        logger.debug(f"Created desugared file {desugared_file}")
         to_append = get_bad_constraints(desugared_file)
         for d in to_append:
             outfile.write(d + "\n")
-        logging.info(f'removed errors: {to_append}')
+        outfile.flush()
+        logger.debug(f'{desugared_file} removed errors: {to_append}')
 
-    logging.info(f"Cmd is {' '.join(cmd)}")
-    run_sugarc(" ".join(cmd), file_to_desugar, desugared_file, log_file)
+    logger.debug(f"Cmd is {' '.join(cmd)}")
+    if not remove_errors or remove_errors and len(to_append) > 0:
+        run_sugarc(" ".join(cmd), file_to_desugar, desugared_file, log_file)
     logger.debug(f"Wrote to {log_file}")
     outfile.close()
     return desugared_file, log_file
@@ -218,12 +228,15 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
     current_directory = os.curdir
     os.chdir(file_to_desugar.parent)
     logger.debug(f"In run_sugarc, running cmd {cmd_str} from directory {os.curdir}")
-
+    start = time.monotonic()
     to_hash = list()
-    for tok in cmd_str.split(' '):
+    for tok in cmd_str.split(' ')[1:]:  # Skip /usr/bin/time
         if (path := Path(tok)).exists() and path.is_file():
             with open(path, 'r') as infile:
-                to_hash.extend(infile.readlines())
+                try:
+                    to_hash.extend(infile.readlines())
+                except UnicodeError:
+                    print(f'failed to extend hash ::{infile.name}::')
         else:
             to_hash.extend(tok)
 
@@ -232,6 +245,8 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
         hasher.update(bytes(st, 'utf-8'))
 
     digest = hasher.hexdigest()
+    usr_time = 0
+    sys_time = 0
     try:
         if (digest_file := (Path("/cached_desugared") / Path((digest + desugared_output.name)))).exists():
             logger.debug("Cache hit!")
@@ -240,22 +255,32 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
                     outfile.write(infile.read())
         else:
             logger.debug("Cache miss")
-            ps = subprocess.run(cmd_str.split(" "), capture_output=True)
-            with open(desugared_output, 'wb') as f:
+            logger.debug("Cmd string is " + cmd_str)
+            ps = subprocess.run(cmd_str, capture_output=True, text=True, shell=True, executable='/bin/bash')
+            try:
+                times = "\n".join(ps.stderr.split("\n")[-30:])
+                usr_time, sys_time, max_memory = parse_bash_time(times)
+                logger.info(f"CPU time to desugar {file_to_desugar} was {usr_time + sys_time}s")
+                logger.info(f"Total memory usage to desugar {file_to_desugar} was {max_memory}kb")
+            except Exception as ve:
+                logger.exception("Could not parse time in string " + times)
+
+            with open(desugared_output, 'w') as f:
                 f.write(ps.stdout)
-            with open(digest_file, 'wb') as f:
+            with open(digest_file, 'w') as f:
                 f.write(ps.stdout)
-            logger.info(f"Wrote to {desugared_output}")
-            with open(log_file, 'wb') as f:
+            logger.debug(f"Wrote to {desugared_output}")
+            with open(log_file, 'w') as f:
                 f.write(ps.stderr)
     finally:
-        if (not desugared_output.exists()) or (desugared_output.stat().st_size == 0):
+        if (not desugared_output.exists()) or (os.path.getsize(desugared_output) == 0):
             try:
                 logger.error(f"Could not desugar file {file_to_desugar}")  # \n\tSugarC stdout: {ps.stdout}\n\tSugarC stderr: {ps.stderr}")
             except UnboundLocalError:
                 logger.error(f"Could not desugar file {file_to_desugar}. Tried to output what went wrong but couldn't access subprocess output.")
         os.chdir(current_directory)
-
+    logger.info(f"{desugared_output} desugared in time:{time.monotonic()-start} (cpu time {usr_time + sys_time}) to file size:{desugared_output.stat().st_size}")
+        
 
 def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Alarm]:
     """
@@ -265,8 +290,6 @@ def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Al
     :param desugared_file: The location of the desugared file.
     :return: A report containing all results. TODO: Replace with some data structure?
     """
-    logger.debug("In process_alarms")
-
     with open(desugared_file, 'r') as fl:
         lines = list(map(lambda x: x.strip("\n"), fl.readlines()))
 
@@ -277,14 +300,26 @@ def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Al
     report = ''
     varis = condition_mapping.varis
     for w in alarms:
+        logger.debug(f"Processing condition for alarm detected in file {w.input_file}:{w.line_in_input_file}")
         w: Alarm
         w.static_condition_results = calculate_asserts(w, desugared_file)
+        logger.info(f"Result of calculate_asserts for warning {w.message} on file {w.input_file}:{w.line_in_input_file} is {w.static_condition_results}")
+        logger.info(f"Condition mapping replacers is {condition_mapping.replacers}")
         s = Solver()
         missingCondition = False
         for a in w.static_condition_results:
-            if a['var'] == '' or not a['var'] in condition_mapping.replacers.keys():
+            if a['var'] == '':
+                logger.debug(f"var is missing from {a}")
                 missingCondition = True
                 break
+            elif not a['var'] in condition_mapping.replacers.keys():
+                logger.debug(f"{a['var']} not in condition replacers.")
+                missingCondition = True
+                break
+#            elif '"' in condition_mapping.replacers[a['var']]:
+#                logger.debug(f"{condition_mapping.replacers[a['var']]} had a double quote in it.")
+#                missingCondition = True
+#                break
             if a['val']:
                 s.add(eval(condition_mapping.replacers[a['var']]))
             else:
@@ -307,7 +342,10 @@ def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Al
                     allConditions.append('Not(' + condition_mapping.replacers[a['var']] + ')')
             varisUseRemoved = re.sub(r'varis\[\"(USE_[a-zA-Z_0-9]+)\"\]', r'\1', "And(" + ','.join(allConditions) + ')')
             varisDefRemoved = re.sub(r'varis\[\"(DEF_[a-zA-Z_0-9]+)\"\]', r'\1', varisUseRemoved)
-            w.presence_condition = varisDefRemoved
+            regex = re.compile("DEF[_A-Za-z0-9]*")
+            for match in re.findall(regex, varisDefRemoved):
+                exec(f"{match} = Bool('{match}')")
+            w.presence_condition = str(simplify(eval(varisDefRemoved)))
             report += str(w) + '\n'
         else:
             print('impossible constraints')
@@ -387,12 +425,12 @@ def calculate_asserts(w: Alarm, fpa):
                     continue
                 found = False
                 for x in w.all_relevant_lines:
-                    if start < x - 1 < end:
+                    if start < x - 1 <= end:
                         found = True
                         break
-                if not found:
-                    asrt = {'var': fl.split("(")[1].split(')')[0], 'val': False}
-                    result.append(asrt)
+                #if not found:
+                    #asrt = {'var': fl.split("(")[1].split(')')[0], 'val': False}
+                    #result.append(asrt)
 
         else:
             top = find_condition_scope(line, fpa, True)
@@ -452,18 +490,17 @@ def get_bad_constraints(desugared_file: Path) -> List[str]:
 
     # noinspection PyUnusedLocal
     varis = condition_mapping.varis  # To make the evals work (why did you do this to me)
-
+    condition_mapping.constraints = []
     logger.debug(f"Condition mapping is {str(condition_mapping)}")
     line_index = len(lines) - 1
     is_error = False
     solver = Solver()
     while line_index > 0:
-        if lines[line_index].startswith('__static_parse_error') or \
-           lines[line_index].startswith('__static_type_error'):
+        if lines[line_index].startswith('__static_type_error'):
             errorLine = find_condition_scope(line_index,desugared_file,True)
             condition = re.match('if \((__static_condition_default_\d+)\(\)\).*', lines[errorLine])
             if condition:
-                to_eval = 'Not('+condition_mapping.replacers[condition.group(1)]+')'
+                to_eval = condition_mapping.replacers[condition.group(1)]
                 logger.debug(f"to_eval is {to_eval}")
                 try:
                     solver.add(eval(to_eval))
@@ -471,7 +508,7 @@ def get_bad_constraints(desugared_file: Path) -> List[str]:
                     logger.exception(f"File is {desugared_file}")
         line_index -= 1
     for key in condition_mapping.ids.keys():
-        if key.startswith('defined '):
+        if key.startswith('defined ') and key[len('defined '):] not in condition_mapping.ids.keys():
             solver.push()
             expr = eval(condition_mapping.ids[key])
             logging.debug(f"Expr {condition_mapping.ids[key]} was evaluated to {expr}")
@@ -487,7 +524,6 @@ def get_bad_constraints(desugared_file: Path) -> List[str]:
                 condition_mapping.constraints.append('#define ' + key[len('defined '):])
             solver.pop()
     return condition_mapping.constraints
-
 
 @dataclass
 class ConditionMapping:
@@ -519,7 +555,6 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
     # Example line:
     # ---Renaming text------------Static Condition ID we map to---Presence Condition
     # __static_condition_renaming("__static_condition_default_5", "(defined READ_X)");
-    logger.debug("In get_condition_mapping")
     # All conditions start with the renaming, if the line doesn't have this text, we aren't interested
     if not line.startswith('__static_condition_renaming('):
         return current_result
@@ -574,9 +609,12 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
                 current_result.ids[splits[0][:-1]] = 'varis["' + v + '"] != 0'
                 current_result.varis[v] = Int(v)
             else:
-                v = 'USE_' + splits[0]
-                current_result.ids[splits[0]] = 'varis["' + v + '"]'
-                current_result.varis[v] = Int(v)
+                for segment in splits:
+                    if re.match(r'\(?^[A-Za-z_][A-Za-z0-9_]+\)?$',segment):
+                        snipped = segment if segment[-1] != ")" else segment[:-1]
+                        v = 'USE_' + snipped
+                        current_result.ids[snipped] = 'varis["' + v + '"]'
+                        current_result.varis[v] = Int(v)
         indxx += 1
     # accessing our string again, removing the ' "'
     condstr = conds[2:]
@@ -589,10 +627,19 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
             condstr = condstr.replace(x, current_result.ids[x])
         else:
             condstr = condstr.replace('(' + x, '(' + current_result.ids[x])
+            condstr = condstr.replace(' ' + x + ' ', ' ' + current_result.ids[x] + ' ')
+            condstr = condstr.replace(' ' + x + ')', ' ' + current_result.ids[x] + ')')
+
     # replace ! with the Not method
     condstr = condstr.replace('!(', 'Not(')
     # we treat this like RPN solvers with stacks, we need a stack of operators and operands
     # being boolean logic and conditions respectively
+    orsplits = condstr.split('||')
+    orsfixed = []
+    for o in orsplits:
+        orsfixed.append('And (' + ','.join(o.split('&&')) + ')')
+    reformatted = 'Or (' + ','.join(orsfixed) + ')'
+
     cs = re.split('&&|\|\|', condstr)
     ops = []
     logger.debug('rearranging ops 0:0')
@@ -639,6 +686,7 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
     ncondlist.clear()
     # if we are looking for the inverse (say we specifically do not take an if statement)
     # we want the inverse, so wrap it all in a Not method
+    ncondstr = reformatted
     if invert:
         ncondstr = 'Not(' + ncondstr + ')'
     # Finally map the static condition renaming to the re-written presence condition

@@ -4,7 +4,7 @@
   "title": "Program",
   "description": "A program specification",
   "type": "object",
-  "required": ["build_script"],
+    "required": ["build_script", "project_root"],
   "properties": {
     "remove_errors": {
       "description": "Whether to enable SugarC's remove_errors functionality (default False).",
@@ -15,7 +15,6 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["included_files", "included_directories"],
         "properties": {
           "file_pattern": {
             "description": "A regular expression to apply to the filename. If the regular expression is found within the filename, then we use the specified included directories and files. Note that patterns are applied in the order specified here. If this is not included, the rule will match every file.",
@@ -42,15 +41,28 @@
       "description": "The location of the build script.",
       "type": "string"
     },
-    "source_location": {
-      "description": "Where the source code will be after running the build_script.",
+      "project_root": {
+          "description": "The root directory of the project. For operations that copy the code to other locations, this will be the folder that is copied.",
+          "type": "string"
+
+      },
+    "make_root": {
+        "description": "The directory from which 'make' should be run (if not supplied, will default to project_root).",
+      "type": "string"
+    },
+    "source_dir": {
+        "description": "Where the source code will be after running the build_script (if not supplied, will default to project_root)",
       "type": "array",
       "items": {
         "type": "string"
       }
     },
-    "samples": {
+    "sample_dir": {
       "description": "A directory containing configuration samples.",
+      "type": "string"
+    },
+    "oldconfig_location": {
+      "description": "The file to copy configs to in baseline testing. By default, is project_root/config/.config",
       "type": "string"
     }
   }

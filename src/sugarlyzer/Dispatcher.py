@@ -5,7 +5,7 @@ logger = logging.getLogger(__name__)
 import docker as docker
 from docker.models.containers import Container
 import os
-import importlib.resources
+from importlib.resources import as_file, files
 import subprocess
 from pathlib import Path
 from typing import List, Optional
@@ -40,6 +40,10 @@ v will print INFO and above. Two or more v's will print DEBUG or above.""", defa
     p.add_argument("--validate",
                    help="""Try running desugared alarms with Z3's configuration to see if they are retained.""",
                    action='store_true')
+    p.add_argument("--sample-size",
+                   help="""Sample size for how many configurations to run (default 1000)""",
+                   type=int,
+                   default=100)
     return p.parse_args()
 
 
@@ -50,8 +54,9 @@ def get_dirs_in_package(package: str) -> List[str]:
     :return: A list of directories.
     """
     # noinspection PyTypeChecker
-    _, dirs, _ = next(os.walk(importlib.resources.path(package, '')))
-    return dirs
+    with as_file(files(package)) as f:
+        _, dirs, _ = next(os.walk(f))
+        return dirs
 
 
 def get_image_name(tool: Optional[str]) -> str:
@@ -81,9 +86,10 @@ def build_images(tools: List[str], nocache: bool, jobs: int) -> None:
     cmds.append(['docker', 'build', '.', '-t', 'sugarlyzer/base'])
 
     # Add commands to build any images for tools.
+
     for t in tools:
-        cmds.append(['docker', 'build', str(importlib.resources.path('resources.tools', t)),
-                     '-t', get_image_name(t)])
+        with as_file(files('resources.tools').joinpath(t)) as f:
+            cmds.append(['docker', 'build', str(f), '-t', get_image_name(t)])
 
     if nocache:
         for c in cmds:
@@ -125,6 +131,7 @@ def start_tester(t, args) -> None:
             command += f" --jobs {args.jobs}"
         if args.validate:
             command += " --validate"
+        command += f" --sample-size {args.sample_size}"
         cntr: Container = docker.from_env().containers.run(
             image=get_image_name(t),
             command="/bin/bash",
@@ -136,7 +143,7 @@ def start_tester(t, args) -> None:
         _, log_stream = cntr.exec_run(cmd=command, stream=True)
         logger.info(f"Started container with cmd {command}")
         for l in log_stream:
-            print(l.decode())
+            print(l.decode('utf-8', 'ignore'))
 
 
 def main() -> None:
