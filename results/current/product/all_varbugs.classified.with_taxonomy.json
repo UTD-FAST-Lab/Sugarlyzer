@@ -26,7 +26,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "dead_store"
   },
@@ -60,7 +60,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "uninitialized_value"
   },
@@ -93,7 +93,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -126,7 +126,7 @@
     "alarm_type": "ERROR",
     "bug_type": "MEMORY_LEAK",
     "original_configuration": [],
-    "classification": "TP",
+    "classification": "",
     "original_file": "infer_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -168,7 +168,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -202,7 +202,7 @@
     "alarm_type": "ERROR",
     "bug_type": "MEMORY_LEAK",
     "original_configuration": [],
-    "classification": "TP",
+    "classification": "",
     "original_file": "infer_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -240,7 +240,7 @@
     "alarm_type": "ERROR",
     "bug_type": "MEMORY_LEAK",
     "original_configuration": [],
-    "classification": "TP",
+    "classification": "",
     "original_file": "infer_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -278,7 +278,7 @@
     "alarm_type": "ERROR",
     "bug_type": "NULLPTR_DEREFERENCE",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "infer_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -312,7 +312,7 @@
     "alarm_type": "ERROR",
     "bug_type": "MEMORY_LEAK",
     "original_configuration": [],
-    "classification": "TP",
+    "classification": "",
     "original_file": "infer_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -346,7 +346,7 @@
     "alarm_type": "ERROR",
     "bug_type": "NULLPTR_DEREFERENCE",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "infer_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -380,7 +380,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -438,7 +438,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "dead_store"
   },
@@ -476,7 +476,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "dead_store"
   },
@@ -516,7 +516,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "dead_store"
   },
@@ -550,7 +550,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -588,7 +588,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -622,7 +622,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -657,7 +657,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -691,7 +691,7 @@
     "alarm_type": "ERROR",
     "bug_type": "NULLPTR_DEREFERENCE",
     "original_configuration": [],
-    "classification": "TP",
+    "classification": "",
     "original_file": "infer_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -737,7 +737,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -783,7 +783,7 @@
     "alarm_type": "ERROR",
     "bug_type": "NULLPTR_DEREFERENCE",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "infer_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -828,7 +828,7 @@
     "function": "showdirs",
     "variable": "arr",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "phasar_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -873,7 +873,7 @@
     "function": "main",
     "variable": "head",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "phasar_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -904,7 +904,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "dead_store"
   },
@@ -935,7 +935,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "dead_store"
   },
@@ -966,7 +966,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "dead_store"
   },
@@ -997,7 +997,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "dead_store"
   },
@@ -1033,7 +1033,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "uninitialized_value"
   },
@@ -1071,7 +1071,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "dead_store"
   },
@@ -1109,7 +1109,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "FP",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -1142,7 +1142,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "dead_store"
   },
@@ -1178,7 +1178,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -1212,7 +1212,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -1248,7 +1248,7 @@
     "alarm_type": "ERROR",
     "bug_type": "NULLPTR_DEREFERENCE",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "infer_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -1281,7 +1281,7 @@
     "alarm_type": "ERROR",
     "bug_type": "MEMORY_LEAK",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "infer_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -1318,7 +1318,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -1349,7 +1349,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "dead_store"
   },
@@ -1383,7 +1383,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -1415,7 +1415,7 @@
     "alarm_type": "ERROR",
     "bug_type": "MEMORY_LEAK",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "infer_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -1450,7 +1450,7 @@
     "function": "main",
     "variable": "buf",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "phasar_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -1485,7 +1485,7 @@
     "function": "main",
     "variable": "buf",
     "original_configuration": [],
-    "classification": "TP",
+    "classification": "",
     "original_file": "phasar_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -1523,7 +1523,7 @@
     "alarm_type": "ERROR",
     "bug_type": "MEMORY_LEAK",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "infer_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -1595,7 +1595,7 @@
     "alarm_type": "ERROR",
     "bug_type": "NULLPTR_DEREFERENCE",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "infer_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -1629,7 +1629,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "dead_store"
   },
@@ -1666,7 +1666,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -1701,7 +1701,7 @@
     "function": "reiserfs_security_init",
     "variable": "length",
     "original_configuration": [],
-    "classification": "TP",
+    "classification": "",
     "original_file": "phasar_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -1736,7 +1736,7 @@
     "function": "reiserfs_security_init",
     "variable": "length",
     "original_configuration": [],
-    "classification": "TP",
+    "classification": "",
     "original_file": "phasar_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -1771,7 +1771,7 @@
     "function": "reiserfs_security_init",
     "variable": "length",
     "original_configuration": [],
-    "classification": "TP",
+    "classification": "",
     "original_file": "phasar_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -1802,7 +1802,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "dead_store"
   },
@@ -1841,7 +1841,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -1877,7 +1877,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "dead_store"
   },
@@ -1912,7 +1912,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -1948,7 +1948,7 @@
     "alarm_type": "ERROR",
     "bug_type": "NULLPTR_DEREFERENCE",
     "original_configuration": [],
-    "classification": "TP",
+    "classification": "",
     "original_file": "infer_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -1986,7 +1986,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "dead_store"
   },
@@ -2024,7 +2024,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "dead_store"
   },
@@ -2058,7 +2058,7 @@
     "alarm_type": "ERROR",
     "bug_type": "MEMORY_LEAK",
     "original_configuration": [],
-    "classification": "FP",
+    "classification": "",
     "original_file": "infer_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -2100,7 +2100,7 @@
     "alarm_type": "ERROR",
     "bug_type": "MEMORY_LEAK",
     "original_configuration": [],
-    "classification": "FP",
+    "classification": "",
     "original_file": "infer_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -2136,7 +2136,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "dead_store"
   },
@@ -2172,7 +2172,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "dead_store"
   },
@@ -2213,7 +2213,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "FP",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "uninitialized_value"
   },
@@ -2247,7 +2247,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -2282,7 +2282,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -2335,7 +2335,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "memory_leak"
   },
@@ -2369,7 +2369,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "dead_store"
   },
@@ -2417,7 +2417,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "dead_store"
   },
@@ -2448,7 +2448,7 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "TP_NEW",
+    "classification": "",
     "original_file": "clang_varbugs.json.classified",
     "taxonomy_type": "dead_store"
   }
