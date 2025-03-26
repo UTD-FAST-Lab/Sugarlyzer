@@ -1,6 +1,6 @@
 [
   {
-    "id": "0",
+    "id": "PRODUCT_0",
     "input_file": "/targets/APACHE/1a3c8e3d840.c",
     "input_line": 13,
     "original_line": "13:13",
@@ -31,7 +31,7 @@
     "taxonomy_type": "dead_store"
   },
   {
-    "id": "0",
+    "id": "PRODUCT_1",
     "input_file": "/targets/APACHE/1b48bb3c1af.c",
     "input_line": 14,
     "original_line": "14:14",
@@ -65,7 +65,7 @@
     "taxonomy_type": "uninitialized_value"
   },
   {
-    "id": "0",
+    "id": "PRODUCT_2",
     "input_file": "/targets/APACHE/2a6cbfa00e0.c",
     "input_line": 16,
     "original_line": "16:16",
@@ -98,7 +98,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "0",
+    "id": "PRODUCT_3",
     "input_file": "/targets/APACHE/2a6cbfa00e0.c",
     "input_line": 9,
     "original_line": "9:9",
@@ -131,7 +131,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "0",
+    "id": "PRODUCT_4",
     "input_file": "/targets/APACHE/35ae2e259e4.c",
     "input_line": 24,
     "original_line": "24:24",
@@ -173,7 +173,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "0",
+    "id": "PRODUCT_5",
     "input_file": "/targets/APACHE/35ae2e259e4.c",
     "input_line": 11,
     "original_line": "11:11",
@@ -207,7 +207,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "1",
+    "id": "PRODUCT_6",
     "input_file": "/targets/APACHE/35ae2e259e4.c",
     "input_line": 12,
     "original_line": "12:12",
@@ -245,7 +245,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "2",
+    "id": "PRODUCT_7",
     "input_file": "/targets/APACHE/35ae2e259e4.c",
     "input_line": 12,
     "original_line": "12:12",
@@ -283,7 +283,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "1",
+    "id": "PRODUCT_8",
     "input_file": "/targets/APACHE/35ae2e259e4.c",
     "input_line": 17,
     "original_line": "17:17",
@@ -317,7 +317,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "3",
+    "id": "PRODUCT_9",
     "input_file": "/targets/APACHE/35ae2e259e4.c",
     "input_line": 17,
     "original_line": "17:17",
@@ -351,7 +351,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "0",
+    "id": "PRODUCT_10",
     "input_file": "/targets/APACHE/bbeb0516cf0.c",
     "input_line": 6,
     "original_line": "6:6",
@@ -385,7 +385,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "0",
+    "id": "PRODUCT_11",
     "input_file": "/targets/APACHE/c76df14dfb4.c",
     "input_line": 42,
     "original_line": "42:42",
@@ -443,7 +443,7 @@
     "taxonomy_type": "dead_store"
   },
   {
-    "id": "1",
+    "id": "PRODUCT_12",
     "input_file": "/targets/APACHE/c76df14dfb4.c",
     "input_line": 38,
     "original_line": "38:38",
@@ -481,7 +481,7 @@
     "taxonomy_type": "dead_store"
   },
   {
-    "id": "0",
+    "id": "PRODUCT_13",
     "input_file": "/targets/BUSYBOX/061fd0a353e.c",
     "input_line": 16,
     "original_line": "16:16",
@@ -521,7 +521,7 @@
     "taxonomy_type": "dead_store"
   },
   {
-    "id": "1",
+    "id": "PRODUCT_14",
     "input_file": "/targets/BUSYBOX/061fd0a353e.c",
     "input_line": 20,
     "original_line": "20:20",
@@ -555,7 +555,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "2",
+    "id": "PRODUCT_15",
     "input_file": "/targets/BUSYBOX/061fd0a353e.c",
     "input_line": 27,
     "original_line": "27:27",
@@ -593,7 +593,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "0",
+    "id": "PRODUCT_16",
     "input_file": "/targets/BUSYBOX/199501f2a00.c",
     "input_line": 21,
     "original_line": "21:21",
@@ -627,7 +627,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "0",
+    "id": "PRODUCT_17",
     "input_file": "/targets/BUSYBOX/1b487ea8a69.c",
     "input_line": 14,
     "original_line": "14:14",
@@ -662,7 +662,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "0",
+    "id": "PRODUCT_18",
     "input_file": "/targets/BUSYBOX/1b487ea8a69.c",
     "input_line": 14,
     "original_line": "14:14",
@@ -696,7 +696,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "0",
+    "id": "PRODUCT_19",
     "input_file": "/targets/BUSYBOX/2631486f1bf.c",
     "input_line": 67,
     "original_line": "67:67",
@@ -742,7 +742,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "0",
+    "id": "PRODUCT_20",
     "input_file": "/targets/BUSYBOX/2631486f1bf.c",
     "input_line": 66,
     "original_line": "66:66",
@@ -788,7 +788,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "0",
+    "id": "PRODUCT_21",
     "input_file": "/targets/BUSYBOX/2631486f1bf.c",
     "input_line": 29,
     "original_line": "29:29",
@@ -833,7 +833,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "1",
+    "id": "PRODUCT_22",
     "input_file": "/targets/BUSYBOX/2631486f1bf.c",
     "input_line": 67,
     "original_line": "67:67",
@@ -878,7 +878,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "1",
+    "id": "PRODUCT_23",
     "input_file": "/targets/BUSYBOX/5275b1e49f6.c",
     "input_line": 16,
     "original_line": "16:16",
@@ -909,7 +909,7 @@
     "taxonomy_type": "dead_store"
   },
   {
-    "id": "2",
+    "id": "PRODUCT_24",
     "input_file": "/targets/BUSYBOX/5275b1e49f6.c",
     "input_line": 18,
     "original_line": "18:18",
@@ -940,7 +940,7 @@
     "taxonomy_type": "dead_store"
   },
   {
-    "id": "3",
+    "id": "PRODUCT_25",
     "input_file": "/targets/BUSYBOX/5275b1e49f6.c",
     "input_line": 21,
     "original_line": "21:21",
@@ -971,7 +971,7 @@
     "taxonomy_type": "dead_store"
   },
   {
-    "id": "4",
+    "id": "PRODUCT_26",
     "input_file": "/targets/BUSYBOX/5275b1e49f6.c",
     "input_line": 25,
     "original_line": "25:25",
@@ -1002,7 +1002,7 @@
     "taxonomy_type": "dead_store"
   },
   {
-    "id": "1",
+    "id": "PRODUCT_27",
     "input_file": "/targets/BUSYBOX/b273d665181.c",
     "input_line": 16,
     "original_line": "16:16",
@@ -1038,7 +1038,7 @@
     "taxonomy_type": "uninitialized_value"
   },
   {
-    "id": "1",
+    "id": "PRODUCT_28",
     "input_file": "/targets/BUSYBOX/b62bd7b261b.c",
     "input_line": 16,
     "original_line": "16:16",
@@ -1076,7 +1076,7 @@
     "taxonomy_type": "dead_store"
   },
   {
-    "id": "2",
+    "id": "PRODUCT_29",
     "input_file": "/targets/BUSYBOX/b62bd7b261b.c",
     "input_line": 24,
     "original_line": "24:24",
@@ -1114,7 +1114,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "0",
+    "id": "PRODUCT_30",
     "input_file": "/targets/BUSYBOX/b62bd7b261b.c",
     "input_line": 14,
     "original_line": "14:14",
@@ -1147,7 +1147,7 @@
     "taxonomy_type": "dead_store"
   },
   {
-    "id": "0",
+    "id": "PRODUCT_31",
     "input_file": "/targets/BUSYBOX/bc0ffc0e971.c",
     "input_line": 43,
     "original_line": "43:43",
@@ -1183,7 +1183,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "1",
+    "id": "PRODUCT_32",
     "input_file": "/targets/BUSYBOX/bc0ffc0e971.c",
     "input_line": 46,
     "original_line": "46:46",
@@ -1217,7 +1217,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "1",
+    "id": "PRODUCT_33",
     "input_file": "/targets/BUSYBOX/bc0ffc0e971.c",
     "input_line": 30,
     "original_line": "30:30",
@@ -1253,7 +1253,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "2",
+    "id": "PRODUCT_34",
     "input_file": "/targets/BUSYBOX/bc0ffc0e971.c",
     "input_line": 40,
     "original_line": "40:40",
@@ -1286,7 +1286,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "0",
+    "id": "PRODUCT_35",
     "input_file": "/targets/BUSYBOX/eef2317b9f5.c",
     "input_line": 30,
     "original_line": "30:30",
@@ -1323,7 +1323,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "1",
+    "id": "PRODUCT_36",
     "input_file": "/targets/BUSYBOX/eef2317b9f5.c",
     "input_line": 26,
     "original_line": "26:26",
@@ -1354,7 +1354,7 @@
     "taxonomy_type": "dead_store"
   },
   {
-    "id": "2",
+    "id": "PRODUCT_37",
     "input_file": "/targets/BUSYBOX/eef2317b9f5.c",
     "input_line": 34,
     "original_line": "34:34",
@@ -1388,7 +1388,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "0",
+    "id": "PRODUCT_38",
     "input_file": "/targets/BUSYBOX/eef2317b9f5.c",
     "input_line": 26,
     "original_line": "26:26",
@@ -1420,7 +1420,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "0",
+    "id": "PRODUCT_39",
     "input_file": "/targets/BUSYBOX/eef2317b9f5.c",
     "input_line": 30,
     "original_line": "30:30",
@@ -1455,7 +1455,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "1",
+    "id": "PRODUCT_40",
     "input_file": "/targets/BUSYBOX/eef2317b9f5.c",
     "input_line": 31,
     "original_line": "31:31",
@@ -1490,7 +1490,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "0",
+    "id": "PRODUCT_41",
     "input_file": "/targets/LINUX/0dc77b6dabe.c",
     "input_line": 109,
     "original_line": "109:109",
@@ -1528,7 +1528,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "0",
+    "id": "PRODUCT_42",
     "input_file": "/targets/LINUX/221ac329e93.c",
     "input_line": 37,
     "original_line": "37:37",
@@ -1600,7 +1600,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "0",
+    "id": "PRODUCT_43",
     "input_file": "/targets/LINUX/30e053248da.c",
     "input_line": 31,
     "original_line": "31:31",
@@ -1634,7 +1634,7 @@
     "taxonomy_type": "dead_store"
   },
   {
-    "id": "0",
+    "id": "PRODUCT_44",
     "input_file": "/targets/LINUX/30e053248da.c",
     "input_line": 31,
     "original_line": "31:31",
@@ -1671,7 +1671,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "0",
+    "id": "PRODUCT_45",
     "input_file": "/targets/LINUX/30e053248da.c",
     "input_line": 24,
     "original_line": "24:24",
@@ -1706,7 +1706,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "1",
+    "id": "PRODUCT_46",
     "input_file": "/targets/LINUX/30e053248da.c",
     "input_line": 27,
     "original_line": "27:27",
@@ -1741,7 +1741,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "2",
+    "id": "PRODUCT_47",
     "input_file": "/targets/LINUX/30e053248da.c",
     "input_line": 31,
     "original_line": "31:31",
@@ -1776,7 +1776,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "0",
+    "id": "PRODUCT_48",
     "input_file": "/targets/LINUX/36855dcfc98.c",
     "input_line": 6,
     "original_line": "6:6",
@@ -1807,7 +1807,7 @@
     "taxonomy_type": "dead_store"
   },
   {
-    "id": "0",
+    "id": "PRODUCT_49",
     "input_file": "/targets/LINUX/472a474c663.c",
     "input_line": 14,
     "original_line": "14:14",
@@ -1846,7 +1846,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "3",
+    "id": "PRODUCT_50",
     "input_file": "/targets/LINUX/6252547b8a7.c",
     "input_line": 12,
     "original_line": "12:12",
@@ -1882,7 +1882,7 @@
     "taxonomy_type": "dead_store"
   },
   {
-    "id": "3",
+    "id": "PRODUCT_51",
     "input_file": "/targets/LINUX/6252547b8a7.c",
     "input_line": 12,
     "original_line": "12:12",
@@ -1917,7 +1917,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "0",
+    "id": "PRODUCT_52",
     "input_file": "/targets/LINUX/6252547b8a7.c",
     "input_line": 25,
     "original_line": "25:25",
@@ -1953,7 +1953,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "1",
+    "id": "PRODUCT_53",
     "input_file": "/targets/LINUX/66517915e09.c",
     "input_line": 16,
     "original_line": "16:16",
@@ -1991,7 +1991,7 @@
     "taxonomy_type": "dead_store"
   },
   {
-    "id": "2",
+    "id": "PRODUCT_54",
     "input_file": "/targets/LINUX/66517915e09.c",
     "input_line": 24,
     "original_line": "24:24",
@@ -2029,7 +2029,7 @@
     "taxonomy_type": "dead_store"
   },
   {
-    "id": "0",
+    "id": "PRODUCT_55",
     "input_file": "/targets/LINUX/6e2b75740be.c",
     "input_line": 67,
     "original_line": "67:67",
@@ -2063,7 +2063,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "1",
+    "id": "PRODUCT_56",
     "input_file": "/targets/LINUX/6e2b75740be.c",
     "input_line": 67,
     "original_line": "67:67",
@@ -2105,7 +2105,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "2",
+    "id": "PRODUCT_57",
     "input_file": "/targets/LINUX/7acf6cd80b2.c",
     "input_line": 8,
     "original_line": "8:8",
@@ -2141,7 +2141,7 @@
     "taxonomy_type": "dead_store"
   },
   {
-    "id": "3",
+    "id": "PRODUCT_58",
     "input_file": "/targets/LINUX/7acf6cd80b2.c",
     "input_line": 39,
     "original_line": "39:39",
@@ -2177,7 +2177,7 @@
     "taxonomy_type": "dead_store"
   },
   {
-    "id": "4",
+    "id": "PRODUCT_59",
     "input_file": "/targets/LINUX/7acf6cd80b2.c",
     "input_line": 44,
     "original_line": "44:44",
@@ -2218,7 +2218,7 @@
     "taxonomy_type": "uninitialized_value"
   },
   {
-    "id": "5",
+    "id": "PRODUCT_60",
     "input_file": "/targets/LINUX/c708c57e247.c",
     "input_line": 18,
     "original_line": "18:18",
@@ -2252,7 +2252,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "1",
+    "id": "PRODUCT_61",
     "input_file": "/targets/LINUX/e39363a9def.c",
     "input_line": 17,
     "original_line": "17:17",
@@ -2287,7 +2287,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "6",
+    "id": "PRODUCT_62",
     "input_file": "/targets/LINUX/ee3f34e8572.c",
     "input_line": 45,
     "original_line": "45:45",
@@ -2340,7 +2340,7 @@
     "taxonomy_type": "memory_leak"
   },
   {
-    "id": "1",
+    "id": "PRODUCT_63",
     "input_file": "/targets/LINUX/ee3f34e8572.c",
     "input_line": 44,
     "original_line": "44:44",
@@ -2374,7 +2374,7 @@
     "taxonomy_type": "dead_store"
   },
   {
-    "id": "4",
+    "id": "PRODUCT_64",
     "input_file": "/targets/MARLIN/8c4377dd635.c",
     "input_line": 19,
     "original_line": "19:19",
@@ -2422,7 +2422,7 @@
     "taxonomy_type": "dead_store"
   },
   {
-    "id": "3",
+    "id": "PRODUCT_65",
     "input_file": "/targets/MARLIN/e30bfedce4d.c",
     "input_line": 24,
     "original_line": "24:24",
