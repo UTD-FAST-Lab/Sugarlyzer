@@ -131,10 +131,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-**/results/
-**/results.json
-**/result.json.log
+**/logs
 **/cached_desugared
- 
+**/joblog
 # Emacs autosave
 \#*

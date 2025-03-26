@@ -29,7 +29,7 @@
     "alarm_type": "warning",
     "original_file": "clang_varbugs.json",
     "taxonomy_type": "dead_store",
-    "classification": "TP_NEW"
+    "classification": ""
   },
   {
     "id": "2",
@@ -61,7 +61,7 @@
     "alarm_type": "warning",
     "original_file": "clang_varbugs.json",
     "taxonomy_type": "dead_store",
-    "classification": "TP_NEW"
+    "classification": ""
   },
   {
     "id": "0",
@@ -102,7 +102,7 @@
     "alarm_type": "warning",
     "original_file": "clang_varbugs.json",
     "taxonomy_type": "uninitialized_value",
-    "classification": "TP"
+    "classification": ""
   },
   {
     "id": "2",
@@ -144,7 +144,7 @@
     "alarm_type": "warning",
     "original_file": "clang_varbugs.json",
     "taxonomy_type": "uninitialized_value",
-    "classification": "TP"
+    "classification": ""
   },
   {
     "id": "0",
@@ -175,7 +175,7 @@
     "variable": "__rmm_lock_691",
     "original_file": "phasar_varbugs.json",
     "taxonomy_type": "memory_leak",
-    "classification": "FP"
+    "classification": ""
   },
   {
     "id": "2",
@@ -205,7 +205,7 @@
     "variable": "__rmm_lock_691",
     "original_file": "phasar_varbugs.json",
     "taxonomy_type": "memory_leak",
-    "classification": "FP"
+    "classification": ""
   },
   {
     "id": "3",
@@ -238,7 +238,7 @@
     "variable": "__rmm_lock_701",
     "original_file": "phasar_varbugs.json",
     "taxonomy_type": "memory_leak",
-    "classification": "TP"
+    "classification": ""
   },
   {
     "id": "5",
@@ -270,7 +270,7 @@
     "variable": "__rmm_lock_701",
     "original_file": "phasar_varbugs.json",
     "taxonomy_type": "memory_leak",
-    "classification": "TP"
+    "classification": ""
   },
   {
     "id": "0",
@@ -309,7 +309,7 @@
     "alarm_type": "warning",
     "original_file": "clang_varbugs.json",
     "taxonomy_type": "uninitialized_value",
-    "classification": "TP_NEW"
+    "classification": ""
   },
   {
     "id": "1",
@@ -352,7 +352,7 @@
     "alarm_type": "warning",
     "original_file": "clang_varbugs.json",
     "taxonomy_type": "uninitialized_value",
-    "classification": "TP_NEW"
+    "classification": ""
   },
   {
     "id": "2",
@@ -391,7 +391,7 @@
     "alarm_type": "warning",
     "original_file": "clang_varbugs.json",
     "taxonomy_type": "memory_leak",
-    "classification": "FP"
+    "classification": ""
   },
   {
     "id": "3",
