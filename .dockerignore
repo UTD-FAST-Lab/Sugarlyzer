@@ -3,3 +3,7 @@ venv
 results
 **.log
 **/Dockerfile
+**/#*
+test
+results
+**/cached_desugared

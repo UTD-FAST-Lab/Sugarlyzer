@@ -4,5 +4,5 @@ CURDIR=$(pwd)
 cd /
 mkdir -p targets
 cd targets
-git clone https://github.com/pattersonz/VarBugsPatches
+mv /Sugarlyzer/resources/programs/varbugs/VarBugsPatches .
 cd $CURDIR
