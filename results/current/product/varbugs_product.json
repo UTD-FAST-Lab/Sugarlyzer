@@ -14,7 +14,7 @@
         "DEF HAVE_TLSV1_X"
       ]
     ],
-    "analysis_time": 0.04098569811321795,
+    "analysis_time": 0.02601862302981317,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -26,9 +26,9 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "dead_store"
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
   },
   {
     "id": "PRODUCT_1",
@@ -46,7 +46,7 @@
         "DEF APU_HAS_LDAP"
       ]
     ],
-    "analysis_time": 0.0424221430439502,
+    "analysis_time": 0.02504443802172318,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -60,9 +60,9 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "uninitialized_value"
+    "original_file": "clang.json",
+    "taxonomy_type": "uninitialized_value",
+    "classification": ""
   },
   {
     "id": "PRODUCT_2",
@@ -79,7 +79,7 @@
         "UNDEF SHARED_MODULE"
       ]
     ],
-    "analysis_time": 0.04873284511268139,
+    "analysis_time": 0.024821127008181065,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -93,9 +93,9 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
     "id": "PRODUCT_3",
@@ -112,7 +112,7 @@
         "UNDEF SHARED_MODULE"
       ]
     ],
-    "analysis_time": 15.105520511977375,
+    "analysis_time": 1.0323688189964741,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -126,9 +126,9 @@
     "alarm_type": "ERROR",
     "bug_type": "MEMORY_LEAK",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "infer_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
     "id": "PRODUCT_4",
@@ -142,15 +142,15 @@
     "feasible": null,
     "configuration": [
       [
-        "DEF SSL_CTX_set_ecdh_auto",
-        "DEF HAVE_ECC"
+        "DEF HAVE_ECC",
+        "DEF SSL_CTX_set_ecdh_auto"
       ],
       [
-        "UNDEF SSL_CTX_set_ecdh_auto",
-        "DEF HAVE_ECC"
+        "DEF HAVE_ECC",
+        "UNDEF SSL_CTX_set_ecdh_auto"
       ]
     ],
-    "analysis_time": 0.04518497991375625,
+    "analysis_time": 0.026237842976115644,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -168,9 +168,9 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
     "id": "PRODUCT_5",
@@ -188,7 +188,7 @@
         "DEF SSL_CTX_set_ecdh_auto"
       ]
     ],
-    "analysis_time": 14.330882326001301,
+    "analysis_time": 1.134339899988845,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -202,9 +202,9 @@
     "alarm_type": "ERROR",
     "bug_type": "MEMORY_LEAK",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "infer_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
     "id": "PRODUCT_6",
@@ -226,7 +226,7 @@
         "UNDEF SSL_CTX_set_ecdh_auto"
       ]
     ],
-    "analysis_time": 14.330882326001301,
+    "analysis_time": 1.134339899988845,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -240,9 +240,9 @@
     "alarm_type": "ERROR",
     "bug_type": "MEMORY_LEAK",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "infer_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
     "id": "PRODUCT_7",
@@ -264,7 +264,7 @@
         "UNDEF SSL_CTX_set_ecdh_auto"
       ]
     ],
-    "analysis_time": 14.330882326001301,
+    "analysis_time": 1.134339899988845,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -278,9 +278,9 @@
     "alarm_type": "ERROR",
     "bug_type": "NULLPTR_DEREFERENCE",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "infer_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
     "id": "PRODUCT_8",
@@ -298,7 +298,7 @@
         "UNDEF SSL_CTX_set_ecdh_auto"
       ]
     ],
-    "analysis_time": 14.002207434969023,
+    "analysis_time": 1.1766588470200077,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -312,9 +312,9 @@
     "alarm_type": "ERROR",
     "bug_type": "MEMORY_LEAK",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "infer_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
     "id": "PRODUCT_9",
@@ -332,7 +332,7 @@
         "UNDEF SSL_CTX_set_ecdh_auto"
       ]
     ],
-    "analysis_time": 14.002207434969023,
+    "analysis_time": 1.1766588470200077,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -346,9 +346,9 @@
     "alarm_type": "ERROR",
     "bug_type": "NULLPTR_DEREFERENCE",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "infer_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
     "id": "PRODUCT_10",
@@ -365,7 +365,7 @@
         "DEF APR_FILES_AS_SOCKETS"
       ]
     ],
-    "analysis_time": 0.04226379794999957,
+    "analysis_time": 0.03250358602963388,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -380,9 +380,9 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
     "id": "PRODUCT_11",
@@ -426,7 +426,7 @@
         "UNDEF OS2"
       ]
     ],
-    "analysis_time": 0.05568664101883769,
+    "analysis_time": 0.025971602008212358,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -438,9 +438,9 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "dead_store"
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
   },
   {
     "id": "PRODUCT_12",
@@ -464,7 +464,7 @@
         "DEF OS2"
       ]
     ],
-    "analysis_time": 0.051621477119624615,
+    "analysis_time": 0.028876367956399918,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -476,9 +476,9 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "dead_store"
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
   },
   {
     "id": "PRODUCT_13",
@@ -504,7 +504,7 @@
         "UNDEF CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF"
       ]
     ],
-    "analysis_time": 0.048649667063727975,
+    "analysis_time": 0.030002793995663524,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -516,9 +516,9 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "dead_store"
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
   },
   {
     "id": "PRODUCT_14",
@@ -536,7 +536,7 @@
         "DEF CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF"
       ]
     ],
-    "analysis_time": 0.048649667063727975,
+    "analysis_time": 0.030002793995663524,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -550,9 +550,9 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
     "id": "PRODUCT_15",
@@ -574,7 +574,7 @@
         "DEF CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF"
       ]
     ],
-    "analysis_time": 0.048649667063727975,
+    "analysis_time": 0.030002793995663524,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -588,12 +588,57 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
     "id": "PRODUCT_16",
+    "input_file": "/targets/BUSYBOX/061fd0a353e.c",
+    "input_line": 27,
+    "original_line": "27:27",
+    "function_line_range": "GLOBAL:1:37",
+    "message": "Uninitialized Variable p",
+    "sanitized_message": "Uninitialized Variable p",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF",
+        "DEF CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF"
+      ],
+      [
+        "DEF CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF",
+        "UNDEF CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF",
+        "DEF CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF",
+        "UNDEF CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF"
+      ]
+    ],
+    "analysis_time": 0.06470389396417886,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        27
+      ]
+    ],
+    "function": "main",
+    "variable": "p",
+    "original_configuration": [],
+    "original_file": "phasar.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_17",
     "input_file": "/targets/BUSYBOX/199501f2a00.c",
     "input_line": 21,
     "original_line": "21:21",
@@ -607,7 +652,7 @@
         "UNDEF ENABLE_FEATURE_MODPROBE_MULTIPLE_OPTIONS"
       ]
     ],
-    "analysis_time": 0.051420214120298624,
+    "analysis_time": 0.02539279096527025,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -622,12 +667,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_17",
+    "id": "PRODUCT_18",
     "input_file": "/targets/BUSYBOX/1b487ea8a69.c",
     "input_line": 14,
     "original_line": "14:14",
@@ -642,7 +687,7 @@
         "UNDEF ENABLE_FEATURE_STAT_FORMAT"
       ]
     ],
-    "analysis_time": 0.058340493123978376,
+    "analysis_time": 0.029423861007671803,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -657,12 +702,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_18",
+    "id": "PRODUCT_19",
     "input_file": "/targets/BUSYBOX/1b487ea8a69.c",
     "input_line": 14,
     "original_line": "14:14",
@@ -677,7 +722,7 @@
         "UNDEF ENABLE_FEATURE_STAT_FORMAT"
       ]
     ],
-    "analysis_time": 16.249085710849613,
+    "analysis_time": 1.1020804590079933,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -691,12 +736,12 @@
     "alarm_type": "ERROR",
     "bug_type": "NULLPTR_DEREFERENCE",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "infer_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_19",
+    "id": "PRODUCT_20",
     "input_file": "/targets/BUSYBOX/2631486f1bf.c",
     "input_line": 67,
     "original_line": "67:67",
@@ -723,7 +768,7 @@
         "UNDEF CONFIG_FEATURE_LS_SORTFILES"
       ]
     ],
-    "analysis_time": 0.056365893920883536,
+    "analysis_time": 0.036515127052553,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -737,12 +782,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_20",
+    "id": "PRODUCT_21",
     "input_file": "/targets/BUSYBOX/2631486f1bf.c",
     "input_line": 66,
     "original_line": "66:66",
@@ -753,23 +798,23 @@
     "feasible": null,
     "configuration": [
       [
-        "DEF CONFIG_FEATURE_LS_SORTFILES",
-        "DEF CONFIG_FEATURE_LS_RECURSIVE"
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
       ],
       [
-        "DEF CONFIG_FEATURE_LS_SORTFILES",
-        "UNDEF CONFIG_FEATURE_LS_RECURSIVE"
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
       ],
       [
-        "UNDEF CONFIG_FEATURE_LS_SORTFILES",
-        "DEF CONFIG_FEATURE_LS_RECURSIVE"
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
       ],
       [
-        "UNDEF CONFIG_FEATURE_LS_SORTFILES",
-        "UNDEF CONFIG_FEATURE_LS_RECURSIVE"
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
       ]
     ],
-    "analysis_time": 16.63822429906577,
+    "analysis_time": 1.109550186956767,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -783,12 +828,12 @@
     "alarm_type": "ERROR",
     "bug_type": "NULLPTR_DEREFERENCE",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "infer_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_21",
+    "id": "PRODUCT_22",
     "input_file": "/targets/BUSYBOX/2631486f1bf.c",
     "input_line": 29,
     "original_line": "29:29",
@@ -799,23 +844,23 @@
     "feasible": null,
     "configuration": [
       [
-        "DEF CONFIG_FEATURE_LS_SORTFILES",
-        "DEF CONFIG_FEATURE_LS_RECURSIVE"
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
       ],
       [
-        "DEF CONFIG_FEATURE_LS_SORTFILES",
-        "UNDEF CONFIG_FEATURE_LS_RECURSIVE"
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
       ],
       [
-        "UNDEF CONFIG_FEATURE_LS_SORTFILES",
-        "DEF CONFIG_FEATURE_LS_RECURSIVE"
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
       ],
       [
-        "UNDEF CONFIG_FEATURE_LS_SORTFILES",
-        "UNDEF CONFIG_FEATURE_LS_RECURSIVE"
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
       ]
     ],
-    "analysis_time": 0.14069976122118533,
+    "analysis_time": 0.07748499704757705,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -828,12 +873,372 @@
     "function": "showdirs",
     "variable": "arr",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "phasar_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "phasar.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_22",
+    "id": "PRODUCT_23",
+    "input_file": "/targets/BUSYBOX/2631486f1bf.c",
+    "input_line": 43,
+    "original_line": "43:43",
+    "function_line_range": "GLOBAL:1:79",
+    "message": "Uninitialized Variable arr",
+    "sanitized_message": "Uninitialized Variable arr",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ]
+    ],
+    "analysis_time": 0.07748499704757705,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        43
+      ]
+    ],
+    "function": "sort",
+    "variable": "arr",
+    "original_configuration": [],
+    "original_file": "phasar.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_24",
+    "input_file": "/targets/BUSYBOX/2631486f1bf.c",
+    "input_line": 48,
+    "original_line": "48:48",
+    "function_line_range": "GLOBAL:1:79",
+    "message": "Uninitialized Variable arr",
+    "sanitized_message": "Uninitialized Variable arr",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ]
+    ],
+    "analysis_time": 0.07748499704757705,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        48
+      ]
+    ],
+    "function": "sort",
+    "variable": "arr",
+    "original_configuration": [],
+    "original_file": "phasar.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_25",
+    "input_file": "/targets/BUSYBOX/2631486f1bf.c",
+    "input_line": 48,
+    "original_line": "48:48",
+    "function_line_range": "GLOBAL:1:79",
+    "message": "Uninitialized Variable  arr",
+    "sanitized_message": "Uninitialized Variable  arr",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ]
+    ],
+    "analysis_time": 0.07748499704757705,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        48
+      ]
+    ],
+    "function": "sort",
+    "variable": " arr",
+    "original_configuration": [],
+    "original_file": "phasar.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_26",
+    "input_file": "/targets/BUSYBOX/2631486f1bf.c",
+    "input_line": 49,
+    "original_line": "49:49",
+    "function_line_range": "GLOBAL:1:79",
+    "message": "Uninitialized Variable arr",
+    "sanitized_message": "Uninitialized Variable arr",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ]
+    ],
+    "analysis_time": 0.07748499704757705,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        49
+      ]
+    ],
+    "function": "sort",
+    "variable": "arr",
+    "original_configuration": [],
+    "original_file": "phasar.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_27",
+    "input_file": "/targets/BUSYBOX/2631486f1bf.c",
+    "input_line": 50,
+    "original_line": "50:50",
+    "function_line_range": "GLOBAL:1:79",
+    "message": "Uninitialized Variable arr",
+    "sanitized_message": "Uninitialized Variable arr",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ]
+    ],
+    "analysis_time": 0.07748499704757705,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        50
+      ]
+    ],
+    "function": "sort",
+    "variable": "arr",
+    "original_configuration": [],
+    "original_file": "phasar.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_28",
+    "input_file": "/targets/BUSYBOX/2631486f1bf.c",
+    "input_line": 50,
+    "original_line": "50:50",
+    "function_line_range": "GLOBAL:1:79",
+    "message": "Uninitialized Variable  arr",
+    "sanitized_message": "Uninitialized Variable  arr",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ]
+    ],
+    "analysis_time": 0.07748499704757705,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        50
+      ]
+    ],
+    "function": "sort",
+    "variable": " arr",
+    "original_configuration": [],
+    "original_file": "phasar.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_29",
+    "input_file": "/targets/BUSYBOX/2631486f1bf.c",
+    "input_line": 51,
+    "original_line": "51:51",
+    "function_line_range": "GLOBAL:1:79",
+    "message": "Uninitialized Variable temp",
+    "sanitized_message": "Uninitialized Variable temp",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ]
+    ],
+    "analysis_time": 0.07748499704757705,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        51
+      ]
+    ],
+    "function": "sort",
+    "variable": "temp",
+    "original_configuration": [],
+    "original_file": "phasar.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_30",
+    "input_file": "/targets/BUSYBOX/2631486f1bf.c",
+    "input_line": 51,
+    "original_line": "51:51",
+    "function_line_range": "GLOBAL:1:79",
+    "message": "Uninitialized Variable  arr",
+    "sanitized_message": "Uninitialized Variable  arr",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ]
+    ],
+    "analysis_time": 0.07748499704757705,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        51
+      ]
+    ],
+    "function": "sort",
+    "variable": " arr",
+    "original_configuration": [],
+    "original_file": "phasar.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_31",
     "input_file": "/targets/BUSYBOX/2631486f1bf.c",
     "input_line": 67,
     "original_line": "67:67",
@@ -844,23 +1249,23 @@
     "feasible": null,
     "configuration": [
       [
-        "DEF CONFIG_FEATURE_LS_SORTFILES",
-        "DEF CONFIG_FEATURE_LS_RECURSIVE"
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
       ],
       [
-        "DEF CONFIG_FEATURE_LS_SORTFILES",
-        "UNDEF CONFIG_FEATURE_LS_RECURSIVE"
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
       ],
       [
-        "UNDEF CONFIG_FEATURE_LS_SORTFILES",
-        "DEF CONFIG_FEATURE_LS_RECURSIVE"
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
       ],
       [
-        "UNDEF CONFIG_FEATURE_LS_SORTFILES",
-        "UNDEF CONFIG_FEATURE_LS_RECURSIVE"
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
       ]
     ],
-    "analysis_time": 0.14069976122118533,
+    "analysis_time": 0.07748499704757705,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -873,12 +1278,12 @@
     "function": "main",
     "variable": "head",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "phasar_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "phasar.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_23",
+    "id": "PRODUCT_32",
     "input_file": "/targets/BUSYBOX/5275b1e49f6.c",
     "input_line": 16,
     "original_line": "16:16",
@@ -892,7 +1297,7 @@
         "DEF CONFIG_FEATURE_INSMOD_VERSION_CHECKING"
       ]
     ],
-    "analysis_time": 0.045513364020735025,
+    "analysis_time": 0.02827721502399072,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -904,12 +1309,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "dead_store"
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_24",
+    "id": "PRODUCT_33",
     "input_file": "/targets/BUSYBOX/5275b1e49f6.c",
     "input_line": 18,
     "original_line": "18:18",
@@ -923,7 +1328,7 @@
         "DEF CONFIG_FEATURE_INSMOD_VERSION_CHECKING"
       ]
     ],
-    "analysis_time": 0.045513364020735025,
+    "analysis_time": 0.02827721502399072,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -935,12 +1340,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "dead_store"
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_25",
+    "id": "PRODUCT_34",
     "input_file": "/targets/BUSYBOX/5275b1e49f6.c",
     "input_line": 21,
     "original_line": "21:21",
@@ -954,7 +1359,7 @@
         "DEF CONFIG_FEATURE_INSMOD_VERSION_CHECKING"
       ]
     ],
-    "analysis_time": 0.045513364020735025,
+    "analysis_time": 0.02827721502399072,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -966,12 +1371,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "dead_store"
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_26",
+    "id": "PRODUCT_35",
     "input_file": "/targets/BUSYBOX/5275b1e49f6.c",
     "input_line": 25,
     "original_line": "25:25",
@@ -985,7 +1390,7 @@
         "DEF CONFIG_FEATURE_INSMOD_VERSION_CHECKING"
       ]
     ],
-    "analysis_time": 0.045513364020735025,
+    "analysis_time": 0.02827721502399072,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -997,12 +1402,81 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "dead_store"
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_27",
+    "id": "PRODUCT_36",
+    "input_file": "/targets/BUSYBOX/5cd6461b6fb.c",
+    "input_line": 36,
+    "original_line": "36:36",
+    "function_line_range": "GLOBAL:1:47",
+    "message": "Uninitialized Variable request",
+    "sanitized_message": "Uninitialized Variable request",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_LFS",
+        "DEF CONFIG_FEATURE_HTTPD_BASIC_AUTH",
+        "DEF CONFIG_FEATURE_HTTPD_CGI"
+      ],
+      [
+        "DEF CONFIG_LFS",
+        "DEF CONFIG_FEATURE_HTTPD_BASIC_AUTH",
+        "UNDEF CONFIG_FEATURE_HTTPD_CGI"
+      ],
+      [
+        "DEF CONFIG_LFS",
+        "UNDEF CONFIG_FEATURE_HTTPD_BASIC_AUTH",
+        "DEF CONFIG_FEATURE_HTTPD_CGI"
+      ],
+      [
+        "DEF CONFIG_LFS",
+        "UNDEF CONFIG_FEATURE_HTTPD_BASIC_AUTH",
+        "UNDEF CONFIG_FEATURE_HTTPD_CGI"
+      ],
+      [
+        "UNDEF CONFIG_LFS",
+        "DEF CONFIG_FEATURE_HTTPD_BASIC_AUTH",
+        "DEF CONFIG_FEATURE_HTTPD_CGI"
+      ],
+      [
+        "UNDEF CONFIG_LFS",
+        "DEF CONFIG_FEATURE_HTTPD_BASIC_AUTH",
+        "UNDEF CONFIG_FEATURE_HTTPD_CGI"
+      ],
+      [
+        "UNDEF CONFIG_LFS",
+        "UNDEF CONFIG_FEATURE_HTTPD_BASIC_AUTH",
+        "DEF CONFIG_FEATURE_HTTPD_CGI"
+      ],
+      [
+        "UNDEF CONFIG_LFS",
+        "UNDEF CONFIG_FEATURE_HTTPD_BASIC_AUTH",
+        "UNDEF CONFIG_FEATURE_HTTPD_CGI"
+      ]
+    ],
+    "analysis_time": 0.0734770679846406,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        36
+      ]
+    ],
+    "function": "handleIncoming",
+    "variable": "request",
+    "original_configuration": [],
+    "original_file": "phasar.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_37",
     "input_file": "/targets/BUSYBOX/b273d665181.c",
     "input_line": 16,
     "original_line": "16:16",
@@ -1013,11 +1487,11 @@
     "feasible": null,
     "configuration": [
       [
-        "UNDEF BB_FEATURE_LS_USERNAME",
-        "DEF BB_FEATURE_LS_FILETYPES"
+        "DEF BB_FEATURE_LS_FILETYPES",
+        "UNDEF BB_FEATURE_LS_USERNAME"
       ]
     ],
-    "analysis_time": 0.04150097700767219,
+    "analysis_time": 0.02691709902137518,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -1033,12 +1507,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "uninitialized_value"
+    "original_file": "clang.json",
+    "taxonomy_type": "uninitialized_value",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_28",
+    "id": "PRODUCT_38",
     "input_file": "/targets/BUSYBOX/b62bd7b261b.c",
     "input_line": 16,
     "original_line": "16:16",
@@ -1049,17 +1523,17 @@
     "feasible": null,
     "configuration": [
       [
-        "DEF ENABLE_FEATURE_MDEV_CONF",
         "DEF ENABLE_FEATURE_MDEV_RENAME",
-        "DEF ENABLE_FEATURE_MDEV_RENAME_REGEXP"
+        "DEF ENABLE_FEATURE_MDEV_RENAME_REGEXP",
+        "DEF ENABLE_FEATURE_MDEV_CONF"
       ],
       [
-        "DEF ENABLE_FEATURE_MDEV_CONF",
         "DEF ENABLE_FEATURE_MDEV_RENAME",
-        "UNDEF ENABLE_FEATURE_MDEV_RENAME_REGEXP"
+        "UNDEF ENABLE_FEATURE_MDEV_RENAME_REGEXP",
+        "DEF ENABLE_FEATURE_MDEV_CONF"
       ]
     ],
-    "analysis_time": 0.050913328072056174,
+    "analysis_time": 0.03226762602571398,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -1071,12 +1545,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "dead_store"
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_29",
+    "id": "PRODUCT_39",
     "input_file": "/targets/BUSYBOX/b62bd7b261b.c",
     "input_line": 24,
     "original_line": "24:24",
@@ -1087,12 +1561,12 @@
     "feasible": null,
     "configuration": [
       [
-        "DEF ENABLE_FEATURE_MDEV_CONF",
         "DEF ENABLE_FEATURE_MDEV_RENAME",
-        "DEF ENABLE_FEATURE_MDEV_RENAME_REGEXP"
+        "DEF ENABLE_FEATURE_MDEV_RENAME_REGEXP",
+        "DEF ENABLE_FEATURE_MDEV_CONF"
       ]
     ],
-    "analysis_time": 0.050913328072056174,
+    "analysis_time": 0.03226762602571398,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -1109,12 +1583,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_30",
+    "id": "PRODUCT_40",
     "input_file": "/targets/BUSYBOX/b62bd7b261b.c",
     "input_line": 14,
     "original_line": "14:14",
@@ -1125,12 +1599,12 @@
     "feasible": null,
     "configuration": [
       [
-        "DEF ENABLE_FEATURE_MDEV_CONF",
         "DEF ENABLE_FEATURE_MDEV_RENAME",
-        "UNDEF ENABLE_FEATURE_MDEV_RENAME_REGEXP"
+        "UNDEF ENABLE_FEATURE_MDEV_RENAME_REGEXP",
+        "DEF ENABLE_FEATURE_MDEV_CONF"
       ]
     ],
-    "analysis_time": 0.05144168785773218,
+    "analysis_time": 0.025403950014151633,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -1142,12 +1616,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "dead_store"
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_31",
+    "id": "PRODUCT_41",
     "input_file": "/targets/BUSYBOX/bc0ffc0e971.c",
     "input_line": 43,
     "original_line": "43:43",
@@ -1161,7 +1635,7 @@
         "DEF ENABLE_FEATURE_CLEAN_UP"
       ]
     ],
-    "analysis_time": 0.04843255691230297,
+    "analysis_time": 0.029555631044786423,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -1178,12 +1652,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_32",
+    "id": "PRODUCT_42",
     "input_file": "/targets/BUSYBOX/bc0ffc0e971.c",
     "input_line": 46,
     "original_line": "46:46",
@@ -1197,7 +1671,7 @@
         "UNDEF ENABLE_FEATURE_CLEAN_UP"
       ]
     ],
-    "analysis_time": 0.05367398587986827,
+    "analysis_time": 0.0324341359664686,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -1212,12 +1686,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_33",
+    "id": "PRODUCT_43",
     "input_file": "/targets/BUSYBOX/bc0ffc0e971.c",
     "input_line": 30,
     "original_line": "30:30",
@@ -1234,7 +1708,7 @@
         "UNDEF ENABLE_FEATURE_CLEAN_UP"
       ]
     ],
-    "analysis_time": 29.09450181783177,
+    "analysis_time": 0.8699904210516252,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -1248,12 +1722,12 @@
     "alarm_type": "ERROR",
     "bug_type": "NULLPTR_DEREFERENCE",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "infer_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_34",
+    "id": "PRODUCT_44",
     "input_file": "/targets/BUSYBOX/bc0ffc0e971.c",
     "input_line": 40,
     "original_line": "40:40",
@@ -1267,7 +1741,7 @@
         "UNDEF ENABLE_FEATURE_CLEAN_UP"
       ]
     ],
-    "analysis_time": 30.530949811218306,
+    "analysis_time": 0.710480406996794,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -1281,12 +1755,12 @@
     "alarm_type": "ERROR",
     "bug_type": "MEMORY_LEAK",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "infer_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_35",
+    "id": "PRODUCT_45",
     "input_file": "/targets/BUSYBOX/eef2317b9f5.c",
     "input_line": 30,
     "original_line": "30:30",
@@ -1300,7 +1774,7 @@
         "DEF CONFIG_FEATURE_CLEAN_UP"
       ]
     ],
-    "analysis_time": 0.06421510712243617,
+    "analysis_time": 0.031623313028831035,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -1318,12 +1792,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_36",
+    "id": "PRODUCT_46",
     "input_file": "/targets/BUSYBOX/eef2317b9f5.c",
     "input_line": 26,
     "original_line": "26:26",
@@ -1337,7 +1811,7 @@
         "UNDEF CONFIG_FEATURE_CLEAN_UP"
       ]
     ],
-    "analysis_time": 0.04646456195041537,
+    "analysis_time": 0.031437802012078464,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -1349,12 +1823,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "dead_store"
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_37",
+    "id": "PRODUCT_47",
     "input_file": "/targets/BUSYBOX/eef2317b9f5.c",
     "input_line": 34,
     "original_line": "34:34",
@@ -1368,7 +1842,7 @@
         "UNDEF CONFIG_FEATURE_CLEAN_UP"
       ]
     ],
-    "analysis_time": 0.04646456195041537,
+    "analysis_time": 0.031437802012078464,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -1383,12 +1857,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_38",
+    "id": "PRODUCT_48",
     "input_file": "/targets/BUSYBOX/eef2317b9f5.c",
     "input_line": 26,
     "original_line": "26:26",
@@ -1402,7 +1876,7 @@
         "UNDEF CONFIG_FEATURE_CLEAN_UP"
       ]
     ],
-    "analysis_time": 17.353142235893756,
+    "analysis_time": 1.0038641199935228,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -1415,82 +1889,12 @@
     "alarm_type": "ERROR",
     "bug_type": "MEMORY_LEAK",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "infer_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_39",
-    "input_file": "/targets/BUSYBOX/eef2317b9f5.c",
-    "input_line": 30,
-    "original_line": "30:30",
-    "function_line_range": "GLOBAL:1:35",
-    "message": "Uninitialized Variable buf",
-    "sanitized_message": "Uninitialized Variable buf",
-    "presence_condition": null,
-    "feasible": null,
-    "configuration": [
-      [
-        "DEF CONFIG_FEATURE_CLEAN_UP"
-      ],
-      [
-        "UNDEF CONFIG_FEATURE_CLEAN_UP"
-      ]
-    ],
-    "analysis_time": 0.12326096603646874,
-    "desugaring_time": null,
-    "get_recommended_space": false,
-    "remove_errors": false,
-    "verified": null,
-    "warning_path": [
-      [
-        30
-      ]
-    ],
-    "function": "main",
-    "variable": "buf",
-    "original_configuration": [],
-    "classification": "",
-    "original_file": "phasar_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
-  },
-  {
-    "id": "PRODUCT_40",
-    "input_file": "/targets/BUSYBOX/eef2317b9f5.c",
-    "input_line": 31,
-    "original_line": "31:31",
-    "function_line_range": "GLOBAL:1:35",
-    "message": "Uninitialized Variable buf",
-    "sanitized_message": "Uninitialized Variable buf",
-    "presence_condition": null,
-    "feasible": null,
-    "configuration": [
-      [
-        "DEF CONFIG_FEATURE_CLEAN_UP"
-      ],
-      [
-        "UNDEF CONFIG_FEATURE_CLEAN_UP"
-      ]
-    ],
-    "analysis_time": 0.12326096603646874,
-    "desugaring_time": null,
-    "get_recommended_space": false,
-    "remove_errors": false,
-    "verified": null,
-    "warning_path": [
-      [
-        31
-      ]
-    ],
-    "function": "main",
-    "variable": "buf",
-    "original_configuration": [],
-    "classification": "",
-    "original_file": "phasar_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
-  },
-  {
-    "id": "PRODUCT_41",
+    "id": "PRODUCT_49",
     "input_file": "/targets/LINUX/0dc77b6dabe.c",
     "input_line": 109,
     "original_line": "109:109",
@@ -1501,11 +1905,11 @@
     "feasible": null,
     "configuration": [
       [
-        "DEF CONFIG_EXTCON",
-        "DEF CONFIG_ANDROID"
+        "DEF CONFIG_ANDROID",
+        "DEF CONFIG_EXTCON"
       ]
     ],
-    "analysis_time": 16.406833697808906,
+    "analysis_time": 1.3362671340000816,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -1523,12 +1927,12 @@
     "alarm_type": "ERROR",
     "bug_type": "MEMORY_LEAK",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "infer_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_42",
+    "id": "PRODUCT_50",
     "input_file": "/targets/LINUX/221ac329e93.c",
     "input_line": 37,
     "original_line": "37:37",
@@ -1540,48 +1944,48 @@
     "configuration": [
       [
         "DEF CONFIG_KPROBES",
+        "DEF CONFIG_KGDB",
         "DEF CONFIG_BDI_SWITCH",
-        "DEF CONFIG_XMON",
-        "DEF CONFIG_KGDB"
+        "DEF CONFIG_XMON"
       ],
       [
         "DEF CONFIG_KPROBES",
+        "DEF CONFIG_KGDB",
         "DEF CONFIG_BDI_SWITCH",
-        "DEF CONFIG_XMON",
-        "UNDEF CONFIG_KGDB"
+        "UNDEF CONFIG_XMON"
       ],
       [
         "DEF CONFIG_KPROBES",
-        "DEF CONFIG_BDI_SWITCH",
-        "UNDEF CONFIG_XMON",
-        "DEF CONFIG_KGDB"
-      ],
-      [
-        "DEF CONFIG_KPROBES",
-        "DEF CONFIG_BDI_SWITCH",
-        "UNDEF CONFIG_XMON",
-        "UNDEF CONFIG_KGDB"
-      ],
-      [
-        "DEF CONFIG_KPROBES",
+        "DEF CONFIG_KGDB",
         "UNDEF CONFIG_BDI_SWITCH",
-        "DEF CONFIG_XMON",
-        "DEF CONFIG_KGDB"
+        "DEF CONFIG_XMON"
       ],
       [
         "DEF CONFIG_KPROBES",
+        "DEF CONFIG_KGDB",
         "UNDEF CONFIG_BDI_SWITCH",
-        "DEF CONFIG_XMON",
-        "UNDEF CONFIG_KGDB"
+        "UNDEF CONFIG_XMON"
       ],
       [
         "DEF CONFIG_KPROBES",
+        "UNDEF CONFIG_KGDB",
+        "DEF CONFIG_BDI_SWITCH",
+        "DEF CONFIG_XMON"
+      ],
+      [
+        "DEF CONFIG_KPROBES",
+        "UNDEF CONFIG_KGDB",
+        "DEF CONFIG_BDI_SWITCH",
+        "UNDEF CONFIG_XMON"
+      ],
+      [
+        "DEF CONFIG_KPROBES",
+        "UNDEF CONFIG_KGDB",
         "UNDEF CONFIG_BDI_SWITCH",
-        "UNDEF CONFIG_XMON",
-        "DEF CONFIG_KGDB"
+        "DEF CONFIG_XMON"
       ]
     ],
-    "analysis_time": 19.690543462056667,
+    "analysis_time": 1.0409350429545157,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -1595,12 +1999,12 @@
     "alarm_type": "ERROR",
     "bug_type": "NULLPTR_DEREFERENCE",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "infer_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_43",
+    "id": "PRODUCT_51",
     "input_file": "/targets/LINUX/30e053248da.c",
     "input_line": 31,
     "original_line": "31:31",
@@ -1617,7 +2021,7 @@
         "UNDEF CONFIG_SECURITY"
       ]
     ],
-    "analysis_time": 0.04220819100737572,
+    "analysis_time": 0.0238916429807432,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -1629,12 +2033,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "dead_store"
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_44",
+    "id": "PRODUCT_52",
     "input_file": "/targets/LINUX/30e053248da.c",
     "input_line": 31,
     "original_line": "31:31",
@@ -1648,7 +2052,7 @@
         "UNDEF CONFIG_SECURITY"
       ]
     ],
-    "analysis_time": 0.03987912181764841,
+    "analysis_time": 0.025913952966220677,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -1666,12 +2070,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_45",
+    "id": "PRODUCT_53",
     "input_file": "/targets/LINUX/30e053248da.c",
     "input_line": 24,
     "original_line": "24:24",
@@ -1688,7 +2092,7 @@
         "UNDEF CONFIG_SECURITY"
       ]
     ],
-    "analysis_time": 0.1034091750625521,
+    "analysis_time": 0.07846857298864052,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -1701,12 +2105,12 @@
     "function": "reiserfs_security_init",
     "variable": "length",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "phasar_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "phasar.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_46",
+    "id": "PRODUCT_54",
     "input_file": "/targets/LINUX/30e053248da.c",
     "input_line": 27,
     "original_line": "27:27",
@@ -1723,7 +2127,7 @@
         "UNDEF CONFIG_SECURITY"
       ]
     ],
-    "analysis_time": 0.1034091750625521,
+    "analysis_time": 0.07846857298864052,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -1736,12 +2140,12 @@
     "function": "reiserfs_security_init",
     "variable": "length",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "phasar_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "phasar.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_47",
+    "id": "PRODUCT_55",
     "input_file": "/targets/LINUX/30e053248da.c",
     "input_line": 31,
     "original_line": "31:31",
@@ -1758,7 +2162,7 @@
         "UNDEF CONFIG_SECURITY"
       ]
     ],
-    "analysis_time": 0.1034091750625521,
+    "analysis_time": 0.07846857298864052,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -1771,12 +2175,12 @@
     "function": "reiserfs_security_init",
     "variable": "length",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "phasar_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "phasar.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_48",
+    "id": "PRODUCT_56",
     "input_file": "/targets/LINUX/36855dcfc98.c",
     "input_line": 6,
     "original_line": "6:6",
@@ -1790,7 +2194,7 @@
         "UNDEF CONFIG_BF60x"
       ]
     ],
-    "analysis_time": 0.03325950796715915,
+    "analysis_time": 0.021237797976937145,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -1802,12 +2206,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "dead_store"
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_49",
+    "id": "PRODUCT_57",
     "input_file": "/targets/LINUX/472a474c663.c",
     "input_line": 14,
     "original_line": "14:14",
@@ -1821,7 +2225,7 @@
         "DEF CONFIG_SMP"
       ]
     ],
-    "analysis_time": 0.03594909212552011,
+    "analysis_time": 0.02357231202768162,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -1841,12 +2245,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_50",
+    "id": "PRODUCT_58",
     "input_file": "/targets/LINUX/6252547b8a7.c",
     "input_line": 12,
     "original_line": "12:12",
@@ -1857,15 +2261,15 @@
     "feasible": null,
     "configuration": [
       [
-        "DEF CONFIG_TWL4030_CORE",
-        "DEF CONFIG_OF_IRQ"
+        "DEF CONFIG_OF_IRQ",
+        "DEF CONFIG_TWL4030_CORE"
       ],
       [
-        "DEF CONFIG_TWL4030_CORE",
-        "UNDEF CONFIG_OF_IRQ"
+        "UNDEF CONFIG_OF_IRQ",
+        "DEF CONFIG_TWL4030_CORE"
       ]
     ],
-    "analysis_time": 0.03404402988962829,
+    "analysis_time": 0.024129664001520723,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -1877,12 +2281,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "dead_store"
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_51",
+    "id": "PRODUCT_59",
     "input_file": "/targets/LINUX/6252547b8a7.c",
     "input_line": 12,
     "original_line": "12:12",
@@ -1893,11 +2297,11 @@
     "feasible": null,
     "configuration": [
       [
-        "DEF CONFIG_TWL4030_CORE",
-        "UNDEF CONFIG_OF_IRQ"
+        "UNDEF CONFIG_OF_IRQ",
+        "DEF CONFIG_TWL4030_CORE"
       ]
     ],
-    "analysis_time": 0.04574073292315006,
+    "analysis_time": 0.022980706999078393,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -1912,12 +2316,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_52",
+    "id": "PRODUCT_60",
     "input_file": "/targets/LINUX/6252547b8a7.c",
     "input_line": 25,
     "original_line": "25:25",
@@ -1932,7 +2336,7 @@
         "DEF CONFIG_TWL4030_CORE"
       ]
     ],
-    "analysis_time": 57.84677642118186,
+    "analysis_time": 1.4773281270172447,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -1948,12 +2352,12 @@
     "alarm_type": "ERROR",
     "bug_type": "NULLPTR_DEREFERENCE",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "infer_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_53",
+    "id": "PRODUCT_61",
     "input_file": "/targets/LINUX/66517915e09.c",
     "input_line": 16,
     "original_line": "16:16",
@@ -1964,17 +2368,17 @@
     "feasible": null,
     "configuration": [
       [
-        "DEF CONFIG_SND_FSI_AK4642",
         "DEF CONFIG_I2C",
-        "DEF CONFIG_SND_FSI_DA7210"
+        "DEF CONFIG_SND_FSI_DA7210",
+        "DEF CONFIG_SND_FSI_AK4642"
       ],
       [
-        "UNDEF CONFIG_SND_FSI_AK4642",
         "DEF CONFIG_I2C",
-        "DEF CONFIG_SND_FSI_DA7210"
+        "DEF CONFIG_SND_FSI_DA7210",
+        "UNDEF CONFIG_SND_FSI_AK4642"
       ]
     ],
-    "analysis_time": 0.03690134105272591,
+    "analysis_time": 0.02222603402333334,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -1986,12 +2390,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "dead_store"
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_54",
+    "id": "PRODUCT_62",
     "input_file": "/targets/LINUX/66517915e09.c",
     "input_line": 24,
     "original_line": "24:24",
@@ -2002,17 +2406,17 @@
     "feasible": null,
     "configuration": [
       [
-        "DEF CONFIG_SND_FSI_AK4642",
         "DEF CONFIG_I2C",
-        "DEF CONFIG_SND_FSI_DA7210"
+        "DEF CONFIG_SND_FSI_DA7210",
+        "DEF CONFIG_SND_FSI_AK4642"
       ],
       [
-        "DEF CONFIG_SND_FSI_AK4642",
         "DEF CONFIG_I2C",
-        "UNDEF CONFIG_SND_FSI_DA7210"
+        "UNDEF CONFIG_SND_FSI_DA7210",
+        "DEF CONFIG_SND_FSI_AK4642"
       ]
     ],
-    "analysis_time": 0.03690134105272591,
+    "analysis_time": 0.02222603402333334,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -2024,12 +2428,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "dead_store"
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_55",
+    "id": "PRODUCT_63",
     "input_file": "/targets/LINUX/6e2b75740be.c",
     "input_line": 67,
     "original_line": "67:67",
@@ -2040,11 +2444,11 @@
     "feasible": null,
     "configuration": [
       [
-        "DEF CONFIG_SMP",
-        "DEF CONFIG_MODULE_UNLOAD"
+        "DEF CONFIG_MODULE_UNLOAD",
+        "DEF CONFIG_SMP"
       ]
     ],
-    "analysis_time": 12.467245280044153,
+    "analysis_time": 0.9463638260494918,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -2058,12 +2462,12 @@
     "alarm_type": "ERROR",
     "bug_type": "MEMORY_LEAK",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "infer_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_56",
+    "id": "PRODUCT_64",
     "input_file": "/targets/LINUX/6e2b75740be.c",
     "input_line": 67,
     "original_line": "67:67",
@@ -2074,19 +2478,19 @@
     "feasible": null,
     "configuration": [
       [
-        "DEF CONFIG_SMP",
-        "UNDEF CONFIG_MODULE_UNLOAD"
+        "DEF CONFIG_MODULE_UNLOAD",
+        "UNDEF CONFIG_SMP"
       ],
       [
-        "UNDEF CONFIG_SMP",
-        "DEF CONFIG_MODULE_UNLOAD"
+        "UNDEF CONFIG_MODULE_UNLOAD",
+        "DEF CONFIG_SMP"
       ],
       [
-        "UNDEF CONFIG_SMP",
-        "UNDEF CONFIG_MODULE_UNLOAD"
+        "UNDEF CONFIG_MODULE_UNLOAD",
+        "UNDEF CONFIG_SMP"
       ]
     ],
-    "analysis_time": 12.462579001206905,
+    "analysis_time": 1.159240991983097,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -2100,12 +2504,12 @@
     "alarm_type": "ERROR",
     "bug_type": "MEMORY_LEAK",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "infer_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_57",
+    "id": "PRODUCT_65",
     "input_file": "/targets/LINUX/7acf6cd80b2.c",
     "input_line": 8,
     "original_line": "8:8",
@@ -2116,15 +2520,15 @@
     "feasible": null,
     "configuration": [
       [
-        "DEF CONFIG_UNIX98_PTYS",
-        "DEF CONFIG_DEVPTS_MULTIPLE_INSTANCES"
+        "DEF CONFIG_DEVPTS_MULTIPLE_INSTANCES",
+        "DEF CONFIG_UNIX98_PTYS"
       ],
       [
-        "UNDEF CONFIG_UNIX98_PTYS",
-        "DEF CONFIG_DEVPTS_MULTIPLE_INSTANCES"
+        "DEF CONFIG_DEVPTS_MULTIPLE_INSTANCES",
+        "UNDEF CONFIG_UNIX98_PTYS"
       ]
     ],
-    "analysis_time": 0.043509492883458734,
+    "analysis_time": 0.022187774011399597,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -2136,12 +2540,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "dead_store"
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_58",
+    "id": "PRODUCT_66",
     "input_file": "/targets/LINUX/7acf6cd80b2.c",
     "input_line": 39,
     "original_line": "39:39",
@@ -2152,15 +2556,15 @@
     "feasible": null,
     "configuration": [
       [
-        "DEF CONFIG_UNIX98_PTYS",
-        "DEF CONFIG_DEVPTS_MULTIPLE_INSTANCES"
+        "DEF CONFIG_DEVPTS_MULTIPLE_INSTANCES",
+        "DEF CONFIG_UNIX98_PTYS"
       ],
       [
-        "DEF CONFIG_UNIX98_PTYS",
-        "UNDEF CONFIG_DEVPTS_MULTIPLE_INSTANCES"
+        "UNDEF CONFIG_DEVPTS_MULTIPLE_INSTANCES",
+        "DEF CONFIG_UNIX98_PTYS"
       ]
     ],
-    "analysis_time": 0.043509492883458734,
+    "analysis_time": 0.022187774011399597,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -2172,12 +2576,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "dead_store"
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_59",
+    "id": "PRODUCT_67",
     "input_file": "/targets/LINUX/7acf6cd80b2.c",
     "input_line": 44,
     "original_line": "44:44",
@@ -2188,15 +2592,15 @@
     "feasible": null,
     "configuration": [
       [
-        "DEF CONFIG_UNIX98_PTYS",
-        "DEF CONFIG_DEVPTS_MULTIPLE_INSTANCES"
+        "DEF CONFIG_DEVPTS_MULTIPLE_INSTANCES",
+        "DEF CONFIG_UNIX98_PTYS"
       ],
       [
-        "DEF CONFIG_UNIX98_PTYS",
-        "UNDEF CONFIG_DEVPTS_MULTIPLE_INSTANCES"
+        "UNDEF CONFIG_DEVPTS_MULTIPLE_INSTANCES",
+        "DEF CONFIG_UNIX98_PTYS"
       ]
     ],
-    "analysis_time": 0.043509492883458734,
+    "analysis_time": 0.022187774011399597,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -2213,12 +2617,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "uninitialized_value"
+    "original_file": "clang.json",
+    "taxonomy_type": "uninitialized_value",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_60",
+    "id": "PRODUCT_68",
     "input_file": "/targets/LINUX/c708c57e247.c",
     "input_line": 18,
     "original_line": "18:18",
@@ -2232,7 +2636,7 @@
         "DEF CONFIG_S390_PRNG"
       ]
     ],
-    "analysis_time": 0.03817401500418782,
+    "analysis_time": 0.02273353695636615,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -2247,12 +2651,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_61",
+    "id": "PRODUCT_69",
     "input_file": "/targets/LINUX/e39363a9def.c",
     "input_line": 17,
     "original_line": "17:17",
@@ -2263,11 +2667,11 @@
     "feasible": null,
     "configuration": [
       [
-        "UNDEF CONFIG_IPV6",
-        "DEF CONFIG_NETPOLL"
+        "DEF CONFIG_NETPOLL",
+        "UNDEF CONFIG_IPV6"
       ]
     ],
-    "analysis_time": 0.03179177385754883,
+    "analysis_time": 0.02166125102667138,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -2282,12 +2686,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_62",
+    "id": "PRODUCT_70",
     "input_file": "/targets/LINUX/ee3f34e8572.c",
     "input_line": 45,
     "original_line": "45:45",
@@ -2298,25 +2702,25 @@
     "feasible": null,
     "configuration": [
       [
-        "DEF CONFIG_SCTP_DBG_MSG",
-        "DEF CONFIG_IP_SCTP",
         "DEF CONFIG_IPV6",
-        "DEF SCTP_DEBUG"
+        "DEF CONFIG_IP_SCTP",
+        "DEF SCTP_DEBUG",
+        "DEF CONFIG_SCTP_DBG_MSG"
       ],
       [
-        "DEF CONFIG_SCTP_DBG_MSG",
-        "DEF CONFIG_IP_SCTP",
         "DEF CONFIG_IPV6",
-        "UNDEF SCTP_DEBUG"
+        "DEF CONFIG_IP_SCTP",
+        "DEF SCTP_DEBUG",
+        "UNDEF CONFIG_SCTP_DBG_MSG"
       ],
       [
-        "UNDEF CONFIG_SCTP_DBG_MSG",
-        "DEF CONFIG_IP_SCTP",
         "DEF CONFIG_IPV6",
-        "DEF SCTP_DEBUG"
+        "DEF CONFIG_IP_SCTP",
+        "UNDEF SCTP_DEBUG",
+        "DEF CONFIG_SCTP_DBG_MSG"
       ]
     ],
-    "analysis_time": 0.047404038021340966,
+    "analysis_time": 0.025967132998630404,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -2335,12 +2739,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "memory_leak"
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_63",
+    "id": "PRODUCT_71",
     "input_file": "/targets/LINUX/ee3f34e8572.c",
     "input_line": 44,
     "original_line": "44:44",
@@ -2351,13 +2755,13 @@
     "feasible": null,
     "configuration": [
       [
-        "UNDEF CONFIG_SCTP_DBG_MSG",
-        "DEF CONFIG_IP_SCTP",
         "DEF CONFIG_IPV6",
-        "UNDEF SCTP_DEBUG"
+        "DEF CONFIG_IP_SCTP",
+        "UNDEF SCTP_DEBUG",
+        "UNDEF CONFIG_SCTP_DBG_MSG"
       ]
     ],
-    "analysis_time": 0.04897942184470594,
+    "analysis_time": 0.028142654977273196,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -2369,12 +2773,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "dead_store"
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_64",
+    "id": "PRODUCT_72",
     "input_file": "/targets/MARLIN/8c4377dd635.c",
     "input_line": 19,
     "original_line": "19:19",
@@ -2385,27 +2789,27 @@
     "feasible": null,
     "configuration": [
       [
-        "DEF PID_DEBUG",
+        "DEF MARLIN_H",
         "UNDEF PIDTEMP",
-        "DEF MARLIN_H"
+        "DEF PID_DEBUG"
       ],
       [
-        "DEF PID_DEBUG",
+        "DEF MARLIN_H",
         "UNDEF PIDTEMP",
-        "UNDEF MARLIN_H"
+        "UNDEF PID_DEBUG"
       ],
       [
-        "UNDEF PID_DEBUG",
+        "UNDEF MARLIN_H",
         "UNDEF PIDTEMP",
-        "DEF MARLIN_H"
+        "DEF PID_DEBUG"
       ],
       [
-        "UNDEF PID_DEBUG",
+        "UNDEF MARLIN_H",
         "UNDEF PIDTEMP",
-        "UNDEF MARLIN_H"
+        "UNDEF PID_DEBUG"
       ]
     ],
-    "analysis_time": 0.03915516613051295,
+    "analysis_time": 0.022971748025156558,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -2417,12 +2821,12 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "dead_store"
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
   },
   {
-    "id": "PRODUCT_65",
+    "id": "PRODUCT_73",
     "input_file": "/targets/MARLIN/e30bfedce4d.c",
     "input_line": 24,
     "original_line": "24:24",
@@ -2436,7 +2840,7 @@
         "DEF ENABLE_AUTO_BED_LEVELING"
       ]
     ],
-    "analysis_time": 0.04070110782049596,
+    "analysis_time": 0.022433686011936516,
     "desugaring_time": null,
     "get_recommended_space": false,
     "remove_errors": false,
@@ -2448,8 +2852,8 @@
     ],
     "alarm_type": "warning",
     "original_configuration": [],
-    "classification": "",
-    "original_file": "clang_varbugs.json.classified",
-    "taxonomy_type": "dead_store"
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
   }
 ]
