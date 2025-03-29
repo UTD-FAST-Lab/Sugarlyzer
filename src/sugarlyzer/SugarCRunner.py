@@ -280,11 +280,6 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
                 logger.error(f"Could not desugar file {file_to_desugar}. Tried to output what went wrong but couldn't access subprocess output.")
         os.chdir(current_directory)
     logger.info(f"{desugared_output} desugared in time:{time.monotonic()-start} (cpu time {usr_time + sys_time}) to file size:{desugared_output.stat().st_size}")
-        
-
-def condLog(a: Alarm, msg: str, logfunc):
-    if "d05e574ec26" in str(a.input_file):
-        logfunc(msg)
 
 def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Alarm]:
     """
@@ -309,10 +304,6 @@ def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Al
         s = Solver()
         missingCondition = False
         for a in w.static_condition_results:
-            if "d05e574ec26" in str(w.input_file):
-                logger.warning("Variable dump!")
-                for v in dir():
-                    logger.warning(f"{v}: {eval(v)}")
             logger.info(f"Currently processing {a} in file {w.input_file}")
             if a['var'] == '':
                 missingCondition = True
@@ -325,11 +316,9 @@ def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Al
 #                missingCondition = True
 #                break
             if a['val']:
-                condLog(w, f"Evaluating the following expression: {(res := condition_mapping.replacers[a['var']])}", logger.warning)
-                s.add(eval(res))
+                s.add(eval(condition_mapping.replacers[a['var']]))
             else:
-                condLog(w, f"Evaluating the following expression: {(res := 'Not(' + condition_mapping.replacers[a['var']] + ')')}", logger.warning)
-                s.add(eval(res))
+                s.add(eval('Not(' + condition_mapping.replacers[a['var']] + ')'))
         if missingCondition:
             print('broken condition')
             w.feasible = False
@@ -354,10 +343,6 @@ def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Al
             regex = re.compile("USE[_A-Za-z0-9]*")
             for match in re.findall(regex, varisDefRemoved):
                 exec(f"{match} = Int('{match}')")
-            if "d05e574ec26" in str(w.input_file):
-                logger.warning("Variable dump!")
-                for v in dir():
-                    logger.warning(f"{v}: {eval(v)}")
             try:
                 w.presence_condition = str(simplify(eval(varisDefRemoved)))
             except NameError as ne:
