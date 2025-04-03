@@ -19,7 +19,23 @@ def ast_to_z3(expr, var_dict):
             return Not(args[0])
     raise ValueError(f"Unsupported expression: {ast.dump(expr)}")
 
-def simplify_presence_condition(condition_str):
+def simplify_presence_condition(condition_str, explicitly_keep=None):
+    """
+    Simplify a presence condition by removing variables starting with DEF__,
+    optionally keeping specific variables regardless of their naming.
+    
+    Args:
+        condition_str: The condition string to simplify
+        explicitly_keep: Optional set of variable names to keep regardless of their prefix
+    
+    Returns:
+        simplified_condition: The simplified Z3 condition
+        kept_vars: List of Z3 variables that are kept
+    """
+    # Set default value for explicitly_keep if None
+    if explicitly_keep is None:
+        explicitly_keep = set()
+    
     # Parse the condition string into a Python AST
     expr_ast = ast.parse(condition_str, mode='eval').body
     
@@ -30,11 +46,13 @@ def simplify_presence_condition(condition_str):
     # Extract all variables from the formula
     all_vars = set(var_dict.values())
     
-    # Determine variables to eliminate (those starting with "DEF__")
-    eliminate_vars = [v for v in all_vars if v.decl().name().startswith("DEF__")]
+    # Determine variables to eliminate (those starting with "DEF__" AND not in explicitly_keep)
+    eliminate_vars = [v for v in all_vars if (v.decl().name().startswith("DEF__") and 
+                                             v.decl().name() not in explicitly_keep)]
     
-    # Variables to keep (those not starting with "DEF__")
-    kept_vars = [v for v in all_vars if not v.decl().name().startswith("DEF__")]
+    # Variables to keep (those not starting with "DEF__" OR in explicitly_keep)
+    kept_vars = [v for v in all_vars if (not v.decl().name().startswith("DEF__") or 
+                                        v.decl().name() in explicitly_keep)]
     
     # Existentially quantify over the unwanted variables
     simplified_condition = simplify(Exists(eliminate_vars, condition))
@@ -71,15 +89,27 @@ def get_all_solutions(simplified_condition, keep_vars):
     
     return solutions
 
-if __name__ == "__main__":
-    # Example with DEF__ variables
+if __name__ == "__main__":    
+    # case 1: remove DEF__ variables
     condition_str = "Or(Or(And(Or (And (Not(DEF__STDLIB_H) , (DEF___STRICT_ANSI__) , Not(DEF___need_malloc_and_calloc) , Not(DEF___USE_EXTERN_INLINES) , (DEF_HAVE_TLSV1_X))))),Or(And(Or (And (Not(DEF__STDLIB_H) , Not(DEF___STRICT_ANSI__) , Not(DEF___need_malloc_and_calloc) , Not(DEF___USE_EXTERN_INLINES) , (DEF_HAVE_TLSV1_X))))))"
-    
+
     simplified_condition, kept_vars_z3 = simplify_presence_condition(condition_str)
     print("Simplified condition:", simplified_condition)
     print("Kept variables:", [v.decl().name() for v in kept_vars_z3])
     
     solutions = get_all_solutions(simplified_condition, kept_vars_z3)
     print(f"\nFound {len(solutions)} solution(s):")
+    for i, solution in enumerate(solutions, 1):
+        print(f"Solution {i}:", solution)
+        
+    
+    # Test case 2: Keep specific DEF__ variables
+    explicitly_keep = {"DEF___STRICT_ANSI__"}  # Explicitly keep DEF__c
+    simplified_condition, kept_vars_z3 = simplify_presence_condition(condition_str, explicitly_keep)
+    print("Simplified condition:", simplified_condition)
+    print("Kept variables:", [v.decl().name() for v in kept_vars_z3])
+    
+    solutions = get_all_solutions(simplified_condition, kept_vars_z3)
+    print(f"Found {len(solutions)} solution(s):")
     for i, solution in enumerate(solutions, 1):
         print(f"Solution {i}:", solution)
