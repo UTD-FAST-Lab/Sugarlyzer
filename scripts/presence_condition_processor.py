@@ -91,20 +91,22 @@ def get_all_solutions(simplified_condition, keep_vars):
 
 if __name__ == "__main__":    
     # case 1: remove DEF__ variables
-    condition_str = "Or(Or(And(Or (And (Not(DEF__STDLIB_H) , (DEF___STRICT_ANSI__) , Not(DEF___need_malloc_and_calloc) , Not(DEF___USE_EXTERN_INLINES) , (DEF_HAVE_TLSV1_X))))),Or(And(Or (And (Not(DEF__STDLIB_H) , Not(DEF___STRICT_ANSI__) , Not(DEF___need_malloc_and_calloc) , Not(DEF___USE_EXTERN_INLINES) , (DEF_HAVE_TLSV1_X))))))"
-
-    simplified_condition, kept_vars_z3 = simplify_presence_condition(condition_str)
-    print("Simplified condition:", simplified_condition)
-    print("Kept variables:", [v.decl().name() for v in kept_vars_z3])
+    condition_str = "Or(And(Not(DEF__STDLIB_H),\n    DEF___STRICT_ANSI__,\n    Not(DEF___need_malloc_and_calloc),\n    DEF___USE_EXTERN_INLINES,\n    DEF_HAVE_TLSV1_X))"
+    condition_str = condition_str.replace("\n", "")
+    condition_str = condition_str.replace("    ", " ")
+    print(condition_str)
+    # simplified_condition, kept_vars_z3 = simplify_presence_condition(condition_str)
+    # print("Simplified condition:", simplified_condition)
+    # print("Kept variables:", [v.decl().name() for v in kept_vars_z3])
     
-    solutions = get_all_solutions(simplified_condition, kept_vars_z3)
-    print(f"\nFound {len(solutions)} solution(s):")
-    for i, solution in enumerate(solutions, 1):
-        print(f"Solution {i}:", solution)
+    # solutions = get_all_solutions(simplified_condition, kept_vars_z3)
+    # print(f"\nFound {len(solutions)} solution(s):")
+    # for i, solution in enumerate(solutions, 1):
+    #     print(f"Solution {i}:", solution)
         
     
     # Test case 2: Keep specific DEF__ variables
-    explicitly_keep = {"DEF___STRICT_ANSI__"}  # Explicitly keep DEF__c
+    explicitly_keep = {"DEF_HAVE_TLSV1_X"}  # Explicitly keep DEF__c
     simplified_condition, kept_vars_z3 = simplify_presence_condition(condition_str, explicitly_keep)
     print("Simplified condition:", simplified_condition)
     print("Kept variables:", [v.decl().name() for v in kept_vars_z3])
