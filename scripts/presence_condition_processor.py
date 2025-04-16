@@ -70,6 +70,8 @@ def get_all_solutions(simplified_condition, keep_vars):
     # Generate all possible combinations of True/False for the kept variables
     possible_assignments = list(itertools.product([True, False], repeat=len(keep_vars)))
     
+    satisfied_once = False
+    
     for assignment in possible_assignments:
         # Create a constraint for this specific assignment
         assignment_constraint = []
@@ -86,12 +88,16 @@ def get_all_solutions(simplified_condition, keep_vars):
         
         if temp_solver.check() == sat:
             solutions.append(dict(zip([v.decl().name() for v in keep_vars], assignment)))
+            satisfied_once = True
     
-    return solutions
+    if satisfied_once:
+        return solutions
+    else:
+        return None
 
 if __name__ == "__main__":    
     # case 1: remove DEF__ variables
-    condition_str = "Or(And(Not(DEF__STDLIB_H),\n    DEF___STRICT_ANSI__,\n    Not(DEF___need_malloc_and_calloc),\n    DEF___USE_EXTERN_INLINES,\n    DEF_HAVE_TLSV1_X))"
+    condition_str = "And(DEF_a, DEF_c)"
     condition_str = condition_str.replace("\n", "")
     condition_str = condition_str.replace("    ", " ")
     print(condition_str)
@@ -106,12 +112,16 @@ if __name__ == "__main__":
         
     
     # Test case 2: Keep specific DEF__ variables
-    explicitly_keep = {"DEF_HAVE_TLSV1_X"}  # Explicitly keep DEF__c
+    explicitly_keep = {"DEF_a"}  # Explicitly keep DEF__c
     simplified_condition, kept_vars_z3 = simplify_presence_condition(condition_str, explicitly_keep)
     print("Simplified condition:", simplified_condition)
     print("Kept variables:", [v.decl().name() for v in kept_vars_z3])
     
     solutions = get_all_solutions(simplified_condition, kept_vars_z3)
-    print(f"Found {len(solutions)} solution(s):")
-    for i, solution in enumerate(solutions, 1):
-        print(f"Solution {i}:", solution)
+    
+    if solutions is None:
+        print("No solutions found.")
+    else:
+        print(f"Found {len(solutions)} solution(s):")
+        for i, solution in enumerate(solutions, 1):
+            print(f"Solution {i}:", solution)
