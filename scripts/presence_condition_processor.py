@@ -54,8 +54,18 @@ def simplify_presence_condition(condition_str, explicitly_keep=None):
     kept_vars = [v for v in all_vars if (not v.decl().name().startswith("DEF__") or 
                                         v.decl().name() in explicitly_keep)]
     
-    # Existentially quantify over the unwanted variables
-    simplified_condition = simplify(Exists(eliminate_vars, condition))
+    # # Existentially quantify over the unwanted variables
+    # simplified_condition = simplify(Exists(eliminate_vars, condition))
+
+    if eliminate_vars:
+        # Recreate bound vars
+        bound_vars = [Bool(v.decl().name()) for v in eliminate_vars]
+        substitutions = [(v, b) for v, b in zip(eliminate_vars, bound_vars)]
+        condition_substituted = substitute(condition, substitutions)
+        simplified_condition = simplify(Exists(bound_vars, condition_substituted))
+    else:
+        # No vars to eliminate, use the original condition
+        simplified_condition = simplify(condition)
     
     return simplified_condition, kept_vars
 
@@ -97,7 +107,7 @@ def get_all_solutions(simplified_condition, keep_vars):
 
 if __name__ == "__main__":    
     # case 1: remove DEF__ variables
-    condition_str = "And(DEF_a, DEF_c)"
+    condition_str = "Or(Or(And(DEF_CONFIG_PCI,\n    Not(DEF___need___FILE),\n    DEF___STRICT_ANSI__,\n    DEF___USE_EXTERN_INLINES)),Or(And(DEF_CONFIG_PCI,\n    Not(DEF___need___FILE),\n    Not(DEF___USE_EXTERN_INLINES))))"
     condition_str = condition_str.replace("\n", "")
     condition_str = condition_str.replace("    ", " ")
     print(condition_str)
@@ -112,7 +122,7 @@ if __name__ == "__main__":
         
     
     # Test case 2: Keep specific DEF__ variables
-    explicitly_keep = {"DEF_a"}  # Explicitly keep DEF__c
+    explicitly_keep = {""}  # Explicitly keep DEF__c
     simplified_condition, kept_vars_z3 = simplify_presence_condition(condition_str, explicitly_keep)
     print("Simplified condition:", simplified_condition)
     print("Kept variables:", [v.decl().name() for v in kept_vars_z3])
