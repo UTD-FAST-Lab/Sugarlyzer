@@ -107,31 +107,33 @@ def get_all_solutions(simplified_condition, keep_vars):
 
 if __name__ == "__main__":    
     # case 1: remove DEF__ variables
-    condition_str = "Or(Or(And(DEF_CONFIG_PCI,\n    Not(DEF___need___FILE),\n    DEF___STRICT_ANSI__,\n    DEF___USE_EXTERN_INLINES)),Or(And(DEF_CONFIG_PCI,\n    Not(DEF___need___FILE),\n    Not(DEF___USE_EXTERN_INLINES))))"
-    condition_str = condition_str.replace("\n", "")
-    condition_str = condition_str.replace("    ", " ")
-    print(condition_str)
-    # simplified_condition, kept_vars_z3 = simplify_presence_condition(condition_str)
-    # print("Simplified condition:", simplified_condition)
-    # print("Kept variables:", [v.decl().name() for v in kept_vars_z3])
-    
-    # solutions = get_all_solutions(simplified_condition, kept_vars_z3)
-    # print(f"\nFound {len(solutions)} solution(s):")
-    # for i, solution in enumerate(solutions, 1):
-    #     print(f"Solution {i}:", solution)
-        
-    
-    # Test case 2: Keep specific DEF__ variables
-    explicitly_keep = {""}  # Explicitly keep DEF__c
-    simplified_condition, kept_vars_z3 = simplify_presence_condition(condition_str, explicitly_keep)
-    print("Simplified condition:", simplified_condition)
-    print("Kept variables:", [v.decl().name() for v in kept_vars_z3])
-    
-    solutions = get_all_solutions(simplified_condition, kept_vars_z3)
-    
-    if solutions is None:
-        print("No solutions found.")
-    else:
-        print(f"Found {len(solutions)} solution(s):")
-        for i, solution in enumerate(solutions, 1):
-            print(f"Solution {i}:", solution)
+   with open('./input.txt', 'r') as f:
+       condition_str = f.read()
+   condition_str = condition_str.replace("\\n", "")
+   condition_str = condition_str.replace("\n", "")
+   condition_str = condition_str.replace("    ", " ")
+   print(condition_str)
+   # simplified_condition, kept_vars_z3 = simplify_presence_condition(condition_str)
+   # print("Simplified condition:", simplified_condition)
+   # print("Kept variables:", [v.decl().name() for v in kept_vars_z3])
+   
+   # solutions = get_all_solutions(simplified_condition, kept_vars_z3)
+# print(f"\nFound {len(solutions)} solution(s):")
+# for i, solution in enumerate(solutions, 1):
+#     print(f"Solution {i}:", solution)
+
+
+# Test case 2: Keep specific DEF__ variables
+   explicitly_keep = {""}  # Explicitly keep DEF__c
+   simplified_condition, kept_vars_z3 = simplify_presence_condition(condition_str, explicitly_keep)
+   print("Simplified condition:", simplified_condition)
+   print("Kept_Vars variables:", [v.decl().name() for v in kept_vars_z3])
+   
+   solutions = get_all_solutions(simplified_condition, kept_vars_z3)
+   
+   if solutions is None:
+       print("No solutions found.")
+   else:
+       print(f"Found {len(solutions)} solution(s):")
+       for i, solution in enumerate(solutions, 1):
+           print(f"Solution {i}:", solution)
