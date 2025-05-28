@@ -280,7 +280,6 @@ def run_sugarc(cmd_str, file_to_desugar: Path, desugared_output: Path, log_file)
                 logger.error(f"Could not desugar file {file_to_desugar}. Tried to output what went wrong but couldn't access subprocess output.")
         os.chdir(current_directory)
     logger.info(f"{desugared_output} desugared in time:{time.monotonic()-start} (cpu time {usr_time + sys_time}) to file size:{desugared_output.stat().st_size}")
-        
 
 def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Alarm]:
     """
@@ -300,20 +299,16 @@ def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Al
     report = ''
     varis = condition_mapping.varis
     for w in alarms:
-        logger.debug(f"Processing condition for alarm detected in file {w.input_file}:{w.line_in_input_file}")
         w: Alarm
         w.static_condition_results = calculate_asserts(w, desugared_file)
-        logger.info(f"Result of calculate_asserts for warning {w.message} on file {w.input_file}:{w.line_in_input_file} is {w.static_condition_results}")
-        logger.info(f"Condition mapping replacers is {condition_mapping.replacers}")
         s = Solver()
         missingCondition = False
         for a in w.static_condition_results:
+            logger.info(f"Currently processing {a} in file {w.input_file}")
             if a['var'] == '':
-                logger.debug(f"var is missing from {a}")
                 missingCondition = True
                 break
             elif not a['var'] in condition_mapping.replacers.keys():
-                logger.debug(f"{a['var']} not in condition replacers.")
                 missingCondition = True
                 break
 #            elif '"' in condition_mapping.replacers[a['var']]:
@@ -345,7 +340,14 @@ def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Al
             regex = re.compile("DEF[_A-Za-z0-9]*")
             for match in re.findall(regex, varisDefRemoved):
                 exec(f"{match} = Bool('{match}')")
-            w.presence_condition = str(simplify(eval(varisDefRemoved)))
+            regex = re.compile("USE[_A-Za-z0-9]*")
+            for match in re.findall(regex, varisDefRemoved):
+                exec(f"{match} = Int('{match}')")
+            try:
+                w.presence_condition = str(simplify(eval(varisDefRemoved)))
+            except NameError as ne:
+                logger.exception(f"Encountered an error when processing file {desugared_file}")
+                raise ne
             report += str(w) + '\n'
         else:
             print('impossible constraints')

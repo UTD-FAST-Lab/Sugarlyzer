@@ -44,9 +44,9 @@ class Clang(AbstractTool):
                "-c", file.absolute()]
         logger.info(f"Running cmd {' '.join(str(s) for s in cmd)}")
         ps = subprocess.run(" ".join(str(s) for s in cmd), text=True, shell=True, capture_output=True, executable='/bin/bash')
+        logger.info(f"Stdout:\n{ps.stdout}\n\nStderr:\n{ps.stderr}")
         if (ps.returncode != 0):
             logger.warning(f"Running clang on file {str(file)} failed.")
-            logger.warning(ps.stdout)
 
         with open(output_location + '/report.report','w') as o:
             o.write(ps.stderr)

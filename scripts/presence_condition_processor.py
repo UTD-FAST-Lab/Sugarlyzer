@@ -54,8 +54,23 @@ def simplify_presence_condition(condition_str, explicitly_keep=None):
     kept_vars = [v for v in all_vars if (not v.decl().name().startswith("DEF__") or 
                                         v.decl().name() in explicitly_keep)]
     
+<<<<<<< HEAD
     # Existentially quantify over the unwanted variables
     simplified_condition = simplify(Exists(eliminate_vars, condition))
+=======
+    # # Existentially quantify over the unwanted variables
+    # simplified_condition = simplify(Exists(eliminate_vars, condition))
+
+    if eliminate_vars:
+        # Recreate bound vars
+        bound_vars = [Bool(v.decl().name()) for v in eliminate_vars]
+        substitutions = [(v, b) for v, b in zip(eliminate_vars, bound_vars)]
+        condition_substituted = substitute(condition, substitutions)
+        simplified_condition = simplify(Exists(bound_vars, condition_substituted))
+    else:
+        # No vars to eliminate, use the original condition
+        simplified_condition = simplify(condition)
+>>>>>>> 87f69c88083d5cc7c97203b4094ca49da4f2c7bb
     
     return simplified_condition, kept_vars
 
@@ -70,6 +85,11 @@ def get_all_solutions(simplified_condition, keep_vars):
     # Generate all possible combinations of True/False for the kept variables
     possible_assignments = list(itertools.product([True, False], repeat=len(keep_vars)))
     
+<<<<<<< HEAD
+=======
+    satisfied_once = False
+    
+>>>>>>> 87f69c88083d5cc7c97203b4094ca49da4f2c7bb
     for assignment in possible_assignments:
         # Create a constraint for this specific assignment
         assignment_constraint = []
@@ -86,6 +106,7 @@ def get_all_solutions(simplified_condition, keep_vars):
         
         if temp_solver.check() == sat:
             solutions.append(dict(zip([v.decl().name() for v in keep_vars], assignment)))
+<<<<<<< HEAD
     
     return solutions
 
@@ -113,3 +134,44 @@ if __name__ == "__main__":
     print(f"Found {len(solutions)} solution(s):")
     for i, solution in enumerate(solutions, 1):
         print(f"Solution {i}:", solution)
+=======
+            satisfied_once = True
+    
+    if satisfied_once:
+        return solutions
+    else:
+        return None
+
+if __name__ == "__main__":    
+    # case 1: remove DEF__ variables
+   with open('./input.txt', 'r') as f:
+       condition_str = f.read()
+   condition_str = condition_str.replace("\\n", "")
+   condition_str = condition_str.replace("\n", "")
+   condition_str = condition_str.replace("    ", " ")
+   print(condition_str)
+   # simplified_condition, kept_vars_z3 = simplify_presence_condition(condition_str)
+   # print("Simplified condition:", simplified_condition)
+   # print("Kept variables:", [v.decl().name() for v in kept_vars_z3])
+   
+   # solutions = get_all_solutions(simplified_condition, kept_vars_z3)
+# print(f"\nFound {len(solutions)} solution(s):")
+# for i, solution in enumerate(solutions, 1):
+#     print(f"Solution {i}:", solution)
+
+
+# Test case 2: Keep specific DEF__ variables
+   explicitly_keep = {""}  # Explicitly keep DEF__c
+   simplified_condition, kept_vars_z3 = simplify_presence_condition(condition_str, explicitly_keep)
+   print("Simplified condition:", simplified_condition)
+   print("Kept_Vars variables:", [v.decl().name() for v in kept_vars_z3])
+   
+   solutions = get_all_solutions(simplified_condition, kept_vars_z3)
+   
+   if solutions is None:
+       print("No solutions found.")
+   else:
+       print(f"Found {len(solutions)} solution(s):")
+       for i, solution in enumerate(solutions, 1):
+           print(f"Solution {i}:", solution)
+>>>>>>> 87f69c88083d5cc7c97203b4094ca49da4f2c7bb
