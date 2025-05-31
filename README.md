@@ -4,7 +4,7 @@ This artifact includes the code and data for RQ2 of our submission entitled "An 
 
 # Prerequisites
 
-This application is written for Python version >= 3.13.We suggest using PyEnv to manage multiple Python versions.
+This application is written for Python version >= 3.13. We suggest using PyEnv to manage multiple Python versions.
 Furthermore, we utilize Docker containers in order to maintain consistent environments across runs, so you must have a working Docker installation. 
 
 # Setup
@@ -65,7 +65,3 @@ dispatcher -t infer -p toybox --baselines --sample-size 10 --jobs <<number of jo
 ## Provided Scripts
 
 We have provided `runDesugared.sh` and `runBaselines.sh.` These run the desugared analysis, the product-based analysis, and a small subset of experiments respectively.
-
-[2] Rhein, Alexander Von, Jörg Liebig, Andreas Janker, Christian Kästner, and Sven Apel. "Variability-aware static analysis at scale: An empirical study." ACM Transactions on Software Engineering and Methodology (TOSEM) 27, no. 4 (2018): 1-33.
-
-[3] Abal, Iago, Jean Melo, Ştefan Stănciulescu, Claus Brabrand, Márcio Ribeiro, and Andrzej Wąsowski. "Variability bugs in highly configurable systems: A qualitative analysis." ACM Transactions on Software Engineering and Methodology (TOSEM) 26, no. 3 (2018): 1-34.
