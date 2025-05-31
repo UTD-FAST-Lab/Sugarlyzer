@@ -13,7 +13,7 @@ fi
 
 for t in clang infer phasar
 do
-  for p in toybox axtls busybox tosembusybox tosemopenssl tosemuclibc
+  for p in toybox axtls busybox 
   do
     dispatcher -t $t -p $p -r "$ROOT/$t.$p.json" --log "$ROOT/$t.$p.log" --jobs $1
   done
