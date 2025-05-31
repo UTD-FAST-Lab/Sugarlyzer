@@ -1,16 +1,13 @@
-import argparse
-
-p = argparse.ArgumentParser()
-p.add_argument("results_file")
-args = p.parse_args()
-
+#!/usr/bin/env python
 import json
+import sys
 
-with open(args.results_file, 'r') as f:
-    results = json.load(f)
+results = json.loads(sys.stdin.read().strip())
 
 for r in results:
     r['classification'] = ''
 
-with open(args.results_file + ".classified", 'w') as f:
-    json.dump(results, f, indent=2)
+try:
+  print(json.dumps(results, indent=2))
+except BrokenPipeError:
+  sys.exit(-1)
