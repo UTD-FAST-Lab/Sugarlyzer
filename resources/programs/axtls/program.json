@@ -1,6 +1,6 @@
 {
       "remove_errors": false,
-      "sample_dir": "programs/axtls/configs",
+      "sample_dir": "axtls/configs",
       "included_files_and_directories": [
             {
                 "included_files": [

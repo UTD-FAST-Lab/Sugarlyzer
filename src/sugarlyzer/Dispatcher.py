@@ -41,7 +41,7 @@ v will print INFO and above. Two or more v's will print DEBUG or above.""", defa
                    help="""Try running desugared alarms with Z3's configuration to see if they are retained.""",
                    action='store_true')
     p.add_argument("--sample-size",
-                   help="""Sample size for how many configurations to run (default 1000)""",
+                   help="""Sample size for how many configurations to run (default 100)""",
                    type=int,
                    default=100)
     return p.parse_args()

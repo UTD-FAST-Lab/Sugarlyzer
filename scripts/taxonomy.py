@@ -28,6 +28,8 @@ def get_warning_type(msg: str, is_family: bool) -> str:
             return WarningTypes.DOUBLE_FREE
         elif "makes pointer from" in msg:
             return WarningTypes.CAST_TO_POINTER
+        elif "switch statement has dangling code":
+            return WarningTypes.CONTROL_FLOW
         else:
             raise RuntimeError(f"Couldn't handle {msg}")
     else:
