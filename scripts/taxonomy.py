@@ -9,6 +9,7 @@ class WarningTypes(StrEnum):
     DOUBLE_FREE = auto()
     CAST_TO_POINTER = auto()
     MEMORY_LEAK = auto()
+    UNDECLARED_IDENTIFIER = auto()
 
 
 def get_warning_type(msg: str, is_family: bool) -> str:
