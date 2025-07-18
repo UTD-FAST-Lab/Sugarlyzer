@@ -1,0 +1,2859 @@
+[
+  {
+    "id": "PRODUCT_0",
+    "input_file": "/targets/APACHE/1a3c8e3d840.c",
+    "input_line": 13,
+    "original_line": "13:13",
+    "function_line_range": "GLOBAL:1:21",
+    "message": " Value stored to 'thisopt' is never read ",
+    "sanitized_message": "Value stored to 'thisopt' is never read",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF HAVE_TLSV1_X"
+      ]
+    ],
+    "analysis_time": 0.02601862302981317,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        13
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_1",
+    "input_file": "/targets/APACHE/1b48bb3c1af.c",
+    "input_line": 14,
+    "original_line": "14:14",
+    "function_line_range": "GLOBAL:1:25",
+    "message": " 1st function call argument is an uninitialized value ",
+    "sanitized_message": "1st function call argument is an uninitialized value",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF APR_HAS_SHARED_MEMORY",
+        "DEF APU_HAS_LDAP"
+      ]
+    ],
+    "analysis_time": 0.02504443802172318,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        22,
+        11,
+        14
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "uninitialized_value",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_2",
+    "input_file": "/targets/APACHE/2a6cbfa00e0.c",
+    "input_line": 16,
+    "original_line": "16:16",
+    "function_line_range": "GLOBAL:1:23",
+    "message": " Potential leak of memory pointed to by 'sc' ",
+    "sanitized_message": "Potential leak of memory pointed to by 'sc'",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "UNDEF SHARED_MODULE"
+      ]
+    ],
+    "analysis_time": 0.024821127008181065,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        21,
+        6,
+        16
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_3",
+    "input_file": "/targets/APACHE/2a6cbfa00e0.c",
+    "input_line": 9,
+    "original_line": "9:9",
+    "function_line_range": "GLOBAL:1:23",
+    "message": "Pulse found a potential memory leak. Memory dynamically allocated at line 6 by call to `malloc`, is not freed after the last access at line 9, column 3.",
+    "sanitized_message": "Pulse found a potential memory leak. Memory dynamically allocated at SANITIZED by call to `malloc`, is not freed after the last access at SANITIZED, SANITIZED.",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "UNDEF SHARED_MODULE"
+      ]
+    ],
+    "analysis_time": 1.0323688189964741,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        6,
+        9
+      ]
+    ],
+    "alarm_type": "ERROR",
+    "bug_type": "MEMORY_LEAK",
+    "original_configuration": [],
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_4",
+    "input_file": "/targets/APACHE/35ae2e259e4.c",
+    "input_line": 24,
+    "original_line": "24:24",
+    "function_line_range": "GLOBAL:1:46",
+    "message": " Potential leak of memory pointed to by 'eckey' ",
+    "sanitized_message": "Potential leak of memory pointed to by 'eckey'",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF HAVE_ECC",
+        "DEF SSL_CTX_set_ecdh_auto"
+      ],
+      [
+        "DEF HAVE_ECC",
+        "UNDEF SSL_CTX_set_ecdh_auto"
+      ]
+    ],
+    "analysis_time": 0.026237842976115644,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        44,
+        39,
+        34,
+        29,
+        10,
+        11,
+        24
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_5",
+    "input_file": "/targets/APACHE/35ae2e259e4.c",
+    "input_line": 11,
+    "original_line": "11:11",
+    "function_line_range": "GLOBAL:1:46",
+    "message": "Pulse found a potential memory leak. Memory dynamically allocated at line 10 by call to `malloc`, is not freed after the last access at line 11, column 7.",
+    "sanitized_message": "Pulse found a potential memory leak. Memory dynamically allocated at SANITIZED by call to `malloc`, is not freed after the last access at SANITIZED, SANITIZED.",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF HAVE_ECC",
+        "DEF SSL_CTX_set_ecdh_auto"
+      ]
+    ],
+    "analysis_time": 1.134339899988845,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        10,
+        11
+      ]
+    ],
+    "alarm_type": "ERROR",
+    "bug_type": "MEMORY_LEAK",
+    "original_configuration": [],
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_6",
+    "input_file": "/targets/APACHE/35ae2e259e4.c",
+    "input_line": 12,
+    "original_line": "12:12",
+    "function_line_range": "GLOBAL:1:46",
+    "message": "Pulse found a potential memory leak. Memory dynamically allocated at line 10 by call to `malloc`, is not freed after the last access at line 12, column 5.",
+    "sanitized_message": "Pulse found a potential memory leak. Memory dynamically allocated at SANITIZED by call to `malloc`, is not freed after the last access at SANITIZED, SANITIZED.",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF HAVE_ECC",
+        "DEF SSL_CTX_set_ecdh_auto"
+      ],
+      [
+        "DEF HAVE_ECC",
+        "UNDEF SSL_CTX_set_ecdh_auto"
+      ]
+    ],
+    "analysis_time": 1.134339899988845,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        10,
+        12
+      ]
+    ],
+    "alarm_type": "ERROR",
+    "bug_type": "MEMORY_LEAK",
+    "original_configuration": [],
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_7",
+    "input_file": "/targets/APACHE/35ae2e259e4.c",
+    "input_line": 12,
+    "original_line": "12:12",
+    "function_line_range": "GLOBAL:1:46",
+    "message": "Pulse found a potential null pointer dereference  on line 10.",
+    "sanitized_message": "Pulse found a potential null pointer dereference  on SANITIZED.",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF HAVE_ECC",
+        "DEF SSL_CTX_set_ecdh_auto"
+      ],
+      [
+        "DEF HAVE_ECC",
+        "UNDEF SSL_CTX_set_ecdh_auto"
+      ]
+    ],
+    "analysis_time": 1.134339899988845,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        10,
+        12
+      ]
+    ],
+    "alarm_type": "ERROR",
+    "bug_type": "NULLPTR_DEREFERENCE",
+    "original_configuration": [],
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_8",
+    "input_file": "/targets/APACHE/35ae2e259e4.c",
+    "input_line": 17,
+    "original_line": "17:17",
+    "function_line_range": "GLOBAL:1:46",
+    "message": "Pulse found a potential memory leak. Memory dynamically allocated at line 10 by call to `malloc`, is not freed after the last access at line 17, column 5.",
+    "sanitized_message": "Pulse found a potential memory leak. Memory dynamically allocated at SANITIZED by call to `malloc`, is not freed after the last access at SANITIZED, SANITIZED.",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF HAVE_ECC",
+        "UNDEF SSL_CTX_set_ecdh_auto"
+      ]
+    ],
+    "analysis_time": 1.1766588470200077,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        10,
+        17
+      ]
+    ],
+    "alarm_type": "ERROR",
+    "bug_type": "MEMORY_LEAK",
+    "original_configuration": [],
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_9",
+    "input_file": "/targets/APACHE/35ae2e259e4.c",
+    "input_line": 17,
+    "original_line": "17:17",
+    "function_line_range": "GLOBAL:1:46",
+    "message": "Pulse found a potential null pointer dereference  on line 10.",
+    "sanitized_message": "Pulse found a potential null pointer dereference  on SANITIZED.",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF HAVE_ECC",
+        "UNDEF SSL_CTX_set_ecdh_auto"
+      ]
+    ],
+    "analysis_time": 1.1766588470200077,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        10,
+        17
+      ]
+    ],
+    "alarm_type": "ERROR",
+    "bug_type": "NULLPTR_DEREFERENCE",
+    "original_configuration": [],
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_10",
+    "input_file": "/targets/APACHE/bbeb0516cf0.c",
+    "input_line": 6,
+    "original_line": "6:6",
+    "function_line_range": "GLOBAL:1:21",
+    "message": " Null pointer passed to 1st parameter expecting 'nonnull' ",
+    "sanitized_message": "Null pointer passed to 1st parameter expecting 'nonnull'",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF APR_FILES_AS_SOCKETS"
+      ]
+    ],
+    "analysis_time": 0.03250358602963388,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        18,
+        19,
+        12,
+        6
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_11",
+    "input_file": "/targets/APACHE/c76df14dfb4.c",
+    "input_line": 42,
+    "original_line": "42:42",
+    "function_line_range": "GLOBAL:1:47",
+    "message": " Value stored to 'flags' is never read ",
+    "sanitized_message": "Value stored to 'flags' is never read",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CROSS_COMPILE",
+        "DEF WIN32",
+        "DEF OS2"
+      ],
+      [
+        "DEF CROSS_COMPILE",
+        "DEF WIN32",
+        "UNDEF OS2"
+      ],
+      [
+        "DEF CROSS_COMPILE",
+        "UNDEF WIN32",
+        "DEF OS2"
+      ],
+      [
+        "DEF CROSS_COMPILE",
+        "UNDEF WIN32",
+        "UNDEF OS2"
+      ],
+      [
+        "UNDEF CROSS_COMPILE",
+        "DEF WIN32",
+        "UNDEF OS2"
+      ],
+      [
+        "UNDEF CROSS_COMPILE",
+        "UNDEF WIN32",
+        "UNDEF OS2"
+      ]
+    ],
+    "analysis_time": 0.025971602008212358,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        42
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_12",
+    "input_file": "/targets/APACHE/c76df14dfb4.c",
+    "input_line": 38,
+    "original_line": "38:38",
+    "function_line_range": "GLOBAL:1:47",
+    "message": " Value stored to 'flags' is never read ",
+    "sanitized_message": "Value stored to 'flags' is never read",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "UNDEF CROSS_COMPILE",
+        "DEF WIN32",
+        "DEF OS2"
+      ],
+      [
+        "UNDEF CROSS_COMPILE",
+        "UNDEF WIN32",
+        "DEF OS2"
+      ]
+    ],
+    "analysis_time": 0.028876367956399918,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        38
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_13",
+    "input_file": "/targets/BUSYBOX/061fd0a353e.c",
+    "input_line": 16,
+    "original_line": "16:16",
+    "function_line_range": "GLOBAL:1:37",
+    "message": " Value stored to 'p' is never read ",
+    "sanitized_message": "Value stored to 'p' is never read",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF",
+        "DEF CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF",
+        "DEF CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF",
+        "UNDEF CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF"
+      ]
+    ],
+    "analysis_time": 0.030002793995663524,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        16
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_14",
+    "input_file": "/targets/BUSYBOX/061fd0a353e.c",
+    "input_line": 20,
+    "original_line": "20:20",
+    "function_line_range": "GLOBAL:1:37",
+    "message": " Branch condition evaluates to a garbage value ",
+    "sanitized_message": "Branch condition evaluates to a garbage value",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF",
+        "DEF CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF"
+      ]
+    ],
+    "analysis_time": 0.030002793995663524,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        7,
+        12,
+        20
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_15",
+    "input_file": "/targets/BUSYBOX/061fd0a353e.c",
+    "input_line": 27,
+    "original_line": "27:27",
+    "function_line_range": "GLOBAL:1:37",
+    "message": " Branch condition evaluates to a garbage value ",
+    "sanitized_message": "Branch condition evaluates to a garbage value",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF",
+        "DEF CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF",
+        "DEF CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF"
+      ]
+    ],
+    "analysis_time": 0.030002793995663524,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        7,
+        12,
+        27
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_16",
+    "input_file": "/targets/BUSYBOX/061fd0a353e.c",
+    "input_line": 27,
+    "original_line": "27:27",
+    "function_line_range": "GLOBAL:1:37",
+    "message": "Uninitialized Variable p",
+    "sanitized_message": "Uninitialized Variable p",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF",
+        "DEF CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF"
+      ],
+      [
+        "DEF CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF",
+        "UNDEF CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF",
+        "DEF CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF",
+        "UNDEF CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF"
+      ]
+    ],
+    "analysis_time": 0.06470389396417886,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        27
+      ]
+    ],
+    "function": "main",
+    "variable": "p",
+    "original_configuration": [],
+    "original_file": "phasar.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_17",
+    "input_file": "/targets/BUSYBOX/199501f2a00.c",
+    "input_line": 21,
+    "original_line": "21:21",
+    "function_line_range": "GLOBAL:1:29",
+    "message": " Null pointer passed to 2nd parameter expecting 'nonnull' ",
+    "sanitized_message": "Null pointer passed to 2nd parameter expecting 'nonnull'",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "UNDEF ENABLE_FEATURE_MODPROBE_MULTIPLE_OPTIONS"
+      ]
+    ],
+    "analysis_time": 0.02539279096527025,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        27,
+        7,
+        9,
+        21
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_18",
+    "input_file": "/targets/BUSYBOX/1b487ea8a69.c",
+    "input_line": 14,
+    "original_line": "14:14",
+    "function_line_range": "GLOBAL:1:25",
+    "message": " Dereference of null pointer (loaded from variable 'scontext') ",
+    "sanitized_message": "Dereference of null pointer (loaded from variable 'scontext')",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF ENABLE_SELINUX",
+        "UNDEF ENABLE_FEATURE_STAT_FORMAT"
+      ]
+    ],
+    "analysis_time": 0.029423861007671803,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        23,
+        7,
+        13,
+        14
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_19",
+    "input_file": "/targets/BUSYBOX/1b487ea8a69.c",
+    "input_line": 14,
+    "original_line": "14:14",
+    "function_line_range": "GLOBAL:1:25",
+    "message": "Pulse found a potential null pointer dereference  on line 7.",
+    "sanitized_message": "Pulse found a potential null pointer dereference  on SANITIZED.",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF ENABLE_SELINUX",
+        "UNDEF ENABLE_FEATURE_STAT_FORMAT"
+      ]
+    ],
+    "analysis_time": 1.1020804590079933,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        7,
+        14
+      ]
+    ],
+    "alarm_type": "ERROR",
+    "bug_type": "NULLPTR_DEREFERENCE",
+    "original_configuration": [],
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_20",
+    "input_file": "/targets/BUSYBOX/2631486f1bf.c",
+    "input_line": 67,
+    "original_line": "67:67",
+    "function_line_range": "GLOBAL:1:79",
+    "message": " Assigned value is garbage or undefined ",
+    "sanitized_message": "Assigned value is garbage or undefined",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ]
+    ],
+    "analysis_time": 0.036515127052553,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        60,
+        64,
+        67
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_21",
+    "input_file": "/targets/BUSYBOX/2631486f1bf.c",
+    "input_line": 66,
+    "original_line": "66:66",
+    "function_line_range": "GLOBAL:1:79",
+    "message": "Pulse found a potential null pointer dereference  on line 65.",
+    "sanitized_message": "Pulse found a potential null pointer dereference  on SANITIZED.",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ]
+    ],
+    "analysis_time": 1.109550186956767,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        65,
+        66
+      ]
+    ],
+    "alarm_type": "ERROR",
+    "bug_type": "NULLPTR_DEREFERENCE",
+    "original_configuration": [],
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_22",
+    "input_file": "/targets/BUSYBOX/2631486f1bf.c",
+    "input_line": 29,
+    "original_line": "29:29",
+    "function_line_range": "GLOBAL:1:79",
+    "message": "Uninitialized Variable arr",
+    "sanitized_message": "Uninitialized Variable arr",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ]
+    ],
+    "analysis_time": 0.07748499704757705,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        29
+      ]
+    ],
+    "function": "showdirs",
+    "variable": "arr",
+    "original_configuration": [],
+    "original_file": "phasar.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_23",
+    "input_file": "/targets/BUSYBOX/2631486f1bf.c",
+    "input_line": 43,
+    "original_line": "43:43",
+    "function_line_range": "GLOBAL:1:79",
+    "message": "Uninitialized Variable arr",
+    "sanitized_message": "Uninitialized Variable arr",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ]
+    ],
+    "analysis_time": 0.07748499704757705,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        43
+      ]
+    ],
+    "function": "sort",
+    "variable": "arr",
+    "original_configuration": [],
+    "original_file": "phasar.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_24",
+    "input_file": "/targets/BUSYBOX/2631486f1bf.c",
+    "input_line": 48,
+    "original_line": "48:48",
+    "function_line_range": "GLOBAL:1:79",
+    "message": "Uninitialized Variable arr",
+    "sanitized_message": "Uninitialized Variable arr",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ]
+    ],
+    "analysis_time": 0.07748499704757705,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        48
+      ]
+    ],
+    "function": "sort",
+    "variable": "arr",
+    "original_configuration": [],
+    "original_file": "phasar.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_25",
+    "input_file": "/targets/BUSYBOX/2631486f1bf.c",
+    "input_line": 48,
+    "original_line": "48:48",
+    "function_line_range": "GLOBAL:1:79",
+    "message": "Uninitialized Variable  arr",
+    "sanitized_message": "Uninitialized Variable  arr",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ]
+    ],
+    "analysis_time": 0.07748499704757705,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        48
+      ]
+    ],
+    "function": "sort",
+    "variable": " arr",
+    "original_configuration": [],
+    "original_file": "phasar.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_26",
+    "input_file": "/targets/BUSYBOX/2631486f1bf.c",
+    "input_line": 49,
+    "original_line": "49:49",
+    "function_line_range": "GLOBAL:1:79",
+    "message": "Uninitialized Variable arr",
+    "sanitized_message": "Uninitialized Variable arr",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ]
+    ],
+    "analysis_time": 0.07748499704757705,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        49
+      ]
+    ],
+    "function": "sort",
+    "variable": "arr",
+    "original_configuration": [],
+    "original_file": "phasar.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_27",
+    "input_file": "/targets/BUSYBOX/2631486f1bf.c",
+    "input_line": 50,
+    "original_line": "50:50",
+    "function_line_range": "GLOBAL:1:79",
+    "message": "Uninitialized Variable arr",
+    "sanitized_message": "Uninitialized Variable arr",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ]
+    ],
+    "analysis_time": 0.07748499704757705,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        50
+      ]
+    ],
+    "function": "sort",
+    "variable": "arr",
+    "original_configuration": [],
+    "original_file": "phasar.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_28",
+    "input_file": "/targets/BUSYBOX/2631486f1bf.c",
+    "input_line": 50,
+    "original_line": "50:50",
+    "function_line_range": "GLOBAL:1:79",
+    "message": "Uninitialized Variable  arr",
+    "sanitized_message": "Uninitialized Variable  arr",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ]
+    ],
+    "analysis_time": 0.07748499704757705,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        50
+      ]
+    ],
+    "function": "sort",
+    "variable": " arr",
+    "original_configuration": [],
+    "original_file": "phasar.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_29",
+    "input_file": "/targets/BUSYBOX/2631486f1bf.c",
+    "input_line": 51,
+    "original_line": "51:51",
+    "function_line_range": "GLOBAL:1:79",
+    "message": "Uninitialized Variable temp",
+    "sanitized_message": "Uninitialized Variable temp",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ]
+    ],
+    "analysis_time": 0.07748499704757705,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        51
+      ]
+    ],
+    "function": "sort",
+    "variable": "temp",
+    "original_configuration": [],
+    "original_file": "phasar.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_30",
+    "input_file": "/targets/BUSYBOX/2631486f1bf.c",
+    "input_line": 51,
+    "original_line": "51:51",
+    "function_line_range": "GLOBAL:1:79",
+    "message": "Uninitialized Variable  arr",
+    "sanitized_message": "Uninitialized Variable  arr",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ]
+    ],
+    "analysis_time": 0.07748499704757705,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        51
+      ]
+    ],
+    "function": "sort",
+    "variable": " arr",
+    "original_configuration": [],
+    "original_file": "phasar.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_31",
+    "input_file": "/targets/BUSYBOX/2631486f1bf.c",
+    "input_line": 67,
+    "original_line": "67:67",
+    "function_line_range": "GLOBAL:1:79",
+    "message": "Uninitialized Variable head",
+    "sanitized_message": "Uninitialized Variable head",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "DEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "DEF CONFIG_FEATURE_LS_SORTFILES"
+      ],
+      [
+        "UNDEF CONFIG_FEATURE_LS_RECURSIVE",
+        "UNDEF CONFIG_FEATURE_LS_SORTFILES"
+      ]
+    ],
+    "analysis_time": 0.07748499704757705,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        67
+      ]
+    ],
+    "function": "main",
+    "variable": "head",
+    "original_configuration": [],
+    "original_file": "phasar.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_32",
+    "input_file": "/targets/BUSYBOX/5275b1e49f6.c",
+    "input_line": 16,
+    "original_line": "16:16",
+    "function_line_range": "GLOBAL:1:35",
+    "message": " Value stored to 'm_has_modinfo' is never read ",
+    "sanitized_message": "Value stored to 'm_has_modinfo' is never read",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_FEATURE_INSMOD_VERSION_CHECKING"
+      ]
+    ],
+    "analysis_time": 0.02827721502399072,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        16
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_33",
+    "input_file": "/targets/BUSYBOX/5275b1e49f6.c",
+    "input_line": 18,
+    "original_line": "18:18",
+    "function_line_range": "GLOBAL:1:35",
+    "message": " Value stored to 'm_has_modinfo' is never read ",
+    "sanitized_message": "Value stored to 'm_has_modinfo' is never read",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_FEATURE_INSMOD_VERSION_CHECKING"
+      ]
+    ],
+    "analysis_time": 0.02827721502399072,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        18
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_34",
+    "input_file": "/targets/BUSYBOX/5275b1e49f6.c",
+    "input_line": 21,
+    "original_line": "21:21",
+    "function_line_range": "GLOBAL:1:35",
+    "message": " Value stored to 'k_crcs' is never read ",
+    "sanitized_message": "Value stored to 'k_crcs' is never read",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_FEATURE_INSMOD_VERSION_CHECKING"
+      ]
+    ],
+    "analysis_time": 0.02827721502399072,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        21
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_35",
+    "input_file": "/targets/BUSYBOX/5275b1e49f6.c",
+    "input_line": 25,
+    "original_line": "25:25",
+    "function_line_range": "GLOBAL:1:35",
+    "message": " Value stored to 'k_crcs' is never read ",
+    "sanitized_message": "Value stored to 'k_crcs' is never read",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_FEATURE_INSMOD_VERSION_CHECKING"
+      ]
+    ],
+    "analysis_time": 0.02827721502399072,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        25
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_36",
+    "input_file": "/targets/BUSYBOX/5cd6461b6fb.c",
+    "input_line": 36,
+    "original_line": "36:36",
+    "function_line_range": "GLOBAL:1:47",
+    "message": "Uninitialized Variable request",
+    "sanitized_message": "Uninitialized Variable request",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_LFS",
+        "DEF CONFIG_FEATURE_HTTPD_BASIC_AUTH",
+        "DEF CONFIG_FEATURE_HTTPD_CGI"
+      ],
+      [
+        "DEF CONFIG_LFS",
+        "DEF CONFIG_FEATURE_HTTPD_BASIC_AUTH",
+        "UNDEF CONFIG_FEATURE_HTTPD_CGI"
+      ],
+      [
+        "DEF CONFIG_LFS",
+        "UNDEF CONFIG_FEATURE_HTTPD_BASIC_AUTH",
+        "DEF CONFIG_FEATURE_HTTPD_CGI"
+      ],
+      [
+        "DEF CONFIG_LFS",
+        "UNDEF CONFIG_FEATURE_HTTPD_BASIC_AUTH",
+        "UNDEF CONFIG_FEATURE_HTTPD_CGI"
+      ],
+      [
+        "UNDEF CONFIG_LFS",
+        "DEF CONFIG_FEATURE_HTTPD_BASIC_AUTH",
+        "DEF CONFIG_FEATURE_HTTPD_CGI"
+      ],
+      [
+        "UNDEF CONFIG_LFS",
+        "DEF CONFIG_FEATURE_HTTPD_BASIC_AUTH",
+        "UNDEF CONFIG_FEATURE_HTTPD_CGI"
+      ],
+      [
+        "UNDEF CONFIG_LFS",
+        "UNDEF CONFIG_FEATURE_HTTPD_BASIC_AUTH",
+        "DEF CONFIG_FEATURE_HTTPD_CGI"
+      ],
+      [
+        "UNDEF CONFIG_LFS",
+        "UNDEF CONFIG_FEATURE_HTTPD_BASIC_AUTH",
+        "UNDEF CONFIG_FEATURE_HTTPD_CGI"
+      ]
+    ],
+    "analysis_time": 0.0734770679846406,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        36
+      ]
+    ],
+    "function": "handleIncoming",
+    "variable": "request",
+    "original_configuration": [],
+    "original_file": "phasar.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_37",
+    "input_file": "/targets/BUSYBOX/b273d665181.c",
+    "input_line": 16,
+    "original_line": "16:16",
+    "function_line_range": "GLOBAL:1:29",
+    "message": " 2nd function call argument is an uninitialized value ",
+    "sanitized_message": "2nd function call argument is an uninitialized value",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF BB_FEATURE_LS_FILETYPES",
+        "UNDEF BB_FEATURE_LS_USERNAME"
+      ]
+    ],
+    "analysis_time": 0.02691709902137518,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        27,
+        22,
+        7,
+        15,
+        16
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "uninitialized_value",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_38",
+    "input_file": "/targets/BUSYBOX/b62bd7b261b.c",
+    "input_line": 16,
+    "original_line": "16:16",
+    "function_line_range": "GLOBAL:1:46",
+    "message": " Value stored to 'val' is never read ",
+    "sanitized_message": "Value stored to 'val' is never read",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF ENABLE_FEATURE_MDEV_RENAME",
+        "DEF ENABLE_FEATURE_MDEV_RENAME_REGEXP",
+        "DEF ENABLE_FEATURE_MDEV_CONF"
+      ],
+      [
+        "DEF ENABLE_FEATURE_MDEV_RENAME",
+        "UNDEF ENABLE_FEATURE_MDEV_RENAME_REGEXP",
+        "DEF ENABLE_FEATURE_MDEV_CONF"
+      ]
+    ],
+    "analysis_time": 0.03226762602571398,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        16
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_39",
+    "input_file": "/targets/BUSYBOX/b62bd7b261b.c",
+    "input_line": 24,
+    "original_line": "24:24",
+    "function_line_range": "GLOBAL:1:46",
+    "message": " Dereference of undefined pointer value ",
+    "sanitized_message": "Dereference of undefined pointer value",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF ENABLE_FEATURE_MDEV_RENAME",
+        "DEF ENABLE_FEATURE_MDEV_RENAME_REGEXP",
+        "DEF ENABLE_FEATURE_MDEV_CONF"
+      ]
+    ],
+    "analysis_time": 0.03226762602571398,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        43,
+        44,
+        11,
+        16,
+        23,
+        24
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_40",
+    "input_file": "/targets/BUSYBOX/b62bd7b261b.c",
+    "input_line": 14,
+    "original_line": "14:14",
+    "function_line_range": "GLOBAL:1:46",
+    "message": " Value stored to 'a' during its initialization is never read ",
+    "sanitized_message": "Value stored to 'a' during its initialization is never read",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF ENABLE_FEATURE_MDEV_RENAME",
+        "UNDEF ENABLE_FEATURE_MDEV_RENAME_REGEXP",
+        "DEF ENABLE_FEATURE_MDEV_CONF"
+      ]
+    ],
+    "analysis_time": 0.025403950014151633,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        14
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_41",
+    "input_file": "/targets/BUSYBOX/bc0ffc0e971.c",
+    "input_line": 43,
+    "original_line": "43:43",
+    "function_line_range": "GLOBAL:1:47",
+    "message": " Use of memory after it is freed ",
+    "sanitized_message": "Use of memory after it is freed",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF ENABLE_FEATURE_CLEAN_UP"
+      ]
+    ],
+    "analysis_time": 0.029555631044786423,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        40,
+        27,
+        29,
+        43,
+        44,
+        16
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_42",
+    "input_file": "/targets/BUSYBOX/bc0ffc0e971.c",
+    "input_line": 46,
+    "original_line": "46:46",
+    "function_line_range": "GLOBAL:1:47",
+    "message": " Potential leak of memory pointed to by 'clist' ",
+    "sanitized_message": "Potential leak of memory pointed to by 'clist'",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "UNDEF ENABLE_FEATURE_CLEAN_UP"
+      ]
+    ],
+    "analysis_time": 0.0324341359664686,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        40,
+        27,
+        29,
+        46
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_43",
+    "input_file": "/targets/BUSYBOX/bc0ffc0e971.c",
+    "input_line": 30,
+    "original_line": "30:30",
+    "function_line_range": "GLOBAL:1:47",
+    "message": "Pulse found a potential null pointer dereference  on line 29.",
+    "sanitized_message": "Pulse found a potential null pointer dereference  on SANITIZED.",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF ENABLE_FEATURE_CLEAN_UP"
+      ],
+      [
+        "UNDEF ENABLE_FEATURE_CLEAN_UP"
+      ]
+    ],
+    "analysis_time": 0.8699904210516252,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        29,
+        30
+      ]
+    ],
+    "alarm_type": "ERROR",
+    "bug_type": "NULLPTR_DEREFERENCE",
+    "original_configuration": [],
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_44",
+    "input_file": "/targets/BUSYBOX/bc0ffc0e971.c",
+    "input_line": 40,
+    "original_line": "40:40",
+    "function_line_range": "GLOBAL:1:47",
+    "message": "Pulse found a potential memory leak. Memory dynamically allocated at line 40 by call to `prepend_new_eth_table()`, is not freed after the last access at line 40, column 3.",
+    "sanitized_message": "Pulse found a potential memory leak. Memory dynamically allocated at SANITIZED by call to `prepend_new_eth_table()`, is not freed after the last access at SANITIZED, SANITIZED.",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "UNDEF ENABLE_FEATURE_CLEAN_UP"
+      ]
+    ],
+    "analysis_time": 0.710480406996794,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        40,
+        29
+      ]
+    ],
+    "alarm_type": "ERROR",
+    "bug_type": "MEMORY_LEAK",
+    "original_configuration": [],
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_45",
+    "input_file": "/targets/BUSYBOX/eef2317b9f5.c",
+    "input_line": 30,
+    "original_line": "30:30",
+    "function_line_range": "GLOBAL:1:35",
+    "message": " Branch condition evaluates to a garbage value ",
+    "sanitized_message": "Branch condition evaluates to a garbage value",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_FEATURE_CLEAN_UP"
+      ]
+    ],
+    "analysis_time": 0.031623313028831035,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        6,
+        11,
+        12,
+        18,
+        22,
+        23,
+        30
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_46",
+    "input_file": "/targets/BUSYBOX/eef2317b9f5.c",
+    "input_line": 26,
+    "original_line": "26:26",
+    "function_line_range": "GLOBAL:1:35",
+    "message": " Value stored to 'buf' is never read ",
+    "sanitized_message": "Value stored to 'buf' is never read",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "UNDEF CONFIG_FEATURE_CLEAN_UP"
+      ]
+    ],
+    "analysis_time": 0.031437802012078464,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        26
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_47",
+    "input_file": "/targets/BUSYBOX/eef2317b9f5.c",
+    "input_line": 34,
+    "original_line": "34:34",
+    "function_line_range": "GLOBAL:1:35",
+    "message": " Potential leak of memory pointed to by 'buf' ",
+    "sanitized_message": "Potential leak of memory pointed to by 'buf'",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "UNDEF CONFIG_FEATURE_CLEAN_UP"
+      ]
+    ],
+    "analysis_time": 0.031437802012078464,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        11,
+        22,
+        26,
+        34
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_48",
+    "input_file": "/targets/BUSYBOX/eef2317b9f5.c",
+    "input_line": 26,
+    "original_line": "26:26",
+    "function_line_range": "GLOBAL:1:35",
+    "message": "Pulse found a potential memory leak. Memory dynamically allocated at line 26 by call to `malloc`, is not freed after the last access at line 26, column 3.",
+    "sanitized_message": "Pulse found a potential memory leak. Memory dynamically allocated at SANITIZED by call to `malloc`, is not freed after the last access at SANITIZED, SANITIZED.",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "UNDEF CONFIG_FEATURE_CLEAN_UP"
+      ]
+    ],
+    "analysis_time": 1.0038641199935228,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        26
+      ]
+    ],
+    "alarm_type": "ERROR",
+    "bug_type": "MEMORY_LEAK",
+    "original_configuration": [],
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_49",
+    "input_file": "/targets/LINUX/0dc77b6dabe.c",
+    "input_line": 109,
+    "original_line": "109:109",
+    "function_line_range": "GLOBAL:1:112",
+    "message": "Pulse found a potential memory leak. Memory dynamically allocated at line 107 by call to `extcon_class_init()`, is not freed after the last access at line 109, column 3.",
+    "sanitized_message": "Pulse found a potential memory leak. Memory dynamically allocated at SANITIZED by call to `extcon_class_init()`, is not freed after the last access at SANITIZED, SANITIZED.",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_ANDROID",
+        "DEF CONFIG_EXTCON"
+      ]
+    ],
+    "analysis_time": 1.3362671340000816,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        107,
+        95,
+        86,
+        65,
+        47,
+        109
+      ]
+    ],
+    "alarm_type": "ERROR",
+    "bug_type": "MEMORY_LEAK",
+    "original_configuration": [],
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_50",
+    "input_file": "/targets/LINUX/221ac329e93.c",
+    "input_line": 37,
+    "original_line": "37:37",
+    "function_line_range": "GLOBAL:1:40",
+    "message": "Pulse found a potential null pointer dereference  on line 35.",
+    "sanitized_message": "Pulse found a potential null pointer dereference  on SANITIZED.",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_KPROBES",
+        "DEF CONFIG_KGDB",
+        "DEF CONFIG_BDI_SWITCH",
+        "DEF CONFIG_XMON"
+      ],
+      [
+        "DEF CONFIG_KPROBES",
+        "DEF CONFIG_KGDB",
+        "DEF CONFIG_BDI_SWITCH",
+        "UNDEF CONFIG_XMON"
+      ],
+      [
+        "DEF CONFIG_KPROBES",
+        "DEF CONFIG_KGDB",
+        "UNDEF CONFIG_BDI_SWITCH",
+        "DEF CONFIG_XMON"
+      ],
+      [
+        "DEF CONFIG_KPROBES",
+        "DEF CONFIG_KGDB",
+        "UNDEF CONFIG_BDI_SWITCH",
+        "UNDEF CONFIG_XMON"
+      ],
+      [
+        "DEF CONFIG_KPROBES",
+        "UNDEF CONFIG_KGDB",
+        "DEF CONFIG_BDI_SWITCH",
+        "DEF CONFIG_XMON"
+      ],
+      [
+        "DEF CONFIG_KPROBES",
+        "UNDEF CONFIG_KGDB",
+        "DEF CONFIG_BDI_SWITCH",
+        "UNDEF CONFIG_XMON"
+      ],
+      [
+        "DEF CONFIG_KPROBES",
+        "UNDEF CONFIG_KGDB",
+        "UNDEF CONFIG_BDI_SWITCH",
+        "DEF CONFIG_XMON"
+      ]
+    ],
+    "analysis_time": 1.0409350429545157,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        35,
+        37
+      ]
+    ],
+    "alarm_type": "ERROR",
+    "bug_type": "NULLPTR_DEREFERENCE",
+    "original_configuration": [],
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_51",
+    "input_file": "/targets/LINUX/30e053248da.c",
+    "input_line": 31,
+    "original_line": "31:31",
+    "function_line_range": "GLOBAL:1:54",
+    "message": " Value stored to 'x' during its initialization is never read ",
+    "sanitized_message": "Value stored to 'x' during its initialization is never read",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_SECURITY"
+      ],
+      [
+        "UNDEF CONFIG_SECURITY"
+      ]
+    ],
+    "analysis_time": 0.0238916429807432,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        31
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_52",
+    "input_file": "/targets/LINUX/30e053248da.c",
+    "input_line": 31,
+    "original_line": "31:31",
+    "function_line_range": "GLOBAL:1:54",
+    "message": " Assigned value is garbage or undefined ",
+    "sanitized_message": "Assigned value is garbage or undefined",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "UNDEF CONFIG_SECURITY"
+      ]
+    ],
+    "analysis_time": 0.025913952966220677,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        52,
+        39,
+        41,
+        24,
+        16,
+        26,
+        31
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_53",
+    "input_file": "/targets/LINUX/30e053248da.c",
+    "input_line": 24,
+    "original_line": "24:24",
+    "function_line_range": "GLOBAL:1:54",
+    "message": "Uninitialized Variable length",
+    "sanitized_message": "Uninitialized Variable length",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_SECURITY"
+      ],
+      [
+        "UNDEF CONFIG_SECURITY"
+      ]
+    ],
+    "analysis_time": 0.07846857298864052,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        24
+      ]
+    ],
+    "function": "reiserfs_security_init",
+    "variable": "length",
+    "original_configuration": [],
+    "original_file": "phasar.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_54",
+    "input_file": "/targets/LINUX/30e053248da.c",
+    "input_line": 27,
+    "original_line": "27:27",
+    "function_line_range": "GLOBAL:1:54",
+    "message": "Uninitialized Variable length",
+    "sanitized_message": "Uninitialized Variable length",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_SECURITY"
+      ],
+      [
+        "UNDEF CONFIG_SECURITY"
+      ]
+    ],
+    "analysis_time": 0.07846857298864052,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        27
+      ]
+    ],
+    "function": "reiserfs_security_init",
+    "variable": "length",
+    "original_configuration": [],
+    "original_file": "phasar.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_55",
+    "input_file": "/targets/LINUX/30e053248da.c",
+    "input_line": 31,
+    "original_line": "31:31",
+    "function_line_range": "GLOBAL:1:54",
+    "message": "Uninitialized Variable length",
+    "sanitized_message": "Uninitialized Variable length",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_SECURITY"
+      ],
+      [
+        "UNDEF CONFIG_SECURITY"
+      ]
+    ],
+    "analysis_time": 0.07846857298864052,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        31
+      ]
+    ],
+    "function": "reiserfs_security_init",
+    "variable": "length",
+    "original_configuration": [],
+    "original_file": "phasar.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_56",
+    "input_file": "/targets/LINUX/36855dcfc98.c",
+    "input_line": 6,
+    "original_line": "6:6",
+    "function_line_range": "GLOBAL:1:16",
+    "message": " Value stored to 'wakeup' is never read ",
+    "sanitized_message": "Value stored to 'wakeup' is never read",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "UNDEF CONFIG_BF60x"
+      ]
+    ],
+    "analysis_time": 0.021237797976937145,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        6
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_57",
+    "input_file": "/targets/LINUX/472a474c663.c",
+    "input_line": 14,
+    "original_line": "14:14",
+    "function_line_range": "GLOBAL:1:46",
+    "message": " Dereference of null pointer (loaded from variable 'ptr') ",
+    "sanitized_message": "Dereference of null pointer (loaded from variable 'ptr')",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_SMP"
+      ]
+    ],
+    "analysis_time": 0.02357231202768162,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        43,
+        34,
+        15,
+        16,
+        35,
+        27,
+        28,
+        21,
+        14
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_58",
+    "input_file": "/targets/LINUX/6252547b8a7.c",
+    "input_line": 12,
+    "original_line": "12:12",
+    "function_line_range": "GLOBAL:1:35",
+    "message": " Value stored to 'irq' during its initialization is never read ",
+    "sanitized_message": "Value stored to 'irq' during its initialization is never read",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_OF_IRQ",
+        "DEF CONFIG_TWL4030_CORE"
+      ],
+      [
+        "UNDEF CONFIG_OF_IRQ",
+        "DEF CONFIG_TWL4030_CORE"
+      ]
+    ],
+    "analysis_time": 0.024129664001520723,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        12
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_59",
+    "input_file": "/targets/LINUX/6252547b8a7.c",
+    "input_line": 12,
+    "original_line": "12:12",
+    "function_line_range": "GLOBAL:1:35",
+    "message": " Dereference of null pointer (loaded from variable 'ops') ",
+    "sanitized_message": "Dereference of null pointer (loaded from variable 'ops')",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "UNDEF CONFIG_OF_IRQ",
+        "DEF CONFIG_TWL4030_CORE"
+      ]
+    ],
+    "analysis_time": 0.022980706999078393,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        32,
+        19,
+        25,
+        12
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_60",
+    "input_file": "/targets/LINUX/6252547b8a7.c",
+    "input_line": 25,
+    "original_line": "25:25",
+    "function_line_range": "GLOBAL:1:35",
+    "message": "Pulse found a potential null pointer dereference  on line 19in call to `irq_domain_add()` .",
+    "sanitized_message": "Pulse found a potential null pointer dereference  on SANITIZEDin call to `irq_domain_add()` .",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "UNDEF CONFIG_OF_IRQ",
+        "DEF CONFIG_TWL4030_CORE"
+      ]
+    ],
+    "analysis_time": 1.4773281270172447,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        19,
+        25,
+        10,
+        12
+      ]
+    ],
+    "alarm_type": "ERROR",
+    "bug_type": "NULLPTR_DEREFERENCE",
+    "original_configuration": [],
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_61",
+    "input_file": "/targets/LINUX/66517915e09.c",
+    "input_line": 16,
+    "original_line": "16:16",
+    "function_line_range": "GLOBAL:1:38",
+    "message": " Value stored to 'codec_hw_write' during its initialization is never read ",
+    "sanitized_message": "Value stored to 'codec_hw_write' during its initialization is never read",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_I2C",
+        "DEF CONFIG_SND_FSI_DA7210",
+        "DEF CONFIG_SND_FSI_AK4642"
+      ],
+      [
+        "DEF CONFIG_I2C",
+        "DEF CONFIG_SND_FSI_DA7210",
+        "UNDEF CONFIG_SND_FSI_AK4642"
+      ]
+    ],
+    "analysis_time": 0.02222603402333334,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        16
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_62",
+    "input_file": "/targets/LINUX/66517915e09.c",
+    "input_line": 24,
+    "original_line": "24:24",
+    "function_line_range": "GLOBAL:1:38",
+    "message": " Value stored to 'codec_hw_write' during its initialization is never read ",
+    "sanitized_message": "Value stored to 'codec_hw_write' during its initialization is never read",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_I2C",
+        "DEF CONFIG_SND_FSI_DA7210",
+        "DEF CONFIG_SND_FSI_AK4642"
+      ],
+      [
+        "DEF CONFIG_I2C",
+        "UNDEF CONFIG_SND_FSI_DA7210",
+        "DEF CONFIG_SND_FSI_AK4642"
+      ]
+    ],
+    "analysis_time": 0.02222603402333334,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        24
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_63",
+    "input_file": "/targets/LINUX/6e2b75740be.c",
+    "input_line": 67,
+    "original_line": "67:67",
+    "function_line_range": "GLOBAL:1:75",
+    "message": "Pulse found a potential memory leak. Memory dynamically allocated at line 30 by call to `malloc`, is not freed after the last access at line 67, column 3.",
+    "sanitized_message": "Pulse found a potential memory leak. Memory dynamically allocated at SANITIZED by call to `malloc`, is not freed after the last access at SANITIZED, SANITIZED.",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_MODULE_UNLOAD",
+        "DEF CONFIG_SMP"
+      ]
+    ],
+    "analysis_time": 0.9463638260494918,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        30,
+        67
+      ]
+    ],
+    "alarm_type": "ERROR",
+    "bug_type": "MEMORY_LEAK",
+    "original_configuration": [],
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_64",
+    "input_file": "/targets/LINUX/6e2b75740be.c",
+    "input_line": 67,
+    "original_line": "67:67",
+    "function_line_range": "GLOBAL:1:75",
+    "message": "Pulse found a potential memory leak. Memory dynamically allocated at line 38 by call to `malloc`, is not freed after the last access at line 67, column 3.",
+    "sanitized_message": "Pulse found a potential memory leak. Memory dynamically allocated at SANITIZED by call to `malloc`, is not freed after the last access at SANITIZED, SANITIZED.",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_MODULE_UNLOAD",
+        "UNDEF CONFIG_SMP"
+      ],
+      [
+        "UNDEF CONFIG_MODULE_UNLOAD",
+        "DEF CONFIG_SMP"
+      ],
+      [
+        "UNDEF CONFIG_MODULE_UNLOAD",
+        "UNDEF CONFIG_SMP"
+      ]
+    ],
+    "analysis_time": 1.159240991983097,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        38,
+        67
+      ]
+    ],
+    "alarm_type": "ERROR",
+    "bug_type": "MEMORY_LEAK",
+    "original_configuration": [],
+    "original_file": "infer.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_65",
+    "input_file": "/targets/LINUX/7acf6cd80b2.c",
+    "input_line": 8,
+    "original_line": "8:8",
+    "function_line_range": "GLOBAL:1:55",
+    "message": " Value stored to 'x' during its initialization is never read ",
+    "sanitized_message": "Value stored to 'x' during its initialization is never read",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_DEVPTS_MULTIPLE_INSTANCES",
+        "DEF CONFIG_UNIX98_PTYS"
+      ],
+      [
+        "DEF CONFIG_DEVPTS_MULTIPLE_INSTANCES",
+        "UNDEF CONFIG_UNIX98_PTYS"
+      ]
+    ],
+    "analysis_time": 0.022187774011399597,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        8
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_66",
+    "input_file": "/targets/LINUX/7acf6cd80b2.c",
+    "input_line": 39,
+    "original_line": "39:39",
+    "function_line_range": "GLOBAL:1:55",
+    "message": " Value stored to 'driver_data' is never read ",
+    "sanitized_message": "Value stored to 'driver_data' is never read",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_DEVPTS_MULTIPLE_INSTANCES",
+        "DEF CONFIG_UNIX98_PTYS"
+      ],
+      [
+        "UNDEF CONFIG_DEVPTS_MULTIPLE_INSTANCES",
+        "DEF CONFIG_UNIX98_PTYS"
+      ]
+    ],
+    "analysis_time": 0.022187774011399597,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        39
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_67",
+    "input_file": "/targets/LINUX/7acf6cd80b2.c",
+    "input_line": 44,
+    "original_line": "44:44",
+    "function_line_range": "GLOBAL:1:55",
+    "message": " 1st function call argument is an uninitialized value ",
+    "sanitized_message": "1st function call argument is an uninitialized value",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_DEVPTS_MULTIPLE_INSTANCES",
+        "DEF CONFIG_UNIX98_PTYS"
+      ],
+      [
+        "UNDEF CONFIG_DEVPTS_MULTIPLE_INSTANCES",
+        "DEF CONFIG_UNIX98_PTYS"
+      ]
+    ],
+    "analysis_time": 0.022187774011399597,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        52,
+        33,
+        35,
+        1,
+        36,
+        44
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "uninitialized_value",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_68",
+    "input_file": "/targets/LINUX/c708c57e247.c",
+    "input_line": 18,
+    "original_line": "18:18",
+    "function_line_range": "GLOBAL:1:31",
+    "message": " Assigned value is garbage or undefined ",
+    "sanitized_message": "Assigned value is garbage or undefined",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_S390_PRNG"
+      ]
+    ],
+    "analysis_time": 0.02273353695636615,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        28,
+        14,
+        17,
+        18
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_69",
+    "input_file": "/targets/LINUX/e39363a9def.c",
+    "input_line": 17,
+    "original_line": "17:17",
+    "function_line_range": "GLOBAL:1:27",
+    "message": " Undefined or garbage value returned to caller ",
+    "sanitized_message": "Undefined or garbage value returned to caller",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_NETPOLL",
+        "UNDEF CONFIG_IPV6"
+      ]
+    ],
+    "analysis_time": 0.02166125102667138,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        24,
+        6,
+        13,
+        17
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_70",
+    "input_file": "/targets/LINUX/ee3f34e8572.c",
+    "input_line": 45,
+    "original_line": "45:45",
+    "function_line_range": "GLOBAL:1:56",
+    "message": " Dereference of null pointer (loaded from variable 'rt') ",
+    "sanitized_message": "Dereference of null pointer (loaded from variable 'rt')",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_IPV6",
+        "DEF CONFIG_IP_SCTP",
+        "DEF SCTP_DEBUG",
+        "DEF CONFIG_SCTP_DBG_MSG"
+      ],
+      [
+        "DEF CONFIG_IPV6",
+        "DEF CONFIG_IP_SCTP",
+        "DEF SCTP_DEBUG",
+        "UNDEF CONFIG_SCTP_DBG_MSG"
+      ],
+      [
+        "DEF CONFIG_IPV6",
+        "DEF CONFIG_IP_SCTP",
+        "UNDEF SCTP_DEBUG",
+        "DEF CONFIG_SCTP_DBG_MSG"
+      ]
+    ],
+    "analysis_time": 0.025967132998630404,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        23,
+        53,
+        40,
+        41,
+        43,
+        14,
+        44,
+        45
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "memory_leak",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_71",
+    "input_file": "/targets/LINUX/ee3f34e8572.c",
+    "input_line": 44,
+    "original_line": "44:44",
+    "function_line_range": "GLOBAL:1:56",
+    "message": " Value stored to 'rt' during its initialization is never read ",
+    "sanitized_message": "Value stored to 'rt' during its initialization is never read",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF CONFIG_IPV6",
+        "DEF CONFIG_IP_SCTP",
+        "UNDEF SCTP_DEBUG",
+        "UNDEF CONFIG_SCTP_DBG_MSG"
+      ]
+    ],
+    "analysis_time": 0.028142654977273196,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        44
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_72",
+    "input_file": "/targets/MARLIN/8c4377dd635.c",
+    "input_line": 19,
+    "original_line": "19:19",
+    "function_line_range": "GLOBAL:1:28",
+    "message": " Value stored to 'pid_output' is never read ",
+    "sanitized_message": "Value stored to 'pid_output' is never read",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF MARLIN_H",
+        "UNDEF PIDTEMP",
+        "DEF PID_DEBUG"
+      ],
+      [
+        "DEF MARLIN_H",
+        "UNDEF PIDTEMP",
+        "UNDEF PID_DEBUG"
+      ],
+      [
+        "UNDEF MARLIN_H",
+        "UNDEF PIDTEMP",
+        "DEF PID_DEBUG"
+      ],
+      [
+        "UNDEF MARLIN_H",
+        "UNDEF PIDTEMP",
+        "UNDEF PID_DEBUG"
+      ]
+    ],
+    "analysis_time": 0.022971748025156558,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        19
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
+  },
+  {
+    "id": "PRODUCT_73",
+    "input_file": "/targets/MARLIN/e30bfedce4d.c",
+    "input_line": 24,
+    "original_line": "24:24",
+    "function_line_range": "GLOBAL:1:35",
+    "message": " Value stored to 'xGridSpacing' during its initialization is never read ",
+    "sanitized_message": "Value stored to 'xGridSpacing' during its initialization is never read",
+    "presence_condition": null,
+    "feasible": null,
+    "configuration": [
+      [
+        "DEF ENABLE_AUTO_BED_LEVELING"
+      ]
+    ],
+    "analysis_time": 0.022433686011936516,
+    "desugaring_time": null,
+    "get_recommended_space": false,
+    "remove_errors": false,
+    "verified": null,
+    "warning_path": [
+      [
+        24
+      ]
+    ],
+    "alarm_type": "warning",
+    "original_configuration": [],
+    "original_file": "clang.json",
+    "taxonomy_type": "dead_store",
+    "classification": ""
+  }
+]
