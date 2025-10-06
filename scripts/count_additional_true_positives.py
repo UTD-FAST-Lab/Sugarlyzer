@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import argparse
 
 p = argparse.ArgumentParser()
@@ -13,7 +14,7 @@ from pathlib import Path
 from typing import Set, Tuple
 
 with open(args.family, 'r') as f:
-    # Assumes you have already used souschef.py to generate the JSON and then extract_info_for_family.py to extract
+    # Assumes you have already used souschef.py to generate the JSON and then family_add_location.py to extract
     # fields from the JSON file.
     family = json.load(f)
 
