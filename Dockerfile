@@ -22,7 +22,7 @@ RUN apt-get update \
 ARG JOBS
 RUN git clone https://github.com/Z3Prover/z3.git
 
-WORKDIR z3
+WORKDIR /z3
 RUN mkdir build && cd build && cmake -DZ3_BUILD_JAVA_BINDINGS=ON .. &&  \
     make -j ${JOBS} && make install
 WORKDIR /

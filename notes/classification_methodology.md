@@ -2,6 +2,7 @@
 
 Varbugs reports are classified using a basic TRUE/FALSE, in addition to a set of modifiers that indicate extra information about the report.
 
+The varbugs dataset can be found [here](https://vbdb.bitbucket.io/database.html).
 ## TRUE/FALSE
 
 Indicates whether the bug described by the report can ever happen at the indicated line under the indicated configuration.

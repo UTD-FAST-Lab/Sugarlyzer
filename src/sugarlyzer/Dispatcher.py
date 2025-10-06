@@ -41,7 +41,7 @@ v will print INFO and above. Two or more v's will print DEBUG or above.""", defa
                    help="""Try running desugared alarms with Z3's configuration to see if they are retained.""",
                    action='store_true')
     p.add_argument("--sample-size",
-                   help="""Sample size for how many configurations to run (default 1000)""",
+                   help="""Sample size for how many configurations to run (default 100)""",
                    type=int,
                    default=100)
     return p.parse_args()
@@ -141,7 +141,6 @@ def start_tester(t, args) -> None:
             auto_remove=True
         )
         _, log_stream = cntr.exec_run(cmd=command, stream=True)
-        logger.info(f"Started container with cmd {command}")
         for l in log_stream:
             print(l.decode('utf-8', 'ignore'))
 
@@ -170,6 +169,7 @@ def main() -> None:
     kwargs = {"format": logging_format, "level": logging_level, "filename": args.log}
 
     logging.basicConfig(**kwargs)
+    logger.error(f"jobs is {args.jobs}")
     build_images(args.tools, args.no_docker_cache, args.jobs)
     for t in args.tools:
         start_tester(t, args)
