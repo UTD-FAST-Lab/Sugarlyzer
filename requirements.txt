@@ -8,7 +8,7 @@ pytest==8.3.5
 dill==0.4.0
 z3-solver==4.15.0.0
 pcpp==1.30
-urllib3==2.4.0
-requests==2.32.3
+urllib3==2.5.0
+requests==2.32.4
 frozendict==2.4.6
 matplotlib-venn==1.1.2
