@@ -134,8 +134,7 @@ class Tester:
             logger.info(f"Desugaring the source code in {self.program.source_directory}")
 
             def desugar(file: Path) -> Tuple[Path, Path, Path, float]:  # God, what an ugly tuple
-                included_directories, included_files, cmd_decs, recommended_space = self.get_inc_files_and_dirs_for_file(
-                    file)
+                included_directories, included_files, cmd_decs, recommended_space = self.get_inc_files_and_dirs_for_file(file)
                 start = time.monotonic()
                 # noinspection PyTypeChecker
                 desugared_file_location, log_file = SugarCRunner.desugar_file(file,
@@ -152,15 +151,20 @@ class Tester:
 
                 return desugared_file_location, log_file, file, time.monotonic() - start
 
-            logger.info(f"Source files are {list(self.program.get_source_files())}")
+
+            source_files = self.program.get_source_files() # Only need to get the source files for a pogram once
+
+            logger.info(f"Source files are {list(source_files)}")
             input_files: List[Tuple] = []
             logger.info("Desugaring files....")
-            for result in tqdm(ProcessPool(self.jobs).imap(desugar, self.program.get_source_files()),
-                               total=len(list(self.program.get_source_files()))):
+            for result in tqdm(ProcessPool(self.jobs).imap(desugar, source_files),
+                               total=len(list(source_files))):
                 input_files.append(result)
+
             logger.info(f"Finished desugaring the source code.")
             # 3/4. Run analysis tool, and read its results
-            logger.info(f"Collected {len(fis := [c for c in self.program.get_source_files()])} .c files to analyze: {fis}.")
+
+            logger.info(f"Collected {len(fis := [c for c in source_files])} .c files to analyze: {fis}.")
 
             def analyze_read_and_process(desugared_file: Path, original_file: Path, desugaring_time: float = None) -> \
                     Iterable[Alarm]:
@@ -473,21 +477,43 @@ class Tester:
 
 def get_arguments() -> argparse.Namespace:
     p = argparse.ArgumentParser()
-    p.add_argument("tool", help="The tool to run.")
-    p.add_argument("program", help="The target program.")
-    p.add_argument("-v", dest="verbosity", action="store_true", help="""Print debug messages.""")
-    p.add_argument("--baselines", action="store_true",
+    p.add_argument("tool", 
+                   help="The tool to run.")
+
+    p.add_argument("program", 
+                   help="The target program.")
+
+    p.add_argument("-v", 
+                   dest="verbosity", 
+                   action="store_true", 
+                   help="""Print debug messages.""")
+
+    p.add_argument("--baselines", 
+                   action="store_true",
                    help="""Run the baseline experiments. In these, we configure each 
                    file with every possible configuration, and then run the experiments.""")
-    p.add_argument("--no-recommended-space", help="""Do not generate a recommended space.""", action='store_true')
-    p.add_argument("--jobs", help="The number of jobs to use. If None, will use all CPUs", type=int)
+
+    p.add_argument("--no-recommended-space", 
+                   help="""Do not generate a recommended space.""", 
+                   action='store_true')
+
+    p.add_argument("--jobs", 
+                   help="The number of jobs to use. If None, will use all CPUs", 
+                   type=int)
+
     p.add_argument("--validate",
                    help="""Try running desugared alarms with Z3's configuration to see if they are retained.""",
                    action='store_true')
+
     p.add_argument("--sample-size",
-                   help="The sample size to use for baselines (default 100)", type=int)
+                   help="The sample size to use for baselines (default 100)", 
+                   type=int)
+
     p.add_argument("--seed",
-                   help="The random seed to use for sampling baseline", type=int, default=1002)
+                   help="The random seed to use for sampling baseline", 
+                   type=int, 
+                   default=1002)
+
     return p.parse_args()
 
 

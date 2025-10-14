@@ -39,10 +39,20 @@ RUN cd superc && make configure && make
 RUN python3.10 -m venv /venv
 ENV PATH=/venv/bin:$PATH
 
+# DEBUG MODE
+ENV SUGARLYZER_DEBUG="true"
+
 RUN mkdir /Sugarlyzer
 WORKDIR /Sugarlyzer
 
 COPY requirements.txt .
+
+# COPY ARGS INTERCEPT SCRIPT
+COPY runIntercept.sh /usr/local/bin/runIntercept.sh
+RUN chmod +x /usr/local/bin/runIntercept.sh
+
+# list of all extracted source files
+ENV EXTRACTED_LIST=/usr/local/bin/extracted_files.txt 
 
 RUN python -m pip install -r requirements.txt --use-pep517
 
