@@ -40,7 +40,7 @@ RUN python3.10 -m venv /venv
 ENV PATH=/venv/bin:$PATH
 
 # DEBUG MODE
-ENV SUGARLYZER_DEBUG="true"
+ENV SUGARLYZER_DEBUG="false"
 
 RUN mkdir /Sugarlyzer
 WORKDIR /Sugarlyzer
