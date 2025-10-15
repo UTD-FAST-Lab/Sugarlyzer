@@ -152,13 +152,13 @@ class Tester:
                 return desugared_file_location, log_file, file, time.monotonic() - start
 
 
-            source_files = self.program.get_source_files() # Only need to get the source files for a pogram once
+            source_files = list(self.program.get_source_files()) # Only need to get the source files for a pogram once
 
-            logger.info(f"Source files are {list(source_files)}")
+            logger.info(f"Source files are {source_files}")
             input_files: List[Tuple] = []
             logger.info("Desugaring files....")
             for result in tqdm(ProcessPool(self.jobs).imap(desugar, source_files),
-                               total=len(list(source_files))):
+                               total=len(source_files)):
                 input_files.append(result)
 
             logger.info(f"Finished desugaring the source code.")
