@@ -1,11 +1,11 @@
 FROM ubuntu:22.04 AS base-setup
 ENV TZ=America/Chicago
 RUN apt-get update && \
-    apt-get install -y tzdata && \
-    ln -sf /usr/share/zoneinfo/$TZ /etc/localtime && \
-    echo $TZ > /etc/timezone && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+  apt-get install -y tzdata && \
+  ln -sf /usr/share/zoneinfo/$TZ /etc/localtime && \
+  echo $TZ > /etc/timezone && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/*
 RUN apt-get update -y && apt-get upgrade -y && \
   apt-get install -y software-properties-common gcc apt-transport-https
 RUN add-apt-repository -y ppa:deadsnakes/ppa &&  \
@@ -45,20 +45,10 @@ RUN cd superc && make configure && make
 RUN python3.10 -m venv /venv
 ENV PATH=/venv/bin:$PATH
 
-# DEBUG MODE
-ENV SUGARLYZER_DEBUG="false"
-
 RUN mkdir /Sugarlyzer
 WORKDIR /Sugarlyzer
 
 COPY requirements.txt .
-
-# COPY ARGS INTERCEPT SCRIPT
-COPY runIntercept.sh /usr/local/bin/runIntercept.sh
-RUN chmod +x /usr/local/bin/runIntercept.sh
-
-# list of all extracted source files
-ENV EXTRACTED_LIST=/usr/local/bin/extracted_files.txt 
 
 RUN python -m pip install -r requirements.txt --use-pep517
 
@@ -67,5 +57,10 @@ ADD . .
 RUN mv resources/SugarlyzerConfig /SugarlyzerConfig
 
 RUN python -m pip install -e .
+
+# DEBUG MODE
+ENV SUGARLYZER_DEBUG="true"
+
+ENV RESULTING_ALARMS=/usr/local/bin/resulting_alarms.txt 
 
 WORKDIR /

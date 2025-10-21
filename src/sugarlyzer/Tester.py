@@ -129,6 +129,7 @@ class Tester:
             raise RuntimeError(f"Tried building program but got return code of {returnCode}")
         logger.info(f"Finished downloading target program.")
 
+        """
         if not self.baselines:
             # 2. Run SugarC
             logger.info(f"Desugaring the source code in {self.program.source_directory}")
@@ -228,6 +229,7 @@ class Tester:
         logger.debug("Writing alarms to file.")
         with open("/results.json", 'w') as f:
             json.dump(alarms, f, indent=2)
+        """
 
     def postprocess_experimental_results(self, experimental_results: List[Dict]) -> List[Dict]:
         logger.info("Now postprocessing " + str(len(experimental_results)) + " alarms.")
