@@ -7,7 +7,7 @@ git clone https://github.com/landley/toybox.git
 cd toybox/
 git checkout 78289203031afc23585035c362beec10db54958d
 
-export CC="/usr/local/bin/runIntercept.sh"
+export PROGRAM="toybox"
 
 make defconfig
 make

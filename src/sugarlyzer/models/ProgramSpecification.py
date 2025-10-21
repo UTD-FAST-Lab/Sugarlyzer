@@ -53,7 +53,7 @@ class ProgramSpecification:
         self.__search_context = "/targets"
         self.__oldconfig_location = "config/.config" if oldconfig_location is None else oldconfig_location
 
-        self.__extractedFiles = "usr/local/bin/extracted_files.txt"
+        self.__extractedFiles = "usr/local/intercept/extracted_files.txt"
 
     @property
     def oldconfig_location(self):
@@ -95,15 +95,17 @@ class ProgramSpecification:
         :return: All .c or .i files that are in the program's source locations.
 
         OLD CODE:
+        """
         for root, dirs, files in os.walk(self.source_directory):
             for f in files:
                 if f.endswith(".c") or f.endswith(".i"):
                     yield Path(root) / f
-        """
 
+        """
         with open(self.__extractedFiles, 'r') as file:
             for f in file:
                 yield Path(f) / f
+        """
 
 
     def inc_files_and_dirs_for_file(self, file: Path) -> Tuple[Iterable[Path], Iterable[Path], Iterable[str]]:

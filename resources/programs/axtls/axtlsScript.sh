@@ -8,7 +8,7 @@ curl -L https://sourceforge.net/projects/axtls/files/2.1.4/axTLS-2.1.4.tar.gz/do
 tar -xf axtls.tar.gz
 cd axtls-code
 
-export CC="/usr/local/bin/runIntercept.sh"
+export PROGRAM="axtls"
 
 make linuxconf
 cp /SugarlyzerConfig/axtlsconfig.h config/config.h
