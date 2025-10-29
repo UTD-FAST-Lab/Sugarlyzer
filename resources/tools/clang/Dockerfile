@@ -30,4 +30,7 @@ FROM sugarlyzer/base:latest
 COPY --from=base-setup /llvm-project /llvm-project
 WORKDIR /llvm-project/build
 RUN make install
+
+ENV TOOL="clang"
+
 WORKDIR /
