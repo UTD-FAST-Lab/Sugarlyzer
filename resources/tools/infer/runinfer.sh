@@ -133,6 +133,8 @@ root@8c782c2f2f52:/targets/busybox-1_28_0#
 
 COMMAND
 
+RESULTING_ALARMS=/tmp/result_alarms.txt
+
 for arg in "$@"; do
   case "$arg" in
     -MM|-M|-MD|-MF|-MT|-MQ) # Makesure real compile command not dep gen
@@ -151,7 +153,7 @@ fi
 # Default infer command prefix
 DEFAULT_INFER_CMD="infer --pulse-only -o /tmp/infer_$(date +%s)_$$ -- clang -I /SugarlyzerConfig -I /SugarlyzerConfig/stdinc/usr/include -I /SugarlyzerConfig/stdinc/usr/include/x86_64-linux-gnu -I /SugarlyzerConfig/stdinc/usr/lib/gcc/x86_64-linux-gnu/9/include"
 
-echo "runInfer.sh called with: """ >&2
+echo "runInfer.sh called with: $@" >&2
 
 # Find the source file and convert to absolute path
 SOURCE_FILE=""

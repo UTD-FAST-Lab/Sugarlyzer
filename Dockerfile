@@ -60,7 +60,6 @@ RUN python -m pip install -e .
 
 # DEBUG MODE
 ENV SUGARLYZER_DEBUG="true"
-
-ENV RESULTING_ALARMS=/usr/local/bin/resulting_alarms.txt 
+RUN chmod -R +x /Sugarlyzer/resources/tools
 
 WORKDIR /
