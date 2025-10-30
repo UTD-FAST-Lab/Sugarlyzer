@@ -36,7 +36,7 @@ RUN ${PHASAR}/utils/setEnvironmentVariables.sh ${LLVM_INSTALL_DIR} ${PHASAR_INST
 
 RUN mkdir -p ${PHASAR}/external/json/build
 WORKDIR ${PHASAR}/external/json/build
-RUN cmake .. && make -j20 && make install
+RUN cmake -DJSON_BuildTests=OFF .. && make -j20 && make install
 
 RUN mkdir -p ${PHASAR}/external/json-schema-validator/build
 WORKDIR ${PHASAR}/external/json-schema-validator/build
