@@ -1,9 +1,14 @@
 FROM sugarlyzer/base:latest
 
+ENV TOOL="phasar"
+
 ARG PHASAR=/phasar
 ARG PHASAR_INSTALL_DIR=/usr/local/phasar
 ARG LLVM_INSTALL_DIR=/usr/local/llvm-12
 ADD llvm-12.tar.gz ${LLVM_INSTALL_DIR}/..
+
+ENV LD_LIBRARY_PATH="${LLVM_INSTALL_DIR}/lib"
+RUN echo "/usr/local/llvm-12/lib" > /etc/ld.so.conf.d/llvm-12.conf && ldconfig
 
 RUN mkdir -p ${PHASAR}
 
@@ -48,6 +53,5 @@ RUN pip3 install wllvm
 ENV LLVM_COMPILER=clang
 ENV LLVM_COMPILER_PATH=${LLVM_INSTALL_DIR}/bin
 
-ENV TOOL="phasar"
 
 WORKDIR /
