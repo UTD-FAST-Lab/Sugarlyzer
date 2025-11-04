@@ -8,22 +8,19 @@ import multiprocessing
 import os
 import random
 import shutil
-import subprocess
 import tempfile
 import time
+import re
 from pathlib import Path
-from tempfile import NamedTemporaryFile
 from typing import Iterable, List, Dict, Any, Tuple
 
 # noinspection PyUnresolvedReferences
-from dill import pickle
 from jsonschema.validators import RefResolver, Draft7Validator
 from pathos.pools import ProcessPool
 # noinspection PyUnresolvedReferences
 from tqdm import tqdm
 
 # noinspection PyUnresolvedReferences
-from z3.z3 import Solver, sat, Bool, Int, Not, And, Or
 
 from src.sugarlyzer import SugarCRunner
 from src.sugarlyzer.SugarCRunner import process_alarms
@@ -55,7 +52,8 @@ class Tester:
             """
             with as_file(files("resources.programs").joinpath("program_schema.json")) as f:
                 with open(f, 'r') as schema_file:
-                    resolver = RefResolver.from_schema(schema := json.load(schema_file))
+                    resolver = RefResolver.from_schema(
+                        schema := json.load(schema_file))
                     validator = Draft7Validator(schema, resolver)
                 with open(file, 'r') as program_file:
                     result = json.load(program_file)
@@ -64,29 +62,35 @@ class Tester:
 
         with as_file(files(f'resources.programs.{program}').joinpath("program.json")) as f:
             program_as_json = read_json_and_validate(f)
-        self.program: ProgramSpecification = ProgramSpecification(program, **program_as_json)
+        self.program: ProgramSpecification = ProgramSpecification(
+            program, **program_as_json)
         self.tool: AbstractTool = AnalysisToolFactory().get_tool(tool)
         self.remove_errors = self.tool.remove_errors if self.program.remove_errors is None else self.program.remove_errors
         self.config_prefix = self.program.config_prefix
         self.whitelist = self.program.whitelist
         self.kgen_map = self.program.kgen_map
 
+        self.alarm_config_map = {}
+
     @functools.cache
     def get_inc_files_and_dirs_for_file(self, file: Path):
-        included_files, included_directories, cmd_decs = self.program.inc_files_and_dirs_for_file(file)
-        logger.debug(f"Included files, included directories for {file}: {included_files} {included_directories}")
+        included_files, included_directories, cmd_decs = self.program.inc_files_and_dirs_for_file(
+            file)
+        logger.debug(
+            f"Included files, included directories for {file}: {included_files} {included_directories}")
         if self.no_recommended_space:
             recommended_space = None
         else:
-            recommended_space = SugarCRunner.get_recommended_space(file, included_files, included_directories)
-        logger.debug(f"User defined space for file {file} is {recommended_space}")
+            recommended_space = SugarCRunner.get_recommended_space(
+                file, included_files, included_directories)
+        logger.debug(
+            f"User defined space for file {file} is {recommended_space}")
         return included_directories, included_files, cmd_decs, recommended_space
 
     def analyze_one_file(self, fi: Path, ps: ProgramSpecification) -> Iterable[Alarm]:
         inc_files, inc_dirs, cmd_decs = ps.inc_files_and_dirs_for_file(fi)
-        alarms = self.tool.analyze_and_read(fi, command_line_defs=cmd_decs,
-                                            included_files=inc_files,
-                                            included_dirs=inc_dirs)
+        alarms = self.tool.analyze_and_read(
+            fi, command_line_defs=cmd_decs, included_files=inc_files, included_dirs=inc_dirs)
         return alarms
 
     @staticmethod
@@ -100,14 +104,15 @@ class Tester:
         os.system('yes "" | make oldconfig')
         logger.debug("make finished.")
         os.chdir(cwd)
-        #if cp.returncode != 0:
+        # if cp.returncode != 0:
         #    logger.warning(f"Running command {' '.join(make_cmd)} resulted in a non-zero error code.\n"
         #                   f"Output was:\n" + cp.stdout)
 
     @staticmethod
     def clone_program_and_configure(ps: ProgramSpecification, config: Path) -> ProgramSpecification:
         """Clones a program spec to a new directory, and returns a program spec with updated search context."""
-        code_dest = Path("/targets") / Path(config.name) / Path(ps.project_root.name)
+        code_dest = Path("/targets") / Path(config.name) / \
+            Path(ps.project_root.name)
         code_dest.parent.mkdir(parents=True)
         logger.debug(f"Cloning {ps.project_root} to {code_dest}")
 
@@ -120,69 +125,78 @@ class Tester:
     def execute(self):
         logger.info(f"Current environment is {os.environ}")
 
-        output_folder = Path("/results") / Path(self.tool.name) / Path(self.program.name)
+        output_folder = Path("/results") / \
+            Path(self.tool.name) / Path(self.program.name)
         output_folder.mkdir(exist_ok=True, parents=True)
 
         # 1. Download target program.
         logger.info(f"Downloading target program {self.program}")
         if (returnCode := self.program.download()) != 0:
-            raise RuntimeError(f"Tried building program but got return code of {returnCode}")
+            raise RuntimeError(
+                f"Tried building program but got return code of {returnCode}")
         logger.info(f"Finished downloading target program.")
 
-        """
         if not self.baselines:
             # 2. Run SugarC
-            logger.info(f"Desugaring the source code in {self.program.source_directory}")
+            logger.info(
+                f"Desugaring the source code in {self.program.source_directory}")
 
-            def desugar(file: Path) -> Tuple[Path, Path, Path, float]:  # God, what an ugly tuple
-                included_directories, included_files, cmd_decs, recommended_space = self.get_inc_files_and_dirs_for_file(file)
+            # God, what an ugly tuple
+            def desugar(file: Path) -> Tuple[Path, Path, Path, float]:
+                included_directories, included_files, cmd_decs, recommended_space = self.get_inc_files_and_dirs_for_file(
+                    file)
                 start = time.monotonic()
                 # noinspection PyTypeChecker
                 desugared_file_location, log_file = SugarCRunner.desugar_file(file,
-                                                       recommended_space=None,
-                                                       remove_errors=self.remove_errors,
-                                                       config_prefix=self.config_prefix,
-                                                       whitelist=self.whitelist,
-                                                       no_stdlibs=True,
-                                                       included_files=included_files,
-                                                       included_directories=included_directories,
-                                                       commandline_declarations=cmd_decs,
-                                                       keep_mem=self.tool.keep_mem,
-                                                       make_main=self.tool.make_main)
+                                                                              recommended_space=None,
+                                                                              remove_errors=self.remove_errors,
+                                                                              config_prefix=self.config_prefix,
+                                                                              whitelist=self.whitelist,
+                                                                              no_stdlibs=True,
+                                                                              included_files=included_files,
+                                                                              included_directories=included_directories,
+                                                                              commandline_declarations=cmd_decs,
+                                                                              keep_mem=self.tool.keep_mem,
+                                                                              make_main=self.tool.make_main)
 
                 return desugared_file_location, log_file, file, time.monotonic() - start
 
-
-            source_files = list(self.program.get_source_files()) # Only need to get the source files for a pogram once
+            # Only need to get the source files for a pogram once
+            source_files = list(self.program.get_source_files())
 
             logger.info(f"Source files are {source_files}")
             input_files: List[Tuple] = []
             logger.info("Desugaring files....")
-            for result in tqdm(ProcessPool(self.jobs).imap(desugar, source_files),
-                               total=len(source_files)):
+
+            for result in tqdm(ProcessPool(self.jobs).imap(desugar, source_files), total=len(source_files)):
                 input_files.append(result)
 
             logger.info(f"Finished desugaring the source code.")
             # 3/4. Run analysis tool, and read its results
 
-            logger.info(f"Collected {len(fis := [c for c in source_files])} .c files to analyze: {fis}.")
+            logger.info(
+                f"Collected {len(fis := [c for c in source_files])} .c files to analyze: {fis}.")
 
-            def analyze_read_and_process(desugared_file: Path, original_file: Path, desugaring_time: float = None) -> \
-                    Iterable[Alarm]:
+            # Get the compile command components for original_file -> run analysis on desugared_file -> get resulting alarms from analysis.
+            def analyze_read_and_process(desugared_file: Path, original_file: Path, desugaring_time: float = None) -> Iterable[Alarm]:
+
                 included_directories, included_files, cmd_decs, user_defined_space = self.get_inc_files_and_dirs_for_file(
                     original_file)
-                alarms = process_alarms(self.tool.analyze_and_read(desugared_file, included_files=included_files,
-                                                                   included_dirs=included_directories),
-                                        desugared_file)
+
+                alarms = process_alarms(self.tool.analyze_and_read(
+                    desugared_file, included_files=included_files, included_dirs=included_directories), desugared_file)
+
                 for a in alarms:
                     a.desugaring_time = desugaring_time
+
                 return alarms
 
             alarms = []
             logger.info("Running analysis....")
             with ProcessPool(self.jobs) as p:
-                for result in tqdm(p.imap(lambda x: analyze_read_and_process(*x), ((d, o, dt) for d, _, o, dt in input_files)),
-                                   total=len(input_files)):
+
+                # d = Desugared file | o = Original file | dt = Desugaring time
+                for result in tqdm(p.imap(lambda x: analyze_read_and_process(*x), ((d, o, dt) for d, _, o, dt in input_files)), total=len(input_files)):
                     alarms.extend(result)
 
             buckets: List[List[Alarm]] = [[]]
@@ -191,8 +205,7 @@ class Tester:
                 return a.line_in_input_file == b.line_in_input_file and a.sanitized_message == b.sanitized_message and a.input_file == b.input_file and a.feasible == b.feasible
 
             # Collect alarms into "buckets" based on equivalence.
-            # Then, for each bucket, we will return one alarm, combining all of the
-            #  models into a list.
+            # Then, for each bucket, we will return one alarm, combining all of the models into a list.
             logger.debug("Now deduplicating results.")
             for ba in alarms:
                 for bucket in buckets:
@@ -209,41 +222,84 @@ class Tester:
 
             logger.debug("Now aggregating alarms.")
             alarms = []
+
             for bucket in (b for b in buckets if len(b) > 0):
                 alarms.append(bucket[0])
                 alarms[-1].presence_condition = f"Or({','.join(str(m.presence_condition) for m in bucket)})"
+
             logger.debug("Done.")
 
             if self.validate:
                 logger.info("Now validating....")
                 with ProcessPool(self.jobs) as p:
                     alarms = list(tqdm(p.imap(self.verify_alarm, alarms)))
-            alarms = self.postprocess_experimental_results([a.as_dict() for a in alarms])
+
+            alarms = self.postprocess_experimental_results(
+                [a.as_dict() for a in alarms])
+
         else:
             alarms = self.run_baseline_experiments()
+
             logger.info("Deduplicating alarms")
-            alarms = self.dedup_and_process_alarms([a.as_dict() for a in alarms])
+            logger.info(f"Collected Alarms: {alarms}")
+
+            #Alarms.model is a list of all configuration options as tuples [(configuration name, configuration value)]
+            self.postprocess_alarm_configs([a.as_dict() for a in alarms])
+
+            # alarms = self.dedup_and_process_alarms([a.as_dict() for a in alarms])
 
         # Now time to postprocess alarms
         logger.info("Got " + str(len(alarms)) + " alarms.")
         logger.debug("Writing alarms to file.")
+        """
         with open("/results.json", 'w') as f:
             json.dump(alarms, f, indent=2)
         """
 
+
+    def postprocess_alarm_configs(self, alarms: List[Dict]):
+        def normalize_file_path(file_path): # Remove the config file from path name
+            normalized = re.sub(r'/\d+\.config/', '/', file_path)
+            return normalized
+
+        config_count_history = {}  # Track progression for each alarm
+        for i, alarm in enumerate(alarms):
+            alarm_config = alarm.pop("configuration")
+            alarm_key = (normalize_file_path(alarm['input_file']), alarm['input_line'], alarm['message'])
+            # Initialize history for this alarm if first time seeing it
+            if alarm_key not in config_count_history:
+                config_count_history[alarm_key] = []
+
+            if alarm_key in self.alarm_config_map:
+                existing_alarm_configs = self.alarm_config_map[alarm_key]
+                alarm_config = list(set(existing_alarm_configs) & set(alarm_config))
+
+            # Track the count at each step
+            config_count_history[alarm_key].append(len(alarm_config))
+            self.alarm_config_map[alarm_key] = alarm_config
+
+        # Print summary statistics
+        for alarm_key, counts in config_count_history.items():
+            print(f"Alarm: {alarm_key}")
+            print(f"  Config progression: {counts}")
+            print(f"  Started: {counts[0]}, Ended: {counts[-1]}, Average: {sum(counts)/len(counts):.2f}")
+
+
     def postprocess_experimental_results(self, experimental_results: List[Dict]) -> List[Dict]:
-        logger.info("Now postprocessing " + str(len(experimental_results)) + " alarms.")
+        logger.info("Now postprocessing " +
+                    str(len(experimental_results)) + " alarms.")
+
         def EQ(a, b):
             a_function_begin = a['function_line_range'].split(":")[-2]
             a_function_end = a['function_line_range'].split(":")[-1]
             b_function_begin = b['function_line_range'].split(":")[-2]
             b_function_end = b['function_line_range'].split(":")[-1]
             return a['original_line'] == b['original_line'] and \
-                   a_function_begin == b_function_begin and \
-                   a_function_end == b_function_end and\
-                   a['sanitized_message'] == b['sanitized_message'] and \
-                   a['input_file'] == b['input_file'] and \
-                   a['feasible'] == b['feasible']
+                a_function_begin == b_function_begin and \
+                a_function_end == b_function_end and\
+                a['sanitized_message'] == b['sanitized_message'] and \
+                a['input_file'] == b['input_file'] and \
+                a['feasible'] == b['feasible']
 
         original_length = len(experimental_results)
         experimental_results = copy.deepcopy(experimental_results)
@@ -306,23 +362,28 @@ class Tester:
                 elif k.startswith('USE_'):
                     config_string += f"{mappedKey[4:]}={mappedValue}\n"
                 else:
-                    logger.critical(f"Ignored constraint {str(mappedKey)}={str(mappedValue)}")
+                    logger.critical(
+                        f"Ignored constraint {str(mappedKey)}={str(mappedValue)}")
             if config_string == "":
                 return alarm
             loggable_config_string = config_string.replace("\n", ", ")
             logger.debug(f"Configuration is {loggable_config_string}")
             ntf = tempfile.NamedTemporaryFile(delete=False, mode="w")
             ntf.write(config_string)
-            ps: ProgramSpecification = self.clone_program_and_configure(self.program, Path(ntf.name))
-            updated_file =  str(alarm.input_file.absolute()).replace('/targets',f'/targets/{Path(ntf.name).name}').replace('.desugared','')
+            ps: ProgramSpecification = self.clone_program_and_configure(
+                self.program, Path(ntf.name))
+            updated_file = str(alarm.input_file.absolute()).replace(
+                '/targets', f'/targets/{Path(ntf.name).name}').replace('.desugared', '')
             updated_file = Path(updated_file)
             logger.debug(f"Mapped file {alarm.input_file} to {updated_file}")
-            verify = self.analyze_file_and_associate_configuration(updated_file, Path(ntf.name), ps)
+            verify = self.analyze_file_and_associate_configuration(
+                updated_file, Path(ntf.name), ps)
             logger.debug(
                 f"Got the following alarms {[json.dumps(b.as_dict()) for b in verify]} when trying to verify alarm {json.dumps(alarm.as_dict())}")
             ntf.close()
             for v in verify:
-                logger.debug(f"Comparing alarms {alarm.as_dict()} and {v.as_dict()}")
+                logger.debug(
+                    f"Comparing alarms {alarm.as_dict()} and {v.as_dict()}")
                 if alarm.sanitized_message == v.sanitized_message and \
                         alarm.verified not in ["FUNCTION_LEVEL", "FULL"]:
                     alarm.verified = "MESSAGE_ONLY"
@@ -346,6 +407,9 @@ class Tester:
             return alarm
 
     def analyze_file_and_associate_configuration(self, file: Path, config: Path, ps: ProgramSpecification, delete=False) -> Iterable[Alarm]:
+        """
+        returns -> Resulting alarms from self.tool analysis on file configured by config
+        """
         def get_config_object(config: Path) -> List[Tuple[str, str]]:
             with open(config, 'r') as f:
                 lines = [l.strip() for l in f.readlines()]
@@ -386,22 +450,23 @@ class Tester:
             alarms = []
 
             def varbugs_analyze_and_read(bc: ProgramSpecification.BaselineConfig) -> Iterable[Alarm]:
-                inc_files, inc_dirs, _ = self.program.inc_files_and_dirs_for_file(bc.source_file)
+                inc_files, inc_dirs, _ = self.program.inc_files_and_dirs_for_file(
+                    bc.source_file)
 
                 def stringify_macro(tp: Tuple[str, str]) -> str:
                     if tp[0].lower() == "def":
                         return f"-D{tp[1]}"
                     else:
                         return f"-U{tp[1]}"
-                    
+
                 clds = [stringify_macro(tp) for tp in bc.macros]
                 alarms = self.tool.analyze_and_read(bc.source_file, command_line_defs=clds,
-                                                   included_dirs=inc_dirs, included_files=inc_files)
+                                                    included_dirs=inc_dirs, included_files=inc_files)
                 for a in alarms:
                     a.model = [[f"{tp[0]} {tp[1]}" for tp in bc.macros]]
-                
+
                 return alarms
-            
+
             with ProcessPool(self.jobs) as p:
                 for i in p.imap(varbugs_analyze_and_read, all_configs):
                     alarms.extend(i)
@@ -411,17 +476,25 @@ class Tester:
             logger.info(f"Selected configurations: {all_configs}")
 
             for config in all_configs:
+
+                # Configure program to specific config
                 spec = self.clone_program_and_configure(self.program, config)
+
+                # file, config file, spec, delete_flag
                 source_files_config_spec_triples: List[Tuple[Path, Path, ProgramSpecification, bool]] = []
+
+                # Set of triple of file/config/spec/delete_flag
                 source_files_config_spec_triples.extend((fi, config, spec, True) for fi in spec.get_source_files())
 
                 logger.info(f"Running analysis on {config.name}:")
                 logger.debug(f"Running analysis on pairs {source_files_config_spec_triples}")
+
                 with ProcessPool(self.jobs) as p:
-                    for i in p.imap(lambda x: self.analyze_file_and_associate_configuration(*x),
-                                source_files_config_spec_triples):
-                        alarms.extend(i)
-                import shutil
+                    for resulting_alarms in p.imap(lambda x: self.analyze_file_and_associate_configuration(*x), source_files_config_spec_triples):
+                        # We have the resulting alarms from a specific config and ran on a specific source file
+
+                        alarms.extend(resulting_alarms)
+
                 for root, dirs, files in os.walk("/targets/" + config.name):
                     for file in files:
                         os.remove(os.path.join(root, file))
@@ -429,6 +502,7 @@ class Tester:
                 for root, dirs, files in os.walk("/tmp", topdown=False):
                     for file in files:
                         os.remove(os.path.join(root, file))
+
                     for dir in dirs:
                         os.rmdir(os.path.join(root, dir))
 
@@ -443,7 +517,8 @@ class Tester:
 
         for b in alarms:
             try:
-                b['original_configuration'] = [re.search(r"(\d*)\.config", b['input_file']).group(1)]
+                b['original_configuration'] = [
+                    re.search(r"(\d*)\.config", b['input_file']).group(1)]
             except AttributeError as ae:
                 b['original_configuration'] = []
             assert (b['original_configuration'] is not None)
@@ -469,7 +544,8 @@ class Tester:
                 assert (d['original_configuration'] is not None)
                 if eq(b, d):
                     found = True
-                    d['original_configuration'].extend(b['original_configuration'])
+                    d['original_configuration'].extend(
+                        b['original_configuration'])
                     d['configuration'].extend(b['configuration'])
                     break
             if not found:
@@ -477,30 +553,31 @@ class Tester:
 
         return deduped
 
+
 def get_arguments() -> argparse.Namespace:
     p = argparse.ArgumentParser()
-    p.add_argument("tool", 
+    p.add_argument("tool",
                    help="The tool to run.")
 
-    p.add_argument("program", 
+    p.add_argument("program",
                    help="The target program.")
 
-    p.add_argument("-v", 
-                   dest="verbosity", 
-                   action="store_true", 
+    p.add_argument("-v",
+                   dest="verbosity",
+                   action="store_true",
                    help="""Print debug messages.""")
 
-    p.add_argument("--baselines", 
+    p.add_argument("--baselines",
                    action="store_true",
                    help="""Run the baseline experiments. In these, we configure each 
                    file with every possible configuration, and then run the experiments.""")
 
-    p.add_argument("--no-recommended-space", 
-                   help="""Do not generate a recommended space.""", 
+    p.add_argument("--no-recommended-space",
+                   help="""Do not generate a recommended space.""",
                    action='store_true')
 
-    p.add_argument("--jobs", 
-                   help="The number of jobs to use. If None, will use all CPUs", 
+    p.add_argument("--jobs",
+                   help="The number of jobs to use. If None, will use all CPUs",
                    type=int)
 
     p.add_argument("--validate",
@@ -508,12 +585,12 @@ def get_arguments() -> argparse.Namespace:
                    action='store_true')
 
     p.add_argument("--sample-size",
-                   help="The sample size to use for baselines (default 100)", 
+                   help="The sample size to use for baselines (default 100)",
                    type=int)
 
     p.add_argument("--seed",
-                   help="The random seed to use for sampling baseline", 
-                   type=int, 
+                   help="The random seed to use for sampling baseline",
+                   type=int,
                    default=1002)
 
     return p.parse_args()
@@ -537,9 +614,11 @@ def main():
     args = get_arguments()
     random.seed(args.seed)
     set_up_logging(args)
-    t = Tester(args.tool, args.program, args.baselines, True, args.jobs, args.validate, args.sample_size)
+    t = Tester(args.tool, args.program, args.baselines, True,
+               args.jobs, args.validate, args.sample_size)
     t.execute()
     print(f'total time: {time.monotonic() - start}')
+
 
 if __name__ == '__main__':
     main()
