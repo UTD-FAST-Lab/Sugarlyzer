@@ -311,10 +311,10 @@ def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Al
             elif not a['var'] in condition_mapping.replacers.keys():
                 missingCondition = True
                 break
-#            elif '"' in condition_mapping.replacers[a['var']]:
-#                logger.debug(f"{condition_mapping.replacers[a['var']]} had a double quote in it.")
-#                missingCondition = True
-#                break
+            elif '"' in condition_mapping.replacers[a['var']]:
+                logger.debug(f"{condition_mapping.replacers[a['var']]} had a double quote in it.")
+                missingCondition = True
+                break
             if a['val']:
                 s.add(eval(condition_mapping.replacers[a['var']]))
             else:
