@@ -41,6 +41,10 @@ class Tester:
         self.jobs: int = jobs
         self.validate = validate
         self.sample_size = sample_size
+        self.alarm_config_map = {}
+
+        if tool == 'testTool' or program == 'testProgram':
+            return
 
         def read_json_and_validate(file: str) -> Dict[str, Any]:
             """
@@ -70,7 +74,6 @@ class Tester:
         self.whitelist = self.program.whitelist
         self.kgen_map = self.program.kgen_map
 
-        self.alarm_config_map = {}
 
     @functools.cache
     def get_inc_files_and_dirs_for_file(self, file: Path):
