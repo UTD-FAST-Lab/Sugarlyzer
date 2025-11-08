@@ -297,7 +297,8 @@ def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Al
         condition_mapping: ConditionMapping = get_condition_mapping(line, condition_mapping)
 
     report = ''
-    varis = condition_mapping.varis
+    varis = condition_mapping.varis # What is this for? (breaks evals when not defined (never used) )
+
     for w in alarms:
         w: Alarm
         w.static_condition_results = calculate_asserts(w, desugared_file)
@@ -305,20 +306,26 @@ def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Al
         missingCondition = False
         for a in w.static_condition_results:
             logger.info(f"Currently processing {a} in file {w.input_file}")
+
             if a['var'] == '':
                 missingCondition = True
                 break
             elif not a['var'] in condition_mapping.replacers.keys():
                 missingCondition = True
                 break
-            elif '"' in condition_mapping.replacers[a['var']]:
-                logger.debug(f"{condition_mapping.replacers[a['var']]} had a double quote in it.")
-                missingCondition = True
-                break
-            if a['val']:
-                s.add(eval(condition_mapping.replacers[a['var']]))
-            else:
-                s.add(eval('Not(' + condition_mapping.replacers[a['var']] + ')'))
+
+            # Catch any eval exceptions and print problematic expression
+            try:
+                expr = eval(condition_mapping.replacers[a['var']])
+                if a['val']:
+                    s.add(expr)
+                else:
+                    s.add(Not(expr))
+            except Exception as e:
+                logger.error(f'FAILED on expr {condition_mapping.replacers[a["var"]]}')
+                logger.error(f'Error: {e}')
+                raise
+
         if missingCondition:
             print('broken condition')
             w.feasible = False
@@ -492,6 +499,7 @@ def get_bad_constraints(desugared_file: Path) -> List[str]:
 
     # noinspection PyUnusedLocal
     varis = condition_mapping.varis  # To make the evals work (why did you do this to me)
+
     condition_mapping.constraints = []
     logger.debug(f"Condition mapping is {str(condition_mapping)}")
     line_index = len(lines) - 1
@@ -554,6 +562,7 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
     :param debug: If debug information should be displayed
     :return: The condition mapping variable passed in, with the new mappings added in
     """
+
     # Example line:
     # ---Renaming text------------Static Condition ID we map to---Presence Condition
     # __static_condition_renaming("__static_condition_default_5", "(defined READ_X)");
@@ -562,25 +571,33 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
         return current_result
     # A comma will separate the __static_condition_default from the condition
     cc = line.split(',')
+
     # Remove the tailend of the presence condition
     conds = re.search('(.*").*?$', cc[1]).group(1)
     logger.debug(f"Conds is {cc[1]} -> {conds}")
+
     #Replace bit shift with something python friendly
     conds = re.sub(r'<<',r'*2**',conds)
+
     # We make some substitutions to enforce format consistency
     conds = re.sub(r'(&&|\|\|) !([a-zA-Z_0-9]+)( |")', r'\1 !(\2)\3', conds)
     conds = re.sub(r'(&&|\|\|) ([a-zA-Z_0-9]+)( |")', r'\1 (\2)\3', conds)
     conds = re.sub(r' "([a-zA-Z_0-9]+)', r' "(\1)', conds)
     conds = re.sub(r' "!([a-zA-Z_0-9]+)', r' "!(\1)', conds)
     # Currently have:  "(defined READ_X)"
+
     # remove the last ", and then seperate by ( to get each condition. We ensured these exist with our substituions
     conds = conds[:-1]
+
     inds = conds.split('(')
+
     # inds[0] is ' "', so we ignore it
     inds = inds[1:]
     logger.debug('checking individual conditions 0:0')
+
     # need to access id often, for performance we manually iterate
     indxx = 0
+
     # each i is a condition
     # This loop is the meat of Part 1
     for i in inds:
@@ -632,8 +649,26 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
             condstr = condstr.replace(' ' + x + ' ', ' ' + current_result.ids[x] + ' ')
             condstr = condstr.replace(' ' + x + ')', ' ' + current_result.ids[x] + ')')
 
+
+    # 11/08/25 FIX: handle arithmetic expressions that need boolean conversion these need to be wrapped as (expr) != 0 when in boolean context
+
+    # first, add != 0 for standalone USE variables NOT followed by operators
+    condstr = re.sub(
+        r'(varis\["USE_[^"]+"\])(?!\s*[><=!+\-*/%])',
+        r'(\1 != 0)', 
+        condstr
+    )
+    
+    # for arithmetic ops that create integer results, wrap and add != 0
+    condstr = re.sub(
+        r'(varis\["USE_[^"]+"\]\s*[+\-*/%]\s*(?:\d+|varis\["USE_[^"]+"\"]))',
+        r'((\1) != 0)',
+        condstr
+    )
+
     # replace ! with the Not method
     condstr = condstr.replace('!(', 'Not(')
+
     # we treat this like RPN solvers with stacks, we need a stack of operators and operands
     # being boolean logic and conditions respectively
     orsplits = condstr.split('||')
@@ -645,16 +680,19 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
     cs = re.split('&&|\|\|', condstr)
     ops = []
     logger.debug('rearranging ops 0:0')
+
     # or and and methods need to be called in plae of the binary operators
     for d in range(0, len(condstr)):
         if condstr[d] == '&' and condstr[d + 1] == '&':
             ops.append('And')
         elif condstr[d] == '|' and condstr[d + 1] == '|':
             ops.append('Or')
+
     ncondlist = list()
     ands = 0
     ors = 0
     opxx = 0
+
     # In this loop we look for And and Or statements on our stack. We set this up in a way
     # such that something like X & Y & Z ends up -> And( X, And(Y, Z))
     # If our current operator is And, we pop it off the stack along with the next operand
@@ -678,19 +716,24 @@ def get_condition_mapping(line, current_result: ConditionMapping = ConditionMapp
             ors += 1
             cs.pop(0)
         opxx += 1
+
     # we close our ands same as when we find an Or
     ncondlist.append(cs[0] + ands * ')')
+
     # we close our ors
     if ors > 0:
         ncondlist.append(')')
+
     # conjoin our strings
     ncondstr = ''.join(ncondlist).rstrip()
     ncondlist.clear()
+
     # if we are looking for the inverse (say we specifically do not take an if statement)
     # we want the inverse, so wrap it all in a Not method
     ncondstr = reformatted
     if invert:
         ncondstr = 'Not(' + ncondstr + ')'
+
     # Finally map the static condition renaming to the re-written presence condition
     current_result.replacers[cc[0][len('__static_condition_renaming("'):-1]] = ncondstr
     return current_result
