@@ -139,6 +139,7 @@ class Tester:
                 f"Tried building program but got return code of {returnCode}")
         logger.info(f"Finished downloading target program.")
 
+        """
         if not self.baselines:
             # 2. Run SugarC
             logger.info(
@@ -257,6 +258,7 @@ class Tester:
         """
         with open("/results.json", 'w') as f:
             json.dump(alarms, f, indent=2)
+        """
         """
 
 
