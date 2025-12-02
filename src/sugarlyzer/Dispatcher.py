@@ -110,7 +110,7 @@ def build_images(tools: List[str], nocache: bool, jobs: int) -> None:
     for c in cmds:
         c.extend(["--build-arg", f"JOBS={jobs}"])
 
-    logger.info('Building images....')
+    logger.debug('Building images....')
 
     for cmd in cmds:
         logging.info(f'Running cmd {" ".join(cmd)}')
