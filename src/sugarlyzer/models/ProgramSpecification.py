@@ -208,7 +208,14 @@ class ProgramSpecification:
 
                 yield from (ProgramSpecification.BaselineConfig(source_file, None, c) for c in all_configurations(macros)) 
         else:
-            yield from self.try_resolve_path(self.sample_directory).iterdir()
+            directory = self.try_resolve_path(self.sample_directory)
+            all_files = list(directory.iterdir())
+            sorted_files = sorted(
+                [f for f in all_files if re.match(r'^\d+\.config$', f.name)],
+                key=lambda p: int(re.match(r'^(\d+)\.config$', p.name).group(1))
+            )
+            print(f"config: {sorted_files}")
+            yield from sorted_files
 
     def get_all_macros(self, fpa):
         parser = MacroDiscoveryPreprocessor()
