@@ -14,6 +14,9 @@ import re
 from pathlib import Path
 from typing import Iterable, List, Dict, Any, Tuple
 
+
+import pandas as pd
+
 # noinspection PyUnresolvedReferences
 from jsonschema.validators import RefResolver, Draft7Validator
 from pathos.pools import ProcessPool
@@ -42,6 +45,7 @@ class Tester:
         self.validate = validate
         self.sample_size = sample_size
         self.alarm_config_map = {}
+        self.all_configs = []
 
         if tool == 'testTool' or program == 'testProgram':
             return
@@ -98,7 +102,7 @@ class Tester:
 
     @staticmethod
     def configure_code(program: ProgramSpecification, config: Path):
-        logger.info(f"Running configuration {config.name}")
+        logger.debug(f"Running configuration {config.name}")
         # Copy config to .config
         cwd = os.curdir
         os.chdir(program.make_root)
@@ -139,7 +143,6 @@ class Tester:
                 f"Tried building program but got return code of {returnCode}")
         logger.info(f"Finished downloading target program.")
 
-        """
         if not self.baselines:
             # 2. Run SugarC
             logger.info(
@@ -210,7 +213,7 @@ class Tester:
 
             # Collect alarms into "buckets" based on equivalence.
             # Then, for each bucket, we will return one alarm, combining all of the models into a list.
-            logger.debug("Now deduplicating results.")
+            logger.info("Now deduplicating results.")
             for ba in alarms:
                 for bucket in buckets:
                     if len(bucket) > 0 and alarm_match(bucket[0], ba):
@@ -224,7 +227,7 @@ class Tester:
                 buckets[-1].append(ba)
                 buckets.append([])
 
-            logger.debug("Now aggregating alarms.")
+            logger.info("Now aggregating alarms.")
             alarms = []
 
             for bucket in (b for b in buckets if len(b) > 0):
@@ -238,8 +241,7 @@ class Tester:
                 with ProcessPool(self.jobs) as p:
                     alarms = list(tqdm(p.imap(self.verify_alarm, alarms)))
 
-            alarms = self.postprocess_experimental_results(
-                [a.as_dict() for a in alarms])
+            alarms = self.postprocess_experimental_results([a.as_dict() for a in alarms])
 
         else:
             alarms = self.run_baseline_experiments()
@@ -247,31 +249,94 @@ class Tester:
             logger.info("Deduplicating alarms")
             logger.info(f"Collected Alarms: {alarms}")
 
-            #Alarms.model is a list of all configuration options as tuples [(configuration name, configuration value)]
-            self.postprocess_alarm_configs([a.as_dict() for a in alarms])
+            alarm_progs = self.postprocess_alarm_configs([a.as_dict() for a in alarms])
 
-            # alarms = self.dedup_and_process_alarms([a.as_dict() for a in alarms])
+            self.build_csv_config_prog_table(alarm_progs)
+            self.build_csv_alarm_occurrence_config_table(alarm_progs)
+
+            alarms = self.dedup_and_process_alarms([a.as_dict() for a in alarms])
 
         # Now time to postprocess alarms
         logger.info("Got " + str(len(alarms)) + " alarms.")
         logger.debug("Writing alarms to file.")
-        """
+
         with open("/results.json", 'w') as f:
             json.dump(alarms, f, indent=2)
-        """
-        """
 
 
-    def postprocess_alarm_configs(self, alarms: List[Dict]):
-        def normalize_file_path(file_path): # Remove the config file from path name
+    def build_csv_config_prog_table(self, config_prog_map):
+        def normalize_file_path(file_path):
+            match = re.search(r'/(\d+\.config)(?:/|$)', file_path)
+            config_file = match.group(1) if match else None
+            return config_file
+
+        def extract_number(config_name):
+            match = re.search(r'(\d+)', config_name)
+            return int(match.group(1)) if match else 0
+
+
+        all_config_files = set()
+        for config_file in self.all_configs:
+            clean_config_file = normalize_file_path(str(config_file))
+            all_config_files.add(clean_config_file)
+
+        sorted_configs = sorted(all_config_files, key=extract_number)
+
+        rows = []
+        for alarm_key, config_list in config_prog_map.items():
+            file_path, line, description = alarm_key
+            alarm_identifier = f"{file_path}:{line} - {description}"
+
+            for progress, config_file in set(config_list):
+                rows.append({
+                    'alarm': alarm_identifier,
+                    'config': config_file,
+                    'progress': progress
+                })
+
+        df = pd.DataFrame(rows)
+
+        pivot_df = df.pivot(index='alarm', columns='config', values='progress')
+        pivot_df = pivot_df.reindex(columns=sorted_configs)
+
+        # Forward fill each row but only after first non-NaN value
+        mask = pivot_df.notnull().cumsum(axis=1) > 0
+        pivot_df = pivot_df.ffill(axis=1).where(mask)
+        
+        pivot_df.to_csv('alarm_config_progress.csv', index=True)
+
+
+    def build_csv_alarm_occurrence_config_table(self, config_prog_map):
+        rows = []
+        for alarm_key, config_list in config_prog_map.items():
+            file_path, line, description = alarm_key
+            alarm_identifier = f"{file_path}:{line} - {description}"
+
+            for i, (progress, _) in enumerate(list(dict.fromkeys(config_list))):
+                rows.append({
+                    'alarm': alarm_identifier,
+                    'occurrence': i+1,
+                    'progress': progress
+                })
+
+            df = pd.DataFrame(rows)
+            pivot_df = df.pivot(index='alarm', columns='occurrence', values='progress')
+            pivot_df.to_csv('alarm_occurrence_config_progress.csv', index=True)
+
+    def postprocess_alarm_configs(self, alarms: List[Dict]) -> Dict:
+        def normalize_file_path(file_path):
+            match = re.search(r'/(\d+\.config)/', file_path)
+            config_file = match.group(1) if match else None
             normalized = re.sub(r'/\d+\.config/', '/', file_path)
-            return normalized
+            return normalized, config_file
 
-        config_count_history = {}  # Track progression for each alarm
-        for i, alarm in enumerate(alarms):
+        config_count_history = {}
+
+        for alarm in alarms:
             alarm_config = alarm.pop("configuration")
-            alarm_key = (normalize_file_path(alarm['input_file']), alarm['input_line'], alarm['message'])
-            # Initialize history for this alarm if first time seeing it
+            file_path, config_file = normalize_file_path(alarm['input_file'])
+            alarm_key = (file_path, alarm['input_line'], alarm['message'])
+
             if alarm_key not in config_count_history:
                 config_count_history[alarm_key] = []
 
@@ -279,15 +344,11 @@ class Tester:
                 existing_alarm_configs = self.alarm_config_map[alarm_key]
                 alarm_config = list(set(existing_alarm_configs) & set(alarm_config))
 
-            # Track the count at each step
-            config_count_history[alarm_key].append(len(alarm_config))
+            config_count_history[alarm_key].append((len(alarm_config), config_file))
+
             self.alarm_config_map[alarm_key] = alarm_config
 
-        # Print summary statistics
-        for alarm_key, counts in config_count_history.items():
-            print(f"Alarm: {alarm_key}")
-            print(f"  Config progression: {counts}")
-            print(f"  Started: {counts[0]}, Ended: {counts[-1]}, Average: {sum(counts)/len(counts):.2f}")
+        return config_count_history 
 
 
     def postprocess_experimental_results(self, experimental_results: List[Dict]) -> List[Dict]:
@@ -449,7 +510,8 @@ class Tester:
 
         logger.info("Performing code cloning for baseline experiments:")
 
-        all_configs = list(self.program.get_baseline_configurations())
+        self.all_configs = list(self.program.get_baseline_configurations())
+        print(f"all_configs: {self.all_configs}")
         if self.program.name.lower() == "varbugs":
             # Need to restructure this and improve this code later, this is very hacky
             alarms = []
@@ -473,15 +535,15 @@ class Tester:
                 return alarms
 
             with ProcessPool(self.jobs) as p:
-                for i in p.imap(varbugs_analyze_and_read, all_configs):
+                for i in p.imap(varbugs_analyze_and_read, self.all_configs):
                     alarms.extend(i)
         else:
             if self.sample_size < 1000:
-                all_configs = random.sample(all_configs, self.sample_size)
-            logger.info(f"Selected configurations: {all_configs}")
+                self.all_configs = self.all_configs[:self.sample_size]
 
-            for config in all_configs:
+            logger.debug(f"Selected configurations: {self.all_configs}")
 
+            for config in self.all_configs:
                 # Configure program to specific config
                 spec = self.clone_program_and_configure(self.program, config)
 
@@ -518,8 +580,6 @@ class Tester:
         return alarms
 
     def dedup_and_process_alarms(self, alarms: List[Dict]) -> List[Dict]:
-        import re
-
         for b in alarms:
             try:
                 b['original_configuration'] = [
