@@ -140,3 +140,26 @@ dmypy.json
 **/joblog
 # Emacs autosave
 \#*
+
+*.class
+*.log
+
+**/.DS_STORE
+/docs
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+
+**/.bsp/*
+**/.metals/*
+**/.vscode/*
+**/.bloop/*
+
+*.cache
+*.semanticdb
+*.tasty
+**/target/*
+
+*~
+
+**/metals.sbt

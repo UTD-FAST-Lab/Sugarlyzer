@@ -15,6 +15,11 @@ lazy val commonSettings = Seq(
     "-no-indent"
   ),
 
+  // Library dependencies
+  libraryDependencies += "org.typelevel" %% "cats-core"   % "2.13.0",
+  libraryDependencies += "org.typelevel" %% "cats-effect" % "3.6.3",
+  libraryDependencies += "com.lihaoyi"   %% "os-lib"      % "0.11.6",
+
   // Test Dependencies
   libraryDependencies += "org.scalameta" %% "munit"            % "1.2.1" % Test,
   libraryDependencies += "org.scalameta" %% "munit-scalacheck" % "1.2.0" % Test,
