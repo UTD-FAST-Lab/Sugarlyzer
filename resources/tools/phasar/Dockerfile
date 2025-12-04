@@ -13,11 +13,11 @@ ENV CFLAGS=""
 ENV CXXFLAGS=""
 
 RUN apt-get update && \
-DEBIAN_FRONTEND=noninteractive TZ="America/New_York" apt-get -y install tzdata && \
-apt-get install wget sudo -y && \
-apt-get install git make cmake -y && \
-apt-get install zlib1g-dev sqlite3 libsqlite3-dev bear python3 doxygen graphviz python3-pip libxml2 libxml2-dev libncurses5-dev libncursesw5-dev libtinfo5 swig build-essential g++ cmake libz3-dev libedit-dev python3-sphinx libomp-dev libcurl4-openssl-dev ninja-build -y && \
-apt-get install libboost-all-dev -y
+	DEBIAN_FRONTEND=noninteractive TZ="America/New_York" apt-get -y install tzdata && \
+	apt-get install wget sudo -y && \
+	apt-get install git make cmake -y && \
+	apt-get install zlib1g-dev sqlite3 libsqlite3-dev bear python3 doxygen graphviz python3-pip libxml2 libxml2-dev libncurses5-dev libncursesw5-dev libtinfo5 swig build-essential g++ cmake libz3-dev libedit-dev python3-sphinx libomp-dev libcurl4-openssl-dev ninja-build -y && \
+	apt-get install libboost-all-dev -y
 
 RUN git clone https://github.com/secure-software-engineering/phasar.git ${PHASAR}
 WORKDIR ${PHASAR}
@@ -36,7 +36,7 @@ RUN ${PHASAR}/utils/setEnvironmentVariables.sh ${LLVM_INSTALL_DIR} ${PHASAR_INST
 
 RUN mkdir -p ${PHASAR}/external/json/build
 WORKDIR ${PHASAR}/external/json/build
-RUN cmake .. && make -j20 && make install
+RUN cmake -DJSON_BuildTests=OFF .. && make -j20 && make install
 
 RUN mkdir -p ${PHASAR}/external/json-schema-validator/build
 WORKDIR ${PHASAR}/external/json-schema-validator/build
