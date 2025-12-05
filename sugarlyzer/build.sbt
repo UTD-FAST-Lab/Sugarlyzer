@@ -16,9 +16,11 @@ lazy val commonSettings = Seq(
   ),
 
   // Library dependencies
-  libraryDependencies += "org.typelevel" %% "cats-core"   % "2.13.0",
-  libraryDependencies += "org.typelevel" %% "cats-effect" % "3.6.3",
-  libraryDependencies += "com.lihaoyi"   %% "os-lib"      % "0.11.6",
+  libraryDependencies += "org.typelevel" %% "cats-core"       % "2.13.0",
+  libraryDependencies += "org.typelevel" %% "cats-effect"     % "3.6.3",
+  libraryDependencies += "com.lihaoyi"   %% "os-lib"          % "0.11.6",
+  libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.3.5",
+  libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
 
   // Test Dependencies
   libraryDependencies += "org.scalameta" %% "munit"            % "1.2.1" % Test,

@@ -8,8 +8,8 @@ object Config {
   opaque type Program = String
 
   case class SampleSize(i: Int) {
-    require(i >= 0)
-    require(i <= 1000)
+    require(i > 0, "Sample size must be greater than 0")
+    require(i <= 1000, "Sample size cannot exceed 1000")
   }
 
   enum Mode {
