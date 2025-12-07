@@ -2,10 +2,9 @@ package sugarlyzer.tester.sugarc
 
 import cats.effect.IO
 import os.Path
-import scala.sys.process._
 import java.io.File
-import cats.Show
 import com.typesafe.scalalogging.Logger
+import sugarlyzer.util.CommandBuilder
 
 object SugarCRunner {
 
@@ -19,74 +18,53 @@ object SugarCRunner {
 
   def desugarFile(
       fileToDesugar: Path,
+      logFile: Path,
       recommendedSpace: Option[Iterable[String]] = None,
-      outputFile: Option[Path] = None,
-      logFile: Option[Path] = None,
-      configPrefix: Option[String] = None,
       noStdLibs: Boolean = false,
       keepMem: Boolean = false,
       makeMain: Boolean = false,
       includedFiles: Iterable[Path] = Seq(),
       includedDirectories: Iterable[Path] = Seq(),
       commandLineDeclarations: Iterable[String] = Nil
-  ): IO[Path] = {
-    // If recommended space exists, write it to a file, and add it to the
-    val recommendedSpaceFile = recommendedSpace.map { rs =>
-      for fi <- getTempFile()
-      _      <- writeToFile(fi, rs)
-      yield ()
+  ): IO[(Path, Path)] = {
+    /* If recommended space exists, write it to a file, and add it to the
+     * included files */
+    val recommendedSpaceFileIO: IO[Option[Path]] = recommendedSpace match {
+      case Some(rs) =>
+        for {
+          fi <- getTempFile()
+          _  <- writeToFile(fi, rs)
+        } yield Some(fi)
+      case None => IO.pure(None)
     }
-    val cmd = CommandBuilder(
-      program = Seq(
-        "java",
-        "-Xmx32g",
-        "superc.SugarC",
-        "-showActions",
-        "-useBDD"
-      ).mkString(" ")
-    ).args(
-      includedFiles.map(p => s"-include ${p.toString()}").toSeq*
-    ).args(
-      includedDirectories.map(p => s"-I ${p.toString()}").toSeq*
-    )
 
-  }
-}
+    recommendedSpaceFileIO.flatMap { rsFileOpt =>
+      val allIncludedFiles = rsFileOpt.toSeq ++ includedFiles
 
-case class CommandBuilder(
-    program: String,
-    args: Vector[String] = Vector.empty,
-    env: Map[String, String] = Map.empty,
-    workingDir: Option[File] = None
-) {
-  def arg(a: String): CommandBuilder    = copy(args = args :+ a)
-  def args(as: String*): CommandBuilder = copy(args = args ++ as)
-  def env(key: String, value: String): CommandBuilder =
-    copy(env = env + (key -> value))
-  def in(dir: File): CommandBuilder = copy(workingDir = Some(dir))
+      var cmd = CommandBuilder(
+        program = Seq(
+          "java",
+          "-Xmx32g",
+          "superc.SugarC",
+          "-showActions",
+          "-useBDD"
+        ).mkString(" ")
+      ).args(
+        allIncludedFiles.map(p => s"-include ${p.toString()}").toSeq*
+      ).args(
+        includedDirectories.map(p => s"-I ${p.toString()}").toSeq*
+      ).args(
+        commandLineDeclarations.toSeq*
+      )
 
-  def build: ProcessBuilder = {
-    Process(program +: args, workingDir, env.toSeq*)
-  }
-
-  def run(): Int = build.!
-  def runWithOutput(): (Int, String, String) = {
-    val stdout = StringBuilder()
-    val stderr = StringBuilder()
-    val code = build.!(ProcessLogger(
-      s => stdout.append(s + "\n"),
-      s => stderr.append(s + "\n")
-    ))
-    (code, stdout.toString.trim, stderr.toString.trim)
-  }
-}
-
-object CommandBuilder {
-  given Show[CommandBuilder] with
-    def show(t: CommandBuilder): String = {
-      val envStr = t.env.map((k, v) => s"$k=$v").mkString(" ")
-      val cwdStr = t.workingDir.map(d => s"(in ${d.getPath})").getOrElse("")
-      val cmdStr = (t.program +: t.args).mkString(" ")
-      Seq(envStr, cmdStr, cwdStr).filter(_.nonEmpty).mkString(" ")
+      if noStdLibs then cmd = cmd.arg("-nostdinc")
+      if keepMem then cmd = cmd.arg("-keep-mem")
+      if makeMain then cmd = cmd.arg("-make-main")
+      cmd = cmd.in(File(fileToDesugar.toURI).getParentFile())
+      cmd.runWithFileRedirects(
+        (fileToDesugar / os.up / (fileToDesugar.baseName + ".desugared.c")),
+        logFile
+      )
     }
+  }
 }
