@@ -15,6 +15,7 @@ from pathlib import Path
 from typing import Iterable, List, Dict, Any, Tuple
 
 
+from multiprocess.pool import traceback
 import pandas as pd
 
 # noinspection PyUnresolvedReferences
@@ -502,14 +503,14 @@ class Tester:
             os.remove(file)
             try:
                 os.remove(str(file.absolute())[:-2] + ".o")
-            except Exception:
-                pass
+            except Exception as e:
+                print(f" CRASH WHEN DELETING IN analyze_file_and_associate_configuration{e}")
 
         return alarms_from_one_file
 
+
     def run_baseline_experiments(self) -> Iterable[Alarm]:
         alarms: List[Alarm] = []
-
         logger.info("Performing code cloning for baseline experiments:")
 
         self.all_configs = list(self.program.get_baseline_configurations())
@@ -559,10 +560,30 @@ class Tester:
                 logger.debug(f"Running analysis on pairs {source_files_config_spec_triples}")
 
                 with ProcessPool(self.jobs) as p:
-                    for resulting_alarms in p.imap(lambda x: self.analyze_file_and_associate_configuration(*x), source_files_config_spec_triples):
-                        # We have the resulting alarms from a specific config and ran on a specific source file
-                        alarms.extend(resulting_alarms)
+                    try:
+                        # get resulting alarms from a specific config and ran on a specific source file
+                        for resulting_alarms in p.imap(lambda x: self.analyze_file_and_associate_configuration(*x), source_files_config_spec_triples):
+                            try:
+                                alarms.extend(resulting_alarms)
+                                print(f"Length of resulting_alarms: {len(resulting_alarms)}")
+                            except Exception as e:
+                                    print(f"CRASH IN LOOP {e}")
+                    except Exception as e:
+                        print("CRASH IN ITERATOR OR POOL")
+                        traceback.print_exc()
 
+                for root, dirs, files in os.walk("/targets/" + config.name):
+                    for file in files:
+                        os.remove(os.path.join(root, file))
+
+                """
+                for root, dirs, files in os.walk("/tmp", topdown=False):
+                    for file in files:
+                        os.remove(os.path.join(root, file))
+
+                    for dir in dirs:
+                        os.rmdir(os.path.join(root, dir))
+                """
         for alarm in alarms:
             alarm.get_recommended_space = (not self.no_recommended_space)
             alarm.remove_errors = self.remove_errors
