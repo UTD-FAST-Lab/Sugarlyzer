@@ -25,7 +25,8 @@ lazy val commonSettings = Seq(
   // Test Dependencies
   libraryDependencies += "org.scalameta" %% "munit"            % "1.2.1" % Test,
   libraryDependencies += "org.scalameta" %% "munit-scalacheck" % "1.2.0" % Test,
-  libraryDependencies += "org.scalamock" %% "scalamock"        % "7.5.0" % Test
+  libraryDependencies += "org.typelevel" %% "munit-cats-effect" % "2.1.0" % Test,
+  libraryDependencies += "org.scalamock" %% "scalamock" % "7.5.0" % Test
 )
 
 lazy val root = project
@@ -55,5 +56,7 @@ lazy val tester = project
   .settings(
     commonSettings,
     name                   := "tester",
-    Compile / doc / target := file("tester/docs")
+    Compile / doc / target := file("tester/docs"),
+    // Make main resources available to tests
+    Test / unmanagedResourceDirectories += (Compile / resourceDirectory).value
   )
