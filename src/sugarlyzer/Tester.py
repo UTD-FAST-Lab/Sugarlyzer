@@ -108,7 +108,9 @@ class Tester:
         os.chdir(program.make_root)
         logger.debug(f"Copying {config.name} to {program.oldconfig_location}")
         shutil.copyfile(config, program.oldconfig_location)
-        os.system('yes "" | make oldconfig')
+        exit_code = os.system('yes | make oldconfig; make')
+        if exit_code != 0:
+            logger.warn(f"Make for config {str(config)} failed.")
         logger.debug("make finished.")
         os.chdir(cwd)
         # if cp.returncode != 0:
@@ -551,7 +553,7 @@ class Tester:
                 source_files_config_spec_triples: List[Tuple[Path, Path, ProgramSpecification, bool]] = []
 
                 # Set of triple of file/config/spec/delete_flag
-                source_files_config_spec_triples.extend((fi, config, spec, True) for fi in spec.get_source_files())
+                source_files_config_spec_triples.extend((fi, config, spec, False) for fi in spec.get_source_files())
 
                 logger.info(f"Running analysis on {config.name}:")
                 logger.debug(f"Running analysis on pairs {source_files_config_spec_triples}")
@@ -559,19 +561,7 @@ class Tester:
                 with ProcessPool(self.jobs) as p:
                     for resulting_alarms in p.imap(lambda x: self.analyze_file_and_associate_configuration(*x), source_files_config_spec_triples):
                         # We have the resulting alarms from a specific config and ran on a specific source file
-
                         alarms.extend(resulting_alarms)
-
-                for root, dirs, files in os.walk("/targets/" + config.name):
-                    for file in files:
-                        os.remove(os.path.join(root, file))
-
-                for root, dirs, files in os.walk("/tmp", topdown=False):
-                    for file in files:
-                        os.remove(os.path.join(root, file))
-
-                    for dir in dirs:
-                        os.rmdir(os.path.join(root, dir))
 
         for alarm in alarms:
             alarm.get_recommended_space = (not self.no_recommended_space)
