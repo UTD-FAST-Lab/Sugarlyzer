@@ -11,10 +11,16 @@ else
   ROOT="$2"
 fi
 
-for t in clang infer phasar
+RESULTS_DIR=$ROOT/experiment_results/product-based
+
+for t in infer clang phasar
 do
-  for p in toybox axtls busybox
+  for p in axtls toybox busybox
   do
-    dispatcher -t $t -p $p -r "$ROOT/$t.$p.baseline.json" --log "$ROOT/$t.$p.baseline.log" --jobs $1 --baselines
+    for i in $(seq 1 5)
+    do
+      echo "Running $t on $p #$i\n"
+      dispatcher -t $t -p $p -r "$RESULTS_DIR/$t/$p/"$i"_results.json" --log "$RESULTS_DIR/$t/$p/"$i".log" --jobs $1 --baselines
+    done
   done
 done

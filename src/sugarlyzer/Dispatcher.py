@@ -48,7 +48,7 @@ def read_arguments() -> argparse.Namespace:
     p.add_argument("--no-recommended-space", help="""Do not generate a recommended space.""", 
                    action='store_true')
 
-    p.add_argument("--jobs", help="The number of jobs to use. If None, will use all CPUs", type=int, 
+    p.add_argument("--jobs", help=f"The number of jobs to use. If None, will use all ({multiprocessing.cpu_count()}) CPUs", type=int, 
                    default=multiprocessing.cpu_count())
 
     p.add_argument("--validate", help="""Try running desugared alarms with Z3's configuration to see if they are retained.""", 
