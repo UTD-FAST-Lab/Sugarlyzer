@@ -1,6 +1,7 @@
 import argparse
 import copy
 import functools
+import gc
 from importlib.resources import as_file, files
 import json
 import logging
@@ -80,7 +81,7 @@ class Tester:
         self.kgen_map = self.program.kgen_map
 
 
-    @functools.cache
+    @functools.lru_cache(maxsize=512)
     def get_inc_files_and_dirs_for_file(self, file: Path):
         included_files, included_directories, cmd_decs = self.program.inc_files_and_dirs_for_file(
             file)
@@ -178,8 +179,9 @@ class Tester:
             input_files: List[Tuple] = []
             logger.info("Desugaring files....")
 
-            for result in tqdm(ProcessPool(self.jobs).imap(desugar, source_files), total=len(source_files)):
-                input_files.append(result)
+            with ProcessPool(self.jobs) as desugar_pool:
+                for result in tqdm(desugar_pool.imap(desugar, source_files), total=len(source_files)):
+                    input_files.append(result)
 
             logger.info(f"Finished desugaring the source code.")
             # 3/4. Run analysis tool, and read its results
@@ -209,33 +211,37 @@ class Tester:
                 for result in tqdm(p.imap(lambda x: analyze_read_and_process(*x), ((d, o, dt) for d, _, o, dt in input_files)), total=len(input_files)):
                     alarms.extend(result)
 
-            buckets: List[List[Alarm]] = [[]]
+            # Use dictionary for O(1) deduplication instead of O(n²) bucket iteration
+            def alarm_key(a: Alarm):
+                return (a.line_in_input_file, a.sanitized_message, str(a.input_file), a.feasible)
 
-            def alarm_match(a: Alarm, b: Alarm):
-                return a.line_in_input_file == b.line_in_input_file and a.sanitized_message == b.sanitized_message and a.input_file == b.input_file and a.feasible == b.feasible
-
-            # Collect alarms into "buckets" based on equivalence.
-            # Then, for each bucket, we will return one alarm, combining all of the models into a list.
+            # Collect alarms into buckets based on equivalence using dict for O(1) lookup
             logger.info("Now deduplicating results.")
+            buckets: Dict[tuple, List[Alarm]] = {}
             for ba in alarms:
-                for bucket in buckets:
-                    if len(bucket) > 0 and alarm_match(bucket[0], ba):
-                        logger.debug("Found matching bucket.")
-                        bucket.append(ba)
-                        break
+                key = alarm_key(ba)
+                if key in buckets:
+                    logger.debug("Found matching bucket.")
+                    buckets[key].append(ba)
+                else:
+                    logger.debug("Creating a new bucket.")
+                    buckets[key] = [ba]
 
-                # If we get here, then there wasn't a bucket that this could fit into,
-                #  So it gets its own bucket and we add a new one to the end of the list.
-                logger.debug("Creating a new bucket.")
-                buckets[-1].append(ba)
-                buckets.append([])
+            # Clear original alarms list to free memory before aggregating
+            alarms.clear()
 
             logger.info("Now aggregating alarms.")
-            alarms = []
-
-            for bucket in (b for b in buckets if len(b) > 0):
+            for bucket in buckets.values():
                 alarms.append(bucket[0])
                 alarms[-1].presence_condition = f"Or({','.join(str(m.presence_condition) for m in bucket)})"
+                # Clear bucket after processing to free memory
+                bucket.clear()
+
+            # Clear buckets dict
+            buckets.clear()
+
+            # Force garbage collection after deduplication to free memory
+            gc.collect()
 
             logger.debug("Done.")
 
@@ -265,6 +271,11 @@ class Tester:
 
         with open("/results.json", 'w') as f:
             json.dump(alarms, f, indent=2)
+
+        # Clean up instance-level accumulated state after all processing is complete
+        self.alarm_config_map.clear()
+        self.all_configs.clear()
+        gc.collect()
 
 
     def build_csv_config_prog_table(self, config_prog_map):
@@ -439,6 +450,7 @@ class Tester:
             logger.debug(f"Configuration is {loggable_config_string}")
             ntf = tempfile.NamedTemporaryFile(delete=False, mode="w")
             ntf.write(config_string)
+            ntf.flush()  # Ensure content is written before using the file
             ps: ProgramSpecification = self.clone_program_and_configure(
                 self.program, Path(ntf.name))
             updated_file = str(alarm.input_file.absolute()).replace(
@@ -450,6 +462,11 @@ class Tester:
             logger.debug(
                 f"Got the following alarms {[json.dumps(b.as_dict()) for b in verify]} when trying to verify alarm {json.dumps(alarm.as_dict())}")
             ntf.close()
+            # Clean up temporary file to prevent temp file accumulation
+            try:
+                os.unlink(ntf.name)
+            except OSError:
+                pass  # File may have already been deleted
             for v in verify:
                 logger.debug(
                     f"Comparing alarms {alarm.as_dict()} and {v.as_dict()}")
@@ -575,6 +592,9 @@ class Tester:
                 for root, dirs, files in os.walk("/targets/" + config.name):
                     for file in files:
                         os.remove(os.path.join(root, file))
+
+                # Force garbage collection after each config to prevent memory buildup
+                gc.collect()
 
                 """
                 for root, dirs, files in os.walk("/tmp", topdown=False):
