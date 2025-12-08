@@ -145,7 +145,7 @@ class ProgramSpecification:
         ps = subprocess.run(self.build_script)
         return ps.returncode
 
-    @functools.cache
+    @functools.lru_cache(maxsize=1024)
     def try_resolve_path(self, path: str | Path, root: Path = Path("/")) -> Path:
         """
         Copied directly from ECSTATIC.
