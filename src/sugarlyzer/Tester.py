@@ -589,6 +589,14 @@ class Tester:
                         print("CRASH IN ITERATOR OR POOL")
                         traceback.print_exc()
 
+                # Force evaluation of function_line_range before deleting files
+                # This caches the value so as_dict() won't need file access later
+                for alarm in alarms:
+                    try:
+                        _ = alarm.function_line_range
+                    except (ValueError, FileNotFoundError):
+                        pass  # Some alarms may not have valid file references
+
                 for root, dirs, files in os.walk("/targets/" + config.name):
                     for file in files:
                         os.remove(os.path.join(root, file))
