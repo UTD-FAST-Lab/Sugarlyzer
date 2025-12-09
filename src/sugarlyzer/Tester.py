@@ -136,9 +136,12 @@ class Tester:
     def execute(self):
         logger.info(f"Current environment is {os.environ}")
 
+        """
+        Not being used
         output_folder = Path("/results") / \
             Path(self.tool.name) / Path(self.program.name)
         output_folder.mkdir(exist_ok=True, parents=True)
+        """
 
         # 1. Download target program.
         logger.info(f"Downloading target program {self.program}")
@@ -317,7 +320,7 @@ class Tester:
         mask = pivot_df.notnull().cumsum(axis=1) > 0
         pivot_df = pivot_df.ffill(axis=1).where(mask)
         
-        pivot_df.to_csv('alarm_config_progress.csv', index=True)
+        pivot_df.to_csv('/results/alarm_config_progress.csv', index=True)
 
 
     def build_csv_alarm_occurrence_config_table(self, config_prog_map):
@@ -335,7 +338,7 @@ class Tester:
 
             df = pd.DataFrame(rows)
             pivot_df = df.pivot(index='alarm', columns='occurrence', values='progress')
-            pivot_df.to_csv('alarm_occurrence_config_progress.csv', index=True)
+            pivot_df.to_csv('/results/alarm_occurrence_config_progress.csv', index=True)
 
     def postprocess_alarm_configs(self, alarms: List[Dict]) -> Dict:
         def normalize_file_path(file_path):
@@ -531,7 +534,6 @@ class Tester:
         logger.info("Performing code cloning for baseline experiments:")
 
         self.all_configs = list(self.program.get_baseline_configurations())
-        print(f"all_configs: {self.all_configs}")
         if self.program.name.lower() == "varbugs":
             # Need to restructure this and improve this code later, this is very hacky
             alarms = []
@@ -582,7 +584,6 @@ class Tester:
                         for resulting_alarms in p.imap(lambda x: self.analyze_file_and_associate_configuration(*x), source_files_config_spec_triples):
                             try:
                                 alarms.extend(resulting_alarms)
-                                print(f"Length of resulting_alarms: {len(resulting_alarms)}")
                             except Exception as e:
                                     print(f"CRASH IN LOOP {e}")
                     except Exception as e:
