@@ -41,6 +41,8 @@ def read_arguments() -> argparse.Namespace:
 
     p.add_argument('--force', action='store_true', help='Do not ask permission to delete existing log and results files.')
 
+    p.add_argument('--output-dir', help='If specified, all results will be stored in the specified directory')
+
     p.add_argument("--baselines", action="store_true",
                    help="""Run the baseline experiments. In these, we configure each 
                    file with every possible configuration, and then run the experiments.""")
@@ -128,9 +130,16 @@ def start_tester(t, args) -> None:
     cache_dir = Path(args.result).parent / Path("cached_desugared") if args.cache_folder is None else Path(args.cache_folder)
     cache_dir.mkdir(parents=True, exist_ok=True)
 
+    if args.output_dir:
+        output_dir = Path(args.output_dir).absolute()
+    else:
+        output_dir = Path(args.result).absolute().parent
+    
+    output_dir.mkdir(parents=True, exist_ok=True)
     bind_volumes = {
         Path(args.result).absolute(): {"bind": "/results.json", "mode": "rw"},
         Path(args.log).absolute(): {"bind": "/log", "mode": "rw"},
+        output_dir: {"bind": "/results", "mode": "rw"},
         Path(cache_dir).absolute(): {"bind": "/cached_desugared", "mode": "rw"}
     }
 
