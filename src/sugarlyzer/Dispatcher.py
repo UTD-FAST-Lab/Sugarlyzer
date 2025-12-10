@@ -145,7 +145,6 @@ def start_tester(t, args) -> None:
 
 
     # image should already be built from build_images()
-    # this was redundant. why is it in the for loop if it has no changing dependencies?
     cntr: Container = docker.from_env().containers.run(
         image=get_image_name(t),
         command="/bin/bash",
@@ -157,37 +156,29 @@ def start_tester(t, args) -> None:
 
     tester_command_args = build_tester_command_args(args)
 
-    try:
-        for i, p in enumerate(args.programs):
-            tester_command = [f"tester {t} {p}"] # run tool(t) on each program(p)
-            tester_command.append(tester_command_args)
-            tester_command = " ".join(tester_command)
+    for p in args.programs:
+        tester_command = [f"tester {t} {p}"] # run tool(t) on each program(p)
+        tester_command.append(tester_command_args)
+        tester_command = " ".join(tester_command)
 
-            _, log_stream = cntr.exec_run(cmd=tester_command, stream=True)
+        _, log_stream = cntr.exec_run(cmd=tester_command, stream=True)
 
-            try:
-                for l in log_stream:
-                    print(l.decode('utf-8', 'ignore'))
-            finally:
-                # Explicitly close the log stream socket to prevent resource leaks
-                if hasattr(log_stream, '_sock') and log_stream._sock is not None:
-                    try:
-                        log_stream._sock.close()
-                    except Exception:
-                        pass
-                # Also try closing the response if it exists
-                if hasattr(log_stream, '_response') and log_stream._response is not None:
-                    try:
-                        log_stream._response.close()
-                    except Exception:
-                        pass
-    finally:
-        # Ensure container is stopped even if auto_remove is set
         try:
-            cntr.stop(timeout=10)
-        except Exception:
-            pass  # Container may already be removed
-
+            for l in log_stream:
+                print(l.decode('utf-8', 'ignore'))
+        finally:
+            # Explicitly close the log stream socket to prevent resource leaks
+            if hasattr(log_stream, '_sock') and log_stream._sock is not None:
+                try:
+                    log_stream._sock.close()
+                except Exception:
+                    pass
+            # Also try closing the response if it exists
+            if hasattr(log_stream, '_response') and log_stream._response is not None:
+                try:
+                    log_stream._response.close()
+                except Exception:
+                    pass
 
 def build_tester_command_args(args):
     command_args = []
