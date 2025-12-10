@@ -259,7 +259,7 @@ class Tester:
             alarms = self.run_baseline_experiments()
 
             logger.info("Deduplicating alarms")
-            logger.info(f"Collected Alarms: {alarms}")
+            logger.debug(f"Collected Alarms: {alarms}")
 
             alarm_progs = self.postprocess_alarm_configs([a.as_dict() for a in alarms])
 
