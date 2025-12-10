@@ -13,23 +13,23 @@ TOOLS=(infer clang phasar)
 PROJECTS=(axtls toybox busybox)
 ITERATIONS=5
 
-for t in "${TOOLS[@]}"; do
-  for p in "${PROJECTS[@]}"; do
-    BASE_DIR="$RESULTS_DIR/$t/$p"
+for i in $(seq 1 "$ITERATIONS"); do
+  for t in "${TOOLS[@]}"; do
+    for p in "${PROJECTS[@]}"; do
+      BASE_DIR="$RESULTS_DIR/$t/$p"
 
-    for i in $(seq 1 "$ITERATIONS"); do
-      printf "Running %s on %s #%d\n" "$t" "$p" "$i"
-      ITERATION_DIR="$BASE_DIR/run_$i"
+        printf "Running %s on %s #%d\n" "$t" "$p" "$i"
+        ITERATION_DIR="$BASE_DIR/run_$i"
 
-      mkdir -p "$ITERATION_DIR"
+        mkdir -p "$ITERATION_DIR"
 
-      dispatcher \
-        -t "$t" \
-        -p "$p" \
-        --output-dir "$ITERATION_DIR" \
-        -r "$ITERATION_DIR/results.json" \
-        --log "$ITERATION_DIR/run.log" \
-        --jobs "$JOBS" 
+        dispatcher \
+          -t "$t" \
+          -p "$p" \
+          --output-dir "$ITERATION_DIR" \
+          -r "$ITERATION_DIR/results.json" \
+          --log "$ITERATION_DIR/run.log" \
+          --jobs "$JOBS"
     done
   done
 done
