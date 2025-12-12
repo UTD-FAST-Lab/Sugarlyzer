@@ -259,7 +259,6 @@ class Tester:
             alarms = self.run_baseline_experiments()
 
             logger.info("Deduplicating alarms")
-            logger.debug(f"Collected Alarms: {alarms}")
 
             alarm_progs = self.postprocess_alarm_configs([a.as_dict() for a in alarms])
 
@@ -605,13 +604,13 @@ class Tester:
                 # Force garbage collection after each config to prevent memory buildup
                 gc.collect()
 
-                """
                 for root, dirs, files in os.walk("/tmp", topdown=False):
                     for file in files:
                         os.remove(os.path.join(root, file))
 
                     for dir in dirs:
                         os.rmdir(os.path.join(root, dir))
+                """
                 """
         for alarm in alarms:
             alarm.get_recommended_space = (not self.no_recommended_space)
