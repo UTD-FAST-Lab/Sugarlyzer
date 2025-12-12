@@ -1,10 +1,10 @@
+import time
 import itertools
 import logging
 import subprocess
 import tempfile
 from pathlib import Path
-from typing import Iterable, Optional
-import re
+from typing import Iterable
 
 from src.sugarlyzer.analyses.AbstractTool import AbstractTool
 import os
@@ -30,13 +30,18 @@ class Phasar(AbstractTool):
             command_line_defs = []
         output_location = tempfile.mkdtemp()
         #create ll file
+
+        start_time = time.monotonic()
+
         llFile = os.path.join(output_location,str(file)[:-2]+'.ll')
-        cmd = ['/usr/bin/time', '-v', "timeout", "--preserve-status", "2h", 'clang-12','-emit-llvm','-S','-fno-discard-value-names','-c','-g',
+        cmd = ['/usr/bin/time', '-v', "timeout", "--preserve-status", "2h", 'clang-12','-w', '-emit-llvm','-S','-fno-discard-value-names','-c','-g',
                *list(itertools.chain(*zip(itertools.cycle(["-I"]), included_dirs))),
                *list(itertools.chain(*zip(itertools.cycle(["--include"]), included_files))),
                *command_line_defs,
                "-nostdinc", "-c", file.absolute(), '-o', llFile]
-        logger.info(f"Running cmd {cmd}")
+        logger.debug(f"Running cmd {cmd}")
+
+
         ps = subprocess.run(" ".join(str(s) for s in cmd), shell=True, executable="/bin/bash", capture_output=True, text=True)
         if (ps.returncode != 0) or ("error" in ps.stdout.lower()):
             logger.warning(f"Running clang on file {str(file)} potentially failed.")
@@ -58,6 +63,8 @@ class Phasar(AbstractTool):
         if (ps.returncode != 0) or ("error" in ps.stdout.lower()):
             logger.warning(f"Running phasar on file {str(file)} potentially failed.")
             logger.warning(ps.stderr)
+
+        logger.info(f"True time to analyze file {str(file)} took {time.monotonic() - start_time}s")
 
         if ps.returncode == 0:
             try:

@@ -41,6 +41,8 @@ def read_arguments() -> argparse.Namespace:
 
     p.add_argument('--force', action='store_true', help='Do not ask permission to delete existing log and results files.')
 
+    p.add_argument('--output-dir', help='If specified, all results will be stored in the specified directory')
+
     p.add_argument("--baselines", action="store_true",
                    help="""Run the baseline experiments. In these, we configure each 
                    file with every possible configuration, and then run the experiments.""")
@@ -48,7 +50,7 @@ def read_arguments() -> argparse.Namespace:
     p.add_argument("--no-recommended-space", help="""Do not generate a recommended space.""", 
                    action='store_true')
 
-    p.add_argument("--jobs", help="The number of jobs to use. If None, will use all CPUs", type=int, 
+    p.add_argument("--jobs", help=f"The number of jobs to use. If None, will use all ({multiprocessing.cpu_count()}) CPUs", type=int, 
                    default=multiprocessing.cpu_count())
 
     p.add_argument("--validate", help="""Try running desugared alarms with Z3's configuration to see if they are retained.""", 
@@ -110,7 +112,7 @@ def build_images(tools: List[str], nocache: bool, jobs: int) -> None:
     for c in cmds:
         c.extend(["--build-arg", f"JOBS={jobs}"])
 
-    logger.info('Building images....')
+    logger.debug('Building images....')
 
     for cmd in cmds:
         logging.info(f'Running cmd {" ".join(cmd)}')
@@ -128,15 +130,21 @@ def start_tester(t, args) -> None:
     cache_dir = Path(args.result).parent / Path("cached_desugared") if args.cache_folder is None else Path(args.cache_folder)
     cache_dir.mkdir(parents=True, exist_ok=True)
 
+    if args.output_dir:
+        output_dir = Path(args.output_dir).absolute()
+    else:
+        output_dir = Path(args.result).absolute().parent
+    
+    output_dir.mkdir(parents=True, exist_ok=True)
     bind_volumes = {
         Path(args.result).absolute(): {"bind": "/results.json", "mode": "rw"},
         Path(args.log).absolute(): {"bind": "/log", "mode": "rw"},
+        output_dir: {"bind": "/results", "mode": "rw"},
         Path(cache_dir).absolute(): {"bind": "/cached_desugared", "mode": "rw"}
     }
 
 
     # image should already be built from build_images()
-    # this was redundant. why is it in the for loop if it has no changing dependencies?
     cntr: Container = docker.from_env().containers.run(
         image=get_image_name(t),
         command="/bin/bash",
@@ -148,16 +156,29 @@ def start_tester(t, args) -> None:
 
     tester_command_args = build_tester_command_args(args)
 
-    for i, p in enumerate(args.programs):
+    for p in args.programs:
         tester_command = [f"tester {t} {p}"] # run tool(t) on each program(p)
         tester_command.append(tester_command_args)
         tester_command = " ".join(tester_command)
 
         _, log_stream = cntr.exec_run(cmd=tester_command, stream=True)
-        
-        for l in log_stream:
-            print(l.decode('utf-8', 'ignore'))
 
+        try:
+            for l in log_stream:
+                print(l.decode('utf-8', 'ignore'))
+        finally:
+            # Explicitly close the log stream socket to prevent resource leaks
+            if hasattr(log_stream, '_sock') and log_stream._sock is not None:
+                try:
+                    log_stream._sock.close()
+                except Exception:
+                    pass
+            # Also try closing the response if it exists
+            if hasattr(log_stream, '_response') and log_stream._response is not None:
+                try:
+                    log_stream._response.close()
+                except Exception:
+                    pass
 
 def build_tester_command_args(args):
     command_args = []
