@@ -1,4 +1,3 @@
-# changed 20.04 -> 22.04
 FROM ubuntu:22.04 AS base-setup
 # SHELL ["/bin/bash", "-c"]
 RUN apt-get update -y && apt-get upgrade -y && \
@@ -30,4 +29,7 @@ FROM sugarlyzer/base:latest
 COPY --from=base-setup /llvm-project /llvm-project
 WORKDIR /llvm-project/build
 RUN make install
+
+ENV TOOL="clang"
+
 WORKDIR /

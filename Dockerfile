@@ -1,17 +1,17 @@
 FROM ubuntu:22.04 AS base-setup
 ENV TZ=America/Chicago
 RUN apt-get update && \
-    apt-get install -y tzdata && \
-    ln -sf /usr/share/zoneinfo/$TZ /etc/localtime && \
-    echo $TZ > /etc/timezone && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+  apt-get install -y tzdata && \
+  ln -sf /usr/share/zoneinfo/$TZ /etc/localtime && \
+  echo $TZ > /etc/timezone && \
+  apt-get clean && \
+  rm -rf /var/lib/apt/lists/*
 RUN apt-get update -y && apt-get upgrade -y && \
   apt-get install -y software-properties-common gcc apt-transport-https
 RUN add-apt-repository -y ppa:deadsnakes/ppa &&  \
   apt-get install -y z3 python3.10 python3-distutils python3-pip python3-apt python3.10-venv git \
   bison libjson-java sat4j openjdk-8-jdk default-jdk gcc g++ make libz3-java emacs curl clang-11 \
-  pkg-config selinux-basics selinux-utils libselinux* electric-fence time
+  pkg-config selinux-basics selinux-utils libselinux* electric-fence time libssl-dev
 
 # Install cmake From https://www.softwarepronto.com/2022/09/dockerubuntu-installing-latest-cmake-on.html
 RUN apt-get update \
@@ -45,20 +45,10 @@ RUN cd superc && make configure && make
 RUN python3.10 -m venv /venv
 ENV PATH=/venv/bin:$PATH
 
-# DEBUG MODE
-ENV SUGARLYZER_DEBUG="false"
-
 RUN mkdir /Sugarlyzer
 WORKDIR /Sugarlyzer
 
 COPY requirements.txt .
-
-# COPY ARGS INTERCEPT SCRIPT
-COPY runIntercept.sh /usr/local/bin/runIntercept.sh
-RUN chmod +x /usr/local/bin/runIntercept.sh
-
-# list of all extracted source files
-ENV EXTRACTED_LIST=/usr/local/bin/extracted_files.txt 
 
 RUN python -m pip install -r requirements.txt --use-pep517
 
@@ -67,5 +57,9 @@ ADD . .
 RUN mv resources/SugarlyzerConfig /SugarlyzerConfig
 
 RUN python -m pip install -e .
+
+# DEBUG MODE
+ENV SUGARLYZER_DEBUG="true"
+RUN chmod -R +x /Sugarlyzer/resources/tools
 
 WORKDIR /

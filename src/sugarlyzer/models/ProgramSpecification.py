@@ -53,7 +53,7 @@ class ProgramSpecification:
         self.__search_context = "/targets"
         self.__oldconfig_location = "config/.config" if oldconfig_location is None else oldconfig_location
 
-        self.__extractedFiles = "usr/local/bin/extracted_files.txt"
+        self.__extractedFiles = "usr/local/intercept/extracted_files.txt"
 
     @property
     def oldconfig_location(self):
@@ -95,15 +95,17 @@ class ProgramSpecification:
         :return: All .c or .i files that are in the program's source locations.
 
         OLD CODE:
+        """
         for root, dirs, files in os.walk(self.source_directory):
             for f in files:
                 if f.endswith(".c") or f.endswith(".i"):
                     yield Path(root) / f
-        """
 
+        """
         with open(self.__extractedFiles, 'r') as file:
             for f in file:
                 yield Path(f) / f
+        """
 
 
     def inc_files_and_dirs_for_file(self, file: Path) -> Tuple[Iterable[Path], Iterable[Path], Iterable[str]]:
@@ -143,7 +145,7 @@ class ProgramSpecification:
         ps = subprocess.run(self.build_script)
         return ps.returncode
 
-    @functools.cache
+    @functools.lru_cache(maxsize=1024)
     def try_resolve_path(self, path: str | Path, root: Path = Path("/")) -> Path:
         """
         Copied directly from ECSTATIC.
@@ -206,7 +208,14 @@ class ProgramSpecification:
 
                 yield from (ProgramSpecification.BaselineConfig(source_file, None, c) for c in all_configurations(macros)) 
         else:
-            yield from self.try_resolve_path(self.sample_directory).iterdir()
+            directory = self.try_resolve_path(self.sample_directory)
+            all_files = list(directory.iterdir())
+            sorted_files = sorted(
+                [f for f in all_files if re.match(r'^\d+\.config$', f.name)],
+                key=lambda p: int(re.match(r'^(\d+)\.config$', p.name).group(1))
+            )
+            print(f"config: {sorted_files}")
+            yield from sorted_files
 
     def get_all_macros(self, fpa):
         parser = MacroDiscoveryPreprocessor()
