@@ -20,7 +20,10 @@ RUN apt-get update \
   && rm /tmp/cmake-install.sh \
   && ln -s /opt/cmake-3.24.1/bin/* /usr/local/bin
 
-RUN git clone https://github.com/llvm/llvm-project.git
+RUN git clone https://github.com/llvm/llvm-project.git && \
+  cd llvm-project && \
+  git checkout release/20
+
 RUN cd llvm-project && mkdir build && cd build && \
   cmake -DLLVM_ENABLE_PROJECTS=clang -DCMAKE_BUILD_TYPE=Release -G "Unix Makefiles" ../llvm && \
   make -j 64
