@@ -15,6 +15,9 @@ __pycache__/
 
 experiment_results/
 
+TypeChef-VAA/
+TypeChef-Artifacts/
+
 # Distribution / packaging
 .Python
 build/

@@ -15,7 +15,7 @@ ROOT="${3:-.}"
 RESULTS_DIR="$ROOT/experiment_results/product-based"
 
 TOOLS=(infer clang phasar)
-PROJECTS=(axtls toybox busybox)
+PROJECTS=(axtls toybox busybox varbugs)
 ITERATIONS=5
 
 for i in $(seq 1 "$ITERATIONS"); do
