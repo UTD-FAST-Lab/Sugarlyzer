@@ -110,6 +110,24 @@ class Tester:
         os.chdir(program.make_root)
         logger.debug(f"Copying {config.name} to {program.oldconfig_location}")
         shutil.copyfile(config, program.oldconfig_location)
+
+        sed_cmds = [
+            "sed -i 's/CONFIG_WERROR=y/CONFIG_WERROR=n/' .config",
+            
+            "sed -i 's/CONFIG_STATIC=y/CONFIG_STATIC=n/' .config",
+            "sed -i 's/CONFIG_DEBUG_SANITIZE=y/CONFIG_DEBUG_SANITIZE=n/' .config",
+            
+            "sed -i 's/CONFIG_DATE=y/CONFIG_DATE=n/' .config",
+            "sed -i 's/CONFIG_RDATE=y/CONFIG_RDATE=n/' .config",
+            
+            "sed -i 's|CONFIG_EXTRA_CFLAGS=\"\"|CONFIG_EXTRA_CFLAGS=\"-I/usr/include/tirpc\"|' .config",
+            "sed -i 's|CONFIG_EXTRA_LDLIBS=\"\"|CONFIG_EXTRA_LDLIBS=\"tirpc\"|' .config"
+        ]
+
+        if (program.name == "busybox"):
+            for cmd in sed_cmds:
+                os.system(cmd)
+
         exit_code = os.system('yes | make oldconfig; make')
         if exit_code != 0:
             logger.warn(f"Make for config {str(config)} failed.")
