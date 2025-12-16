@@ -278,16 +278,18 @@ class Tester:
 
             logger.info("Deduplicating alarms")
 
-            alarm_progs = self.postprocess_alarm_configs([a.as_dict() for a in alarms])
 
-            self.build_csv_config_prog_table(alarm_progs)
-            self.build_csv_alarm_occurrence_config_table(alarm_progs)
+            if self.program.name != "varbugs":
+                alarm_progs = self.postprocess_alarm_configs([a.as_dict() for a in alarms])
+
+                self.build_csv_config_prog_table(alarm_progs)
+                self.build_csv_alarm_occurrence_config_table(alarm_progs)
 
             alarms = self.dedup_and_process_alarms([a.as_dict() for a in alarms])
 
         # Now time to postprocess alarms
         logger.info("Got " + str(len(alarms)) + " alarms.")
-        logger.debug("Writing alarms to file.")
+        logger.info("Writing alarms to file.")
 
         with open("/results.json", 'w') as f:
             json.dump(alarms, f, indent=2)
