@@ -10,7 +10,7 @@ ROOT="${2:-.}"
 RESULTS_DIR="$ROOT/experiment_results/transformation-based"
 
 TOOLS=(infer clang phasar)
-PROGRAMS=(axtls toybox busybox)
+PROGRAMS=(axtls toybox busybox varbugs)
 ITERATIONS=5
 
 for i in $(seq 1 "$ITERATIONS"); do
