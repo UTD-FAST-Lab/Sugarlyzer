@@ -1,4 +1,5 @@
 val scala3Version = "3.8.0-RC1"
+val scoptVersion  = "4.1.0"
 
 // Common settings for all modules
 lazy val commonSettings = Seq(
@@ -31,7 +32,7 @@ lazy val commonSettings = Seq(
 
 lazy val root = project
   .in(file("."))
-  .aggregate(dispatcher, tester)
+  .aggregate(common, dispatcher, tester)
   .settings(
     name := "Sugarlyzer",
     // Skip compilation and assembly for the root project
@@ -43,8 +44,18 @@ lazy val root = project
     publish / skip             := true
   )
 
+lazy val common = project
+  .in(file("common"))
+  .settings(
+    commonSettings,
+    name := "common",
+    libraryDependencies ++= Seq(
+      "com.github.scopt" %% "scopt" % scoptVersion
+    )
+  )
 lazy val dispatcher = project
   .in(file("dispatcher"))
+  .dependsOn(common)
   .settings(
     commonSettings,
     name                   := "dispatcher",
