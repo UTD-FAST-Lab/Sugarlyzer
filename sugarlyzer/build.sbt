@@ -22,6 +22,7 @@ lazy val commonSettings = Seq(
   libraryDependencies += "com.lihaoyi"   %% "os-lib"          % "0.11.6",
   libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.3.5",
   libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
+  libraryDependencies += "com.github.scopt" %% "scopt" % scoptVersion,
 
   // Test Dependencies
   libraryDependencies += "org.scalameta" %% "munit"            % "1.2.1" % Test,
@@ -48,10 +49,7 @@ lazy val common = project
   .in(file("common"))
   .settings(
     commonSettings,
-    name := "common",
-    libraryDependencies ++= Seq(
-      "com.github.scopt" %% "scopt" % scoptVersion
-    )
+    name := "common"
   )
 lazy val dispatcher = project
   .in(file("dispatcher"))
@@ -64,6 +62,7 @@ lazy val dispatcher = project
 
 lazy val tester = project
   .in(file("tester"))
+  .dependsOn(common)
   .settings(
     commonSettings,
     name                   := "tester",
