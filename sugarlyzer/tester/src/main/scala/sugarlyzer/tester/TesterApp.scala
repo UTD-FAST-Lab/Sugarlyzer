@@ -1,14 +1,27 @@
 package sugarlyzer.tester
 
-import cats.effect.IOApp
-import cats.effect.IO
+import cats.effect.{IOApp, IO, ExitCode}
+import scopt.OParser
+import sugarlyzer.common.Config
 
-object TesterApp extends IOApp.Simple {
+import sugarlyzer.tester.strategies.StrategyFactory
+import sugarlyzer.tester.tools.ToolFactory
 
-  override def run: IO[Unit] =
-    for {
-      _      <- IO.println("Starting analysis run")
-      config <- IO.fromTry(Config.fromEnvironment())
-    } yield ()
+object TesterApp extends IOApp {
 
+  override def run(args: List[String]): IO[ExitCode] = {
+    OParser.parse(Config.parser, args, Config.AppConfig()) match {
+      case Some(config) =>
+        for {
+          _        <- IO.println("[TESTER] Running analysis logic...")
+          tool     <- IO(ToolFactory.create(config.tool))
+          strategy <- IO(StrategyFactory.create(config.mode))
+
+          _ <- IO.println(s"[TESTER] Strategy is ${config.mode}")
+          _ <- IO.println(s"[TESTER] Tool is ${config.tool}")
+
+        } yield ExitCode.Success
+      case None => IO(ExitCode.Error)
+    }
+  }
 }
