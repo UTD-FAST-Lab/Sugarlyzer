@@ -3,7 +3,7 @@ package sugarlyzer.tester
 import cats.effect.IOApp
 import cats.effect.IO
 
-object Application extends IOApp.Simple {
+object TesterApp extends IOApp.Simple {
 
   override def run: IO[Unit] =
     for {

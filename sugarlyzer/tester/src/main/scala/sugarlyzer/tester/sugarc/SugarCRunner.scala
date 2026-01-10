@@ -92,11 +92,7 @@ object SugarCRunner {
     }
   }
 
-  def processAlarms(
-      alarms: Iterable[Alarm],
-      desugaredFile: Path
-  ): Iterable[Alarm] =
-
 }
 
 case class Alarm()
+
