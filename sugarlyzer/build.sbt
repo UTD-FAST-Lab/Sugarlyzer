@@ -1,5 +1,6 @@
 val scala3Version = "3.8.0-RC1"
 val scoptVersion  = "4.1.0"
+val circeVersion  = "0.14.15"
 
 // Common settings for all modules
 lazy val commonSettings = Seq(
@@ -23,6 +24,11 @@ lazy val commonSettings = Seq(
   libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.3.5",
   libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
   libraryDependencies += "com.github.scopt" %% "scopt" % scoptVersion,
+  libraryDependencies ++= Seq(
+    "io.circe" %% "circe-core",
+    "io.circe" %% "circe-generic",
+    "io.circe" %% "circe-parser"
+  ).map(_ % circeVersion),
 
   // Test Dependencies
   libraryDependencies += "org.scalameta" %% "munit"            % "1.2.1" % Test,
