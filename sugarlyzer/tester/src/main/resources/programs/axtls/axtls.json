@@ -1,0 +1,7 @@
+{
+  "name": "axtls",
+  "buildDirectory": "/targets/axtls-code",
+  "buildCommand": "make oldconfig; make",
+  "cleanCommand": "make clean",
+  "configFile": ".config"
+}

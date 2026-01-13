@@ -1,9 +1,14 @@
 package sugarlyzer.tester.tools
 
-import cats.effect.{IO}
+import sugarlyzer.models.ProgramSpecification
 
 object InferTool extends AnalysisTool {
-  def name(): String = {}
-  def runAnalysis(): IO[String] = {}
-  def parseOutput(rawOutput: String): List[Alarm] = {}
+  def name(): String = { "Infer" }
+
+  def run(programSpec: ProgramSpecification): String = {
+    "O"
+  }
+  def parseOutput(rawOutput: String): List[String] = {
+    List("O")
+  }
 }

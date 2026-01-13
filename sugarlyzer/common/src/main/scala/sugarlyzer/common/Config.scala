@@ -4,7 +4,7 @@ import scopt.OParser
 
 object Config {
   enum Mode {
-    case PRODUCT, FAMILY, TRANSFORMATION
+    case PRODUCT
   }
 
   case class AppConfig(

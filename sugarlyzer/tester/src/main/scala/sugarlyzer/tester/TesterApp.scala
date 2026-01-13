@@ -4,8 +4,8 @@ import cats.effect.{IOApp, IO, ExitCode}
 import scopt.OParser
 import sugarlyzer.common.Config
 
-import sugarlyzer.tester.strategies.StrategyFactory
-import sugarlyzer.tester.tools.ToolFactory
+import sugarlyzer.tester.strategies.*
+import sugarlyzer.tester.tools.*
 
 object TesterApp extends IOApp {
 
@@ -16,9 +16,9 @@ object TesterApp extends IOApp {
           _        <- IO.println("[TESTER] Running analysis logic...")
           tool     <- IO(ToolFactory.create(config.tool))
           strategy <- IO(StrategyFactory.create(config.mode))
-
-          _ <- IO.println(s"[TESTER] Strategy is ${config.mode}")
-          _ <- IO.println(s"[TESTER] Tool is ${config.tool}")
+          _        <- IO.println(s"[TESTER] Strategy is ${config.mode}")
+          _        <- IO.println(s"[TESTER] Tool is ${config.tool}")
+          _        <- strategy.execute(config.program, tool)
 
         } yield ExitCode.Success
       case None => IO(ExitCode.Error)
