@@ -1,4 +1,6 @@
 val scala3Version = "3.8.0-RC1"
+val scoptVersion  = "4.1.0"
+val circeVersion  = "0.14.15"
 
 // Common settings for all modules
 lazy val commonSettings = Seq(
@@ -21,6 +23,12 @@ lazy val commonSettings = Seq(
   libraryDependencies += "com.lihaoyi"   %% "os-lib"          % "0.11.6",
   libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.3.5",
   libraryDependencies += "com.typesafe.scala-logging" %% "scala-logging" % "3.9.5",
+  libraryDependencies += "com.github.scopt" %% "scopt" % scoptVersion,
+  libraryDependencies ++= Seq(
+    "io.circe" %% "circe-core",
+    "io.circe" %% "circe-generic",
+    "io.circe" %% "circe-parser"
+  ).map(_ % circeVersion),
 
   // Test Dependencies
   libraryDependencies += "org.scalameta" %% "munit"            % "1.2.1" % Test,
@@ -31,7 +39,7 @@ lazy val commonSettings = Seq(
 
 lazy val root = project
   .in(file("."))
-  .aggregate(dispatcher, tester)
+  .aggregate(common, dispatcher, tester)
   .settings(
     name := "Sugarlyzer",
     // Skip compilation and assembly for the root project
@@ -43,8 +51,15 @@ lazy val root = project
     publish / skip             := true
   )
 
+lazy val common = project
+  .in(file("common"))
+  .settings(
+    commonSettings,
+    name := "common"
+  )
 lazy val dispatcher = project
   .in(file("dispatcher"))
+  .dependsOn(common)
   .settings(
     commonSettings,
     name                   := "dispatcher",
@@ -53,6 +68,7 @@ lazy val dispatcher = project
 
 lazy val tester = project
   .in(file("tester"))
+  .dependsOn(common)
   .settings(
     commonSettings,
     name                   := "tester",
