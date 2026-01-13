@@ -3,21 +3,40 @@
 
 path=$(pwd)
 
+TYPECHEF_PATH="${1:-.}"
+OUTPUT_DIR="${2:-.}"
+
+BUSYBOX_PATH=$(find "$path" -type d -path "*/busybox/busybox-1_28_0" -print -quit)
+CASESTUDY_PATH=$(find "$path" -type d -name "casestudy" -print -quit)
+SOUSCHEF_PATH=$(find "$path" -type f -name "souschef.sh" -print -quit)
+
+cd $(dirname "$BUSYBOX_PATH") || exit 1
+
 filesToProcess() {
-  local listFile=busybox/busybox_files.txt
+  local listFile=busybox_files.txt
   cat $listFile
 }
 
 flags=" --bdd --serializeAST \
   -A cfginnonvoidfunction -A doublefree -A xfree -A uninitializedmemory -A casetermination -A danglingswitchcode -A checkstdlibfuncreturn -A deadstore -A interactiondegree \
   -p _ \
-  -c $path/casestudy/redhat.properties \
-  -I $path/busybox/busybox-1_28_0/include \
-  --featureModelDimacs $path/busybox/kconfig.dimacs  \
+  --errorXML=$OUTPUT_DIR/toybox_errors.xml \
+  -c $CASESTUDY_PATH/redhat.properties \
+  -I $CASESTUDY_PATH/systems/redhat/usr/include \
+  -I $CASESTUDY_PATH/systems/redhat/usr/lib/gcc/x86_64-redhat-linux/4.4.4/include \
+  -I $BUSYBOX_PATH/include
+  --featureModelDimacs kconfig.dimacs  \
   --recordTiming --parserstatistics --lexNoStdout"
 
-filesToProcess|while read i; do
-         echo "Analysing $path/busybox/busybox-1_28_0/$i"
+filesToProcess|while read file; do
+         echo "Analysing $BUSYBOX_PATH/$file"
          echo "With settings: $flags"
-         ../TypeChef-VAA/typechef.sh  $path/busybox/busybox-1_28_0/$i $flags
+         "$TYPECHEF_PATH/typechef.sh" "$BUSYBOX_PATH/$file" $flags > "$OUTPUT_DIR/$(basename "$file").log" 2>&1
 done
+
+if [[ -f "$SOUSCHEF_PATH" ]]; then
+  echo "Aggregating results to $OUTPUT_DIR/results.json...\n"
+  cat "$OUTPUT_DIR"/*.log | python3 "$SOUSCHEF_PATH" > "$OUTPUT_DIR/results.json"
+else
+  echo "Warning: souschef.sh not found. Skipping JSON aggregation \n"
+fi

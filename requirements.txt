@@ -12,3 +12,4 @@ urllib3==2.5.0
 requests==2.32.4
 frozendict==2.4.6
 matplotlib-venn==1.1.2
+pandas==2.3.3
