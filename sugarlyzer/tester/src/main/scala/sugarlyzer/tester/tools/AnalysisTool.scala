@@ -2,11 +2,13 @@ package sugarlyzer.tester.tools
 
 import sugarlyzer.models.ProgramSpecification
 
+import cats.effect.{IO}
+
 trait Alarm {} // Prop for now
 
 trait AnalysisTool {
   def name(): String
-  def run(programSpec: ProgramSpecification): String
+  def run(spec: ProgramSpecification): IO[String]
   def parseOutput(rawOutput: String): List[String]
 }
 

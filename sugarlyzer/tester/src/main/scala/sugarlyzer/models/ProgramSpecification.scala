@@ -9,15 +9,14 @@ import io.circe.generic.semiauto._
 
 case class ProgramSpecification(
     name: String = "",
-    basePath: String = "",
-    buildDirectory: String = "",
+    rootDir: String = "",
+    targetDir: String = "",
     buildCommand: String = "",
-    cleanCommand: String = "",
-    configFile: String = ""
+    configFileLocation: String = ""
 )
 
 object ProgramFactory {
-  implicit val decoder: Decoder[ProgramSpecification] =
+  given decoder: Decoder[ProgramSpecification] =
     deriveDecoder[ProgramSpecification]
 
   def load(programName: String): IO[ProgramSpecification] = IO.blocking {
