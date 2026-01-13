@@ -4,9 +4,10 @@ import cats.effect.{IO}
 
 import sugarlyzer.tester.tools.AnalysisTool
 import sugarlyzer.common.Config.Mode
+import sugarlyzer.common.Config.AppConfig
 
 trait AnalysisStrategy {
-  def execute(programName: String, tool: AnalysisTool): IO[Unit]
+  def execute(appConfig: AppConfig, tool: AnalysisTool): IO[Unit]
 }
 
 object StrategyFactory {

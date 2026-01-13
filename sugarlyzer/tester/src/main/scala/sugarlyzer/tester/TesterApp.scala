@@ -18,7 +18,7 @@ object TesterApp extends IOApp {
           strategy <- IO(StrategyFactory.create(config.mode))
           _        <- IO.println(s"[TESTER] Strategy is ${config.mode}")
           _        <- IO.println(s"[TESTER] Tool is ${config.tool}")
-          _        <- strategy.execute(config.program, tool)
+          _        <- strategy.execute(config, tool)
 
         } yield ExitCode.Success
       case None => IO(ExitCode.Error)

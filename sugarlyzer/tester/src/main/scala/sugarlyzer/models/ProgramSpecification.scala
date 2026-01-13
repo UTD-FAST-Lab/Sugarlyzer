@@ -9,6 +9,7 @@ import io.circe.generic.semiauto._
 
 case class ProgramSpecification(
     name: String = "",
+    basePath: String = "",
     buildDirectory: String = "",
     buildCommand: String = "",
     cleanCommand: String = "",

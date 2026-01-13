@@ -1,4 +1,3 @@
-# changed 20.04 -> 22.04
 FROM ubuntu:22.04 AS base-setup
 # SHELL ["/bin/bash", "-c"]
 RUN apt-get update -y && apt-get upgrade -y && \
@@ -21,7 +20,10 @@ RUN apt-get update \
   && rm /tmp/cmake-install.sh \
   && ln -s /opt/cmake-3.24.1/bin/* /usr/local/bin
 
-RUN git clone https://github.com/llvm/llvm-project.git
+RUN git clone https://github.com/llvm/llvm-project.git && \
+  cd llvm-project && \
+  git checkout release/20
+
 RUN cd llvm-project && mkdir build && cd build && \
   cmake -DLLVM_ENABLE_PROJECTS=clang -DCMAKE_BUILD_TYPE=Release -G "Unix Makefiles" ../llvm && \
   make -j 64
@@ -30,4 +32,7 @@ FROM sugarlyzer/base:latest
 COPY --from=base-setup /llvm-project /llvm-project
 WORKDIR /llvm-project/build
 RUN make install
+
+ENV TOOL="clang"
+
 WORKDIR /

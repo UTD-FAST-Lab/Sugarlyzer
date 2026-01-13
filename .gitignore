@@ -15,6 +15,15 @@ __pycache__/
 
 experiment_results/
 
+casestudy/
+axtls-code/
+busybox-1_28_0/
+toybox/toybox/
+VarBugsPatches/
+
+TypeChef-VAA/
+TypeChef-Artifacts/
+
 # Distribution / packaging
 .Python
 build/

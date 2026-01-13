@@ -1,4 +1,4 @@
-import itertools
+import gc
 import itertools
 import logging
 import os
@@ -221,6 +221,13 @@ def desugar_file(file_to_desugar: Path,
         run_sugarc(" ".join(cmd), file_to_desugar, desugared_file, log_file)
     logger.debug(f"Wrote to {log_file}")
     outfile.close()
+
+    # Clean up temporary file to prevent temp file accumulation
+    try:
+        os.unlink(outfile.name)
+    except OSError:
+        pass  # File may have already been deleted or not exist
+
     return desugared_file, log_file
 
 
@@ -356,12 +363,20 @@ def process_alarms(alarms: Iterable[Alarm], desugared_file: Path) -> Iterable[Al
                 logger.exception(f"Encountered an error when processing file {desugared_file}")
                 raise ne
             report += str(w) + '\n'
+            # Explicitly delete Z3 model to free native memory
+            del m
         else:
             print('impossible constraints')
             w.feasible = False
             w.model = None
             # Use None and make correNum an Optional type
             # w.correNum = '-1'
+
+        # Explicitly delete Z3 solver to free native memory
+        del s
+
+    # Force garbage collection after processing all alarms to reclaim Z3 native memory
+    gc.collect()
     return alarms
 
 
@@ -533,6 +548,10 @@ def get_bad_constraints(desugared_file: Path) -> List[str]:
             if solver.check() != sat:
                 condition_mapping.constraints.append('#define ' + key[len('defined '):])
             solver.pop()
+
+    # Explicitly delete solver to free Z3 native memory
+    del solver
+    gc.collect()
     return condition_mapping.constraints
 
 @dataclass
