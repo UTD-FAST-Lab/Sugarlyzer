@@ -3,9 +3,7 @@ package sugarlyzer.models
 import cats.effect.{IO}
 import io.circe.parser._
 import scala.io.Source
-import io.circe.Decoder
 import io.circe._
-import io.circe.generic.semiauto._
 
 case class ProgramSpecification(
     name: String = "",
@@ -13,12 +11,9 @@ case class ProgramSpecification(
     targetDir: String = "",
     buildCommand: String = "",
     configFileLocation: String = ""
-)
+) derives Decoder
 
 object ProgramFactory {
-  given decoder: Decoder[ProgramSpecification] =
-    deriveDecoder[ProgramSpecification]
-
   def load(programName: String): IO[ProgramSpecification] = IO.blocking {
     val resourcePath = s"programs/$programName/$programName.json"
     val stream       = getClass.getClassLoader.getResourceAsStream(resourcePath)
