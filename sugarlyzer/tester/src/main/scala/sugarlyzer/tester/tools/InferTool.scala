@@ -19,8 +19,6 @@ object InferTool extends AnalysisTool {
       commands <- getCompileCommands(spec)
       _        <- IO.println(s"Found ${commands.size} commands")
       alarms   <- analyzeFiles(spec, commands)
-      _        <- IO.println(s"Got ${alarms.size} alarms")
-      _        <- IO.println(s"Alarms: ${alarms}")
     } yield (alarms)
   }
 

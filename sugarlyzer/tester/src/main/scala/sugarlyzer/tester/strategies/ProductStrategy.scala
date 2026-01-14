@@ -6,37 +6,39 @@ import sugarlyzer.models.*
 import sugarlyzer.common.Config.AppConfig
 import cats.syntax.all.*
 import os._
+import sugarlyzer.tester.tools.Alarm
 
 object ProductStrategy extends AnalysisStrategy {
   def execute(config: AppConfig, tool: AnalysisTool): IO[Unit] = {
     for {
-      _            <- IO.println("Loading program specification...")
-      spec         <- ProgramFactory.load(config.program)
-      masterSource <- Configurator.stageAndConfigure(spec)
-      _ <- (0 until config.sampleSize).toList.parTraverse_ { i =>
-        prepareAndRunSample(i, masterSource, spec, tool)
+      _    <- IO.println("Loading program specification...")
+      spec <- ProgramFactory.load(config.program)
+      _    <- Configurator.stageAndBuild(spec)
+      resulting_alarms <- (0 until config.sampleSize).toList.parTraverse { i =>
+        prepareAndRunSample(i, spec, tool)
       }
+      _ <- IO.println(s"Got ${resulting_alarms.flatten.size} alarms")
+      _ <- IO.println(s"Alarms: ${resulting_alarms.flatten}")
     } yield ()
   }
 
   private def prepareAndRunSample(
       i: Int,
-      masterSource: os.Path,
       spec: ProgramSpecification,
       tool: AnalysisTool
-  ): IO[Unit] = {
+  ): IO[List[Alarm]] = {
     for {
-      newSpec <- prepareTarget(i, masterSource, spec)
-      _       <- tool.run(newSpec)
-    } yield ()
+      newSpec <- prepareTarget(i, spec)
+      alarms  <- tool.run(newSpec)
+    } yield (alarms)
   }
 
   private def prepareTarget(
       i: Int,
-      masterSource: os.Path,
       spec: ProgramSpecification
   ): IO[ProgramSpecification] = IO.blocking {
-    val iterDir = os.Path("/targets") / s"$i"
+    val masterSource = os.Path(spec.targetDir)
+    val iterDir      = os.Path("/targets") / s"$i"
 
     if (os.exists(iterDir)) os.remove.all(iterDir)
     os.makeDir.all(iterDir)

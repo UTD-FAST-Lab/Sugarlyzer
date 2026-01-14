@@ -4,7 +4,7 @@ import cats.effect.{IO}
 import os._
 
 object Configurator {
-  def stageAndConfigure(spec: ProgramSpecification): IO[Path] = IO.blocking {
+  def stageAndBuild(spec: ProgramSpecification): IO[Unit] = IO.blocking {
     val targetRootDir = os.Path("/targets")
     if (!os.exists(targetRootDir)) os.makeDir.all(targetRootDir)
 
@@ -19,20 +19,16 @@ object Configurator {
     os.write.over(tarDest, stream)
 
     val proc =
-      os.proc("tar", "-xf", tarDest, "-C", targetRootDir).call(check = false)
-    if (proc.exitCode != 0) throw new RuntimeException("Tar extraction failed")
+      os.proc("tar", "-xf", tarDest, "-C", targetRootDir)
+        .call(check = false)
+    if (proc.exitCode != 0)
+      throw new RuntimeException("Tar extraction failed")
 
-    val buildProc = os.proc("bash", "-c", spec.buildCommand).call(
-      cwd = os.Path(spec.targetDir)
-    )
-
-    if (buildProc.exitCode != 0) {
+    val buildProc = os.proc("bash", "-c", spec.buildCommand)
+      .call(cwd = os.Path(spec.targetDir))
+    if (buildProc.exitCode != 0)
       throw new RuntimeException(
         s"Failed to run build command: ${spec.buildCommand}"
       )
-    }
-
-    os.Path(spec.targetDir)
   }
-
 }
