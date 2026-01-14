@@ -25,40 +25,44 @@ object ProductStrategy extends AnalysisStrategy {
       spec: ProgramSpecification,
       tool: AnalysisTool
   ): IO[Unit] = {
-    val setup = IO.blocking {
-      val iterDir = os.Path("/targets") / s"$i"
+    for {
+      newSpec <- prepareTarget(i, masterSource, spec)
+      _       <- tool.run(newSpec)
+    } yield ()
+  }
 
-      if (os.exists(iterDir)) os.remove.all(iterDir)
-      os.makeDir.all(iterDir)
+  private def prepareTarget(
+      i: Int,
+      masterSource: os.Path,
+      spec: ProgramSpecification
+  ): IO[ProgramSpecification] = IO.blocking {
+    val iterDir = os.Path("/targets") / s"$i"
 
-      val finalDest = iterDir / masterSource.last
-      os.copy(masterSource, finalDest)
+    if (os.exists(iterDir)) os.remove.all(iterDir)
+    os.makeDir.all(iterDir)
 
-      val destConfigDir = iterDir / os.RelPath(spec.configFileLocation)
+    val finalDest = iterDir / masterSource.last
+    os.copy(masterSource, finalDest)
 
-      if (!os.exists(destConfigDir))
-        throw new RuntimeException(
-          s"Config dir still not found: $destConfigDir. Content of iterDir: ${os.list(iterDir)}"
-        )
+    val destConfigDir = iterDir / os.RelPath(spec.configFileLocation)
 
-      val destConfigFile = destConfigDir / ".config"
-      val configResource = s"programs/${spec.name}/configs/$i.config"
-
-      val stream = getClass.getClassLoader.getResourceAsStream(configResource)
-      if (stream == null)
-        throw new RuntimeException(s"Missing config: $configResource")
-
-      os.write.over(destConfigFile, stream)
-
-      ProgramSpecification(
-        spec.name,
-        spec.rootDir,
-        (iterDir / spec.rootDir).toString,
-        "yes | make oldconfig; make",
-        spec.configFileLocation
+    if (!os.exists(destConfigDir))
+      throw new RuntimeException(
+        s"Config dir still not found: $destConfigDir. Content of iterDir: ${os.list(iterDir)}"
       )
-    }
 
-    setup.flatMap(newSpec => tool.run(newSpec)).void
+    val destConfigFile = destConfigDir / ".config"
+    val configResource = s"programs/${spec.name}/configs/$i.config"
+
+    val stream = getClass.getClassLoader.getResourceAsStream(configResource)
+    if (stream == null)
+      throw new RuntimeException(s"Missing config: $configResource")
+
+    os.write.over(destConfigFile, stream)
+
+    spec.copy(
+      targetDir = (iterDir / spec.rootDir).toString,
+      buildCommand = "yes | make oldconfig"
+    )
   }
 }
