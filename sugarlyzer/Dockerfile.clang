@@ -1,0 +1,20 @@
+FROM ubuntu:22.04 AS clang-builder
+
+RUN apt-get update && apt-get install -y \
+	build-essential git wget python3 zlib1g-dev \
+	&& rm -rf /var/lib/apt/lists/*
+
+RUN wget https://github.com/Kitware/CMake/releases/download/v3.24.1/cmake-3.24.1-Linux-x86_64.sh -q -O /tmp/cmake.sh \
+	&& bash /tmp/cmake.sh --skip-license --prefix=/usr/local
+
+# Build LLVM
+WORKDIR /llvm-source
+RUN git clone --depth 1 --branch release/18.x https://github.com/llvm/llvm-project.git . \
+	&& mkdir build && cd build \
+	&& cmake -DLLVM_ENABLE_PROJECTS=clang -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/opt/llvm -G "Unix Makefiles" ../llvm \
+	&& make -j $(nproc) \
+	&& make install
+
+FROM sugarlyzer-base:latest
+COPY --from=clang-builder /opt/llvm /opt/llvm
+ENV PATH="/opt/llvm/bin:$PATH"

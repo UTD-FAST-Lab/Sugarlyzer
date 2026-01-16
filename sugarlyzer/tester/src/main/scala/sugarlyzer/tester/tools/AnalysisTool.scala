@@ -22,6 +22,7 @@ trait AnalysisTool {
 object ToolFactory {
   def create(name: String): AnalysisTool = name.toLowerCase() match {
     case "infer" => InferTool
+    case "clang" => ClangTool
     case other   => throw new IllegalArgumentException(s"Unkown Tool ${other}")
   }
 }

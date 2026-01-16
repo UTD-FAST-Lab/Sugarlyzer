@@ -1,0 +1,16 @@
+services:
+  base:
+    build:
+      context: .
+      dockerfile: Dockerfile.base
+    image: sugarlyzer-base:latest
+
+  clang:
+    build:
+      context: .
+      dockerfile: Dockerfile.clang
+    image: sugarlyzer-clang:latest
+    depends_on:
+      - base
+    volumes:
+      - .:/Sugarlyzer
