@@ -3,14 +3,16 @@ package sugarlyzer.common
 import scopt.OParser
 
 object Config {
-  enum Mode {
+  enum Strategy {
+    case FAMILY
+    case TRANSFORMATION
     case PRODUCT
   }
 
   case class AppConfig(
       tool: String = "",
       program: String = "",
-      mode: Mode = Mode.PRODUCT,
+      strategy: Strategy = Strategy.PRODUCT,
       sampleSize: Int = 100,
       jobs: Int = Runtime.getRuntime().availableProcessors(),
       verbose: Boolean = false
@@ -30,11 +32,11 @@ object Config {
         .required()
         .action((x, c) => c.copy(program = x))
         .text("Target program (e.g., axtls)"),
-      opt[Int]('s', "sample_size")
+      opt[Int]("sample_size")
         .action((x, c) => c.copy(sampleSize = x)),
-      opt[String]('m', "mode")
-        .action((x, c) => c.copy(mode = Mode.valueOf(x.toUpperCase)))
-        .text("Mode: product, transformation, family"),
+      opt[String]('s', "strategy")
+        .action((x, c) => c.copy(strategy = Strategy.valueOf(x.toUpperCase)))
+        .text("Strategy: product, transformation, family"),
       opt[Int]('j', "jobs")
         .action((x, c) => c.copy(jobs = x))
         .text("number of parallel jobs"),
