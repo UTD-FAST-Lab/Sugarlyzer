@@ -29,7 +29,8 @@ lazy val commonSettings = Seq(
     "io.circe" %% "circe-generic",
     "io.circe" %% "circe-parser"
   ).map(_ % circeVersion),
-
+  libraryDependencies += "com.github.docker-java" % "docker-java-transport-httpclient5" % "3.3.6",
+  libraryDependencies += "com.github.docker-java" % "docker-java" % "3.3.6",
   // Test Dependencies
   libraryDependencies += "org.scalameta" %% "munit"            % "1.2.1" % Test,
   libraryDependencies += "org.scalameta" %% "munit-scalacheck" % "1.2.0" % Test,
@@ -51,18 +52,35 @@ lazy val root = project
     publish / skip             := true
   )
 
+lazy val assemblySettings = Seq(
+  assembly / assemblyMergeStrategy := {
+    case PathList("META-INF", xs @ _*) =>
+      xs map { _.toLowerCase } match {
+        case "services" :: xs => MergeStrategy.filterDistinctLines
+        case "manifest.mf" :: Nil | "index.list" :: Nil | "dependencies" :: Nil =>
+          MergeStrategy.discard
+        case _ => MergeStrategy.discard
+      }
+    case "module-info.class" => MergeStrategy.discard
+    case _                   => MergeStrategy.first
+  }
+)
+
 lazy val common = project
   .in(file("common"))
   .settings(
     commonSettings,
     name := "common"
   )
+
 lazy val dispatcher = project
   .in(file("dispatcher"))
   .dependsOn(common)
   .settings(
     commonSettings,
+    assemblySettings,
     name                   := "dispatcher",
+    Compile / mainClass    := Some("sugarlyzer.dispatcher.DispatcherApp"),
     Compile / doc / target := file("dispatcher/docs")
   )
 
@@ -71,7 +89,9 @@ lazy val tester = project
   .dependsOn(common)
   .settings(
     commonSettings,
+    assemblySettings,
     name                   := "tester",
+    Compile / mainClass    := Some("sugarlyzer.tester.TesterApp"),
     Compile / doc / target := file("tester/docs"),
     // Make main resources available to tests
     Test / unmanagedResourceDirectories += (Compile / resourceDirectory).value
