@@ -9,6 +9,15 @@ import cats.effect.syntax.all._
 import io.circe._
 import io.circe.jawn.decodeFile
 
+case class InferAlarm(
+    bug_type: String,
+    qualifier: String,
+    line: Int,
+    column: Int,
+    procedure_start_line: Int,
+    file: String
+) derives Decoder
+
 object InferTool extends AnalysisTool {
   def name(): String = { "Infer" }
 
