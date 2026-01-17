@@ -6,10 +6,11 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Sys Deps
 RUN apt-get update && apt-get install -y \
 	tzdata software-properties-common gcc apt-transport-https wget curl \
-	build-essential git zlib1g-dev make bear \
+	build-essential git zlib1g-dev make bear ninja-build \
 	bison libjson-java sat4j openjdk-17-jdk g++ libz3-java \
 	clang-11 pkg-config selinux-basics selinux-utils libselinux1-dev \
 	electric-fence time libssl-dev libpam0g-dev libtirpc-dev \
+	libtinfo5 libboost-all-dev libsqlite3-dev libcurl4-openssl-dev\
 	&& rm -rf /var/lib/apt/lists/*
 
 RUN ln -sf /usr/share/zoneinfo/$TZ /etc/localtime \

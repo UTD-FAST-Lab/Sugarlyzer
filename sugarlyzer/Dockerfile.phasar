@@ -1,0 +1,47 @@
+FROM sugarlyzer/base
+
+ARG PHASAR=/phasar
+ARG PHASAR_INSTALL_DIR=/usr/local/phasar
+ARG LLVM_INSTALL_DIR=/usr/local/llvm-12
+ADD llvm-12.tar.gz ${LLVM_INSTALL_DIR}/..
+
+ENV LD_LIBRARY_PATH="${LLVM_INSTALL_DIR}/lib"
+RUN echo "/usr/local/llvm-12/lib" > /etc/ld.so.conf.d/llvm-12.conf && ldconfig
+
+RUN mkdir -p ${PHASAR}
+
+ENV CC="/usr/local/llvm-12/bin/clang"
+ENV CXX="/usr/local/llvm-12/bin/clang++"
+ENV CFLAGS=""
+ENV CXXFLAGS=""
+
+RUN git clone https://github.com/secure-software-engineering/phasar.git ${PHASAR}
+WORKDIR ${PHASAR}
+RUN git checkout aed66c04e6dbb3f6ef1bed4ad69b29aa0017bd9a
+RUN git submodule init && git submodule update
+
+RUN mkdir -p ${PHASAR}/build
+WORKDIR ${PHASAR}/build
+ENV PATH="${LLVM_INSTALL_DIR}/bin/:$PATH"
+RUN echo $PATH
+RUN cmake -G Ninja -DCMAKE_BUILD_TYPE=Release ..
+RUN cmake --build .
+RUN cmake -DCMAKE_INSTALL_PREFIX=${PHASAR_INSTALL_DIR} -P cmake_install.cmake
+RUN ldconfig
+RUN ${PHASAR}/utils/setEnvironmentVariables.sh ${LLVM_INSTALL_DIR} ${PHASAR_INSTALL_DIR}
+
+RUN mkdir -p ${PHASAR}/external/json/build
+WORKDIR ${PHASAR}/external/json/build
+RUN cmake -DJSON_BuildTests=OFF .. && make -j20 && make install
+
+RUN mkdir -p ${PHASAR}/external/json-schema-validator/build
+WORKDIR ${PHASAR}/external/json-schema-validator/build
+RUN cmake .. && make -j20 && make install
+RUN ldconfig
+
+ENV LLVM_COMPILER=clang
+ENV LLVM_COMPILER_PATH=${LLVM_INSTALL_DIR}/bin
+
+COPY tester.jar /app/tester.jar
+
+WORKDIR /
