@@ -1,22 +1,19 @@
-FROM ubuntu:22.04 AS base-setup
+FROM ubuntu:22.04 AS base-builder
 
 ENV TZ=America/Chicago
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Sys Deps
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y \
 	tzdata software-properties-common gcc apt-transport-https wget curl \
-	build-essential git zlib1g-dev make \
-	&& ln -sf /usr/share/zoneinfo/$TZ /etc/localtime \
-	&& echo $TZ > /etc/timezone \
-	&& add-apt-repository -y ppa:deadsnakes/ppa \
-	&& apt-get update \
-	&& apt-get install -y \
-	python3.10 python3.10-venv python3-distutils python3-pip python3-apt \
-	bison libjson-java sat4j openjdk-8-jdk default-jdk g++ libz3-java \
+	build-essential git zlib1g-dev make bear \
+	bison libjson-java sat4j openjdk-17-jdk g++ libz3-java \
 	clang-11 pkg-config selinux-basics selinux-utils libselinux1-dev \
 	electric-fence time libssl-dev libpam0g-dev libtirpc-dev \
 	&& rm -rf /var/lib/apt/lists/*
+
+RUN ln -sf /usr/share/zoneinfo/$TZ /etc/localtime \
+	&& echo $TZ > /etc/timezone
 
 # CMake i
 RUN wget https://github.com/Kitware/CMake/releases/download/v3.24.1/cmake-3.24.1-Linux-x86_64.sh -q -O /tmp/cmake-install.sh \
@@ -26,22 +23,7 @@ RUN wget https://github.com/Kitware/CMake/releases/download/v3.24.1/cmake-3.24.1
 	&& rm /tmp/cmake-install.sh \
 	&& ln -s /opt/cmake-3.24.1/bin/* /usr/local/bin
 
-# Build Z3
-ARG JOBS=4
-WORKDIR /z3
-RUN git clone https://github.com/Z3Prover/z3.git . \
-	&& mkdir build && cd build \
-	&& cmake -DZ3_BUILD_JAVA_BINDINGS=ON .. \
-	&& make -j ${JOBS} && make install 
 
-# Build SuperC
-WORKDIR /superc
-RUN git clone https://github.com/appleseedlab/superc.git . \
-	&& git checkout mergingParseErrors \
-	&& make configure && make
+COPY tester.jar /app/tester.jar
 
-ENV JAVA_DEV_ROOT=/superc
-ENV CLASSPATH=:/superc/classes:/superc/bin/json-simple-1.1.1.jar:/superc/bin/junit.jar:/superc/bin/antlr.jar:/superc/bin/javabdd.jar:/usr/share/java/org.sat4j.core.jar:/usr/local/share/java/com.microsoft.z3.jar:/usr/share/java/json-lib.jar
-ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
-
-WORKDIR /
+WORKDIR /app

@@ -15,8 +15,8 @@ object TesterApp extends IOApp {
         for {
           _        <- IO.println("[TESTER] Running analysis logic...")
           tool     <- IO(ToolFactory.create(config.tool))
-          strategy <- IO(StrategyFactory.create(config.mode))
-          _        <- IO.println(s"[TESTER] Strategy is ${config.mode}")
+          strategy <- IO(StrategyFactory.create(config.strategy))
+          _        <- IO.println(s"[TESTER] Strategy is ${config.strategy}")
           _        <- IO.println(s"[TESTER] Tool is ${config.tool}")
           _        <- strategy.execute(config, tool)
 

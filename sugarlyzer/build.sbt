@@ -81,7 +81,8 @@ lazy val dispatcher = project
     assemblySettings,
     name                   := "dispatcher",
     Compile / mainClass    := Some("sugarlyzer.dispatcher.DispatcherApp"),
-    Compile / doc / target := file("dispatcher/docs")
+    Compile / doc / target := file("dispatcher/docs"),
+    assembly / assemblyOutputPath := file("dispatcher.jar")
   )
 
 lazy val tester = project
@@ -94,5 +95,6 @@ lazy val tester = project
     Compile / mainClass    := Some("sugarlyzer.tester.TesterApp"),
     Compile / doc / target := file("tester/docs"),
     // Make main resources available to tests
-    Test / unmanagedResourceDirectories += (Compile / resourceDirectory).value
+    Test / unmanagedResourceDirectories += (Compile / resourceDirectory).value,
+    assembly / assemblyOutputPath := file("tester.jar")
   )
