@@ -31,6 +31,7 @@ lazy val commonSettings = Seq(
   ).map(_ % circeVersion),
   libraryDependencies += "com.github.docker-java" % "docker-java-transport-httpclient5" % "3.3.6",
   libraryDependencies += "com.github.docker-java" % "docker-java" % "3.3.6",
+  libraryDependencies += "com.googlecode.plist"   % "dd-plist"    % "1.27",
   // Test Dependencies
   libraryDependencies += "org.scalameta" %% "munit"            % "1.2.1" % Test,
   libraryDependencies += "org.scalameta" %% "munit-scalacheck" % "1.2.0" % Test,
@@ -54,6 +55,8 @@ lazy val root = project
 
 lazy val assemblySettings = Seq(
   assembly / assemblyMergeStrategy := {
+    case PathList("META-INF", "maven", "com.kohlschutter.junixsocket", _*) =>
+      MergeStrategy.first
     case PathList("META-INF", xs @ _*) =>
       xs map { _.toLowerCase } match {
         case "services" :: xs => MergeStrategy.filterDistinctLines

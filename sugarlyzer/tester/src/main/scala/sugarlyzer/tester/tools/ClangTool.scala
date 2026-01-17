@@ -6,8 +6,9 @@ import cats.effect.{IO}
 import os._
 import sugarlyzer.tester.parsing._
 import cats.effect.syntax.all._
-import io.circe._
-import io.circe.jawn.decodeFile
+import com.dd.plist.PropertyListParser
+import com.dd.plist.NSDictionary
+import com.dd.plist.NSArray
 
 object ClangTool extends AnalysisTool {
   def name(): String = { "Clang" }
@@ -36,15 +37,26 @@ object ClangTool extends AnalysisTool {
           if (os.exists(uniqueResultsDir)) os.remove.all(uniqueResultsDir)
           val reportXMLLocation = uniqueResultsDir / "report.plist"
 
+          if (!os.exists(reportXMLLocation)) {
+            os.makeDir.all(uniqueResultsDir)
+          }
+
+          def filterOutputFlag(args: List[String]): List[String] = args match {
+            case "-o" :: _ :: tail => filterOutputFlag(tail)
+            case head :: tail      => head :: filterOutputFlag(tail)
+            case Nil               => Nil
+          }
+
+          val cleanCmdArgs = filterOutputFlag(cmd.arguments)
+
           val proc = os.proc(
             "clang-11",
-            "-w",
             "--analyze",
             "-Xanalyzer",
             "-analyzer-output=plist",
             "-o",
             reportXMLLocation.toString,
-            cmd.arguments
+            cleanCmdArgs
           ).call(
             cwd = os.Path(cmd.directory),
             stderr = os.Pipe,
@@ -100,14 +112,40 @@ object ClangTool extends AnalysisTool {
     }
   }
 
-  def parseOutput(resultPath: Path): IO[List[Alarm]] = IO.blocking {
+  def parseOutput(resultPath: os.Path): IO[List[Alarm]] = IO.blocking {
     val file = resultPath.toIO
 
-    decodeFile[List[Alarm]](file) match {
-      case Right(alarms) => alarms
-      case Left(error) => throw new RuntimeException(
-          s"Failed to parse alarms from $resultPath: $error"
-        )
-    }
+    val rootDict = PropertyListParser.parse(file).asInstanceOf[NSDictionary]
+
+    val filesArray = rootDict.objectForKey("files").asInstanceOf[NSArray]
+    val fileNames  = filesArray.getArray.map(_.toString)
+
+    val diagnostics = rootDict.objectForKey("diagnostics").asInstanceOf[NSArray]
+
+    (0 until diagnostics.count()).map { i =>
+      val bugDict = diagnostics.objectAtIndex(i).asInstanceOf[NSDictionary]
+
+      val bugType = bugDict.objectForKey("check_name").toString
+
+      val description = bugDict.objectForKey("description").toString
+
+      val locDict = bugDict.objectForKey("location").asInstanceOf[NSDictionary]
+      val line    = locDict.objectForKey("line").toString.toInt
+      val col     = locDict.objectForKey("col").toString.toInt
+      val fileIdx = locDict.objectForKey("file").toString.toInt
+
+      val fileName =
+        if (fileIdx < fileNames.length) fileNames(fileIdx) else "Unknown"
+
+      Alarm(
+        bug_type = bugType,
+        qualifier = description,
+        line = line,
+        column = col,
+        procedure_start_line = 0,
+        file = fileName
+      )
+    }.toList
   }
+
 }
