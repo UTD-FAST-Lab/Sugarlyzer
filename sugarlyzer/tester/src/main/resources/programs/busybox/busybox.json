@@ -1,0 +1,8 @@
+{
+	"name": "busybox",
+	"rootDir": "busybox-1_28_0",
+	"targetDir": "/targets/busybox-1_28_0",
+	"buildCommand": "make allyesconfig",
+	"configFileLocation": "busybox-1_28_0/include/.config",
+	"configHeaderLocation": "busybox-1_28_0/include/autoconf.h",
+}
