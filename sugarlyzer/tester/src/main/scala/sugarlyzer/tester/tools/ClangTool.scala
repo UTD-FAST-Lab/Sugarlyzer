@@ -59,7 +59,7 @@ object ClangTool extends AnalysisTool {
             cleanCmdArgs
           ).call(
             cwd = os.Path(cmd.directory),
-            stderr = os.Pipe,
+            stdout = os.Inherit,
             mergeErrIntoOut = true,
             check = false
           )
@@ -142,7 +142,6 @@ object ClangTool extends AnalysisTool {
         qualifier = description,
         line = line,
         column = col,
-        procedure_start_line = 0,
         file = fileName
       )
     }.toList
