@@ -55,7 +55,7 @@ object InferTool extends AnalysisTool {
             cmd.arguments
           ).call(
             cwd = os.Path(cmd.directory),
-            stderr = os.Pipe,
+            stdout = os.Inherit,
             mergeErrIntoOut = true,
             check = false
           )

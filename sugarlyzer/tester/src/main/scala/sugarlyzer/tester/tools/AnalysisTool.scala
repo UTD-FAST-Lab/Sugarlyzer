@@ -10,7 +10,6 @@ case class Alarm(
     qualifier: String,
     line: Int,
     column: Int,
-    procedure_start_line: Int,
     file: String
 ) derives Decoder
 
