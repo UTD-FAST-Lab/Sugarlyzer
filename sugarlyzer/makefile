@@ -9,3 +9,7 @@ build_dispatcher:
 build_tester:
 	@echo "Building Tester JAR"
 	sbt "tester/assembly"
+
+
+clean:
+	rm -rf dispatcher.jar tester.jar
