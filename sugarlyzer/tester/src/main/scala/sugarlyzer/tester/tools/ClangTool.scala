@@ -34,12 +34,10 @@ object ClangTool extends AnalysisTool {
         IO.blocking {
           val uniqueResultsDir =
             os.Path(spec.targetDir) / "clang_results" / s"out-$i"
-          if (os.exists(uniqueResultsDir)) os.remove.all(uniqueResultsDir)
-          val reportXMLLocation = uniqueResultsDir / "report.plist"
+          os.remove.all(uniqueResultsDir)
+          os.makeDir.all(uniqueResultsDir)
 
-          if (!os.exists(reportXMLLocation)) {
-            os.makeDir.all(uniqueResultsDir)
-          }
+          val reportXMLLocation = uniqueResultsDir / "report.plist"
 
           def filterOutputFlag(args: List[String]): List[String] = args match {
             case "-o" :: _ :: tail => filterOutputFlag(tail)
@@ -67,7 +65,7 @@ object ClangTool extends AnalysisTool {
           println(s"Clang command: ${proc.command}")
 
           if (proc.exitCode != 0)
-            throw new RuntimeException("Failed to run infer analysis")
+            throw new RuntimeException("Failed to run clang analysis")
 
           reportXMLLocation
         }

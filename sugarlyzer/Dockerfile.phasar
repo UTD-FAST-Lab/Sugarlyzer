@@ -5,6 +5,8 @@ ARG PHASAR_INSTALL_DIR=/usr/local/phasar
 ARG LLVM_INSTALL_DIR=/usr/local/llvm-12
 ADD llvm-12.tar.gz ${LLVM_INSTALL_DIR}/..
 
+RUN pip install wllvm
+
 ENV LD_LIBRARY_PATH="${LLVM_INSTALL_DIR}/lib"
 RUN echo "/usr/local/llvm-12/lib" > /etc/ld.so.conf.d/llvm-12.conf && ldconfig
 
@@ -41,6 +43,9 @@ RUN ldconfig
 
 ENV LLVM_COMPILER=clang
 ENV LLVM_COMPILER_PATH=${LLVM_INSTALL_DIR}/bin
+ENV CC=wllvm
+ENV CXX=wllvm++
+
 
 COPY tester.jar /app/tester.jar
 

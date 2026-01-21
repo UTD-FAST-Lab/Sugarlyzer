@@ -5,7 +5,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Sys Deps
 RUN apt-get update && apt-get install -y \
-	tzdata software-properties-common gcc apt-transport-https wget curl \
+	pip tzdata software-properties-common gcc apt-transport-https wget curl \
 	build-essential git zlib1g-dev make bear ninja-build \
 	bison libjson-java sat4j openjdk-17-jdk g++ libz3-java \
 	clang-11 pkg-config selinux-basics selinux-utils libselinux1-dev \
@@ -23,5 +23,7 @@ RUN wget https://github.com/Kitware/CMake/releases/download/v3.24.1/cmake-3.24.1
 	&& /tmp/cmake-install.sh --skip-license --prefix=/opt/cmake-3.24.1 \
 	&& rm /tmp/cmake-install.sh \
 	&& ln -s /opt/cmake-3.24.1/bin/* /usr/local/bin
+
+COPY SugarlyzerConfig /SugarlyzerConfig
 
 WORKDIR /app

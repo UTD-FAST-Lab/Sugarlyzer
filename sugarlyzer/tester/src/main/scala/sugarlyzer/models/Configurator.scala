@@ -2,6 +2,7 @@ package sugarlyzer.models
 
 import cats.effect.{IO}
 import os._
+import scala.util.Using
 
 object Configurator {
   def stageAndBuild(spec: ProgramSpecification): IO[Unit] = IO.blocking {
@@ -12,11 +13,12 @@ object Configurator {
     val resourcePath = s"programs/${spec.name}/$tarName"
     val tarDest      = targetRootDir / tarName
 
-    val stream = getClass.getClassLoader.getResourceAsStream(resourcePath)
-    if (stream == null)
-      throw new RuntimeException(s"Missing resource: $resourcePath")
+    Using(getClass.getClassLoader.getResourceAsStream(resourcePath)) { stream =>
+      if (stream == null)
+        throw new RuntimeException(s"Missing resource: $resourcePath")
 
-    os.write.over(tarDest, stream)
+      os.write.over(tarDest, stream)
+    }.get
 
     val proc =
       os.proc("tar", "-xf", tarDest, "-C", targetRootDir)
@@ -30,5 +32,15 @@ object Configurator {
       throw new RuntimeException(
         s"Failed to run build command: ${spec.buildCommand}"
       )
+
+    /* val configHeaderResource = s"programs/${spec.name}/${spec.name}Config.h"
+     * Using(getClass.getClassLoader.getResourceAsStream(configHeaderResource))
+     * { stream => if (stream == null) throw new RuntimeException(s"Missing
+     * resource: $configHeaderResource")
+     *
+     * val configHeaderDest =
+     * targetRootDir / os.RelPath(spec.configHeaderLocation)
+     *
+     * os.write.over(configHeaderDest, stream) }.get */
   }
 }
