@@ -5,3 +5,5 @@ RUN curl -sSL "https://github.com/facebook/infer/releases/download/v$VERSION/inf
 	| tar -C /opt -xJ && ln -s "/opt/infer-linux64-v$VERSION/bin/infer" /usr/local/bin/infer
 
 COPY tester.jar /app/tester.jar
+
+WORKDIR /
