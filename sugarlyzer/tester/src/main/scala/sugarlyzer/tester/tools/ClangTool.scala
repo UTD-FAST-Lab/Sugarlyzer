@@ -77,13 +77,11 @@ object ClangTool extends AnalysisTool {
       : IO[List[CompileCommand]] = {
 
     val targetPath          = os.Path(spec.targetDir)
-    val compileCommandsFile = targetPath / os.up / "compile_commands.json"
+    val compileCommandsFile = targetPath / "compile_commands.json"
 
     val runBear = IO.blocking {
       val proc = os.proc(
         "bear",
-        "--output",
-        compileCommandsFile.toString,
         "--",
         "make"
       ).call(cwd = targetPath)
@@ -98,6 +96,9 @@ object ClangTool extends AnalysisTool {
   }
 
   def applyConfiguration(spec: ProgramSpecification): IO[Unit] = IO.blocking {
+    os.proc("make", "clean").call(
+      cwd = os.Path(spec.targetDir)
+    )
     val proc = os.proc("bash", "-c", spec.buildCommand).call(
       cwd = os.Path(spec.targetDir)
     )

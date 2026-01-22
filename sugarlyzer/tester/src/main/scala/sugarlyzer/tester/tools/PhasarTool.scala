@@ -16,6 +16,13 @@ object PhasarTool extends AnalysisTool {
   }
 
   def buildWithWLLVM(spec: ProgramSpecification): IO[Unit] = IO.blocking {
+    os.proc("make", "clean").call(
+      cwd = os.Path(spec.targetDir)
+    )
+    os.proc("bash", "-c", spec.buildCommand)
+      .call(
+        cwd = os.Path(spec.targetDir)
+      )
     val proc = os.proc("make", "CC=wllvm")
       .call(
         cwd = os.Path(spec.targetDir),

@@ -74,13 +74,11 @@ object InferTool extends AnalysisTool {
       : IO[List[CompileCommand]] = {
 
     val targetPath          = os.Path(spec.targetDir)
-    val compileCommandsFile = targetPath / os.up / "compile_commands.json"
+    val compileCommandsFile = targetPath / "compile_commands.json"
 
     val runBear = IO.blocking {
       val proc = os.proc(
         "bear",
-        "--output",
-        compileCommandsFile.toString,
         "--",
         "make"
       ).call(cwd = targetPath)
