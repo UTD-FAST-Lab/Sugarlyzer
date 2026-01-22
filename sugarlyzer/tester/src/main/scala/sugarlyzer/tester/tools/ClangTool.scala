@@ -62,8 +62,6 @@ object ClangTool extends AnalysisTool {
             check = false
           )
 
-          println(s"Clang command: ${proc.command}")
-
           if (proc.exitCode != 0)
             throw new RuntimeException("Failed to run clang analysis")
 

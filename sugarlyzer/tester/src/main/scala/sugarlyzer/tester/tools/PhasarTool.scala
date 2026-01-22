@@ -35,8 +35,6 @@ object PhasarTool extends AnalysisTool {
           s"Could not find binary named '$binaryName' in $targetDir"
         ))
 
-      println(s"Found binary at: $binaryPath")
-
       val proc = os.proc("extract-bc", binaryPath.toString)
         .call(
           cwd = os.Path(targetDir)
@@ -51,7 +49,6 @@ object PhasarTool extends AnalysisTool {
           s"extract-bc ran but output file missing: $bcPath"
         )
 
-      println(s"Extracted bitcode to: $bcPath")
       bcPath
     }
 
@@ -85,13 +82,8 @@ object PhasarTool extends AnalysisTool {
 
       reportFileOpt match {
         case Some(reportFile) =>
-          println(s"Found report at: $reportFile")
           parseOutput(os.read(reportFile))
         case None =>
-          println(
-            s"Warning: 'psr-report.txt' not found anywhere in $resultsDir. " +
-              s"Root contents: ${os.list(resultsDir).map(_.last).mkString(", ")}"
-          )
           List.empty[Alarm]
       }
 
