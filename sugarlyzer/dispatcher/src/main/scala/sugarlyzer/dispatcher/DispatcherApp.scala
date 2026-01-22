@@ -41,8 +41,6 @@ object DispatcherApp extends IOApp {
       "."
     )
 
-    println(s"pwd: ${os.pwd}")
-
     IO.blocking {
       println("[HOST] Building Base Image...")
       val baseResult = os.proc(baseCmd).call(
