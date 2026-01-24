@@ -4,8 +4,6 @@ import sugarlyzer.models.ProgramSpecification
 
 import cats.effect.{IO}
 import os._
-import sugarlyzer.tester.parsing._
-import cats.effect.syntax.all._
 import io.circe._
 import io.circe.jawn.decodeFile
 
@@ -23,60 +21,52 @@ object InferTool extends AnalysisTool {
 
   def run(spec: ProgramSpecification): IO[List[Alarm]] = {
     for {
-      _        <- IO.println(s"Running spec ${spec}")
-      _        <- applyConfiguration(spec)
-      commands <- getCompileCommands(spec)
-      _        <- IO.println(s"Found ${commands.size} commands")
-      alarms   <- analyzeFiles(spec, commands)
+      _             <- IO.println(s"Running spec ${spec}")
+      _             <- applyConfiguration(spec)
+      commandDBPath <- getCompileCommands(spec)
+      alarms        <- analyzeFiles(spec, commandDBPath)
     } yield (alarms)
   }
 
   def analyzeFiles(
       spec: ProgramSpecification,
-      compileCommands: List[CompileCommand]
+      compileCommandsPath: os.Path
   ): IO[List[Alarm]] = {
-    val indexedCommands = compileCommands.zipWithIndex
+    val procCapture = os.proc(
+      "infer",
+      "capture",
+      "--compilation-database",
+      compileCommandsPath.toString
+    )
+      .call(cwd = os.Path(spec.targetDir))
 
-    indexedCommands.parTraverseN(Runtime.getRuntime().availableProcessors()) {
-      case (cmd, i) =>
-        IO.blocking {
-          val uniqueResultsDir =
-            os.Path(spec.targetDir) / "infer_results" / s"out-$i"
-          if (os.exists(uniqueResultsDir)) os.remove.all(uniqueResultsDir)
-          val reportJsonLocation = uniqueResultsDir / "report.json"
+    if (procCapture.exitCode != 0)
+      throw new RuntimeException("Failed to run infer")
 
-          val proc = os.proc(
-            "infer",
-            "run",
-            "--pulse-only",
-            "--results-dir",
-            uniqueResultsDir.toString,
-            "--",
-            cmd.arguments
-          ).call(
-            cwd = os.Path(cmd.directory),
-            stdout = os.Inherit,
-            mergeErrIntoOut = true,
-            check = false
-          )
+    val proc = os.proc(
+      "infer",
+      "analyze"
+    ).call(cwd = os.Path(spec.targetDir))
+    if (proc.exitCode != 0)
+      throw new RuntimeException("Failed to run infer")
 
-          if (proc.exitCode != 0)
-            throw new RuntimeException("Failed to run infer analysis")
-
-          reportJsonLocation
-        }.flatMap { path =>
-          parseOutput(path)
-        }
-    }.map(_.flatten)
+    val reportJsonPath = os.Path(spec.targetDir) / "infer-out" / "report.json"
+    parseOutput(reportJsonPath)
   }
 
   def getCompileCommands(spec: ProgramSpecification)
-      : IO[List[CompileCommand]] = {
+      : IO[os.Path] = {
 
     val targetPath          = os.Path(spec.targetDir)
     val compileCommandsFile = targetPath / "compile_commands.json"
 
     val runBear = IO.blocking {
+      val procBear = os.proc("make", "clean").call(
+        cwd = os.Path(spec.targetDir)
+      )
+      if (procBear.exitCode != 0)
+        throw new RuntimeException("Failed to run make clean")
+
       val proc = os.proc(
         "bear",
         "--",
@@ -87,9 +77,8 @@ object InferTool extends AnalysisTool {
     }
 
     for {
-      _        <- runBear
-      commands <- CompileCommands.parse(compileCommandsFile)
-    } yield commands
+      _ <- runBear
+    } yield compileCommandsFile
   }
 
   def applyConfiguration(spec: ProgramSpecification): IO[Unit] = IO.blocking {
