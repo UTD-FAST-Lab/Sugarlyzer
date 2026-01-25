@@ -1,0 +1,24 @@
+FROM ubuntu:18.04
+
+ENV TZ=America/Chicago
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Basic util
+RUN apt-get update && apt-get install -y \
+	software-properties-common wget curl git unzip \
+	&& add-apt-repository ppa:linuxuprising/java \
+	&& apt-get update
+
+# Sys Deps
+RUN apt-get install -y \
+	build-essential make gcc g++ \
+	bear \
+	bison flex \
+	libssl-dev zlib1g-dev libpam0g-dev libtirpc-dev \
+	openjdk-17-jdk \
+	&& rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+COPY tester.jar /app/tester.jar
+COPY SugarlyzerConfig /SugarlyzerConfig

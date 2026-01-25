@@ -3,6 +3,11 @@ package sugarlyzer.common
 import scopt.OParser
 
 object Config {
+  enum Phase {
+    case BUILD
+    case ANALYZE
+  }
+
   enum Strategy {
     case FAMILY
     case TRANSFORMATION
@@ -13,6 +18,7 @@ object Config {
       tool: String = "",
       program: String = "",
       strategy: Strategy = Strategy.PRODUCT,
+      phase: Phase = Phase.BUILD,
       sampleSize: Int = 100,
       jobs: Int = Runtime.getRuntime().availableProcessors(),
       verbose: Boolean = false
@@ -32,6 +38,9 @@ object Config {
         .required()
         .action((x, c) => c.copy(program = x))
         .text("Target program (e.g., axtls)"),
+      opt[String]("phase")
+        .action((x, c) => c.copy(phase = Phase.valueOf(x.toUpperCase)))
+        .hidden(),
       opt[Int]("sample_size")
         .action((x, c) => c.copy(sampleSize = x)),
       opt[String]('s', "strategy")
