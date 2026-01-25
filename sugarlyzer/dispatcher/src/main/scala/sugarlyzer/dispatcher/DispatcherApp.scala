@@ -5,120 +5,15 @@ import scopt.OParser
 import sugarlyzer.common.Config
 import com.github.dockerjava.api.DockerClient
 import com.github.dockerjava.core.DockerClientBuilder
-import com.github.dockerjava.api.model.HostConfig
-import com.github.dockerjava.api.async.ResultCallback
-import com.github.dockerjava.api.model.Frame
 
-import os._
+import com.github.dockerjava.api.model.Bind
+import com.github.dockerjava.api.model.Volume
+import com.github.dockerjava.api.model.AccessMode
+import com.github.dockerjava.api.model.HostConfig
+import com.github.dockerjava.api.model.Frame
+import com.github.dockerjava.api.async.ResultCallback
 
 object DispatcherApp extends IOApp {
-
-  private def getImageName(tool: String): String = {
-    tool match {
-      case ""   => return "sugarlyzer/base"
-      case tool => return f"sugarlyzer/${tool.toString().toLowerCase()}"
-    }
-  }
-
-  private def buildImage(tool: String): IO[Unit] = {
-    val baseCmd = List(
-      "docker",
-      "build",
-      "-t",
-      "sugarlyzer/base",
-      "-f",
-      "Dockerfile.base",
-      "."
-    )
-
-    val toolCmd = List(
-      "docker",
-      "build",
-      "-t",
-      getImageName(tool),
-      "-f",
-      s"Dockerfile.$tool",
-      "."
-    )
-
-    IO.blocking {
-      println("[HOST] Building Base Image...")
-      val baseResult = os.proc(baseCmd).call(
-        cwd = os.pwd
-      )
-      if (baseResult.exitCode != 0) {
-        println(s"[HOST] Base Image Build Failed: ${baseResult.exitCode}")
-        sys.exit(1)
-      }
-
-      println(s"[HOST] Building ${getImageName(tool)}...")
-      val toolResult = os.proc(toolCmd).call(
-        cwd = os.pwd
-      )
-      if (toolResult.exitCode != 0) {
-        println(
-          s"[HOST] ${getImageName(tool)} Build Failed: ${toolResult.exitCode}"
-        )
-        sys.exit(1)
-      }
-    }
-  }
-
-  private def startTester(
-      dockerClient: DockerClient,
-      config: Config.AppConfig
-  ): IO[Unit] = {
-    for {
-      container <- IO.blocking {
-
-        val hostConfig = new HostConfig()
-          .withAutoRemove(true)
-
-        val createdContainer =
-          dockerClient.createContainerCmd(getImageName(config.tool))
-            .withCmd("/bin/bash")
-            .withTty(true)
-            .withHostConfig(hostConfig)
-            .exec()
-
-        dockerClient.startContainerCmd(createdContainer.getId).exec()
-
-        createdContainer
-      }
-      _ <- IO.blocking {
-        val testerCmd = List(
-          "java",
-          "-jar",
-          "/app/tester.jar",
-          "-t",
-          config.tool,
-          "-p",
-          config.program,
-          "-s",
-          config.strategy.toString,
-          "--sample_size",
-          config.sampleSize.toString
-        )
-
-        val execCreateCmdResponse = dockerClient.execCreateCmd(container.getId)
-          .withAttachStderr(true)
-          .withAttachStdout(true)
-          .withCmd("bash", "-c", testerCmd.mkString(" "))
-          .exec()
-
-        dockerClient.execStartCmd(execCreateCmdResponse.getId)
-          .exec(new ResultCallback.Adapter[Frame] {
-            override def onNext(item: Frame): Unit = {
-              print(new String(item.getPayload, "UTF-8"))
-            }
-          }).awaitCompletion()
-      }
-
-      _ <- IO.println(s"Container is ${container}")
-
-    } yield ()
-  }
-
   override def run(args: List[String]): IO[ExitCode] = {
     OParser.parse(Config.parser, args, Config.AppConfig()) match {
       case Some(config) => {
@@ -127,17 +22,140 @@ object DispatcherApp extends IOApp {
             s"[HOST] Preparing to run ${config.tool} on ${config.program}"
           )
 
-          _ <- buildImage(config.tool)
+          _ <- buildImages(config)
 
           dockerClient <-
             IO.blocking { DockerClientBuilder.getInstance().build() }
 
-          _ <- startTester(dockerClient, config)
-          _ <- IO.println("[HOST] Preparing/Launching docker environment")
+          _ <- runPipeline(dockerClient, config)
 
         } yield ExitCode.Success
       }
       case None => IO(ExitCode.Error)
     }
+  }
+
+  def buildImages(
+      config: Config.AppConfig
+  ): IO[Unit] = {
+    val buildProgramCmd = List(
+      "docker",
+      "build",
+      "-t",
+      "sugarlyzer-program",
+      "-f",
+      "Dockerfile.program",
+      "."
+    )
+
+    val buildToolCmd = List(
+      "docker",
+      "build",
+      "-t",
+      s"sugarlyzer/${config.tool.toString().toLowerCase()}",
+      "-f",
+      s"Dockerfile.${config.tool}",
+      "."
+    )
+
+    for {
+      _ <- IO.println("[HOST] Building program image")
+      _ <- IO.blocking {
+        os.proc(buildProgramCmd).call(cwd = os.pwd)
+      }
+      _ <- IO.println("[HOST] Building tool image")
+      _ <- IO.blocking {
+        os.proc(buildToolCmd).call(cwd = os.pwd)
+      }
+    } yield ()
+  }
+
+  val SharedPath = "/workspace"
+  def runPipeline(
+      dockerClient: DockerClient,
+      config: Config.AppConfig
+  ): IO[Unit] = {
+    val volumeName = s"sugarlyzer-${config.program}-${config.tool}"
+
+    val createVolume = IO.blocking {
+      dockerClient.createVolumeCmd().withName(volumeName).exec()
+    }
+
+    val volumeBind =
+      new Bind(SharedPath, new Volume("/workspace"), AccessMode.rw)
+
+    for {
+      _ <- IO.println("[HOST] Creating shared volume")
+      _ <- createVolume
+      _ <- IO.println(s"[HOST] Volume ${volumeName} created")
+      _ <- IO.println(s"[HOST] Starting Phase 1: Build")
+
+      builderId <- IO.blocking {
+        val container = dockerClient.createContainerCmd("sugarlyzer-program")
+          .withHostConfig(
+            new HostConfig().withBinds(volumeBind).withAutoRemove(true)
+          )
+          .withCmd(
+            "java",
+            "-jar",
+            "/app/tester.jar",
+            "--phase",
+            "build",
+            "--program",
+            config.program,
+            "--tool",
+            config.tool
+          )
+          .exec()
+
+        dockerClient.startContainerCmd(container.getId()).exec()
+        container.getId()
+      }
+
+      buildResult <- IO.blocking {
+        dockerClient.waitContainerCmd(builderId).start().awaitStatusCode()
+      }
+      _ <- if (buildResult != 0)
+        IO.raiseError(new RuntimeException("Build failed"))
+      else IO.unit
+
+      _ <- IO.println(s"[HOST] Phase 1 completed")
+      _ <- IO.println(s"[HOST] Starting Phase 2: Run")
+
+      analyzerId <- IO.blocking {
+        val container = dockerClient.createContainerCmd(
+          s"sugarlyzer/${config.tool.toString().toLowerCase()}"
+        ).withHostConfig(new HostConfig().withBinds(
+          volumeBind
+        ).withAutoRemove(true))
+          .withCmd(
+            "java",
+            "-jar",
+            "/app/tester.jar",
+            "--phase",
+            "analyze",
+            "--program",
+            config.program,
+            "--tool",
+            config.tool
+          )
+          .exec()
+
+        dockerClient.startContainerCmd(container.getId()).exec()
+        container.getId()
+      }
+
+      _ <- IO.blocking {
+        dockerClient.logContainerCmd(analyzerId)
+          .withStdOut(true).withStdErr(true).withFollowStream(true)
+          .exec(new ResultCallback.Adapter[Frame] {
+            override def onNext(item: Frame): Unit =
+              print(new String(item.getPayload, "UTF-8"))
+          }).awaitCompletion()
+      }
+
+      _ <- IO.println(s"[HOST] Phase 2 completed")
+
+    } yield ()
   }
 }
