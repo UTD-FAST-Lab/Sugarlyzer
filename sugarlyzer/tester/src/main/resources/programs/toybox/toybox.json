@@ -1,7 +1,6 @@
 {
 	"name": "toybox",
 	"rootDir": "toybox",
-	"targetDir": "/targets/toybox",
 	"buildCommand": "make defconfig",
 	"configFileLocation": "toybox/.config",
 	"configHeaderLocation": "toybox/generated/config.h"

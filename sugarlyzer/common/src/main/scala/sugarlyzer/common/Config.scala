@@ -19,6 +19,7 @@ object Config {
       program: String = "",
       strategy: Strategy = Strategy.PRODUCT,
       phase: Phase = Phase.BUILD,
+      sharedPath: String = "/workspace",
       sampleSize: Int = 100,
       jobs: Int = Runtime.getRuntime().availableProcessors(),
       verbose: Boolean = false
