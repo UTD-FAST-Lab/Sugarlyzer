@@ -3,15 +3,22 @@ package sugarlyzer.models
 import cats.effect.{IO}
 import os._
 import scala.util.Using
+import sugarlyzer.common.Config.AppConfig
 
 object Configurator {
-  def stageAndBuild(spec: ProgramSpecification): IO[Unit] = IO.blocking {
-    val targetRootDir = os.Path("/targets")
-    if (!os.exists(targetRootDir)) os.makeDir.all(targetRootDir)
+  def stageAndBuild(
+      appConfig: AppConfig,
+      spec: ProgramSpecification
+  ): IO[Unit] = IO.blocking {
+    val sharedPath   = os.Path(appConfig.sharedPath)
+    val masterSource = sharedPath / os.RelPath(spec.rootDir)
+
+    println(s"sharedPath: $sharedPath")
+    println(s"masterSource: $masterSource")
 
     val tarName      = s"${spec.name}.tar.gz"
     val resourcePath = s"programs/${spec.name}/$tarName"
-    val tarDest      = targetRootDir / tarName
+    val tarDest      = sharedPath / tarName
 
     Using(getClass.getClassLoader.getResourceAsStream(resourcePath)) { stream =>
       if (stream == null)
@@ -21,26 +28,31 @@ object Configurator {
     }.get
 
     val proc =
-      os.proc("tar", "-xf", tarDest, "-C", targetRootDir)
+      os.proc("tar", "-xf", tarDest, "-C", sharedPath.toString)
         .call(check = false)
     if (proc.exitCode != 0)
       throw new RuntimeException("Tar extraction failed")
 
+    if (!os.exists(masterSource)) {
+      println(s"[FATAL] Expected $masterSource but found:")
+      os.list(sharedPath).foreach(p => println(s" - ${p.last}"))
+      throw new RuntimeException(
+        s"Source directory does not exist: $masterSource. Check spec.rootDir vs tar structure."
+      )
+    }
+
+    val cleanProc = os.proc("make", "clean")
+      .call(cwd = masterSource)
+    if (cleanProc.exitCode != 0)
+      throw new RuntimeException(
+        s"Failed to run clean command: ${spec.buildCommand}"
+      )
+
     val buildProc = os.proc("bash", "-c", spec.buildCommand)
-      .call(cwd = os.Path(spec.targetDir))
+      .call(cwd = masterSource)
     if (buildProc.exitCode != 0)
       throw new RuntimeException(
         s"Failed to run build command: ${spec.buildCommand}"
       )
-
-    /* val configHeaderResource = s"programs/${spec.name}/${spec.name}Config.h"
-     * Using(getClass.getClassLoader.getResourceAsStream(configHeaderResource))
-     * { stream => if (stream == null) throw new RuntimeException(s"Missing
-     * resource: $configHeaderResource")
-     *
-     * val configHeaderDest =
-     * targetRootDir / os.RelPath(spec.configHeaderLocation)
-     *
-     * os.write.over(configHeaderDest, stream) }.get */
   }
 }

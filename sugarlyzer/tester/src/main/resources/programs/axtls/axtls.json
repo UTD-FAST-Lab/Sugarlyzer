@@ -1,7 +1,6 @@
 {
 	"name": "axtls",
 	"rootDir": "axtls-code",
-	"targetDir": "/targets/axtls-code",
 	"buildCommand": "make linuxconf",
 	"configFileLocation": "axtls-code/config/.config",
 	"configHeaderLocation": "axtls-code/config/config.h"

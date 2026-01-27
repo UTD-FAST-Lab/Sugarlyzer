@@ -10,70 +10,108 @@ import sugarlyzer.tester.tools.Alarm
 import scala.util.Using
 
 object ProductStrategy extends AnalysisStrategy {
-  def execute(config: AppConfig, tool: AnalysisTool): IO[Unit] = {
-    for {
-      _    <- IO.println("Loading program specification...")
-      spec <- ProgramFactory.load(config.program)
-      _    <- Configurator.stageAndBuild(spec)
-      resulting_alarms <- (0 until config.sampleSize).toList.parTraverseN(
-        Runtime.getRuntime().availableProcessors()
-      ) {
-        i =>
-          prepareAndRunSample(i, spec, tool)
-      }
-      _ <- IO.println(s"Got ${resulting_alarms.flatten.size} alarms")
-    } yield ()
-  }
 
-  private def prepareAndRunSample(
-      i: Int,
+  def analyze(
+      appConfig: AppConfig,
       spec: ProgramSpecification,
       tool: AnalysisTool
   ): IO[List[Alarm]] = {
-    for {
-      newSpec <- prepareTarget(i, spec)
-      alarms  <- tool.run(newSpec)
-      _       <- IO.println(s"Finished sample #$i")
-    } yield (alarms)
+    IO.println(s"Running analysis for ${spec.name}")
+
+    (0 until appConfig.sampleSize).toList.parTraverseN(appConfig.jobs) { i =>
+      val iterDir = os.Path(appConfig.sharedPath) / s"$i" / spec.rootDir
+
+      for {
+        _      <- IO.println(s"Running analysis for sample $i")
+        alarms <- tool.run(spec.copy(rootDir = iterDir.toString))
+
+      } yield (alarms)
+    }.map(_.flatten)
   }
 
-  private def prepareTarget(
-      i: Int,
-      spec: ProgramSpecification
-  ): IO[ProgramSpecification] = IO.blocking {
-    val masterSource = os.Path(spec.targetDir)     // i.e., /targets/axtls-code/
-    val iterDir      = os.Path("/targets") / s"$i" // i.e., /targets/0/
+  def build(appConfig: AppConfig, spec: ProgramSpecification): IO[Unit] = for {
+    _ <- IO.println("Preparing to build...")
+    _ <- Configurator.stageAndBuild(appConfig, spec)
+    _ <- prepareAndBuildSamples(appConfig, spec)
+  } yield ()
 
+  private def prepareAndBuildSamples(
+      appConfig: AppConfig,
+      spec: ProgramSpecification
+  ): IO[Unit] = {
+    val sharedPath   = os.Path(appConfig.sharedPath)
+    val masterSource = sharedPath / spec.rootDir
+
+    (0 until appConfig.sampleSize).toList.parTraverseN(appConfig.jobs) { i =>
+      val iterDir   = sharedPath / s"$i"
+      val finalDest = iterDir / masterSource.last
+
+      for {
+        _ <- setupWorkspace(iterDir, masterSource, finalDest)
+        _ <- injectConfig(i, spec, iterDir)
+        _ <- runBuild(iterDir, spec, i)
+      } yield ()
+    }.void
+  }
+
+  private def setupWorkspace(
+      iterDir: os.Path,
+      masterSource: os.Path,
+      finalDest: os.Path
+  ): IO[Unit] = IO.blocking {
     if (os.exists(iterDir)) os.remove.all(iterDir)
     os.makeDir.all(iterDir)
-
-    val finalDest = iterDir / masterSource.last // i.e., /targets/0/axtls-code/
-
-    // Copy the source code to the new iteration location to parallelize
     os.copy(masterSource, finalDest)
+  }
 
-    // Here we need to replace the existing config file with one of our samples
-    val destConfigFile = iterDir / os.RelPath(
-      spec.configFileLocation
-    ) // i.e., /targets/0/axtls-code/config/.config
+  private def injectConfig(
+      i: Int,
+      spec: ProgramSpecification,
+      iterDir: os.Path
+  ): IO[Unit] = IO.blocking {
+    val destConfigFile = iterDir / os.RelPath(spec.configFileLocation)
 
-    if (!os.exists(destConfigFile))
+    if (!os.exists(destConfigFile / os.up)) {
       throw new RuntimeException(
-        s"Config files not found: $destConfigFile. Content of iterDir: ${os.list(iterDir)}"
+        s"Parent directory for config does not exist: ${destConfigFile / os.up}"
       )
+    }
 
     val configResource = s"programs/${spec.name}/configs/$i.config"
+    val stream = getClass.getClassLoader.getResourceAsStream(configResource)
 
-    Using(getClass.getClassLoader.getResourceAsStream((configResource))) {
-      stream =>
-        if (stream == null)
-          throw new RuntimeException(s"Missing config: $configResource")
-        os.write.over(destConfigFile, stream)
-    }.get
+    if (stream == null) {
+      throw new RuntimeException(s"Missing resource config: $configResource")
+    }
 
-    spec.copy(
-      targetDir = (iterDir / spec.rootDir).toString,
-      buildCommand = "yes | make oldconfig"
-    )
+    Using.resource(stream) { s =>
+      os.write.over(destConfigFile, s)
+    }
+  }
+
+  private def runBuild(
+      iterDir: os.Path,
+      spec: ProgramSpecification,
+      sampleId: Int
+  ): IO[Unit] = IO.blocking {
+    val workingDir = iterDir / spec.rootDir
+
+    val configResult = os.proc("sh", "-c", "yes | make oldconfig")
+      .call(cwd = workingDir, check = false)
+
+    if (configResult.exitCode != 0) {
+      throw new RuntimeException(
+        s"Build config failed for sample $sampleId. Code: ${configResult.exitCode}"
+      )
+    }
+
+    val bearResult = os.proc("bear", "make")
+      .call(cwd = workingDir, check = false)
+
+    if (bearResult.exitCode != 0) {
+      throw new RuntimeException(
+        s"Bear make failed for sample $sampleId. Code: ${bearResult.exitCode}"
+      )
+    }
   }
 }

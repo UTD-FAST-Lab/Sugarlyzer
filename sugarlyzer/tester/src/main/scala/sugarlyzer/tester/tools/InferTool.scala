@@ -21,75 +21,35 @@ object InferTool extends AnalysisTool {
 
   def run(spec: ProgramSpecification): IO[List[Alarm]] = {
     for {
-      _             <- IO.println(s"Running spec ${spec}")
-      _             <- applyConfiguration(spec)
-      commandDBPath <- getCompileCommands(spec)
-      alarms        <- analyzeFiles(spec, commandDBPath)
+      _      <- IO.println(s"Running spec ${spec}")
+      alarms <- analyzeFiles(spec)
     } yield (alarms)
   }
 
   def analyzeFiles(
-      spec: ProgramSpecification,
-      compileCommandsPath: os.Path
+      spec: ProgramSpecification
   ): IO[List[Alarm]] = {
+    val rootDir             = os.Path(spec.rootDir)
+    val compileCommandsPath = rootDir / "compile_commands.json"
+
     val procCapture = os.proc(
       "infer",
       "capture",
       "--compilation-database",
       compileCommandsPath.toString
-    )
-      .call(cwd = os.Path(spec.targetDir))
-
+    ).call(cwd = os.Path(spec.rootDir))
     if (procCapture.exitCode != 0)
       throw new RuntimeException("Failed to run infer")
 
     val proc = os.proc(
       "infer",
       "analyze"
-    ).call(cwd = os.Path(spec.targetDir))
+    ).call(cwd = os.Path(spec.rootDir))
     if (proc.exitCode != 0)
       throw new RuntimeException("Failed to run infer")
 
-    val reportJsonPath = os.Path(spec.targetDir) / "infer-out" / "report.json"
+    val reportJsonPath = os.Path(spec.rootDir) / "infer-out" / "report.json"
     parseOutput(reportJsonPath)
-  }
-
-  def getCompileCommands(spec: ProgramSpecification)
-      : IO[os.Path] = {
-
-    val targetPath          = os.Path(spec.targetDir)
-    val compileCommandsFile = targetPath / "compile_commands.json"
-
-    val runBear = IO.blocking {
-      val procBear = os.proc("make", "clean").call(
-        cwd = os.Path(spec.targetDir)
-      )
-      if (procBear.exitCode != 0)
-        throw new RuntimeException("Failed to run make clean")
-
-      val proc = os.proc(
-        "bear",
-        "--",
-        "make"
-      ).call(cwd = targetPath)
-      if (proc.exitCode != 0)
-        throw new RuntimeException("Failed to run bear")
-    }
-
-    for {
-      _ <- runBear
-    } yield compileCommandsFile
-  }
-
-  def applyConfiguration(spec: ProgramSpecification): IO[Unit] = IO.blocking {
-    val proc = os.proc("bash", "-c", spec.buildCommand).call(
-      cwd = os.Path(spec.targetDir)
-    )
-    if (proc.exitCode != 0) {
-      throw new RuntimeException(
-        s"Failed to run build command: ${spec.buildCommand}"
-      )
-    }
   }
 
   def parseOutput(resultPath: Path): IO[List[Alarm]] = IO.blocking {

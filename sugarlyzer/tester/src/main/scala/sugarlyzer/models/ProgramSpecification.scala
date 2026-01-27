@@ -8,7 +8,6 @@ import io.circe._
 case class ProgramSpecification(
     name: String = "",
     rootDir: String = "",
-    targetDir: String = "",
     buildCommand: String = "",
     configFileLocation: String = "",
     configHeaderLocation: String = ""

@@ -1,9 +1,19 @@
-FROM sugarlyzer/base
+FROM ubuntu:22.04
 
+ENV TZ=America/Chicago
+ENV DEBIAN_FRONTEND=noninteractive
 ENV VERSION=1.1.0
+
+RUN apt-get update && \
+	DEBIAN_FRONTEND=noninteractive apt-get install -y \
+	openjdk-17-jdk curl xz-utils zlib1g-dev tzdata \
+	libselinux1-dev selinux-basics selinux-utils libcurl4-openssl-dev \
+	&& rm -rf /var/lib/apt/lists/*
+
+# 2. Install Infer (Latest)
 RUN curl -sSL "https://github.com/facebook/infer/releases/download/v$VERSION/infer-linux64-v$VERSION.tar.xz" \
 	| tar -C /opt -xJ && ln -s "/opt/infer-linux64-v$VERSION/bin/infer" /usr/local/bin/infer
 
-COPY tester.jar /app/tester.jar
 
 WORKDIR /
+COPY tester.jar .
