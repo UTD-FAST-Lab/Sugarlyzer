@@ -41,13 +41,6 @@ object Configurator {
       )
     }
 
-    val cleanProc = os.proc("make", "clean")
-      .call(cwd = masterSource)
-    if (cleanProc.exitCode != 0)
-      throw new RuntimeException(
-        s"Failed to run clean command: ${spec.buildCommand}"
-      )
-
     val buildProc = os.proc("bash", "-c", spec.buildCommand)
       .call(cwd = masterSource)
     if (buildProc.exitCode != 0)

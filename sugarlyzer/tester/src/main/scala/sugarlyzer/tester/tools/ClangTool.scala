@@ -15,98 +15,74 @@ object ClangTool extends AnalysisTool {
 
   def run(spec: ProgramSpecification): IO[List[Alarm]] = {
     for {
-      _        <- IO.println(s"Running spec ${spec}")
-      _        <- applyConfiguration(spec)
-      commands <- getCompileCommands(spec)
-      _        <- IO.println(s"Found ${commands.size} commands")
-      alarms   <- analyzeFiles(spec, commands)
+      _      <- IO.println(s"Running spec ${spec}")
+      alarms <- analyzeFiles(spec)
     } yield (alarms)
   }
 
   def analyzeFiles(
-      spec: ProgramSpecification,
-      compileCommands: List[CompileCommand]
+      spec: ProgramSpecification
   ): IO[List[Alarm]] = {
-    val indexedCommands = compileCommands.zipWithIndex
+    val rootDir             = os.Path(spec.rootDir)
+    val compileCommandsPath = rootDir / "compile_commands.json"
 
-    indexedCommands.parTraverseN(Runtime.getRuntime().availableProcessors()) {
-      case (cmd, i) =>
-        IO.blocking {
-          val uniqueResultsDir =
-            os.Path(spec.targetDir) / "clang_results" / s"out-$i"
-          os.remove.all(uniqueResultsDir)
-          os.makeDir.all(uniqueResultsDir)
-
-          val reportXMLLocation = uniqueResultsDir / "report.plist"
-
-          def filterOutputFlag(args: List[String]): List[String] = args match {
-            case "-o" :: _ :: tail => filterOutputFlag(tail)
-            case head :: tail      => head :: filterOutputFlag(tail)
-            case Nil               => Nil
-          }
-
-          val cleanCmdArgs = filterOutputFlag(cmd.arguments)
-
-          val proc = os.proc(
-            "clang-11",
-            "--analyze",
-            "-Xanalyzer",
-            "-analyzer-output=plist",
-            "-o",
-            reportXMLLocation.toString,
-            cleanCmdArgs
-          ).call(
-            cwd = os.Path(cmd.directory),
-            stdout = os.Inherit,
-            mergeErrIntoOut = true,
-            check = false
-          )
-
-          if (proc.exitCode != 0)
-            throw new RuntimeException("Failed to run clang analysis")
-
-          reportXMLLocation
-        }
-          .flatMap { path =>
-            parseOutput(path)
-          }
-    }.map(_.flatten)
-  }
-
-  def getCompileCommands(spec: ProgramSpecification)
-      : IO[List[CompileCommand]] = {
-
-    val targetPath          = os.Path(spec.targetDir)
-    val compileCommandsFile = targetPath / "compile_commands.json"
-
-    val runBear = IO.blocking {
-      val proc = os.proc(
-        "bear",
-        "--",
-        "make"
-      ).call(cwd = targetPath)
-      if (proc.exitCode != 0)
-        throw new RuntimeException("Failed to run bear")
-    }
+    os.proc(
+      "sed",
+      "-i",
+      "s/-fno-guess-branch-probability//g",
+      compileCommandsPath.toString
+    )
+      .call(cwd = rootDir)
 
     for {
-      _        <- runBear
-      commands <- CompileCommands.parse(compileCommandsFile)
-    } yield commands
-  }
+      commands <- CompileCommands.parse(compileCommandsPath)
 
-  def applyConfiguration(spec: ProgramSpecification): IO[Unit] = IO.blocking {
-    os.proc("make", "clean").call(
-      cwd = os.Path(spec.targetDir)
-    )
-    val proc = os.proc("bash", "-c", spec.buildCommand).call(
-      cwd = os.Path(spec.targetDir)
-    )
-    if (proc.exitCode != 0) {
-      throw new RuntimeException(
-        s"Failed to run build command: ${spec.buildCommand}"
-      )
-    }
+      alarms <- commands.zipWithIndex.parTraverseN(
+        Runtime.getRuntime().availableProcessors()
+      ) {
+        case (cmd, i) =>
+          IO.blocking {
+            val uniqueResultsDir =
+              os.Path(spec.rootDir) / "clang_results" / s"out-$i"
+            os.remove.all(uniqueResultsDir)
+            os.makeDir.all(uniqueResultsDir)
+
+            val reportXMLLocation = uniqueResultsDir / "report.plist"
+
+            def filterOutputFlag(args: List[String]): List[String] =
+              args match {
+                case "-o" :: _ :: tail => filterOutputFlag(tail)
+                case head :: tail      => head :: filterOutputFlag(tail)
+                case Nil               => Nil
+              }
+
+            val cleanCmdArgs = filterOutputFlag(cmd.arguments)
+
+            val proc = os.proc(
+              "clang-11",
+              "--analyze",
+              "-Xanalyzer",
+              "-analyzer-output=plist",
+              "-o",
+              reportXMLLocation.toString,
+              cleanCmdArgs.drop(1)
+            ).call(
+              cwd = os.Path(cmd.directory),
+              stdout = os.Inherit,
+              mergeErrIntoOut = true,
+              check = false
+            )
+
+            if (proc.exitCode != 0)
+              throw new RuntimeException("Failed to run clang analysis")
+
+            reportXMLLocation
+          }
+            .flatMap { path =>
+              parseOutput(path)
+            }
+      }
+    } yield alarms.flatten
   }
 
   def parseOutput(resultPath: os.Path): IO[List[Alarm]] = IO.blocking {
