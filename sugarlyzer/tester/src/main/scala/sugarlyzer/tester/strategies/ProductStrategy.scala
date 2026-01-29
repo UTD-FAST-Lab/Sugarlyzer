@@ -96,8 +96,21 @@ object ProductStrategy extends AnalysisStrategy {
   ): IO[Unit] = IO.blocking {
     val workingDir = iterDir / spec.rootDir
 
+    val cleanResult = os.proc("make", "clean")
+      .call(
+        cwd = workingDir,
+        check = false,
+        stdout = os.Inherit,
+        stderr = os.Inherit
+      )
+
     val configResult = os.proc("sh", "-c", "yes | make oldconfig")
-      .call(cwd = workingDir, check = false)
+      .call(
+        cwd = workingDir,
+        check = false,
+        stdout = os.Inherit,
+        stderr = os.Inherit
+      )
 
     if (configResult.exitCode != 0) {
       throw new RuntimeException(
@@ -105,12 +118,18 @@ object ProductStrategy extends AnalysisStrategy {
       )
     }
 
-    val bearResult = os.proc("bear", "make")
-      .call(cwd = workingDir, check = false)
+    val bearResult = os.proc("bear", "make", "-k")
+      .call(
+        cwd = workingDir,
+        check = false,
+        stdout = os.Inherit,
+        stderr = os.Inherit
+      )
 
-    if (bearResult.exitCode != 0) {
+    val jsonPath = workingDir / "compile_commands.json"
+    if (!os.exists(jsonPath) || os.size(jsonPath) < 50) {
       throw new RuntimeException(
-        s"Bear make failed for sample $sampleId. Code: ${bearResult.exitCode}"
+        s"Bear failed to generate a valid compile_commands.json for sample $sampleId"
       )
     }
   }

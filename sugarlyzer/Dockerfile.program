@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 ENV TZ=America/Chicago
 ENV DEBIAN_FRONTEND=noninteractive
@@ -15,10 +15,9 @@ RUN apt-get install -y \
 	bear bison flex \
 	selinux-basics selinux-utils libselinux1-dev \
 	libssl-dev zlib1g-dev libpam0g-dev libtirpc-dev \
-	openjdk-17-jdk \
+	openjdk-17-jdk pkg-config libtinfo5 libboost-all-dev \
+	libsqlite3-dev electric-fence\
 	&& rm -rf /var/lib/apt/lists/*
 
-WORKDIR /app
-
-COPY tester.jar /app/tester.jar
+COPY tester.jar .
 COPY SugarlyzerConfig /SugarlyzerConfig
