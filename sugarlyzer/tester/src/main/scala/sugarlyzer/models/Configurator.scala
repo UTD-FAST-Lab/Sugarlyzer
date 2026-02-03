@@ -13,9 +13,6 @@ object Configurator {
     val sharedPath   = os.Path(appConfig.sharedPath)
     val masterSource = sharedPath / os.RelPath(spec.rootDir)
 
-    println(s"sharedPath: $sharedPath")
-    println(s"masterSource: $masterSource")
-
     val tarName      = s"${spec.name}.tar.gz"
     val resourcePath = s"programs/${spec.name}/$tarName"
     val tarDest      = sharedPath / tarName
@@ -34,8 +31,6 @@ object Configurator {
       throw new RuntimeException("Tar extraction failed")
 
     if (!os.exists(masterSource)) {
-      println(s"[FATAL] Expected $masterSource but found:")
-      os.list(sharedPath).foreach(p => println(s" - ${p.last}"))
       throw new RuntimeException(
         s"Source directory does not exist: $masterSource. Check spec.rootDir vs tar structure."
       )
@@ -47,5 +42,11 @@ object Configurator {
       throw new RuntimeException(
         s"Failed to run build command: ${spec.buildCommand}"
       )
+
+    os.copy(
+      from = os.Path("/SugarlyzerConfig") / s"${spec.name}Config.h",
+      to = sharedPath / os.RelPath(spec.configHeaderLocation),
+      replaceExisting = true
+    )
   }
 }

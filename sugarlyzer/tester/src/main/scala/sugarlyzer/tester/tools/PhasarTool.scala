@@ -10,23 +10,26 @@ object PhasarTool extends AnalysisTool {
     for {
       _      <- IO.println(s"Running WLLVM strategy for ${spec}")
       _      <- buildWithWLLVM(spec)
-      bcFile <- extractBitcode(spec.targetDir, "axssl")
-      alarms <- runPhasarOnFile(spec.targetDir, bcFile)
+      bcFile <- extractBitcode(spec.rootDir, spec.binaryName)
+      alarms <- runPhasarOnFile(spec.rootDir, bcFile)
     } yield alarms
   }
 
   def buildWithWLLVM(spec: ProgramSpecification): IO[Unit] = IO.blocking {
     os.proc("make", "clean").call(
-      cwd = os.Path(spec.targetDir)
-    )
+      cwd = os.Path(spec.rootDir)
+    ): Unit
+
+    val env = Map("CFLAGS" -> "-g", "CXXFLAGS" -> "-g")
+
     os.proc("bash", "-c", spec.buildCommand)
-      .call(
-        cwd = os.Path(spec.targetDir)
-      )
+      .call(cwd = os.Path(spec.rootDir), env = env): Unit
+
     val proc = os.proc("make", "CC=wllvm")
       .call(
-        cwd = os.Path(spec.targetDir),
+        cwd = os.Path(spec.rootDir),
         stdout = os.Inherit,
+        env = env,
         mergeErrIntoOut = true
       )
 

@@ -31,8 +31,7 @@ object ClangTool extends AnalysisTool {
       "-i",
       "s/-fno-guess-branch-probability//g",
       compileCommandsPath.toString
-    )
-      .call(cwd = rootDir)
+    ).call(cwd = rootDir): Unit
 
     for {
       commands <- CompileCommands.parse(compileCommandsPath)
@@ -49,23 +48,29 @@ object ClangTool extends AnalysisTool {
 
             val reportXMLLocation = uniqueResultsDir / "report.plist"
 
-            def filterOutputFlag(args: List[String]): List[String] =
+            def filterFlags(args: List[String]): List[String] = {
               args match {
-                case "-o" :: _ :: tail => filterOutputFlag(tail)
-                case head :: tail      => head :: filterOutputFlag(tail)
-                case Nil               => Nil
+                case head :: tail if head.startsWith("gcc") || head == "cc" =>
+                  filterFlags(tail)
+                case "-o" :: _ :: tail =>
+                  filterFlags(tail)
+                case head :: tail =>
+                  head :: filterFlags(tail)
+                case Nil =>
+                  Nil
               }
+            }
 
-            val cleanCmdArgs = filterOutputFlag(cmd.arguments)
+            val cleanCmdArgs = filterFlags(cmd.arguments)
 
             val proc = os.proc(
-              "clang-11",
+              "clang",
               "--analyze",
               "-Xanalyzer",
               "-analyzer-output=plist",
               "-o",
               reportXMLLocation.toString,
-              cleanCmdArgs.drop(1)
+              cleanCmdArgs
             ).call(
               cwd = os.Path(cmd.directory),
               stdout = os.Inherit,
@@ -73,9 +78,10 @@ object ClangTool extends AnalysisTool {
               check = false
             )
 
-            if (proc.exitCode != 0)
-              throw new RuntimeException("Failed to run clang analysis")
+            println(s"Clang command: ${proc.command.mkString(" ")}")
 
+            if (proc.exitCode != 0)
+              println(s"Clang command failed: ${proc.out.text()}")
             reportXMLLocation
           }
             .flatMap { path =>

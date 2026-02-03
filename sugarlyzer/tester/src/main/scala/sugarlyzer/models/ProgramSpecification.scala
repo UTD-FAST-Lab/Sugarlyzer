@@ -10,7 +10,8 @@ case class ProgramSpecification(
     rootDir: String = "",
     buildCommand: String = "",
     configFileLocation: String = "",
-    configHeaderLocation: String = ""
+    configHeaderLocation: String = "",
+    binaryName: String = ""
 ) derives Decoder
 
 object ProgramFactory {

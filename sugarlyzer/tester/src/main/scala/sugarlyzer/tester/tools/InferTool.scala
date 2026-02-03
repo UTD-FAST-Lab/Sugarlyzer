@@ -7,15 +7,6 @@ import os._
 import io.circe._
 import io.circe.jawn.decodeFile
 
-case class InferAlarm(
-    bug_type: String,
-    qualifier: String,
-    line: Int,
-    column: Int,
-    procedure_start_line: Int,
-    file: String
-) derives Decoder
-
 object InferTool extends AnalysisTool {
   def name(): String = { "Infer" }
 
@@ -32,19 +23,26 @@ object InferTool extends AnalysisTool {
     val rootDir             = os.Path(spec.rootDir)
     val compileCommandsPath = rootDir / "compile_commands.json"
 
+    os.proc(
+      "sed",
+      "-i",
+      "s/-fno-guess-branch-probability//g",
+      compileCommandsPath.toString
+    ).call(cwd = rootDir): Unit
+
     val procCapture = os.proc(
       "infer",
       "capture",
       "--compilation-database",
       compileCommandsPath.toString
-    ).call(cwd = os.Path(spec.rootDir))
+    ).call(cwd = rootDir, stdout = os.Inherit, stderr = os.Inherit)
     if (procCapture.exitCode != 0)
       throw new RuntimeException("Failed to run infer")
 
     val proc = os.proc(
       "infer",
       "analyze"
-    ).call(cwd = os.Path(spec.rootDir))
+    ).call(cwd = rootDir, stdout = os.Inherit, stderr = os.Inherit)
     if (proc.exitCode != 0)
       throw new RuntimeException("Failed to run infer")
 
