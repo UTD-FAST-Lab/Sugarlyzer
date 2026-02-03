@@ -16,15 +16,13 @@ object ProductStrategy extends AnalysisStrategy {
       spec: ProgramSpecification,
       tool: AnalysisTool
   ): IO[List[Alarm]] = {
-    IO.println(s"Running analysis for ${spec.name}")
+    println(s"Running analysis for ${spec.name}")
 
     (0 until appConfig.sampleSize).toList.parTraverseN(appConfig.jobs) { i =>
       val iterDir = os.Path(appConfig.sharedPath) / s"$i" / spec.rootDir
-
       for {
         _      <- IO.println(s"Running analysis for sample $i")
         alarms <- tool.run(spec.copy(rootDir = iterDir.toString))
-
       } yield (alarms)
     }.map(_.flatten)
   }
@@ -49,7 +47,7 @@ object ProductStrategy extends AnalysisStrategy {
       for {
         _ <- setupWorkspace(iterDir, masterSource, finalDest)
         _ <- injectConfig(i, spec, iterDir)
-        _ <- runBuild(iterDir, spec, i)
+        _ <- runBuild(i, spec, iterDir)
       } yield ()
     }.void
   }
@@ -90,19 +88,19 @@ object ProductStrategy extends AnalysisStrategy {
   }
 
   private def runBuild(
-      iterDir: os.Path,
+      sampleId: Int,
       spec: ProgramSpecification,
-      sampleId: Int
+      iterDir: os.Path
   ): IO[Unit] = IO.blocking {
     val workingDir = iterDir / spec.rootDir
 
-    val cleanResult = os.proc("make", "clean")
+    os.proc("make", "clean")
       .call(
         cwd = workingDir,
         check = false,
         stdout = os.Inherit,
         stderr = os.Inherit
-      )
+      ): Unit
 
     val configResult = os.proc("sh", "-c", "yes | make oldconfig")
       .call(
@@ -118,19 +116,26 @@ object ProductStrategy extends AnalysisStrategy {
       )
     }
 
-    val bearResult = os.proc("bear", "make", "-k")
+    os.proc("bear", "make")
       .call(
         cwd = workingDir,
         check = false,
         stdout = os.Inherit,
         stderr = os.Inherit
-      )
+      ): Unit
 
     val jsonPath = workingDir / "compile_commands.json"
-    if (!os.exists(jsonPath) || os.size(jsonPath) < 50) {
+    if (!os.exists(jsonPath) || os.size(jsonPath) < 50)
       throw new RuntimeException(
         s"Bear failed to generate a valid compile_commands.json for sample $sampleId"
       )
-    }
+
+    os.proc(
+      "sed",
+      "-i",
+      s"""/"arguments": \\[/{n;s|$$|\\n            "-include",\\n            "/SugarlyzerConfig/${spec.name}Inc.h",|;}""",
+      jsonPath
+    ).call(cwd = workingDir): Unit
+
   }
 }

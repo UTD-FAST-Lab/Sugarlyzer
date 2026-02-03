@@ -18,6 +18,7 @@ trait AnalysisStrategy {
 }
 
 object StrategyFactory {
+  // Whenever there is a new strategy, add it here
   def create(strategy: Strategy): AnalysisStrategy = strategy match {
     case Strategy.PRODUCT => ProductStrategy
   }

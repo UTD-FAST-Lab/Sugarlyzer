@@ -3,5 +3,6 @@
 	"rootDir": "busybox-1_28_0",
 	"buildCommand": "make allyesconfig",
 	"configFileLocation": "busybox-1_28_0/.config",
-	"configHeaderLocation": "busybox-1_28_0/include/autoconf.h"
+	"configHeaderLocation": "busybox-1_28_0/include/autoconf.h",
+	"binaryName": "busybox"
 }

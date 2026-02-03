@@ -15,10 +15,15 @@ object TesterApp extends IOApp {
     OParser.parse(Config.parser, args, Config.AppConfig()) match {
       case Some(config) =>
         for {
-          spec     <- ProgramFactory.load(config.program)
+          // Load the spec from specific program configuration file
+          spec <- ProgramFactory.load(config.program)
+          // Get the strategy object
           strategy <- IO(StrategyFactory.create(config.strategy))
           _ <- {
+            // Run the specific phase of the program
             config.phase match {
+              /* Build phase to create the shared directory, build the
+               * base/master source. Basically every prereq for running the tool */
               case Phase.BUILD =>
                 for {
                   _ <- IO.println("[TESTER] Running build logic...")
@@ -27,11 +32,14 @@ object TesterApp extends IOApp {
               case Phase.ANALYZE =>
                 for {
                   _ <- IO.println("[TESTER] Running analysis logic...")
+                  // Get the tools object and run the analysis
+                  tool <- IO(ToolFactory.create(config.tool))
                   alarms <- strategy.analyze(
                     config,
                     spec,
-                    ToolFactory.create(config.tool)
+                    tool
                   )
+                  // Do any post-processing on alarms here
                   _ <- IO.println(s"Found ${alarms.length} alarms")
                 } yield ExitCode.Success
             }

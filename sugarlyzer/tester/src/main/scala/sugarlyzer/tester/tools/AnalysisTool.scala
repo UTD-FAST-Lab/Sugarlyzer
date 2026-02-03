@@ -19,10 +19,11 @@ trait AnalysisTool {
 }
 
 object ToolFactory {
+  // Whenever there is a new tool, add it here
   def create(name: String): AnalysisTool = name.toLowerCase() match {
-    case "infer" => InferTool
-    case "clang" => ClangTool
-    // case "phasar" => PhasarTool
-    case other => throw new IllegalArgumentException(s"Unkown Tool ${other}")
+    case "infer"  => InferTool
+    case "clang"  => ClangTool
+    case "phasar" => PhasarTool
+    case other    => throw new IllegalArgumentException(s"Unkown Tool ${other}")
   }
 }
