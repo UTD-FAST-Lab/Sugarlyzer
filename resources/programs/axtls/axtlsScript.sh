@@ -9,6 +9,6 @@ curl -L https://sourceforge.net/projects/axtls/files/2.1.4/axTLS-2.1.4.tar.gz/do
 tar -xf axtls.tar.gz
 cd axtls-code
 make linuxconf
-cp /SugarlyzerConfig/axtlsconfig.h config/config.h
+cp /SugarlyzerConfig/axtlsConfig.h config/config.h
 cd $CURDIR
 

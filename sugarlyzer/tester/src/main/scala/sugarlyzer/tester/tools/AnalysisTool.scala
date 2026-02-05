@@ -2,17 +2,28 @@ package sugarlyzer.tester.tools
 
 import sugarlyzer.models.ProgramSpecification
 
-trait Alarm {} // Prop for now
+import cats.effect.{IO}
+import io.circe.Decoder
+
+case class Alarm(
+    bug_type: String,
+    qualifier: String,
+    line: Int,
+    column: Int,
+    file: String
+) derives Decoder
 
 trait AnalysisTool {
   def name(): String
-  def run(programSpec: ProgramSpecification): String
-  def parseOutput(rawOutput: String): List[String]
+  def run(spec: ProgramSpecification): IO[List[Alarm]]
 }
 
 object ToolFactory {
+  // Whenever there is a new tool, add it here
   def create(name: String): AnalysisTool = name.toLowerCase() match {
-    case "infer" => InferTool
-    case other   => throw new IllegalArgumentException(s"Unkown Tool ${name}")
+    case "infer"  => InferTool
+    case "clang"  => ClangTool
+    case "phasar" => PhasarTool
+    case other    => throw new IllegalArgumentException(s"Unkown Tool ${other}")
   }
 }
