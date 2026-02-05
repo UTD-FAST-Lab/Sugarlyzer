@@ -1,8 +1,8 @@
 {
 	"name": "axtls",
-	"tarPath": "resources/programs/axtls//",
-	"buildDirectory": "/targets/axtls-code",
-	"buildCommand": "make oldconfig; make",
-	"cleanCommand": "make clean",
-	"configFile": ".config"
+	"rootDir": "axtls-code",
+	"buildCommand": "make linuxconf",
+	"configFileLocation": "axtls-code/config/.config",
+	"configHeaderLocation": "axtls-code/config/config.h",
+	"binaryName": "axssl"
 }
