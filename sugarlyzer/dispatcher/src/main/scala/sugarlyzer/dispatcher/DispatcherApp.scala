@@ -22,13 +22,9 @@ object DispatcherApp extends IOApp {
         for {
           _ <-
             IO.println(s"[HOST] Preparing ${config.tool} on ${config.program}")
-          _ <- buildImages(config)
-
+          _            <- buildImages(config)
           dockerClient <- IO.blocking(DockerClientBuilder.getInstance().build())
           _            <- runPipeline(dockerClient, config)
-          _ <- IO.println("[HOST] Pipeline finished. Launching debug shell...")
-          _ <- enterShell(config)
-
         } yield ExitCode.Success
       case None => IO(ExitCode.Error)
     }
@@ -91,7 +87,15 @@ object DispatcherApp extends IOApp {
       builderId <- IO.blocking {
         val container = dockerClient.createContainerCmd("sugarlyzer-program")
           .withHostConfig(new HostConfig().withBinds(volumeBind))
-          .withTty(false)
+          .withCmd("sleep", "infinity")
+          .exec()
+        dockerClient.startContainerCmd(container.getId()).exec()
+        container.getId()
+      }
+      _ <- IO.blocking {
+        val execCmd = dockerClient.execCreateCmd(builderId)
+          .withAttachStdout(true)
+          .withAttachStderr(true)
           .withCmd(
             "java",
             "-jar",
@@ -106,20 +110,16 @@ object DispatcherApp extends IOApp {
             config.sampleSize.toString
           )
           .exec()
-        dockerClient.startContainerCmd(container.getId()).exec()
-        container.getId()
+
+        dockerClient.execStartCmd(
+          execCmd.getId()
+        ).exec(new ResultCallback.Adapter[Frame] {
+          override def onNext(item: Frame): Unit =
+            print(new String(item.getPayload, "UTF-8"))
+        }).awaitCompletion()
       }
 
       // STREAM LOGS (BUILDER)
-      _ <- streamLogs(dockerClient, builderId)
-
-      buildResult <- IO.blocking {
-        dockerClient.waitContainerCmd(builderId).start().awaitStatusCode()
-      }
-      _ <- if (buildResult != 0) IO.raiseError(
-        new RuntimeException(s"Build failed with code $buildResult")
-      )
-      else IO.unit
       _ <- IO.println(s"[HOST] Phase 1 completed")
 
       // PHASE 2: RUN
@@ -129,7 +129,16 @@ object DispatcherApp extends IOApp {
           s"sugarlyzer/${config.tool.toString().toLowerCase()}"
         )
           .withHostConfig(new HostConfig().withBinds(volumeBind))
-          .withTty(false)
+          .withCmd("sleep", "infinity")
+          .exec()
+        dockerClient.startContainerCmd(container.getId()).exec()
+        container.getId()
+      }
+
+      _ <- IO.blocking {
+        val execCmd = dockerClient.execCreateCmd(analyzerId)
+          .withAttachStdout(true)
+          .withAttachStderr(true)
           .withCmd(
             "java",
             "-jar",
@@ -144,61 +153,15 @@ object DispatcherApp extends IOApp {
             config.sampleSize.toString
           )
           .exec()
-        dockerClient.startContainerCmd(container.getId()).exec()
-        container.getId()
+        dockerClient.execStartCmd(
+          execCmd.getId()
+        ).exec(new ResultCallback.Adapter[Frame] {
+          override def onNext(item: Frame): Unit =
+            print(new String(item.getPayload, "UTF-8"))
+        }).awaitCompletion()
       }
 
-      _ <- streamLogs(dockerClient, analyzerId)
       _ <- IO.println(s"[HOST] Phase 2 completed")
     } yield ()
-  }
-
-  // Helper to stream logs to local console
-  private def streamLogs(
-      client: DockerClient,
-      containerId: String
-  ): IO[Unit] = IO.blocking {
-    client.logContainerCmd(containerId)
-      .withStdOut(true)
-      .withStdErr(true)
-      .withFollowStream(true)
-      .exec(new ResultCallback.Adapter[Frame] {
-        override def onNext(item: Frame): Unit = {
-          print(new String(
-            item.getPayload,
-            "UTF-8"
-          ))
-        }
-      }).awaitCompletion(): Unit
-  }
-
-  private def enterShell(config: Config.AppConfig): IO[Unit] = IO.blocking {
-    val volumeName = s"sugarlyzer-${config.program}-${config.tool}"
-    val image      = s"sugarlyzer/${config.tool.toString().toLowerCase()}"
-
-    println(s"\n[HOST] >>> ENTERING DEBUG SHELL ($image) <<<")
-    println(s"[HOST] Mounted Volume: $volumeName")
-    println(s"[HOST] Type 'exit' to return to host.\n")
-
-    val proc = os.proc(
-      "docker",
-      "run",
-      "-it",
-      "--rm",
-      "-v",
-      s"$volumeName:/workspace",
-      image,
-      "/bin/bash"
-    ).call(
-      stdin = os.Inherit,
-      stdout = os.Inherit,
-      stderr = os.Inherit
-    )
-
-    if (proc.exitCode != 0) {
-      throw new RuntimeException(s"Shell failed with code ${proc.exitCode}")
-    }
-
-    ()
   }
 }
