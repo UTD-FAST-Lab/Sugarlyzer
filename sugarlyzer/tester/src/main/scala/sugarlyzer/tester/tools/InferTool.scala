@@ -14,6 +14,7 @@ object InferTool extends AnalysisTool {
     for {
       _      <- IO.println(s"Running spec ${spec}")
       alarms <- analyzeFiles(spec)
+      _      <- IO.println(s"Got ${alarms.length} alarms")
     } yield (alarms)
   }
 

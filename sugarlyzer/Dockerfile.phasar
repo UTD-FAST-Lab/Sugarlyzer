@@ -1,4 +1,4 @@
-FROM ubuntu:22.04
+FROM ubuntu:20.04
 
 ENV TZ=America/Chicago
 ENV DEBIAN_FRONTEND=noninteractive
@@ -7,9 +7,10 @@ RUN apt-get update && \
 	DEBIAN_FRONTEND=noninteractive apt-get install -y \
 	openjdk-17-jdk curl xz-utils zlib1g-dev tzdata \
 	libselinux1-dev selinux-basics selinux-utils \
-	libcurl4-openssl-dev libssl-dev libsqlite3-dev\
-	git cmake build-essential python3 clang-11\
-	pip ninja-build libtinfo5 libboost-all-dev\
+	libcurl4-openssl-dev libssl-dev libsqlite3-dev \
+	git cmake build-essential python3 clang-11 \
+	pip ninja-build libtinfo5 libboost-all-dev \
+	pkg-config libpam0g-dev libtirpc-dev \
 	&& rm -rf /var/lib/apt/lists/*
 
 ARG PHASAR=/phasar
@@ -55,8 +56,6 @@ RUN ldconfig
 
 ENV LLVM_COMPILER=clang
 ENV LLVM_COMPILER_PATH=${LLVM_INSTALL_DIR}/bin
-ENV CC=wllvm
-ENV CXX=wllvm++
 
 WORKDIR /
 COPY tester.jar .

@@ -8,6 +8,7 @@ import cats.effect.syntax.all._
 import os._
 import sugarlyzer.tester.tools.Alarm
 import scala.util.Using
+import sugarlyzer.common.Config
 
 object ProductStrategy extends AnalysisStrategy {
 
@@ -47,7 +48,7 @@ object ProductStrategy extends AnalysisStrategy {
       for {
         _ <- setupWorkspace(iterDir, masterSource, finalDest)
         _ <- injectConfig(i, spec, iterDir)
-        _ <- runBuild(i, spec, iterDir)
+        _ <- runBuild(i, spec, iterDir, appConfig)
       } yield ()
     }.void
   }
@@ -90,7 +91,8 @@ object ProductStrategy extends AnalysisStrategy {
   private def runBuild(
       sampleId: Int,
       spec: ProgramSpecification,
-      iterDir: os.Path
+      iterDir: os.Path,
+      config: Config.AppConfig
   ): IO[Unit] = IO.blocking {
     val workingDir = iterDir / spec.rootDir
 
@@ -116,26 +118,37 @@ object ProductStrategy extends AnalysisStrategy {
       )
     }
 
-    os.proc("bear", "make")
-      .call(
-        cwd = workingDir,
-        check = false,
-        stdout = os.Inherit,
-        stderr = os.Inherit
-      ): Unit
+    // If the tool we are using is phasar we need to use wllvm
+    if (config.tool == "phasar") {
+      val proc = os.proc("make", "CC=wllvm")
+        .call(
+          cwd = workingDir,
+          stdout = os.Inherit,
+          mergeErrIntoOut = true,
+          env = Map(
+            "CFLAGS"   -> "-g -Wignored-optimization-argument",
+            "CXXFLAGS" -> "-g -Wignored-optimization-argument"
+          )
+        )
+      if (proc.exitCode != 0)
+        throw new RuntimeException(s"WLLVM Build failed: ${proc.err.text()}")
+    } else {
+      val proc = os.proc("bear", "make")
+        .call(
+          cwd = workingDir,
+          check = false,
+          stdout = os.Inherit,
+          stderr = os.Inherit
+        )
+      if (proc.exitCode != 0)
+        throw new RuntimeException(s"Bear Build failed: ${proc.err.text()}")
 
-    val jsonPath = workingDir / "compile_commands.json"
-    if (!os.exists(jsonPath) || os.size(jsonPath) < 50)
-      throw new RuntimeException(
-        s"Bear failed to generate a valid compile_commands.json for sample $sampleId"
-      )
-
-    os.proc(
-      "sed",
-      "-i",
-      s"""/"arguments": \\[/{n;s|$$|\\n            "-include",\\n            "/SugarlyzerConfig/${spec.name}Inc.h",|;}""",
-      jsonPath
-    ).call(cwd = workingDir): Unit
+      val jsonPath = workingDir / "compile_commands.json"
+      if (!os.exists(jsonPath) || os.size(jsonPath) < 50)
+        throw new RuntimeException(
+          s"Bear failed to generate a valid compile_commands.json for sample $sampleId"
+        )
+    }
 
   }
 }
