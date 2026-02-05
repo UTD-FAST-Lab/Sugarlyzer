@@ -9,32 +9,9 @@ object PhasarTool extends AnalysisTool {
   def run(spec: ProgramSpecification): IO[List[Alarm]] = {
     for {
       _      <- IO.println(s"Running WLLVM strategy for ${spec}")
-      _      <- buildWithWLLVM(spec)
       bcFile <- extractBitcode(spec.rootDir, spec.binaryName)
       alarms <- runPhasarOnFile(spec.rootDir, bcFile)
     } yield alarms
-  }
-
-  def buildWithWLLVM(spec: ProgramSpecification): IO[Unit] = IO.blocking {
-    os.proc("make", "clean").call(
-      cwd = os.Path(spec.rootDir)
-    ): Unit
-
-    val env = Map("CFLAGS" -> "-g", "CXXFLAGS" -> "-g")
-
-    os.proc("bash", "-c", spec.buildCommand)
-      .call(cwd = os.Path(spec.rootDir), env = env): Unit
-
-    val proc = os.proc("make", "CC=wllvm")
-      .call(
-        cwd = os.Path(spec.rootDir),
-        stdout = os.Inherit,
-        env = env,
-        mergeErrIntoOut = true
-      )
-
-    if (proc.exitCode != 0)
-      throw new RuntimeException(s"WLLVM Build failed: ${proc.out.text()}")
   }
 
   def extractBitcode(targetDir: String, binaryName: String): IO[String] =

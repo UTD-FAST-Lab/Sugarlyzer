@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:18.04
 
 ENV TZ=America/Chicago
 ENV DEBIAN_FRONTEND=noninteractive
@@ -16,8 +16,22 @@ RUN apt-get install -y \
 	selinux-basics selinux-utils libselinux1-dev \
 	libssl-dev zlib1g-dev libpam0g-dev libtirpc-dev \
 	openjdk-17-jdk pkg-config libtinfo5 libboost-all-dev \
-	libsqlite3-dev electric-fence\
+	libsqlite3-dev electric-fence python3 python3-pip \
 	&& rm -rf /var/lib/apt/lists/*
 
+RUN pip3 install wllvm
+
+ARG LLVM_INSTALL_DIR=/usr/local/llvm-12
+ENV LLVM_COMPILER=clang
+ENV LLVM_COMPILER_PATH=${LLVM_INSTALL_DIR}/bin
+
+ADD llvm-12.tar.gz ${LLVM_INSTALL_DIR}/..
+
+ENV LD_LIBRARY_PATH="${LLVM_INSTALL_DIR}/lib"
+RUN echo "/usr/local/llvm-12/lib" > /etc/ld.so.conf.d/llvm-12.conf && ldconfig
+
+ENV PATH="${LLVM_INSTALL_DIR}/bin:${PATH}"
+
+WORKDIR /
 COPY tester.jar .
 COPY SugarlyzerConfig /SugarlyzerConfig

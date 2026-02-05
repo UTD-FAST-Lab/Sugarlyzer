@@ -54,17 +54,26 @@ object ClangTool extends AnalysisTool {
                   filterFlags(tail)
                 case "-o" :: _ :: tail =>
                   filterFlags(tail)
+                case head :: tail if head == "" =>
+                  filterFlags(tail)
                 case head :: tail =>
                   head :: filterFlags(tail)
                 case Nil =>
                   Nil
               }
             }
+            val suppressionFlags =
+              "-Wno-ignored-optimization-argument"
+
+            val env = Map(
+              "CFLAGS"   -> s"$suppressionFlags",
+              "CXXFLAGS" -> s"$suppressionFlags"
+            )
 
             val cleanCmdArgs = filterFlags(cmd.arguments)
 
             val proc = os.proc(
-              "clang",
+              "clang-11",
               "--analyze",
               "-Xanalyzer",
               "-analyzer-output=plist",
@@ -75,10 +84,9 @@ object ClangTool extends AnalysisTool {
               cwd = os.Path(cmd.directory),
               stdout = os.Inherit,
               mergeErrIntoOut = true,
-              check = false
+              check = false,
+              env = env
             )
-
-            println(s"Clang command: ${proc.command.mkString(" ")}")
 
             if (proc.exitCode != 0)
               println(s"Clang command failed: ${proc.out.text()}")
