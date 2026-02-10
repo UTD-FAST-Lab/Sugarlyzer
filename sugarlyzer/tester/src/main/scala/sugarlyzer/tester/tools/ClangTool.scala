@@ -15,8 +15,9 @@ object ClangTool extends AnalysisTool {
 
   def run(spec: ProgramSpecification): IO[List[Alarm]] = {
     for {
-      _      <- IO.println(s"Running spec ${spec}")
+      _      <- IO.println(s"[TOOL] Running spec ${spec}")
       alarms <- analyzeFiles(spec)
+      _      <- IO.println(s"[TOOL] Got ${alarms.length} alarms")
     } yield (alarms)
   }
 
@@ -42,7 +43,7 @@ object ClangTool extends AnalysisTool {
         case (cmd, i) =>
           IO.blocking {
             val uniqueResultsDir =
-              os.Path(spec.rootDir) / "clang_results" / s"out-$i"
+              rootDir / "clang_results" / s"out-$i"
             os.remove.all(uniqueResultsDir)
             os.makeDir.all(uniqueResultsDir)
 

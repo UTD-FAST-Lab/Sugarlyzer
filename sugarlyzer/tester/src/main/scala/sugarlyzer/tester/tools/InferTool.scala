@@ -12,9 +12,9 @@ object InferTool extends AnalysisTool {
 
   def run(spec: ProgramSpecification): IO[List[Alarm]] = {
     for {
-      _      <- IO.println(s"Running spec ${spec}")
+      _      <- IO.println(s"[TOOL] Running spec ${spec}")
       alarms <- analyzeFiles(spec)
-      _      <- IO.println(s"Got ${alarms.length} alarms")
+      _      <- IO.println(s"[TOOL] Got ${alarms.length} alarms")
     } yield (alarms)
   }
 
