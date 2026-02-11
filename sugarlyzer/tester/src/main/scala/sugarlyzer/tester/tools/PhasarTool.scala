@@ -11,6 +11,7 @@ object PhasarTool extends AnalysisTool {
       _      <- IO.println(s"Running WLLVM strategy for ${spec}")
       bcFile <- extractBitcode(spec.rootDir, spec.binaryName)
       alarms <- runPhasarOnFile(spec.rootDir, bcFile)
+      _      <- IO.println(s"[TOOL] Got ${alarms.length} alarms")
     } yield alarms
   }
 
