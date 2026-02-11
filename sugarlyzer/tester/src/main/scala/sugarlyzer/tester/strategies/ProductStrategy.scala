@@ -49,6 +49,7 @@ object ProductStrategy extends AnalysisStrategy {
         _ <- setupWorkspace(iterDir, masterSource, finalDest)
         _ <- injectConfig(i, spec, iterDir)
         _ <- runBuild(i, spec, iterDir, appConfig)
+        _ <- IO.println(s"Finished preparing sample $i.")
       } yield ()
     }.void
   }

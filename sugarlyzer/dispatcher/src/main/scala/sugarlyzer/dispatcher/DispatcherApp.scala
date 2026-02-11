@@ -117,6 +117,13 @@ object DispatcherApp extends IOApp {
           override def onNext(item: Frame): Unit =
             print(new String(item.getPayload, "UTF-8"))
         }).awaitCompletion()
+
+        val execResponse = dockerClient.inspectExecCmd(execCmd.getId()).exec()
+        if (execResponse.getExitCodeLong() != 0) {
+          throw new RuntimeException(
+            s"Build failed. Exit code: ${execResponse.getExitCodeLong()}"
+          )
+        }
       }
 
       // STREAM LOGS (BUILDER)
