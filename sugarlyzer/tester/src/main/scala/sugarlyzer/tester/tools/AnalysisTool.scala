@@ -3,15 +3,20 @@ package sugarlyzer.tester.tools
 import sugarlyzer.models.ProgramSpecification
 
 import cats.effect.{IO}
-import io.circe.Decoder
 
 case class Alarm(
-    bug_type: String,
-    qualifier: String,
+    alarmType: String,
+    description: String,
+    sanitizedDescription: Option[String],
     line: Int,
-    column: Int,
-    file: String
-) derives Decoder
+    lineInputFile: Option[Int],
+    fileLocation: String,
+    configFile: Option[String],
+    model: Option[String],
+    feasible: Option[Boolean],
+    desugaringTime: Option[Double],
+    analysisTime: Double
+)
 
 trait AnalysisTool {
   def name(): String

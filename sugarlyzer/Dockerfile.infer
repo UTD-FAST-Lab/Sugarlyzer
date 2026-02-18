@@ -7,9 +7,20 @@ ENV VERSION=1.2.0
 RUN apt-get update && \
 	DEBIAN_FRONTEND=noninteractive apt-get install -y \
 	openjdk-17-jdk curl xz-utils zlib1g-dev tzdata \
+	autoconf automake libtool git gcc make pkg-config\
 	libselinux1-dev selinux-basics selinux-utils \
 	libcurl4-openssl-dev libssl-dev libsqlite3-dev\
 	&& rm -rf /var/lib/apt/lists/*
+
+
+RUN git clone https://github.com/smack-team/smack.git /tmp/libsmack && \
+	cd /tmp/libsmack && \
+	./autogen.sh && \
+	./configure --prefix=/usr --with-attr && \
+	make && \
+	make install && \
+	rm -rf /tmp/libsmack
+
 
 # 2. Install Infer 
 RUN curl -sSL "https://github.com/facebook/infer/releases/download/v$VERSION/infer-linux-x86_64-v$VERSION.tar.xz" \

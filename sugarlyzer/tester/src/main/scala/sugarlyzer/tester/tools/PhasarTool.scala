@@ -10,7 +10,7 @@ object PhasarTool extends AnalysisTool {
     for {
       _      <- IO.println(s"Running WLLVM strategy for ${spec}")
       bcFile <- extractBitcode(spec.rootDir, spec.binaryName)
-      alarms <- runPhasarOnFile(spec.rootDir, bcFile)
+      alarms <- runPhasarOnFile(spec, bcFile)
       _      <- IO.println(s"[TOOL] Got ${alarms.length} alarms")
     } yield alarms
   }
@@ -40,8 +40,12 @@ object PhasarTool extends AnalysisTool {
       bcPath
     }
 
-  def runPhasarOnFile(targetDir: String, bcFile: String): IO[List[Alarm]] =
+  def runPhasarOnFile(
+      spec: ProgramSpecification,
+      bcFile: String
+  ): IO[List[Alarm]] =
     IO.blocking {
+      val targetDir  = spec.rootDir
       val resultsDir = os.Path(targetDir) / "phasar_results"
       if (os.exists(resultsDir)) os.remove.all(resultsDir)
       os.makeDir.all(resultsDir)
@@ -70,14 +74,14 @@ object PhasarTool extends AnalysisTool {
 
       reportFileOpt match {
         case Some(reportFile) =>
-          parseOutput(os.read(reportFile))
+          parseOutput(spec, os.read(reportFile))
         case None =>
           List.empty[Alarm]
       }
 
     }
 
-  def parseOutput(content: String): List[Alarm] = {
+  def parseOutput(spec: ProgramSpecification, content: String): List[Alarm] = {
     val lineRegex = """Line\s+:\s+(\d+)""".r
     val fileRegex = """File\s+:\s+(.+)""".r
     val funcRegex = """Function\s+:\s+(.+)""".r
@@ -91,11 +95,17 @@ object PhasarTool extends AnalysisTool {
           func <- funcRegex.findFirstMatchIn(chunk).map(_.group(1))
           if func != "Unknown"
         } yield Alarm(
-          bug_type = "UninitializedVariable",
-          qualifier = s"Uninitialized variable potential in $func",
+          alarmType = "UninitializedVariable",
+          description = s"Uninitialized variable potential in $func",
+          sanitizedDescription = None,
           line = line,
-          column = 0,
-          file = file
+          lineInputFile = None,
+          fileLocation = spec.rootDir + "/" + file,
+          configFile = Some(spec.rootDir),
+          model = None,
+          feasible = None,
+          desugaringTime = None,
+          analysisTime = 0.0
         )
     }.toList
   }
