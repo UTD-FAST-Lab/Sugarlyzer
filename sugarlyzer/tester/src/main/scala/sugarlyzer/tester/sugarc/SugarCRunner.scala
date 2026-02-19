@@ -65,7 +65,7 @@ object SugarCRunner {
       includedFiles: Iterable[Path] = Seq(),
       includedDirectories: Iterable[Path] = Seq(),
       commandLineDeclarations: Iterable[String] = Nil
-  ): IO[(Path, Path)] = {
+  ): IO[(CommandBuilder.ResultFile, CommandBuilder.LogFile)] = {
     /* If recommended space exists, write it to a file, and add it to the
      * included files */
     val recommendedSpaceFileIO: IO[Option[Path]] = recommendedSpace match {
@@ -95,4 +95,3 @@ object SugarCRunner {
 }
 
 case class Alarm()
-

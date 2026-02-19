@@ -101,3 +101,17 @@ lazy val tester = project
     Test / unmanagedResourceDirectories += (Compile / resourceDirectory).value,
     assembly / assemblyOutputPath := file("tester.jar")
   )
+
+lazy val testerTest = project
+  .in(file("tester_test"))
+  .dependsOn(common, tester)
+  .settings(
+    commonSettings,
+    assemblySettings,
+    name                   := "tester_test",
+    Compile / mainClass    := Some("sugarlyzer.tester.test.MainApp"),
+    Compile / doc / target := file("tester_test/docs"),
+    // Make main resources available to tests
+    Test / unmanagedResourceDirectories += (Compile / resourceDirectory).value,
+    assembly / assemblyOutputPath := file("tester_test.jar")
+  )
