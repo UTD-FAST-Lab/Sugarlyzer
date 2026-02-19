@@ -237,8 +237,8 @@ class CommandBuilderTest extends CatsEffectSuite {
 
     result match {
       case Right((out, log)) =>
-        assertEquals(out, outputFile)
-        assertEquals(log, logFile)
+        assertEquals(out, CommandBuilder.ResultFile(outputFile))
+        assertEquals(log, CommandBuilder.LogFile(logFile))
         val content = os.read(outputFile).trim
         assertEquals(content, "hello world")
       case Left(e) =>

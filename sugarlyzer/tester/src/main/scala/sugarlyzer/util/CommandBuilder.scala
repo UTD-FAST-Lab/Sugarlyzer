@@ -26,10 +26,12 @@ case class CommandBuilder(
   }
 
   def run(): Int = build.!
+
+  import CommandBuilder.{LogFile, ResultFile}
   def runWithFileRedirects(
       outputFile: Path,
       logFile: Path
-  ): IO[(Path, Path)] = {
+  ): IO[(ResultFile, LogFile)] = {
     val pb = build
     val stdoutWriter = Resource.fromAutoCloseable(
       IO.blocking(PrintWriter(FileWriter(File(outputFile.toURI))))
@@ -45,7 +47,7 @@ case class CommandBuilder(
           ferr = line => stderrWriter.println(line)
         ))
       }.flatMap { status =>
-        if status == 0 then IO.pure((outputFile, logFile))
+        if status == 0 then IO.pure((ResultFile(outputFile), LogFile(logFile)))
         else IO.raiseError(RuntimeException(
           s"Desugaring to file ${outputFile.toString} ended with ${status} exit code."
         ))
@@ -55,6 +57,17 @@ case class CommandBuilder(
 }
 
 object CommandBuilder {
+  opaque type ResultFile = Path
+  opaque type LogFile    = Path
+
+  object ResultFile {
+    def apply(p: os.Path): ResultFile = p
+  }
+
+  object LogFile {
+    def apply(p: os.Path): LogFile = p
+  }
+
   given Show[CommandBuilder] with {
     def show(t: CommandBuilder): String = {
       val envStr = t.env.map((k, v) => s"$k=$v").mkString(" ")

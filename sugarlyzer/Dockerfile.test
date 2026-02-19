@@ -47,5 +47,5 @@ ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
 RUN cd superc && make configure && make
 
 WORKDIR /
-COPY tester.jar .
+COPY tester_test.jar .
 COPY SugarlyzerConfig /SugarlyzerConfig
