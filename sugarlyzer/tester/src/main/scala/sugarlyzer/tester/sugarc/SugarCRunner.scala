@@ -5,6 +5,7 @@ import os.Path
 import java.io.File
 import com.typesafe.scalalogging.Logger
 import sugarlyzer.util.CommandBuilder
+import cats.implicits.*
 
 object SugarCRunner {
 
@@ -30,21 +31,21 @@ object SugarCRunner {
     val allIncludedFiles = rsFileOpt.toSeq ++ includedFiles
 
     var cmd = CommandBuilder(
-      program = Seq(
-        "java",
-        "-Xmx32g",
-        "superc.SugarC",
-        "-showActions",
-        "-useBDD"
-      ).mkString(" ")
+      program = "java"
     ).args(
-      allIncludedFiles.map(p => s"-include ${p.toString()}").toSeq*
+      "-Xmx32g",
+      "superc.SugarC",
+      "-showActions",
+      "-useBDD"
     ).args(
-      includedDirectories.map(p => s"-I ${p.toString()}").toSeq*
+      allIncludedFiles.flatMap(p => Seq("-include", p.toString())).toSeq*
+    ).args(
+      includedDirectories.flatMap(p => Seq("-I", p.toString())).toSeq*
     ).args(
       commandLineDeclarations.toSeq*
-    )
+    ).args(fileToDesugar.toString)
 
+    println(s"cmd is ${cmd.show}")
     if noStdLibs then cmd = cmd.arg("-nostdinc")
     if keepMem then cmd = cmd.arg("-keep-mem")
     if makeMain then cmd = cmd.arg("-make-main")

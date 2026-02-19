@@ -39,7 +39,6 @@ case class CommandBuilder(
     val stderrWriter = Resource.fromAutoCloseable(
       IO.blocking(PrintWriter(FileWriter(File(logFile.toURI))))
     )
-
     (stdoutWriter, stderrWriter).tupled.use { (stdoutWriter, stderrWriter) =>
       IO.blocking {
         pb.!(ProcessLogger(
@@ -47,10 +46,10 @@ case class CommandBuilder(
           ferr = line => stderrWriter.println(line)
         ))
       }.flatMap { status =>
-        if status == 0 then IO.pure((ResultFile(outputFile), LogFile(logFile)))
-        else IO.raiseError(RuntimeException(
-          s"Desugaring to file ${outputFile.toString} ended with ${status} exit code."
-        ))
+        IO.println(print(status)) >>
+          IO.blocking(stdoutWriter.flush()) >>
+          IO.blocking(stderrWriter.flush()) >>
+          IO.pure((ResultFile(outputFile), LogFile(logFile)))
       }
     }
   }
