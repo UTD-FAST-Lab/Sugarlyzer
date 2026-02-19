@@ -32,6 +32,12 @@ RUN echo "/usr/local/llvm-12/lib" > /etc/ld.so.conf.d/llvm-12.conf && ldconfig
 
 ENV PATH="${LLVM_INSTALL_DIR}/bin:${PATH}"
 
+# Get Z3
+ARG Z3_INSTALL_DIR=/opt/z3/
+ADD https://github.com/Z3Prover/z3/releases/download/z3-4.15.8/z3-4.15.8-arm64-glibc-2.38.zip ${Z3_INSTALL_DIR}
+WORKDIR /opt/z3
+RUN unzip z3-4.15.8-arm64-glibc-2.38.zip
+
 WORKDIR /
 COPY tester.jar .
 COPY SugarlyzerConfig /SugarlyzerConfig
