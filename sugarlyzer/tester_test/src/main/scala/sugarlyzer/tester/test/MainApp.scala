@@ -5,7 +5,7 @@ import cats.effect.IO
 import sugarlyzer.tester.sugarc.SugarCRunner
 object MainApp extends IOApp.Simple {
   def run: IO[Unit] = {
-    val sample1 = getClass().getResource("sample1.c").toString()
+    val sample1 = "/resources/sample1.c"
     val io = for {
       _                  <- IO.println("Starting tester integration tests...")
       _                  <- IO.println(s"Testing on ${sample1}")
