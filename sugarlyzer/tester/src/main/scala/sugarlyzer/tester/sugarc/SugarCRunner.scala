@@ -33,6 +33,7 @@ object SugarCRunner {
     var cmd = CommandBuilder(
       program = "java"
     ).args(
+      "-Djava.library.path=/opt/z3/bin",
       "-Xmx32g",
       "superc.SugarC",
       "-showActions",
@@ -45,10 +46,10 @@ object SugarCRunner {
       commandLineDeclarations.toSeq*
     ).args(fileToDesugar.toString)
 
-    println(s"cmd is ${cmd.show}")
     if noStdLibs then cmd = cmd.arg("-nostdinc")
     if keepMem then cmd = cmd.arg("-keep-mem")
     if makeMain then cmd = cmd.arg("-make-main")
+    logger.debug(s"Sugarc cmd is ${cmd.show}")
     cmd.in(File(fileToDesugar.toURI).getParentFile())
   }
 
@@ -60,9 +61,9 @@ object SugarCRunner {
       fileToDesugar: Path,
       logFile: Path,
       recommendedSpace: Option[Iterable[String]] = None,
-      noStdLibs: Boolean = false,
-      keepMem: Boolean = false,
-      makeMain: Boolean = false,
+      noStdLibs: Boolean = true,
+      keepMem: Boolean = true,
+      makeMain: Boolean = true,
       includedFiles: Iterable[Path] = Seq(),
       includedDirectories: Iterable[Path] = Seq(),
       commandLineDeclarations: Iterable[String] = Nil
