@@ -1,10 +1,11 @@
 #include <stdio.h>
 
 int main() {
-  #if HELLO_WORLD
+  #ifdef HELLO_WORLD
   printf("Hello, World!\n");
+  return 0;
   #else
   printf("Goodbye, World!\n");
+  return -1;
   #endif
-  return 0;
 }

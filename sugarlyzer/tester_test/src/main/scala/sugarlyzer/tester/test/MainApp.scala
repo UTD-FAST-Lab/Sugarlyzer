@@ -18,11 +18,18 @@ object MainApp extends IOApp.Simple {
     fileToDesugar = os.Path(file),
     logFile = os.Path("/log.txt"),
     recommendedSpace = None,
-    noStdLibs = false,
+    noStdLibs = true,
     keepMem = true,
-    makeMain = false,
-    includedFiles = List.empty,
-    includedDirectories = List.empty,
+    makeMain = true,
+    includedFiles = List(
+      "/SugarlyzerConfig/baseInc.h"
+    ),
+    includedDirectories = List(
+      "/SugarlyzerConfig",
+      "/SugarlyzerConfig/stdinc/usr/include",
+      "/SugarlyzerConfig/stdinc/usr/include/x86_64-linux-gnu",
+      "/SugarlyzerConfig/stdinc/usr/lib/gcc/x86_64-linux-gnu/9/include"
+    ),
     commandLineDeclarations = List.empty
   )
 }
