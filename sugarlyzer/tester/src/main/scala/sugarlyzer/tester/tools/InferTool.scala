@@ -18,7 +18,7 @@ case class InferAlarm(
 object InferTool extends AnalysisTool {
   def name(): String = { "Infer" }
 
-  def run(spec: ProgramSpecification): IO[List[Alarm]] = {
+  def run(spec: ProgramSpecification): IO[List[ToolAlarm]] = {
     for {
       _      <- IO.println(s"[TOOL] Running spec ${spec}")
       alarms <- analyzeFiles(spec)
@@ -28,7 +28,7 @@ object InferTool extends AnalysisTool {
 
   def analyzeFiles(
       spec: ProgramSpecification
-  ): IO[List[Alarm]] = {
+  ): IO[List[ToolAlarm]] = {
     val rootDir             = os.Path(spec.rootDir)
     val compileCommandsPath = rootDir / "compile_commands.json"
     val reportJsonPath = os.Path(spec.rootDir) / "infer-out" / "report.json"
@@ -72,7 +72,7 @@ object InferTool extends AnalysisTool {
       spec: ProgramSpecification,
       resultPath: Path,
       analysisTime: Double
-  ): IO[List[Alarm]] = {
+  ): IO[List[ToolAlarm]] = {
     IO.blocking {
       decodeFile[List[InferAlarm]](resultPath.toIO) match {
         case Right(alarms) => normalizeAlarms(spec, alarms, analysisTime)
@@ -85,19 +85,13 @@ object InferTool extends AnalysisTool {
       spec: ProgramSpecification,
       inferAlarms: List[InferAlarm],
       analysisTime: Double
-  ): List[Alarm] = {
+  ): List[ToolAlarm] = {
     inferAlarms.map { ia =>
-      Alarm(
+      ToolAlarm(
         alarmType = ia.bug_type,
         description = ia.qualifier,
-        sanitizedDescription = None,
         line = ia.line,
-        lineInputFile = None,
         fileLocation = ia.file,
-        configFile = Some(spec.rootDir),
-        model = None,
-        feasible = None,
-        desugaringTime = None,
         analysisTime = analysisTime
       )
     }

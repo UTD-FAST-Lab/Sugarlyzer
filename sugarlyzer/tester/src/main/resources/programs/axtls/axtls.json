@@ -4,5 +4,9 @@
 	"buildCommand": "make linuxconf",
 	"configFileLocation": "axtls-code/config/.config",
 	"configHeaderLocation": "axtls-code/config/config.h",
-	"binaryName": "axssl"
+	"targetBinaries": [
+		"_stage/axssl",
+		"_stage/axhttpd",
+		"_stage/axtlswrap"
+	]
 }

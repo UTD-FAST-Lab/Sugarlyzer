@@ -47,7 +47,7 @@ object DispatcherApp extends IOApp {
       "-t",
       toolTag,
       "-f",
-      s"Dockerfile.${config.tool}",
+      s"Dockerfile.${config.tool.toString().toLowerCase()}",
       "."
     )
 
@@ -105,7 +105,7 @@ object DispatcherApp extends IOApp {
             "--program",
             config.program,
             "--tool",
-            config.tool,
+            config.tool.toString(),
             "--sample_size",
             config.sampleSize.toString
           )
@@ -125,8 +125,6 @@ object DispatcherApp extends IOApp {
           )
         }
       }
-
-      // STREAM LOGS (BUILDER)
       _ <- IO.println(s"[HOST] Phase 1 completed")
 
       // PHASE 2: RUN
@@ -155,7 +153,7 @@ object DispatcherApp extends IOApp {
             "--program",
             config.program,
             "--tool",
-            config.tool,
+            config.tool.toString().toLowerCase(),
             "--sample_size",
             config.sampleSize.toString
           )
@@ -167,7 +165,6 @@ object DispatcherApp extends IOApp {
             print(new String(item.getPayload, "UTF-8"))
         }).awaitCompletion()
       }
-
       _ <- IO.println(s"[HOST] Phase 2 completed")
     } yield ()
   }

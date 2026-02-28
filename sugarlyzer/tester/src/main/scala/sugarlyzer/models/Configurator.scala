@@ -17,11 +17,12 @@ object Configurator {
     val resourcePath = s"programs/${spec.name}/$tarName"
     val tarDest      = sharedPath / tarName
 
-    Using(getClass.getClassLoader.getResourceAsStream(resourcePath)) { stream =>
-      if (stream == null)
-        throw new RuntimeException(s"Missing resource: $resourcePath")
+    Using(getClass.getClassLoader.getResourceAsStream(resourcePath)) {
+      stream =>
+        if (stream == null)
+          throw new RuntimeException(s"Missing resource: $resourcePath")
 
-      os.write.over(tarDest, stream)
+        os.write.over(tarDest, stream)
     }.get
 
     val proc =

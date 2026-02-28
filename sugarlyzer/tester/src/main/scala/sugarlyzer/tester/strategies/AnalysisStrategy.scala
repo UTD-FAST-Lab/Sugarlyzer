@@ -6,14 +6,14 @@ import sugarlyzer.tester.tools.AnalysisTool
 import sugarlyzer.common.Config.AppConfig
 import sugarlyzer.common.Config.Strategy
 import sugarlyzer.models.ProgramSpecification
-import sugarlyzer.tester.tools.Alarm
+import sugarlyzer.tester.tools.StrategyAlarm
 
 trait AnalysisStrategy {
   def analyze(
       appConfig: AppConfig,
       spec: ProgramSpecification,
       tool: AnalysisTool
-  ): IO[List[Alarm]]
+  ): IO[List[StrategyAlarm]]
   def build(appConfig: AppConfig, spec: ProgramSpecification): IO[Unit]
 }
 

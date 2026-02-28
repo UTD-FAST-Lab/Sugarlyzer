@@ -24,6 +24,14 @@ VarBugsPatches/
 TypeChef-VAA/
 TypeChef-Artifacts/
 
+dispatcher.jar
+tester.jar
+
+*.csv
+
+results.json
+
+
 # Distribution / packaging
 .Python
 build/
