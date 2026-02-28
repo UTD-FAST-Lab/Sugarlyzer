@@ -11,7 +11,7 @@ case class ProgramSpecification(
     buildCommand: String = "",
     configFileLocation: String = "",
     configHeaderLocation: String = "",
-    binaryName: String = ""
+    targetBinaries: List[String] = List.empty
 ) derives Decoder
 
 object ProgramFactory {

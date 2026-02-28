@@ -6,9 +6,10 @@ import sugarlyzer.models.*
 import sugarlyzer.common.Config.AppConfig
 import cats.effect.syntax.all._
 import os._
-import sugarlyzer.tester.tools.Alarm
-import scala.util.Using
+import sugarlyzer.tester.tools.ProductAlarm
 import sugarlyzer.common.Config
+import cats.effect.kernel.Resource
+import sugarlyzer.common.Config.Tool
 
 object ProductStrategy extends AnalysisStrategy {
 
@@ -16,14 +17,23 @@ object ProductStrategy extends AnalysisStrategy {
       appConfig: AppConfig,
       spec: ProgramSpecification,
       tool: AnalysisTool
-  ): IO[List[Alarm]] = {
+  ): IO[List[ProductAlarm]] = {
     println(s"Running analysis for ${spec.name}")
 
     (0 until appConfig.sampleSize).toList.parTraverseN(appConfig.jobs) { i =>
-      val iterDir = os.Path(appConfig.sharedPath) / s"$i" / spec.rootDir
+      val iterDir    = os.Path(appConfig.sharedPath) / s"$i" / spec.rootDir
+      val configFile = s"$i.config"
       for {
-        _      <- IO.println(s"Running analysis for sample $i")
-        alarms <- tool.run(spec.copy(rootDir = iterDir.toString))
+        _           <- IO.println(s"Running analysis for sample $i")
+        rawFindings <- tool.run(spec.copy(rootDir = iterDir.toString))
+        alarms <- IO.blocking {
+          rawFindings.map { finding =>
+            ProductAlarm(
+              finding = finding,
+              configFile = configFile
+            )
+          }
+        }
       } yield (alarms)
     }.map(_.flatten)
   }
@@ -68,24 +78,17 @@ object ProductStrategy extends AnalysisStrategy {
       i: Int,
       spec: ProgramSpecification,
       iterDir: os.Path
-  ): IO[Unit] = IO.blocking {
+  ): IO[Unit] = {
     val destConfigFile = iterDir / os.RelPath(spec.configFileLocation)
-
-    if (!os.exists(destConfigFile / os.up)) {
-      throw new RuntimeException(
-        s"Parent directory for config does not exist: ${destConfigFile / os.up}"
-      )
-    }
-
     val configResource = s"programs/${spec.name}/configs/$i.config"
-    val stream = getClass.getClassLoader.getResourceAsStream(configResource)
 
-    if (stream == null) {
-      throw new RuntimeException(s"Missing resource config: $configResource")
-    }
-
-    Using.resource(stream) { s =>
-      os.write.over(destConfigFile, s)
+    Resource.fromAutoCloseable(
+      IO(getClass.getClassLoader.getResourceAsStream(configResource))
+    ).use { stream =>
+      IO.raiseWhen(stream == null)(
+        new RuntimeException(s"Missing resource: $configResource")
+      ) *>
+        IO.blocking(os.write.over(destConfigFile, stream))
     }
   }
 
@@ -120,7 +123,7 @@ object ProductStrategy extends AnalysisStrategy {
     }
 
     // If the tool we are using is phasar we need to use wllvm
-    if (config.tool == "phasar") {
+    if (config.tool == Tool.PHASAR) {
       val proc = os.proc("make", "CC=wllvm")
         .call(
           cwd = workingDir,

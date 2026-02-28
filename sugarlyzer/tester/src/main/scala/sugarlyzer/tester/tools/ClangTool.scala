@@ -13,7 +13,7 @@ import com.dd.plist.NSArray
 object ClangTool extends AnalysisTool {
   def name(): String = { "Clang" }
 
-  def run(spec: ProgramSpecification): IO[List[Alarm]] = {
+  def run(spec: ProgramSpecification): IO[List[ToolAlarm]] = {
     for {
       _      <- IO.println(s"[TOOL] Running spec ${spec}")
       alarms <- analyzeFiles(spec)
@@ -23,7 +23,7 @@ object ClangTool extends AnalysisTool {
 
   def analyzeFiles(
       spec: ProgramSpecification
-  ): IO[List[Alarm]] = {
+  ): IO[List[ToolAlarm]] = {
     val rootDir             = os.Path(spec.rootDir)
     val compileCommandsPath = rootDir / "compile_commands.json"
 
@@ -99,9 +99,9 @@ object ClangTool extends AnalysisTool {
   def parseOutput(
       spec: ProgramSpecification,
       resultPath: os.Path
-  ): IO[List[Alarm]] = IO.blocking {
+  ): IO[List[ToolAlarm]] = IO.blocking {
     if (!os.exists(resultPath)) {
-      List.empty[Alarm]
+      List.empty[ToolAlarm]
     } else {
       val file = resultPath.toIO
 
@@ -129,17 +129,11 @@ object ClangTool extends AnalysisTool {
         val fileName =
           if (fileIdx < fileNames.length) fileNames(fileIdx) else "Unknown"
 
-        Alarm(
+        ToolAlarm(
           alarmType = bugType,
           description = description,
-          sanitizedDescription = None,
           line = line,
-          lineInputFile = None,
           fileLocation = spec.rootDir + "/" + fileName,
-          configFile = Some(spec.rootDir),
-          model = None,
-          feasible = None,
-          desugaringTime = None,
           analysisTime = 0.0
         )
       }.toList

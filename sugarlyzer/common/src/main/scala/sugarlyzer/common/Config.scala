@@ -14,8 +14,14 @@ object Config {
     case PRODUCT
   }
 
+  enum Tool {
+    case INFER
+    case CLANG
+    case PHASAR
+  }
+
   case class AppConfig(
-      tool: String = "",
+      tool: Tool = Tool.INFER,
       program: String = "",
       strategy: Strategy = Strategy.PRODUCT,
       phase: Phase = Phase.BUILD,
@@ -33,7 +39,7 @@ object Config {
       head("Sugarlyzer", "2.0"),
       opt[String]('t', "tool")
         .required()
-        .action((x, c) => c.copy(tool = x))
+        .action((x, c) => c.copy(tool = Tool.valueOf(x.toUpperCase())))
         .text("Tool to run (e.g., clang)"),
       opt[String]('p', "program")
         .required()
