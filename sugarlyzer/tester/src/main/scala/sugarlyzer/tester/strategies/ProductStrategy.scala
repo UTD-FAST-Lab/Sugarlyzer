@@ -10,8 +10,11 @@ import sugarlyzer.tester.tools.ProductAlarm
 import sugarlyzer.common.Config
 import cats.effect.kernel.Resource
 import sugarlyzer.common.Config.Tool
+import scala.util.Using
+import scala.io.Source
 
 object ProductStrategy extends AnalysisStrategy {
+  type Alarm = ProductAlarm
 
   def analyze(
       appConfig: AppConfig,
@@ -26,11 +29,30 @@ object ProductStrategy extends AnalysisStrategy {
       for {
         _           <- IO.println(s"Running analysis for sample $i")
         rawFindings <- tool.run(spec.copy(rootDir = iterDir.toString))
+        model <- IO.blocking {
+          val configResourcePath = s"programs/${spec.name}/configs/$configFile"
+
+          Using.resource(Source.fromResource(configResourcePath)) { source =>
+            source.getLines()
+              .map(_.trim)
+              .filter(_.nonEmpty)
+              .map { line =>
+                if (line.startsWith("#")) {
+                  val key = line.substring(1).trim.split(" ").head
+                  (key, "false")
+                } else {
+                  val toks = line.split("=", 2)
+                  (toks(0).trim, toks(1).trim)
+                }
+              }.toList
+          }
+        }
         alarms <- IO.blocking {
           rawFindings.map { finding =>
             ProductAlarm(
               finding = finding,
-              configFile = configFile
+              configFile = configFile,
+              model = model
             )
           }
         }

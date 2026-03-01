@@ -11,7 +11,7 @@ build_tester:
 	sbt "tester/assembly"
 
 build_tester_test:
-  @echo "Building Tester test JAR"
+	@echo "Building Tester test JAR"
 	sbt "tester_test/assembly"
 
 clean:
