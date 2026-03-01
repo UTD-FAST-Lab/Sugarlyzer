@@ -39,8 +39,7 @@ object TesterApp extends IOApp {
                     spec,
                     tool
                   )
-                  _ <- IO.println(s"Found ${alarms.length} alarms")
-                  _ <- IO.println(s"Alarms: ${alarms.mkString("\n")}")
+                  _ <- IO.println(s"[TESTER] Found ${alarms.length} alarms")
                 } yield ExitCode.Success
             }
           }
