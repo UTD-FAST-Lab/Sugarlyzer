@@ -25,13 +25,13 @@ object MainApp extends IOApp.Simple {
         IO.println("=== INTEGRATION TEST 3: Presence Condition Parser ===")
       _ <-
         IO.println("Testing presence condition parser with sample expression")
+      _ <- testPresenceConditionParser()
       _ <-
         IO.println("=== INTEGRATION TEST 4: Presence Condition Extraction ===")
       _ <- IO.println("Testing presence condition extraction for sample1")
-      _ <- IO.println("All tests completed!")
       _ <- testAlarmPresenceCondition()
 
-      _ <- testPresenceConditionParser()
+      _ <- IO.println("All tests completed!")
     } yield ()
     io
   }
@@ -87,7 +87,7 @@ object MainApp extends IOApp.Simple {
       alarm,
       os.Path("/resources/sample1.desugared.c")
     )
-    IO.println(s"Model: ${model}")
+    IO.println(s"Model: ${model}") >> IO.println("Success!")
   }
 
   def testPresenceConditionParser(): IO[Unit] = {
@@ -96,6 +96,6 @@ object MainApp extends IOApp.Simple {
       ctx,
       "(defined cond1) && ((defined cond2) || !cond3)"
     )
-    IO.println(s"Parsed expression: $expr")
+    IO.println(s"Parsed expression: $expr") >> IO.println("Success!")
   }
 }
