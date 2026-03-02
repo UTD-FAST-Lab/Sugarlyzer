@@ -44,7 +44,7 @@ object TesterApp extends IOApp {
                   deduplicated_alarms <- IO(strategy.deduplicate(alarms))
 
                   _ <- IO.println(
-                    s"[TESTER] deduplicate alarms: ${deduplicated_alarms} (length: ${deduplicated_alarms.length})"
+                    s"[TESTER] deduplicated (length: ${deduplicated_alarms.length})"
                   )
                 } yield ExitCode.Success
             }
