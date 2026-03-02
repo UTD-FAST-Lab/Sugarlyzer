@@ -52,4 +52,4 @@ WORKDIR /
 COPY tester_test.jar .
 COPY tester_test/resources ./resources
 COPY SugarlyzerConfig /SugarlyzerConfig
-CMD ["java", "-jar", "tester_test.jar"]
+CMD ["java", "-Djava.library.path=/opt/z3/bin", "-jar", "tester_test.jar"]

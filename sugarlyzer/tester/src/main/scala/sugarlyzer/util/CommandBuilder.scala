@@ -46,7 +46,7 @@ case class CommandBuilder(
           ferr = line => stderrWriter.println(line)
         ))
       }.flatMap { status =>
-        IO.println(print(status)) >>
+        IO.println(status) >>
           IO.blocking(stdoutWriter.flush()) >>
           IO.blocking(stderrWriter.flush()) >>
           IO.pure((ResultFile(outputFile), LogFile(logFile)))
