@@ -31,7 +31,6 @@ object ProductStrategy extends AnalysisStrategy {
         rawFindings <- tool.run(spec.copy(rootDir = iterDir.toString))
         model <- IO.blocking {
           val configResourcePath = s"programs/${spec.name}/configs/$configFile"
-
           Using.resource(Source.fromResource(configResourcePath)) { source =>
             source.getLines()
               .map(_.trim)
@@ -52,10 +51,12 @@ object ProductStrategy extends AnalysisStrategy {
             ProductAlarm(
               finding = finding,
               configFiles = List[String](configFile),
-              model = model
+              model = model,
+              numConfigs = List[Int](model.length)
             )
           }
         }
+
       } yield (alarms)
     }.map(_.flatten)
   }
@@ -157,7 +158,7 @@ object ProductStrategy extends AnalysisStrategy {
           )
         )
       if (proc.exitCode != 0)
-        throw new RuntimeException(s"WLLVM Build failed: ${proc.err.text()}")
+        println(s"WLLVM Build failed: ${proc.err.text()}")
     } else {
       val proc = os.proc("bear", "make")
         .call(
@@ -191,9 +192,11 @@ object ProductStrategy extends AnalysisStrategy {
       .values
       .map { groupedAlarms =>
         groupedAlarms.reduceLeft { (acc, curr) =>
+          val model = acc.model.toSet.intersect(curr.model.toSet).toList
           acc.copy(
             configFiles = (acc.configFiles ++ curr.configFiles).distinct,
-            model = acc.model.toSet.intersect(curr.model.toSet).toList
+            model = model,
+            numConfigs = (acc.numConfigs :+ model.length)
           )
         }
       }
