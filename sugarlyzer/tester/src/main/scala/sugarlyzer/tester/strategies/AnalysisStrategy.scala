@@ -16,15 +16,15 @@ trait AnalysisStrategy {
       tool: AnalysisTool
   ): IO[List[Alarm]]
   def build(appConfig: AppConfig, spec: ProgramSpecification): IO[Unit]
+  def deduplicate(alarms: List[Alarm]): List[Alarm]
 }
 
-object StrategyFactory {
-  // Whenever there is a new strategy, add it here
-  def create(strategy: Strategy): AnalysisStrategy =
+object AnalysisStrategy {
+  def apply(strategy: Strategy): AnalysisStrategy =
     strategy match {
       case Strategy.PRODUCT => ProductStrategy
       case Strategy.TRANSFORMATION =>
-        throw RuntimeException("Not implemented yet")
-      case Strategy.FAMILY => throw RuntimeException("Not implemented yet")
+        throw new RuntimeException("Not implemented yet")
+      case Strategy.FAMILY => throw new RuntimeException("Not implemented yet")
     }
 }

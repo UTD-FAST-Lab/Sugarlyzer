@@ -19,7 +19,7 @@ sealed trait StrategyAlarm {
 
 case class ProductAlarm(
     finding: ToolAlarm,
-    configFile: String,
+    configFiles: List[String],
     model: List[(String, String)]
 ) extends StrategyAlarm
 
@@ -38,9 +38,8 @@ trait AnalysisTool {
   def run(spec: ProgramSpecification): IO[List[ToolAlarm]]
 }
 
-object ToolFactory {
-  // Whenever there is a new tool, add it here
-  def create(tool: Tool): AnalysisTool = tool match {
+object AnalysisTool {
+  def apply(tool: Tool): AnalysisTool = tool match {
     case Tool.INFER  => InferTool
     case Tool.CLANG  => ClangTool
     case Tool.PHASAR => PhasarTool
