@@ -51,7 +51,7 @@ object ProductStrategy extends AnalysisStrategy {
           rawFindings.map { finding =>
             ProductAlarm(
               finding = finding,
-              configFile = configFile,
+              configFiles = List[String](configFile),
               model = model
             )
           }
@@ -176,5 +176,27 @@ object ProductStrategy extends AnalysisStrategy {
         )
     }
 
+  }
+
+  def deduplicate(alarms: List[ProductAlarm]): List[ProductAlarm] = {
+    alarms
+      .groupBy(a =>
+        (
+          a.finding.fileLocation,
+          a.finding.line,
+          a.finding.alarmType,
+          a.finding.description
+        )
+      )
+      .values
+      .map { groupedAlarms =>
+        groupedAlarms.reduceLeft { (acc, curr) =>
+          acc.copy(
+            configFiles = (acc.configFiles ++ curr.configFiles).distinct,
+            model = acc.model.toSet.intersect(curr.model.toSet).toList
+          )
+        }
+      }
+      .toList
   }
 }

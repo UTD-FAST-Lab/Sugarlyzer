@@ -6,8 +6,8 @@ import sugarlyzer.common.Config
 
 import sugarlyzer.common.Config.Phase
 import sugarlyzer.models.ProgramFactory
-import sugarlyzer.tester.strategies.StrategyFactory
-import sugarlyzer.tester.tools.ToolFactory
+import sugarlyzer.tester.tools.AnalysisTool
+import sugarlyzer.tester.strategies.AnalysisStrategy
 
 object TesterApp extends IOApp {
 
@@ -18,7 +18,7 @@ object TesterApp extends IOApp {
           // Load the spec from specific program configuration file
           spec <- ProgramFactory.load(config.program)
           // Get the strategy object
-          strategy <- IO(StrategyFactory.create(config.strategy))
+          strategy <- IO(AnalysisStrategy(config.strategy))
           _ <- {
             // Run the specific phase of the program
             config.phase match {
@@ -33,13 +33,19 @@ object TesterApp extends IOApp {
                 for {
                   _ <- IO.println("[TESTER] Running analysis logic...")
                   // Get the tools object and run the analysis
-                  tool <- IO(ToolFactory.create(config.tool))
+                  tool <- IO(AnalysisTool(config.tool))
                   alarms <- strategy.analyze(
                     config,
                     spec,
                     tool
                   )
                   _ <- IO.println(s"[TESTER] Found ${alarms.length} alarms")
+
+                  deduplicated_alarms <- IO(strategy.deduplicate(alarms))
+
+                  _ <- IO.println(
+                    s"[TESTER] deduplicate alarms: ${deduplicated_alarms} (length: ${deduplicated_alarms.length})"
+                  )
                 } yield ExitCode.Success
             }
           }
