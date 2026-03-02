@@ -47,7 +47,7 @@ object DispatcherApp extends IOApp {
       "-t",
       toolTag,
       "-f",
-      s"Dockerfile.${config.tool}",
+      s"Dockerfile.${config.tool.toString().toLowerCase()}",
       "."
     )
 
@@ -105,7 +105,7 @@ object DispatcherApp extends IOApp {
             "--program",
             config.program,
             "--tool",
-            config.tool,
+            config.tool.toString(),
             "--sample_size",
             config.sampleSize.toString
           )
@@ -117,9 +117,14 @@ object DispatcherApp extends IOApp {
           override def onNext(item: Frame): Unit =
             print(new String(item.getPayload, "UTF-8"))
         }).awaitCompletion()
-      }
 
-      // STREAM LOGS (BUILDER)
+        val execResponse = dockerClient.inspectExecCmd(execCmd.getId()).exec()
+        if (execResponse.getExitCodeLong() != 0) {
+          throw new RuntimeException(
+            s"Build failed. Exit code: ${execResponse.getExitCodeLong()}"
+          )
+        }
+      }
       _ <- IO.println(s"[HOST] Phase 1 completed")
 
       // PHASE 2: RUN
@@ -148,7 +153,7 @@ object DispatcherApp extends IOApp {
             "--program",
             config.program,
             "--tool",
-            config.tool,
+            config.tool.toString().toLowerCase(),
             "--sample_size",
             config.sampleSize.toString
           )
@@ -160,7 +165,6 @@ object DispatcherApp extends IOApp {
             print(new String(item.getPayload, "UTF-8"))
         }).awaitCompletion()
       }
-
       _ <- IO.println(s"[HOST] Phase 2 completed")
     } yield ()
   }
