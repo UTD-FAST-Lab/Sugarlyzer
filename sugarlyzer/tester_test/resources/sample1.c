@@ -1,11 +1,10 @@
-#include <stdio.h>
-
-int main() {
-  #ifdef HELLO_WORLD
-  printf("Hello, World!\n");
+int main()
+{
+#ifdef HELLO_WORLD
+#if NESTED
   return 0;
-  #else
-  printf("Goodbye, World!\n");
+#endif
+#else
   return -1;
-  #endif
+#endif
 }

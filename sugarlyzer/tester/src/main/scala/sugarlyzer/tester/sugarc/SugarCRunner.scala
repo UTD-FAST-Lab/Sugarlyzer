@@ -6,9 +6,9 @@ import java.io.File
 import com.typesafe.scalalogging.Logger
 import sugarlyzer.util.CommandBuilder
 import cats.implicits.*
-import sugarlyzer.tester.tools.Alarm
 import scala.util.matching.Regex
 import com.microsoft.z3.Context
+import sugarlyzer.tester.tools.ToolAlarm
 object SugarCRunner {
 
   val logger = Logger[SugarCRunner.type]
@@ -99,7 +99,7 @@ object SugarCRunner {
   }
 
   def findPresenceCondition(
-      alarm: Alarm,
+      alarm: ToolAlarm,
       file: Path
   ): PresenceCondition = {
     // Open the file

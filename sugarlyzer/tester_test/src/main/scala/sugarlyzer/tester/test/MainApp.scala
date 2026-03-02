@@ -8,6 +8,7 @@ import sugarlyzer.util.CommandBuilder.LogFile
 import com.microsoft.z3.*
 import sugarlyzer.tester.tools.Alarm
 import sugarlyzer.tester.sugarc.PresenceConditionParser
+import sugarlyzer.tester.tools.ToolAlarm
 
 object MainApp extends IOApp.Simple {
   def run: IO[Unit] = {
@@ -22,12 +23,15 @@ object MainApp extends IOApp.Simple {
       _ <- IO.println("Checking that Z3 works")
       _ <- testZ3()
       _ <-
-        IO.println("=== INTEGRATION TEST 3: Presence Condition Extraction ===")
-      _ <- IO.println("Testing presence condition extraction for sample1")
-      _ <- testAlarmPresenceCondition()
-      _ <- IO.println("=== INTEGRATION TEST 4: Presence Condition Parser ===")
+        IO.println("=== INTEGRATION TEST 3: Presence Condition Parser ===")
       _ <-
         IO.println("Testing presence condition parser with sample expression")
+      _ <-
+        IO.println("=== INTEGRATION TEST 4: Presence Condition Extraction ===")
+      _ <- IO.println("Testing presence condition extraction for sample1")
+      _ <- IO.println("All tests completed!")
+      _ <- testAlarmPresenceCondition()
+
       _ <- testPresenceConditionParser()
     } yield ()
     io
@@ -73,16 +77,16 @@ object MainApp extends IOApp.Simple {
   }
 
   def testAlarmPresenceCondition(): IO[Unit] = {
-    val alarm = Alarm(
-      file = "/resources/sample1.desugared.c",
+    val alarm = ToolAlarm(
+      alarmType = "Sample",
+      description = "Sample alarm",
+      fileLocation = "/resources/sample1.desugared.c",
       line = 32,
-      column = 8,
-      bug_type = "Sample",
-      qualifier = "Sample"
+      analysisTime = 0.0
     )
     val model = SugarCRunner.findPresenceCondition(
       alarm,
-      os.Path("/resources/sample1.desugared.c"),
+      os.Path("/resources/sample1.desugared.c")
     )
     IO.println(s"Model: ${model}")
   }

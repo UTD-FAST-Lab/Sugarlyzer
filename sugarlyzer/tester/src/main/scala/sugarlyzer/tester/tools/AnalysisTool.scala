@@ -1,9 +1,9 @@
 package sugarlyzer.tester.tools
 
 import sugarlyzer.models.ProgramSpecification
-
 import cats.effect.{IO}
 import sugarlyzer.common.Config.Tool
+import sugarlyzer.tester.sugarc.PresenceCondition
 
 case class ToolAlarm(
     alarmType: String,
@@ -27,8 +27,7 @@ case class TransformationAlarm(
     finding: ToolAlarm,
     sanitizedDescription: String,
     lineInputFile: Int,
-    presenceCondition: String,
-    model: String,
+    presenceCondition: PresenceCondition,
     feasible: Boolean,
     desugaringTime: Double
 ) extends StrategyAlarm
