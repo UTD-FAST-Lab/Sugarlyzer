@@ -6,7 +6,6 @@ import sugarlyzer.tester.sugarc.SugarCRunner
 import sugarlyzer.util.CommandBuilder.ResultFile
 import sugarlyzer.util.CommandBuilder.LogFile
 import com.microsoft.z3.*
-import sugarlyzer.tester.tools.Alarm
 import sugarlyzer.tester.sugarc.PresenceConditionParser
 import sugarlyzer.tester.tools.ToolAlarm
 
