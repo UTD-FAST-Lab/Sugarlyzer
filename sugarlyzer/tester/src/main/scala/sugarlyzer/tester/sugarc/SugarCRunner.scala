@@ -5,7 +5,10 @@ import os.Path
 import java.io.File
 import com.typesafe.scalalogging.Logger
 import sugarlyzer.util.CommandBuilder
-
+import cats.implicits.*
+import sugarlyzer.tester.tools.Alarm
+import scala.util.matching.Regex
+import com.microsoft.z3.Context
 object SugarCRunner {
 
   val logger = Logger[SugarCRunner.type]
@@ -25,29 +28,32 @@ object SugarCRunner {
       makeMain: Boolean,
       includedFiles: Iterable[Path],
       includedDirectories: Iterable[Path],
-      commandLineDeclarations: Iterable[String]
+      commandLineDeclarations: Iterable[String],
+      restrict: Boolean = false
   ): CommandBuilder = {
     val allIncludedFiles = rsFileOpt.toSeq ++ includedFiles
 
     var cmd = CommandBuilder(
-      program = Seq(
-        "java",
-        "-Xmx32g",
-        "superc.SugarC",
-        "-showActions",
-        "-useBDD"
-      ).mkString(" ")
+      program = "java"
     ).args(
-      allIncludedFiles.map(p => s"-include ${p.toString()}").toSeq*
+      "-Djava.library.path=/opt/z3/bin",
+      "-Xmx32g",
+      "superc.SugarC",
+      "-showActions",
+      "-useBDD"
     ).args(
-      includedDirectories.map(p => s"-I ${p.toString()}").toSeq*
+      allIncludedFiles.flatMap(p => Seq("-include", p.toString())).toSeq*
+    ).args(
+      includedDirectories.flatMap(p => Seq("-I", p.toString())).toSeq*
     ).args(
       commandLineDeclarations.toSeq*
-    )
+    ).args(fileToDesugar.toString)
 
     if noStdLibs then cmd = cmd.arg("-nostdinc")
     if keepMem then cmd = cmd.arg("-keep-mem")
     if makeMain then cmd = cmd.arg("-make-main")
+    if restrict then cmd = cmd.args("-restrictConfigToPrefix", "_KGENMACRO")
+    logger.debug(s"Sugarc cmd is ${cmd.show}")
     cmd.in(File(fileToDesugar.toURI).getParentFile())
   }
 
@@ -59,9 +65,9 @@ object SugarCRunner {
       fileToDesugar: Path,
       logFile: Path,
       recommendedSpace: Option[Iterable[String]] = None,
-      noStdLibs: Boolean = false,
-      keepMem: Boolean = false,
-      makeMain: Boolean = false,
+      noStdLibs: Boolean = true,
+      keepMem: Boolean = true,
+      makeMain: Boolean = true,
       includedFiles: Iterable[Path] = Seq(),
       includedDirectories: Iterable[Path] = Seq(),
       commandLineDeclarations: Iterable[String] = Nil
@@ -92,6 +98,58 @@ object SugarCRunner {
     }
   }
 
-}
+  def findPresenceCondition(
+      alarm: Alarm,
+      file: Path
+  ): PresenceCondition = {
+    // Open the file
+    var results = List.empty[String]
+    val lines   = os.read(file).split("\n").toList
+    // Find the line with the alarm
+    val alarmLine    = alarm.line
+    var counter      = 0
+    val regex: Regex = raw"if \((__static_condition_default_\d+)\(\)\).*".r
 
-case class Alarm()
+    // Walk backwards from the alarm line
+    for {
+      i <- (alarmLine - 1) to 0 by -1
+    } do {
+      val line = lines(i)
+      counter -= line.count(_ == '{')
+      counter += line.count(_ == '}')
+      if counter < 0 then line match {
+        case regex(condition) =>
+          logger.debug(
+            s"Found presence condition for alarm at line ${alarmLine} at line " + i
+          )
+          results = condition :: results
+        case _ =>
+      }
+    }
+    // For each presence condition, parse the actual condition expression
+    val conditionRegex: Regex =
+      """__static_condition_renaming\(\"(.*)\", \"(.*)\"\);""".r
+    val ctx = new Context()
+    val exprs = for {
+      r <- results
+      l <- lines.filter(_.contains(s"__static_condition_renaming(\"$r\""))
+      expr <- l match {
+        case conditionRegex(oldName, newName) =>
+          logger.debug(
+            s"Found renamed presence condition: $oldName -> $newName"
+          )
+          Some(PresenceConditionParser.parse(ctx, newName))
+        case _ =>
+          logger.debug("Couldn't match regular expression")
+          None
+      }
+    } yield expr
+
+    val combined = exprs match {
+      case Nil      => ctx.mkTrue()
+      case e :: Nil => e
+      case _        => ctx.mkAnd(exprs*)
+    }
+    PresenceCondition(ctx, combined)
+  }
+}
