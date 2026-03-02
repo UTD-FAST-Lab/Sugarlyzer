@@ -20,7 +20,8 @@ sealed trait StrategyAlarm {
 case class ProductAlarm(
     finding: ToolAlarm,
     configFiles: List[String],
-    model: List[(String, String)]
+    model: List[(String, String)],
+    numConfigs: List[Int]
 ) extends StrategyAlarm
 
 case class TransformationAlarm(
