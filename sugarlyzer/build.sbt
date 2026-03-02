@@ -97,6 +97,7 @@ lazy val tester = project
     name                   := "tester",
     Compile / mainClass    := Some("sugarlyzer.tester.TesterApp"),
     Compile / doc / target := file("tester/docs"),
+    Compile / unmanagedJars += file("/opt/z3/bin/com.microsoft.z3.jar"),
     // Make main resources available to tests
     Test / unmanagedResourceDirectories += (Compile / resourceDirectory).value,
     assembly / assemblyOutputPath := file("tester.jar")
@@ -111,6 +112,7 @@ lazy val testerTest = project
     name                   := "tester_test",
     Compile / mainClass    := Some("sugarlyzer.tester.test.MainApp"),
     Compile / doc / target := file("tester_test/docs"),
+    Compile / unmanagedJars += file("/opt/z3/bin/com.microsoft.z3.jar"),
     // Make main resources available to tests
     Test / unmanagedResourceDirectories += (Compile / resourceDirectory).value,
     assembly / assemblyOutputPath := file("tester_test.jar")
