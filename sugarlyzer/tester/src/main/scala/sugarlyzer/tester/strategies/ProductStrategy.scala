@@ -6,24 +6,61 @@ import sugarlyzer.models.*
 import sugarlyzer.common.Config.AppConfig
 import cats.effect.syntax.all._
 import os._
-import sugarlyzer.tester.tools.Alarm
-import scala.util.Using
+import sugarlyzer.tester.tools.ProductAlarm
 import sugarlyzer.common.Config
+import cats.effect.kernel.Resource
+import sugarlyzer.common.Config.Tool
+import scala.util.Using
+import scala.io.Source
+import io.circe.generic.auto.*
+import io.circe.syntax.*
 
 object ProductStrategy extends AnalysisStrategy {
+  type Alarm = ProductAlarm
 
   def analyze(
       appConfig: AppConfig,
       spec: ProgramSpecification,
       tool: AnalysisTool
-  ): IO[List[Alarm]] = {
+  ): IO[List[ProductAlarm]] = {
     println(s"Running analysis for ${spec.name}")
 
     (0 until appConfig.sampleSize).toList.parTraverseN(appConfig.jobs) { i =>
-      val iterDir = os.Path(appConfig.sharedPath) / s"$i" / spec.rootDir
+      val iterDir    = os.Path(appConfig.sharedPath) / s"$i" / spec.rootDir
+      val configFile = s"$i.config"
       for {
-        _      <- IO.println(s"Running analysis for sample $i")
-        alarms <- tool.run(spec.copy(rootDir = iterDir.toString))
+        _           <- IO.println(s"Running analysis for sample $i")
+        rawFindings <- tool.run(spec.copy(rootDir = iterDir.toString))
+        model <- IO.blocking {
+          val configResourcePath = s"programs/${spec.name}/configs/$configFile"
+          Using.resource(Source.fromResource(configResourcePath)) { source =>
+            source.getLines()
+              .map(_.trim)
+              .filter(_.nonEmpty)
+              .map { line =>
+                if (line.startsWith("#")) {
+                  val key = line.substring(1).trim.split(" ").head
+                  (key, "false")
+                } else {
+                  val toks = line.split("=", 2)
+                  (toks(0).trim, toks(1).trim)
+                }
+              }.toList
+          }
+        }
+        alarms <- IO.blocking {
+          rawFindings.map { finding =>
+            ProductAlarm(
+              finding = finding.copy(fileLocation =
+                finding.fileLocation.replaceAll(s"/workspace/$i/", "")
+              ),
+              configFiles = List[String](configFile),
+              model = model,
+              numConfigs = List[Int](model.length)
+            )
+          }
+        }
+
       } yield (alarms)
     }.map(_.flatten)
   }
@@ -49,6 +86,7 @@ object ProductStrategy extends AnalysisStrategy {
         _ <- setupWorkspace(iterDir, masterSource, finalDest)
         _ <- injectConfig(i, spec, iterDir)
         _ <- runBuild(i, spec, iterDir, appConfig)
+        _ <- IO.println(s"Finished preparing sample $i.")
       } yield ()
     }.void
   }
@@ -67,24 +105,17 @@ object ProductStrategy extends AnalysisStrategy {
       i: Int,
       spec: ProgramSpecification,
       iterDir: os.Path
-  ): IO[Unit] = IO.blocking {
+  ): IO[Unit] = {
     val destConfigFile = iterDir / os.RelPath(spec.configFileLocation)
-
-    if (!os.exists(destConfigFile / os.up)) {
-      throw new RuntimeException(
-        s"Parent directory for config does not exist: ${destConfigFile / os.up}"
-      )
-    }
-
     val configResource = s"programs/${spec.name}/configs/$i.config"
-    val stream = getClass.getClassLoader.getResourceAsStream(configResource)
 
-    if (stream == null) {
-      throw new RuntimeException(s"Missing resource config: $configResource")
-    }
-
-    Using.resource(stream) { s =>
-      os.write.over(destConfigFile, s)
+    Resource.fromAutoCloseable(
+      IO(getClass.getClassLoader.getResourceAsStream(configResource))
+    ).use { stream =>
+      IO.raiseWhen(stream == null)(
+        new RuntimeException(s"Missing resource: $configResource")
+      ) *>
+        IO.blocking(os.write.over(destConfigFile, stream))
     }
   }
 
@@ -119,7 +150,7 @@ object ProductStrategy extends AnalysisStrategy {
     }
 
     // If the tool we are using is phasar we need to use wllvm
-    if (config.tool == "phasar") {
+    if (config.tool == Tool.PHASAR) {
       val proc = os.proc("make", "CC=wllvm")
         .call(
           cwd = workingDir,
@@ -131,7 +162,7 @@ object ProductStrategy extends AnalysisStrategy {
           )
         )
       if (proc.exitCode != 0)
-        throw new RuntimeException(s"WLLVM Build failed: ${proc.err.text()}")
+        println(s"WLLVM Build failed: ${proc.err.text()}")
     } else {
       val proc = os.proc("bear", "make")
         .call(
@@ -150,5 +181,36 @@ object ProductStrategy extends AnalysisStrategy {
         )
     }
 
+  }
+
+  def deduplicate(alarms: List[ProductAlarm]): List[ProductAlarm] = {
+    alarms
+      .groupBy(a =>
+        (
+          a.finding.fileLocation,
+          a.finding.line,
+          a.finding.alarmType,
+          a.finding.description
+        )
+      )
+      .values
+      .map { groupedAlarms =>
+        groupedAlarms.reduceLeft { (acc, curr) =>
+          val model = acc.model.toSet.intersect(curr.model.toSet).toList
+          acc.copy(
+            configFiles = (acc.configFiles ++ curr.configFiles).distinct,
+            model = model,
+            numConfigs = (acc.numConfigs :+ model.length)
+          )
+        }
+      }
+      .toList
+  }
+
+  def exportAlarms(alarms: List[Alarm]): IO[Unit] = IO.blocking {
+    val destPath = os.Path("/results")
+    if (!os.exists(destPath)) os.makeDir.all(destPath)
+    val targetFile = destPath / "results.json"
+    os.write.over(targetFile, alarms.asJson.spaces2, createFolders = true)
   }
 }
