@@ -9,12 +9,13 @@ class SugarCRunnerTest extends FunSuite {
 
   // ============================================================
   // Base Command Tests
-  // ============================================================
+  // =====================================================
 
   test(
     "buildDesugarCommand: includes java with correct memory and SugarC args"
   ) {
-    val fileToDesugar = os.Path("/tmp/test/file.c")
+    val fileToDesugar =
+      os.Path(getClass().getClassLoader().getResource("sample1.c").toString())
     val cmd = SugarCRunner.buildDesugarCommand(
       fileToDesugar = fileToDesugar,
       rsFileOpt = None,

@@ -13,16 +13,17 @@ import com.dd.plist.NSArray
 object ClangTool extends AnalysisTool {
   def name(): String = { "Clang" }
 
-  def run(spec: ProgramSpecification): IO[List[Alarm]] = {
+  def run(spec: ProgramSpecification): IO[List[ToolAlarm]] = {
     for {
-      _      <- IO.println(s"Running spec ${spec}")
+      _      <- IO.println(s"[TOOL] Running spec ${spec}")
       alarms <- analyzeFiles(spec)
+      _      <- IO.println(s"[TOOL] Got ${alarms.length} alarms")
     } yield (alarms)
   }
 
   def analyzeFiles(
       spec: ProgramSpecification
-  ): IO[List[Alarm]] = {
+  ): IO[List[ToolAlarm]] = {
     val rootDir             = os.Path(spec.rootDir)
     val compileCommandsPath = rootDir / "compile_commands.json"
 
@@ -42,7 +43,7 @@ object ClangTool extends AnalysisTool {
         case (cmd, i) =>
           IO.blocking {
             val uniqueResultsDir =
-              os.Path(spec.rootDir) / "clang_results" / s"out-$i"
+              rootDir / "clang_results" / s"out-$i"
             os.remove.all(uniqueResultsDir)
             os.makeDir.all(uniqueResultsDir)
 
@@ -54,7 +55,9 @@ object ClangTool extends AnalysisTool {
                   filterFlags(tail)
                 case "-o" :: _ :: tail =>
                   filterFlags(tail)
-                case head :: tail if head == "" =>
+                case "" :: tail =>
+                  filterFlags(tail)
+                case "-fno-guess-branch-probability" :: tail =>
                   filterFlags(tail)
                 case head :: tail =>
                   head :: filterFlags(tail)
@@ -62,13 +65,6 @@ object ClangTool extends AnalysisTool {
                   Nil
               }
             }
-            val suppressionFlags =
-              "-Wno-ignored-optimization-argument"
-
-            val env = Map(
-              "CFLAGS"   -> s"$suppressionFlags",
-              "CXXFLAGS" -> s"$suppressionFlags"
-            )
 
             val cleanCmdArgs = filterFlags(cmd.arguments)
 
@@ -84,54 +80,63 @@ object ClangTool extends AnalysisTool {
               cwd = os.Path(cmd.directory),
               stdout = os.Inherit,
               mergeErrIntoOut = true,
-              check = false,
-              env = env
+              check = false
             )
 
             if (proc.exitCode != 0)
-              println(s"Clang command failed: ${proc.out.text()}")
+              println(
+                s"Clang command failed: ${proc.out.text()}, commang: ${cmd}"
+              )
             reportXMLLocation
           }
             .flatMap { path =>
-              parseOutput(path)
+              parseOutput(spec, path)
             }
       }
     } yield alarms.flatten
   }
 
-  def parseOutput(resultPath: os.Path): IO[List[Alarm]] = IO.blocking {
-    val file = resultPath.toIO
+  def parseOutput(
+      spec: ProgramSpecification,
+      resultPath: os.Path
+  ): IO[List[ToolAlarm]] = IO.blocking {
+    if (!os.exists(resultPath)) {
+      List.empty[ToolAlarm]
+    } else {
+      val file = resultPath.toIO
 
-    val rootDict = PropertyListParser.parse(file).asInstanceOf[NSDictionary]
+      val rootDict = PropertyListParser.parse(file).asInstanceOf[NSDictionary]
 
-    val filesArray = rootDict.objectForKey("files").asInstanceOf[NSArray]
-    val fileNames  = filesArray.getArray.map(_.toString)
+      val filesArray = rootDict.objectForKey("files").asInstanceOf[NSArray]
+      val fileNames  = filesArray.getArray.map(_.toString)
 
-    val diagnostics = rootDict.objectForKey("diagnostics").asInstanceOf[NSArray]
+      val diagnostics =
+        rootDict.objectForKey("diagnostics").asInstanceOf[NSArray]
 
-    (0 until diagnostics.count()).map { i =>
-      val bugDict = diagnostics.objectAtIndex(i).asInstanceOf[NSDictionary]
+      (0 until diagnostics.count()).map { i =>
+        val bugDict = diagnostics.objectAtIndex(i).asInstanceOf[NSDictionary]
 
-      val bugType = bugDict.objectForKey("check_name").toString
+        val bugType = bugDict.objectForKey("check_name").toString
 
-      val description = bugDict.objectForKey("description").toString
+        val description = bugDict.objectForKey("description").toString
 
-      val locDict = bugDict.objectForKey("location").asInstanceOf[NSDictionary]
-      val line    = locDict.objectForKey("line").toString.toInt
-      val col     = locDict.objectForKey("col").toString.toInt
-      val fileIdx = locDict.objectForKey("file").toString.toInt
+        val locDict =
+          bugDict.objectForKey("location").asInstanceOf[NSDictionary]
+        // val col     = locDict.objectForKey("col").toString.toInt
+        val line    = locDict.objectForKey("line").toString.toInt
+        val fileIdx = locDict.objectForKey("file").toString.toInt
 
-      val fileName =
-        if (fileIdx < fileNames.length) fileNames(fileIdx) else "Unknown"
+        val fileName =
+          if (fileIdx < fileNames.length) fileNames(fileIdx) else "Unknown"
 
-      Alarm(
-        bug_type = bugType,
-        qualifier = description,
-        line = line,
-        column = col,
-        file = fileName
-      )
-    }.toList
+        ToolAlarm(
+          alarmType = bugType,
+          description = description,
+          line = line,
+          fileLocation = spec.rootDir + "/" + fileName,
+          analysisTime = 0.0
+        )
+      }.toList
+    }
   }
-
 }
