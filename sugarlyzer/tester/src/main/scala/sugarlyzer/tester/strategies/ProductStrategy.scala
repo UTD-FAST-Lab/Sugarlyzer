@@ -51,7 +51,9 @@ object ProductStrategy extends AnalysisStrategy {
         alarms <- IO.blocking {
           rawFindings.map { finding =>
             ProductAlarm(
-              finding = finding,
+              finding = finding.copy(fileLocation =
+                finding.fileLocation.replaceAll(s"/workspace/$i/", "")
+              ),
               configFiles = List[String](configFile),
               model = model,
               numConfigs = List[Int](model.length)
