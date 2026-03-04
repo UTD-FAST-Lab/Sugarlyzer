@@ -1,6 +1,7 @@
 package sugarlyzer.common
 
 import scopt.OParser
+import java.nio.file.Paths
 
 object Config {
   enum Phase {
@@ -27,6 +28,8 @@ object Config {
       phase: Phase = Phase.BUILD,
       sharedPath: String = "/workspace",
       sampleSize: Int = 100,
+      resultsDir: String =
+        Paths.get(".").toAbsolutePath().normalize().toString() + "/results/",
       jobs: Int = Runtime.getRuntime().availableProcessors(),
       verbose: Boolean = false
   )
@@ -48,6 +51,13 @@ object Config {
       opt[String]("phase")
         .action((x, c) => c.copy(phase = Phase.valueOf(x.toUpperCase)))
         .hidden(),
+      opt[String]("results_dir")
+        .action((x, c) =>
+          c.copy(resultsDir =
+            (Paths.get(".").toAbsolutePath().normalize().toString() + "/" + x)
+          )
+        )
+        .text("Directoy to store results (e.g., /results/)"),
       opt[Int]("sample_size")
         .action((x, c) => c.copy(sampleSize = x)),
       opt[String]('s', "strategy")

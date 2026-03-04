@@ -74,8 +74,10 @@ object DispatcherApp extends IOApp {
       config: Config.AppConfig
   ): IO[Unit] = {
     val volumeName = s"sugarlyzer-${config.program}-${config.tool}"
-    val volumeBind =
+    val workspaceVolumeBind =
       new Bind(volumeName, new Volume("/workspace"), AccessMode.rw)
+    val resultsVolumeBind =
+      new Bind(config.resultsDir, new Volume("/results"), AccessMode.rw)
 
     for {
       _ <- IO.println("[HOST] Ensuring shared volume exists...")
@@ -86,7 +88,10 @@ object DispatcherApp extends IOApp {
       _ <- IO.println(s"[HOST] Starting Phase 1: Build")
       builderId <- IO.blocking {
         val container = dockerClient.createContainerCmd("sugarlyzer-program")
-          .withHostConfig(new HostConfig().withBinds(volumeBind))
+          .withHostConfig(new HostConfig().withBinds(
+            workspaceVolumeBind,
+            resultsVolumeBind
+          ))
           .withCmd("sleep", "infinity")
           .exec()
         dockerClient.startContainerCmd(container.getId()).exec()
@@ -133,7 +138,10 @@ object DispatcherApp extends IOApp {
         val container = dockerClient.createContainerCmd(
           s"sugarlyzer/${config.tool.toString().toLowerCase()}"
         )
-          .withHostConfig(new HostConfig().withBinds(volumeBind))
+          .withHostConfig(new HostConfig().withBinds(
+            workspaceVolumeBind,
+            resultsVolumeBind
+          ))
           .withCmd("sleep", "infinity")
           .exec()
         dockerClient.startContainerCmd(container.getId()).exec()

@@ -12,6 +12,8 @@ import cats.effect.kernel.Resource
 import sugarlyzer.common.Config.Tool
 import scala.util.Using
 import scala.io.Source
+import io.circe.generic.auto.*
+import io.circe.syntax.*
 
 object ProductStrategy extends AnalysisStrategy {
   type Alarm = ProductAlarm
@@ -201,5 +203,12 @@ object ProductStrategy extends AnalysisStrategy {
         }
       }
       .toList
+  }
+
+  def exportAlarms(alarms: List[Alarm]): IO[Unit] = IO.blocking {
+    val destPath = os.Path("/results")
+    if (!os.exists(destPath)) os.makeDir.all(destPath)
+    val targetFile = destPath / "results.json"
+    os.write.over(targetFile, alarms.asJson.spaces2, createFolders = true)
   }
 }
