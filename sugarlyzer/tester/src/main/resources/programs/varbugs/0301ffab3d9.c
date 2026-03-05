@@ -1,3 +1,4 @@
+#include <stdio.h>
 
 void ext2fs_open2(void)
 {
