@@ -1,6 +1,5 @@
 #include <unistd.h>
 #include <stdio.h>
-#include <malloc.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <sys/mman.h>
@@ -18,7 +17,7 @@ void allocate_buffer() {
   if (pagesize == -1)
     handle_error("sysconf");
 
-  buffer = memalign(pagesize, 4*pagesize);
+  buffer = aligned_alloc(pagesize, 4*pagesize);
   if (buffer == NULL)
     handle_error("memalign");
 

@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #ifndef MARLIN_H
 const char echomagic[] ="echo:";
 #define SERIAL_ECHO_START (serialprint(echomagic))

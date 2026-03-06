@@ -1,9 +1,11 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #ifdef ULTRA_LCD
 //  convert float to string with +1234.5 format
 char *ftostr51(float x)
 {
+  char* conv = &conv[7];
   int16_t xx=x*10;
   conv[0]=(xx>=0)?'+':'-';
   xx=abs(xx);

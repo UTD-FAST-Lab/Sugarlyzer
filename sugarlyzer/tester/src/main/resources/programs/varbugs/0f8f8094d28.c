@@ -5,13 +5,13 @@
 #endif
 
 #if defined(CONFIG_PPC_256K_PAGES)
-#define PAGE_SHIFT18
+#define PAGE_SHIFT 18
 #elif defined(CONFIG_PPC_64K_PAGES)
-#define PAGE_SHIFT16
+#define PAGE_SHIFT 16
 #elif defined(CONFIG_PPC_16K_PAGES)
-#define PAGE_SHIFT14
+#define PAGE_SHIFT 14
 #else
-#define PAGE_SHIFT12
+#define PAGE_SHIFT 12
 #endif
 
 #ifdef CONFIG_SLAB

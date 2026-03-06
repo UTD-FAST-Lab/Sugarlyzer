@@ -18,6 +18,6 @@ void thermal_runaway_protection(int *state, unsigned long *timer, float temperat
 #endif
 
 int main(void){
-  thermal_runaway_protection(0, 123456783, 145.0f, 200.0f, 1, 10, 1);
+  thermal_runaway_protection(0, (long*)123456783, 145.0f, 200.0f, 1, 10, 1);
   return 0;
 }
