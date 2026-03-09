@@ -26,10 +26,10 @@ object SugarCRunner {
       noStdLibs: Boolean,
       keepMem: Boolean,
       makeMain: Boolean,
+      restrict: Boolean = false,
       includedFiles: Iterable[Path],
       includedDirectories: Iterable[Path],
-      commandLineDeclarations: Iterable[String],
-      restrict: Boolean = false
+      commandLineDeclarations: Iterable[String]
   ): CommandBuilder = {
     val allIncludedFiles = rsFileOpt.toSeq ++ includedFiles
 
@@ -69,6 +69,7 @@ object SugarCRunner {
       noStdLibs: Boolean = true,
       keepMem: Boolean = true,
       makeMain: Boolean = true,
+      restrict: Boolean = false,
       includedFiles: Iterable[Path] = Seq(),
       includedDirectories: Iterable[Path] = Seq(),
       commandLineDeclarations: Iterable[String] = Nil
@@ -91,6 +92,7 @@ object SugarCRunner {
         noStdLibs,
         keepMem,
         makeMain,
+        restrict,
         includedFiles,
         includedDirectories,
         commandLineDeclarations
