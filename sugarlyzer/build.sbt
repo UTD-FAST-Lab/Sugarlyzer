@@ -39,6 +39,15 @@ lazy val commonSettings = Seq(
   libraryDependencies += "org.scalamock" %% "scalamock" % "7.5.0" % Test
 )
 
+lazy val testerOnlySettings = Seq(
+  libraryDependencies ++= Seq(
+    "com.github.mhoffrog.attached" % "org.eclipse.cdt.core"       % "5.11.0",
+    "org.eclipse.platform"         % "org.eclipse.equinox.common" % "3.18.0",
+    "org.eclipse.platform"         % "org.eclipse.core.runtime"   % "3.29.0",
+    "org.eclipse.platform"         % "org.eclipse.core.resources" % "3.23.200"
+  )
+)
+
 lazy val root = project
   .in(file("."))
   .aggregate(common, dispatcher, tester)
@@ -94,6 +103,7 @@ lazy val tester = project
   .settings(
     commonSettings,
     assemblySettings,
+    testerOnlySettings,
     name                   := "tester",
     Compile / mainClass    := Some("sugarlyzer.tester.TesterApp"),
     Compile / doc / target := file("tester/docs"),
@@ -109,6 +119,7 @@ lazy val testerTest = project
   .settings(
     commonSettings,
     assemblySettings,
+    testerOnlySettings,
     name                   := "tester_test",
     Compile / mainClass    := Some("sugarlyzer.tester.test.MainApp"),
     Compile / doc / target := file("tester_test/docs"),
