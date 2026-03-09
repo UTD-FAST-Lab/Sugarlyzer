@@ -17,16 +17,29 @@ import sugarlyzer.tester.sugarc.SugarCRunner.desugarFile
 object TransformationStrategy extends AnalysisStrategy {
   type Alarm = TransformationAlarm
 
-  // TODO: Implement this
   def analyze(
       appConfig: AppConfig,
       spec: ProgramSpecification,
       tool: AnalysisTool
   ): IO[List[TransformationAlarm]] = {
-    IO.blocking {
-      val alarms = List.empty[TransformationAlarm]
-      alarms
-    }
+    println(s"Running analysis for ${spec.name}")
+    val workingDir = os.Path(appConfig.sharedPath) / os.RelPath(spec.rootDir)
+    for {
+      rawFindings <- tool.run(spec.copy(rootDir = workingDir.toString))
+      alarms <- IO.blocking {
+        rawFindings.map { finding =>
+          TransformationAlarm(
+            finding = finding,
+            sanitizedDescription = "",
+            lineInputFile = 0,
+            presenceCondition = "",
+            model = "",
+            feasible = false,
+            desugaringTime = 0.0
+          )
+        }
+      }
+    } yield (alarms)
   }
 
   def build(appConfig: AppConfig, spec: ProgramSpecification): IO[Unit] = {
@@ -42,7 +55,8 @@ object TransformationStrategy extends AnalysisStrategy {
           logFile = logFilePath,
           includedFiles = ctx.incFiles ++ List(
             os.root / "SugarlyzerConfig" / "baseInc.h",
-            os.root / "SugarlyzerConfig" / s"${spec.name}Inc.h"
+            os.root / "SugarlyzerConfig" / s"${spec.name}Inc.h",
+            os.root / "SugarlyzerConfig" / s"${spec.name}Config.h"
           ),
           includedDirectories = ctx.incDirs ++ List(
             os.root / "SugarlyzerConfig",
@@ -50,8 +64,22 @@ object TransformationStrategy extends AnalysisStrategy {
             os.root / "SugarlyzerConfig" / "stdinc" / "usr" / "include" / "x86_64-linux-gnu",
             os.root / "SugarlyzerConfig" / "stdinc" / "usr" / "lib" / "gcc" / "x86_64-linux-gnu" / "9" / "include"
           ),
-          commandLineDeclarations = ctx.cmdLineDefs
+          commandLineDeclarations = ctx.cmdLineDefs,
+          restrict = spec.name.toLowerCase() == "busybox"
         )
+      }
+      _ <- IO.blocking {
+        val updatedCmds = compileCmds.map { cmd =>
+          val desugaredFile =
+            cmd.file.replaceFirst("\\.[a-zA-Z0-9]+$", ".desugared.c")
+          val updatedArgs =
+            cmd.arguments.map(_.replace(cmd.file, desugaredFile))
+          cmd.copy(file = desugaredFile, arguments = updatedArgs)
+        }
+        val workingDir =
+          os.Path(appConfig.sharedPath) / os.RelPath(spec.rootDir)
+        val jsonPath = workingDir / "compile_commands.json"
+        os.write.over(jsonPath, updatedCmds.asJson.spaces2)
       }
     } yield ()
   }

@@ -3,6 +3,7 @@ package sugarlyzer.tester.parsing
 import cats.effect.{IO}
 
 import io.circe.Decoder
+import io.circe.Encoder
 import io.circe.jawn.decodeFile
 import os._
 import scala.annotation.tailrec
@@ -12,7 +13,7 @@ case class CompileCommand(
     file: String,
     output: Option[String],
     arguments: List[String]
-) derives Decoder
+) derives Decoder, Encoder
 
 case class CommandContext(
     file: os.Path,
