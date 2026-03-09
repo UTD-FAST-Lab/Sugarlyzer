@@ -2,11 +2,11 @@ package sugarlyzer.tester.strategies
 
 import os._
 import cats.effect.IO
-import cats.syntax.all._
-import sugarlyzer.tester.tools.TransformationAlarm
+import cats.effect.syntax.all._
 import sugarlyzer.tester.tools.AnalysisTool
-import sugarlyzer.models.ProgramSpecification
+import sugarlyzer.tester.tools.TransformationAlarm
 import sugarlyzer.common.Config.AppConfig
+import sugarlyzer.models.*
 import io.circe.generic.auto.*
 import io.circe.syntax.*
 import sugarlyzer.models.Configurator
@@ -35,19 +35,20 @@ object TransformationStrategy extends AnalysisStrategy {
       _           <- Configurator.stageAndBuild(appConfig, spec)
       compileCmds <- getCompileCommands(appConfig, spec)
       contexts = compileCmds.map(CompileCommands.extractContext)
-      _ <- contexts.traverse { ctx =>
+      _ <- contexts.parTraverseN(appConfig.jobs) { ctx =>
         val logFilePath = ctx.file / os.up / s"${ctx.file.last}.log"
         desugarFile(
           fileToDesugar = ctx.file,
           logFile = logFilePath,
           includedFiles = ctx.incFiles ++ List(
-            "/SugarlyzerConfig/baseInc.h"
+            os.root / "SugarlyzerConfig" / "baseInc.h",
+            os.root / "SugarlyzerConfig" / s"${spec.name}Inc.h"
           ),
           includedDirectories = ctx.incDirs ++ List(
-            "/SugarlyzerConfig",
-            "/SugarlyzerConfig/stdinc/usr/include",
-            "/SugarlyzerConfig/stdinc/usr/include/x86_64-linux-gnu",
-            "/SugarlyzerConfig/stdinc/usr/lib/gcc/x86_64-linux-gnu/9/include"
+            os.root / "SugarlyzerConfig",
+            os.root / "SugarlyzerConfig" / "stdinc" / "usr" / "include",
+            os.root / "SugarlyzerConfig" / "stdinc" / "usr" / "include" / "x86_64-linux-gnu",
+            os.root / "SugarlyzerConfig" / "stdinc" / "usr" / "lib" / "gcc" / "x86_64-linux-gnu" / "9" / "include"
           ),
           commandLineDeclarations = ctx.cmdLineDefs
         )
