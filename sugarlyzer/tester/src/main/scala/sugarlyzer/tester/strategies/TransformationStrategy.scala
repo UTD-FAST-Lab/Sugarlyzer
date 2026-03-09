@@ -2,6 +2,7 @@ package sugarlyzer.tester.strategies
 
 import os._
 import cats.effect.IO
+import cats.syntax.all._
 import sugarlyzer.tester.tools.TransformationAlarm
 import sugarlyzer.tester.tools.AnalysisTool
 import sugarlyzer.models.ProgramSpecification
@@ -11,6 +12,7 @@ import io.circe.syntax.*
 import sugarlyzer.models.Configurator
 import sugarlyzer.tester.parsing.CompileCommand
 import sugarlyzer.tester.parsing.CompileCommands
+import sugarlyzer.tester.sugarc.SugarCRunner.desugarFile
 
 object TransformationStrategy extends AnalysisStrategy {
   type Alarm = TransformationAlarm
@@ -27,16 +29,29 @@ object TransformationStrategy extends AnalysisStrategy {
     }
   }
 
-  // TODO: Implement this
   def build(appConfig: AppConfig, spec: ProgramSpecification): IO[Unit] = {
-    // Setup workspace
-    // Install program
-    // Build program
     for {
       _           <- IO.println("Preparing to build...")
       _           <- Configurator.stageAndBuild(appConfig, spec)
       compileCmds <- getCompileCommands(appConfig, spec)
-      _           <- IO.println(s"compile commands: ${compileCmds}")
+      contexts = compileCmds.map(CompileCommands.extractContext)
+      _ <- contexts.traverse { ctx =>
+        val logFilePath = ctx.file / os.up / s"${ctx.file.last}.log"
+        desugarFile(
+          fileToDesugar = ctx.file,
+          logFile = logFilePath,
+          includedFiles = ctx.incFiles ++ List(
+            "/SugarlyzerConfig/baseInc.h"
+          ),
+          includedDirectories = ctx.incDirs ++ List(
+            "/SugarlyzerConfig",
+            "/SugarlyzerConfig/stdinc/usr/include",
+            "/SugarlyzerConfig/stdinc/usr/include/x86_64-linux-gnu",
+            "/SugarlyzerConfig/stdinc/usr/lib/gcc/x86_64-linux-gnu/9/include"
+          ),
+          commandLineDeclarations = ctx.cmdLineDefs
+        )
+      }
     } yield ()
   }
 
@@ -55,7 +70,7 @@ object TransformationStrategy extends AnalysisStrategy {
           stderr = os.Inherit
         ): Unit
 
-      os.proc("make", "allyesconfig")
+      os.proc("make", "oldconfig")
         .call(
           cwd = workingDir,
           check = false,

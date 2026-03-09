@@ -18,7 +18,7 @@ RUN apt-get install -y \
 	libssl-dev zlib1g-dev libpam0g-dev libtirpc-dev \
 	openjdk-17-jdk pkg-config libtinfo5 libboost-all-dev \
 	libsqlite3-dev electric-fence python3 python3-pip \
-	libsepol-dev libdmalloc-dev sat4j\
+	libsepol-dev libdmalloc-dev sat4j libz3-java\
 	&& rm -rf /var/lib/apt/lists/*
 
 RUN git clone https://github.com/smack-team/smack.git /tmp/libsmack && \
@@ -44,10 +44,10 @@ ENV PATH="${LLVM_INSTALL_DIR}/bin:${PATH}"
 
 # Get Z3
 ARG Z3_INSTALL_DIR=/opt/z3/
-ADD https://github.com/Z3Prover/z3/releases/download/z3-4.15.8/z3-4.15.8-arm64-glibc-2.38.zip ${Z3_INSTALL_DIR}
+ADD https://github.com/Z3Prover/z3/releases/download/z3-4.15.8/z3-4.15.8-x64-glibc-2.39.zip ${Z3_INSTALL_DIR}
 WORKDIR /opt/z3
-RUN unzip z3-4.15.8-arm64-glibc-2.38.zip
-RUN mv z3-4.15.8-arm64-glibc-2.38/* .
+RUN unzip z3-4.15.8-x64-glibc-2.39.zip
+RUN mv z3-4.15.8-x64-glibc-2.39/* .
 
 # Get sugarc
 WORKDIR /

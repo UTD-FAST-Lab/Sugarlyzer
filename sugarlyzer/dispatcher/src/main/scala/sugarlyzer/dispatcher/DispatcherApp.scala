@@ -103,6 +103,7 @@ object DispatcherApp extends IOApp {
           .withAttachStderr(true)
           .withCmd(
             "java",
+            "-Djava.library.path=/opt/z3/bin",
             "-jar",
             "tester.jar",
             "--phase",
@@ -156,6 +157,7 @@ object DispatcherApp extends IOApp {
           .withAttachStderr(true)
           .withCmd(
             "java",
+            "-Djava.library.path=/opt/z3/bin",
             "-jar",
             "tester.jar",
             "--phase",
