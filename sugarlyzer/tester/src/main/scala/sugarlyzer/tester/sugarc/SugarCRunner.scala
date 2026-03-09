@@ -8,7 +8,7 @@ import sugarlyzer.util.CommandBuilder
 import cats.implicits.*
 import scala.util.matching.Regex
 import com.microsoft.z3.Context
-import sugarlyzer.tester.tools.TransformationAlarm
+import sugarlyzer.tester.tools.ToolAlarm
 object SugarCRunner {
 
   val logger = Logger[SugarCRunner.type]
@@ -99,14 +99,14 @@ object SugarCRunner {
   }
 
   def findPresenceCondition(
-      alarm: TransformationAlarm,
+      alarm: ToolAlarm,
       file: Path
   ): PresenceCondition = {
     // Open the file
     var results = List.empty[String]
     val lines   = os.read(file).split("\n").toList
     // Find the line with the alarm
-    val alarmLine    = alarm.finding.line
+    val alarmLine    = alarm.line
     var counter      = 0
     val regex: Regex = raw"if \((__static_condition_default_\d+)\(\)\).*".r
 
