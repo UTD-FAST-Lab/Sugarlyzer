@@ -54,6 +54,14 @@ object CompileCommands {
       case "-include" :: file :: tail =>
         parseArgs(tail, incDirs, os.Path(file, baseDir) :: incFiles, defines)
 
+      case (flag @ ("-D" | "-U")) :: macroDef :: tail =>
+        parseArgs(tail, incDirs, incFiles, macroDef :: flag :: defines)
+
+      case arg :: tail if arg.startsWith("-D") || arg.startsWith("-U") =>
+        val flag     = arg.substring(0, 2)
+        val macroDef = arg.substring(2)
+        parseArgs(tail, incDirs, incFiles, macroDef :: flag :: defines)
+
       case arg :: tail if arg.startsWith("-I") =>
         parseArgs(
           tail,
@@ -61,16 +69,11 @@ object CompileCommands {
           incFiles,
           defines
         )
-
-      case arg :: tail if arg.startsWith("-D") || arg.startsWith("-U") =>
-        parseArgs(tail, incDirs, incFiles, arg :: defines)
-
       case _ :: tail =>
         parseArgs(tail, incDirs, incFiles, defines)
     }
 
     val (dirs, files, defs) = parseArgs(cmd.arguments)
-
     CommandContext(
       file = sourceFile,
       incDirs = dirs,
