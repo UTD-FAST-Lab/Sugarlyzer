@@ -6,13 +6,13 @@ import sugarlyzer.tester.sugarc.SugarCRunner
 import sugarlyzer.util.CommandBuilder.ResultFile
 import sugarlyzer.util.CommandBuilder.LogFile
 import com.microsoft.z3.*
-import sugarlyzer.tester.tools.Alarm
 import sugarlyzer.tester.sugarc.PresenceConditionParser
+import sugarlyzer.tester.tools.ToolAlarm
 
 object MainApp extends IOApp.Simple {
   def run: IO[Unit] = {
     val sample1 = "/resources/sample1.c"
-    val io = for {
+    for {
       _ <- IO.println("Starting tester integration tests...")
       _ <- IO.println("=== INTEGRATION TEST 1: SugarC Integration ===")
       _ <- IO.println(s"Testing on ${sample1}")
@@ -30,7 +30,6 @@ object MainApp extends IOApp.Simple {
         IO.println("Testing presence condition parser with sample expression")
       _ <- testPresenceConditionParser()
     } yield ()
-    io
   }
 
   def analyzeFile(file: String): IO[(ResultFile, LogFile)] =
@@ -73,16 +72,16 @@ object MainApp extends IOApp.Simple {
   }
 
   def testAlarmPresenceCondition(): IO[Unit] = {
-    val alarm = Alarm(
-      file = "/resources/sample1.desugared.c",
+    val alarm = ToolAlarm(
+      fileLocation = "/resources/sample1.desugared.c",
       line = 32,
-      column = 8,
-      bug_type = "Sample",
-      qualifier = "Sample"
+      alarmType = "Sample",
+      description = "Sample",
+      analysisTime = 1.0
     )
     val model = SugarCRunner.findPresenceCondition(
       alarm,
-      os.Path("/resources/sample1.desugared.c"),
+      os.Path("/resources/sample1.desugared.c")
     )
     IO.println(s"Model: ${model}")
   }
