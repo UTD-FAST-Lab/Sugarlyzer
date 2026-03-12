@@ -13,6 +13,13 @@ import scala.util.Using
 import scala.io.Source
 import io.circe.generic.auto.*
 import io.circe.syntax.*
+import org.eclipse.cdt.core.dom.ast.gnu.c.GCCLanguage
+import org.eclipse.cdt.core.parser.FileContent
+import org.eclipse.cdt.core.parser.ScannerInfo
+import org.eclipse.cdt.core.parser.DefaultLogService
+import org.eclipse.cdt.core.parser.IncludeFileContentProvider
+import org.eclipse.cdt.core.model.ILanguage
+import sugarlyzer.tester.sugarc.SugarCRunner.logger
 
 object ProductStrategy extends AnalysisStrategy {
   type Alarm = ProductAlarm
@@ -66,9 +73,69 @@ object ProductStrategy extends AnalysisStrategy {
 
   def build(appConfig: AppConfig, spec: ProgramSpecification): IO[Unit] = for {
     _ <- IO.println("Preparing to build...")
-    _ <- Configurator.stageAndBuild(appConfig, spec)
+    _ <- {
+      if (!spec.configFileLocation.isEmpty) {
+        Configurator.stageAndBuild(appConfig, spec)
+      } else {
+        IO.println("No config file location specified. Skipping build.")
+      }
+    }
     _ <- prepareAndBuildSamples(appConfig, spec)
   } yield ()
+
+  /** Given a file, outputs all potential binary combinations of macros defined in the file
+    */
+  private[tester] def exhaustivelySample(file: os.Path)
+      : Set[Set[String]] = {
+    // Extension to take the cartesian product of a list of lists
+    extension [A](lists: List[List[A]]) {
+      def cartesian: List[List[A]] =
+        lists match {
+          case Nil => List(Nil)
+          case head :: tail =>
+            for {
+              x  <- head
+              xs <- tail.cartesian
+            } yield x :: xs
+        }
+    }
+
+    // Read in the file content, set up eclipse CDT stuff
+    val fileContent =
+      FileContent.create(file.baseName, os.read(file).toCharArray())
+    val scanInfo      = ScannerInfo(java.util.HashMap(), Array[String]())
+    val parserLog     = DefaultLogService()
+    val emptyIncludes = IncludeFileContentProvider.getEmptyFilesProvider()
+
+    // Parse the code
+    val translationUnit =
+      GCCLanguage.getDefault().getASTTranslationUnit(
+        fileContent,
+        scanInfo,
+        emptyIncludes,
+        null,
+        ILanguage.OPTION_IS_SOURCE_UNIT,
+        parserLog
+      )
+
+    // Get the preprocessor statements
+    val preprocessorStatements = translationUnit.getAllPreprocessorStatements()
+
+    // Get the macros, by checking for anything that includes #if
+    val macros =
+      preprocessorStatements.map(m => m.getRawSignature()).filter(p =>
+        p.toLowerCase().contains("#if")
+      ).map(s => s.split(" ")(1))
+    logger.debug(s"Macros are ${macros}")
+
+    // Pair with -U and -D
+    val macroSets = macros.map(m =>
+      List("-U", "-D").map(pref => s"${pref}${m}")
+    ).toList
+
+    // Take the cartesian product
+    macroSets.cartesian.map(a => a.toSet).toSet
+  }
 
   private def prepareAndBuildSamples(
       appConfig: AppConfig,
@@ -77,17 +144,21 @@ object ProductStrategy extends AnalysisStrategy {
     val sharedPath   = os.Path(appConfig.sharedPath)
     val masterSource = sharedPath / spec.rootDir
 
-    (0 until appConfig.sampleSize).toList.parTraverseN(appConfig.jobs) { i =>
-      val iterDir   = sharedPath / s"$i"
-      val finalDest = iterDir / masterSource.last
+    if (getClass.getResource("/your_directory_name") == null) {
+      IO.println("The program/configs directory does not exist in resources")
+    } else {
+      (0 until appConfig.sampleSize).toList.parTraverseN(appConfig.jobs) { i =>
+        val iterDir   = sharedPath / s"$i"
+        val finalDest = iterDir / masterSource.last
 
-      for {
-        _ <- setupWorkspace(iterDir, masterSource, finalDest)
-        _ <- injectConfig(i, spec, iterDir)
-        _ <- runBuild(i, spec, iterDir, appConfig)
-        _ <- IO.println(s"Finished preparing sample $i.")
-      } yield ()
-    }.void
+        for {
+          _ <- setupWorkspace(iterDir, masterSource, finalDest)
+          _ <- injectConfig(i, spec, iterDir)
+          _ <- runBuild(i, spec, iterDir, appConfig)
+          _ <- IO.println(s"Finished preparing sample $i.")
+        } yield ()
+      }.void
+    }
   }
 
   private def setupWorkspace(
