@@ -33,13 +33,12 @@ object TransformationStrategy extends AnalysisStrategy {
             finding = finding,
             sanitizedDescription = "",
             lineInputFile = 0,
-            <<<<<<< Updated upstream presenceCondition = "",
-            ======= presenceCondition =
+            presenceCondition =
               SugarCRunner.findPresenceCondition(
                 finding,
                 os.Path(finding.fileLocation)
               ).toString(),
-            >>>>>>> Stashed changes model = "",
+            model = "",
             feasible = false,
             desugaringTime = 0.0
           )
