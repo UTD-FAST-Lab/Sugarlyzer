@@ -91,7 +91,7 @@ object InferTool extends AnalysisTool {
         alarmType = ia.bug_type,
         description = ia.qualifier,
         line = ia.line,
-        fileLocation = ia.file,
+        fileLocation = spec.rootDir + "/" + ia.file,
         analysisTime = analysisTime
       )
     }

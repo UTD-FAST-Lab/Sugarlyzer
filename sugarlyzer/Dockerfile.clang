@@ -10,7 +10,7 @@ RUN apt-get update && \
 	libcurl4-openssl-dev libssl-dev libsqlite3-dev\
 	git cmake build-essential python3 clang-11 \
 	pkg-config make gcc autoconf automake libtool\
-	libtirpc-dev \
+	libtirpc-dev unzip\
 	&& rm -rf /var/lib/apt/lists/*
 
 RUN git clone https://github.com/smack-team/smack.git /tmp/libsmack && \
@@ -36,6 +36,19 @@ RUN git clone https://github.com/llvm/llvm-project.git . && \
 	&& cd / \
 	&& rm -rf /llvm-project
 
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64/
+
+# Build Z3 from source with Java bindings
+RUN git clone --depth 1 --branch z3-4.13.3 https://github.com/Z3Prover/z3.git /tmp/z3-src && \
+	cd /tmp/z3-src && \
+	python3 scripts/mk_make.py --java && \
+	cd build && \
+	make -j$(nproc) && \
+	mkdir -p /opt/z3/bin && \
+	cp libz3.so libz3java.so com.microsoft.z3.jar /opt/z3/bin/ && \
+	rm -rf /tmp/z3-src
+
+ENV LD_LIBRARY_PATH="/opt/z3/bin:${LD_LIBRARY_PATH}"
 
 WORKDIR /
 COPY tester.jar .

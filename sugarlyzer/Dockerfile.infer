@@ -8,8 +8,8 @@ RUN apt-get update && \
 	DEBIAN_FRONTEND=noninteractive apt-get install -y \
 	openjdk-17-jdk curl xz-utils zlib1g-dev tzdata \
 	autoconf automake libtool git gcc make pkg-config\
-	libselinux1-dev selinux-basics selinux-utils \
-	libcurl4-openssl-dev libssl-dev libsqlite3-dev\
+	libselinux1-dev selinux-basics selinux-utils g++\
+	libcurl4-openssl-dev libssl-dev libsqlite3-dev unzip\
 	&& rm -rf /var/lib/apt/lists/*
 
 
@@ -25,6 +25,20 @@ RUN git clone https://github.com/smack-team/smack.git /tmp/libsmack && \
 # 2. Install Infer 
 RUN curl -sSL "https://github.com/facebook/infer/releases/download/v$VERSION/infer-linux-x86_64-v$VERSION.tar.xz" \
 	| tar -C /opt -xJ && ln -s "/opt/infer-linux-x86_64-v$VERSION/bin/infer" /usr/local/bin/infer
+
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64/
+
+# Build Z3 from source with Java bindings
+RUN git clone --depth 1 --branch z3-4.13.3 https://github.com/Z3Prover/z3.git /tmp/z3-src && \
+	cd /tmp/z3-src && \
+	python3 scripts/mk_make.py --java && \
+	cd build && \
+	make -j$(nproc) && \
+	mkdir -p /opt/z3/bin && \
+	cp libz3.so libz3java.so com.microsoft.z3.jar /opt/z3/bin/ && \
+	rm -rf /tmp/z3-src
+
+ENV LD_LIBRARY_PATH="/opt/z3/bin:${LD_LIBRARY_PATH}"
 
 WORKDIR /
 COPY tester.jar .
