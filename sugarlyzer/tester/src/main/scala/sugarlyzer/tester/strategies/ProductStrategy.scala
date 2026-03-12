@@ -74,7 +74,13 @@ object ProductStrategy extends AnalysisStrategy {
 
   def build(appConfig: AppConfig, spec: ProgramSpecification): IO[Unit] = for {
     _ <- IO.println("Preparing to build...")
-    _ <- Configurator.stageAndBuild(appConfig, spec)
+    _ <- {
+      if (!spec.configFileLocation.isEmpty) {
+        Configurator.stageAndBuild(appConfig, spec)
+      } else {
+        IO.println("No config file location specified. Skipping build.")
+      }
+    }
     _ <- prepareAndBuildSamples(appConfig, spec)
   } yield ()
 
@@ -139,17 +145,21 @@ object ProductStrategy extends AnalysisStrategy {
     val sharedPath   = os.Path(appConfig.sharedPath)
     val masterSource = sharedPath / spec.rootDir
 
-    (0 until appConfig.sampleSize).toList.parTraverseN(appConfig.jobs) { i =>
-      val iterDir   = sharedPath / s"$i"
-      val finalDest = iterDir / masterSource.last
+    if (getClass.getResource("/your_directory_name") == null) {
+      IO.println("The program/configs directory does not exist in resources")
+    } else {
+      (0 until appConfig.sampleSize).toList.parTraverseN(appConfig.jobs) { i =>
+        val iterDir   = sharedPath / s"$i"
+        val finalDest = iterDir / masterSource.last
 
-      for {
-        _ <- setupWorkspace(iterDir, masterSource, finalDest)
-        _ <- injectConfig(i, spec, iterDir)
-        _ <- runBuild(i, spec, iterDir, appConfig)
-        _ <- IO.println(s"Finished preparing sample $i.")
-      } yield ()
-    }.void
+        for {
+          _ <- setupWorkspace(iterDir, masterSource, finalDest)
+          _ <- injectConfig(i, spec, iterDir)
+          _ <- runBuild(i, spec, iterDir, appConfig)
+          _ <- IO.println(s"Finished preparing sample $i.")
+        } yield ()
+      }.void
+    }
   }
 
   private def setupWorkspace(

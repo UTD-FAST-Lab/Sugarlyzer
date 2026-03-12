@@ -1,0 +1,8 @@
+{
+	"name": "varbugs",
+	"rootDir": "varbugs",
+	"buildCommand": "make",
+	"configFileLocation": "",
+	"configHeaderLocation": "",
+	"targetBinaries": []
+}
