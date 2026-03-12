@@ -40,6 +40,7 @@ object PresenceConditionParser {
   private case object TokRParen             extends Token
   private case object TokDefined            extends Token
   private case class TokIdent(name: String) extends Token
+  private case object TokCmpOp              extends Token
 
   private def tokenize(s: String): Array[Token] = {
     val buf = collection.mutable.ArrayBuffer.empty[Token]
@@ -58,6 +59,12 @@ object PresenceConditionParser {
           buf += TokAnd; i += 2
         case '|' if i + 1 < s.length && s(i + 1) == '|' =>
           buf += TokOr; i += 2
+        case '=' if i + 1 < s.length && s(i + 1) == '=' =>
+          buf += TokCmpOp; i += 2
+        case '<' if i + 1 < s.length && s(i + 1) == '=' =>
+          buf += TokCmpOp; i += 2
+        case '>' if i + 1 < s.length && s(i + 1) == '=' =>
+          buf += TokCmpOp; i += 2
         case c if c.isLetterOrDigit || c == '_' =>
           val start = i
           while (i < s.length && (s(i).isLetterOrDigit || s(i) == '_')) {
@@ -135,9 +142,22 @@ object PresenceConditionParser {
             expect(TokRParen)
             ctx.mkBoolConst(name)
           } else {
-            val expr = parseExpr()
-            expect(TokRParen)
-            expr
+            // Peek ahead: if it's `(IDENT cmp_op NUMBER)`, consume and return the ident
+            val savedPos = pos
+            peek match {
+              case Some(TokIdent(name)) if pos + 2 < tokens.length &&
+                  tokens(pos + 1) == TokCmpOp &&
+                  tokens(pos + 2).isInstanceOf[TokIdent] &&
+                  tokens(pos + 2).asInstanceOf[TokIdent].name.forall(_.isDigit) =>
+                pos += 3
+                expect(TokRParen)
+                ctx.mkBoolConst(name)
+              case _ =>
+                pos = savedPos
+                val expr = parseExpr()
+                expect(TokRParen)
+                expr
+            }
           }
         case Some(TokDefined) =>
           pos += 1
