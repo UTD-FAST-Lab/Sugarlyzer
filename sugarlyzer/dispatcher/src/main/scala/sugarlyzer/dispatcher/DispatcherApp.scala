@@ -73,7 +73,8 @@ object DispatcherApp extends IOApp {
       dockerClient: DockerClient,
       config: Config.AppConfig
   ): IO[Unit] = {
-    val volumeName = s"sugarlyzer-${config.program}-${config.tool}"
+    val volumeName =
+      s"sugarlyzer-${config.program}-${config.tool}-${config.strategy}"
     val workspaceVolumeBind =
       new Bind(volumeName, new Volume("/workspace"), AccessMode.rw)
     val resultsVolumeBind =
