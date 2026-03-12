@@ -13,6 +13,7 @@ import sugarlyzer.models.Configurator
 import sugarlyzer.tester.parsing.CompileCommand
 import sugarlyzer.tester.parsing.CompileCommands
 import sugarlyzer.tester.sugarc.SugarCRunner.desugarFile
+import sugarlyzer.tester.sugarc.SugarCRunner
 
 object TransformationStrategy extends AnalysisStrategy {
   type Alarm = TransformationAlarm
@@ -32,8 +33,13 @@ object TransformationStrategy extends AnalysisStrategy {
             finding = finding,
             sanitizedDescription = "",
             lineInputFile = 0,
-            presenceCondition = "",
-            model = "",
+            <<<<<<< Updated upstream presenceCondition = "",
+            ======= presenceCondition =
+              SugarCRunner.findPresenceCondition(
+                finding,
+                os.Path(finding.fileLocation)
+              ).toString(),
+            >>>>>>> Stashed changes model = "",
             feasible = false,
             desugaringTime = 0.0
           )
