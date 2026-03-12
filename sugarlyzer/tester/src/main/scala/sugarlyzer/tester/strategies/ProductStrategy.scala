@@ -139,17 +139,22 @@ object ProductStrategy extends AnalysisStrategy {
     val sharedPath   = os.Path(appConfig.sharedPath)
     val masterSource = sharedPath / spec.rootDir
 
-    (0 until appConfig.sampleSize).toList.parTraverseN(appConfig.jobs) { i =>
-      val iterDir   = sharedPath / s"$i"
-      val finalDest = iterDir / masterSource.last
-
-      for {
-        _ <- setupWorkspace(iterDir, masterSource, finalDest)
-        _ <- injectConfig(i, spec, iterDir)
-        _ <- runBuild(i, spec, iterDir, appConfig)
-        _ <- IO.println(s"Finished preparing sample $i.")
-      } yield ()
-    }.void
+    if (getClass.getResource(s"/programs/${spec.name}/configs/") == null) {
+      IO.println(
+        s"The programs/${spec.name}/configs/ does not exist in resources"
+      )
+    } else {
+      (0 until appConfig.sampleSize).toList.parTraverseN(appConfig.jobs) { i =>
+        val iterDir   = sharedPath / s"$i"
+        val finalDest = iterDir / masterSource.last
+        for {
+          _ <- setupWorkspace(iterDir, masterSource, finalDest)
+          _ <- injectConfig(i, spec, iterDir)
+          _ <- runBuild(i, spec, iterDir, appConfig)
+          _ <- IO.println(s"Finished preparing sample $i.")
+        } yield ()
+      }.void
+    }
   }
 
   private def setupWorkspace(
