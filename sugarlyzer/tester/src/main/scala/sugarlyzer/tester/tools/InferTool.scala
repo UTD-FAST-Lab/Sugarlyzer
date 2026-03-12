@@ -50,9 +50,15 @@ object InferTool extends AnalysisTool {
           "--keep-going",
           "--compilation-database",
           compileCommandsPath.toString
-        ).call(cwd = rootDir, stdout = os.Inherit, stderr = os.Inherit)
+        ).call(
+          cwd = rootDir,
+          stdout = os.Inherit,
+          check = false
+        )
         if (procCapture.exitCode != 0)
-          throw new RuntimeException("Failed to run infer")
+          throw new RuntimeException(
+            s"Failed to run infer: ${procCapture.err.text()}"
+          )
 
         val proc = os.proc(
           "infer",
