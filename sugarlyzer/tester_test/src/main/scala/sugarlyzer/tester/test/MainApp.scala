@@ -90,7 +90,7 @@ object MainApp extends IOApp.Simple {
     val ctx = Context()
     val expr = PresenceConditionParser.parse(
       ctx,
-      "(defined cond1) && ((defined cond2) || !(defined cond3))"
+      "(defined cond1) && ((defined cond2) || !(defined cond3) && (cond4 == 5))"
     )
     IO.println(s"Parsed expression: $expr")
   }
