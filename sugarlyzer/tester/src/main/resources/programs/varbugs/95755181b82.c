@@ -10,9 +10,11 @@ int content_gzip = 0;
 int authorized = 0;
 #endif
 
-#define HTTP_UNAUTHORIZED  401
-#define IOBUF_SIZE         8192
-char *iobuf = malloc(IOBUF_SIZE);
+#define HTTP_UNAUTHORIZED 401
+#define IOBUF_SIZE 8192
+#define HTTP_OK 1
+
+char *iobuf;
 
 void send_headers(int responseNum)
 {
@@ -25,12 +27,13 @@ void send_headers(int responseNum)
   len = sprintf(iobuf, "HTTP/1.0 %d\r\nContent-type: %s\r\n",
                 responseNum, mime_type);
 
-  #ifdef ENABLE_FEATURE_HTTPD_BASIC_AUTH
-  if (responseNum == HTTP_UNAUTHORIZED) {
+#ifdef ENABLE_FEATURE_HTTPD_BASIC_AUTH
+  if (responseNum == HTTP_UNAUTHORIZED)
+  {
     len += sprintf(iobuf + len,
                    "WWW-Authenticate: Basic realm=\"Web Server Authentication\"\r\n");
   }
-  #endif
+#endif
 
   if (content_gzip)
     len += sprintf(iobuf + len, "Content-Encoding: gzip\r\n");
@@ -46,16 +49,16 @@ void send_headers_and_exit(int responseNum)
 void handle_incoming_and_exit()
 {
 
-  #ifdef ENABLE_FEATURE_HTTPD_GZIP
+#ifdef ENABLE_FEATURE_HTTPD_GZIP
   const char *s = strstr(iobuf, "gzip");
   if (s)
     content_gzip = 1;
-  #endif
+#endif
 
-  #ifdef ENABLE_FEATURE_HTTPD_BASIC_AUTH
-  if(!authorized)
+#ifdef ENABLE_FEATURE_HTTPD_BASIC_AUTH
+  if (!authorized)
     send_headers_and_exit(HTTP_UNAUTHORIZED);
-  #endif
+#endif
 }
 
 #ifdef BB_MMU
@@ -65,10 +68,11 @@ void mini_httpd()
 }
 #endif
 
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
-  #ifdef BB_MMU
+  iobuf = malloc(IOBUF_SIZE);
+#ifdef BB_MMU
   mini_httpd();
-  #endif
+#endif
   return 0;
 }

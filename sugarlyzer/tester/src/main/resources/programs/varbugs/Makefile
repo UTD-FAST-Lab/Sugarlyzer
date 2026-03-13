@@ -409,7 +409,7 @@ all: $(OBJS)
 	$(CC) $(CFLAGS) $(97ECBEC1237_MACROS) -c 97ecbec1237.c -o 97ecbec1237.o
 
 # Per-file macros for a7fc1f83c81.c: set A7FC1F83C81_MACROS to e.g. -DDEBUG=1
-A7FC1F83C81_MACROS =
+A7FC1F83C81_MACROS = -DSDSUPPORT
 a7fc1f83c81.o: a7fc1f83c81.c
 	$(CC) $(CFLAGS) $(A7FC1F83C81_MACROS) -c a7fc1f83c81.c -o a7fc1f83c81.o
 
@@ -429,7 +429,7 @@ b62bd7b261b.o: b62bd7b261b.c
 	$(CC) $(CFLAGS) $(B62BD7B261B_MACROS) -c b62bd7b261b.c -o b62bd7b261b.o
 
 # Per-file macros for b7ebc61b54f.c: set B7EBC61B54F_MACROS to e.g. -DDEBUG=1
-B7EBC61B54F_MACROS =
+B7EBC61B54F_MACROS = -DCONFIG_FEATURE_LS_TIMESTAMPS
 b7ebc61b54f.o: b7ebc61b54f.c
 	$(CC) $(CFLAGS) $(B7EBC61B54F_MACROS) -c b7ebc61b54f.c -o b7ebc61b54f.o
 
@@ -534,7 +534,7 @@ e39363a9def.o: e39363a9def.c
 	$(CC) $(CFLAGS) $(E39363A9DEF_MACROS) -c e39363a9def.c -o e39363a9def.o
 
 # Per-file macros for e67bc51e574.c: set E67BC51E574_MACROS to e.g. -DDEBUG=1
-E67BC51E574_MACROS =
+E67BC51E574_MACROS = -DCONFIG_TRACING
 e67bc51e574.o: e67bc51e574.c
 	$(CC) $(CFLAGS) $(E67BC51E574_MACROS) -c e67bc51e574.c -o e67bc51e574.o
 
@@ -584,7 +584,7 @@ fc3c76fc164.o: fc3c76fc164.c
 	$(CC) $(CFLAGS) $(FC3C76FC164_MACROS) -c fc3c76fc164.c -o fc3c76fc164.o
 
 # Per-file macros for fdac8f6cece.c: set FDAC8F6CECE_MACROS to e.g. -DDEBUG=1
-FDAC8F6CECE_MACROS =
+FDAC8F6CECE_MACROS = -DENABLE_AUTO_BED_LEVELING
 fdac8f6cece.o: fdac8f6cece.c
 	$(CC) $(CFLAGS) $(FDAC8F6CECE_MACROS) -c fdac8f6cece.c -o fdac8f6cece.o
 

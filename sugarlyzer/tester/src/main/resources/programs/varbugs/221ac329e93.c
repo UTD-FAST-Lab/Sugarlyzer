@@ -4,36 +4,41 @@
 #include <errno.h>
 #include <sys/mman.h>
 
+#define _SC_PAGE_SIZE 1
 #define handle_error(msg) \
-  do { perror(msg); exit(EXIT_FAILURE); } while (0)
+  do                      \
+  {                       \
+    perror(msg);          \
+    exit(EXIT_FAILURE);   \
+  } while (0)
 
 char *buffer;
 
 #if !defined(CONFIG_KGDB) && !defined(CONFIG_XMON) && !defined(CONFIG_BDI_SWITCH)
-void allocate_buffer() {
+void allocate_buffer()
+{
   int pagesize;
 
   pagesize = sysconf(_SC_PAGE_SIZE);
   if (pagesize == -1)
     handle_error("sysconf");
 
-  buffer = aligned_alloc(pagesize, 4*pagesize);
+  buffer = aligned_alloc(pagesize, 4 * pagesize);
   if (buffer == NULL)
     handle_error("memalign");
 
-  if (mprotect(buffer, 4*pagesize, PROT_READ) == -1)
+  if (mprotect(buffer, 4 * pagesize, PROT_READ) == -1)
     handle_error("mprotect");
 }
 #else
 #define allocate_buffer() ({ buffer = malloc(4092); })
 #endif
 
-
-int main(int argc, char** argv)
+int main(int argc, char **argv)
 {
   allocate_buffer();
-  #ifdef CONFIG_KPROBES
+#ifdef CONFIG_KPROBES
   *buffer = 'a'; // ERROR
-  #endif
+#endif
   return 0;
 }
