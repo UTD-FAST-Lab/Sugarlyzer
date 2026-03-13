@@ -15,15 +15,13 @@
 #endif
 
 #ifdef CONFIG_SLAB
-#define KMALLOC_SHIFT_HIGH ((MAX_ORDER + PAGE_SHIFT - 1) <= 25 ? \
-                           (MAX_ORDER + PAGE_SHIFT - 1) : 25)
+#define KMALLOC_SHIFT_HIGH ((MAX_ORDER + PAGE_SHIFT - 1) <= 25 ? (MAX_ORDER + PAGE_SHIFT - 1) : 25)
 #else
 #define KMALLOC_SHIFT_HIGH (PAGE_SHIFT + 1)
 #endif
 
-
 #ifndef CONFIG_SLOB
-int* kmalloc_caches[KMALLOC_SHIFT_HIGH + 1];
+int *kmalloc_caches[KMALLOC_SHIFT_HIGH + 1];
 #endif
 
 #ifdef CONFIG_LOCKDEP
@@ -32,14 +30,14 @@ static void init_node_lock_keys()
   int i;
 
   for (i = 1; i < PAGE_SHIFT + MAX_ORDER; i++)
-    {
-      int* cache = kmalloc_caches[i]; // (4) ERROR
+  {
+    int *cache = kmalloc_caches[i]; // (4) ERROR
 
-      if (!cache)
-        continue;
+    if (!cache)
+      continue;
 
-      int n = *cache;
-    }
+    int n = *cache;
+  }
 }
 
 void init_lock_keys(void)
@@ -63,8 +61,8 @@ void kmem_cache_init_late(void)
 
 int main(void)
 {
-    #ifndef CONFIG_SLOB
+#ifndef CONFIG_SLOB
   kmem_cache_init_late(); // (1)
-    #endif
+#endif
   return 0;
 }
