@@ -115,7 +115,7 @@ object ProductStrategy extends AnalysisStrategy {
       if (!spec.configFileLocation.isEmpty) {
         Configurator.stageAndBuild(appConfig, spec)
       } else {
-        IO.println("No config file location specified. Skipping build.")
+        Configurator.stage(appConfig, spec)
       }
     }
     _ <- prepareAndBuildSamples(appConfig, spec)
@@ -183,9 +183,25 @@ object ProductStrategy extends AnalysisStrategy {
     val masterSource = sharedPath / spec.rootDir
 
     if (spec.configFileLocation == "") {
-      IO.println(
-        "The program/configs directory does not exist in resources. Exhaustively sampling."
-      )
+      for {
+        _ <- IO.println("Exhaustively sampling configurations from source.")
+        allConfigs <- IO.blocking {
+          os.walk(masterSource)
+            .filter(_.ext == "c")
+            .flatMap(exhaustivelySample)
+            .toSet
+            .toList
+        }
+        _ <- allConfigs.zipWithIndex.parTraverseN(appConfig.jobs) { case (macroSet, i) =>
+          val iterDir   = sharedPath / s"$i"
+          val finalDest = iterDir / masterSource.last
+          for {
+            _ <- setupWorkspace(iterDir, masterSource, finalDest)
+            _ <- runVarbugsBuild(i, spec, iterDir, appConfig, macroSet.toList)
+            _ <- IO.println(s"Finished preparing varbugs config $i.")
+          } yield ()
+        }
+      } yield ()
     } else {
       (0 until appConfig.sampleSize).toList.parTraverseN(appConfig.jobs) { i =>
         val iterDir   = sharedPath / s"$i"
@@ -227,6 +243,31 @@ object ProductStrategy extends AnalysisStrategy {
       ) *>
         IO.blocking(os.write.over(destConfigFile, stream))
     }
+  }
+
+  private def runVarbugsBuild(
+      sampleId: Int,
+      spec: ProgramSpecification,
+      iterDir: os.Path,
+      config: Config.AppConfig,
+      macroFlags: List[String]
+  ): IO[Unit] = IO.blocking {
+    val workingDir = iterDir / spec.rootDir
+    val cflags     = macroFlags.mkString(" ")
+
+    os.proc("make", "clean")
+      .call(cwd = workingDir, check = false, stdout = os.Inherit, stderr = os.Inherit): Unit
+
+    val proc = os.proc("bear", "make", s"CFLAGS=$cflags")
+      .call(cwd = workingDir, check = false, stdout = os.Inherit, stderr = os.Inherit)
+    if (proc.exitCode != 0)
+      throw new RuntimeException(s"Bear build failed for varbugs config $sampleId")
+
+    val jsonPath = workingDir / "compile_commands.json"
+    if (!os.exists(jsonPath) || os.size(jsonPath) < 50)
+      throw new RuntimeException(
+        s"Bear failed to generate compile_commands.json for varbugs config $sampleId"
+      )
   }
 
   private def runBuild(
