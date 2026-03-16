@@ -33,13 +33,39 @@ object ProductStrategy extends AnalysisStrategy {
     given AppConfig = appConfig
     println(s"Running analysis for ${spec.name}")
     if spec.name == "varbugs" then {
+      val sharedPath = os.Path(appConfig.sharedPath)
+      val sourceDir  = sharedPath / spec.rootDir
+
       for {
-        _ <-
-          IO.println(s"Running exhaustive product-based analysis for varbugs")
-        rawFindings <- tool.run(spec)
-        
-      } yield ()
-      ???
+        // Collect all exhaustive macro configurations across all C source files
+        allConfigs <- IO.blocking {
+          os.walk(sourceDir)
+            .filter(_.ext == "c")
+            .flatMap(exhaustivelySample)
+            .toSet
+            .toList
+        }
+        results <- allConfigs.zipWithIndex.parTraverseN(appConfig.jobs) { case (macroSet, i) =>
+          val iterDir = sharedPath / s"$i" / spec.rootDir
+          val model = macroSet.toList.map { flag =>
+            if flag.startsWith("-D") then (flag.drop(2), "true")
+            else (flag.drop(2), "false")
+          }
+          for {
+            _           <- IO.println(s"Running exhaustive varbugs analysis for config $i")
+            rawFindings <- tool.run(spec.copy(rootDir = iterDir.toString))
+          } yield rawFindings.map { finding =>
+            ProductAlarm(
+              finding = finding.copy(fileLocation =
+                finding.fileLocation.replaceAll(s"/workspace/$i/", "")
+              ),
+              configFiles = List.empty,
+              model = model,
+              numConfigs = List(model.length)
+            )
+          }
+        }
+      } yield results.flatten
     } else {
       (0 until appConfig.sampleSize).toList.parTraverseN(appConfig.jobs) { i =>
         val iterDir    = os.Path(appConfig.sharedPath) / s"$i" / spec.rootDir

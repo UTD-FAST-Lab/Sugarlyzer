@@ -3,11 +3,14 @@ package sugarlyzer.tester.tools
 import cats.effect.IO
 import sugarlyzer.models.ProgramSpecification
 import cats.implicits._
+import sugarlyzer.common.Config.AppConfig
 
 object PhasarTool extends AnalysisTool {
   def name(): String = { "Phasar" }
 
-  def run(spec: ProgramSpecification): IO[List[ToolAlarm]] = {
+  def run(spec: ProgramSpecification)(using
+      config: AppConfig
+  ): IO[List[ToolAlarm]] = {
     for {
       _       <- IO.println(s"Running WLLVM strategy for ${spec}")
       bcFiles <- extractBitcode(spec.rootDir, spec.targetBinaries)
