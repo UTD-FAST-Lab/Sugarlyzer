@@ -262,7 +262,7 @@ object ProductStrategy extends AnalysisStrategy {
   ): Unit = {
     val path    = sourceFile.toString
     val command = s"cc -c $path ${macroFlags.mkString(" ")}"
-    val args    = macroFlags.map(f => s"\"$f\"").mkString(", ")
+    val args    = command.split(" ").map(f => s"\"$f\"").mkString(", ")
     val json =
       s"""[{"directory":"$iterDir","file":"$path","command":"$command","arguments":[$args]}]"""
     os.write.over(iterDir / "compile_commands.json", json)
