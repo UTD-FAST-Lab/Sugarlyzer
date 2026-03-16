@@ -45,25 +45,27 @@ object ProductStrategy extends AnalysisStrategy {
             .toSet
             .toList
         }
-        results <- allConfigs.zipWithIndex.parTraverseN(appConfig.jobs) { case (macroSet, i) =>
-          val iterDir = sharedPath / s"$i" / spec.rootDir
-          val model = macroSet.toList.map { flag =>
-            if flag.startsWith("-D") then (flag.drop(2), "true")
-            else (flag.drop(2), "false")
-          }
-          for {
-            _           <- IO.println(s"Running exhaustive varbugs analysis for config $i")
-            rawFindings <- tool.run(spec.copy(rootDir = iterDir.toString))
-          } yield rawFindings.map { finding =>
-            ProductAlarm(
-              finding = finding.copy(fileLocation =
-                finding.fileLocation.replaceAll(s"/workspace/$i/", "")
-              ),
-              configFiles = List.empty,
-              model = model,
-              numConfigs = List(model.length)
-            )
-          }
+        results <- allConfigs.zipWithIndex.parTraverseN(appConfig.jobs) {
+          case (macroSet, i) =>
+            val iterDir = sharedPath / s"$i" / spec.rootDir
+            val model = macroSet.toList.map { flag =>
+              if flag.startsWith("-D") then (flag.drop(2), "true")
+              else (flag.drop(2), "false")
+            }
+            for {
+              _ <-
+                IO.println(s"Running exhaustive varbugs analysis for config $i")
+              rawFindings <- tool.run(spec.copy(rootDir = iterDir.toString))
+            } yield rawFindings.map { finding =>
+              ProductAlarm(
+                finding = finding.copy(fileLocation =
+                  finding.fileLocation.replaceAll(s"/workspace/$i/", "")
+                ),
+                configFiles = List.empty,
+                model = model,
+                numConfigs = List(model.length)
+              )
+            }
         }
       } yield results.flatten
     } else {
@@ -192,14 +194,15 @@ object ProductStrategy extends AnalysisStrategy {
             .toSet
             .toList
         }
-        _ <- allConfigs.zipWithIndex.parTraverseN(appConfig.jobs) { case (macroSet, i) =>
-          val iterDir   = sharedPath / s"$i"
-          val finalDest = iterDir / masterSource.last
-          for {
-            _ <- setupWorkspace(iterDir, masterSource, finalDest)
-            _ <- runVarbugsBuild(i, spec, iterDir, appConfig, macroSet.toList)
-            _ <- IO.println(s"Finished preparing varbugs config $i.")
-          } yield ()
+        _ <- allConfigs.zipWithIndex.parTraverseN(appConfig.jobs) {
+          case (macroSet, i) =>
+            val iterDir   = sharedPath / s"$i"
+            val finalDest = iterDir / masterSource.last
+            for {
+              _ <- setupWorkspace(iterDir, masterSource, finalDest)
+              _ <- runVarbugsBuild(i, spec, iterDir, appConfig, macroSet.toList)
+              _ <- IO.println(s"Finished preparing varbugs config $i.")
+            } yield ()
         }
       } yield ()
     } else {
@@ -256,12 +259,24 @@ object ProductStrategy extends AnalysisStrategy {
     val cflags     = macroFlags.mkString(" ")
 
     os.proc("make", "clean")
-      .call(cwd = workingDir, check = false, stdout = os.Inherit, stderr = os.Inherit): Unit
+      .call(
+        cwd = workingDir,
+        check = false,
+        stdout = os.Inherit,
+        stderr = os.Inherit
+      ): Unit
 
     val proc = os.proc("bear", "make", s"CFLAGS=$cflags")
-      .call(cwd = workingDir, check = false, stdout = os.Inherit, stderr = os.Inherit)
+      .call(
+        cwd = workingDir,
+        check = false,
+        stdout = os.Inherit,
+        stderr = os.Inherit
+      )
     if (proc.exitCode != 0)
-      throw new RuntimeException(s"Bear build failed for varbugs config $sampleId")
+      throw new RuntimeException(
+        s"Bear build failed for varbugs config $sampleId"
+      )
 
     val jsonPath = workingDir / "compile_commands.json"
     if (!os.exists(jsonPath) || os.size(jsonPath) < 50)
