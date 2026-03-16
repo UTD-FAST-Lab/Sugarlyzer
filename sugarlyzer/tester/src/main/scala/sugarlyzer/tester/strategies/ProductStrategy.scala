@@ -24,7 +24,7 @@ import com.typesafe.scalalogging.Logger
 
 object ProductStrategy extends AnalysisStrategy {
   val logger = Logger[ProductStrategy.type]
-  
+
   type Alarm = ProductAlarm
 
   def analyze(
@@ -162,10 +162,17 @@ object ProductStrategy extends AnalysisStrategy {
     val preprocessorStatements = translationUnit.getAllPreprocessorStatements()
 
     // Get the macros, by checking for anything that includes #if
+    val definedPattern = """!?defined\((.*)\)""".r
     val macros =
       preprocessorStatements.map(m => m.getRawSignature()).filter(p =>
         p.toLowerCase().contains("#if")
-      ).map(s => s.split(" ")(1))
+      ).map(s => s.split(" ")(1)).map(s =>
+        s match {
+          case definedPattern(mac) => mac
+          case _                   => s
+        }
+      )
+
     logger.debug(s"Macros are ${macros}")
 
     // Pair with -U and -D
