@@ -58,11 +58,11 @@ ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
 RUN cd superc && make configure && make
 
 # Download util/
-WORKDIR /usr/local/include
+WORKDIR /
 RUN apt-get install unzip
 ADD http://download.savannah.gnu.org/releases/avr-libc/binary-releases/avr-libc-bin-2.0.0.zip .
 RUN unzip avr-libc-bin-2.0.0.zip
-RUN mv avr/include/* .
+RUN mv avr/include/* /usr/local/include
 
 WORKDIR /
 COPY tester.jar .
