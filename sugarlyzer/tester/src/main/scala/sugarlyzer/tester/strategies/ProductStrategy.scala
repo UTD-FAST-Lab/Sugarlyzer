@@ -37,30 +37,26 @@ object ProductStrategy extends AnalysisStrategy {
       val sourceDir  = sharedPath / spec.rootDir
 
       for {
-        // Collect all exhaustive macro configurations across all C source files
-        allConfigs <- IO.blocking {
+        // Each config is paired with the specific file it was derived from
+        fileConfigs <- IO.blocking {
           os.walk(sourceDir)
             .filter(_.ext == "c")
-            .flatMap(exhaustivelySample)
-            .toSet
             .toList
+            .flatMap(f => exhaustivelySample(f).map(config => (f, config)))
         }
-        results <- allConfigs.zipWithIndex.parTraverseN(appConfig.jobs) {
-          case (macroSet, i) =>
-            val iterDir = sharedPath / s"$i" / spec.rootDir
+        results <- fileConfigs.zipWithIndex.parTraverseN(appConfig.jobs) {
+          case ((file, macroSet), i) =>
+            val iterDir = sharedPath / s"$i"
             val model = macroSet.toList.map { flag =>
               if flag.startsWith("-D") then (flag.drop(2), "true")
               else (flag.drop(2), "false")
             }
             for {
-              _ <-
-                IO.println(s"Running exhaustive varbugs analysis for config $i")
+              _ <- IO.println(s"Running exhaustive varbugs analysis for config $i (${file.last})")
               rawFindings <- tool.run(spec.copy(rootDir = iterDir.toString))
             } yield rawFindings.map { finding =>
               ProductAlarm(
-                finding = finding.copy(fileLocation =
-                  finding.fileLocation.replaceAll(s"/workspace/$i/", "")
-                ),
+                finding = finding,
                 configFiles = List.empty,
                 model = model,
                 numConfigs = List(model.length)
@@ -187,22 +183,20 @@ object ProductStrategy extends AnalysisStrategy {
     if (spec.configFileLocation == "") {
       for {
         _ <- IO.println("Exhaustively sampling configurations from source.")
-        allConfigs <- IO.blocking {
+        fileConfigs <- IO.blocking {
           os.walk(masterSource)
             .filter(_.ext == "c")
-            .flatMap(exhaustivelySample)
-            .toSet
             .toList
+            .flatMap(f => exhaustivelySample(f).map(config => (f, config)))
         }
-        _ <- allConfigs.zipWithIndex.parTraverseN(appConfig.jobs) {
-          case (macroSet, i) =>
-            val iterDir   = sharedPath / s"$i"
-            val finalDest = iterDir / masterSource.last
-            for {
-              _ <- setupWorkspace(iterDir, masterSource, finalDest)
-              _ <- runVarbugsBuild(i, spec, iterDir, appConfig, macroSet.toList)
-              _ <- IO.println(s"Finished preparing varbugs config $i.")
-            } yield ()
+        _ <- fileConfigs.zipWithIndex.parTraverseN(appConfig.jobs) {
+          case ((file, macroSet), i) =>
+            IO.blocking {
+              val iterDir = sharedPath / s"$i"
+              if (os.exists(iterDir)) os.remove.all(iterDir)
+              os.makeDir.all(iterDir)
+              writeCompileCommands(iterDir, file, macroSet.toList)
+            } *> IO.println(s"Finished preparing varbugs config $i (${file.last}).")
         }
       } yield ()
     } else {
@@ -248,41 +242,16 @@ object ProductStrategy extends AnalysisStrategy {
     }
   }
 
-  private def runVarbugsBuild(
-      sampleId: Int,
-      spec: ProgramSpecification,
+  private def writeCompileCommands(
       iterDir: os.Path,
-      config: Config.AppConfig,
+      sourceFile: os.Path,
       macroFlags: List[String]
-  ): IO[Unit] = IO.blocking {
-    val workingDir = iterDir / spec.rootDir
-    val cflags     = macroFlags.mkString(" ")
-
-    os.proc("make", "clean")
-      .call(
-        cwd = workingDir,
-        check = false,
-        stdout = os.Inherit,
-        stderr = os.Inherit
-      ): Unit
-
-    val proc = os.proc("bear", "make", s"CFLAGS=$cflags")
-      .call(
-        cwd = workingDir,
-        check = false,
-        stdout = os.Inherit,
-        stderr = os.Inherit
-      )
-    if (proc.exitCode != 0)
-      throw new RuntimeException(
-        s"Bear build failed for varbugs config $sampleId"
-      )
-
-    val jsonPath = workingDir / "compile_commands.json"
-    if (!os.exists(jsonPath) || os.size(jsonPath) < 50)
-      throw new RuntimeException(
-        s"Bear failed to generate compile_commands.json for varbugs config $sampleId"
-      )
+  ): Unit = {
+    val path    = sourceFile.toString
+    val command = s"cc -c $path ${macroFlags.mkString(" ")}"
+    val json =
+      s"""[{"directory":"$iterDir","file":"$path","command":"$command"}]"""
+    os.write.over(iterDir / "compile_commands.json", json)
   }
 
   private def runBuild(
