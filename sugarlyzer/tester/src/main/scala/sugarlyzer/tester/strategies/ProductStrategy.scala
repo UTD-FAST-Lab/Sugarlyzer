@@ -263,7 +263,7 @@ object ProductStrategy extends AnalysisStrategy {
     val path    = sourceFile.toString
     val command = s"cc -c $path"
     val json =
-      s"""[{"directory":"$iterDir","file":"$path","command":"Some($command)","arguments":[${macroFlags.mkString(
+      s"""[{"directory":"$iterDir","file":"$path","command":"$command","arguments":[${macroFlags.mkString(
           """"""",
           """", """,
           """""""
