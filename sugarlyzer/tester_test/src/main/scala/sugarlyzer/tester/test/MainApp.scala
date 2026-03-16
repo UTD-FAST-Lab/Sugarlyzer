@@ -7,13 +7,12 @@ import sugarlyzer.util.CommandBuilder.ResultFile
 import sugarlyzer.util.CommandBuilder.LogFile
 import com.microsoft.z3.*
 import sugarlyzer.tester.sugarc.PresenceConditionParser
-import sugarlyzer.tester.strategies.ProductStrategy
 import sugarlyzer.tester.tools.ToolAlarm
 
 object MainApp extends IOApp.Simple {
   def run: IO[Unit] = {
     val sample1 = "/resources/sample1.c"
-    val io = for {
+    for {
       _ <- IO.println("Starting tester integration tests...")
       _ <- IO.println("=== INTEGRATION TEST 1: SugarC Integration ===")
       _ <- IO.println(s"Testing on ${sample1}")
@@ -32,7 +31,6 @@ object MainApp extends IOApp.Simple {
       _ <- IO.println("=== INTEGRATION TEST 5: Macro Combinations ===")
       _ <- testExhaustively(sample1)
     } yield ()
-    io
   }
 
   def testExhaustively(file: String): IO[Unit] = {
@@ -99,7 +97,7 @@ object MainApp extends IOApp.Simple {
     val ctx = Context()
     val expr = PresenceConditionParser.parse(
       ctx,
-      "(defined cond1) && ((defined cond2) || !(defined cond3))"
+      "(defined cond1) && ((defined cond2) || !(defined cond3) && (cond4 == 5))"
     )
     IO.println(s"Parsed expression: $expr")
   }
