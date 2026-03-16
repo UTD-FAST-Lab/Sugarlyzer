@@ -8,6 +8,7 @@ import sugarlyzer.util.CommandBuilder.LogFile
 import com.microsoft.z3.*
 import sugarlyzer.tester.sugarc.PresenceConditionParser
 import sugarlyzer.tester.tools.ToolAlarm
+import sugarlyzer.tester.strategies.ProductStrategy
 
 object MainApp extends IOApp.Simple {
   def run: IO[Unit] = {
