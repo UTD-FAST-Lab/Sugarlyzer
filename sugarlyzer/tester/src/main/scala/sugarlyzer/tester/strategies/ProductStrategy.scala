@@ -261,7 +261,7 @@ object ProductStrategy extends AnalysisStrategy {
       macroFlags: List[String]
   ): Unit = {
     val path    = sourceFile.toString
-    val command = s"cc -c $path}"
+    val command = s"cc -c $path"
     val json =
       s"""[{"directory":"$iterDir","file":"$path","command":"$command","arguments":[${macroFlags.mkString(
           """"""",
