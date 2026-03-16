@@ -6,7 +6,6 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Basic util
 RUN apt-get update && apt-get install -y \
 	software-properties-common wget curl git unzip \
-	&& add-apt-repository ppa:linuxuprising/java \
 	&& apt-get update
 
 # Sys Deps
@@ -57,6 +56,13 @@ ENV CLASSPATH=:/superc/classes:/superc/bin/json-simple-1.1.1.jar:/superc/bin/jun
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
 RUN cd superc && make configure && make
 
+# Download util/
+WORKDIR /
+RUN apt-get install unzip
+ADD http://download.savannah.gnu.org/releases/avr-libc/binary-releases/avr-libc-bin-2.0.0.zip .
+RUN unzip avr-libc-bin-2.0.0.zip
+RUN mv avr/include/* /usr/local/include
+RUN rm /usr/local/include/time.h
 
 WORKDIR /
 COPY tester.jar .

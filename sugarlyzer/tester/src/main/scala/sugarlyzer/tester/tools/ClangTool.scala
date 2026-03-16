@@ -9,11 +9,14 @@ import cats.effect.syntax.all._
 import com.dd.plist.PropertyListParser
 import com.dd.plist.NSDictionary
 import com.dd.plist.NSArray
+import sugarlyzer.common.Config.AppConfig
 
 object ClangTool extends AnalysisTool {
   def name(): String = { "Clang" }
 
-  def run(spec: ProgramSpecification): IO[List[ToolAlarm]] = {
+  def run(spec: ProgramSpecification)(using
+      config: AppConfig
+  ): IO[List[ToolAlarm]] = {
     for {
       _      <- IO.println(s"[TOOL] Running spec ${spec}")
       alarms <- analyzeFiles(spec)
@@ -23,7 +26,7 @@ object ClangTool extends AnalysisTool {
 
   def analyzeFiles(
       spec: ProgramSpecification
-  ): IO[List[ToolAlarm]] = {
+  )(using config: AppConfig): IO[List[ToolAlarm]] = {
     val rootDir             = os.Path(spec.rootDir)
     val compileCommandsPath = rootDir / "compile_commands.json"
 
@@ -38,7 +41,7 @@ object ClangTool extends AnalysisTool {
       commands <- CompileCommands.parse(compileCommandsPath)
 
       alarms <- commands.zipWithIndex.parTraverseN(
-        Runtime.getRuntime().availableProcessors()
+        config.jobs
       ) {
         case (cmd, i) =>
           IO.blocking {

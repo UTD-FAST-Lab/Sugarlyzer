@@ -28,8 +28,15 @@ object MainApp extends IOApp.Simple {
       _ <- IO.println("=== INTEGRATION TEST 4: Presence Condition Parser ===")
       _ <-
         IO.println("Testing presence condition parser with sample expression")
-      _ <- testPresenceConditionParser()
+      _ <- IO.println("=== INTEGRATION TEST 5: Macro Combinations ===")
+      _ <- testExhaustively(sample1)
     } yield ()
+  }
+
+  def testExhaustively(file: String): IO[Unit] = {
+    IO.println(
+      s"Exhaustive sample for ${file} are ${ProductStrategy.exhaustivelySample(os.Path(file))}"
+    )
   }
 
   def analyzeFile(file: String): IO[(ResultFile, LogFile)] =
