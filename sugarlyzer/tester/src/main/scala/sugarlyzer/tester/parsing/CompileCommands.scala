@@ -20,7 +20,7 @@ object CompileCommands {
     decodeFile[List[CompileCommand]](file) match {
       case Right(commands) => commands
       case Left(error) => throw new RuntimeException(
-          s"Failed to parse compile commands json file: $error"
+          s"Failed to parse compile commands json file (${jsonPath.toString}): $error"
         )
     }
 
