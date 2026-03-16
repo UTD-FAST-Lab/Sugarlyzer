@@ -20,9 +20,11 @@ import org.eclipse.cdt.core.parser.ScannerInfo
 import org.eclipse.cdt.core.parser.DefaultLogService
 import org.eclipse.cdt.core.parser.IncludeFileContentProvider
 import org.eclipse.cdt.core.model.ILanguage
-import sugarlyzer.tester.sugarc.SugarCRunner.logger
+import com.typesafe.scalalogging.Logger
 
 object ProductStrategy extends AnalysisStrategy {
+  val logger = Logger[ProductStrategy.type]
+  
   type Alarm = ProductAlarm
 
   def analyze(
@@ -52,7 +54,9 @@ object ProductStrategy extends AnalysisStrategy {
               else (flag.drop(2), "false")
             }
             for {
-              _ <- IO.println(s"Running exhaustive varbugs analysis for config $i (${file.last})")
+              _ <- IO.println(
+                s"Running exhaustive varbugs analysis for config $i (${file.last})"
+              )
               rawFindings <- tool.run(spec.copy(rootDir = iterDir.toString))
             } yield rawFindings.map { finding =>
               ProductAlarm(
@@ -196,7 +200,9 @@ object ProductStrategy extends AnalysisStrategy {
               if (os.exists(iterDir)) os.remove.all(iterDir)
               os.makeDir.all(iterDir)
               writeCompileCommands(iterDir, file, macroSet.toList)
-            } *> IO.println(s"Finished preparing varbugs config $i (${file.last}).")
+            } *> IO.println(
+              s"Finished preparing varbugs config $i (${file.last})."
+            )
         }
       } yield ()
     } else {
