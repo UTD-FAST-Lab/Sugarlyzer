@@ -6,7 +6,6 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Basic util
 RUN apt-get update && apt-get install -y \
 	software-properties-common wget curl git unzip \
-	&& add-apt-repository ppa:linuxuprising/java \
 	&& apt-get update
 
 # Sys Deps
