@@ -263,9 +263,11 @@ object ProductStrategy extends AnalysisStrategy {
     val path    = sourceFile.toString
     val command = s"cc -c $path}"
     val json =
-      s"""[{"directory":"$iterDir","file":"$path","command":"$command","arguments":"[${macroFlags.mkString(
-          ", "
-        )}]"}]"""
+      s"""[{"directory":"$iterDir","file":"$path","command":"$command","arguments":[${macroFlags.mkString(
+          """"""",
+          """", """,
+          """""""
+        )}]}]"""
     os.write.over(iterDir / "compile_commands.json", json)
   }
 
