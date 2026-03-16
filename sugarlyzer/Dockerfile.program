@@ -62,6 +62,7 @@ RUN apt-get install unzip
 ADD http://download.savannah.gnu.org/releases/avr-libc/binary-releases/avr-libc-bin-2.0.0.zip .
 RUN unzip avr-libc-bin-2.0.0.zip
 RUN mv avr/include/* /usr/local/include
+RUN rm /usr/local/include/time.h
 
 WORKDIR /
 COPY tester.jar .
