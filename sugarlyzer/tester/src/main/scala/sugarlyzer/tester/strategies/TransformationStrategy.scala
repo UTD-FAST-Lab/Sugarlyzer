@@ -37,7 +37,7 @@ object TransformationStrategy extends AnalysisStrategy {
               SugarCRunner.findPresenceCondition(
                 finding,
                 os.Path(finding.fileLocation)
-              ).toString(),
+              ),
             model = "",
             feasible = false,
             desugaringTime = 0.0
@@ -133,7 +133,20 @@ object TransformationStrategy extends AnalysisStrategy {
   // TODO: Implement this
   def deduplicate(alarms: List[TransformationAlarm])
       : List[TransformationAlarm] = {
-    List.empty[TransformationAlarm]
+    alarms.groupBy(al =>
+      (
+        al.sanitizedDescription,
+        al.lineInputFile,
+        al.finding.fileLocation,
+        al.finding.alarmType
+      )
+    ).values.flatMap(groupedAlarms =>
+      List(groupedAlarms.reduce((a, b) =>
+        a.copy(presenceCondition = a.presenceCondition.||(b.presenceCondition))
+      ))
+    ).map(al =>
+      al.copy(presenceCondition = al.presenceCondition.simplify)
+    ).toList
   }
 
   def exportAlarms(alarms: List[Alarm]): IO[Unit] = IO.blocking {
