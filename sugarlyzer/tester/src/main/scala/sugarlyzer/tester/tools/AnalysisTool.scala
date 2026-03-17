@@ -4,6 +4,7 @@ import sugarlyzer.models.ProgramSpecification
 
 import cats.effect.{IO}
 import sugarlyzer.common.Config.Tool
+import sugarlyzer.common.Config.AppConfig
 import sugarlyzer.tester.sugarc.PresenceCondition
 
 case class ToolAlarm(
@@ -37,7 +38,7 @@ case class TransformationAlarm(
 
 trait AnalysisTool {
   def name(): String
-  def run(spec: ProgramSpecification): IO[List[ToolAlarm]]
+  def run(spec: ProgramSpecification)(using AppConfig): IO[List[ToolAlarm]]
 }
 
 object AnalysisTool {

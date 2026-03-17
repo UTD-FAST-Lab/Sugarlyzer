@@ -5,15 +5,18 @@ import sugarlyzer.models.ProgramSpecification
 import cats.effect.{IO}
 import os._
 import sugarlyzer.tester.parsing._
-import cats.effect.syntax.all._
+import cats.syntax.all._
 import com.dd.plist.PropertyListParser
 import com.dd.plist.NSDictionary
 import com.dd.plist.NSArray
+import sugarlyzer.common.Config.AppConfig
 
 object ClangTool extends AnalysisTool {
   def name(): String = { "Clang" }
 
-  def run(spec: ProgramSpecification): IO[List[ToolAlarm]] = {
+  def run(spec: ProgramSpecification)(using
+      config: AppConfig
+  ): IO[List[ToolAlarm]] = {
     for {
       _      <- IO.println(s"[TOOL] Running spec ${spec}")
       alarms <- analyzeFiles(spec)
@@ -23,7 +26,7 @@ object ClangTool extends AnalysisTool {
 
   def analyzeFiles(
       spec: ProgramSpecification
-  ): IO[List[ToolAlarm]] = {
+  )(using config: AppConfig): IO[List[ToolAlarm]] = {
     val rootDir             = os.Path(spec.rootDir)
     val compileCommandsPath = rootDir / "compile_commands.json"
 
@@ -37,9 +40,7 @@ object ClangTool extends AnalysisTool {
     for {
       commands <- CompileCommands.parse(compileCommandsPath)
 
-      alarms <- commands.zipWithIndex.parTraverseN(
-        Runtime.getRuntime().availableProcessors()
-      ) {
+      alarms <- commands.zipWithIndex.traverse {
         case (cmd, i) =>
           IO.blocking {
             val uniqueResultsDir =
@@ -85,7 +86,7 @@ object ClangTool extends AnalysisTool {
 
             if (proc.exitCode != 0)
               println(
-                s"Clang command failed: ${proc.out.text()}, commang: ${cmd}"
+                s"Clang command failed: ${proc.out.text()}, command: ${cmd}"
               )
             reportXMLLocation
           }

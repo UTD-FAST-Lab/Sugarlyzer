@@ -6,6 +6,7 @@ import cats.effect.{IO}
 import os._
 import io.circe._
 import io.circe.jawn.decodeFile
+import sugarlyzer.common.Config.AppConfig
 
 case class InferAlarm(
     bug_type: String,
@@ -18,7 +19,9 @@ case class InferAlarm(
 object InferTool extends AnalysisTool {
   def name(): String = { "Infer" }
 
-  def run(spec: ProgramSpecification): IO[List[ToolAlarm]] = {
+  def run(spec: ProgramSpecification)(using
+      config: AppConfig
+  ): IO[List[ToolAlarm]] = {
     for {
       _      <- IO.println(s"[TOOL] Running spec ${spec}")
       alarms <- analyzeFiles(spec)
@@ -28,7 +31,7 @@ object InferTool extends AnalysisTool {
 
   def analyzeFiles(
       spec: ProgramSpecification
-  ): IO[List[ToolAlarm]] = {
+  )(using config: AppConfig): IO[List[ToolAlarm]] = {
     val rootDir             = os.Path(spec.rootDir)
     val compileCommandsPath = rootDir / "compile_commands.json"
     val reportJsonPath = os.Path(spec.rootDir) / "infer-out" / "report.json"
@@ -56,7 +59,8 @@ object InferTool extends AnalysisTool {
 
         val proc = os.proc(
           "infer",
-          "analyze"
+          "analyze",
+          "--jobs", "1"
         ).call(cwd = rootDir, stdout = os.Inherit, stderr = os.Inherit)
         if (proc.exitCode != 0)
           throw new RuntimeException("Failed to run infer")

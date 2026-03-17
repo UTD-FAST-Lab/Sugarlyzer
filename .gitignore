@@ -182,3 +182,4 @@ hs_err_pid*
 *~
 
 **/metals.sbt
+**/*.jar
