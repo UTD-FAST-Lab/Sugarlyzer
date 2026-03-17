@@ -5,6 +5,7 @@ import sugarlyzer.models.ProgramSpecification
 import cats.effect.{IO}
 import sugarlyzer.common.Config.Tool
 import sugarlyzer.common.Config.AppConfig
+import sugarlyzer.tester.sugarc.PresenceCondition
 
 case class ToolAlarm(
     alarmType: String,
@@ -29,7 +30,7 @@ case class TransformationAlarm(
     finding: ToolAlarm,
     sanitizedDescription: String,
     lineInputFile: Int,
-    presenceCondition: String,
+    presenceCondition: PresenceCondition,
     model: String,
     feasible: Boolean,
     desugaringTime: Double

@@ -1,15 +1,14 @@
 package sugarlyzer.tester.strategies
 
-import cats.effect.IO
-import sugarlyzer.tester.tools.AnalysisTool
-import sugarlyzer.models.*
-import sugarlyzer.common.Config.AppConfig
-import cats.effect.syntax.all._
 import os._
-import sugarlyzer.tester.tools.ProductAlarm
-import sugarlyzer.common.Config
+import cats.effect.IO
+import cats.effect.syntax.all._
 import cats.effect.kernel.Resource
+import sugarlyzer.tester.tools.AnalysisTool
+import sugarlyzer.tester.tools.ProductAlarm
+import sugarlyzer.common.Config.AppConfig
 import sugarlyzer.common.Config.Tool
+import sugarlyzer.models.*
 import scala.util.Using
 import scala.io.Source
 import io.circe.generic.auto.*
@@ -272,7 +271,7 @@ object ProductStrategy extends AnalysisStrategy {
       sampleId: Int,
       spec: ProgramSpecification,
       iterDir: os.Path,
-      config: Config.AppConfig
+      config: AppConfig
   ): IO[Unit] = IO.blocking {
     val workingDir = iterDir / spec.rootDir
 

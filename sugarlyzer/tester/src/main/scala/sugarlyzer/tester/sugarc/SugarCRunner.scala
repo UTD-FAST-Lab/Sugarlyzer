@@ -26,10 +26,10 @@ object SugarCRunner {
       noStdLibs: Boolean,
       keepMem: Boolean,
       makeMain: Boolean,
+      restrict: Boolean = false,
       includedFiles: Iterable[Path],
       includedDirectories: Iterable[Path],
-      commandLineDeclarations: Iterable[String],
-      restrict: Boolean = false
+      commandLineDeclarations: Iterable[String]
   ): CommandBuilder = {
     val allIncludedFiles = rsFileOpt.toSeq ++ includedFiles
 
@@ -47,12 +47,13 @@ object SugarCRunner {
       includedDirectories.flatMap(p => Seq("-I", p.toString())).toSeq*
     ).args(
       commandLineDeclarations.toSeq*
-    ).args(fileToDesugar.toString)
+    )
 
     if noStdLibs then cmd = cmd.arg("-nostdinc")
     if keepMem then cmd = cmd.arg("-keep-mem")
     if makeMain then cmd = cmd.arg("-make-main")
-    if restrict then cmd = cmd.args("-restrictConfigToPrefix", "_KGENMACRO")
+    if restrict then cmd = cmd.args("-restrictConfigToPrefix", "KGENMACRO_")
+    cmd = cmd.args(fileToDesugar.toString)
     logger.debug(s"Sugarc cmd is ${cmd.show}")
     cmd.in(File(fileToDesugar.toURI).getParentFile())
   }
@@ -68,6 +69,7 @@ object SugarCRunner {
       noStdLibs: Boolean = true,
       keepMem: Boolean = true,
       makeMain: Boolean = true,
+      restrict: Boolean = false,
       includedFiles: Iterable[Path] = Seq(),
       includedDirectories: Iterable[Path] = Seq(),
       commandLineDeclarations: Iterable[String] = Nil
@@ -90,6 +92,7 @@ object SugarCRunner {
         noStdLibs,
         keepMem,
         makeMain,
+        restrict,
         includedFiles,
         includedDirectories,
         commandLineDeclarations

@@ -111,6 +111,20 @@ object ClangTool extends AnalysisTool {
       val filesArray = rootDict.objectForKey("files").asInstanceOf[NSArray]
       val fileNames  = filesArray.getArray.map(_.toString)
 
+      val rootDirPath = java.nio.file.Paths.get(spec.rootDir.toString)
+      val fileStream  = java.nio.file.Files.walk(rootDirPath)
+
+      val fileMap =
+        try {
+          fileStream.toArray
+            .map(_.asInstanceOf[java.nio.file.Path])
+            .filter(java.nio.file.Files.isRegularFile(_))
+            .map(p => p.getFileName.toString -> p.toAbsolutePath.toString)
+            .toMap
+        } finally {
+          fileStream.close()
+        }
+
       val diagnostics =
         rootDict.objectForKey("diagnostics").asInstanceOf[NSArray]
 
@@ -123,18 +137,19 @@ object ClangTool extends AnalysisTool {
 
         val locDict =
           bugDict.objectForKey("location").asInstanceOf[NSDictionary]
-        // val col     = locDict.objectForKey("col").toString.toInt
         val line    = locDict.objectForKey("line").toString.toInt
         val fileIdx = locDict.objectForKey("file").toString.toInt
 
         val fileName =
           if (fileIdx < fileNames.length) fileNames(fileIdx) else "Unknown"
 
+        val absolutePath = fileMap.getOrElse(fileName, "Unknown")
+
         ToolAlarm(
           alarmType = bugType,
           description = description,
           line = line,
-          fileLocation = spec.rootDir + "/" + fileName,
+          fileLocation = absolutePath,
           analysisTime = 0.0
         )
       }.toList
