@@ -5,7 +5,7 @@ import sugarlyzer.models.ProgramSpecification
 import cats.effect.{IO}
 import os._
 import sugarlyzer.tester.parsing._
-import cats.effect.syntax.all._
+import cats.syntax.all._
 import com.dd.plist.PropertyListParser
 import com.dd.plist.NSDictionary
 import com.dd.plist.NSArray
@@ -40,9 +40,7 @@ object ClangTool extends AnalysisTool {
     for {
       commands <- CompileCommands.parse(compileCommandsPath)
 
-      alarms <- commands.zipWithIndex.parTraverseN(
-        config.jobs
-      ) {
+      alarms <- commands.zipWithIndex.traverse {
         case (cmd, i) =>
           IO.blocking {
             val uniqueResultsDir =
