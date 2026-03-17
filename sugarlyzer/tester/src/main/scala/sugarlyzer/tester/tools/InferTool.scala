@@ -61,7 +61,8 @@ object InferTool extends AnalysisTool {
         val proc = os.proc(
           "infer",
           "analyze",
-          "--jobs", "1"
+          "--jobs", "1",
+          "--no-server"
         ).call(cwd = rootDir, stdout = os.Inherit, stderr = os.Inherit)
         if (proc.exitCode != 0)
           throw new RuntimeException("Failed to run infer")
