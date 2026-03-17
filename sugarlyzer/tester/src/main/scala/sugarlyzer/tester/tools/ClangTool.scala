@@ -5,7 +5,7 @@ import sugarlyzer.models.ProgramSpecification
 import cats.effect.{IO}
 import os._
 import sugarlyzer.tester.parsing._
-import cats.effect.syntax.all._
+import cats.syntax.all._
 import com.dd.plist.PropertyListParser
 import com.dd.plist.NSDictionary
 import com.dd.plist.NSArray
