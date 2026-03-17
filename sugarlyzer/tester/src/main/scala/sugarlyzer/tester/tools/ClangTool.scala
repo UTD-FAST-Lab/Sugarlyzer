@@ -88,7 +88,7 @@ object ClangTool extends AnalysisTool {
 
             if (proc.exitCode != 0)
               println(
-                s"Clang command failed: ${proc.out.text()}, commang: ${cmd}"
+                s"Clang command failed: ${proc.out.text()}, command: ${cmd}"
               )
             reportXMLLocation
           }

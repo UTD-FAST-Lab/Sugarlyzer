@@ -171,7 +171,7 @@ object ProductStrategy extends AnalysisStrategy {
           case definedPattern(mac) => mac
           case _                   => s
         }
-      )
+      ).map(s => s.stripPrefix("(").stripSuffix(")"))
 
     logger.debug(s"Macros are ${macros}")
 
@@ -261,13 +261,10 @@ object ProductStrategy extends AnalysisStrategy {
       macroFlags: List[String]
   ): Unit = {
     val path    = sourceFile.toString
-    val command = s"cc -c $path"
+    val command = s"cc -c $path ${macroFlags.mkString(" ")}"
+    val args    = command.split(" ").map(f => s"\"$f\"").mkString(", ")
     val json =
-      s"""[{"directory":"$iterDir","file":"$path","command":"$command","arguments":[${macroFlags.mkString(
-          """"""",
-          """", """,
-          """""""
-        )}]}]"""
+      s"""[{"directory":"$iterDir","file":"$path","command":"$command","arguments":[$args]}]"""
     os.write.over(iterDir / "compile_commands.json", json)
   }
 
