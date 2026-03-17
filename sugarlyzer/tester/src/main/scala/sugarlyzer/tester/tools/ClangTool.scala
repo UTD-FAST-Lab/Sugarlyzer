@@ -40,9 +40,7 @@ object ClangTool extends AnalysisTool {
     for {
       commands <- CompileCommands.parse(compileCommandsPath)
 
-      alarms <- commands.zipWithIndex.parTraverseN(
-        config.jobs
-      ) {
+      alarms <- commands.zipWithIndex.traverse {
         case (cmd, i) =>
           IO.blocking {
             val uniqueResultsDir =
