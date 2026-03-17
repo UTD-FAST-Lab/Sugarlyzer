@@ -41,12 +41,19 @@ RUN echo "/usr/local/llvm-12/lib" > /etc/ld.so.conf.d/llvm-12.conf && ldconfig
 
 ENV PATH="${LLVM_INSTALL_DIR}/bin:${PATH}"
 
-# Get Z3
-ARG Z3_INSTALL_DIR=/opt/z3/
-ADD https://github.com/Z3Prover/z3/releases/download/z3-4.15.8/z3-4.15.8-arm64-glibc-2.38.zip ${Z3_INSTALL_DIR}
-WORKDIR /opt/z3
-RUN unzip z3-4.15.8-arm64-glibc-2.38.zip
-RUN mv z3-4.15.8-arm64-glibc-2.38/* .
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64/
+
+# Build Z3 from source with Java bindings
+RUN git clone --depth 1 --branch z3-4.8.14 https://github.com/Z3Prover/z3.git /tmp/z3-src && \
+	cd /tmp/z3-src && \
+	python3 scripts/mk_make.py --java && \
+	cd build && \
+	make -j$(nproc) && \
+	mkdir -p /opt/z3/bin && \
+	cp libz3.so libz3java.so com.microsoft.z3.jar /opt/z3/bin/ && \
+	rm -rf /tmp/z3-src
+
+ENV LD_LIBRARY_PATH="/opt/z3/bin:${LD_LIBRARY_PATH}"
 
 # Get sugarc
 WORKDIR /

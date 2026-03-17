@@ -23,9 +23,8 @@ trait AnalysisStrategy {
 object AnalysisStrategy {
   def apply(strategy: Strategy): AnalysisStrategy =
     strategy match {
-      case Strategy.PRODUCT => ProductStrategy
-      case Strategy.TRANSFORMATION =>
-        throw new RuntimeException("Not implemented yet")
+      case Strategy.PRODUCT        => ProductStrategy
+      case Strategy.TRANSFORMATION => TransformationStrategy
       case Strategy.FAMILY => throw new RuntimeException("Not implemented yet")
     }
 }

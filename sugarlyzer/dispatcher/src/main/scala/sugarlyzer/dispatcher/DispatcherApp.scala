@@ -104,6 +104,7 @@ object DispatcherApp extends IOApp {
           .withAttachStderr(true)
           .withCmd(
             "java",
+            "-Djava.library.path=/opt/z3/bin",
             "-jar",
             "tester.jar",
             "--phase",
@@ -112,6 +113,8 @@ object DispatcherApp extends IOApp {
             config.program,
             "--tool",
             config.tool.toString(),
+            "--strategy",
+            config.strategy.toString,
             "--sample_size",
             config.sampleSize.toString
           )
@@ -155,6 +158,7 @@ object DispatcherApp extends IOApp {
           .withAttachStderr(true)
           .withCmd(
             "java",
+            "-Djava.library.path=/opt/z3/bin",
             "-jar",
             "tester.jar",
             "--phase",
@@ -163,6 +167,8 @@ object DispatcherApp extends IOApp {
             config.program,
             "--tool",
             config.tool.toString().toLowerCase(),
+            "--strategy",
+            config.strategy.toString,
             "--sample_size",
             config.sampleSize.toString
           )
