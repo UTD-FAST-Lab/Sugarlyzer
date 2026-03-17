@@ -50,6 +50,7 @@ object InferTool extends AnalysisTool {
         val procCapture = os.proc(
           "infer",
           "capture",
+          "--jobs", "1",
           "--keep-going",
           "--compilation-database",
           compileCommandsPath.toString
