@@ -72,6 +72,27 @@ object Configurator {
       .filter(p => p.ext == "o")
       .foreach(os.remove)
 
+    // Remove generated Kconfig parser files that may be left over from a
+    // previous build with a stale timestamp.  If present, `make` skips
+    // regenerating them from the *_shipped originals, and an old flex-generated
+    // lex.zconf.c (without #include <errno.h>) causes the same TLS link error.
+    val kconfigDir = masterSource / "config" / "scripts" / "config"
+    if (os.exists(kconfigDir)) {
+      Seq("lex.zconf.c", "zconf.tab.c", "zconf.tab.h", "lkc_defs.h")
+        .map(kconfigDir / _)
+        .filter(os.exists)
+        .foreach(os.remove)
+    }
+
+    // Prepend #include <errno.h> to zconf.tab.c_shipped so that errno is
+    // declared via the TLS-aware glibc macro before any code in the file uses it.
+    val zconfTabShipped = kconfigDir / "zconf.tab.c_shipped"
+    if (os.exists(zconfTabShipped)) {
+      val content = os.read(zconfTabShipped)
+      if (!content.startsWith("#include <errno.h>"))
+        os.write.over(zconfTabShipped, "#include <errno.h>\n" + content)
+    }
+
     val buildProc = os.proc("bash", "-c", spec.buildCommand)
       .call(cwd = masterSource)
     if (buildProc.exitCode != 0)
