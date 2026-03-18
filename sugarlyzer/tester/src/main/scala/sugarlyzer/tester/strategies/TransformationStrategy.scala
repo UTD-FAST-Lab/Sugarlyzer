@@ -23,6 +23,7 @@ object TransformationStrategy extends AnalysisStrategy {
       spec: ProgramSpecification,
       tool: AnalysisTool
   ): IO[List[TransformationAlarm]] = {
+    given AppConfig = appConfig
     println(s"Running analysis for ${spec.name}")
     val workingDir = os.Path(appConfig.sharedPath) / os.RelPath(spec.rootDir)
     for {
