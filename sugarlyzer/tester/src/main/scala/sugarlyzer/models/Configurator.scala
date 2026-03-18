@@ -65,6 +65,13 @@ object Configurator {
       )
     }
 
+    // Remove any pre-compiled .o files shipped in the tarball so they get
+    // recompiled for the current host (e.g. axtls ships zconf.tab.o built
+    // against an older ABI which causes a TLS/errno mismatch at link time).
+    os.walk(masterSource)
+      .filter(p => p.ext == "o")
+      .foreach(os.remove)
+
     val buildProc = os.proc("bash", "-c", spec.buildCommand)
       .call(cwd = masterSource)
     if (buildProc.exitCode != 0)
