@@ -118,7 +118,8 @@ object TransformationStrategy extends AnalysisStrategy {
           cwd = workingDir,
           check = false,
           stdout = os.Inherit,
-          stderr = os.Inherit
+          stderr = os.Inherit,
+          env = Map("CFLAGS" -> "-fPIC")
         ): Unit
 
       val jsonPath = workingDir / "compile_commands.json"
