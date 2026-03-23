@@ -26,6 +26,16 @@ case class PresenceCondition(ctx: Context, expr: BoolExpr) {
     solver.add(expr)
     solver.check() == Status.SATISFIABLE
   }
+
+  def getModel: String = {
+    val solver = ctx.mkSolver()
+    solver.add(expr)
+    if (solver.check() == Status.SATISFIABLE) {
+      solver.getModel.toString
+    } else {
+      "Unsatisfiable"
+    }
+  }
 }
 
 object PresenceCondition {

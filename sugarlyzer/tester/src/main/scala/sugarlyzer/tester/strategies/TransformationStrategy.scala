@@ -20,7 +20,7 @@ object TransformationStrategy extends AnalysisStrategy {
 
   def sanitizeDescription(description: String): String = {
     val pattern = """__(.*)_(?:\d*)""".r
-    pattern.replaceAllIn(description, m => m.group(1))    
+    pattern.replaceAllIn(description, m => m.group(1))
   }
   def analyze(
       appConfig: AppConfig,
@@ -34,17 +34,17 @@ object TransformationStrategy extends AnalysisStrategy {
       rawFindings <- tool.run(spec.copy(rootDir = workingDir.toString))
       alarms <- IO.blocking {
         rawFindings.map { finding =>
+          val model = SugarCRunner.findPresenceCondition(
+            finding,
+            os.Path(finding.fileLocation)
+          )
           TransformationAlarm(
             finding = finding,
             sanitizedDescription = sanitizeDescription(finding.description),
             lineInputFile = 0,
-            presenceCondition =
-              SugarCRunner.findPresenceCondition(
-                finding,
-                os.Path(finding.fileLocation)
-              ),
-            model = "",
-            feasible = ,
+            presenceCondition = model,
+            model = model.getModel,
+            feasible = model.isSatisfiable,
             desugaringTime = 0.0
           )
         }
