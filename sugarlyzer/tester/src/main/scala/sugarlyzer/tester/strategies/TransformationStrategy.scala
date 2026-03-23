@@ -18,6 +18,10 @@ import sugarlyzer.tester.sugarc.SugarCRunner
 object TransformationStrategy extends AnalysisStrategy {
   type Alarm = TransformationAlarm
 
+  def sanitizeDescription(description: String): String = {
+    val pattern = """__(.*)_(?:\d*)""".r
+    pattern.replaceAllIn(description, m => m.group(1))    
+  }
   def analyze(
       appConfig: AppConfig,
       spec: ProgramSpecification,
@@ -32,7 +36,7 @@ object TransformationStrategy extends AnalysisStrategy {
         rawFindings.map { finding =>
           TransformationAlarm(
             finding = finding,
-            sanitizedDescription = "",
+            sanitizedDescription = sanitizeDescription(finding.description),
             lineInputFile = 0,
             presenceCondition =
               SugarCRunner.findPresenceCondition(
@@ -40,7 +44,7 @@ object TransformationStrategy extends AnalysisStrategy {
                 os.Path(finding.fileLocation)
               ),
             model = "",
-            feasible = false,
+            feasible = ,
             desugaringTime = 0.0
           )
         }
