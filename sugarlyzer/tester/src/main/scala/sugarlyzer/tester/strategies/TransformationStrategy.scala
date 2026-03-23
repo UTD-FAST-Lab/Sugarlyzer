@@ -149,8 +149,6 @@ object TransformationStrategy extends AnalysisStrategy {
       List(groupedAlarms.reduce((a, b) =>
         a.copy(presenceCondition = a.presenceCondition.||(b.presenceCondition))
       ))
-    ).map(al =>
-      al.copy(presenceCondition = al.presenceCondition.simplify)
     ).toList
   }
 
