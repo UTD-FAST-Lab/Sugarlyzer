@@ -18,6 +18,10 @@ import sugarlyzer.tester.sugarc.SugarCRunner
 object TransformationStrategy extends AnalysisStrategy {
   type Alarm = TransformationAlarm
 
+  def sanitizeDescription(description: String): String = {
+    val pattern = """__(.*)_(?:\d*)""".r
+    pattern.replaceAllIn(description, m => m.group(1))
+  }
   def analyze(
       appConfig: AppConfig,
       spec: ProgramSpecification,
@@ -30,22 +34,22 @@ object TransformationStrategy extends AnalysisStrategy {
       rawFindings <- tool.run(spec.copy(rootDir = workingDir.toString))
       alarms <- IO.blocking {
         rawFindings.map { finding =>
+          val model = SugarCRunner.findPresenceCondition(
+            finding,
+            os.Path(finding.fileLocation)
+          )
           TransformationAlarm(
             finding = finding,
-            sanitizedDescription = "",
+            sanitizedDescription = sanitizeDescription(finding.description),
             lineInputFile = 0,
-            presenceCondition =
-              SugarCRunner.findPresenceCondition(
-                finding,
-                os.Path(finding.fileLocation)
-              ),
-            model = "",
-            feasible = false,
+            presenceCondition = model,
+            model = model.getModel,
+            feasible = model.isSatisfiable,
             desugaringTime = 0.0
           )
         }
       }
-    } yield (alarms)
+    } yield (alarms.filter(_.feasible))
   }
 
   def build(appConfig: AppConfig, spec: ProgramSpecification): IO[Unit] = {
@@ -131,7 +135,6 @@ object TransformationStrategy extends AnalysisStrategy {
     }.flatMap(jsonPath => CompileCommands.parse(jsonPath))
   }
 
-  // TODO: Implement this
   def deduplicate(alarms: List[TransformationAlarm])
       : List[TransformationAlarm] = {
     alarms.groupBy(al =>
@@ -145,8 +148,6 @@ object TransformationStrategy extends AnalysisStrategy {
       List(groupedAlarms.reduce((a, b) =>
         a.copy(presenceCondition = a.presenceCondition.||(b.presenceCondition))
       ))
-    ).map(al =>
-      al.copy(presenceCondition = al.presenceCondition.simplify)
     ).toList
   }
 
