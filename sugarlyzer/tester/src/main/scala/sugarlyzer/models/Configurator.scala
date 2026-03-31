@@ -72,10 +72,12 @@ object Configurator {
         s"Failed to run build command: ${spec.buildCommand}"
       )
 
-    os.copy(
-      from = os.Path("/SugarlyzerConfig") / s"${spec.name}Config.h",
-      to = sharedPath / os.RelPath(spec.configHeaderLocation),
-      replaceExisting = true
-    )
+    if (spec.configHeaderLocation.nonEmpty) {
+      os.copy(
+        from = os.Path("/SugarlyzerConfig") / s"${spec.name}Config.h",
+        to = sharedPath / os.RelPath(spec.configHeaderLocation),
+        replaceExisting = true
+      )
+    }
   }
 }
