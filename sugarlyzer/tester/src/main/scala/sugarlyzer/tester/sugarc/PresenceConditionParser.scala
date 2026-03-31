@@ -140,7 +140,7 @@ object PresenceConditionParser {
             pos += 1
             val name = parseIdent()
             expect(TokRParen)
-            ctx.mkBoolConst(name)
+            mkCondition(name)
           } else {
             // Peek ahead: if it's `(IDENT cmp_op NUMBER)`, consume and return the ident
             val savedPos = pos
@@ -151,7 +151,7 @@ object PresenceConditionParser {
                   tokens(pos + 2).asInstanceOf[TokIdent].name.forall(_.isDigit) =>
                 pos += 3
                 expect(TokRParen)
-                ctx.mkBoolConst(name)
+                mkCondition(name)
               case _ =>
                 pos = savedPos
                 val expr = parseExpr()
@@ -162,10 +162,10 @@ object PresenceConditionParser {
         case Some(TokDefined) =>
           pos += 1
           val name = parseIdent()
-          ctx.mkBoolConst(name)
+          mkCondition(name)
         case Some(TokIdent(name)) =>
           pos += 1
-          ctx.mkBoolConst(name)
+          mkCondition(name)
         case got =>
           throw new IllegalArgumentException(
             s"Expected '(', 'defined', or identifier but got $got at position $pos"
@@ -184,5 +184,9 @@ object PresenceConditionParser {
           )
       }
     }
+
+    private def mkCondition(name: String): BoolExpr =
+      if (name.startsWith("_")) ctx.mkTrue()
+      else mkCondition(name)
   }
 }
