@@ -49,7 +49,7 @@ object TransformationStrategy extends AnalysisStrategy {
           )
         }
       }
-    } yield (alarms)
+    } yield (alarms.filter(_.feasible))
   }
 
   def build(appConfig: AppConfig, spec: ProgramSpecification): IO[Unit] = {
@@ -135,7 +135,6 @@ object TransformationStrategy extends AnalysisStrategy {
     }.flatMap(jsonPath => CompileCommands.parse(jsonPath))
   }
 
-  // TODO: Implement this
   def deduplicate(alarms: List[TransformationAlarm])
       : List[TransformationAlarm] = {
     alarms.groupBy(al =>
