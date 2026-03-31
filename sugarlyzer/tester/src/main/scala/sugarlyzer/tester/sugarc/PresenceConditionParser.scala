@@ -186,7 +186,6 @@ object PresenceConditionParser {
     }
 
     private def mkCondition(name: String): BoolExpr =
-      if (name.startsWith("_")) ctx.mkTrue()
-      else ctx.mkBoolConst(name)
+      ctx.mkBoolConst(name)
   }
 }
