@@ -143,7 +143,7 @@ object ClangTool extends AnalysisTool {
         val fileName =
           if (fileIdx < fileNames.length) fileNames(fileIdx) else "Unknown"
 
-        val absolutePath = fileMap.getOrElse(fileName, "Unknown")
+        val absolutePath = fileMap.getOrElse(fileName, fileNames(fileIdx))
 
         ToolAlarm(
           alarmType = bugType,
