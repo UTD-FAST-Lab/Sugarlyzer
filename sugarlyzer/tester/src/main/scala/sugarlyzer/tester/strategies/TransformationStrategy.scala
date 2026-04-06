@@ -155,7 +155,7 @@ object TransformationStrategy extends AnalysisStrategy {
       List(groupedAlarms.reduce((a, b) =>
         a.copy(presenceCondition = a.presenceCondition.||(b.presenceCondition))
       ))
-    ).toList
+    ).filter(t => t.lineInputFile.isDefined).toList
   }
 
   def exportAlarms(alarms: List[Alarm]): IO[Unit] = IO.blocking {
