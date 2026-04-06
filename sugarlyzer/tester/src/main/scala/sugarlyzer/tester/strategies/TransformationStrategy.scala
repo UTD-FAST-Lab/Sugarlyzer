@@ -39,7 +39,7 @@ object TransformationStrategy extends AnalysisStrategy {
             os.Path(finding.fileLocation)
           )
           TransformationAlarm(
-            finding = finding,
+            originalAlarm = finding,
             sanitizedDescription = sanitizeDescription(finding.description),
             lineInputFile = SugarCRunner.mapLineNumber(
               finding,
@@ -144,8 +144,8 @@ object TransformationStrategy extends AnalysisStrategy {
       (
         al.sanitizedDescription,
         al.lineInputFile,
-        al.finding.fileLocation,
-        al.finding.alarmType
+        al.originalAlarm.fileLocation,
+        al.originalAlarm.alarmType
       )
     ).values.flatMap(groupedAlarms =>
       List(groupedAlarms.reduce((a, b) =>
