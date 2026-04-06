@@ -102,13 +102,13 @@ object SugarCRunner {
   }
 
   def mapLineNumber(
-    alarm: ToolAlarm,
-    file: Path
+      alarm: ToolAlarm,
+      file: Path
   ): (Int, Int) = {
-    val lines = os.read(file).split("\n").toList
-    val line = lines(alarm.line-1)
+    val lines      = os.read(file).split("\n").toList
+    val line       = lines(alarm.line - 1)
     val rangeRegex = """(?:.*)// L(.*):L(.*)$""".r
-    val lineRegex = """(?:.*)// L(.*)$""".r
+    val lineRegex  = """(?:.*)// L(.*)$""".r
     line match {
       case rangeRegex(start, end) =>
         logger.debug(s"Mapped line ${alarm.line} to range $start-$end")
@@ -118,10 +118,10 @@ object SugarCRunner {
         (num.toInt, num.toInt)
       case _ =>
         logger.warn(
-          s"Couldn't map line ${alarm.line} in file $file, defaulting to original line"
+          s"Couldn't map line ${alarm.line} in file $file ($line), defaulting to original line"
         )
         (alarm.line, alarm.line)
-    } 
+    }
   }
   def findPresenceCondition(
       alarm: ToolAlarm,
