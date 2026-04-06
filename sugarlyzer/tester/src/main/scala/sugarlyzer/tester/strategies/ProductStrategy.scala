@@ -59,7 +59,7 @@ object ProductStrategy extends AnalysisStrategy {
               rawFindings <- tool.run(spec.copy(rootDir = iterDir.toString))
             } yield rawFindings.map { finding =>
               ProductAlarm(
-                finding = finding,
+                originalAlarm = finding,
                 configFiles = List.empty,
                 model = model,
                 numConfigs = List(model.length)
@@ -95,7 +95,7 @@ object ProductStrategy extends AnalysisStrategy {
           alarms <- IO.blocking {
             rawFindings.map { finding =>
               ProductAlarm(
-                finding = finding.copy(fileLocation =
+                originalAlarm = finding.copy(fileLocation =
                   finding.fileLocation.replaceAll(s"/workspace/$i/", "")
                 ),
                 configFiles = List[String](configFile),
@@ -335,10 +335,10 @@ object ProductStrategy extends AnalysisStrategy {
     alarms
       .groupBy(a =>
         (
-          a.finding.fileLocation,
-          a.finding.line,
-          a.finding.alarmType,
-          a.finding.description
+          a.originalAlarm.fileLocation,
+          a.originalAlarm.line,
+          a.originalAlarm.alarmType,
+          a.originalAlarm.description
         )
       )
       .values

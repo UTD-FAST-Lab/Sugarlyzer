@@ -39,9 +39,16 @@ object TransformationStrategy extends AnalysisStrategy {
             os.Path(finding.fileLocation)
           )
           TransformationAlarm(
-            finding = finding,
+            originalAlarm = finding,
+            originalFile = finding.fileLocation.replace(
+              ".desugared",
+              ""
+            ),
             sanitizedDescription = sanitizeDescription(finding.description),
-            lineInputFile = 0,
+            lineInputFile = SugarCRunner.mapLineNumber(
+              finding,
+              os.Path(finding.fileLocation)
+            ),
             presenceCondition = model,
             model = model.getModel,
             feasible = model.isSatisfiable,
@@ -141,14 +148,14 @@ object TransformationStrategy extends AnalysisStrategy {
       (
         al.sanitizedDescription,
         al.lineInputFile,
-        al.finding.fileLocation,
-        al.finding.alarmType
+        al.originalAlarm.fileLocation,
+        al.originalAlarm.alarmType
       )
     ).values.flatMap(groupedAlarms =>
       List(groupedAlarms.reduce((a, b) =>
         a.copy(presenceCondition = a.presenceCondition.||(b.presenceCondition))
       ))
-    ).toList
+    ).filter(t => t.lineInputFile.isDefined).toList
   }
 
   def exportAlarms(alarms: List[Alarm]): IO[Unit] = IO.blocking {
