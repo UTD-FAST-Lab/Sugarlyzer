@@ -41,7 +41,10 @@ object TransformationStrategy extends AnalysisStrategy {
           TransformationAlarm(
             finding = finding,
             sanitizedDescription = sanitizeDescription(finding.description),
-            lineInputFile = 0,
+            lineInputFile = SugarCRunner.mapLineNumber(
+              finding,
+              os.Path(finding.fileLocation)
+            ),
             presenceCondition = model,
             model = model.getModel,
             feasible = model.isSatisfiable,

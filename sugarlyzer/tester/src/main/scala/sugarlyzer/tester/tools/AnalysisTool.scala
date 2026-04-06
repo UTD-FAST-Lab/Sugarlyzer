@@ -29,7 +29,7 @@ case class ProductAlarm(
 case class TransformationAlarm(
     finding: ToolAlarm,
     sanitizedDescription: String,
-    lineInputFile: Int,
+    lineInputFile: (Int, Int),
     presenceCondition: PresenceCondition,
     model: String,
     feasible: Boolean,
