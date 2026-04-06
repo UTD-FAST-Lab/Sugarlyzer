@@ -28,6 +28,7 @@ case class ProductAlarm(
 
 case class TransformationAlarm(
     originalAlarm: ToolAlarm,
+    originalFile: String,
     sanitizedDescription: String,
     lineInputFile: Option[(Int, Int)],
     presenceCondition: PresenceCondition,

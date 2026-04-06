@@ -40,6 +40,10 @@ object TransformationStrategy extends AnalysisStrategy {
           )
           TransformationAlarm(
             originalAlarm = finding,
+            originalFile = finding.fileLocation.replace(
+              ".desugared",
+              ""
+            ),
             sanitizedDescription = sanitizeDescription(finding.description),
             lineInputFile = SugarCRunner.mapLineNumber(
               finding,
