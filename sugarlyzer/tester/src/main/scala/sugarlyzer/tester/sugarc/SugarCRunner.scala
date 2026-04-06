@@ -107,8 +107,8 @@ object SugarCRunner {
   ): (Int, Int) = {
     val lines = os.read(file).split("\n").toList
     val line = lines(alarm.line-1)
-    val rangeRegex = """// L(.*):L(.*)$""".r
-    val lineRegex = """// L(.*)$""".r
+    val rangeRegex = """(?:.*)// L(.*):L(.*)$""".r
+    val lineRegex = """(?:.*)// L(.*)$""".r
     line match {
       case rangeRegex(start, end) =>
         logger.debug(s"Mapped line ${alarm.line} to range $start-$end")
