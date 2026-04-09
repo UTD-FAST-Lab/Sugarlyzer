@@ -16,20 +16,21 @@ case class ToolAlarm(
 )
 
 sealed trait StrategyAlarm {
-  def finding: ToolAlarm
+  def originalAlarm: ToolAlarm
 }
 
 case class ProductAlarm(
-    finding: ToolAlarm,
+    originalAlarm: ToolAlarm,
     configFiles: List[String],
     model: List[(String, String)],
     numConfigs: List[Int]
 ) extends StrategyAlarm
 
 case class TransformationAlarm(
-    finding: ToolAlarm,
+    originalAlarm: ToolAlarm,
+    originalFile: String,
     sanitizedDescription: String,
-    lineInputFile: Int,
+    lineInputFile: Option[(Int, Int)],
     presenceCondition: PresenceCondition,
     model: String,
     feasible: Boolean,
