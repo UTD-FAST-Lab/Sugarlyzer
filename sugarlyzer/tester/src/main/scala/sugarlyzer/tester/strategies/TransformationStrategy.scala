@@ -57,7 +57,6 @@ object TransformationStrategy extends AnalysisStrategy {
           )
 
           println(s"Time for $absoluteFilePath: $time")
-
           TransformationAlarm(
             originalAlarm = finding,
             originalFile = finding.fileLocation.replace(
@@ -67,7 +66,7 @@ object TransformationStrategy extends AnalysisStrategy {
             sanitizedDescription = sanitizeDescription(finding.description),
             lineInputFile = SugarCRunner.mapLineNumber(
               finding,
-              os.Path(finding.fileLocation)
+              absoluteFilePath
             ),
             presenceCondition = model,
             model = model.getModel,
