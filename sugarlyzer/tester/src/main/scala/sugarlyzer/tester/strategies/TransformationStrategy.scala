@@ -32,12 +32,32 @@ object TransformationStrategy extends AnalysisStrategy {
     val workingDir = os.Path(appConfig.sharedPath) / os.RelPath(spec.rootDir)
     for {
       rawFindings <- tool.run(spec.copy(rootDir = workingDir.toString))
+      telemetryMap <- IO.blocking {
+        val telemetryPath = workingDir / "desugar_telemetry.json"
+        if (os.exists(telemetryPath))
+          io.circe.parser.decode[Map[
+            String,
+            Double
+          ]](os.read(telemetryPath)).getOrElse(Map.empty)
+        else Map.empty[String, Double]
+      }
+      _ <- IO.println("Telemetry map: " + telemetryMap.toString)
       alarms <- IO.blocking {
         rawFindings.map { finding =>
+          val absoluteFilePath = workingDir / os.RelPath(finding.fileLocation)
+
           val model = SugarCRunner.findPresenceCondition(
             finding,
-            os.Path(finding.fileLocation)
+            absoluteFilePath
           )
+
+          val time = telemetryMap.getOrElse(
+            absoluteFilePath.toString,
+            0.0
+          )
+
+          println(s"Time for $absoluteFilePath: $time")
+
           TransformationAlarm(
             finding = finding,
             sanitizedDescription = sanitizeDescription(finding.description),
@@ -45,10 +65,11 @@ object TransformationStrategy extends AnalysisStrategy {
             presenceCondition = model,
             model = model.getModel,
             feasible = model.isSatisfiable,
-            desugaringTime = 0.0
+            desugaringTime = time
           )
         }
       }
+      _ <- IO.println("Alarms: " + alarms.map(_.toString).mkString("\n"))
     } yield (alarms.filter(_.feasible))
   }
 
@@ -58,9 +79,9 @@ object TransformationStrategy extends AnalysisStrategy {
       _           <- Configurator.stageAndBuild(appConfig, spec)
       compileCmds <- getCompileCommands(appConfig, spec)
       contexts = compileCmds.map(CompileCommands.extractContext)
-      _ <- contexts.parTraverseN(appConfig.jobs) { ctx =>
+      timingsIO <- contexts.parTraverseN(appConfig.jobs) { ctx =>
         val logFilePath = ctx.file / os.up / s"${ctx.file.last}.log"
-        desugarFile(
+        val operation = desugarFile(
           fileToDesugar = ctx.file,
           logFile = logFilePath,
           includedFiles = ctx.incFiles ++ List(
@@ -77,6 +98,17 @@ object TransformationStrategy extends AnalysisStrategy {
           commandLineDeclarations = ctx.cmdLineDefs,
           restrict = spec.name.toLowerCase() == "busybox"
         )
+
+        operation.timed.map { case (duration, _) =>
+          ctx.file.toString -> duration.toMillis.toDouble
+        }
+      }
+      _ <- IO.blocking {
+        val timingsMap = timingsIO.toMap
+        val workingDir =
+          os.Path(appConfig.sharedPath) / os.RelPath(spec.rootDir)
+        val telemetryPath = workingDir / "desugar_telemetry.json"
+        os.write.over(telemetryPath, timingsMap.asJson.spaces2)
       }
       _ <- IO.blocking {
         val updatedCmds = compileCmds.map { cmd =>
