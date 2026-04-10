@@ -142,13 +142,16 @@ object SugarCRunner {
       val line = lines(i)
       counter -= line.count(_ == '{')
       counter += line.count(_ == '}')
-      if counter < 0 then line match {
-        case regex(condition) =>
-          logger.debug(
-            s"Found presence condition for alarm at line ${alarmLine} at line " + i
-          )
-          results = condition :: results
-        case _ =>
+      if counter < 0 then {
+        line match {
+          case regex(condition) =>
+            logger.debug(
+              s"Found presence condition for alarm at line ${alarmLine} at line " + i
+            )
+            results = condition :: results
+          case _ =>
+        }
+        counter = 0
       }
     }
     // For each presence condition, parse the actual condition expression
