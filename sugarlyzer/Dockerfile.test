@@ -1,4 +1,4 @@
-FROM ubuntu:18.04 AS sugarlyzer_test
+FROM ubuntu:18.04 AS sugarlyzer
 
 ENV TZ=America/Chicago
 ENV DEBIAN_FRONTEND=noninteractive
@@ -6,19 +6,27 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Basic util
 RUN apt-get update && apt-get install -y \
 	software-properties-common wget curl git unzip \
-	&& add-apt-repository ppa:linuxuprising/java \
 	&& apt-get update
 
 # Sys Deps
 RUN apt-get install -y \
 	build-essential make gcc g++ \
 	bear bison flex \
+	autoconf automake libtool \
 	selinux-basics selinux-utils libselinux1-dev \
 	libssl-dev zlib1g-dev libpam0g-dev libtirpc-dev \
 	openjdk-17-jdk pkg-config libtinfo5 libboost-all-dev \
 	libsqlite3-dev electric-fence python3 python3-pip \
-	libz3-java sat4j \
+	libsepol-dev libdmalloc-dev sat4j\
 	&& rm -rf /var/lib/apt/lists/*
+
+RUN git clone https://github.com/smack-team/smack.git /tmp/libsmack && \
+	cd /tmp/libsmack && \
+	./autogen.sh && \
+	./configure --prefix=/usr --with-attr && \
+	make && \
+	make install && \
+	rm -rf /tmp/libsmack
 
 RUN pip3 install wllvm
 
@@ -33,18 +41,25 @@ RUN echo "/usr/local/llvm-12/lib" > /etc/ld.so.conf.d/llvm-12.conf && ldconfig
 
 ENV PATH="${LLVM_INSTALL_DIR}/bin:${PATH}"
 
-# Get Z3
-ARG Z3_INSTALL_DIR=/opt/z3/
-ADD https://github.com/Z3Prover/z3/releases/download/z3-4.15.8/z3-4.15.8-arm64-glibc-2.38.zip ${Z3_INSTALL_DIR}
-WORKDIR /opt/z3
-RUN unzip z3-4.15.8-arm64-glibc-2.38.zip
-RUN mv z3-4.15.8-arm64-glibc-2.38/* .
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64/
+
+# Build Z3 from source with Java bindings
+RUN git clone --depth 1 --branch z3-4.8.14 https://github.com/Z3Prover/z3.git /tmp/z3-src && \
+	cd /tmp/z3-src && \
+	python3 scripts/mk_make.py --java && \
+	cd build && \
+	make -j$(nproc) && \
+	mkdir -p /opt/z3/bin && \
+	cp libz3.so libz3java.so com.microsoft.z3.jar /opt/z3/bin/ && \
+	rm -rf /tmp/z3-src
+
+ENV LD_LIBRARY_PATH="/opt/z3/bin:${LD_LIBRARY_PATH}"
 
 # Get sugarc
 WORKDIR /
 RUN git clone https://github.com/appleseedlab/superc.git && cd /superc && git checkout mergingParseErrors && cd -
 ENV JAVA_DEV_ROOT=/superc
-ENV CLASSPATH=:/superc/classes:/superc/bin/json-simple-1.1.1.jar:/superc/bin/junit.jar:/superc/bin/antlr.jar:/superc/bin/javabdd.jar:/usr/share/java/org.sat4j.core.jar:/opt/z3/bin/com.microsoft.z3.jar:/usr/share/java/json-lib.jar
+ENV CLASSPATH=:/superc/classes:/superc/bin/json-simple-1.1.1.jar:/superc/bin/junit.jar:/superc/bin/antlr.jar:/superc/bin/javabdd.jar:/usr/share/java/org.sat4j.core.jar:/opt/z3/bin/com.microsoft.z3.jar:/usr/share/java/json-lib.jar:/opt/z3/bin
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
 RUN cd superc && make configure && make
 
