@@ -135,9 +135,12 @@ object SugarCRunner {
     var counter      = 0
     val regex: Regex = raw"if \((__static_condition_default_\d+)\(\)\).*".r
 
-    // Walk backwards from the alarm line
+    // Walk backwards from the line before the alarm line.
+    // We skip the alarm line itself because it may contain a closing }
+    // that belongs to an enclosing block (e.g. `malloc(...); }`), which
+    // would incorrectly offset the brace counter.
     for {
-      i <- (alarmLine - 1) to 0 by -1
+      i <- (alarmLine - 2) to 0 by -1
     } do {
       val line = lines(i)
       counter -= line.count(_ == '{')
