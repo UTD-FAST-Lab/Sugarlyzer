@@ -6,33 +6,36 @@ import scala.util.Using
 import sugarlyzer.common.Config.AppConfig
 
 object Configurator {
+
   /** Extracts the program tarball to sharedPath without building or injecting config headers. */
-  def stage(appConfig: AppConfig, spec: ProgramSpecification): IO[Unit] = IO.blocking {
-    val sharedPath   = os.Path(appConfig.sharedPath)
-    val masterSource = sharedPath / os.RelPath(spec.rootDir)
+  def stage(appConfig: AppConfig, spec: ProgramSpecification): IO[Unit] =
+    IO.blocking {
+      val sharedPath   = os.Path(appConfig.sharedPath)
+      val masterSource = sharedPath / os.RelPath(spec.rootDir)
 
-    if (!os.exists(masterSource)) {
-      val tarName      = s"${spec.name}.tar.gz"
-      val resourcePath = s"programs/${spec.name}/$tarName"
-      val tarDest      = sharedPath / tarName
+      if (!os.exists(masterSource)) {
+        val tarName      = s"${spec.name}.tar.gz"
+        val resourcePath = s"programs/${spec.name}/$tarName"
+        val tarDest      = sharedPath / tarName
 
-      Using(getClass.getClassLoader.getResourceAsStream(resourcePath)) { stream =>
-        if (stream == null)
-          throw new RuntimeException(s"Missing resource: $resourcePath")
-        os.write.over(tarDest, stream)
-      }.get
+        Using(getClass.getClassLoader.getResourceAsStream(resourcePath)) {
+          stream =>
+            if (stream == null)
+              throw new RuntimeException(s"Missing resource: $resourcePath")
+            os.write.over(tarDest, stream)
+        }.get
 
-      val proc = os.proc("tar", "-xf", tarDest, "-C", sharedPath.toString)
-        .call(check = false)
-      if (proc.exitCode != 0)
-        throw new RuntimeException("Tar extraction failed")
+        val proc = os.proc("tar", "-xf", tarDest, "-C", sharedPath.toString)
+          .call(check = false)
+        if (proc.exitCode != 0)
+          throw new RuntimeException("Tar extraction failed")
 
-      if (!os.exists(masterSource))
-        throw new RuntimeException(
-          s"Source directory does not exist after extraction: $masterSource"
-        )
+        if (!os.exists(masterSource))
+          throw new RuntimeException(
+            s"Source directory does not exist after extraction: $masterSource"
+          )
+      }
     }
-  }
 
   def stageAndBuild(
       appConfig: AppConfig,

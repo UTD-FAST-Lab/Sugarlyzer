@@ -44,25 +44,27 @@ object TransformationStrategy extends AnalysisStrategy {
       _ <- IO.println("Telemetry map: " + telemetryMap.toString)
       alarms <- IO.blocking {
         rawFindings.map { finding =>
-          val absoluteFilePath = workingDir / os.RelPath(finding.fileLocation)
+          val absoluteFilePath = os.Path(finding.fileLocation, workingDir)
 
           val model = SugarCRunner.findPresenceCondition(
             finding,
             absoluteFilePath
           )
 
+          val ogFilePath = finding.fileLocation.replace(
+            ".desugared",
+            ""
+          )
+
           val time = telemetryMap.getOrElse(
-            absoluteFilePath.toString,
+            ogFilePath,
             0.0
           )
 
           println(s"Time for $absoluteFilePath: $time")
           TransformationAlarm(
             originalAlarm = finding,
-            originalFile = finding.fileLocation.replace(
-              ".desugared",
-              ""
-            ),
+            originalFile = ogFilePath,
             sanitizedDescription = sanitizeDescription(finding.description),
             lineInputFile = SugarCRunner.mapLineNumber(
               finding,
