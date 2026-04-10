@@ -82,7 +82,7 @@ object MainApp extends IOApp.Simple {
   def testAlarmPresenceCondition(): IO[Unit] = {
     val alarm = ToolAlarm(
       fileLocation = "/resources/sample1.desugared.c",
-      line = 32,
+      line = 2408,
       alarmType = "Sample",
       description = "Sample",
       analysisTime = 1.0
@@ -91,7 +91,8 @@ object MainApp extends IOApp.Simple {
       alarm,
       os.Path("/resources/sample1.desugared.c")
     )
-    IO.println(s"Model: ${model}")
+    IO.println(s"Model: ${model.expr.toString()}") >>
+      IO.println(s"Model feasibility is ${model.isSatisfiable}")
   }
 
   def testPresenceConditionParser(): IO[Unit] = {
