@@ -51,4 +51,20 @@ object PresenceCondition {
 
   def vacuouslyTrue(ctx: Context): PresenceCondition =
     PresenceCondition(ctx, ctx.mkTrue())
+
+  def fromTuples(tups: Iterable[(String, String)]): PresenceCondition = {
+    /* Transform the list of tuples, which is of the form [("MACRO_NAME", TRUE)]
+     * into a conjunction of expressions */
+    val ctx = new Context()
+    val exprs = tups.map { case (mac, value) =>
+      val const = ctx.mkConst(mac, ctx.mkBoolSort())
+      val boolValue = value.toLowerCase match {
+        case "true"  => ctx.mkTrue()
+        case "false" => ctx.mkFalse()
+        case _ => throw new IllegalArgumentException(s"Invalid value: $value")
+      }
+      ctx.mkEq(const, boolValue)
+    }
+    PresenceCondition(ctx, ctx.mkAnd(exprs.toSeq*))
+  }
 }

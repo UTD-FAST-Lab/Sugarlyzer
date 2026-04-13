@@ -1,0 +1,867 @@
+[
+  {
+    "originalAlarm" : {
+      "alarmType" : "unix.Malloc",
+      "description" : "Potential leak of memory pointed to by 'buf'",
+      "fileLocation" : "/workspace/varbugs/eef2317b9f5.c",
+      "line" : 34,
+      "analysisTime" : 0.029251189
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_CLEAN_UP false))",
+    "model" : "(define-fun CONFIG_FEATURE_CLEAN_UP () Bool\n  false)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "deadcode.DeadStores",
+      "description" : "Value stored to 'pid_output' is never read",
+      "fileLocation" : "/workspace/varbugs/8c4377dd635.c",
+      "line" : 21,
+      "analysisTime" : 0.027003367
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(or (and MARLIN_H (not PIDTEMP) (not PID_DEBUG))\n    (and (not MARLIN_H) (not PIDTEMP) (not PID_DEBUG))\n    (and MARLIN_H (not PIDTEMP) PID_DEBUG)\n    (and (not MARLIN_H) (not PIDTEMP) PID_DEBUG))",
+    "model" : "(define-fun PID_DEBUG () Bool\n  true)\n(define-fun MARLIN_H () Bool\n  false)\n(define-fun PIDTEMP () Bool\n  false)",
+    "numConfigs" : [
+      3,
+      113,
+      111,
+      112
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "unix.Malloc",
+      "description" : "Potential leak of memory pointed to by 'clist'",
+      "fileLocation" : "/workspace/varbugs/bc0ffc0e971.c",
+      "line" : 46,
+      "analysisTime" : 0.040065936
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_CLEAN_UP false))",
+    "model" : "(define-fun ENABLE_FEATURE_CLEAN_UP () Bool\n  false)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "deadcode.DeadStores",
+      "description" : "Value stored to 'n' during its initialization is never read",
+      "fileLocation" : "/workspace/varbugs/0f8f8094d28.c",
+      "line" : 39,
+      "analysisTime" : 0.024775274
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(or (and CONFIG_LOCKDEP\n         CONFIG_FORCE_MAX_ZONEORDER\n         (not CONFIG_SLOB)\n         (not CONFIG_SLAB)\n         CONFIG_PPC_256K_PAGES)\n    (and CONFIG_LOCKDEP\n         CONFIG_FORCE_MAX_ZONEORDER\n         (not CONFIG_SLOB)\n         (not CONFIG_PPC_256K_PAGES)\n         (not CONFIG_SLAB))\n    (and CONFIG_LOCKDEP\n         CONFIG_SLAB\n         CONFIG_FORCE_MAX_ZONEORDER\n         (not CONFIG_SLOB)\n         CONFIG_PPC_256K_PAGES)\n    (and CONFIG_LOCKDEP\n         (not CONFIG_SLOB)\n         (not CONFIG_PPC_256K_PAGES)\n         CONFIG_SLAB\n         (not CONFIG_FORCE_MAX_ZONEORDER))\n    (and CONFIG_LOCKDEP\n         (not CONFIG_FORCE_MAX_ZONEORDER)\n         (not CONFIG_SLOB)\n         (not CONFIG_SLAB)\n         CONFIG_PPC_256K_PAGES)\n    (and CONFIG_LOCKDEP\n         CONFIG_SLAB\n         CONFIG_FORCE_MAX_ZONEORDER\n         (not CONFIG_SLOB)\n         (not CONFIG_PPC_256K_PAGES))\n    (and CONFIG_LOCKDEP\n         (not CONFIG_SLOB)\n         CONFIG_PPC_256K_PAGES\n         CONFIG_SLAB\n         (not CONFIG_FORCE_MAX_ZONEORDER))\n    (and CONFIG_LOCKDEP\n         (not CONFIG_FORCE_MAX_ZONEORDER)\n         (not CONFIG_SLOB)\n         (not CONFIG_PPC_256K_PAGES)\n         (not CONFIG_SLAB)))",
+    "model" : "(define-fun CONFIG_SLAB () Bool\n  false)\n(define-fun CONFIG_SLOB () Bool\n  false)\n(define-fun CONFIG_PPC_256K_PAGES () Bool\n  false)\n(define-fun CONFIG_LOCKDEP () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  false)",
+    "numConfigs" : [
+      5,
+      13,
+      13,
+      13,
+      230,
+      228,
+      230,
+      13,
+      230,
+      229,
+      13,
+      13,
+      13,
+      229,
+      231,
+      13
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "core.uninitialized.Assign",
+      "description" : "Assigned value is garbage or undefined",
+      "fileLocation" : "/workspace/varbugs/31873ec707d.c",
+      "line" : 8,
+      "analysisTime" : 0.025607698
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ULTRA_LCD true))",
+    "model" : "(define-fun ULTRA_LCD () Bool\n  true)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "deadcode.DeadStores",
+      "description" : "Value stored to 'codec_hw_write' during its initialization is never read",
+      "fileLocation" : "/workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.019765102
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(or (and CONFIG_SND_FSI_DA7210\n         CONFIG_SND_FSI_AK4642\n         CONFIG_I2C\n         CONFIG_SND_SOC_AK4642\n         CONFIG_SND_SOC_DA7210)\n    (and CONFIG_SND_FSI_DA7210\n         CONFIG_SND_FSI_AK4642\n         CONFIG_SND_SOC_DA7210\n         CONFIG_I2C\n         (not CONFIG_SND_SOC_AK4642))\n    (and (not CONFIG_SND_FSI_AK4642)\n         CONFIG_I2C\n         CONFIG_SND_SOC_AK4642\n         (not CONFIG_SND_FSI_DA7210)\n         CONFIG_SND_SOC_DA7210)\n    (and (not CONFIG_SND_SOC_DA7210)\n         CONFIG_SND_FSI_DA7210\n         CONFIG_SND_FSI_AK4642\n         CONFIG_I2C\n         CONFIG_SND_SOC_AK4642)\n    (and CONFIG_SND_FSI_AK4642\n         (not CONFIG_SND_FSI_DA7210)\n         CONFIG_SND_SOC_DA7210\n         CONFIG_I2C\n         (not CONFIG_SND_SOC_AK4642))\n    (and (not CONFIG_SND_SOC_DA7210)\n         CONFIG_SND_FSI_AK4642\n         (not CONFIG_SND_FSI_DA7210)\n         CONFIG_I2C\n         (not CONFIG_SND_SOC_AK4642))\n    (and (not CONFIG_SND_SOC_DA7210)\n         CONFIG_SND_FSI_AK4642\n         CONFIG_I2C\n         CONFIG_SND_SOC_AK4642\n         (not CONFIG_SND_FSI_DA7210))\n    (and CONFIG_SND_FSI_AK4642\n         CONFIG_I2C\n         CONFIG_SND_SOC_AK4642\n         (not CONFIG_SND_FSI_DA7210)\n         CONFIG_SND_SOC_DA7210)\n    (and (not CONFIG_SND_SOC_DA7210)\n         CONFIG_I2C\n         CONFIG_SND_SOC_AK4642\n         (not CONFIG_SND_FSI_AK4642)\n         CONFIG_SND_FSI_DA7210)\n    (and (not CONFIG_SND_SOC_DA7210)\n         (not CONFIG_SND_FSI_AK4642)\n         CONFIG_I2C\n         CONFIG_SND_SOC_AK4642\n         (not CONFIG_SND_FSI_DA7210))\n    (and (not CONFIG_SND_SOC_DA7210)\n         CONFIG_SND_FSI_DA7210\n         CONFIG_SND_FSI_AK4642\n         CONFIG_I2C\n         (not CONFIG_SND_SOC_AK4642))\n    (and CONFIG_I2C\n         CONFIG_SND_SOC_AK4642\n         CONFIG_SND_SOC_DA7210\n         (not CONFIG_SND_FSI_AK4642)\n         CONFIG_SND_FSI_DA7210))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  true)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  false)",
+    "numConfigs" : [
+      6,
+      13,
+      238,
+      239,
+      13,
+      13,
+      240,
+      13,
+      13,
+      239,
+      240,
+      13,
+      13,
+      13,
+      13,
+      241,
+      240,
+      239,
+      240,
+      241,
+      240,
+      13,
+      239,
+      13
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "deadcode.DeadStores",
+      "description" : "Value stored to 'val' is never read",
+      "fileLocation" : "/workspace/varbugs/b62bd7b261b.c",
+      "line" : 16,
+      "analysisTime" : 0.046473546
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(or (and ENABLE_FEATURE_MDEV_CONF\n         ENABLE_FEATURE_MDEV_RENAME\n         ENABLE_FEATURE_MDEV_RENAME_REGEXP)\n    (and ENABLE_FEATURE_MDEV_CONF\n         ENABLE_FEATURE_MDEV_RENAME\n         (not ENABLE_FEATURE_MDEV_RENAME_REGEXP)))",
+    "model" : "(define-fun ENABLE_FEATURE_MDEV_CONF () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME_REGEXP () Bool\n  false)",
+    "numConfigs" : [
+      3,
+      170
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "core.NonNullParamChecker",
+      "description" : "Null pointer passed to 1st parameter expecting 'nonnull'",
+      "fileLocation" : "/workspace/varbugs/bbeb0516cf0.c",
+      "line" : 6,
+      "analysisTime" : 0.02924177
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= APR_FILES_AS_SOCKETS true))",
+    "model" : "(define-fun APR_FILES_AS_SOCKETS () Bool\n  true)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "core.uninitialized.Branch",
+      "description" : "Branch condition evaluates to a garbage value",
+      "fileLocation" : "/workspace/varbugs/061fd0a353e.c",
+      "line" : 27,
+      "analysisTime" : 0.033207215
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(or (and CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF\n         CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF)\n    (and (not CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF)\n         CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF))",
+    "model" : "(define-fun CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF () Bool\n  false)\n(define-fun CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF () Bool\n  true)",
+    "numConfigs" : [
+      2,
+      135
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "core.uninitialized.Assign",
+      "description" : "Assigned value is garbage or undefined",
+      "fileLocation" : "/workspace/varbugs/c708c57e247.c",
+      "line" : 18,
+      "analysisTime" : 0.025693668
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "CONFIG_S390_PRNG",
+    "model" : "(define-fun CONFIG_S390_PRNG () Bool\n  true)",
+    "numConfigs" : [
+      2,
+      44
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "deadcode.DeadStores",
+      "description" : "Value stored to 'a' during its initialization is never read",
+      "fileLocation" : "/workspace/varbugs/b62bd7b261b.c",
+      "line" : 14,
+      "analysisTime" : 0.039206341
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_MDEV_CONF true)\n     (= ENABLE_FEATURE_MDEV_RENAME true)\n     (= ENABLE_FEATURE_MDEV_RENAME_REGEXP false))",
+    "model" : "(define-fun ENABLE_FEATURE_MDEV_CONF () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME_REGEXP () Bool\n  false)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "deadcode.DeadStores",
+      "description" : "Value stored to 'buf' is never read",
+      "fileLocation" : "/workspace/varbugs/eef2317b9f5.c",
+      "line" : 26,
+      "analysisTime" : 0.029251189
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_CLEAN_UP false))",
+    "model" : "(define-fun CONFIG_FEATURE_CLEAN_UP () Bool\n  false)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "core.uninitialized.Branch",
+      "description" : "Branch condition evaluates to a garbage value",
+      "fileLocation" : "/workspace/varbugs/061fd0a353e.c",
+      "line" : 20,
+      "analysisTime" : 0.032233838
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF true)\n     (= CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF true))",
+    "model" : "(define-fun CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF () Bool\n  true)\n(define-fun CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF () Bool\n  true)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "deadcode.DeadStores",
+      "description" : "Value stored to 'driver_data' is never read",
+      "fileLocation" : "/workspace/varbugs/7acf6cd80b2.c",
+      "line" : 39,
+      "analysisTime" : 0.031099931
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(or (and (not CONFIG_DEVPTS_MULTIPLE_INSTANCES) CONFIG_UNIX98_PTYS)\n    (and CONFIG_DEVPTS_MULTIPLE_INSTANCES CONFIG_UNIX98_PTYS))",
+    "model" : "(define-fun CONFIG_UNIX98_PTYS () Bool\n  true)\n(define-fun CONFIG_DEVPTS_MULTIPLE_INSTANCES () Bool\n  true)",
+    "numConfigs" : [
+      3,
+      13,
+      108,
+      107
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "core.NonNullParamChecker",
+      "description" : "Null pointer passed to 2nd parameter expecting 'nonnull'",
+      "fileLocation" : "/workspace/varbugs/199501f2a00.c",
+      "line" : 21,
+      "analysisTime" : 0.024863533
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_MODPROBE_MULTIPLE_OPTIONS false))",
+    "model" : "(define-fun ENABLE_FEATURE_MODPROBE_MULTIPLE_OPTIONS () Bool\n  false)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "deadcode.DeadStores",
+      "description" : "Value stored to 'p' is never read",
+      "fileLocation" : "/workspace/varbugs/061fd0a353e.c",
+      "line" : 16,
+      "analysisTime" : 0.032737601
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(or (and (not CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF)\n         CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF)\n    (and (not CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF)\n         (not CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF))\n    (and CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF\n         CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF))",
+    "model" : "(define-fun CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF () Bool\n  false)\n(define-fun CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF () Bool\n  true)",
+    "numConfigs" : [
+      2,
+      136,
+      135
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "deadcode.DeadStores",
+      "description" : "Value stored to 'k_crcs' is never read",
+      "fileLocation" : "/workspace/varbugs/5275b1e49f6.c",
+      "line" : 25,
+      "analysisTime" : 0.062813677
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "CONFIG_FEATURE_INSMOD_VERSION_CHECKING",
+    "model" : "(define-fun CONFIG_FEATURE_INSMOD_VERSION_CHECKING () Bool\n  true)",
+    "numConfigs" : [
+      2,
+      66
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "core.NullDereference",
+      "description" : "Dereference of undefined pointer value",
+      "fileLocation" : "/workspace/varbugs/b62bd7b261b.c",
+      "line" : 24,
+      "analysisTime" : 0.046473546
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_MDEV_CONF true)\n     (= ENABLE_FEATURE_MDEV_RENAME true)\n     (= ENABLE_FEATURE_MDEV_RENAME_REGEXP true))",
+    "model" : "(define-fun ENABLE_FEATURE_MDEV_CONF () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME_REGEXP () Bool\n  true)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "core.CallAndMessage",
+      "description" : "1st function call argument is an uninitialized value",
+      "fileLocation" : "/workspace/varbugs/1b48bb3c1af.c",
+      "line" : 14,
+      "analysisTime" : 0.02901301
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and APU_HAS_LDAP APR_HAS_SHARED_MEMORY)",
+    "model" : "(define-fun APR_HAS_SHARED_MEMORY () Bool\n  true)\n(define-fun APU_HAS_LDAP () Bool\n  true)",
+    "numConfigs" : [
+      3,
+      90
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "core.uninitialized.UndefReturn",
+      "description" : "Undefined or garbage value returned to caller",
+      "fileLocation" : "/workspace/varbugs/e39363a9def.c",
+      "line" : 17,
+      "analysisTime" : 0.042008469
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and CONFIG_NETPOLL (not CONFIG_IPV6))",
+    "model" : "(define-fun CONFIG_NETPOLL () Bool\n  true)\n(define-fun CONFIG_IPV6 () Bool\n  false)",
+    "numConfigs" : [
+      3,
+      83
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "core.NullDereference",
+      "description" : "Dereference of null pointer (loaded from variable 'ptr')",
+      "fileLocation" : "/workspace/varbugs/472a474c663.c",
+      "line" : 14,
+      "analysisTime" : 0.028151043
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "CONFIG_SMP",
+    "model" : "(define-fun CONFIG_SMP () Bool\n  true)",
+    "numConfigs" : [
+      2,
+      38
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "core.uninitialized.Branch",
+      "description" : "Branch condition evaluates to a garbage value",
+      "fileLocation" : "/workspace/varbugs/eef2317b9f5.c",
+      "line" : 30,
+      "analysisTime" : 0.029661152
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_CLEAN_UP true))",
+    "model" : "(define-fun CONFIG_FEATURE_CLEAN_UP () Bool\n  true)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "core.NullDereference",
+      "description" : "Dereference of null pointer (loaded from variable 'ops')",
+      "fileLocation" : "/workspace/varbugs/6252547b8a7.c",
+      "line" : 12,
+      "analysisTime" : 0.020249375
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(or (and CONFIG_TWL4030_CORE CONFIG_IRQ_DOMAIN (not CONFIG_OF_IRQ))\n    (and CONFIG_TWL4030_CORE (not CONFIG_IRQ_DOMAIN) (not CONFIG_OF_IRQ)))",
+    "model" : "(define-fun CONFIG_TWL4030_CORE () Bool\n  true)\n(define-fun CONFIG_IRQ_DOMAIN () Bool\n  false)\n(define-fun CONFIG_OF_IRQ () Bool\n  false)",
+    "numConfigs" : [
+      4,
+      136,
+      137,
+      13
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "deadcode.DeadStores",
+      "description" : "Value stored to 'x' during its initialization is never read",
+      "fileLocation" : "/workspace/varbugs/30e053248da.c",
+      "line" : 31,
+      "analysisTime" : 0.023612845
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "true",
+    "model" : "",
+    "numConfigs" : [
+      1,
+      43
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "deadcode.DeadStores",
+      "description" : "Value stored to 'x' during its initialization is never read",
+      "fileLocation" : "/workspace/varbugs/7acf6cd80b2.c",
+      "line" : 8,
+      "analysisTime" : 0.064016655
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(or (and CONFIG_DEVPTS_MULTIPLE_INSTANCES (not CONFIG_UNIX98_PTYS))\n    (and CONFIG_DEVPTS_MULTIPLE_INSTANCES CONFIG_UNIX98_PTYS))",
+    "model" : "(define-fun CONFIG_UNIX98_PTYS () Bool\n  true)\n(define-fun CONFIG_DEVPTS_MULTIPLE_INSTANCES () Bool\n  true)",
+    "numConfigs" : [
+      3,
+      108,
+      107
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "core.CallAndMessage",
+      "description" : "2nd function call argument is an uninitialized value",
+      "fileLocation" : "/workspace/varbugs/b273d665181.c",
+      "line" : 16,
+      "analysisTime" : 0.030465728
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and BB_FEATURE_LS_FILETYPES (not BB_FEATURE_LS_USERNAME))",
+    "model" : "(define-fun BB_FEATURE_LS_USERNAME () Bool\n  false)\n(define-fun BB_FEATURE_LS_FILETYPES () Bool\n  true)",
+    "numConfigs" : [
+      2,
+      13
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "core.uninitialized.Assign",
+      "description" : "Assigned value is garbage or undefined",
+      "fileLocation" : "/workspace/varbugs/30e053248da.c",
+      "line" : 31,
+      "analysisTime" : 0.023612845
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SECURITY false))",
+    "model" : "(define-fun CONFIG_SECURITY () Bool\n  false)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "deadcode.DeadStores",
+      "description" : "Value stored to 'len' is never read",
+      "fileLocation" : "/workspace/varbugs/95755181b82.c",
+      "line" : 39,
+      "analysisTime" : 0.031026132
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(or (and ENABLE_FEATURE_HTTPD_GZIP\n         (not ENABLE_FEATURE_HTTPD_BASIC_AUTH)\n         (not BB_MMU))\n    (and ENABLE_FEATURE_HTTPD_GZIP (not ENABLE_FEATURE_HTTPD_BASIC_AUTH) BB_MMU)\n    (and ENABLE_FEATURE_HTTPD_GZIP ENABLE_FEATURE_HTTPD_BASIC_AUTH (not BB_MMU))\n    (and ENABLE_FEATURE_HTTPD_GZIP ENABLE_FEATURE_HTTPD_BASIC_AUTH BB_MMU))",
+    "model" : "(define-fun BB_MMU () Bool\n  true)\n(define-fun ENABLE_FEATURE_HTTPD_GZIP () Bool\n  true)\n(define-fun ENABLE_FEATURE_HTTPD_BASIC_AUTH () Bool\n  true)",
+    "numConfigs" : [
+      4,
+      13,
+      13,
+      13,
+      13,
+      150,
+      13,
+      149,
+      13,
+      13,
+      13,
+      13,
+      13,
+      13,
+      13,
+      149,
+      148,
+      13
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "deadcode.DeadStores",
+      "description" : "Value stored to 'irq' during its initialization is never read",
+      "fileLocation" : "/workspace/varbugs/6252547b8a7.c",
+      "line" : 12,
+      "analysisTime" : 0.020249375
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(or (and CONFIG_TWL4030_CORE (not CONFIG_IRQ_DOMAIN) CONFIG_OF_IRQ)\n    (and CONFIG_TWL4030_CORE CONFIG_IRQ_DOMAIN (not CONFIG_OF_IRQ))\n    (and CONFIG_TWL4030_CORE CONFIG_IRQ_DOMAIN CONFIG_OF_IRQ)\n    (and (not CONFIG_TWL4030_CORE) CONFIG_IRQ_DOMAIN (not CONFIG_OF_IRQ))\n    (and CONFIG_TWL4030_CORE (not CONFIG_IRQ_DOMAIN) (not CONFIG_OF_IRQ))\n    (and (not CONFIG_TWL4030_CORE) CONFIG_IRQ_DOMAIN CONFIG_OF_IRQ))",
+    "model" : "(define-fun CONFIG_TWL4030_CORE () Bool\n  false)\n(define-fun CONFIG_IRQ_DOMAIN () Bool\n  true)\n(define-fun CONFIG_OF_IRQ () Bool\n  true)",
+    "numConfigs" : [
+      4,
+      136,
+      136,
+      13,
+      135,
+      137,
+      137,
+      13,
+      136,
+      13
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "unix.Malloc",
+      "description" : "Potential leak of memory pointed to by 'eckey'",
+      "fileLocation" : "/workspace/varbugs/35ae2e259e4.c",
+      "line" : 24,
+      "analysisTime" : 0.029171519
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(or (and HAVE_ECC SSL_CTX_set_ecdh_auto)\n    (and HAVE_ECC (not SSL_CTX_set_ecdh_auto)))",
+    "model" : "(define-fun SSL_CTX_set_ecdh_auto () Bool\n  false)\n(define-fun HAVE_ECC () Bool\n  true)",
+    "numConfigs" : [
+      3,
+      86,
+      87,
+      13
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "deadcode.DeadStores",
+      "description" : "Value stored to 'wakeup' is never read",
+      "fileLocation" : "/workspace/varbugs/36855dcfc98.c",
+      "line" : 6,
+      "analysisTime" : 0.021630673
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_BF60x false))",
+    "model" : "(define-fun CONFIG_BF60x () Bool\n  false)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "core.CallAndMessage",
+      "description" : "1st function call argument is an uninitialized value",
+      "fileLocation" : "/workspace/varbugs/7acf6cd80b2.c",
+      "line" : 44,
+      "analysisTime" : 0.031099931
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(or (and (not CONFIG_DEVPTS_MULTIPLE_INSTANCES) CONFIG_UNIX98_PTYS)\n    (and CONFIG_DEVPTS_MULTIPLE_INSTANCES CONFIG_UNIX98_PTYS))",
+    "model" : "(define-fun CONFIG_UNIX98_PTYS () Bool\n  true)\n(define-fun CONFIG_DEVPTS_MULTIPLE_INSTANCES () Bool\n  true)",
+    "numConfigs" : [
+      3,
+      13,
+      108,
+      107
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "core.NullDereference",
+      "description" : "Dereference of null pointer (loaded from variable 'scontext')",
+      "fileLocation" : "/workspace/varbugs/1b487ea8a69.c",
+      "line" : 14,
+      "analysisTime" : 0.030390307
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and ENABLE_SELINUX (not ENABLE_FEATURE_STAT_FORMAT))",
+    "model" : "(define-fun ENABLE_FEATURE_STAT_FORMAT () Bool\n  false)\n(define-fun ENABLE_SELINUX () Bool\n  true)",
+    "numConfigs" : [
+      2,
+      13
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "deadcode.DeadStores",
+      "description" : "Value stored to 'm_has_modinfo' is never read",
+      "fileLocation" : "/workspace/varbugs/5275b1e49f6.c",
+      "line" : 18,
+      "analysisTime" : 0.062813677
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "CONFIG_FEATURE_INSMOD_VERSION_CHECKING",
+    "model" : "(define-fun CONFIG_FEATURE_INSMOD_VERSION_CHECKING () Bool\n  true)",
+    "numConfigs" : [
+      2,
+      66
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "deadcode.DeadStores",
+      "description" : "Value stored to 'thisopt' is never read",
+      "fileLocation" : "/workspace/varbugs/1a3c8e3d840.c",
+      "line" : 13,
+      "analysisTime" : 0.024200049
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= HAVE_TLSV1_X true))",
+    "model" : "(define-fun HAVE_TLSV1_X () Bool\n  true)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "deadcode.DeadStores",
+      "description" : "Value stored to 'flags' is never read",
+      "fileLocation" : "/workspace/varbugs/c76df14dfb4.c",
+      "line" : 38,
+      "analysisTime" : 0.020290205
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(or (and CROSS_COMPILE (not WIN32) NEED_ENHANCED_ESCAPES)\n    (and CROSS_COMPILE WIN32 NEED_ENHANCED_ESCAPES)\n    (and (not CROSS_COMPILE) WIN32 (not NEED_ENHANCED_ESCAPES))\n    (and (not CROSS_COMPILE) (not WIN32) NEED_ENHANCED_ESCAPES)\n    (and (not CROSS_COMPILE) WIN32 NEED_ENHANCED_ESCAPES))",
+    "model" : "(define-fun WIN32 () Bool\n  true)\n(define-fun NEED_ENHANCED_ESCAPES () Bool\n  false)\n(define-fun CROSS_COMPILE () Bool\n  false)",
+    "numConfigs" : [
+      3,
+      125,
+      127,
+      127,
+      126
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "unix.Malloc",
+      "description" : "Potential leak of memory pointed to by 'buf'",
+      "fileLocation" : "/workspace/varbugs/d05e574ec26.c",
+      "line" : 21,
+      "analysisTime" : 0.033130473
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= APR_HAS_SHARED_MEMORY true))",
+    "model" : "(define-fun APR_HAS_SHARED_MEMORY () Bool\n  true)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "deadcode.DeadStores",
+      "description" : "Value stored to 'm_has_modinfo' is never read",
+      "fileLocation" : "/workspace/varbugs/5275b1e49f6.c",
+      "line" : 16,
+      "analysisTime" : 0.062813677
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "CONFIG_FEATURE_INSMOD_VERSION_CHECKING",
+    "model" : "(define-fun CONFIG_FEATURE_INSMOD_VERSION_CHECKING () Bool\n  true)",
+    "numConfigs" : [
+      2,
+      66
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "deadcode.DeadStores",
+      "description" : "Value stored to 'k_crcs' is never read",
+      "fileLocation" : "/workspace/varbugs/5275b1e49f6.c",
+      "line" : 21,
+      "analysisTime" : 0.062813677
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "CONFIG_FEATURE_INSMOD_VERSION_CHECKING",
+    "model" : "(define-fun CONFIG_FEATURE_INSMOD_VERSION_CHECKING () Bool\n  true)",
+    "numConfigs" : [
+      2,
+      66
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "unix.Malloc",
+      "description" : "Use of memory after it is freed",
+      "fileLocation" : "/workspace/varbugs/bc0ffc0e971.c",
+      "line" : 43,
+      "analysisTime" : 0.031228822
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "ENABLE_FEATURE_CLEAN_UP",
+    "model" : "(define-fun ENABLE_FEATURE_CLEAN_UP () Bool\n  true)",
+    "numConfigs" : [
+      2,
+      51
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "deadcode.DeadStores",
+      "description" : "Value stored to 'xGridSpacing' during its initialization is never read",
+      "fileLocation" : "/workspace/varbugs/e30bfedce4d.c",
+      "line" : 24,
+      "analysisTime" : 0.068613564
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(or (and ENABLE_AUTO_BED_LEVELING (not AUTO_BED_LEVELING_GRID))\n    (and ENABLE_AUTO_BED_LEVELING AUTO_BED_LEVELING_GRID))",
+    "model" : "(define-fun AUTO_BED_LEVELING_GRID () Bool\n  true)\n(define-fun ENABLE_AUTO_BED_LEVELING () Bool\n  true)",
+    "numConfigs" : [
+      2,
+      13,
+      103,
+      13,
+      13,
+      13
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "core.uninitialized.Assign",
+      "description" : "Assigned value is garbage or undefined",
+      "fileLocation" : "/workspace/varbugs/2631486f1bf.c",
+      "line" : 67,
+      "analysisTime" : 0.02773298
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(or (and (not CONFIG_FEATURE_LS_RECURSIVE) (not CONFIG_FEATURE_LS_SORTFILES))\n    (and CONFIG_FEATURE_LS_RECURSIVE CONFIG_FEATURE_LS_SORTFILES)\n    (and CONFIG_FEATURE_LS_RECURSIVE (not CONFIG_FEATURE_LS_SORTFILES))\n    (and (not CONFIG_FEATURE_LS_RECURSIVE) CONFIG_FEATURE_LS_SORTFILES))",
+    "model" : "(define-fun CONFIG_FEATURE_LS_RECURSIVE () Bool\n  true)\n(define-fun CONFIG_FEATURE_LS_SORTFILES () Bool\n  false)",
+    "numConfigs" : [
+      2,
+      111,
+      13,
+      112,
+      112,
+      13,
+      13,
+      13,
+      13
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "unix.Malloc",
+      "description" : "Potential leak of memory pointed to by 'sc'",
+      "fileLocation" : "/workspace/varbugs/2a6cbfa00e0.c",
+      "line" : 16,
+      "analysisTime" : 0.028274924
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= SHARED_MODULE false))",
+    "model" : "(define-fun SHARED_MODULE () Bool\n  false)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "deadcode.DeadStores",
+      "description" : "Value stored to 'codec_hw_write' during its initialization is never read",
+      "fileLocation" : "/workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.019765102
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(or (and CONFIG_SND_FSI_DA7210\n         CONFIG_SND_FSI_AK4642\n         CONFIG_I2C\n         CONFIG_SND_SOC_AK4642\n         CONFIG_SND_SOC_DA7210)\n    (and CONFIG_SND_FSI_DA7210\n         CONFIG_SND_FSI_AK4642\n         CONFIG_SND_SOC_DA7210\n         CONFIG_I2C\n         (not CONFIG_SND_SOC_AK4642))\n    (and (not CONFIG_SND_SOC_DA7210)\n         (not CONFIG_SND_FSI_AK4642)\n         CONFIG_SND_FSI_DA7210\n         CONFIG_I2C\n         (not CONFIG_SND_SOC_AK4642))\n    (and (not CONFIG_SND_FSI_AK4642)\n         CONFIG_I2C\n         CONFIG_SND_SOC_AK4642\n         (not CONFIG_SND_FSI_DA7210)\n         CONFIG_SND_SOC_DA7210)\n    (and (not CONFIG_SND_SOC_DA7210)\n         CONFIG_SND_FSI_DA7210\n         CONFIG_SND_FSI_AK4642\n         CONFIG_I2C\n         CONFIG_SND_SOC_AK4642)\n    (and CONFIG_SND_FSI_AK4642\n         (not CONFIG_SND_FSI_DA7210)\n         CONFIG_SND_SOC_DA7210\n         CONFIG_I2C\n         (not CONFIG_SND_SOC_AK4642))\n    (and CONFIG_SND_SOC_DA7210\n         (not CONFIG_SND_FSI_AK4642)\n         CONFIG_SND_FSI_DA7210\n         CONFIG_I2C\n         (not CONFIG_SND_SOC_AK4642))\n    (and CONFIG_SND_FSI_AK4642\n         CONFIG_I2C\n         CONFIG_SND_SOC_AK4642\n         (not CONFIG_SND_FSI_DA7210)\n         CONFIG_SND_SOC_DA7210)\n    (and (not CONFIG_SND_SOC_DA7210)\n         CONFIG_I2C\n         CONFIG_SND_SOC_AK4642\n         (not CONFIG_SND_FSI_AK4642)\n         CONFIG_SND_FSI_DA7210)\n    (and (not CONFIG_SND_SOC_DA7210)\n         CONFIG_SND_FSI_DA7210\n         CONFIG_SND_FSI_AK4642\n         CONFIG_I2C\n         (not CONFIG_SND_SOC_AK4642))\n    (and CONFIG_I2C\n         CONFIG_SND_SOC_AK4642\n         CONFIG_SND_SOC_DA7210\n         (not CONFIG_SND_FSI_AK4642)\n         CONFIG_SND_FSI_DA7210)\n    (and (not CONFIG_SND_FSI_AK4642)\n         (not CONFIG_SND_FSI_DA7210)\n         CONFIG_SND_SOC_DA7210\n         CONFIG_I2C\n         (not CONFIG_SND_SOC_AK4642)))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  true)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+    "numConfigs" : [
+      6,
+      13,
+      238,
+      239,
+      13,
+      13,
+      241,
+      13,
+      240,
+      13,
+      13,
+      239,
+      240,
+      13,
+      13,
+      13,
+      240,
+      239,
+      240,
+      13,
+      13,
+      240,
+      13,
+      239,
+      13,
+      13,
+      13,
+      13,
+      241,
+      13
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "deadcode.DeadStores",
+      "description" : "Value stored to 'flags' is never read",
+      "fileLocation" : "/workspace/varbugs/c76df14dfb4.c",
+      "line" : 42,
+      "analysisTime" : 0.030694459
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(or (and (not CROSS_COMPILE) (not WIN32) (not NEED_ENHANCED_ESCAPES))\n    (and CROSS_COMPILE WIN32 (not NEED_ENHANCED_ESCAPES))\n    (and CROSS_COMPILE (not WIN32) (not NEED_ENHANCED_ESCAPES)))",
+    "model" : "(define-fun WIN32 () Bool\n  true)\n(define-fun NEED_ENHANCED_ESCAPES () Bool\n  false)\n(define-fun CROSS_COMPILE () Bool\n  true)",
+    "numConfigs" : [
+      3,
+      126,
+      127
+    ]
+  }
+]
