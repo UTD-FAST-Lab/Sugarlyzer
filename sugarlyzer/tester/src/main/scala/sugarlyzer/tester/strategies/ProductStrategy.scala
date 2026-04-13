@@ -65,7 +65,7 @@ object ProductStrategy extends AnalysisStrategy {
                 configFiles = List.empty,
                 presenceCondition = pc,
                 model = pc.getModel,
-                numConfigs = pc.numConsts
+                numConfigs = List(pc.numConsts)
               )
             }
         }
