@@ -20,6 +20,7 @@ import org.eclipse.cdt.core.parser.DefaultLogService
 import org.eclipse.cdt.core.parser.IncludeFileContentProvider
 import org.eclipse.cdt.core.model.ILanguage
 import com.typesafe.scalalogging.Logger
+import sugarlyzer.tester.sugarc.PresenceCondition
 
 object ProductStrategy extends AnalysisStrategy {
   val logger = Logger[ProductStrategy.type]
@@ -58,10 +59,12 @@ object ProductStrategy extends AnalysisStrategy {
               )
               rawFindings <- tool.run(spec.copy(rootDir = iterDir.toString))
             } yield rawFindings.map { finding =>
+              val pc = PresenceCondition.fromTuples(model)
               ProductAlarm(
                 originalAlarm = finding,
                 configFiles = List.empty,
-                model = model,
+                presenceCondition = pc,
+                model = pc.getModel,
                 numConfigs = List(model.length)
               )
             }
@@ -94,12 +97,14 @@ object ProductStrategy extends AnalysisStrategy {
           }
           alarms <- IO.blocking {
             rawFindings.map { finding =>
+              val pc = PresenceCondition.fromTuples(model)
               ProductAlarm(
                 originalAlarm = finding.copy(fileLocation =
                   finding.fileLocation.replaceAll(s"/workspace/$i/", "")
                 ),
                 configFiles = List[String](configFile),
-                model = model,
+                presenceCondition = pc,
+                model = pc.getModel,
                 numConfigs = List[Int](model.length)
               )
             }
@@ -344,11 +349,13 @@ object ProductStrategy extends AnalysisStrategy {
       .values
       .map { groupedAlarms =>
         groupedAlarms.reduceLeft { (acc, curr) =>
-          val model = acc.model.toSet.intersect(curr.model.toSet).toList
+          val updatedPc = acc.presenceCondition || curr.presenceCondition
           acc.copy(
             configFiles = (acc.configFiles ++ curr.configFiles).distinct,
-            model = model,
-            numConfigs = (acc.numConfigs :+ model.length)
+            presenceCondition = updatedPc.simplify,
+            model = updatedPc.getModel,
+            numConfigs =
+              (acc.numConfigs :+ curr.model.length)
           )
         }
       }
