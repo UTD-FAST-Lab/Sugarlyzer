@@ -69,6 +69,8 @@ object ClangTool extends AnalysisTool {
 
             val cleanCmdArgs = filterFlags(cmd.arguments)
 
+            val start = System.nanoTime()
+
             val proc = os.proc(
               "clang-11",
               "--analyze",
@@ -84,14 +86,18 @@ object ClangTool extends AnalysisTool {
               check = false
             )
 
+            val end          = System.nanoTime()
+            val analysisTime = (end - start) / 1e9d
+
             if (proc.exitCode != 0)
               println(
                 s"Clang command failed: ${proc.out.text()}, command: ${cmd}"
               )
-            reportXMLLocation
+
+            (reportXMLLocation, analysisTime)
           }
-            .flatMap { path =>
-              parseOutput(spec, path)
+            .flatMap { case (path, time) =>
+              parseOutput(spec, path, time)
             }
       }
     } yield alarms.flatten
@@ -99,7 +105,8 @@ object ClangTool extends AnalysisTool {
 
   def parseOutput(
       spec: ProgramSpecification,
-      resultPath: os.Path
+      resultPath: os.Path,
+      analysisTime: Double
   ): IO[List[ToolAlarm]] = IO.blocking {
     if (!os.exists(resultPath)) {
       List.empty[ToolAlarm]
@@ -150,7 +157,7 @@ object ClangTool extends AnalysisTool {
           description = description,
           line = line,
           fileLocation = absolutePath,
-          analysisTime = 0.0
+          analysisTime = analysisTime
         )
       }.toList
     }
