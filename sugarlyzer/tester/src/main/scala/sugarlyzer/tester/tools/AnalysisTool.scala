@@ -24,7 +24,8 @@ case class ProductAlarm(
     configFiles: List[String],
     presenceCondition: PresenceCondition,
     model: String,
-    numConfigs: List[Int]
+    numConfigs: List[Int],
+    strategy: String = "product"
 ) extends StrategyAlarm
 
 case class TransformationAlarm(
@@ -35,7 +36,8 @@ case class TransformationAlarm(
     presenceCondition: PresenceCondition,
     model: String,
     feasible: Boolean,
-    desugaringTime: Double
+    desugaringTime: Double,
+    strategy: String = "transformation"
 ) extends StrategyAlarm
 
 trait AnalysisTool {

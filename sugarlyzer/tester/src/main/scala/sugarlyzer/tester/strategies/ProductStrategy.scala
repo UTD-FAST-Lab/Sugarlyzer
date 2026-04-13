@@ -65,7 +65,7 @@ object ProductStrategy extends AnalysisStrategy {
                 configFiles = List.empty,
                 presenceCondition = pc,
                 model = pc.getModel,
-                numConfigs = List(model.length)
+                numConfigs = pc.numConsts
               )
             }
         }
@@ -355,7 +355,7 @@ object ProductStrategy extends AnalysisStrategy {
             presenceCondition = updatedPc.simplify,
             model = updatedPc.getModel,
             numConfigs =
-              (acc.numConfigs :+ curr.model.length)
+              (acc.numConfigs :+ curr.presenceCondition.numConsts)
           )
         }
       }
