@@ -60,6 +60,8 @@ object ProductStrategy extends AnalysisStrategy {
               rawFindings <- tool.run(spec.copy(rootDir = iterDir.toString))
             } yield rawFindings.map { finding =>
               val pc = PresenceCondition.fromTuples(model)
+              println(s"Model: $model")
+              println(s"PC expr: ${pc.expr.toString()}")
               ProductAlarm(
                 originalAlarm = finding,
                 configFiles = List.empty,
