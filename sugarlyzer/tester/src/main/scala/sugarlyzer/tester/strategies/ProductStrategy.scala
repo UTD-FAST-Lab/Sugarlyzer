@@ -65,7 +65,7 @@ object ProductStrategy extends AnalysisStrategy {
                 configFiles = List.empty,
                 presenceCondition = pc,
                 model = pc.getModel,
-                numConfigs = pc.numConsts
+                numConfigs = List(pc.numConsts)
               )
             }
         }
@@ -105,7 +105,7 @@ object ProductStrategy extends AnalysisStrategy {
                 configFiles = List[String](configFile),
                 presenceCondition = pc,
                 model = pc.getModel,
-                numConfigs = List[Int](model.length)
+                numConfigs = List[Int](pc.numConsts)
               )
             }
           }
@@ -175,7 +175,7 @@ object ProductStrategy extends AnalysisStrategy {
           case definedPattern(mac) => mac
           case _                   => s
         }
-      ).map(s => s.stripPrefix("(").stripSuffix(")"))
+      ).map(s => s.stripPrefix("(").stripSuffix(")")).toSet
 
     logger.debug(s"Macros are ${macros}")
 
@@ -349,13 +349,14 @@ object ProductStrategy extends AnalysisStrategy {
       .values
       .map { groupedAlarms =>
         groupedAlarms.reduceLeft { (acc, curr) =>
-          val updatedPc = acc.presenceCondition || curr.presenceCondition
+          val updatedPc =
+            (acc.presenceCondition || curr.presenceCondition).simplify
           acc.copy(
             configFiles = (acc.configFiles ++ curr.configFiles).distinct,
             presenceCondition = updatedPc.simplify,
             model = updatedPc.getModel,
             numConfigs =
-              (acc.numConfigs :+ curr.presenceCondition.numConsts)
+              (acc.numConfigs :+ updatedPc.numConsts)
           )
         }
       }
