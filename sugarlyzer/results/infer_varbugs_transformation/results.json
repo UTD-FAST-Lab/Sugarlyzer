@@ -5,7 +5,7 @@
       "description" : "`__val_1882` is read without initialization.",
       "fileLocation" : "/workspace/varbugs/b62bd7b261b.desugared.c",
       "line" : 2553,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/b62bd7b261b.c",
     "sanitizedDescription" : "`val` is read without initialization.",
@@ -16,7 +16,8 @@
     "presenceCondition" : "(or (and __STRICT_ANSI__ (not ENABLE_FEATURE_MDEV_CONF))\n    (and (and __STRICT_ANSI__ ENABLE_FEATURE_MDEV_CONF)\n         (not ENABLE_FEATURE_MDEV_RENAME))\n    (and (and __STRICT_ANSI__ ENABLE_FEATURE_MDEV_CONF)\n         ENABLE_FEATURE_MDEV_RENAME\n         (not ENABLE_FEATURE_MDEV_RENAME_REGEXP))\n    (and (not __STRICT_ANSI__) (not ENABLE_FEATURE_MDEV_CONF))\n    (and (and (not __STRICT_ANSI__) ENABLE_FEATURE_MDEV_CONF)\n         (not ENABLE_FEATURE_MDEV_RENAME))\n    (and (and (not __STRICT_ANSI__) ENABLE_FEATURE_MDEV_CONF)\n         ENABLE_FEATURE_MDEV_RENAME\n         (not ENABLE_FEATURE_MDEV_RENAME_REGEXP)))",
     "model" : "(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_CONF () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME_REGEXP () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 4636.0
+    "desugaringTime" : 8254.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -24,7 +25,7 @@
       "description" : "The value written to `&__x_4` is never used.",
       "fileLocation" : "/workspace/varbugs/7acf6cd80b2.desugared.c",
       "line" : 76,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/7acf6cd80b2.c",
     "sanitizedDescription" : "The value written to `&x` is never used.",
@@ -35,7 +36,8 @@
     "presenceCondition" : "CONFIG_DEVPTS_MULTIPLE_INSTANCES",
     "model" : "(define-fun CONFIG_DEVPTS_MULTIPLE_INSTANCES () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 2173.0
+    "desugaringTime" : 2331.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -43,7 +45,7 @@
       "description" : "`__s_1883` is read without initialization.",
       "fileLocation" : "/workspace/varbugs/b62bd7b261b.desugared.c",
       "line" : 2559,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/b62bd7b261b.c",
     "sanitizedDescription" : "`s` is read without initialization.",
@@ -54,7 +56,8 @@
     "presenceCondition" : "(let ((a!1 (or (and __STRICT_ANSI__ (not ENABLE_FEATURE_MDEV_CONF))\n               (and (and __STRICT_ANSI__ ENABLE_FEATURE_MDEV_CONF)\n                    (not ENABLE_FEATURE_MDEV_RENAME))\n               (and (and (and __STRICT_ANSI__ ENABLE_FEATURE_MDEV_CONF)\n                         ENABLE_FEATURE_MDEV_RENAME)\n                    (not ENABLE_FEATURE_MDEV_RENAME_REGEXP))))\n      (a!3 (and (and (and (not __STRICT_ANSI__) ENABLE_FEATURE_MDEV_CONF)\n                     ENABLE_FEATURE_MDEV_RENAME)\n                (not ENABLE_FEATURE_MDEV_RENAME_REGEXP)))\n      (a!5 (and (and (and (not __STRICT_ANSI__) ENABLE_FEATURE_MDEV_CONF)\n                     ENABLE_FEATURE_MDEV_RENAME)\n                ENABLE_FEATURE_MDEV_RENAME_REGEXP)))\n(let ((a!2 (and a!1\n                (and (and (and __STRICT_ANSI__ ENABLE_FEATURE_MDEV_CONF)\n                          ENABLE_FEATURE_MDEV_RENAME)\n                     (not ENABLE_FEATURE_MDEV_RENAME_REGEXP))))\n      (a!4 (or (and (not __STRICT_ANSI__) (not ENABLE_FEATURE_MDEV_CONF))\n               (and (and (not __STRICT_ANSI__) ENABLE_FEATURE_MDEV_CONF)\n                    (not ENABLE_FEATURE_MDEV_RENAME))\n               a!3)))\n  (or a!2\n      (and (and (and __STRICT_ANSI__ ENABLE_FEATURE_MDEV_CONF)\n                ENABLE_FEATURE_MDEV_RENAME)\n           ENABLE_FEATURE_MDEV_RENAME_REGEXP)\n      (and a!4 a!3)\n      a!5)))",
     "model" : "(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_CONF () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME_REGEXP () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 4636.0
+    "desugaringTime" : 8254.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -62,7 +65,7 @@
       "description" : "`__eckey_814` could be null (null value originating from line 1356) and is dereferenced.",
       "fileLocation" : "/workspace/varbugs/35ae2e259e4.desugared.c",
       "line" : 1395,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/35ae2e259e4.c",
     "sanitizedDescription" : "`eckey` could be null (null value originating from line 1356) and is dereferenced.",
@@ -73,7 +76,8 @@
     "presenceCondition" : "(let ((a!1 (and (not _STDLIB_H)\n                (not __STRICT_ANSI__)\n                (not __need_malloc_and_calloc)\n                (not __USE_EXTERN_INLINES)\n                HAVE_ECC)))\n  (or (and (and (not _STDLIB_H)\n                (not __need_malloc_and_calloc)\n                (not __USE_EXTERN_INLINES))\n           (and (not _STDLIB_H)\n                __STRICT_ANSI__\n                (not __need_malloc_and_calloc)\n                (not __USE_EXTERN_INLINES)\n                HAVE_ECC)\n           (and (not _STDLIB_H)\n                __STRICT_ANSI__\n                (not __need_malloc_and_calloc)\n                (not __USE_EXTERN_INLINES)\n                HAVE_ECC)\n           (not SSL_CTX_set_ecdh_auto))\n      (and (and (not _STDLIB_H)\n                (not __need_malloc_and_calloc)\n                (not __USE_EXTERN_INLINES))\n           a!1\n           a!1\n           (not SSL_CTX_set_ecdh_auto))))",
     "model" : "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun SSL_CTX_set_ecdh_auto () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __USE_EXTERN_INLINES () Bool\n  false)\n(define-fun HAVE_ECC () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 5155.0
+    "desugaringTime" : 7166.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -81,7 +85,7 @@
       "description" : "The value written to `&__m_has_modinfo_1618` is never used.",
       "fileLocation" : "/workspace/varbugs/5275b1e49f6.desugared.c",
       "line" : 2314,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/5275b1e49f6.c",
     "sanitizedDescription" : "The value written to `&m_has_modinfo` is never used.",
@@ -92,7 +96,8 @@
     "presenceCondition" : "(or (and (and (not __USE_EXTERN_INLINES)\n              (not _STDLIB_H)\n              (not __need_malloc_and_calloc))\n         (and (not __USE_EXTERN_INLINES)\n              (not _STDLIB_H)\n              (not __need_malloc_and_calloc)))\n    (and (and __USE_EXTERN_INLINES\n              (not _STDLIB_H)\n              (not __need_malloc_and_calloc))\n         (and __USE_EXTERN_INLINES\n              (not _STDLIB_H)\n              (not __need_malloc_and_calloc))))",
     "model" : "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun __USE_EXTERN_INLINES () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 6973.0
+    "desugaringTime" : 7601.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -100,7 +105,7 @@
       "description" : "`__len_698` is read without initialization.",
       "fileLocation" : "/workspace/varbugs/60e233a5660.desugared.c",
       "line" : 839,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/60e233a5660.c",
     "sanitizedDescription" : "`len` is read without initialization.",
@@ -111,7 +116,8 @@
     "presenceCondition" : "(and CONFIG_HOTPLUG (not __need___FILE) CONFIG_HOTPLUG)",
     "model" : "(define-fun __need___FILE () Bool\n  false)\n(define-fun CONFIG_HOTPLUG () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 5365.0
+    "desugaringTime" : 6269.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -119,7 +125,7 @@
       "description" : "`__sc_1035` is read without initialization.",
       "fileLocation" : "/workspace/varbugs/2a6cbfa00e0.desugared.c",
       "line" : 1526,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/2a6cbfa00e0.c",
     "sanitizedDescription" : "`sc` is read without initialization.",
@@ -130,7 +136,8 @@
     "presenceCondition" : "(or (and __STRICT_ANSI__\n         (not _STDLIB_H)\n         __STRICT_ANSI__\n         (not __need_malloc_and_calloc)\n         (not __malloc_and_calloc_defined)\n         SHARED_MODULE)\n    (and (not __STRICT_ANSI__)\n         (not _STDLIB_H)\n         (not __STRICT_ANSI__)\n         (not __need_malloc_and_calloc)\n         (not __malloc_and_calloc_defined)\n         SHARED_MODULE))",
     "model" : "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __malloc_and_calloc_defined () Bool\n  false)\n(define-fun SHARED_MODULE () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 6918.0
+    "desugaringTime" : 7464.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -138,7 +145,7 @@
       "description" : "The value written to `&__gdp_695` is never used.",
       "fileLocation" : "/workspace/varbugs/0301ffab3d9.desugared.c",
       "line" : 984,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/0301ffab3d9.c",
     "sanitizedDescription" : "The value written to `&gdp` is never used.",
@@ -149,7 +156,8 @@
     "presenceCondition" : "(and __need___FILE EXT2FS_ENABLE_SWAPFS)",
     "model" : "(define-fun __need___FILE () Bool\n  true)\n(define-fun EXT2FS_ENABLE_SWAPFS () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 4997.0
+    "desugaringTime" : 4930.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -157,7 +165,7 @@
       "description" : "a value is read without initialization.",
       "fileLocation" : "/workspace/varbugs/6e2b75740be.desugared.c",
       "line" : 156,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/6e2b75740be.c",
     "sanitizedDescription" : "a value is read without initialization.",
@@ -168,7 +176,8 @@
     "presenceCondition" : "(and CONFIG_MODULE_UNLOAD CONFIG_SMP)",
     "model" : "(define-fun CONFIG_MODULE_UNLOAD () Bool\n  true)\n(define-fun CONFIG_SMP () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 1822.0
+    "desugaringTime" : 1805.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -176,7 +185,7 @@
       "description" : "The value written to `&__pid_output_699` is never used.",
       "fileLocation" : "/workspace/varbugs/8c4377dd635.desugared.c",
       "line" : 839,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/8c4377dd635.c",
     "sanitizedDescription" : "The value written to `&pid_output` is never used.",
@@ -187,7 +196,8 @@
     "presenceCondition" : "(or (and (and MARLIN_H PIDTEMP) (not PID_DEBUG))\n    (and MARLIN_H (not PIDTEMP))\n    (and (and MARLIN_H PIDTEMP) PID_DEBUG)\n    (and (and (not MARLIN_H) PIDTEMP) (not PID_DEBUG))\n    (and (not MARLIN_H) (not PIDTEMP))\n    (and (and (not MARLIN_H) PIDTEMP) PID_DEBUG))",
     "model" : "(define-fun PID_DEBUG () Bool\n  false)\n(define-fun MARLIN_H () Bool\n  true)\n(define-fun PIDTEMP () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 4781.0
+    "desugaringTime" : 5233.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -195,7 +205,7 @@
       "description" : "`__buf_978` is read without initialization.",
       "fileLocation" : "/workspace/varbugs/eef2317b9f5.desugared.c",
       "line" : 1758,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/eef2317b9f5.c",
     "sanitizedDescription" : "`buf` is read without initialization.",
@@ -206,7 +216,8 @@
     "presenceCondition" : "CONFIG_FEATURE_CLEAN_UP",
     "model" : "(define-fun CONFIG_FEATURE_CLEAN_UP () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 5929.0
+    "desugaringTime" : 6484.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -214,7 +225,7 @@
       "description" : "The value written to `&__k_crcs_1621` is never used.",
       "fileLocation" : "/workspace/varbugs/5275b1e49f6.desugared.c",
       "line" : 2327,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/5275b1e49f6.c",
     "sanitizedDescription" : "The value written to `&k_crcs` is never used.",
@@ -225,7 +236,8 @@
     "presenceCondition" : "(or (and (and (not __USE_EXTERN_INLINES)\n              (not _STDLIB_H)\n              (not __need_malloc_and_calloc))\n         (and (not __USE_EXTERN_INLINES)\n              (not _STDLIB_H)\n              (not __need_malloc_and_calloc)))\n    (and (and __USE_EXTERN_INLINES\n              (not _STDLIB_H)\n              (not __need_malloc_and_calloc))\n         (and __USE_EXTERN_INLINES\n              (not _STDLIB_H)\n              (not __need_malloc_and_calloc))))",
     "model" : "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun __USE_EXTERN_INLINES () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 6973.0
+    "desugaringTime" : 7601.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -233,7 +245,7 @@
       "description" : "`__curr_1644` could be null (null value originating from line 2675) and is dereferenced.",
       "fileLocation" : "/workspace/varbugs/2631486f1bf.desugared.c",
       "line" : 2684,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/2631486f1bf.c",
     "sanitizedDescription" : "`curr` could be null (null value originating from line 2675) and is dereferenced.",
@@ -244,7 +256,8 @@
     "presenceCondition" : "(or (and CONFIG_FEATURE_LS_SORTFILES\n         __STRICT_ANSI__\n         (not _STDLIB_H)\n         (not __need_malloc_and_calloc)\n         CONFIG_FEATURE_LS_SORTFILES)\n    (and CONFIG_FEATURE_LS_SORTFILES\n         (not __STRICT_ANSI__)\n         (not _STDLIB_H)\n         (not __need_malloc_and_calloc)\n         CONFIG_FEATURE_LS_SORTFILES))",
     "model" : "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun CONFIG_FEATURE_LS_SORTFILES () Bool\n  true)\n(define-fun _STDLIB_H () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 5956.0
+    "desugaringTime" : 8388.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -252,7 +265,7 @@
       "description" : "`__rmm_lock_701` is read without initialization.",
       "fileLocation" : "/workspace/varbugs/1b48bb3c1af.desugared.c",
       "line" : 903,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/1b48bb3c1af.c",
     "sanitizedDescription" : "`rmm_lock` is read without initialization.",
@@ -263,7 +276,8 @@
     "presenceCondition" : "(or (and (and APU_HAS_LDAP APR_HAS_SHARED_MEMORY)\n         (not __need___FILE)\n         __STRICT_ANSI__\n         __USE_EXTERN_INLINES\n         APU_HAS_LDAP\n         APR_HAS_SHARED_MEMORY)\n    (and (and APU_HAS_LDAP APR_HAS_SHARED_MEMORY)\n         (not __need___FILE)\n         (not __STRICT_ANSI__)\n         __USE_EXTERN_INLINES\n         APU_HAS_LDAP\n         APR_HAS_SHARED_MEMORY)\n    (and (and APU_HAS_LDAP APR_HAS_SHARED_MEMORY)\n         (not __need___FILE)\n         (not __USE_EXTERN_INLINES)\n         APU_HAS_LDAP\n         APR_HAS_SHARED_MEMORY)\n    (and (and APU_HAS_LDAP APR_HAS_SHARED_MEMORY)\n         __need___FILE\n         APU_HAS_LDAP\n         APR_HAS_SHARED_MEMORY))",
     "model" : "(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun APR_HAS_SHARED_MEMORY () Bool\n  true)\n(define-fun __USE_EXTERN_INLINES () Bool\n  true)\n(define-fun __need___FILE () Bool\n  false)\n(define-fun APU_HAS_LDAP () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 5361.0
+    "desugaringTime" : 6288.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -271,7 +285,7 @@
       "description" : "The value written to `&__buf_978` is never used.",
       "fileLocation" : "/workspace/varbugs/eef2317b9f5.desugared.c",
       "line" : 1878,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/eef2317b9f5.c",
     "sanitizedDescription" : "The value written to `&buf` is never used.",
@@ -282,7 +296,8 @@
     "presenceCondition" : "(and (not CONFIG_FEATURE_CLEAN_UP)\n     (not _STDLIB_H)\n     (not __malloc_and_calloc_defined)\n     (not CONFIG_FEATURE_CLEAN_UP))",
     "model" : "(define-fun CONFIG_FEATURE_CLEAN_UP () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __malloc_and_calloc_defined () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 5929.0
+    "desugaringTime" : 6484.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -290,7 +305,7 @@
       "description" : "Memory dynamically allocated by `malloc` on line 1878 is not freed after the last access at line 1878, column 2.",
       "fileLocation" : "/workspace/varbugs/eef2317b9f5.desugared.c",
       "line" : 1878,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/eef2317b9f5.c",
     "sanitizedDescription" : "Memory dynamically allocated by `malloc` on line 1878 is not freed after the last access at line 1878, column 2.",
@@ -301,7 +316,8 @@
     "presenceCondition" : "(and (not CONFIG_FEATURE_CLEAN_UP)\n     (not _STDLIB_H)\n     (not __malloc_and_calloc_defined)\n     (not CONFIG_FEATURE_CLEAN_UP))",
     "model" : "(define-fun CONFIG_FEATURE_CLEAN_UP () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __malloc_and_calloc_defined () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 5929.0
+    "desugaringTime" : 6484.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -309,7 +325,7 @@
       "description" : "`__r_193` is read without initialization.",
       "fileLocation" : "/workspace/varbugs/ae249b5fa27.desugared.c",
       "line" : 235,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/ae249b5fa27.c",
     "sanitizedDescription" : "`r` is read without initialization.",
@@ -320,7 +336,8 @@
     "presenceCondition" : "(and CONFIG_DISCONTIGMEM CONFIG_DISCONTIGMEM (not NDEBUG) (not _ASSERT_H_DECLS))",
     "model" : "(define-fun NDEBUG () Bool\n  false)\n(define-fun _ASSERT_H_DECLS () Bool\n  false)\n(define-fun CONFIG_DISCONTIGMEM () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 4944.0
+    "desugaringTime" : 5343.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -328,7 +345,7 @@
       "description" : "`__curr_1644` could be null (null value originating from line 2678) and is dereferenced.",
       "fileLocation" : "/workspace/varbugs/2631486f1bf.desugared.c",
       "line" : 2692,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/2631486f1bf.c",
     "sanitizedDescription" : "`curr` could be null (null value originating from line 2678) and is dereferenced.",
@@ -339,7 +356,8 @@
     "presenceCondition" : "CONFIG_FEATURE_LS_SORTFILES",
     "model" : "(define-fun CONFIG_FEATURE_LS_SORTFILES () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 5956.0
+    "desugaringTime" : 8388.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -347,7 +365,7 @@
       "description" : "`__ch_1907` is read without initialization.",
       "fileLocation" : "/workspace/varbugs/bc0ffc0e971.desugared.c",
       "line" : 2697,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/bc0ffc0e971.c",
     "sanitizedDescription" : "`ch` is read without initialization.",
@@ -358,7 +376,8 @@
     "presenceCondition" : "(or __STRICT_ANSI__ (not __STRICT_ANSI__))",
     "model" : "(define-fun __STRICT_ANSI__ () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 6897.0
+    "desugaringTime" : 7254.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -366,7 +385,7 @@
       "description" : "`__mask_752` is read without initialization.",
       "fileLocation" : "/workspace/varbugs/76baeebf7df.desugared.c",
       "line" : 1229,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/76baeebf7df.c",
     "sanitizedDescription" : "`mask` is read without initialization.",
@@ -377,7 +396,8 @@
     "presenceCondition" : "(or (and CONFIG_PCI\n         (not __need___FILE)\n         __STRICT_ANSI__\n         __USE_EXTERN_INLINES\n         CONFIG_PCI)\n    (and CONFIG_PCI (not __need___FILE) (not __USE_EXTERN_INLINES) CONFIG_PCI)\n    (and CONFIG_PCI\n         (not __need___FILE)\n         (not __STRICT_ANSI__)\n         __USE_EXTERN_INLINES\n         CONFIG_PCI))",
     "model" : "(define-fun CONFIG_PCI () Bool\n  true)\n(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun __USE_EXTERN_INLINES () Bool\n  true)\n(define-fun __need___FILE () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 5601.0
+    "desugaringTime" : 6481.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -385,7 +405,7 @@
       "description" : "`__curr_1644` could be null (null value originating from line 2574) and is dereferenced.",
       "fileLocation" : "/workspace/varbugs/2631486f1bf.desugared.c",
       "line" : 2583,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/2631486f1bf.c",
     "sanitizedDescription" : "`curr` could be null (null value originating from line 2574) and is dereferenced.",
@@ -396,7 +416,8 @@
     "presenceCondition" : "(or (and (not CONFIG_FEATURE_LS_SORTFILES)\n         __STRICT_ANSI__\n         (not _STDLIB_H)\n         (not __need_malloc_and_calloc)\n         (not CONFIG_FEATURE_LS_SORTFILES))\n    (and (not CONFIG_FEATURE_LS_SORTFILES)\n         (not __STRICT_ANSI__)\n         (not _STDLIB_H)\n         (not __need_malloc_and_calloc)\n         (not CONFIG_FEATURE_LS_SORTFILES)))",
     "model" : "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun CONFIG_FEATURE_LS_SORTFILES () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 5956.0
+    "desugaringTime" : 8388.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -404,7 +425,7 @@
       "description" : "`__random_1625` is read without initialization.",
       "fileLocation" : "/workspace/varbugs/5cd6461b6fb.desugared.c",
       "line" : 2383,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/5cd6461b6fb.c",
     "sanitizedDescription" : "`random` is read without initialization.",
@@ -415,7 +436,8 @@
     "presenceCondition" : "(or (and (not CONFIG_FEATURE_HTTPD_CGI)\n         (and (not _STDLIB_H)\n              (not __need_malloc_and_calloc)\n              CONFIG_FEATURE_HTTPD_BASIC_AUTH))\n    (and CONFIG_FEATURE_HTTPD_CGI\n         (and (not _STDLIB_H)\n              (not __need_malloc_and_calloc)\n              CONFIG_FEATURE_HTTPD_BASIC_AUTH)))",
     "model" : "(define-fun CONFIG_FEATURE_HTTPD_CGI () Bool\n  false)\n(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun CONFIG_FEATURE_HTTPD_BASIC_AUTH () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 6965.0
+    "desugaringTime" : 7311.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -423,7 +445,7 @@
       "description" : "`__curr_1644` could be null (null value originating from line 2577) and is dereferenced.",
       "fileLocation" : "/workspace/varbugs/2631486f1bf.desugared.c",
       "line" : 2591,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/2631486f1bf.c",
     "sanitizedDescription" : "`curr` could be null (null value originating from line 2577) and is dereferenced.",
@@ -434,7 +456,8 @@
     "presenceCondition" : "(not CONFIG_FEATURE_LS_SORTFILES)",
     "model" : "(define-fun CONFIG_FEATURE_LS_SORTFILES () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 5956.0
+    "desugaringTime" : 8388.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -442,7 +465,7 @@
       "description" : "The value written to `&__lfilename_179` is never used.",
       "fileLocation" : "/workspace/varbugs/a7fc1f83c81.desugared.c",
       "line" : 178,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/a7fc1f83c81.c",
     "sanitizedDescription" : "The value written to `&lfilename` is never used.",
@@ -453,7 +476,8 @@
     "presenceCondition" : "(or __STRICT_ANSI__ (not __STRICT_ANSI__))",
     "model" : "(define-fun __STRICT_ANSI__ () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 3281.0
+    "desugaringTime" : 2709.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -461,7 +485,7 @@
       "description" : "`__cache_6` is read without initialization.",
       "fileLocation" : "/workspace/varbugs/0f8f8094d28.desugared.c",
       "line" : 71,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/0f8f8094d28.c",
     "sanitizedDescription" : "`cache` is read without initialization.",
@@ -472,7 +496,8 @@
     "presenceCondition" : "(or (and CONFIG_SLOB (not CONFIG_FORCE_MAX_ZONEORDER) CONFIG_SLOB)\n    (and (not CONFIG_SLOB) (not CONFIG_FORCE_MAX_ZONEORDER) (not CONFIG_SLOB)))",
     "model" : "(define-fun CONFIG_SLOB () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 2504.0
+    "desugaringTime" : 3732.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -480,7 +505,7 @@
       "description" : "`__len_1887` is read without initialization.",
       "fileLocation" : "/workspace/varbugs/95755181b82.desugared.c",
       "line" : 2588,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/95755181b82.c",
     "sanitizedDescription" : "`len` is read without initialization.",
@@ -491,7 +516,8 @@
     "presenceCondition" : "(or (and __STRICT_ANSI__ (not __need___FILE) __STRICT_ANSI__)\n    (and (not __STRICT_ANSI__) (not __need___FILE) (not __STRICT_ANSI__)))",
     "model" : "(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun __need___FILE () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 7173.0
+    "desugaringTime" : 8391.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -499,7 +525,7 @@
       "description" : "`__sc_1035` is read without initialization.",
       "fileLocation" : "/workspace/varbugs/2a6cbfa00e0.desugared.c",
       "line" : 1520,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/2a6cbfa00e0.c",
     "sanitizedDescription" : "`sc` is read without initialization.",
@@ -510,7 +536,8 @@
     "presenceCondition" : "(or (and __STRICT_ANSI__\n         (not _STDLIB_H)\n         __STRICT_ANSI__\n         (not __malloc_and_calloc_defined))\n    (and (not __STRICT_ANSI__)\n         (not _STDLIB_H)\n         (not __STRICT_ANSI__)\n         (not __malloc_and_calloc_defined)))",
     "model" : "(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __malloc_and_calloc_defined () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 6918.0
+    "desugaringTime" : 7464.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -518,7 +545,7 @@
       "description" : "Memory dynamically allocated by `malloc` on line 1576 is not freed after the last access at line 1576, column 2.",
       "fileLocation" : "/workspace/varbugs/35ae2e259e4.desugared.c",
       "line" : 1576,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/35ae2e259e4.c",
     "sanitizedDescription" : "Memory dynamically allocated by `malloc` on line 1576 is not freed after the last access at line 1576, column 2.",
@@ -529,7 +556,8 @@
     "presenceCondition" : "(and (or (and (not _STDLIB_H) __need_malloc_and_calloc) _STDLIB_H)\n     (and (not _STDLIB_H) __need_malloc_and_calloc)\n     (not __malloc_and_calloc_defined)\n     HAVE_ECC)",
     "model" : "(define-fun __need_malloc_and_calloc () Bool\n  true)\n(define-fun HAVE_ECC () Bool\n  true)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __malloc_and_calloc_defined () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 5155.0
+    "desugaringTime" : 7166.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -537,7 +565,7 @@
       "description" : "`__info_1612` is read without initialization.",
       "fileLocation" : "/workspace/varbugs/b273d665181.desugared.c",
       "line" : 2371,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/b273d665181.c",
     "sanitizedDescription" : "`info` is read without initialization.",
@@ -548,7 +576,8 @@
     "presenceCondition" : "(let ((a!1 (and (and (not __need___FILE) __STRICT_ANSI__)\n                (not __USE_EXTERN_INLINES)\n                (not _STDLIB_H)\n                (not __need_malloc_and_calloc)\n                BB_FEATURE_LS_FILETYPES))\n      (a!2 (and (not __STRICT_ANSI__)\n                (not __USE_EXTERN_INLINES)\n                (not _STDLIB_H)\n                (not __need_malloc_and_calloc)\n                BB_FEATURE_LS_FILETYPES))\n      (a!3 (and (and (not __need___FILE) (not __STRICT_ANSI__))\n                (not __USE_EXTERN_INLINES)\n                (not _STDLIB_H)\n                (not __need_malloc_and_calloc)\n                BB_FEATURE_LS_FILETYPES))\n      (a!4 (and (and (not __need___FILE) __STRICT_ANSI__)\n                __USE_EXTERN_INLINES\n                (not _STDLIB_H)\n                (not __need_malloc_and_calloc)\n                BB_FEATURE_LS_FILETYPES))\n      (a!5 (and (and (not __need___FILE) (not __STRICT_ANSI__))\n                __USE_EXTERN_INLINES\n                (not _STDLIB_H)\n                (not __need_malloc_and_calloc)\n                BB_FEATURE_LS_FILETYPES)))\n  (or (and (and (not __USE_EXTERN_INLINES)\n                (not _STDLIB_H)\n                (not __need_malloc_and_calloc)\n                BB_FEATURE_LS_FILETYPES)\n           (and __STRICT_ANSI__\n                (not __USE_EXTERN_INLINES)\n                (not _STDLIB_H)\n                (not __need_malloc_and_calloc)\n                BB_FEATURE_LS_FILETYPES)\n           BB_FEATURE_LS_USERNAME\n           a!1\n           BB_FEATURE_LS_USERNAME)\n      (and (and (not __USE_EXTERN_INLINES)\n                (not _STDLIB_H)\n                (not __need_malloc_and_calloc)\n                BB_FEATURE_LS_FILETYPES)\n           a!2\n           BB_FEATURE_LS_USERNAME\n           a!3\n           BB_FEATURE_LS_USERNAME)\n      (and (and (not __USE_EXTERN_INLINES)\n                (not _STDLIB_H)\n                (not __need_malloc_and_calloc)\n                BB_FEATURE_LS_FILETYPES)\n           (and __STRICT_ANSI__\n                (not __USE_EXTERN_INLINES)\n                (not _STDLIB_H)\n                (not __need_malloc_and_calloc)\n                BB_FEATURE_LS_FILETYPES)\n           (not BB_FEATURE_LS_USERNAME)\n           a!1\n           (not BB_FEATURE_LS_USERNAME))\n      (and (and (not __USE_EXTERN_INLINES)\n                (not _STDLIB_H)\n                (not __need_malloc_and_calloc)\n                BB_FEATURE_LS_FILETYPES)\n           a!2\n           (not BB_FEATURE_LS_USERNAME)\n           a!3\n           (not BB_FEATURE_LS_USERNAME))\n      (and (and __USE_EXTERN_INLINES\n                (not _STDLIB_H)\n                (not __need_malloc_and_calloc)\n                BB_FEATURE_LS_FILETYPES)\n           (and __STRICT_ANSI__\n                __USE_EXTERN_INLINES\n                (not _STDLIB_H)\n                (not __need_malloc_and_calloc)\n                BB_FEATURE_LS_FILETYPES)\n           BB_FEATURE_LS_USERNAME\n           a!4\n           BB_FEATURE_LS_USERNAME)\n      (and (and __USE_EXTERN_INLINES\n                (not _STDLIB_H)\n                (not __need_malloc_and_calloc)\n                BB_FEATURE_LS_FILETYPES)\n           (and (not __STRICT_ANSI__)\n                __USE_EXTERN_INLINES\n                (not _STDLIB_H)\n                (not __need_malloc_and_calloc)\n                BB_FEATURE_LS_FILETYPES)\n           BB_FEATURE_LS_USERNAME\n           a!5\n           BB_FEATURE_LS_USERNAME)\n      (and (and __USE_EXTERN_INLINES\n                (not _STDLIB_H)\n                (not __need_malloc_and_calloc)\n                BB_FEATURE_LS_FILETYPES)\n           (and __STRICT_ANSI__\n                __USE_EXTERN_INLINES\n                (not _STDLIB_H)\n                (not __need_malloc_and_calloc)\n                BB_FEATURE_LS_FILETYPES)\n           (not BB_FEATURE_LS_USERNAME)\n           a!4\n           (not BB_FEATURE_LS_USERNAME))\n      (and (and __USE_EXTERN_INLINES\n                (not _STDLIB_H)\n                (not __need_malloc_and_calloc)\n                BB_FEATURE_LS_FILETYPES)\n           (and (not __STRICT_ANSI__)\n                __USE_EXTERN_INLINES\n                (not _STDLIB_H)\n                (not __need_malloc_and_calloc)\n                BB_FEATURE_LS_FILETYPES)\n           (not BB_FEATURE_LS_USERNAME)\n           a!5\n           (not BB_FEATURE_LS_USERNAME))))",
     "model" : "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun __USE_EXTERN_INLINES () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun BB_FEATURE_LS_USERNAME () Bool\n  true)\n(define-fun BB_FEATURE_LS_FILETYPES () Bool\n  true)\n(define-fun __need___FILE () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 7001.0
+    "desugaringTime" : 8234.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -556,7 +585,7 @@
       "description" : "accessing `__hdr_10` that was invalidated by call to `free()` on line 166.",
       "fileLocation" : "/workspace/varbugs/6e2b75740be.desugared.c",
       "line" : 180,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/6e2b75740be.c",
     "sanitizedDescription" : "accessing `hdr` that was invalidated by call to `free()` on line 166.",
@@ -567,7 +596,8 @@
     "presenceCondition" : "(or (not CONFIG_MODULE_UNLOAD) (and CONFIG_MODULE_UNLOAD (not CONFIG_SMP)))",
     "model" : "(define-fun CONFIG_MODULE_UNLOAD () Bool\n  true)\n(define-fun CONFIG_SMP () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 1822.0
+    "desugaringTime" : 1805.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -575,7 +605,7 @@
       "description" : "`__r_1614` is read without initialization.",
       "fileLocation" : "/workspace/varbugs/5275b1e49f6.desugared.c",
       "line" : 2305,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/5275b1e49f6.c",
     "sanitizedDescription" : "`r` is read without initialization.",
@@ -586,7 +616,8 @@
     "presenceCondition" : "(or (and (not __USE_EXTERN_INLINES)\n         (not _STDLIB_H)\n         (not __need_malloc_and_calloc))\n    (and __USE_EXTERN_INLINES (not _STDLIB_H) (not __need_malloc_and_calloc)))",
     "model" : "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun __USE_EXTERN_INLINES () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 6973.0
+    "desugaringTime" : 7601.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -594,7 +625,7 @@
       "description" : "The value written to `&__flags_1837` is never used.",
       "fileLocation" : "/workspace/varbugs/c76df14dfb4.desugared.c",
       "line" : 2536,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/c76df14dfb4.c",
     "sanitizedDescription" : "The value written to `&flags` is never used.",
@@ -605,7 +636,8 @@
     "presenceCondition" : "(let ((a!1 (and (and (not CROSS_COMPILE)\n                     (not _STDLIB_H)\n                     __need_malloc_and_calloc)\n                (not __malloc_and_calloc_defined)\n                (and (and (not __CORRECT_ISO_CPP_STRING_H_PROTO)\n                          (not CROSS_COMPILE))\n                     (not _STDLIB_H)\n                     __need_malloc_and_calloc)\n                (not __malloc_and_calloc_defined)\n                (not OS2)\n                (not NEED_ENHANCED_ESCAPES)))\n      (a!2 (or (and (and (not CROSS_COMPILE)\n                         (not _STDLIB_H)\n                         __need_malloc_and_calloc)\n                    __malloc_and_calloc_defined)\n               (and (not CROSS_COMPILE) _STDLIB_H)\n               CROSS_COMPILE))\n      (a!3 (and (and (and (not __CORRECT_ISO_CPP_STRING_H_PROTO)\n                          (not CROSS_COMPILE))\n                     (not _STDLIB_H)\n                     __need_malloc_and_calloc)\n                __malloc_and_calloc_defined\n                (not OS2)\n                (not NEED_ENHANCED_ESCAPES))))\n(let ((a!4 (or a!3\n               (and (and (not __CORRECT_ISO_CPP_STRING_H_PROTO)\n                         (not CROSS_COMPILE))\n                    _STDLIB_H\n                    (not OS2)\n                    (not NEED_ENHANCED_ESCAPES))\n               (and (not __CORRECT_ISO_CPP_STRING_H_PROTO)\n                    CROSS_COMPILE\n                    (not NEED_ENHANCED_ESCAPES)))))\n  (or (and (not __USE_EXTERN_INLINES)\n           (not CROSS_COMPILE)\n           (not _STDLIB_H)\n           (not __need_malloc_and_calloc)\n           (not __USE_EXTERN_INLINES)\n           (not __CORRECT_ISO_CPP_STRING_H_PROTO)\n           (not CROSS_COMPILE)\n           (not _STDLIB_H)\n           (not __need_malloc_and_calloc)\n           (not OS2)\n           (not NEED_ENHANCED_ESCAPES))\n      (and __USE_EXTERN_INLINES\n           (not CROSS_COMPILE)\n           (not _STDLIB_H)\n           (not __need_malloc_and_calloc)\n           __USE_EXTERN_INLINES\n           (not __CORRECT_ISO_CPP_STRING_H_PROTO)\n           (not CROSS_COMPILE)\n           (not _STDLIB_H)\n           (not __need_malloc_and_calloc)\n           (not OS2)\n           (not NEED_ENHANCED_ESCAPES))\n      a!1\n      (and a!2 a!4))))",
     "model" : "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun __CORRECT_ISO_CPP_STRING_H_PROTO () Bool\n  false)\n(define-fun OS2 () Bool\n  false)\n(define-fun __USE_EXTERN_INLINES () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun NEED_ENHANCED_ESCAPES () Bool\n  false)\n(define-fun CROSS_COMPILE () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 6187.0
+    "desugaringTime" : 7822.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -613,7 +645,7 @@
       "description" : "The value written to `&__len_1887` is never used.",
       "fileLocation" : "/workspace/varbugs/95755181b82.desugared.c",
       "line" : 2599,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/95755181b82.c",
     "sanitizedDescription" : "The value written to `&len` is never used.",
@@ -624,7 +656,8 @@
     "presenceCondition" : "(and (not __STRICT_ANSI__) (not __need___FILE) (not __STRICT_ANSI__))",
     "model" : "(define-fun __STRICT_ANSI__ () Bool\n  false)\n(define-fun __need___FILE () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 7173.0
+    "desugaringTime" : 8391.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -632,7 +665,7 @@
       "description" : "`__head_1645` is read without initialization.",
       "fileLocation" : "/workspace/varbugs/2631486f1bf.desugared.c",
       "line" : 2591,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/2631486f1bf.c",
     "sanitizedDescription" : "`head` is read without initialization.",
@@ -643,7 +676,8 @@
     "presenceCondition" : "(or (not CONFIG_FEATURE_LS_SORTFILES) CONFIG_FEATURE_LS_SORTFILES)",
     "model" : "(define-fun CONFIG_FEATURE_LS_SORTFILES () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 5956.0
+    "desugaringTime" : 8388.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -651,7 +685,7 @@
       "description" : "`__curr_1644` could be null (null value originating from line 2577) and is dereferenced.",
       "fileLocation" : "/workspace/varbugs/2631486f1bf.desugared.c",
       "line" : 2583,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/2631486f1bf.c",
     "sanitizedDescription" : "`curr` could be null (null value originating from line 2577) and is dereferenced.",
@@ -662,7 +696,8 @@
     "presenceCondition" : "(or (and (not CONFIG_FEATURE_LS_SORTFILES)\n         __STRICT_ANSI__\n         (not _STDLIB_H)\n         (not __need_malloc_and_calloc)\n         (not CONFIG_FEATURE_LS_SORTFILES))\n    (and (not CONFIG_FEATURE_LS_SORTFILES)\n         (not __STRICT_ANSI__)\n         (not _STDLIB_H)\n         (not __need_malloc_and_calloc)\n         (not CONFIG_FEATURE_LS_SORTFILES)))",
     "model" : "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun CONFIG_FEATURE_LS_SORTFILES () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 5956.0
+    "desugaringTime" : 8388.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -670,7 +705,7 @@
       "description" : "`__ops_6` could be null (null value originating from line 67) and is dereferenced in the call to `__irq_domain_add_2()`.",
       "fileLocation" : "/workspace/varbugs/6252547b8a7.desugared.c",
       "line" : 73,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/6252547b8a7.c",
     "sanitizedDescription" : "`ops_6` could be null (null value originating from line 67) and is dereferenced in the call to `__irq_domain_add()`.",
@@ -681,7 +716,8 @@
     "presenceCondition" : "(and CONFIG_TWL4030_CORE CONFIG_TWL4030_CORE (not CONFIG_OF_IRQ))",
     "model" : "(define-fun CONFIG_TWL4030_CORE () Bool\n  true)\n(define-fun CONFIG_OF_IRQ () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 2214.0
+    "desugaringTime" : 1857.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -689,7 +725,7 @@
       "description" : "`__curr_1644` could be null (null value originating from line 2574) and is dereferenced.",
       "fileLocation" : "/workspace/varbugs/2631486f1bf.desugared.c",
       "line" : 2591,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/2631486f1bf.c",
     "sanitizedDescription" : "`curr` could be null (null value originating from line 2574) and is dereferenced.",
@@ -700,7 +736,8 @@
     "presenceCondition" : "(not CONFIG_FEATURE_LS_SORTFILES)",
     "model" : "(define-fun CONFIG_FEATURE_LS_SORTFILES () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 5956.0
+    "desugaringTime" : 8388.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -708,7 +745,7 @@
       "description" : "The value written to `&__codec_hw_write_7` is never used.",
       "fileLocation" : "/workspace/varbugs/66517915e09.desugared.c",
       "line" : 82,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/66517915e09.c",
     "sanitizedDescription" : "The value written to `&codec_hw_write` is never used.",
@@ -719,7 +756,8 @@
     "presenceCondition" : "(and (or (and (not CONFIG_SND_FSI_AK4642) CONFIG_SND_SOC_AK4642)\n         CONFIG_SND_FSI_AK4642)\n     (or (and (not CONFIG_SND_FSI_AK4642) CONFIG_I2C CONFIG_SND_SOC_AK4642)\n         (and CONFIG_SND_FSI_AK4642 CONFIG_I2C)))",
     "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 2320.0
+    "desugaringTime" : 1623.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -727,7 +765,7 @@
       "description" : "`__conv_1613` is read without initialization.",
       "fileLocation" : "/workspace/varbugs/31873ec707d.desugared.c",
       "line" : 2285,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/31873ec707d.c",
     "sanitizedDescription" : "`conv` is read without initialization.",
@@ -738,7 +776,8 @@
     "presenceCondition" : "(or (and (not __USE_EXTERN_INLINES)\n         (not _STDLIB_H)\n         (not __need_malloc_and_calloc))\n    (and __USE_EXTERN_INLINES (not _STDLIB_H) (not __need_malloc_and_calloc))\n    (and (not _STDLIB_H) __need_malloc_and_calloc)\n    _STDLIB_H)",
     "model" : "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun __USE_EXTERN_INLINES () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 6972.0
+    "desugaringTime" : 8310.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -746,7 +785,7 @@
       "description" : "`__eckey_814` could be null (null value originating from line 1466) and is dereferenced.",
       "fileLocation" : "/workspace/varbugs/35ae2e259e4.desugared.c",
       "line" : 1505,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/35ae2e259e4.c",
     "sanitizedDescription" : "`eckey` could be null (null value originating from line 1466) and is dereferenced.",
@@ -757,7 +796,8 @@
     "presenceCondition" : "(or (and (and (not _STDLIB_H)\n              (not __need_malloc_and_calloc)\n              __USE_EXTERN_INLINES)\n         (and (not _STDLIB_H)\n              __STRICT_ANSI__\n              (not __need_malloc_and_calloc)\n              __USE_EXTERN_INLINES\n              HAVE_ECC)\n         (and (not _STDLIB_H)\n              __STRICT_ANSI__\n              (not __need_malloc_and_calloc)\n              __USE_EXTERN_INLINES\n              HAVE_ECC)\n         (not SSL_CTX_set_ecdh_auto))\n    (and (and (not _STDLIB_H)\n              (not __need_malloc_and_calloc)\n              __USE_EXTERN_INLINES)\n         (and (not _STDLIB_H)\n              (not __STRICT_ANSI__)\n              (not __need_malloc_and_calloc)\n              __USE_EXTERN_INLINES\n              HAVE_ECC)\n         (and (not _STDLIB_H)\n              (not __STRICT_ANSI__)\n              (not __need_malloc_and_calloc)\n              __USE_EXTERN_INLINES\n              HAVE_ECC)\n         (not SSL_CTX_set_ecdh_auto)))",
     "model" : "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun SSL_CTX_set_ecdh_auto () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __USE_EXTERN_INLINES () Bool\n  true)\n(define-fun HAVE_ECC () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 5155.0
+    "desugaringTime" : 7166.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -765,7 +805,7 @@
       "description" : "The value written to `&__someInt_1620` is never used.",
       "fileLocation" : "/workspace/varbugs/5275b1e49f6.desugared.c",
       "line" : 2474,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/5275b1e49f6.c",
     "sanitizedDescription" : "The value written to `&someInt` is never used.",
@@ -776,7 +816,8 @@
     "presenceCondition" : "(or (and (not _STDLIB_H) __need_malloc_and_calloc) _STDLIB_H)",
     "model" : "(define-fun __need_malloc_and_calloc () Bool\n  true)\n(define-fun _STDLIB_H () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 6973.0
+    "desugaringTime" : 7601.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -784,7 +825,7 @@
       "description" : "The value written to `&__codec_hw_write_2` is never used.",
       "fileLocation" : "/workspace/varbugs/66517915e09.desugared.c",
       "line" : 57,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/66517915e09.c",
     "sanitizedDescription" : "The value written to `&codec_hw_write` is never used.",
@@ -795,7 +836,8 @@
     "presenceCondition" : "(and (or (and (not CONFIG_SND_FSI_DA7210) CONFIG_SND_SOC_DA7210)\n         CONFIG_SND_FSI_DA7210)\n     (or (and (not CONFIG_SND_FSI_DA7210) CONFIG_I2C CONFIG_SND_SOC_DA7210)\n         (and CONFIG_SND_FSI_DA7210 CONFIG_I2C)))",
     "model" : "(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  true)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 2320.0
+    "desugaringTime" : 1623.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -803,7 +845,7 @@
       "description" : "The value written to `&__family_1` is never used.",
       "fileLocation" : "/workspace/varbugs/581635e28f1.desugared.c",
       "line" : 29,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/581635e28f1.c",
     "sanitizedDescription" : "The value written to `&family` is never used.",
@@ -814,7 +856,8 @@
     "presenceCondition" : "true",
     "model" : "",
     "feasible" : true,
-    "desugaringTime" : 1131.0
+    "desugaringTime" : 1748.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -822,7 +865,7 @@
       "description" : "`__eckey_814` is read without initialization.",
       "fileLocation" : "/workspace/varbugs/35ae2e259e4.desugared.c",
       "line" : 1371,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/35ae2e259e4.c",
     "sanitizedDescription" : "`eckey` is read without initialization.",
@@ -833,7 +876,8 @@
     "presenceCondition" : "(let ((a!1 (and (and (not _STDLIB_H)\n                     __STRICT_ANSI__\n                     (not __need_malloc_and_calloc))\n                (not __USE_EXTERN_INLINES)\n                HAVE_ECC))\n      (a!3 (and (and (not _STDLIB_H)\n                     (not __STRICT_ANSI__)\n                     (not __need_malloc_and_calloc))\n                (not __USE_EXTERN_INLINES)\n                HAVE_ECC))\n      (a!5 (and (and (and (not _STDLIB_H) (not __need_malloc_and_calloc))\n                     __USE_EXTERN_INLINES)\n                (and (and (not _STDLIB_H)\n                          __STRICT_ANSI__\n                          (not __need_malloc_and_calloc))\n                     __USE_EXTERN_INLINES\n                     HAVE_ECC)\n                (and (and (not _STDLIB_H)\n                          __STRICT_ANSI__\n                          (not __need_malloc_and_calloc))\n                     __USE_EXTERN_INLINES\n                     HAVE_ECC)))\n      (a!6 (and (and (not _STDLIB_H)\n                     (not __STRICT_ANSI__)\n                     (not __need_malloc_and_calloc))\n                __USE_EXTERN_INLINES\n                HAVE_ECC)))\n(let ((a!2 (and (and (and (not _STDLIB_H) (not __need_malloc_and_calloc))\n                     (not __USE_EXTERN_INLINES))\n                a!1\n                a!1))\n      (a!4 (and (and (and (not _STDLIB_H) (not __need_malloc_and_calloc))\n                     (not __USE_EXTERN_INLINES))\n                a!3\n                a!3))\n      (a!7 (and (and (and (not _STDLIB_H) (not __need_malloc_and_calloc))\n                     __USE_EXTERN_INLINES)\n                a!6\n                a!6)))\n  (or a!2 a!4 a!5 a!7)))",
     "model" : "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __USE_EXTERN_INLINES () Bool\n  false)\n(define-fun HAVE_ECC () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 5155.0
+    "desugaringTime" : 7166.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -841,7 +885,7 @@
       "description" : "The value written to `&__eckey_814` is never used.",
       "fileLocation" : "/workspace/varbugs/35ae2e259e4.desugared.c",
       "line" : 1576,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/35ae2e259e4.c",
     "sanitizedDescription" : "The value written to `&eckey` is never used.",
@@ -852,7 +896,8 @@
     "presenceCondition" : "(and (or (and (not _STDLIB_H) __need_malloc_and_calloc) _STDLIB_H)\n     (and (not _STDLIB_H) __need_malloc_and_calloc)\n     (not __malloc_and_calloc_defined)\n     HAVE_ECC)",
     "model" : "(define-fun __need_malloc_and_calloc () Bool\n  true)\n(define-fun HAVE_ECC () Bool\n  true)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __malloc_and_calloc_defined () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 5155.0
+    "desugaringTime" : 7166.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -860,7 +905,7 @@
       "description" : "The value written to `&__a_1885` is never used.",
       "fileLocation" : "/workspace/varbugs/b62bd7b261b.desugared.c",
       "line" : 2553,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/b62bd7b261b.c",
     "sanitizedDescription" : "The value written to `&a` is never used.",
@@ -871,7 +916,8 @@
     "presenceCondition" : "(or (and __STRICT_ANSI__ (not ENABLE_FEATURE_MDEV_CONF))\n    (and (and __STRICT_ANSI__ ENABLE_FEATURE_MDEV_CONF)\n         (not ENABLE_FEATURE_MDEV_RENAME))\n    (and (and __STRICT_ANSI__ ENABLE_FEATURE_MDEV_CONF)\n         ENABLE_FEATURE_MDEV_RENAME\n         (not ENABLE_FEATURE_MDEV_RENAME_REGEXP))\n    (and (not __STRICT_ANSI__) (not ENABLE_FEATURE_MDEV_CONF))\n    (and (and (not __STRICT_ANSI__) ENABLE_FEATURE_MDEV_CONF)\n         (not ENABLE_FEATURE_MDEV_RENAME))\n    (and (and (not __STRICT_ANSI__) ENABLE_FEATURE_MDEV_CONF)\n         ENABLE_FEATURE_MDEV_RENAME\n         (not ENABLE_FEATURE_MDEV_RENAME_REGEXP)))",
     "model" : "(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_CONF () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME_REGEXP () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 4636.0
+    "desugaringTime" : 8254.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -879,7 +925,7 @@
       "description" : "`__curr_1644` could be null (null value originating from line 2675) and is dereferenced.",
       "fileLocation" : "/workspace/varbugs/2631486f1bf.desugared.c",
       "line" : 2692,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/2631486f1bf.c",
     "sanitizedDescription" : "`curr` could be null (null value originating from line 2675) and is dereferenced.",
@@ -890,7 +936,8 @@
     "presenceCondition" : "CONFIG_FEATURE_LS_SORTFILES",
     "model" : "(define-fun CONFIG_FEATURE_LS_SORTFILES () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 5956.0
+    "desugaringTime" : 8388.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -898,7 +945,7 @@
       "description" : "`__err_2` is read without initialization.",
       "fileLocation" : "/workspace/varbugs/e39363a9def.desugared.c",
       "line" : 78,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/e39363a9def.c",
     "sanitizedDescription" : "`err` is read without initialization.",
@@ -909,7 +956,8 @@
     "presenceCondition" : "CONFIG_NETPOLL",
     "model" : "(define-fun CONFIG_NETPOLL () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 2117.0
+    "desugaringTime" : 2558.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -917,7 +965,7 @@
       "description" : "`__scontext_1613` could be null (null value originating from line 2421) and is dereferenced.",
       "fileLocation" : "/workspace/varbugs/1b487ea8a69.desugared.c",
       "line" : 2427,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/1b487ea8a69.c",
     "sanitizedDescription" : "`scontext` could be null (null value originating from line 2421) and is dereferenced.",
@@ -928,7 +976,8 @@
     "presenceCondition" : "(or (and (and __USE_EXTERN_INLINES\n              (not _STDLIB_H)\n              (not __need_malloc_and_calloc)\n              (not ENABLE_FEATURE_STAT_FORMAT))\n         __STRICT_ANSI__\n         __USE_EXTERN_INLINES\n         (not _STDLIB_H)\n         (not __need_malloc_and_calloc)\n         ENABLE_SELINUX\n         (not ENABLE_FEATURE_STAT_FORMAT)\n         (not __need___FILE)\n         __STRICT_ANSI__\n         __USE_EXTERN_INLINES\n         (not _STDLIB_H)\n         (not __need_malloc_and_calloc)\n         ENABLE_SELINUX\n         (not ENABLE_FEATURE_STAT_FORMAT))\n    (and (and __USE_EXTERN_INLINES\n              (not _STDLIB_H)\n              (not __need_malloc_and_calloc)\n              (not ENABLE_FEATURE_STAT_FORMAT))\n         (not __STRICT_ANSI__)\n         __USE_EXTERN_INLINES\n         (not _STDLIB_H)\n         (not __need_malloc_and_calloc)\n         ENABLE_SELINUX\n         (not ENABLE_FEATURE_STAT_FORMAT)\n         (not __need___FILE)\n         (not __STRICT_ANSI__)\n         __USE_EXTERN_INLINES\n         (not _STDLIB_H)\n         (not __need_malloc_and_calloc)\n         ENABLE_SELINUX\n         (not ENABLE_FEATURE_STAT_FORMAT)))",
     "model" : "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun __USE_EXTERN_INLINES () Bool\n  true)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun ENABLE_FEATURE_STAT_FORMAT () Bool\n  false)\n(define-fun ENABLE_SELINUX () Bool\n  true)\n(define-fun __need___FILE () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 5596.0
+    "desugaringTime" : 8161.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -936,7 +985,7 @@
       "description" : "`__curr_1644` could be null (null value originating from line 2678) and is dereferenced.",
       "fileLocation" : "/workspace/varbugs/2631486f1bf.desugared.c",
       "line" : 2684,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/2631486f1bf.c",
     "sanitizedDescription" : "`curr` could be null (null value originating from line 2678) and is dereferenced.",
@@ -947,7 +996,8 @@
     "presenceCondition" : "(or (and CONFIG_FEATURE_LS_SORTFILES\n         __STRICT_ANSI__\n         (not _STDLIB_H)\n         (not __need_malloc_and_calloc)\n         CONFIG_FEATURE_LS_SORTFILES)\n    (and CONFIG_FEATURE_LS_SORTFILES\n         (not __STRICT_ANSI__)\n         (not _STDLIB_H)\n         (not __need_malloc_and_calloc)\n         CONFIG_FEATURE_LS_SORTFILES))",
     "model" : "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun CONFIG_FEATURE_LS_SORTFILES () Bool\n  true)\n(define-fun _STDLIB_H () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 5956.0
+    "desugaringTime" : 8388.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -955,7 +1005,7 @@
       "description" : "`__driver_data_16` is read without initialization.",
       "fileLocation" : "/workspace/varbugs/7acf6cd80b2.desugared.c",
       "line" : 178,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/7acf6cd80b2.c",
     "sanitizedDescription" : "`driver_data` is read without initialization.",
@@ -966,7 +1016,8 @@
     "presenceCondition" : "CONFIG_UNIX98_PTYS",
     "model" : "(define-fun CONFIG_UNIX98_PTYS () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 2173.0
+    "desugaringTime" : 2331.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -974,7 +1025,7 @@
       "description" : "`__v_16` is read without initialization.",
       "fileLocation" : "/workspace/varbugs/63878acfafb.desugared.c",
       "line" : 148,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/63878acfafb.c",
     "sanitizedDescription" : "`v` is read without initialization.",
@@ -985,7 +1036,8 @@
     "presenceCondition" : "CONFIG_ARCH_OMAP3",
     "model" : "(define-fun CONFIG_ARCH_OMAP3 () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 2439.0
+    "desugaringTime" : 1334.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -993,7 +1045,7 @@
       "description" : "The value written to `&__len_176` is never used.",
       "fileLocation" : "/workspace/varbugs/a7fc1f83c81.desugared.c",
       "line" : 171,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/a7fc1f83c81.c",
     "sanitizedDescription" : "The value written to `&len` is never used.",
@@ -1004,7 +1056,8 @@
     "presenceCondition" : "(or (and __STRICT_ANSI__ __STRICT_ANSI__)\n    (and (not __STRICT_ANSI__) (not __STRICT_ANSI__)))",
     "model" : "(define-fun __STRICT_ANSI__ () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 3281.0
+    "desugaringTime" : 2709.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -1012,7 +1065,7 @@
       "description" : "`__scontext_1613` could be null (null value originating from line 2352) and is dereferenced.",
       "fileLocation" : "/workspace/varbugs/1b487ea8a69.desugared.c",
       "line" : 2358,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/1b487ea8a69.c",
     "sanitizedDescription" : "`scontext` could be null (null value originating from line 2352) and is dereferenced.",
@@ -1023,7 +1076,8 @@
     "presenceCondition" : "(or (and (and (not __USE_EXTERN_INLINES)\n              (not _STDLIB_H)\n              (not __need_malloc_and_calloc)\n              (not ENABLE_FEATURE_STAT_FORMAT))\n         __STRICT_ANSI__\n         (not __USE_EXTERN_INLINES)\n         (not _STDLIB_H)\n         (not __need_malloc_and_calloc)\n         ENABLE_SELINUX\n         (not ENABLE_FEATURE_STAT_FORMAT)\n         (not __need___FILE)\n         __STRICT_ANSI__\n         (not __USE_EXTERN_INLINES)\n         (not _STDLIB_H)\n         (not __need_malloc_and_calloc)\n         ENABLE_SELINUX\n         (not ENABLE_FEATURE_STAT_FORMAT))\n    (and (and (not __USE_EXTERN_INLINES)\n              (not _STDLIB_H)\n              (not __need_malloc_and_calloc)\n              (not ENABLE_FEATURE_STAT_FORMAT))\n         (not __STRICT_ANSI__)\n         (not __USE_EXTERN_INLINES)\n         (not _STDLIB_H)\n         (not __need_malloc_and_calloc)\n         ENABLE_SELINUX\n         (not ENABLE_FEATURE_STAT_FORMAT)\n         (not __need___FILE)\n         (not __STRICT_ANSI__)\n         (not __USE_EXTERN_INLINES)\n         (not _STDLIB_H)\n         (not __need_malloc_and_calloc)\n         ENABLE_SELINUX\n         (not ENABLE_FEATURE_STAT_FORMAT)))",
     "model" : "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun __USE_EXTERN_INLINES () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun ENABLE_FEATURE_STAT_FORMAT () Bool\n  false)\n(define-fun ENABLE_SELINUX () Bool\n  true)\n(define-fun __need___FILE () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 5596.0
+    "desugaringTime" : 8161.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -1031,7 +1085,7 @@
       "description" : "The value written to `&__time_8` is never used.",
       "fileLocation" : "/workspace/varbugs/831016b09f7.desugared.c",
       "line" : 87,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/831016b09f7.c",
     "sanitizedDescription" : "The value written to `&time` is never used.",
@@ -1042,7 +1096,8 @@
     "presenceCondition" : "SDSUPPORT",
     "model" : "(define-fun SDSUPPORT () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 1475.0
+    "desugaringTime" : 1722.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -1050,7 +1105,7 @@
       "description" : "The value written to `&__x_695` is never used.",
       "fileLocation" : "/workspace/varbugs/b833f064550.desugared.c",
       "line" : 894,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/b833f064550.c",
     "sanitizedDescription" : "The value written to `&x` is never used.",
@@ -1061,7 +1116,8 @@
     "presenceCondition" : "__need___FILE",
     "model" : "(define-fun __need___FILE () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 5470.0
+    "desugaringTime" : 6785.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -1069,7 +1125,7 @@
       "description" : "`__eckey_814` could be null (null value originating from line 1466) and is dereferenced.",
       "fileLocation" : "/workspace/varbugs/35ae2e259e4.desugared.c",
       "line" : 1481,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/35ae2e259e4.c",
     "sanitizedDescription" : "`eckey` could be null (null value originating from line 1466) and is dereferenced.",
@@ -1080,7 +1136,8 @@
     "presenceCondition" : "(or (and (and (not _STDLIB_H)\n              (not __need_malloc_and_calloc)\n              __USE_EXTERN_INLINES)\n         (and (not _STDLIB_H)\n              __STRICT_ANSI__\n              (not __need_malloc_and_calloc)\n              __USE_EXTERN_INLINES\n              HAVE_ECC)\n         (and (not _STDLIB_H)\n              __STRICT_ANSI__\n              (not __need_malloc_and_calloc)\n              __USE_EXTERN_INLINES\n              HAVE_ECC))\n    (and (and (not _STDLIB_H)\n              (not __need_malloc_and_calloc)\n              __USE_EXTERN_INLINES)\n         (and (not _STDLIB_H)\n              (not __STRICT_ANSI__)\n              (not __need_malloc_and_calloc)\n              __USE_EXTERN_INLINES\n              HAVE_ECC)\n         (and (not _STDLIB_H)\n              (not __STRICT_ANSI__)\n              (not __need_malloc_and_calloc)\n              __USE_EXTERN_INLINES\n              HAVE_ECC)))",
     "model" : "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __USE_EXTERN_INLINES () Bool\n  true)\n(define-fun HAVE_ECC () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 5155.0
+    "desugaringTime" : 7166.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -1088,7 +1145,7 @@
       "description" : "`__length_13` is read without initialization during the call to `__reiserfs_security_init_8()`.",
       "fileLocation" : "/workspace/varbugs/30e053248da.desugared.c",
       "line" : 149,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/30e053248da.c",
     "sanitizedDescription" : "`length_13` is read without initialization during the call to `__reiserfs_security_init()`.",
@@ -1099,7 +1156,8 @@
     "presenceCondition" : "true",
     "model" : "",
     "feasible" : true,
-    "desugaringTime" : 1122.0
+    "desugaringTime" : 1612.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -1107,7 +1165,7 @@
       "description" : "`__buffer_2089` could be null (null value originating from line 2423) and is dereferenced.",
       "fileLocation" : "/workspace/varbugs/221ac329e93.desugared.c",
       "line" : 2431,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/221ac329e93.c",
     "sanitizedDescription" : "`buffer` could be null (null value originating from line 2423) and is dereferenced.",
@@ -1118,7 +1176,8 @@
     "presenceCondition" : "(let ((a!1 (or (and (and (not CONFIG_KGDB) (not CONFIG_XMON) CONFIG_BDI_SWITCH)\n                    CONFIG_KPROBES)\n               (and (and (not CONFIG_KGDB) CONFIG_XMON) CONFIG_KPROBES)\n               (and CONFIG_KGDB CONFIG_KPROBES))))\n  (and (or (and (not CONFIG_KGDB) (not CONFIG_XMON) CONFIG_BDI_SWITCH)\n           (and (not CONFIG_KGDB) CONFIG_XMON)\n           CONFIG_KGDB)\n       a!1))",
     "model" : "(define-fun CONFIG_BDI_SWITCH () Bool\n  false)\n(define-fun CONFIG_KPROBES () Bool\n  true)\n(define-fun CONFIG_KGDB () Bool\n  false)\n(define-fun CONFIG_XMON () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 7808.0
+    "desugaringTime" : 6957.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -1126,7 +1185,7 @@
       "description" : "`__r_193` is read without initialization.",
       "fileLocation" : "/workspace/varbugs/ae249b5fa27.desugared.c",
       "line" : 240,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/ae249b5fa27.c",
     "sanitizedDescription" : "`r` is read without initialization.",
@@ -1137,7 +1196,8 @@
     "presenceCondition" : "CONFIG_DISCONTIGMEM",
     "model" : "(define-fun CONFIG_DISCONTIGMEM () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 4944.0
+    "desugaringTime" : 5343.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -1145,7 +1205,7 @@
       "description" : "The value written to `&__x_10` is never used.",
       "fileLocation" : "/workspace/varbugs/30e053248da.desugared.c",
       "line" : 129,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/30e053248da.c",
     "sanitizedDescription" : "The value written to `&x` is never used.",
@@ -1156,7 +1216,8 @@
     "presenceCondition" : "true",
     "model" : "",
     "feasible" : true,
-    "desugaringTime" : 1122.0
+    "desugaringTime" : 1612.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -1164,7 +1225,7 @@
       "description" : "`__readpage_37` is read without initialization during the call to `__i915_load_modeset_init_35()`.",
       "fileLocation" : "/workspace/varbugs/f7ab9b407b3.desugared.c",
       "line" : 340,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/f7ab9b407b3.c",
     "sanitizedDescription" : "`readpage_37` is read without initialization during the call to `__i915_load_modeset_init()`.",
@@ -1175,7 +1236,8 @@
     "presenceCondition" : "CONFIG_DRM_I915",
     "model" : "(define-fun CONFIG_DRM_I915 () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 2172.0
+    "desugaringTime" : 1582.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -1183,7 +1245,7 @@
       "description" : "`__curr_1644` is read without initialization.",
       "fileLocation" : "/workspace/varbugs/2631486f1bf.desugared.c",
       "line" : 2583,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/2631486f1bf.c",
     "sanitizedDescription" : "`curr` is read without initialization.",
@@ -1194,7 +1256,8 @@
     "presenceCondition" : "(or (and (not CONFIG_FEATURE_LS_SORTFILES)\n         (and __STRICT_ANSI__ (not _STDLIB_H) (not __need_malloc_and_calloc))\n         (not CONFIG_FEATURE_LS_SORTFILES))\n    (and (not CONFIG_FEATURE_LS_SORTFILES)\n         (and (not __STRICT_ANSI__)\n              (not _STDLIB_H)\n              (not __need_malloc_and_calloc))\n         (not CONFIG_FEATURE_LS_SORTFILES))\n    (and CONFIG_FEATURE_LS_SORTFILES\n         (and __STRICT_ANSI__ (not _STDLIB_H) (not __need_malloc_and_calloc))\n         CONFIG_FEATURE_LS_SORTFILES)\n    (and CONFIG_FEATURE_LS_SORTFILES\n         (and (not __STRICT_ANSI__)\n              (not _STDLIB_H)\n              (not __need_malloc_and_calloc))\n         CONFIG_FEATURE_LS_SORTFILES))",
     "model" : "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun CONFIG_FEATURE_LS_SORTFILES () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 5956.0
+    "desugaringTime" : 8388.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -1202,7 +1265,7 @@
       "description" : "`__p_1884` is read without initialization.",
       "fileLocation" : "/workspace/varbugs/b62bd7b261b.desugared.c",
       "line" : 2598,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/b62bd7b261b.c",
     "sanitizedDescription" : "`p` is read without initialization.",
@@ -1213,7 +1276,8 @@
     "presenceCondition" : "(or (and __STRICT_ANSI__\n         ENABLE_FEATURE_MDEV_CONF\n         ENABLE_FEATURE_MDEV_RENAME\n         ENABLE_FEATURE_MDEV_RENAME_REGEXP)\n    (and (not __STRICT_ANSI__)\n         ENABLE_FEATURE_MDEV_CONF\n         ENABLE_FEATURE_MDEV_RENAME\n         ENABLE_FEATURE_MDEV_RENAME_REGEXP))",
     "model" : "(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_CONF () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME_REGEXP () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 4636.0
+    "desugaringTime" : 8254.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -1221,7 +1285,7 @@
       "description" : "`__http_unauthorized_1629` is read without initialization.",
       "fileLocation" : "/workspace/varbugs/5cd6461b6fb.desugared.c",
       "line" : 2389,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/5cd6461b6fb.c",
     "sanitizedDescription" : "`http_unauthorized` is read without initialization.",
@@ -1232,7 +1296,8 @@
     "presenceCondition" : "(or (and (not CONFIG_FEATURE_HTTPD_CGI)\n         (and (not _STDLIB_H) (not __need_malloc_and_calloc))\n         (not CONFIG_FEATURE_HTTPD_CGI)\n         CONFIG_FEATURE_HTTPD_BASIC_AUTH)\n    (and CONFIG_FEATURE_HTTPD_CGI\n         (and (not _STDLIB_H) (not __need_malloc_and_calloc))\n         CONFIG_FEATURE_HTTPD_CGI\n         CONFIG_FEATURE_HTTPD_BASIC_AUTH))",
     "model" : "(define-fun CONFIG_FEATURE_HTTPD_CGI () Bool\n  false)\n(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun CONFIG_FEATURE_HTTPD_BASIC_AUTH () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 6965.0
+    "desugaringTime" : 7311.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -1240,7 +1305,7 @@
       "description" : "The value written to `&__thisopt_814` is never used.",
       "fileLocation" : "/workspace/varbugs/1a3c8e3d840.desugared.c",
       "line" : 1321,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/1a3c8e3d840.c",
     "sanitizedDescription" : "The value written to `&thisopt` is never used.",
@@ -1251,7 +1316,8 @@
     "presenceCondition" : "(let ((a!1 (and (and (and (not _STDLIB_H) (not __need_malloc_and_calloc))\n                     (not __USE_EXTERN_INLINES))\n                (and (not _STDLIB_H)\n                     __STRICT_ANSI__\n                     (not __need_malloc_and_calloc))\n                (not __USE_EXTERN_INLINES)))\n      (a!2 (and (and (and (not _STDLIB_H) (not __need_malloc_and_calloc))\n                     (not __USE_EXTERN_INLINES))\n                (and (not _STDLIB_H)\n                     (not __STRICT_ANSI__)\n                     (not __need_malloc_and_calloc))\n                (not __USE_EXTERN_INLINES)))\n      (a!3 (and (and (and (not _STDLIB_H) (not __need_malloc_and_calloc))\n                     __USE_EXTERN_INLINES)\n                (and (not _STDLIB_H)\n                     __STRICT_ANSI__\n                     (not __need_malloc_and_calloc))\n                __USE_EXTERN_INLINES))\n      (a!4 (and (and (and (not _STDLIB_H) (not __need_malloc_and_calloc))\n                     __USE_EXTERN_INLINES)\n                (and (not _STDLIB_H)\n                     (not __STRICT_ANSI__)\n                     (not __need_malloc_and_calloc))\n                __USE_EXTERN_INLINES)))\n  (or a!1 a!2 a!3 a!4))",
     "model" : "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __USE_EXTERN_INLINES () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 4778.0
+    "desugaringTime" : 5887.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -1259,7 +1325,7 @@
       "description" : "`__eckey_814` could be null (null value originating from line 1356) and is dereferenced.",
       "fileLocation" : "/workspace/varbugs/35ae2e259e4.desugared.c",
       "line" : 1371,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/35ae2e259e4.c",
     "sanitizedDescription" : "`eckey` could be null (null value originating from line 1356) and is dereferenced.",
@@ -1270,7 +1336,8 @@
     "presenceCondition" : "(let ((a!1 (and (not _STDLIB_H)\n                (not __STRICT_ANSI__)\n                (not __need_malloc_and_calloc)\n                (not __USE_EXTERN_INLINES)\n                HAVE_ECC)))\n  (or (and (and (not _STDLIB_H)\n                (not __need_malloc_and_calloc)\n                (not __USE_EXTERN_INLINES))\n           (and (not _STDLIB_H)\n                __STRICT_ANSI__\n                (not __need_malloc_and_calloc)\n                (not __USE_EXTERN_INLINES)\n                HAVE_ECC)\n           (and (not _STDLIB_H)\n                __STRICT_ANSI__\n                (not __need_malloc_and_calloc)\n                (not __USE_EXTERN_INLINES)\n                HAVE_ECC))\n      (and (and (not _STDLIB_H)\n                (not __need_malloc_and_calloc)\n                (not __USE_EXTERN_INLINES))\n           a!1\n           a!1)))",
     "model" : "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __USE_EXTERN_INLINES () Bool\n  false)\n(define-fun HAVE_ECC () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 5155.0
+    "desugaringTime" : 7166.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -1278,7 +1345,7 @@
       "description" : "The value written to `&__n_9` is never used.",
       "fileLocation" : "/workspace/varbugs/0f8f8094d28.desugared.c",
       "line" : 75,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/0f8f8094d28.c",
     "sanitizedDescription" : "The value written to `&n` is never used.",
@@ -1289,7 +1356,8 @@
     "presenceCondition" : "(or (and CONFIG_SLOB (not CONFIG_FORCE_MAX_ZONEORDER) CONFIG_SLOB)\n    (and (not CONFIG_SLOB) (not CONFIG_FORCE_MAX_ZONEORDER) (not CONFIG_SLOB)))",
     "model" : "(define-fun CONFIG_SLOB () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 2504.0
+    "desugaringTime" : 3732.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -1297,7 +1365,7 @@
       "description" : "`__error_9` is read without initialization.",
       "fileLocation" : "/workspace/varbugs/30e053248da.desugared.c",
       "line" : 116,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/30e053248da.c",
     "sanitizedDescription" : "`error` is read without initialization.",
@@ -1308,7 +1376,8 @@
     "presenceCondition" : "true",
     "model" : "",
     "feasible" : true,
-    "desugaringTime" : 1122.0
+    "desugaringTime" : 1612.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -1316,7 +1385,7 @@
       "description" : "The value written to `&__irq_3` is never used.",
       "fileLocation" : "/workspace/varbugs/6252547b8a7.desugared.c",
       "line" : 49,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/6252547b8a7.c",
     "sanitizedDescription" : "The value written to `&irq` is never used.",
@@ -1327,7 +1396,8 @@
     "presenceCondition" : "(or (and (not CONFIG_TWL4030_CORE) CONFIG_IRQ_DOMAIN) CONFIG_TWL4030_CORE)",
     "model" : "(define-fun CONFIG_TWL4030_CORE () Bool\n  false)\n(define-fun CONFIG_IRQ_DOMAIN () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 2214.0
+    "desugaringTime" : 1857.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -1335,7 +1405,7 @@
       "description" : "The value written to `&__xGridSpacing_2` is never used.",
       "fileLocation" : "/workspace/varbugs/e30bfedce4d.desugared.c",
       "line" : 52,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/e30bfedce4d.c",
     "sanitizedDescription" : "The value written to `&xGridSpacing` is never used.",
@@ -1346,7 +1416,8 @@
     "presenceCondition" : "ENABLE_AUTO_BED_LEVELING",
     "model" : "(define-fun ENABLE_AUTO_BED_LEVELING () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 1147.0
+    "desugaringTime" : 914.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -1354,7 +1425,7 @@
       "description" : "The value written to `&__driver_data_16` is never used.",
       "fileLocation" : "/workspace/varbugs/7acf6cd80b2.desugared.c",
       "line" : 173,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/7acf6cd80b2.c",
     "sanitizedDescription" : "The value written to `&driver_data` is never used.",
@@ -1365,7 +1436,8 @@
     "presenceCondition" : "CONFIG_UNIX98_PTYS",
     "model" : "(define-fun CONFIG_UNIX98_PTYS () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 2173.0
+    "desugaringTime" : 2331.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -1373,7 +1445,7 @@
       "description" : "The value written to `&__y_696` is never used.",
       "fileLocation" : "/workspace/varbugs/b833f064550.desugared.c",
       "line" : 896,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/b833f064550.c",
     "sanitizedDescription" : "The value written to `&y` is never used.",
@@ -1384,7 +1456,8 @@
     "presenceCondition" : "__need___FILE",
     "model" : "(define-fun __need___FILE () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 5470.0
+    "desugaringTime" : 6785.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -1392,7 +1465,7 @@
       "description" : "The value written to `&__val_1882` is never used.",
       "fileLocation" : "/workspace/varbugs/b62bd7b261b.desugared.c",
       "line" : 2559,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/b62bd7b261b.c",
     "sanitizedDescription" : "The value written to `&val` is never used.",
@@ -1403,7 +1476,8 @@
     "presenceCondition" : "(let ((a!1 (or (and __STRICT_ANSI__ (not ENABLE_FEATURE_MDEV_CONF))\n               (and (and __STRICT_ANSI__ ENABLE_FEATURE_MDEV_CONF)\n                    (not ENABLE_FEATURE_MDEV_RENAME))\n               (and (and (and __STRICT_ANSI__ ENABLE_FEATURE_MDEV_CONF)\n                         ENABLE_FEATURE_MDEV_RENAME)\n                    (not ENABLE_FEATURE_MDEV_RENAME_REGEXP))))\n      (a!3 (and (and (and (not __STRICT_ANSI__) ENABLE_FEATURE_MDEV_CONF)\n                     ENABLE_FEATURE_MDEV_RENAME)\n                (not ENABLE_FEATURE_MDEV_RENAME_REGEXP)))\n      (a!5 (and (and (and (not __STRICT_ANSI__) ENABLE_FEATURE_MDEV_CONF)\n                     ENABLE_FEATURE_MDEV_RENAME)\n                ENABLE_FEATURE_MDEV_RENAME_REGEXP)))\n(let ((a!2 (and a!1\n                (and (and (and __STRICT_ANSI__ ENABLE_FEATURE_MDEV_CONF)\n                          ENABLE_FEATURE_MDEV_RENAME)\n                     (not ENABLE_FEATURE_MDEV_RENAME_REGEXP))))\n      (a!4 (or (and (not __STRICT_ANSI__) (not ENABLE_FEATURE_MDEV_CONF))\n               (and (and (not __STRICT_ANSI__) ENABLE_FEATURE_MDEV_CONF)\n                    (not ENABLE_FEATURE_MDEV_RENAME))\n               a!3)))\n  (or a!2\n      (and (and (and __STRICT_ANSI__ ENABLE_FEATURE_MDEV_CONF)\n                ENABLE_FEATURE_MDEV_RENAME)\n           ENABLE_FEATURE_MDEV_RENAME_REGEXP)\n      (and a!4 a!3)\n      a!5)))",
     "model" : "(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_CONF () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME_REGEXP () Bool\n  false)",
     "feasible" : true,
-    "desugaringTime" : 4636.0
+    "desugaringTime" : 8254.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -1411,7 +1485,7 @@
       "description" : "`__eckey_814` is read without initialization.",
       "fileLocation" : "/workspace/varbugs/35ae2e259e4.desugared.c",
       "line" : 1395,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/35ae2e259e4.c",
     "sanitizedDescription" : "`eckey` is read without initialization.",
@@ -1422,7 +1496,8 @@
     "presenceCondition" : "(let ((a!1 (and (and (not _STDLIB_H)\n                     __STRICT_ANSI__\n                     (not __need_malloc_and_calloc))\n                (not __USE_EXTERN_INLINES)\n                HAVE_ECC))\n      (a!3 (and (and (not _STDLIB_H)\n                     (not __STRICT_ANSI__)\n                     (not __need_malloc_and_calloc))\n                (not __USE_EXTERN_INLINES)\n                HAVE_ECC))\n      (a!5 (and (and (and (not _STDLIB_H) (not __need_malloc_and_calloc))\n                     __USE_EXTERN_INLINES)\n                (and (and (not _STDLIB_H)\n                          __STRICT_ANSI__\n                          (not __need_malloc_and_calloc))\n                     __USE_EXTERN_INLINES\n                     HAVE_ECC)\n                (and (and (not _STDLIB_H)\n                          __STRICT_ANSI__\n                          (not __need_malloc_and_calloc))\n                     __USE_EXTERN_INLINES\n                     HAVE_ECC)\n                (not SSL_CTX_set_ecdh_auto)))\n      (a!6 (and (and (not _STDLIB_H)\n                     (not __STRICT_ANSI__)\n                     (not __need_malloc_and_calloc))\n                __USE_EXTERN_INLINES\n                HAVE_ECC)))\n(let ((a!2 (and (and (and (not _STDLIB_H) (not __need_malloc_and_calloc))\n                     (not __USE_EXTERN_INLINES))\n                a!1\n                a!1\n                (not SSL_CTX_set_ecdh_auto)))\n      (a!4 (and (and (and (not _STDLIB_H) (not __need_malloc_and_calloc))\n                     (not __USE_EXTERN_INLINES))\n                a!3\n                a!3\n                (not SSL_CTX_set_ecdh_auto)))\n      (a!7 (and (and (and (not _STDLIB_H) (not __need_malloc_and_calloc))\n                     __USE_EXTERN_INLINES)\n                a!6\n                a!6\n                (not SSL_CTX_set_ecdh_auto))))\n  (or a!2 a!4 a!5 a!7)))",
     "model" : "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun SSL_CTX_set_ecdh_auto () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __USE_EXTERN_INLINES () Bool\n  false)\n(define-fun HAVE_ECC () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 5155.0
+    "desugaringTime" : 7166.0,
+    "strategy" : "transformation"
   },
   {
     "originalAlarm" : {
@@ -1430,7 +1505,7 @@
       "description" : "The value written to `&__pdata_0` is never used.",
       "fileLocation" : "/workspace/varbugs/d6c7e113959.desugared.c",
       "line" : 43,
-      "analysisTime" : 3.16455804
+      "analysisTime" : 4.556807071
     },
     "originalFile" : "/workspace/varbugs/d6c7e113959.c",
     "sanitizedDescription" : "The value written to `&pdata` is never used.",
@@ -1441,6 +1516,7 @@
     "presenceCondition" : "(and CONFIG_REGULATOR_MAX8660 CONFIG_OF)",
     "model" : "(define-fun CONFIG_REGULATOR_MAX8660 () Bool\n  true)\n(define-fun CONFIG_OF () Bool\n  true)",
     "feasible" : true,
-    "desugaringTime" : 1339.0
+    "desugaringTime" : 1396.0,
+    "strategy" : "transformation"
   }
 ]
