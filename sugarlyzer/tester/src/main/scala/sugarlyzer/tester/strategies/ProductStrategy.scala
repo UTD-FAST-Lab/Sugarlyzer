@@ -105,7 +105,7 @@ object ProductStrategy extends AnalysisStrategy {
                 configFiles = List[String](configFile),
                 presenceCondition = pc,
                 model = pc.getModel,
-                numConfigs = List[Int](model.length)
+                numConfigs = List[Int](pc.numConsts)
               )
             }
           }
