@@ -41,7 +41,6 @@ object TransformationStrategy extends AnalysisStrategy {
           ]](os.read(telemetryPath)).getOrElse(Map.empty)
         else Map.empty[String, Double]
       }
-      _ <- IO.println("Telemetry map: " + telemetryMap.toString)
       alarms <- IO.blocking {
         rawFindings.map { finding =>
           val absoluteFilePath = os.Path(finding.fileLocation, workingDir)
@@ -61,7 +60,6 @@ object TransformationStrategy extends AnalysisStrategy {
             0.0
           )
 
-          println(s"Time for $absoluteFilePath: $time")
           TransformationAlarm(
             originalAlarm = finding,
             originalFile = ogFilePath,
@@ -77,7 +75,6 @@ object TransformationStrategy extends AnalysisStrategy {
           )
         }
       }
-      _ <- IO.println("Alarms: " + alarms.map(_.toString).mkString("\n"))
     } yield (alarms.filter(_.feasible))
   }
 
