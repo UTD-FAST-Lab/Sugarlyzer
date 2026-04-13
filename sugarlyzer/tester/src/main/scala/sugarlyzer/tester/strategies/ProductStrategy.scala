@@ -349,13 +349,14 @@ object ProductStrategy extends AnalysisStrategy {
       .values
       .map { groupedAlarms =>
         groupedAlarms.reduceLeft { (acc, curr) =>
-          val updatedPc = acc.presenceCondition || curr.presenceCondition
+          val updatedPc =
+            (acc.presenceCondition || curr.presenceCondition).simplify
           acc.copy(
             configFiles = (acc.configFiles ++ curr.configFiles).distinct,
             presenceCondition = updatedPc.simplify,
             model = updatedPc.getModel,
             numConfigs =
-              (acc.numConfigs :+ curr.presenceCondition.numConsts)
+              (acc.numConfigs :+ updatedPc.numConsts)
           )
         }
       }
