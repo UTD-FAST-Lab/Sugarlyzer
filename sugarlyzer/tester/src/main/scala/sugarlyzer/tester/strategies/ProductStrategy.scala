@@ -351,6 +351,7 @@ object ProductStrategy extends AnalysisStrategy {
         groupedAlarms.reduceLeft { (acc, curr) =>
           val updatedPc =
             (acc.presenceCondition || curr.presenceCondition).simplify
+          println("Curr pc" + curr.presenceCondition.getModel)
           acc.copy(
             configFiles = (acc.configFiles ++ curr.configFiles).distinct,
             presenceCondition = updatedPc.simplify,
