@@ -60,8 +60,6 @@ object ProductStrategy extends AnalysisStrategy {
               rawFindings <- tool.run(spec.copy(rootDir = iterDir.toString))
             } yield rawFindings.map { finding =>
               val pc = PresenceCondition.fromTuples(model)
-              println(s"Model: $model")
-              println(s"PC expr: ${pc.expr.toString()}")
               ProductAlarm(
                 originalAlarm = finding,
                 configFiles = List.empty,
@@ -353,8 +351,6 @@ object ProductStrategy extends AnalysisStrategy {
         groupedAlarms.reduceLeft { (acc, curr) =>
           val updatedPc =
             (acc.presenceCondition || curr.presenceCondition).simplify
-          println("Curr pc" + curr.presenceCondition.expr.toString())
-          println("Curr model" + curr.presenceCondition.getModel)
           acc.copy(
             configFiles = (acc.configFiles ++ curr.configFiles).distinct,
             presenceCondition = updatedPc.simplify,
