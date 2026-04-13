@@ -5,7 +5,7 @@
       "description" : "Potential leak of memory pointed to by 'buf'",
       "fileLocation" : "/workspace/varbugs/eef2317b9f5.c",
       "line" : 34,
-      "analysisTime" : 0.029251189
+      "analysisTime" : 0.034840544
     },
     "configFiles" : [
     ],
@@ -21,7 +21,7 @@
       "description" : "Value stored to 'pid_output' is never read",
       "fileLocation" : "/workspace/varbugs/8c4377dd635.c",
       "line" : 21,
-      "analysisTime" : 0.027003367
+      "analysisTime" : 0.024233938
     },
     "configFiles" : [
     ],
@@ -40,7 +40,7 @@
       "description" : "Potential leak of memory pointed to by 'clist'",
       "fileLocation" : "/workspace/varbugs/bc0ffc0e971.c",
       "line" : 46,
-      "analysisTime" : 0.040065936
+      "analysisTime" : 0.029694126
     },
     "configFiles" : [
     ],
@@ -56,7 +56,7 @@
       "description" : "Value stored to 'n' during its initialization is never read",
       "fileLocation" : "/workspace/varbugs/0f8f8094d28.c",
       "line" : 39,
-      "analysisTime" : 0.024775274
+      "analysisTime" : 0.019849893
     },
     "configFiles" : [
     ],
@@ -87,7 +87,7 @@
       "description" : "Assigned value is garbage or undefined",
       "fileLocation" : "/workspace/varbugs/31873ec707d.c",
       "line" : 8,
-      "analysisTime" : 0.025607698
+      "analysisTime" : 0.02679432
     },
     "configFiles" : [
     ],
@@ -103,7 +103,7 @@
       "description" : "Value stored to 'codec_hw_write' during its initialization is never read",
       "fileLocation" : "/workspace/varbugs/66517915e09.c",
       "line" : 24,
-      "analysisTime" : 0.019765102
+      "analysisTime" : 0.01896678
     },
     "configFiles" : [
     ],
@@ -142,7 +142,7 @@
       "description" : "Value stored to 'val' is never read",
       "fileLocation" : "/workspace/varbugs/b62bd7b261b.c",
       "line" : 16,
-      "analysisTime" : 0.046473546
+      "analysisTime" : 0.040211432
     },
     "configFiles" : [
     ],
@@ -159,7 +159,7 @@
       "description" : "Null pointer passed to 1st parameter expecting 'nonnull'",
       "fileLocation" : "/workspace/varbugs/bbeb0516cf0.c",
       "line" : 6,
-      "analysisTime" : 0.02924177
+      "analysisTime" : 0.03031777
     },
     "configFiles" : [
     ],
@@ -175,7 +175,7 @@
       "description" : "Branch condition evaluates to a garbage value",
       "fileLocation" : "/workspace/varbugs/061fd0a353e.c",
       "line" : 27,
-      "analysisTime" : 0.033207215
+      "analysisTime" : 0.035513396
     },
     "configFiles" : [
     ],
@@ -192,7 +192,7 @@
       "description" : "Assigned value is garbage or undefined",
       "fileLocation" : "/workspace/varbugs/c708c57e247.c",
       "line" : 18,
-      "analysisTime" : 0.025693668
+      "analysisTime" : 0.021727305
     },
     "configFiles" : [
     ],
@@ -209,7 +209,7 @@
       "description" : "Value stored to 'a' during its initialization is never read",
       "fileLocation" : "/workspace/varbugs/b62bd7b261b.c",
       "line" : 14,
-      "analysisTime" : 0.039206341
+      "analysisTime" : 0.037621847
     },
     "configFiles" : [
     ],
@@ -225,7 +225,7 @@
       "description" : "Value stored to 'buf' is never read",
       "fileLocation" : "/workspace/varbugs/eef2317b9f5.c",
       "line" : 26,
-      "analysisTime" : 0.029251189
+      "analysisTime" : 0.034840544
     },
     "configFiles" : [
     ],
@@ -241,7 +241,7 @@
       "description" : "Branch condition evaluates to a garbage value",
       "fileLocation" : "/workspace/varbugs/061fd0a353e.c",
       "line" : 20,
-      "analysisTime" : 0.032233838
+      "analysisTime" : 0.026263407
     },
     "configFiles" : [
     ],
@@ -257,7 +257,7 @@
       "description" : "Value stored to 'driver_data' is never read",
       "fileLocation" : "/workspace/varbugs/7acf6cd80b2.c",
       "line" : 39,
-      "analysisTime" : 0.031099931
+      "analysisTime" : 0.044277083
     },
     "configFiles" : [
     ],
@@ -276,7 +276,7 @@
       "description" : "Null pointer passed to 2nd parameter expecting 'nonnull'",
       "fileLocation" : "/workspace/varbugs/199501f2a00.c",
       "line" : 21,
-      "analysisTime" : 0.024863533
+      "analysisTime" : 0.03230274
     },
     "configFiles" : [
     ],
@@ -292,7 +292,7 @@
       "description" : "Value stored to 'p' is never read",
       "fileLocation" : "/workspace/varbugs/061fd0a353e.c",
       "line" : 16,
-      "analysisTime" : 0.032737601
+      "analysisTime" : 0.03029351
     },
     "configFiles" : [
     ],
@@ -310,7 +310,7 @@
       "description" : "Value stored to 'k_crcs' is never read",
       "fileLocation" : "/workspace/varbugs/5275b1e49f6.c",
       "line" : 25,
-      "analysisTime" : 0.062813677
+      "analysisTime" : 0.048932057
     },
     "configFiles" : [
     ],
@@ -327,7 +327,7 @@
       "description" : "Dereference of undefined pointer value",
       "fileLocation" : "/workspace/varbugs/b62bd7b261b.c",
       "line" : 24,
-      "analysisTime" : 0.046473546
+      "analysisTime" : 0.040211432
     },
     "configFiles" : [
     ],
@@ -343,7 +343,7 @@
       "description" : "1st function call argument is an uninitialized value",
       "fileLocation" : "/workspace/varbugs/1b48bb3c1af.c",
       "line" : 14,
-      "analysisTime" : 0.02901301
+      "analysisTime" : 0.025420484
     },
     "configFiles" : [
     ],
@@ -360,7 +360,7 @@
       "description" : "Undefined or garbage value returned to caller",
       "fileLocation" : "/workspace/varbugs/e39363a9def.c",
       "line" : 17,
-      "analysisTime" : 0.042008469
+      "analysisTime" : 0.029648767
     },
     "configFiles" : [
     ],
@@ -377,7 +377,7 @@
       "description" : "Dereference of null pointer (loaded from variable 'ptr')",
       "fileLocation" : "/workspace/varbugs/472a474c663.c",
       "line" : 14,
-      "analysisTime" : 0.028151043
+      "analysisTime" : 0.02485096
     },
     "configFiles" : [
     ],
@@ -394,7 +394,7 @@
       "description" : "Branch condition evaluates to a garbage value",
       "fileLocation" : "/workspace/varbugs/eef2317b9f5.c",
       "line" : 30,
-      "analysisTime" : 0.029661152
+      "analysisTime" : 0.035180595
     },
     "configFiles" : [
     ],
@@ -410,7 +410,7 @@
       "description" : "Dereference of null pointer (loaded from variable 'ops')",
       "fileLocation" : "/workspace/varbugs/6252547b8a7.c",
       "line" : 12,
-      "analysisTime" : 0.020249375
+      "analysisTime" : 0.019488863
     },
     "configFiles" : [
     ],
@@ -429,7 +429,7 @@
       "description" : "Value stored to 'x' during its initialization is never read",
       "fileLocation" : "/workspace/varbugs/30e053248da.c",
       "line" : 31,
-      "analysisTime" : 0.023612845
+      "analysisTime" : 0.019942926
     },
     "configFiles" : [
     ],
@@ -446,7 +446,7 @@
       "description" : "Value stored to 'x' during its initialization is never read",
       "fileLocation" : "/workspace/varbugs/7acf6cd80b2.c",
       "line" : 8,
-      "analysisTime" : 0.064016655
+      "analysisTime" : 0.04009453
     },
     "configFiles" : [
     ],
@@ -464,7 +464,7 @@
       "description" : "2nd function call argument is an uninitialized value",
       "fileLocation" : "/workspace/varbugs/b273d665181.c",
       "line" : 16,
-      "analysisTime" : 0.030465728
+      "analysisTime" : 0.026232919
     },
     "configFiles" : [
     ],
@@ -481,7 +481,7 @@
       "description" : "Assigned value is garbage or undefined",
       "fileLocation" : "/workspace/varbugs/30e053248da.c",
       "line" : 31,
-      "analysisTime" : 0.023612845
+      "analysisTime" : 0.019942926
     },
     "configFiles" : [
     ],
@@ -497,7 +497,7 @@
       "description" : "Value stored to 'len' is never read",
       "fileLocation" : "/workspace/varbugs/95755181b82.c",
       "line" : 39,
-      "analysisTime" : 0.031026132
+      "analysisTime" : 0.037496517
     },
     "configFiles" : [
     ],
@@ -530,7 +530,7 @@
       "description" : "Value stored to 'irq' during its initialization is never read",
       "fileLocation" : "/workspace/varbugs/6252547b8a7.c",
       "line" : 12,
-      "analysisTime" : 0.020249375
+      "analysisTime" : 0.019488863
     },
     "configFiles" : [
     ],
@@ -555,7 +555,7 @@
       "description" : "Potential leak of memory pointed to by 'eckey'",
       "fileLocation" : "/workspace/varbugs/35ae2e259e4.c",
       "line" : 24,
-      "analysisTime" : 0.029171519
+      "analysisTime" : 0.026721321
     },
     "configFiles" : [
     ],
@@ -574,7 +574,7 @@
       "description" : "Value stored to 'wakeup' is never read",
       "fileLocation" : "/workspace/varbugs/36855dcfc98.c",
       "line" : 6,
-      "analysisTime" : 0.021630673
+      "analysisTime" : 0.021430921
     },
     "configFiles" : [
     ],
@@ -590,7 +590,7 @@
       "description" : "1st function call argument is an uninitialized value",
       "fileLocation" : "/workspace/varbugs/7acf6cd80b2.c",
       "line" : 44,
-      "analysisTime" : 0.031099931
+      "analysisTime" : 0.044277083
     },
     "configFiles" : [
     ],
@@ -609,7 +609,7 @@
       "description" : "Dereference of null pointer (loaded from variable 'scontext')",
       "fileLocation" : "/workspace/varbugs/1b487ea8a69.c",
       "line" : 14,
-      "analysisTime" : 0.030390307
+      "analysisTime" : 0.026952623
     },
     "configFiles" : [
     ],
@@ -626,7 +626,7 @@
       "description" : "Value stored to 'm_has_modinfo' is never read",
       "fileLocation" : "/workspace/varbugs/5275b1e49f6.c",
       "line" : 18,
-      "analysisTime" : 0.062813677
+      "analysisTime" : 0.048932057
     },
     "configFiles" : [
     ],
@@ -643,7 +643,7 @@
       "description" : "Value stored to 'thisopt' is never read",
       "fileLocation" : "/workspace/varbugs/1a3c8e3d840.c",
       "line" : 13,
-      "analysisTime" : 0.024200049
+      "analysisTime" : 0.030103798
     },
     "configFiles" : [
     ],
@@ -659,7 +659,7 @@
       "description" : "Value stored to 'flags' is never read",
       "fileLocation" : "/workspace/varbugs/c76df14dfb4.c",
       "line" : 38,
-      "analysisTime" : 0.020290205
+      "analysisTime" : 0.020901431
     },
     "configFiles" : [
     ],
@@ -679,7 +679,7 @@
       "description" : "Potential leak of memory pointed to by 'buf'",
       "fileLocation" : "/workspace/varbugs/d05e574ec26.c",
       "line" : 21,
-      "analysisTime" : 0.033130473
+      "analysisTime" : 0.029086303
     },
     "configFiles" : [
     ],
@@ -695,7 +695,7 @@
       "description" : "Value stored to 'm_has_modinfo' is never read",
       "fileLocation" : "/workspace/varbugs/5275b1e49f6.c",
       "line" : 16,
-      "analysisTime" : 0.062813677
+      "analysisTime" : 0.048932057
     },
     "configFiles" : [
     ],
@@ -712,7 +712,7 @@
       "description" : "Value stored to 'k_crcs' is never read",
       "fileLocation" : "/workspace/varbugs/5275b1e49f6.c",
       "line" : 21,
-      "analysisTime" : 0.062813677
+      "analysisTime" : 0.048932057
     },
     "configFiles" : [
     ],
@@ -729,7 +729,7 @@
       "description" : "Use of memory after it is freed",
       "fileLocation" : "/workspace/varbugs/bc0ffc0e971.c",
       "line" : 43,
-      "analysisTime" : 0.031228822
+      "analysisTime" : 0.040187181
     },
     "configFiles" : [
     ],
@@ -746,7 +746,7 @@
       "description" : "Value stored to 'xGridSpacing' during its initialization is never read",
       "fileLocation" : "/workspace/varbugs/e30bfedce4d.c",
       "line" : 24,
-      "analysisTime" : 0.068613564
+      "analysisTime" : 0.036772483
     },
     "configFiles" : [
     ],
@@ -767,7 +767,7 @@
       "description" : "Assigned value is garbage or undefined",
       "fileLocation" : "/workspace/varbugs/2631486f1bf.c",
       "line" : 67,
-      "analysisTime" : 0.02773298
+      "analysisTime" : 0.029124274
     },
     "configFiles" : [
     ],
@@ -791,7 +791,7 @@
       "description" : "Potential leak of memory pointed to by 'sc'",
       "fileLocation" : "/workspace/varbugs/2a6cbfa00e0.c",
       "line" : 16,
-      "analysisTime" : 0.028274924
+      "analysisTime" : 0.027973227
     },
     "configFiles" : [
     ],
@@ -807,7 +807,7 @@
       "description" : "Value stored to 'codec_hw_write' during its initialization is never read",
       "fileLocation" : "/workspace/varbugs/66517915e09.c",
       "line" : 16,
-      "analysisTime" : 0.019765102
+      "analysisTime" : 0.01896678
     },
     "configFiles" : [
     ],
@@ -852,7 +852,7 @@
       "description" : "Value stored to 'flags' is never read",
       "fileLocation" : "/workspace/varbugs/c76df14dfb4.c",
       "line" : 42,
-      "analysisTime" : 0.030694459
+      "analysisTime" : 0.027880278
     },
     "configFiles" : [
     ],
