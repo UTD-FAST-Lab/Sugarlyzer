@@ -177,7 +177,7 @@ object ProductStrategy extends AnalysisStrategy {
           case definedPattern(mac) => mac
           case _                   => s
         }
-      ).map(s => s.stripPrefix("(").stripSuffix(")"))
+      ).map(s => s.stripPrefix("(").stripSuffix(")")).toSet
 
     logger.debug(s"Macros are ${macros}")
 
