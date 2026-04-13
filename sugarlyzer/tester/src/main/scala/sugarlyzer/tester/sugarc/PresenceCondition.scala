@@ -36,6 +36,16 @@ case class PresenceCondition(ctx: Context, expr: BoolExpr) {
       "Unsatisfiable"
     }
   }
+
+  def numConsts: Int = {
+    val solver = ctx.mkSolver()
+    solver.add(expr)
+    if (solver.check() == Status.SATISFIABLE) {
+      solver.getModel.getConstDecls.length
+    } else {
+      0
+    }
+  }
 }
 
 object PresenceCondition {
