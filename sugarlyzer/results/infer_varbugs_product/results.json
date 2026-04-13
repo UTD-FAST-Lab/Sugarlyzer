@@ -1,0 +1,4850 @@
+[
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`cache` is read without initialization.",
+      "fileLocation" : "/workspace/562//workspace/varbugs/0f8f8094d28.c",
+      "line" : 36,
+      "analysisTime" : 0.96902403
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_SLAB true)\n     (= CONFIG_SLOB true)\n     (= CONFIG_FORCE_MAX_ZONEORDER true)\n     (= CONFIG_PPC_256K_PAGES false))",
+    "model" : "(define-fun CONFIG_SLAB () Bool\n  true)\n(define-fun CONFIG_SLOB () Bool\n  true)\n(define-fun CONFIG_PPC_256K_PAGES () Bool\n  false)\n(define-fun CONFIG_LOCKDEP () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&n` is never used.",
+      "fileLocation" : "/workspace/568//workspace/varbugs/0f8f8094d28.c",
+      "line" : 39,
+      "analysisTime" : 0.815706946
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_SLAB true)\n     (= CONFIG_SLOB true)\n     (= CONFIG_FORCE_MAX_ZONEORDER true)\n     (= CONFIG_SLOB false)\n     (= CONFIG_PPC_256K_PAGES false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/370//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 1.062686999
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&len` is never used.",
+      "fileLocation" : "/workspace/648//workspace/varbugs/95755181b82.c",
+      "line" : 39,
+      "analysisTime" : 1.021777552
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_HTTPD_GZIP true)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH true)\n     (= BB_MMU false)\n     (= BB_MMU true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      4
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/318//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.959089868
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_I2C false)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 true))",
+    "model" : "(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  true)\n(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  false)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`err` is read without initialization.",
+      "fileLocation" : "/workspace/686//workspace/varbugs/e39363a9def.c",
+      "line" : 17,
+      "analysisTime" : 0.78498601
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_NETPOLL false) (= CONFIG_IPV6 false) (= CONFIG_NETPOLL true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/372//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.965330326
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      7
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/326//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.901429026
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&n` is never used.",
+      "fileLocation" : "/workspace/544//workspace/varbugs/0f8f8094d28.c",
+      "line" : 39,
+      "analysisTime" : 1.086471914
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_SLOB false)\n     (= CONFIG_PPC_256K_PAGES false)\n     (= CONFIG_SLAB true)\n     (= CONFIG_FORCE_MAX_ZONEORDER false))",
+    "model" : "(define-fun CONFIG_SLAB () Bool\n  true)\n(define-fun CONFIG_SLOB () Bool\n  false)\n(define-fun CONFIG_PPC_256K_PAGES () Bool\n  false)\n(define-fun CONFIG_LOCKDEP () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/336//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.949277438
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "NULLPTR_DEREFERENCE",
+      "description" : "`curr` could be null (null value originating from line 65) and is dereferenced.",
+      "fileLocation" : "/workspace/498//workspace/varbugs/2631486f1bf.c",
+      "line" : 66,
+      "analysisTime" : 1.060980539
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_LS_RECURSIVE false)\n     (= CONFIG_FEATURE_LS_SORTFILES false)\n     (= CONFIG_FEATURE_LS_SORTFILES true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&xGridSpacing` is never used.",
+      "fileLocation" : "/workspace/740//workspace/varbugs/e30bfedce4d.c",
+      "line" : 24,
+      "analysisTime" : 1.099100443
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_AUTO_BED_LEVELING true) (= AUTO_BED_LEVELING_GRID false))",
+    "model" : "(define-fun AUTO_BED_LEVELING_GRID () Bool\n  false)\n(define-fun ENABLE_AUTO_BED_LEVELING () Bool\n  true)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&pid_output` is never used.",
+      "fileLocation" : "/workspace/510//workspace/varbugs/8c4377dd635.c",
+      "line" : 13,
+      "analysisTime" : 0.902526234
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= MARLIN_H true) (= PIDTEMP true) (= PID_DEBUG false))",
+    "model" : "(define-fun PID_DEBUG () Bool\n  false)\n(define-fun MARLIN_H () Bool\n  true)\n(define-fun PIDTEMP () Bool\n  true)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&argc` is never used.",
+      "fileLocation" : "/workspace/679//workspace/varbugs/061fd0a353e.c",
+      "line" : 16,
+      "analysisTime" : 0.884142023
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF true)\n     (= CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF true))",
+    "model" : "(define-fun CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF () Bool\n  true)\n(define-fun CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF () Bool\n  true)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "MEMORY_LEAK_C",
+      "description" : "Memory dynamically allocated by `malloc`, indirectly via call to `extcon_class_init()` on line 107 is not freed after the last access at line 112, column 1.",
+      "fileLocation" : "/workspace/129//workspace/varbugs/0dc77b6dabe.c",
+      "line" : 112,
+      "analysisTime" : 1.199936111
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_ANDROID true) (= CONFIG_SYSFS true) (= CONFIG_EXTCON true))",
+    "model" : "(define-fun CONFIG_SYSFS () Bool\n  true)\n(define-fun CONFIG_ANDROID () Bool\n  true)\n(define-fun CONFIG_EXTCON () Bool\n  true)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/339//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.995861581
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      7
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&pid_output` is never used.",
+      "fileLocation" : "/workspace/508//workspace/varbugs/8c4377dd635.c",
+      "line" : 13,
+      "analysisTime" : 1.001321755
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= MARLIN_H true) (= PIDTEMP false) (= PID_DEBUG true))",
+    "model" : "(define-fun PID_DEBUG () Bool\n  true)\n(define-fun MARLIN_H () Bool\n  true)\n(define-fun PIDTEMP () Bool\n  false)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&len` is never used.",
+      "fileLocation" : "/workspace/637//workspace/varbugs/95755181b82.c",
+      "line" : 39,
+      "analysisTime" : 1.035054452
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_HTTPD_GZIP false)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH false)\n     (= ENABLE_FEATURE_HTTPD_GZIP true)\n     (= BB_MMU true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      4
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/334//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 1.032813876
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "MEMORY_LEAK_C",
+      "description" : "Memory dynamically allocated by `malloc`, indirectly via call to `extcon_class_init()` on line 107 is not freed after the last access at line 112, column 1.",
+      "fileLocation" : "/workspace/117//workspace/varbugs/0dc77b6dabe.c",
+      "line" : 112,
+      "analysisTime" : 1.203441043
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_ANDROID true)\n     (= CONFIG_SYSFS false)\n     (= CONFIG_EXTCON false)\n     (= CONFIG_EXTCON true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      4
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/354//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.89693496
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_I2C false)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  true)\n(define-fun CONFIG_I2C () Bool\n  false)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`cache` is read without initialization.",
+      "fileLocation" : "/workspace/528//workspace/varbugs/0f8f8094d28.c",
+      "line" : 36,
+      "analysisTime" : 1.105259788
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_SLAB true)\n     (= CONFIG_SLOB true)\n     (= CONFIG_FORCE_MAX_ZONEORDER true)\n     (= CONFIG_PPC_256K_PAGES true))",
+    "model" : "(define-fun CONFIG_SLAB () Bool\n  true)\n(define-fun CONFIG_SLOB () Bool\n  true)\n(define-fun CONFIG_PPC_256K_PAGES () Bool\n  true)\n(define-fun CONFIG_LOCKDEP () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/342//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.908160127
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_I2C false)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&len` is never used.",
+      "fileLocation" : "/workspace/641//workspace/varbugs/95755181b82.c",
+      "line" : 39,
+      "analysisTime" : 1.080068405
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_HTTPD_GZIP false)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH true)\n     (= ENABLE_FEATURE_HTTPD_GZIP true)\n     (= BB_MMU true)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "MEMORY_LEAK_C",
+      "description" : "Memory dynamically allocated by `malloc` on line 10 is not freed after the last access at line 11, column 7.",
+      "fileLocation" : "/workspace/161//workspace/varbugs/35ae2e259e4.c",
+      "line" : 11,
+      "analysisTime" : 1.098582625
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= HAVE_ECC false) (= HAVE_ECC true) (= SSL_CTX_set_ecdh_auto true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/349//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.935536024
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  false)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`cache` is read without initialization.",
+      "fileLocation" : "/workspace/526//workspace/varbugs/0f8f8094d28.c",
+      "line" : 36,
+      "analysisTime" : 0.940900357
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_SLOB true)\n     (= CONFIG_PPC_256K_PAGES false)\n     (= CONFIG_SLAB true)\n     (= CONFIG_FORCE_MAX_ZONEORDER false))",
+    "model" : "(define-fun CONFIG_SLAB () Bool\n  true)\n(define-fun CONFIG_SLOB () Bool\n  true)\n(define-fun CONFIG_PPC_256K_PAGES () Bool\n  false)\n(define-fun CONFIG_LOCKDEP () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/387//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 1.034210145
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  false)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "NULLPTR_DEREFERENCE",
+      "description" : "The call to `prepend_new_eth_table` may trigger the following issue: `ch` could be null (from the call to `prepend_new_eth_table()` on line 40) and is dereferenced in the call to `prepend_new_eth_table()`.",
+      "fileLocation" : "/workspace/674//workspace/varbugs/bc0ffc0e971.c",
+      "line" : 40,
+      "analysisTime" : 1.12008236
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_CLEAN_UP false) (= ENABLE_FEATURE_CLEAN_UP true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&irq` is never used.",
+      "fileLocation" : "/workspace/37//workspace/varbugs/6252547b8a7.c",
+      "line" : 12,
+      "analysisTime" : 0.992179006
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_TWL4030_CORE false)\n     (= CONFIG_IRQ_DOMAIN true)\n     (= CONFIG_OF_IRQ true))",
+    "model" : "(define-fun CONFIG_TWL4030_CORE () Bool\n  false)\n(define-fun CONFIG_IRQ_DOMAIN () Bool\n  true)\n(define-fun CONFIG_OF_IRQ () Bool\n  true)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&len` is never used.",
+      "fileLocation" : "/workspace/636//workspace/varbugs/95755181b82.c",
+      "line" : 39,
+      "analysisTime" : 1.031608131
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_HTTPD_GZIP false)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH true)\n     (= BB_MMU true))",
+    "model" : "(define-fun BB_MMU () Bool\n  true)\n(define-fun ENABLE_FEATURE_HTTPD_GZIP () Bool\n  false)\n(define-fun ENABLE_FEATURE_HTTPD_BASIC_AUTH () Bool\n  true)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/355//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 1.089586501
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`driver_data` is read without initialization.",
+      "fileLocation" : "/workspace/739//workspace/varbugs/7acf6cd80b2.c",
+      "line" : 44,
+      "analysisTime" : 0.928164231
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_DEVPTS_MULTIPLE_INSTANCES true) (= CONFIG_UNIX98_PTYS true))",
+    "model" : "(define-fun CONFIG_UNIX98_PTYS () Bool\n  true)\n(define-fun CONFIG_DEVPTS_MULTIPLE_INSTANCES () Bool\n  true)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&flags` is never used.",
+      "fileLocation" : "/workspace/156//workspace/varbugs/c76df14dfb4.c",
+      "line" : 38,
+      "analysisTime" : 0.920949684
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CROSS_COMPILE false) (= WIN32 true) (= NEED_ENHANCED_ESCAPES false))",
+    "model" : "(define-fun WIN32 () Bool\n  true)\n(define-fun NEED_ENHANCED_ESCAPES () Bool\n  false)\n(define-fun CROSS_COMPILE () Bool\n  false)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&m_has_modinfo` is never used.",
+      "fileLocation" : "/workspace/750//workspace/varbugs/5275b1e49f6.c",
+      "line" : 18,
+      "analysisTime" : 1.09722405
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_INSMOD_VERSION_CHECKING false)\n     (= CONFIG_FEATURE_INSMOD_VERSION_CHECKING true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/366//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 1.074451539
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 true))",
+    "model" : "(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  false)\n(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  true)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "NULLPTR_DEREFERENCE",
+      "description" : "`curr` could be null (null value originating from line 65) and is dereferenced.",
+      "fileLocation" : "/workspace/497//workspace/varbugs/2631486f1bf.c",
+      "line" : 66,
+      "analysisTime" : 1.084704113
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_LS_RECURSIVE true) (= CONFIG_FEATURE_LS_SORTFILES true))",
+    "model" : "(define-fun CONFIG_FEATURE_LS_RECURSIVE () Bool\n  true)\n(define-fun CONFIG_FEATURE_LS_SORTFILES () Bool\n  true)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/386//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 1.004879327
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_I2C false)\n     (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`p` is read without initialization.",
+      "fileLocation" : "/workspace/678//workspace/varbugs/061fd0a353e.c",
+      "line" : 20,
+      "analysisTime" : 0.883340457
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF true)\n     (= CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF false))",
+    "model" : "(define-fun CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF () Bool\n  true)\n(define-fun CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF () Bool\n  false)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/340//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.981073732
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_I2C false)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&xGridSpacing` is never used.",
+      "fileLocation" : "/workspace/744//workspace/varbugs/e30bfedce4d.c",
+      "line" : 24,
+      "analysisTime" : 0.996531728
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_AUTO_BED_LEVELING true) (= AUTO_BED_LEVELING_GRID true))",
+    "model" : "(define-fun AUTO_BED_LEVELING_GRID () Bool\n  true)\n(define-fun ENABLE_AUTO_BED_LEVELING () Bool\n  true)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&len` is never used.",
+      "fileLocation" : "/workspace/647//workspace/varbugs/95755181b82.c",
+      "line" : 39,
+      "analysisTime" : 1.093858499
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_HTTPD_GZIP true)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH false)\n     (= BB_MMU true))",
+    "model" : "(define-fun BB_MMU () Bool\n  true)\n(define-fun ENABLE_FEATURE_HTTPD_GZIP () Bool\n  true)\n(define-fun ENABLE_FEATURE_HTTPD_BASIC_AUTH () Bool\n  false)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "NULLPTR_DEREFERENCE",
+      "description" : "`ops` could be null (null value originating from line 19) and is dereferenced in the call to `irq_domain_add()`.",
+      "fileLocation" : "/workspace/35//workspace/varbugs/6252547b8a7.c",
+      "line" : 25,
+      "analysisTime" : 1.016257303
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_TWL4030_CORE true)\n     (= CONFIG_IRQ_DOMAIN false)\n     (= CONFIG_OF_IRQ false))",
+    "model" : "(define-fun CONFIG_TWL4030_CORE () Bool\n  true)\n(define-fun CONFIG_IRQ_DOMAIN () Bool\n  false)\n(define-fun CONFIG_OF_IRQ () Bool\n  false)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&pdata` is never used.",
+      "fileLocation" : "/workspace/671//workspace/varbugs/d6c7e113959.c",
+      "line" : 5,
+      "analysisTime" : 0.894012492
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_REGULATOR_MAX8660 true) (= CONFIG_OF true))",
+    "model" : "(define-fun CONFIG_REGULATOR_MAX8660 () Bool\n  true)\n(define-fun CONFIG_OF () Bool\n  true)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/357//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.859855314
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "MEMORY_LEAK_C",
+      "description" : "Memory dynamically allocated by `malloc` on line 10 is not freed after the last access at line 12, column 5.",
+      "fileLocation" : "/workspace/161//workspace/varbugs/35ae2e259e4.c",
+      "line" : 12,
+      "analysisTime" : 1.098582625
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= HAVE_ECC false) (= HAVE_ECC true) (= SSL_CTX_set_ecdh_auto true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/327//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.954734391
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  true)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/368//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.811036657
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_I2C false)\n     (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_SOC_DA7210 true))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  true)\n(define-fun CONFIG_I2C () Bool\n  false)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`head` is read without initialization.",
+      "fileLocation" : "/workspace/500//workspace/varbugs/2631486f1bf.c",
+      "line" : 67,
+      "analysisTime" : 1.087864583
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_LS_RECURSIVE false) (= CONFIG_FEATURE_LS_SORTFILES true))",
+    "model" : "(define-fun CONFIG_FEATURE_LS_RECURSIVE () Bool\n  false)\n(define-fun CONFIG_FEATURE_LS_SORTFILES () Bool\n  true)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "NULLPTR_DEREFERENCE",
+      "description" : "`eckey` could be null (null value originating from line 10) and is dereferenced.",
+      "fileLocation" : "/workspace/161//workspace/varbugs/35ae2e259e4.c",
+      "line" : 12,
+      "analysisTime" : 1.098582625
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= HAVE_ECC false) (= HAVE_ECC true) (= SSL_CTX_set_ecdh_auto true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&irq` is never used.",
+      "fileLocation" : "/workspace/30//workspace/varbugs/6252547b8a7.c",
+      "line" : 12,
+      "analysisTime" : 0.895866141
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_TWL4030_CORE true)\n     (= CONFIG_IRQ_DOMAIN true)\n     (= CONFIG_OF_IRQ false))",
+    "model" : "(define-fun CONFIG_TWL4030_CORE () Bool\n  true)\n(define-fun CONFIG_IRQ_DOMAIN () Bool\n  true)\n(define-fun CONFIG_OF_IRQ () Bool\n  false)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&irq` is never used.",
+      "fileLocation" : "/workspace/36//workspace/varbugs/6252547b8a7.c",
+      "line" : 12,
+      "analysisTime" : 0.912948414
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_TWL4030_CORE false)\n     (= CONFIG_IRQ_DOMAIN true)\n     (= CONFIG_OF_IRQ false)\n     (= CONFIG_TWL4030_CORE true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      4
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`info` is read without initialization.",
+      "fileLocation" : "/workspace/407//workspace/varbugs/b273d665181.c",
+      "line" : 16,
+      "analysisTime" : 1.202347847
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= BB_FEATURE_LS_FILETYPES true) (= BB_FEATURE_LS_USERNAME false))",
+    "model" : "(define-fun BB_FEATURE_LS_USERNAME () Bool\n  false)\n(define-fun BB_FEATURE_LS_FILETYPES () Bool\n  true)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/382//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.981714885
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/356//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 1.067036665
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&flags` is never used.",
+      "fileLocation" : "/workspace/155//workspace/varbugs/c76df14dfb4.c",
+      "line" : 38,
+      "analysisTime" : 0.884771435
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CROSS_COMPILE true) (= WIN32 true) (= NEED_ENHANCED_ESCAPES true))",
+    "model" : "(define-fun WIN32 () Bool\n  true)\n(define-fun NEED_ENHANCED_ESCAPES () Bool\n  true)\n(define-fun CROSS_COMPILE () Bool\n  true)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&n` is never used.",
+      "fileLocation" : "/workspace/538//workspace/varbugs/0f8f8094d28.c",
+      "line" : 39,
+      "analysisTime" : 0.852239928
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_SLAB true)\n     (= CONFIG_SLOB true)\n     (= CONFIG_FORCE_MAX_ZONEORDER true)\n     (= CONFIG_SLOB false)\n     (= CONFIG_PPC_256K_PAGES true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "MEMORY_LEAK_C",
+      "description" : "Memory dynamically allocated by `malloc`, indirectly via call to `prepend_new_eth_table()` on line 40 is not freed after the last access at line 40, column 3.",
+      "fileLocation" : "/workspace/673//workspace/varbugs/bc0ffc0e971.c",
+      "line" : 40,
+      "analysisTime" : 0.834754903
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_CLEAN_UP false))",
+    "model" : "(define-fun ENABLE_FEATURE_CLEAN_UP () Bool\n  false)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/317//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.9841612
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_I2C false)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  true)\n(define-fun CONFIG_I2C () Bool\n  false)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "NULLPTR_DEREFERENCE",
+      "description" : "`curr` could be null (null value originating from line 65) and is dereferenced.",
+      "fileLocation" : "/workspace/501//workspace/varbugs/2631486f1bf.c",
+      "line" : 66,
+      "analysisTime" : 1.066763593
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_LS_RECURSIVE true)\n     (= CONFIG_FEATURE_LS_SORTFILES false)\n     (= CONFIG_FEATURE_LS_SORTFILES true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/383//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 1.090594847
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`p` is read without initialization.",
+      "fileLocation" : "/workspace/679//workspace/varbugs/061fd0a353e.c",
+      "line" : 27,
+      "analysisTime" : 0.884142023
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF true)\n     (= CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF true))",
+    "model" : "(define-fun CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF () Bool\n  true)\n(define-fun CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF () Bool\n  true)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/348//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.970634297
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 true))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  true)\n(define-fun CONFIG_I2C () Bool\n  true)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/330//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.984626433
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/337//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.780487
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  true)\n(define-fun CONFIG_I2C () Bool\n  true)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&pid_output` is never used.",
+      "fileLocation" : "/workspace/512//workspace/varbugs/8c4377dd635.c",
+      "line" : 13,
+      "analysisTime" : 1.081756155
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= MARLIN_H false) (= PIDTEMP true) (= PID_DEBUG true))",
+    "model" : "(define-fun PID_DEBUG () Bool\n  true)\n(define-fun MARLIN_H () Bool\n  false)\n(define-fun PIDTEMP () Bool\n  true)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&n` is never used.",
+      "fileLocation" : "/workspace/531//workspace/varbugs/0f8f8094d28.c",
+      "line" : 39,
+      "analysisTime" : 0.920987847
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_FORCE_MAX_ZONEORDER false)\n     (= CONFIG_SLOB true)\n     (= CONFIG_SLAB false)\n     (= CONFIG_PPC_256K_PAGES true))",
+    "model" : "(define-fun CONFIG_SLAB () Bool\n  false)\n(define-fun CONFIG_SLOB () Bool\n  true)\n(define-fun CONFIG_PPC_256K_PAGES () Bool\n  true)\n(define-fun CONFIG_LOCKDEP () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/375//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 1.019332174
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  true)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/340//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.981073732
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_I2C false)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "MEMORY_LEAK_C",
+      "description" : "Memory dynamically allocated by `malloc`, indirectly via call to `extcon_class_init()` on line 107 is not freed after the last access at line 112, column 1.",
+      "fileLocation" : "/workspace/128//workspace/varbugs/0dc77b6dabe.c",
+      "line" : 112,
+      "analysisTime" : 1.203343243
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_ANDROID false)\n     (= CONFIG_SYSFS true)\n     (= CONFIG_EXTCON true)\n     (= CONFIG_ANDROID true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      4
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "NULLPTR_DEREFERENCE",
+      "description" : "`curr` could be null (null value originating from line 65) and is dereferenced.",
+      "fileLocation" : "/workspace/503//workspace/varbugs/2631486f1bf.c",
+      "line" : 66,
+      "analysisTime" : 0.974611274
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_LS_RECURSIVE false)\n     (= CONFIG_FEATURE_LS_RECURSIVE true)\n     (= CONFIG_FEATURE_LS_SORTFILES false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/376//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 1.004910476
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "NULLPTR_DEREFERENCE",
+      "description" : "`eckey` could be null (null value originating from line 10) and is dereferenced.",
+      "fileLocation" : "/workspace/164//workspace/varbugs/35ae2e259e4.c",
+      "line" : 17,
+      "analysisTime" : 0.907756313
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= HAVE_ECC true) (= SSL_CTX_set_ecdh_auto false))",
+    "model" : "(define-fun SSL_CTX_set_ecdh_auto () Bool\n  false)\n(define-fun HAVE_ECC () Bool\n  true)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "USE_AFTER_FREE",
+      "description" : "accessing `ch` that was invalidated by call to `free()` during the call to `delete_eth_table()` on line 44.",
+      "fileLocation" : "/workspace/675//workspace/varbugs/bc0ffc0e971.c",
+      "line" : 43,
+      "analysisTime" : 1.037363077
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_CLEAN_UP true))",
+    "model" : "(define-fun ENABLE_FEATURE_CLEAN_UP () Bool\n  true)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/369//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.887041799
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  true)\n(define-fun CONFIG_I2C () Bool\n  true)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`cache` is read without initialization.",
+      "fileLocation" : "/workspace/552//workspace/varbugs/0f8f8094d28.c",
+      "line" : 36,
+      "analysisTime" : 0.649929096
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_SLOB true)\n     (= CONFIG_FORCE_MAX_ZONEORDER true)\n     (= CONFIG_SLAB false)\n     (= CONFIG_PPC_256K_PAGES true))",
+    "model" : "(define-fun CONFIG_SLAB () Bool\n  false)\n(define-fun CONFIG_SLOB () Bool\n  true)\n(define-fun CONFIG_PPC_256K_PAGES () Bool\n  true)\n(define-fun CONFIG_LOCKDEP () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&len` is never used.",
+      "fileLocation" : "/workspace/659//workspace/varbugs/95755181b82.c",
+      "line" : 39,
+      "analysisTime" : 1.058658415
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_HTTPD_GZIP false)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH true)\n     (= BB_MMU false))",
+    "model" : "(define-fun BB_MMU () Bool\n  false)\n(define-fun ENABLE_FEATURE_HTTPD_GZIP () Bool\n  false)\n(define-fun ENABLE_FEATURE_HTTPD_BASIC_AUTH () Bool\n  true)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&xGridSpacing` is never used.",
+      "fileLocation" : "/workspace/742//workspace/varbugs/e30bfedce4d.c",
+      "line" : 24,
+      "analysisTime" : 1.111193556
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_AUTO_BED_LEVELING false)\n     (= AUTO_BED_LEVELING_GRID false)\n     (= ENABLE_AUTO_BED_LEVELING true)\n     (= AUTO_BED_LEVELING_GRID true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      4
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&pid_output` is never used.",
+      "fileLocation" : "/workspace/509//workspace/varbugs/8c4377dd635.c",
+      "line" : 13,
+      "analysisTime" : 0.76050401
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= MARLIN_H false) (= PIDTEMP true) (= PID_DEBUG false))",
+    "model" : "(define-fun PID_DEBUG () Bool\n  false)\n(define-fun MARLIN_H () Bool\n  false)\n(define-fun PIDTEMP () Bool\n  true)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/344//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.995480718
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 true))",
+    "model" : "(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  false)\n(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  false)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/341//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 1.016978709
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/347//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.823995484
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "MEMORY_LEAK_C",
+      "description" : "Memory dynamically allocated by `malloc` on line 10 is not freed after the last access at line 11, column 7.",
+      "fileLocation" : "/workspace/162//workspace/varbugs/35ae2e259e4.c",
+      "line" : 11,
+      "analysisTime" : 1.003079305
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= HAVE_ECC true) (= SSL_CTX_set_ecdh_auto true))",
+    "model" : "(define-fun SSL_CTX_set_ecdh_auto () Bool\n  true)\n(define-fun HAVE_ECC () Bool\n  true)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/379//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 1.028593411
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&xGridSpacing` is never used.",
+      "fileLocation" : "/workspace/746//workspace/varbugs/e30bfedce4d.c",
+      "line" : 24,
+      "analysisTime" : 0.990714102
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_AUTO_BED_LEVELING true)\n     (= AUTO_BED_LEVELING_GRID false)\n     (= AUTO_BED_LEVELING_GRID true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`head` is read without initialization.",
+      "fileLocation" : "/workspace/498//workspace/varbugs/2631486f1bf.c",
+      "line" : 67,
+      "analysisTime" : 1.060980539
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_LS_RECURSIVE false)\n     (= CONFIG_FEATURE_LS_SORTFILES false)\n     (= CONFIG_FEATURE_LS_SORTFILES true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/345//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.889306303
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/333//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 1.082992661
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_I2C false)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  true)\n(define-fun CONFIG_I2C () Bool\n  false)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "MEMORY_LEAK_C",
+      "description" : "Memory dynamically allocated by `malloc`, indirectly via call to `inet_ehash_locks_alloc()` on line 43 is not freed after the last access at line 46, column 1.",
+      "fileLocation" : "/workspace/580//workspace/varbugs/218ad12f42e.c",
+      "line" : 46,
+      "analysisTime" : 0.942128416
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_NUMA true))",
+    "model" : "(define-fun CONFIG_NUMA () Bool\n  true)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`err` is read without initialization.",
+      "fileLocation" : "/workspace/687//workspace/varbugs/e39363a9def.c",
+      "line" : 17,
+      "analysisTime" : 0.970345237
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_NETPOLL true) (= CONFIG_IPV6 false))",
+    "model" : "(define-fun CONFIG_NETPOLL () Bool\n  true)\n(define-fun CONFIG_IPV6 () Bool\n  false)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/321//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.998287936
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/337//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.780487
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  true)\n(define-fun CONFIG_I2C () Bool\n  true)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/356//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 1.067036665
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/381//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 1.138274538
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_I2C false)\n     (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&argc` is never used.",
+      "fileLocation" : "/workspace/678//workspace/varbugs/061fd0a353e.c",
+      "line" : 16,
+      "analysisTime" : 0.883340457
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF true)\n     (= CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF false))",
+    "model" : "(define-fun CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF () Bool\n  true)\n(define-fun CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF () Bool\n  false)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&x` is never used.",
+      "fileLocation" : "/workspace/8//workspace/varbugs/30e053248da.c",
+      "line" : 31,
+      "analysisTime" : 0.666324414
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SECURITY true))",
+    "model" : "(define-fun CONFIG_SECURITY () Bool\n  true)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/333//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 1.082992661
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_I2C false)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  true)\n(define-fun CONFIG_I2C () Bool\n  false)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "USE_AFTER_FREE",
+      "description" : "accessing `ch` that was invalidated by call to `free()` during the call to `delete_eth_table()` on line 44.",
+      "fileLocation" : "/workspace/674//workspace/varbugs/bc0ffc0e971.c",
+      "line" : 43,
+      "analysisTime" : 1.12008236
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_CLEAN_UP false) (= ENABLE_FEATURE_CLEAN_UP true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&len` is never used.",
+      "fileLocation" : "/workspace/638//workspace/varbugs/95755181b82.c",
+      "line" : 39,
+      "analysisTime" : 0.950541647
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_HTTPD_GZIP true)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH false)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH true)\n     (= BB_MMU false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      4
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "NULLPTR_DEREFERENCE",
+      "description" : "`scontext` could be null (null value originating from line 7) and is dereferenced.",
+      "fileLocation" : "/workspace/143//workspace/varbugs/1b487ea8a69.c",
+      "line" : 14,
+      "analysisTime" : 1.100542597
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_SELINUX false)\n     (= ENABLE_FEATURE_STAT_FORMAT false)\n     (= ENABLE_SELINUX true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&x` is never used.",
+      "fileLocation" : "/workspace/737//workspace/varbugs/7acf6cd80b2.c",
+      "line" : 8,
+      "analysisTime" : 1.093295287
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_DEVPTS_MULTIPLE_INSTANCES true) (= CONFIG_UNIX98_PTYS false))",
+    "model" : "(define-fun CONFIG_UNIX98_PTYS () Bool\n  false)\n(define-fun CONFIG_DEVPTS_MULTIPLE_INSTANCES () Bool\n  true)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&xGridSpacing` is never used.",
+      "fileLocation" : "/workspace/745//workspace/varbugs/e30bfedce4d.c",
+      "line" : 24,
+      "analysisTime" : 1.110506801
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_AUTO_BED_LEVELING false)\n     (= AUTO_BED_LEVELING_GRID true)\n     (= ENABLE_AUTO_BED_LEVELING true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&flags` is never used.",
+      "fileLocation" : "/workspace/152//workspace/varbugs/c76df14dfb4.c",
+      "line" : 42,
+      "analysisTime" : 1.051167196
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CROSS_COMPILE true) (= WIN32 true) (= NEED_ENHANCED_ESCAPES false))",
+    "model" : "(define-fun WIN32 () Bool\n  true)\n(define-fun NEED_ENHANCED_ESCAPES () Bool\n  false)\n(define-fun CROSS_COMPILE () Bool\n  true)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&family` is never used.",
+      "fileLocation" : "/workspace/683//workspace/varbugs/581635e28f1.c",
+      "line" : 7,
+      "analysisTime" : 0.649542985
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= APR_HAVE_IPV6 true))",
+    "model" : "(define-fun APR_HAVE_IPV6 () Bool\n  true)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/319//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.973563056
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  false)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`driver_data` is read without initialization.",
+      "fileLocation" : "/workspace/738//workspace/varbugs/7acf6cd80b2.c",
+      "line" : 44,
+      "analysisTime" : 0.74703455
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_DEVPTS_MULTIPLE_INSTANCES false) (= CONFIG_UNIX98_PTYS true))",
+    "model" : "(define-fun CONFIG_UNIX98_PTYS () Bool\n  true)\n(define-fun CONFIG_DEVPTS_MULTIPLE_INSTANCES () Bool\n  false)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/358//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.778486188
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  true)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&len` is never used.",
+      "fileLocation" : "/workspace/658//workspace/varbugs/95755181b82.c",
+      "line" : 39,
+      "analysisTime" : 0.760375299
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_HTTPD_GZIP false)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH false)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH true)\n     (= BB_MMU false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      4
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&n` is never used.",
+      "fileLocation" : "/workspace/549//workspace/varbugs/0f8f8094d28.c",
+      "line" : 39,
+      "analysisTime" : 0.805083851
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_FORCE_MAX_ZONEORDER false)\n     (= CONFIG_SLOB true)\n     (= CONFIG_SLOB false)\n     (= CONFIG_SLAB false)\n     (= CONFIG_PPC_256K_PAGES true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/359//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 1.049254726
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`cache` is read without initialization.",
+      "fileLocation" : "/workspace/534//workspace/varbugs/0f8f8094d28.c",
+      "line" : 36,
+      "analysisTime" : 1.104522034
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_SLOB true)\n     (= CONFIG_PPC_256K_PAGES true)\n     (= CONFIG_SLAB true)\n     (= CONFIG_FORCE_MAX_ZONEORDER false))",
+    "model" : "(define-fun CONFIG_SLAB () Bool\n  true)\n(define-fun CONFIG_SLOB () Bool\n  true)\n(define-fun CONFIG_PPC_256K_PAGES () Bool\n  true)\n(define-fun CONFIG_LOCKDEP () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&len` is never used.",
+      "fileLocation" : "/workspace/639//workspace/varbugs/95755181b82.c",
+      "line" : 39,
+      "analysisTime" : 0.912661466
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_HTTPD_GZIP false)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH true)\n     (= BB_MMU false)\n     (= BB_MMU true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      4
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&argv` is never used.",
+      "fileLocation" : "/workspace/678//workspace/varbugs/061fd0a353e.c",
+      "line" : 16,
+      "analysisTime" : 0.883340457
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF true)\n     (= CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF false))",
+    "model" : "(define-fun CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF () Bool\n  true)\n(define-fun CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF () Bool\n  false)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&someInt` is never used.",
+      "fileLocation" : "/workspace/749//workspace/varbugs/5275b1e49f6.c",
+      "line" : 9,
+      "analysisTime" : 1.080988772
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_INSMOD_VERSION_CHECKING false))",
+    "model" : "(define-fun CONFIG_FEATURE_INSMOD_VERSION_CHECKING () Bool\n  false)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/317//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.9841612
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_I2C false)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  true)\n(define-fun CONFIG_I2C () Bool\n  false)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "MEMORY_LEAK_C",
+      "description" : "Memory dynamically allocated by `malloc`, indirectly via call to `extcon_class_init()` on line 107 is not freed after the last access at line 112, column 1.",
+      "fileLocation" : "/workspace/120//workspace/varbugs/0dc77b6dabe.c",
+      "line" : 112,
+      "analysisTime" : 1.08299248
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_ANDROID true) (= CONFIG_SYSFS false) (= CONFIG_EXTCON true))",
+    "model" : "(define-fun CONFIG_SYSFS () Bool\n  false)\n(define-fun CONFIG_ANDROID () Bool\n  true)\n(define-fun CONFIG_EXTCON () Bool\n  true)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/363//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 1.120609841
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 true))",
+    "model" : "(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  false)\n(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  false)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/374//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.859260181
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      7
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`head` is read without initialization.",
+      "fileLocation" : "/workspace/501//workspace/varbugs/2631486f1bf.c",
+      "line" : 67,
+      "analysisTime" : 1.066763593
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_LS_RECURSIVE true)\n     (= CONFIG_FEATURE_LS_SORTFILES false)\n     (= CONFIG_FEATURE_LS_SORTFILES true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&driver_data` is never used.",
+      "fileLocation" : "/workspace/735//workspace/varbugs/7acf6cd80b2.c",
+      "line" : 39,
+      "analysisTime" : 1.128605861
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_DEVPTS_MULTIPLE_INSTANCES false)\n     (= CONFIG_UNIX98_PTYS false)\n     (= CONFIG_UNIX98_PTYS true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "MEMORY_LEAK_C",
+      "description" : "Memory dynamically allocated by `malloc` on line 10 is not freed after the last access at line 17, column 5.",
+      "fileLocation" : "/workspace/165//workspace/varbugs/35ae2e259e4.c",
+      "line" : 17,
+      "analysisTime" : 1.046282107
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= HAVE_ECC false) (= HAVE_ECC true) (= SSL_CTX_set_ecdh_auto false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/330//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.984626433
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&len` is never used.",
+      "fileLocation" : "/workspace/643//workspace/varbugs/95755181b82.c",
+      "line" : 39,
+      "analysisTime" : 1.076898506
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_HTTPD_GZIP false)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH true)\n     (= ENABLE_FEATURE_HTTPD_GZIP true)\n     (= BB_MMU true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      4
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/324//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.830562155
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  false)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/331//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.916945481
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&a` is never used.",
+      "fileLocation" : "/workspace/732//workspace/varbugs/b62bd7b261b.c",
+      "line" : 14,
+      "analysisTime" : 1.048111561
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_MDEV_CONF true)\n     (= ENABLE_FEATURE_MDEV_RENAME true)\n     (= ENABLE_FEATURE_MDEV_RENAME_REGEXP false))",
+    "model" : "(define-fun ENABLE_FEATURE_MDEV_CONF () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME_REGEXP () Bool\n  false)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/368//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.811036657
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_I2C false)\n     (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_SOC_DA7210 true))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  true)\n(define-fun CONFIG_I2C () Bool\n  false)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&n` is never used.",
+      "fileLocation" : "/workspace/536//workspace/varbugs/0f8f8094d28.c",
+      "line" : 39,
+      "analysisTime" : 1.046661981
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_FORCE_MAX_ZONEORDER false)\n     (= CONFIG_SLOB true)\n     (= CONFIG_SLOB false)\n     (= CONFIG_PPC_256K_PAGES false)\n     (= CONFIG_SLAB false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&len` is never used.",
+      "fileLocation" : "/workspace/660//workspace/varbugs/95755181b82.c",
+      "line" : 39,
+      "analysisTime" : 0.993248977
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_HTTPD_GZIP true)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH true)\n     (= BB_MMU true))",
+    "model" : "(define-fun BB_MMU () Bool\n  true)\n(define-fun ENABLE_FEATURE_HTTPD_GZIP () Bool\n  true)\n(define-fun ENABLE_FEATURE_HTTPD_BASIC_AUTH () Bool\n  true)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/342//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.908160127
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_I2C false)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/357//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.859855314
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&m_has_modinfo` is never used.",
+      "fileLocation" : "/workspace/749//workspace/varbugs/5275b1e49f6.c",
+      "line" : 18,
+      "analysisTime" : 1.080988772
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_INSMOD_VERSION_CHECKING false))",
+    "model" : "(define-fun CONFIG_FEATURE_INSMOD_VERSION_CHECKING () Bool\n  false)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`info` is read without initialization.",
+      "fileLocation" : "/workspace/409//workspace/varbugs/b273d665181.c",
+      "line" : 16,
+      "analysisTime" : 0.99050575
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= BB_FEATURE_LS_FILETYPES false)\n     (= BB_FEATURE_LS_USERNAME false)\n     (= BB_FEATURE_LS_FILETYPES true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/347//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.823995484
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "NULLPTR_DEREFERENCE",
+      "description" : "`curr` could be null (null value originating from line 65) and is dereferenced.",
+      "fileLocation" : "/workspace/499//workspace/varbugs/2631486f1bf.c",
+      "line" : 66,
+      "analysisTime" : 1.007370873
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_LS_RECURSIVE true) (= CONFIG_FEATURE_LS_SORTFILES false))",
+    "model" : "(define-fun CONFIG_FEATURE_LS_RECURSIVE () Bool\n  true)\n(define-fun CONFIG_FEATURE_LS_SORTFILES () Bool\n  false)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&x` is never used.",
+      "fileLocation" : "/workspace/739//workspace/varbugs/7acf6cd80b2.c",
+      "line" : 8,
+      "analysisTime" : 0.928164231
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_DEVPTS_MULTIPLE_INSTANCES true) (= CONFIG_UNIX98_PTYS true))",
+    "model" : "(define-fun CONFIG_UNIX98_PTYS () Bool\n  true)\n(define-fun CONFIG_DEVPTS_MULTIPLE_INSTANCES () Bool\n  true)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/332//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.994552683
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "NULLPTR_DEREFERENCE",
+      "description" : "The call to `prepend_new_eth_table` may trigger the following issue: `ch` could be null (from the call to `prepend_new_eth_table()` on line 40) and is dereferenced in the call to `prepend_new_eth_table()`.",
+      "fileLocation" : "/workspace/673//workspace/varbugs/bc0ffc0e971.c",
+      "line" : 40,
+      "analysisTime" : 0.834754903
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_CLEAN_UP false))",
+    "model" : "(define-fun ENABLE_FEATURE_CLEAN_UP () Bool\n  false)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&len` is never used.",
+      "fileLocation" : "/workspace/653//workspace/varbugs/95755181b82.c",
+      "line" : 39,
+      "analysisTime" : 0.925724476
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_HTTPD_BASIC_AUTH true)\n     (= ENABLE_FEATURE_HTTPD_GZIP true)\n     (= BB_MMU true)\n     (= BB_MMU false)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&m_has_modinfo` is never used.",
+      "fileLocation" : "/workspace/751//workspace/varbugs/5275b1e49f6.c",
+      "line" : 18,
+      "analysisTime" : 0.939888253
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_INSMOD_VERSION_CHECKING true))",
+    "model" : "(define-fun CONFIG_FEATURE_INSMOD_VERSION_CHECKING () Bool\n  true)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&k_crcs` is never used.",
+      "fileLocation" : "/workspace/750//workspace/varbugs/5275b1e49f6.c",
+      "line" : 25,
+      "analysisTime" : 1.09722405
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_INSMOD_VERSION_CHECKING false)\n     (= CONFIG_FEATURE_INSMOD_VERSION_CHECKING true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "NULLPTR_DEREFERENCE",
+      "description" : "`eckey` could be null (null value originating from line 10) and is dereferenced.",
+      "fileLocation" : "/workspace/162//workspace/varbugs/35ae2e259e4.c",
+      "line" : 12,
+      "analysisTime" : 1.003079305
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= HAVE_ECC true) (= SSL_CTX_set_ecdh_auto true))",
+    "model" : "(define-fun SSL_CTX_set_ecdh_auto () Bool\n  true)\n(define-fun HAVE_ECC () Bool\n  true)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&family` is never used.",
+      "fileLocation" : "/workspace/682//workspace/varbugs/581635e28f1.c",
+      "line" : 7,
+      "analysisTime" : 0.724739492
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= APR_HAVE_IPV6 false))",
+    "model" : "(define-fun APR_HAVE_IPV6 () Bool\n  false)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/339//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.995861581
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      7
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/348//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.970634297
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 true))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  true)\n(define-fun CONFIG_I2C () Bool\n  true)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "NULLPTR_DEREFERENCE",
+      "description" : "`curr` could be null (null value originating from line 65) and is dereferenced.",
+      "fileLocation" : "/workspace/504//workspace/varbugs/2631486f1bf.c",
+      "line" : 66,
+      "analysisTime" : 0.978708998
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_LS_RECURSIVE false)\n     (= CONFIG_FEATURE_LS_RECURSIVE true)\n     (= CONFIG_FEATURE_LS_SORTFILES true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&pid_output` is never used.",
+      "fileLocation" : "/workspace/511//workspace/varbugs/8c4377dd635.c",
+      "line" : 13,
+      "analysisTime" : 1.078259834
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= MARLIN_H false) (= PIDTEMP false) (= PID_DEBUG true))",
+    "model" : "(define-fun PID_DEBUG () Bool\n  true)\n(define-fun MARLIN_H () Bool\n  false)\n(define-fun PIDTEMP () Bool\n  false)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&irq` is never used.",
+      "fileLocation" : "/workspace/28//workspace/varbugs/6252547b8a7.c",
+      "line" : 12,
+      "analysisTime" : 1.004868414
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_TWL4030_CORE true)\n     (= CONFIG_IRQ_DOMAIN false)\n     (= CONFIG_OF_IRQ true))",
+    "model" : "(define-fun CONFIG_TWL4030_CORE () Bool\n  true)\n(define-fun CONFIG_IRQ_DOMAIN () Bool\n  false)\n(define-fun CONFIG_OF_IRQ () Bool\n  true)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&irq` is never used.",
+      "fileLocation" : "/workspace/38//workspace/varbugs/6252547b8a7.c",
+      "line" : 12,
+      "analysisTime" : 1.073029008
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_TWL4030_CORE false)\n     (= CONFIG_IRQ_DOMAIN false)\n     (= CONFIG_OF_IRQ true)\n     (= CONFIG_TWL4030_CORE true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      4
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&flags` is never used.",
+      "fileLocation" : "/workspace/157//workspace/varbugs/c76df14dfb4.c",
+      "line" : 38,
+      "analysisTime" : 1.126667445
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CROSS_COMPILE false) (= WIN32 false) (= NEED_ENHANCED_ESCAPES true))",
+    "model" : "(define-fun WIN32 () Bool\n  false)\n(define-fun NEED_ENHANCED_ESCAPES () Bool\n  true)\n(define-fun CROSS_COMPILE () Bool\n  false)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "NULLPTR_DEREFERENCE",
+      "description" : "The call to `prepend_new_eth_table` may trigger the following issue: `ch` could be null (from the call to `prepend_new_eth_table()` on line 40) and is dereferenced in the call to `prepend_new_eth_table()`.",
+      "fileLocation" : "/workspace/675//workspace/varbugs/bc0ffc0e971.c",
+      "line" : 40,
+      "analysisTime" : 1.037363077
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_CLEAN_UP true))",
+    "model" : "(define-fun ENABLE_FEATURE_CLEAN_UP () Bool\n  true)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&pid_output` is never used.",
+      "fileLocation" : "/workspace/507//workspace/varbugs/8c4377dd635.c",
+      "line" : 13,
+      "analysisTime" : 1.046221388
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= MARLIN_H false) (= PIDTEMP false) (= PID_DEBUG false))",
+    "model" : "(define-fun PID_DEBUG () Bool\n  false)\n(define-fun MARLIN_H () Bool\n  false)\n(define-fun PIDTEMP () Bool\n  false)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`conv` is read without initialization.",
+      "fileLocation" : "/workspace/629//workspace/varbugs/31873ec707d.c",
+      "line" : 8,
+      "analysisTime" : 1.045005273
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ULTRA_LCD true))",
+    "model" : "(define-fun ULTRA_LCD () Bool\n  true)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&n` is never used.",
+      "fileLocation" : "/workspace/561//workspace/varbugs/0f8f8094d28.c",
+      "line" : 39,
+      "analysisTime" : 1.006147226
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_SLOB true)\n     (= CONFIG_FORCE_MAX_ZONEORDER true)\n     (= CONFIG_PPC_256K_PAGES false)\n     (= CONFIG_SLAB false))",
+    "model" : "(define-fun CONFIG_SLAB () Bool\n  false)\n(define-fun CONFIG_SLOB () Bool\n  true)\n(define-fun CONFIG_PPC_256K_PAGES () Bool\n  false)\n(define-fun CONFIG_LOCKDEP () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/327//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.954734391
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  true)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&irq` is never used.",
+      "fileLocation" : "/workspace/32//workspace/varbugs/6252547b8a7.c",
+      "line" : 12,
+      "analysisTime" : 1.015343788
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_TWL4030_CORE false)\n     (= CONFIG_IRQ_DOMAIN true)\n     (= CONFIG_OF_IRQ true)\n     (= CONFIG_TWL4030_CORE true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      4
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`head` is read without initialization.",
+      "fileLocation" : "/workspace/503//workspace/varbugs/2631486f1bf.c",
+      "line" : 67,
+      "analysisTime" : 0.974611274
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_LS_RECURSIVE false)\n     (= CONFIG_FEATURE_LS_RECURSIVE true)\n     (= CONFIG_FEATURE_LS_SORTFILES false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&argv` is never used.",
+      "fileLocation" : "/workspace/677//workspace/varbugs/061fd0a353e.c",
+      "line" : 16,
+      "analysisTime" : 0.941372622
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF false)\n     (= CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF true))",
+    "model" : "(define-fun CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF () Bool\n  false)\n(define-fun CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF () Bool\n  true)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&driver_data` is never used.",
+      "fileLocation" : "/workspace/739//workspace/varbugs/7acf6cd80b2.c",
+      "line" : 39,
+      "analysisTime" : 0.928164231
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_DEVPTS_MULTIPLE_INSTANCES true) (= CONFIG_UNIX98_PTYS true))",
+    "model" : "(define-fun CONFIG_UNIX98_PTYS () Bool\n  true)\n(define-fun CONFIG_DEVPTS_MULTIPLE_INSTANCES () Bool\n  true)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&argc` is never used.",
+      "fileLocation" : "/workspace/676//workspace/varbugs/061fd0a353e.c",
+      "line" : 16,
+      "analysisTime" : 1.064762874
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF false)\n     (= CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF false))",
+    "model" : "(define-fun CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF () Bool\n  false)\n(define-fun CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF () Bool\n  false)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/346//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.849639001
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      7
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/376//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 1.004910476
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/384//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 1.119684486
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  true)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/351//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 1.068323531
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_I2C false)\n     (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  true)\n(define-fun CONFIG_I2C () Bool\n  false)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/377//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 1.083156583
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 true))",
+    "model" : "(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  true)\n(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  true)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`rmm_lock` is read without initialization.",
+      "fileLocation" : "/workspace/576//workspace/varbugs/1b48bb3c1af.c",
+      "line" : 14,
+      "analysisTime" : 1.039346559
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= APU_HAS_LDAP true) (= APR_HAS_SHARED_MEMORY true))",
+    "model" : "(define-fun APR_HAS_SHARED_MEMORY () Bool\n  true)\n(define-fun APU_HAS_LDAP () Bool\n  true)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&thisopt` is never used.",
+      "fileLocation" : "/workspace/69//workspace/varbugs/1a3c8e3d840.c",
+      "line" : 13,
+      "analysisTime" : 1.05348265
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= HAVE_TLSV1_X false))",
+    "model" : "(define-fun HAVE_TLSV1_X () Bool\n  false)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "NULLPTR_DEREFERENCE",
+      "description" : "`ops` could be null (null value originating from line 19) and is dereferenced in the call to `irq_domain_add()`.",
+      "fileLocation" : "/workspace/36//workspace/varbugs/6252547b8a7.c",
+      "line" : 25,
+      "analysisTime" : 0.912948414
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_TWL4030_CORE false)\n     (= CONFIG_IRQ_DOMAIN true)\n     (= CONFIG_OF_IRQ false)\n     (= CONFIG_TWL4030_CORE true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      4
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&irq` is never used.",
+      "fileLocation" : "/workspace/27//workspace/varbugs/6252547b8a7.c",
+      "line" : 12,
+      "analysisTime" : 1.005765719
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_TWL4030_CORE false)\n     (= CONFIG_IRQ_DOMAIN false)\n     (= CONFIG_OF_IRQ false)\n     (= CONFIG_TWL4030_CORE true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      4
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/360//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 1.04798249
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  true)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "NULLPTR_DEREFERENCE",
+      "description" : "`eckey` could be null (null value originating from line 10) and is dereferenced.",
+      "fileLocation" : "/workspace/165//workspace/varbugs/35ae2e259e4.c",
+      "line" : 17,
+      "analysisTime" : 1.046282107
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= HAVE_ECC false) (= HAVE_ECC true) (= SSL_CTX_set_ecdh_auto false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "MEMORY_LEAK_C",
+      "description" : "Memory dynamically allocated by `malloc` on line 26 is not freed after the last access at line 26, column 3.",
+      "fileLocation" : "/workspace/194//workspace/varbugs/eef2317b9f5.c",
+      "line" : 26,
+      "analysisTime" : 1.055811274
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_CLEAN_UP false))",
+    "model" : "(define-fun CONFIG_FEATURE_CLEAN_UP () Bool\n  false)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/371//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 1.095299937
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_I2C false)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  true)\n(define-fun CONFIG_I2C () Bool\n  false)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/320//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.978079123
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/352//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.89220115
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/328//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.892352651
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  false)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/322//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.960357725
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      7
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/353//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.76076907
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      7
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/325//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 1.012326081
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  true)\n(define-fun CONFIG_I2C () Bool\n  true)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/318//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.959089868
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_I2C false)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 true))",
+    "model" : "(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  true)\n(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  false)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&flags` is never used.",
+      "fileLocation" : "/workspace/151//workspace/varbugs/c76df14dfb4.c",
+      "line" : 42,
+      "analysisTime" : 1.061149598
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CROSS_COMPILE false) (= WIN32 false) (= NEED_ENHANCED_ESCAPES false))",
+    "model" : "(define-fun WIN32 () Bool\n  false)\n(define-fun NEED_ENHANCED_ESCAPES () Bool\n  false)\n(define-fun CROSS_COMPILE () Bool\n  false)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/385//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 1.18459355
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      7
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/367//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 1.076574883
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&n` is never used.",
+      "fileLocation" : "/workspace/526//workspace/varbugs/0f8f8094d28.c",
+      "line" : 39,
+      "analysisTime" : 0.940900357
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_SLOB true)\n     (= CONFIG_PPC_256K_PAGES false)\n     (= CONFIG_SLAB true)\n     (= CONFIG_FORCE_MAX_ZONEORDER false))",
+    "model" : "(define-fun CONFIG_SLAB () Bool\n  true)\n(define-fun CONFIG_SLOB () Bool\n  true)\n(define-fun CONFIG_PPC_256K_PAGES () Bool\n  false)\n(define-fun CONFIG_LOCKDEP () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`driver_data` is read without initialization.",
+      "fileLocation" : "/workspace/735//workspace/varbugs/7acf6cd80b2.c",
+      "line" : 44,
+      "analysisTime" : 1.128605861
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_DEVPTS_MULTIPLE_INSTANCES false)\n     (= CONFIG_UNIX98_PTYS false)\n     (= CONFIG_UNIX98_PTYS true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&val` is never used.",
+      "fileLocation" : "/workspace/732//workspace/varbugs/b62bd7b261b.c",
+      "line" : 16,
+      "analysisTime" : 1.048111561
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_MDEV_CONF true)\n     (= ENABLE_FEATURE_MDEV_RENAME true)\n     (= ENABLE_FEATURE_MDEV_RENAME_REGEXP false))",
+    "model" : "(define-fun ENABLE_FEATURE_MDEV_CONF () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME_REGEXP () Bool\n  false)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/338//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 1.028929363
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&len` is never used.",
+      "fileLocation" : "/workspace/651//workspace/varbugs/95755181b82.c",
+      "line" : 39,
+      "analysisTime" : 0.780770012
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_HTTPD_GZIP false)\n     (= ENABLE_FEATURE_HTTPD_GZIP true)\n     (= BB_MMU true)\n     (= BB_MMU false)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&argv` is never used.",
+      "fileLocation" : "/workspace/679//workspace/varbugs/061fd0a353e.c",
+      "line" : 16,
+      "analysisTime" : 0.884142023
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF true)\n     (= CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF true))",
+    "model" : "(define-fun CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF () Bool\n  true)\n(define-fun CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF () Bool\n  true)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&len` is never used.",
+      "fileLocation" : "/workspace/655//workspace/varbugs/95755181b82.c",
+      "line" : 39,
+      "analysisTime" : 0.948048603
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_HTTPD_GZIP false)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH true)\n     (= ENABLE_FEATURE_HTTPD_GZIP true)\n     (= BB_MMU false)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/323//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.977142346
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/332//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.994552683
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&k_crcs` is never used.",
+      "fileLocation" : "/workspace/751//workspace/varbugs/5275b1e49f6.c",
+      "line" : 25,
+      "analysisTime" : 0.939888253
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_INSMOD_VERSION_CHECKING true))",
+    "model" : "(define-fun CONFIG_FEATURE_INSMOD_VERSION_CHECKING () Bool\n  true)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "MEMORY_LEAK_C",
+      "description" : "Memory dynamically allocated by `malloc`, indirectly via call to `extcon_class_init()` on line 107 is not freed after the last access at line 112, column 1.",
+      "fileLocation" : "/workspace/115//workspace/varbugs/0dc77b6dabe.c",
+      "line" : 112,
+      "analysisTime" : 1.302987979
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_ANDROID true)\n     (= CONFIG_SYSFS true)\n     (= CONFIG_EXTCON false)\n     (= CONFIG_EXTCON true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      4
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/350//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 1.097175567
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  true)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/375//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 1.019332174
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  true)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`cache` is read without initialization.",
+      "fileLocation" : "/workspace/531//workspace/varbugs/0f8f8094d28.c",
+      "line" : 36,
+      "analysisTime" : 0.920987847
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_FORCE_MAX_ZONEORDER false)\n     (= CONFIG_SLOB true)\n     (= CONFIG_SLAB false)\n     (= CONFIG_PPC_256K_PAGES true))",
+    "model" : "(define-fun CONFIG_SLAB () Bool\n  false)\n(define-fun CONFIG_SLOB () Bool\n  true)\n(define-fun CONFIG_PPC_256K_PAGES () Bool\n  true)\n(define-fun CONFIG_LOCKDEP () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/366//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 1.074451539
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 true))",
+    "model" : "(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  false)\n(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  true)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "NULLPTR_DEREFERENCE",
+      "description" : "`curr` could be null (null value originating from line 65) and is dereferenced.",
+      "fileLocation" : "/workspace/502//workspace/varbugs/2631486f1bf.c",
+      "line" : 66,
+      "analysisTime" : 1.083597398
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_LS_RECURSIVE false)\n     (= CONFIG_FEATURE_LS_RECURSIVE true)\n     (= CONFIG_FEATURE_LS_SORTFILES false)\n     (= CONFIG_FEATURE_LS_SORTFILES true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      4
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&n` is never used.",
+      "fileLocation" : "/workspace/552//workspace/varbugs/0f8f8094d28.c",
+      "line" : 39,
+      "analysisTime" : 0.649929096
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_SLOB true)\n     (= CONFIG_FORCE_MAX_ZONEORDER true)\n     (= CONFIG_SLAB false)\n     (= CONFIG_PPC_256K_PAGES true))",
+    "model" : "(define-fun CONFIG_SLAB () Bool\n  false)\n(define-fun CONFIG_SLOB () Bool\n  true)\n(define-fun CONFIG_PPC_256K_PAGES () Bool\n  true)\n(define-fun CONFIG_LOCKDEP () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`p` is read without initialization.",
+      "fileLocation" : "/workspace/679//workspace/varbugs/061fd0a353e.c",
+      "line" : 20,
+      "analysisTime" : 0.884142023
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF true)\n     (= CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF true))",
+    "model" : "(define-fun CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF () Bool\n  true)\n(define-fun CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF () Bool\n  true)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&n` is never used.",
+      "fileLocation" : "/workspace/540//workspace/varbugs/0f8f8094d28.c",
+      "line" : 39,
+      "analysisTime" : 0.878019155
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_FORCE_MAX_ZONEORDER false)\n     (= CONFIG_SLOB true)\n     (= CONFIG_PPC_256K_PAGES false)\n     (= CONFIG_SLAB false))",
+    "model" : "(define-fun CONFIG_SLAB () Bool\n  false)\n(define-fun CONFIG_SLOB () Bool\n  true)\n(define-fun CONFIG_PPC_256K_PAGES () Bool\n  false)\n(define-fun CONFIG_LOCKDEP () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/350//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 1.097175567
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  true)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/377//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 1.083156583
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 true))",
+    "model" : "(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  true)\n(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  true)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&xGridSpacing` is never used.",
+      "fileLocation" : "/workspace/747//workspace/varbugs/e30bfedce4d.c",
+      "line" : 24,
+      "analysisTime" : 1.143931985
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_AUTO_BED_LEVELING false)\n     (= AUTO_BED_LEVELING_GRID false)\n     (= ENABLE_AUTO_BED_LEVELING true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/378//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.973402834
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      7
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/380//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.958958937
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&len` is never used.",
+      "fileLocation" : "/workspace/654//workspace/varbugs/95755181b82.c",
+      "line" : 39,
+      "analysisTime" : 0.971204983
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_HTTPD_GZIP false)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH false)\n     (= BB_MMU false)\n     (= BB_MMU true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      4
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&len` is never used.",
+      "fileLocation" : "/workspace/650//workspace/varbugs/95755181b82.c",
+      "line" : 39,
+      "analysisTime" : 0.975690791
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_HTTPD_GZIP false)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH false)\n     (= BB_MMU false))",
+    "model" : "(define-fun BB_MMU () Bool\n  false)\n(define-fun ENABLE_FEATURE_HTTPD_GZIP () Bool\n  false)\n(define-fun ENABLE_FEATURE_HTTPD_BASIC_AUTH () Bool\n  false)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "NULLPTR_DEREFERENCE",
+      "description" : "`curr` could be null (null value originating from line 65) and is dereferenced.",
+      "fileLocation" : "/workspace/500//workspace/varbugs/2631486f1bf.c",
+      "line" : 66,
+      "analysisTime" : 1.087864583
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_LS_RECURSIVE false) (= CONFIG_FEATURE_LS_SORTFILES true))",
+    "model" : "(define-fun CONFIG_FEATURE_LS_RECURSIVE () Bool\n  false)\n(define-fun CONFIG_FEATURE_LS_SORTFILES () Bool\n  true)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&len` is never used.",
+      "fileLocation" : "/workspace/657//workspace/varbugs/95755181b82.c",
+      "line" : 39,
+      "analysisTime" : 1.094536794
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_HTTPD_GZIP true)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH true)\n     (= BB_MMU false))",
+    "model" : "(define-fun BB_MMU () Bool\n  false)\n(define-fun ENABLE_FEATURE_HTTPD_GZIP () Bool\n  true)\n(define-fun ENABLE_FEATURE_HTTPD_BASIC_AUTH () Bool\n  true)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&driver_data` is never used.",
+      "fileLocation" : "/workspace/738//workspace/varbugs/7acf6cd80b2.c",
+      "line" : 39,
+      "analysisTime" : 0.74703455
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_DEVPTS_MULTIPLE_INSTANCES false) (= CONFIG_UNIX98_PTYS true))",
+    "model" : "(define-fun CONFIG_UNIX98_PTYS () Bool\n  true)\n(define-fun CONFIG_DEVPTS_MULTIPLE_INSTANCES () Bool\n  false)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&n` is never used.",
+      "fileLocation" : "/workspace/541//workspace/varbugs/0f8f8094d28.c",
+      "line" : 39,
+      "analysisTime" : 0.821697942
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_FORCE_MAX_ZONEORDER true)\n     (= CONFIG_SLOB false)\n     (= CONFIG_PPC_256K_PAGES false)\n     (= CONFIG_SLAB false))",
+    "model" : "(define-fun CONFIG_SLAB () Bool\n  false)\n(define-fun CONFIG_SLOB () Bool\n  false)\n(define-fun CONFIG_PPC_256K_PAGES () Bool\n  false)\n(define-fun CONFIG_LOCKDEP () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "NULLPTR_DEREFERENCE",
+      "description" : "`eckey` could be null (null value originating from line 10) and is dereferenced.",
+      "fileLocation" : "/workspace/164//workspace/varbugs/35ae2e259e4.c",
+      "line" : 12,
+      "analysisTime" : 0.907756313
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= HAVE_ECC true) (= SSL_CTX_set_ecdh_auto false))",
+    "model" : "(define-fun SSL_CTX_set_ecdh_auto () Bool\n  false)\n(define-fun HAVE_ECC () Bool\n  true)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/373//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.98434043
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`head` is read without initialization.",
+      "fileLocation" : "/workspace/496//workspace/varbugs/2631486f1bf.c",
+      "line" : 67,
+      "analysisTime" : 1.045972927
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_LS_RECURSIVE false)\n     (= CONFIG_FEATURE_LS_SORTFILES false))",
+    "model" : "(define-fun CONFIG_FEATURE_LS_RECURSIVE () Bool\n  false)\n(define-fun CONFIG_FEATURE_LS_SORTFILES () Bool\n  false)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&len` is never used.",
+      "fileLocation" : "/workspace/635//workspace/varbugs/95755181b82.c",
+      "line" : 39,
+      "analysisTime" : 1.072548321
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_HTTPD_GZIP true)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH false)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH true)\n     (= BB_MMU true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      4
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/386//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 1.004879327
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_I2C false)\n     (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&n` is never used.",
+      "fileLocation" : "/workspace/557//workspace/varbugs/0f8f8094d28.c",
+      "line" : 39,
+      "analysisTime" : 0.962213728
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_SLOB false)\n     (= CONFIG_PPC_256K_PAGES true)\n     (= CONFIG_SLAB true)\n     (= CONFIG_FORCE_MAX_ZONEORDER false))",
+    "model" : "(define-fun CONFIG_SLAB () Bool\n  true)\n(define-fun CONFIG_SLOB () Bool\n  false)\n(define-fun CONFIG_PPC_256K_PAGES () Bool\n  true)\n(define-fun CONFIG_LOCKDEP () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`cache` is read without initialization.",
+      "fileLocation" : "/workspace/540//workspace/varbugs/0f8f8094d28.c",
+      "line" : 36,
+      "analysisTime" : 0.878019155
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_FORCE_MAX_ZONEORDER false)\n     (= CONFIG_SLOB true)\n     (= CONFIG_PPC_256K_PAGES false)\n     (= CONFIG_SLAB false))",
+    "model" : "(define-fun CONFIG_SLAB () Bool\n  false)\n(define-fun CONFIG_SLOB () Bool\n  true)\n(define-fun CONFIG_PPC_256K_PAGES () Bool\n  false)\n(define-fun CONFIG_LOCKDEP () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&flags` is never used.",
+      "fileLocation" : "/workspace/153//workspace/varbugs/c76df14dfb4.c",
+      "line" : 42,
+      "analysisTime" : 0.868755766
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CROSS_COMPILE true) (= WIN32 false) (= NEED_ENHANCED_ESCAPES false))",
+    "model" : "(define-fun WIN32 () Bool\n  false)\n(define-fun NEED_ENHANCED_ESCAPES () Bool\n  false)\n(define-fun CROSS_COMPILE () Bool\n  true)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`head` is read without initialization.",
+      "fileLocation" : "/workspace/504//workspace/varbugs/2631486f1bf.c",
+      "line" : 67,
+      "analysisTime" : 0.978708998
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_LS_RECURSIVE false)\n     (= CONFIG_FEATURE_LS_RECURSIVE true)\n     (= CONFIG_FEATURE_LS_SORTFILES true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/385//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 1.18459355
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      7
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&len` is never used.",
+      "fileLocation" : "/workspace/649//workspace/varbugs/95755181b82.c",
+      "line" : 39,
+      "analysisTime" : 1.089923096
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_HTTPD_GZIP false)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH true)\n     (= ENABLE_FEATURE_HTTPD_GZIP true)\n     (= BB_MMU false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      4
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/362//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 1.056987303
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  true)\n(define-fun CONFIG_I2C () Bool\n  true)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&pid_output` is never used.",
+      "fileLocation" : "/workspace/506//workspace/varbugs/8c4377dd635.c",
+      "line" : 13,
+      "analysisTime" : 1.072098997
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= MARLIN_H true) (= PIDTEMP true) (= PID_DEBUG true))",
+    "model" : "(define-fun PID_DEBUG () Bool\n  true)\n(define-fun MARLIN_H () Bool\n  true)\n(define-fun PIDTEMP () Bool\n  true)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&n` is never used.",
+      "fileLocation" : "/workspace/528//workspace/varbugs/0f8f8094d28.c",
+      "line" : 39,
+      "analysisTime" : 1.105259788
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_SLAB true)\n     (= CONFIG_SLOB true)\n     (= CONFIG_FORCE_MAX_ZONEORDER true)\n     (= CONFIG_PPC_256K_PAGES true))",
+    "model" : "(define-fun CONFIG_SLAB () Bool\n  true)\n(define-fun CONFIG_SLOB () Bool\n  true)\n(define-fun CONFIG_PPC_256K_PAGES () Bool\n  true)\n(define-fun CONFIG_LOCKDEP () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/319//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.973563056
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  false)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/325//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 1.012326081
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  true)\n(define-fun CONFIG_I2C () Bool\n  true)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&len` is never used.",
+      "fileLocation" : "/workspace/652//workspace/varbugs/95755181b82.c",
+      "line" : 39,
+      "analysisTime" : 0.810194143
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_HTTPD_GZIP false)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH false)\n     (= ENABLE_FEATURE_HTTPD_GZIP true)\n     (= BB_MMU false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      4
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&len` is never used.",
+      "fileLocation" : "/workspace/646//workspace/varbugs/95755181b82.c",
+      "line" : 39,
+      "analysisTime" : 1.104056043
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_HTTPD_GZIP true)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH false)\n     (= BB_MMU false)\n     (= BB_MMU true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      4
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/371//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 1.095299937
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_I2C false)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  true)\n(define-fun CONFIG_I2C () Bool\n  false)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`driver_data` is read without initialization.",
+      "fileLocation" : "/workspace/736//workspace/varbugs/7acf6cd80b2.c",
+      "line" : 44,
+      "analysisTime" : 1.113415529
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_DEVPTS_MULTIPLE_INSTANCES true)\n     (= CONFIG_UNIX98_PTYS false)\n     (= CONFIG_UNIX98_PTYS true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&buf` is never used.",
+      "fileLocation" : "/workspace/194//workspace/varbugs/eef2317b9f5.c",
+      "line" : 26,
+      "analysisTime" : 1.055811274
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_CLEAN_UP false))",
+    "model" : "(define-fun CONFIG_FEATURE_CLEAN_UP () Bool\n  false)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&n` is never used.",
+      "fileLocation" : "/workspace/532//workspace/varbugs/0f8f8094d28.c",
+      "line" : 39,
+      "analysisTime" : 0.836530423
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_FORCE_MAX_ZONEORDER true)\n     (= CONFIG_SLOB false)\n     (= CONFIG_SLAB false)\n     (= CONFIG_PPC_256K_PAGES true))",
+    "model" : "(define-fun CONFIG_SLAB () Bool\n  false)\n(define-fun CONFIG_SLOB () Bool\n  false)\n(define-fun CONFIG_PPC_256K_PAGES () Bool\n  true)\n(define-fun CONFIG_LOCKDEP () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "NULLPTR_DEREFERENCE",
+      "description" : "`scontext` could be null (null value originating from line 7) and is dereferenced.",
+      "fileLocation" : "/workspace/139//workspace/varbugs/1b487ea8a69.c",
+      "line" : 14,
+      "analysisTime" : 1.051345457
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_SELINUX true) (= ENABLE_FEATURE_STAT_FORMAT false))",
+    "model" : "(define-fun ENABLE_FEATURE_STAT_FORMAT () Bool\n  false)\n(define-fun ENABLE_SELINUX () Bool\n  true)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/323//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.977142346
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&n` is never used.",
+      "fileLocation" : "/workspace/562//workspace/varbugs/0f8f8094d28.c",
+      "line" : 39,
+      "analysisTime" : 0.96902403
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_SLAB true)\n     (= CONFIG_SLOB true)\n     (= CONFIG_FORCE_MAX_ZONEORDER true)\n     (= CONFIG_PPC_256K_PAGES false))",
+    "model" : "(define-fun CONFIG_SLAB () Bool\n  true)\n(define-fun CONFIG_SLOB () Bool\n  true)\n(define-fun CONFIG_PPC_256K_PAGES () Bool\n  false)\n(define-fun CONFIG_LOCKDEP () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&n` is never used.",
+      "fileLocation" : "/workspace/548//workspace/varbugs/0f8f8094d28.c",
+      "line" : 39,
+      "analysisTime" : 0.959037188
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_SLAB true)\n     (= CONFIG_FORCE_MAX_ZONEORDER true)\n     (= CONFIG_SLOB false)\n     (= CONFIG_PPC_256K_PAGES false))",
+    "model" : "(define-fun CONFIG_SLAB () Bool\n  true)\n(define-fun CONFIG_SLOB () Bool\n  false)\n(define-fun CONFIG_PPC_256K_PAGES () Bool\n  false)\n(define-fun CONFIG_LOCKDEP () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/320//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.978079123
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&irq` is never used.",
+      "fileLocation" : "/workspace/34//workspace/varbugs/6252547b8a7.c",
+      "line" : 12,
+      "analysisTime" : 0.833743833
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_TWL4030_CORE false)\n     (= CONFIG_IRQ_DOMAIN true)\n     (= CONFIG_OF_IRQ false))",
+    "model" : "(define-fun CONFIG_TWL4030_CORE () Bool\n  false)\n(define-fun CONFIG_IRQ_DOMAIN () Bool\n  true)\n(define-fun CONFIG_OF_IRQ () Bool\n  false)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`head` is read without initialization.",
+      "fileLocation" : "/workspace/499//workspace/varbugs/2631486f1bf.c",
+      "line" : 67,
+      "analysisTime" : 1.007370873
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_LS_RECURSIVE true) (= CONFIG_FEATURE_LS_SORTFILES false))",
+    "model" : "(define-fun CONFIG_FEATURE_LS_RECURSIVE () Bool\n  true)\n(define-fun CONFIG_FEATURE_LS_SORTFILES () Bool\n  false)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&n` is never used.",
+      "fileLocation" : "/workspace/534//workspace/varbugs/0f8f8094d28.c",
+      "line" : 39,
+      "analysisTime" : 1.104522034
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_SLOB true)\n     (= CONFIG_PPC_256K_PAGES true)\n     (= CONFIG_SLAB true)\n     (= CONFIG_FORCE_MAX_ZONEORDER false))",
+    "model" : "(define-fun CONFIG_SLAB () Bool\n  true)\n(define-fun CONFIG_SLOB () Bool\n  true)\n(define-fun CONFIG_PPC_256K_PAGES () Bool\n  true)\n(define-fun CONFIG_LOCKDEP () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&n` is never used.",
+      "fileLocation" : "/workspace/542//workspace/varbugs/0f8f8094d28.c",
+      "line" : 39,
+      "analysisTime" : 0.78345763
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_SLAB true)\n     (= CONFIG_FORCE_MAX_ZONEORDER true)\n     (= CONFIG_SLOB false)\n     (= CONFIG_PPC_256K_PAGES true))",
+    "model" : "(define-fun CONFIG_SLAB () Bool\n  true)\n(define-fun CONFIG_SLOB () Bool\n  false)\n(define-fun CONFIG_PPC_256K_PAGES () Bool\n  true)\n(define-fun CONFIG_LOCKDEP () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&len` is never used.",
+      "fileLocation" : "/workspace/656//workspace/varbugs/95755181b82.c",
+      "line" : 39,
+      "analysisTime" : 1.094886296
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_HTTPD_GZIP false)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH true)\n     (= ENABLE_FEATURE_HTTPD_GZIP true)\n     (= BB_MMU true)\n     (= BB_MMU false)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/353//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.76076907
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      7
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/365//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 1.118026435
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  true)\n(define-fun CONFIG_I2C () Bool\n  true)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/335//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 1.043083348
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  true)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/349//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.935536024
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  false)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "NULLPTR_DEREFERENCE",
+      "description" : "`curr` could be null (null value originating from line 65) and is dereferenced.",
+      "fileLocation" : "/workspace/496//workspace/varbugs/2631486f1bf.c",
+      "line" : 66,
+      "analysisTime" : 1.045972927
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_LS_RECURSIVE false)\n     (= CONFIG_FEATURE_LS_SORTFILES false))",
+    "model" : "(define-fun CONFIG_FEATURE_LS_RECURSIVE () Bool\n  false)\n(define-fun CONFIG_FEATURE_LS_SORTFILES () Bool\n  false)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "MEMORY_LEAK_C",
+      "description" : "Memory dynamically allocated by `malloc`, indirectly via call to `extcon_class_init()` on line 107 is not freed after the last access at line 112, column 1.",
+      "fileLocation" : "/workspace/123//workspace/varbugs/0dc77b6dabe.c",
+      "line" : 112,
+      "analysisTime" : 1.226894365
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_ANDROID false)\n     (= CONFIG_SYSFS false)\n     (= CONFIG_EXTCON true)\n     (= CONFIG_ANDROID true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      4
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`p` is read without initialization.",
+      "fileLocation" : "/workspace/677//workspace/varbugs/061fd0a353e.c",
+      "line" : 27,
+      "analysisTime" : 0.941372622
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF false)\n     (= CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF true))",
+    "model" : "(define-fun CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF () Bool\n  false)\n(define-fun CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF () Bool\n  true)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&n` is never used.",
+      "fileLocation" : "/workspace/537//workspace/varbugs/0f8f8094d28.c",
+      "line" : 39,
+      "analysisTime" : 0.876252074
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_SLOB true)\n     (= CONFIG_SLOB false)\n     (= CONFIG_PPC_256K_PAGES false)\n     (= CONFIG_SLAB true)\n     (= CONFIG_FORCE_MAX_ZONEORDER false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&n` is never used.",
+      "fileLocation" : "/workspace/556//workspace/varbugs/0f8f8094d28.c",
+      "line" : 39,
+      "analysisTime" : 0.991937127
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_SLOB true)\n     (= CONFIG_FORCE_MAX_ZONEORDER true)\n     (= CONFIG_SLOB false)\n     (= CONFIG_PPC_256K_PAGES false)\n     (= CONFIG_SLAB false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&x` is never used.",
+      "fileLocation" : "/workspace/736//workspace/varbugs/7acf6cd80b2.c",
+      "line" : 8,
+      "analysisTime" : 1.113415529
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_DEVPTS_MULTIPLE_INSTANCES true)\n     (= CONFIG_UNIX98_PTYS false)\n     (= CONFIG_UNIX98_PTYS true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`cache` is read without initialization.",
+      "fileLocation" : "/workspace/561//workspace/varbugs/0f8f8094d28.c",
+      "line" : 36,
+      "analysisTime" : 1.006147226
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_SLOB true)\n     (= CONFIG_FORCE_MAX_ZONEORDER true)\n     (= CONFIG_PPC_256K_PAGES false)\n     (= CONFIG_SLAB false))",
+    "model" : "(define-fun CONFIG_SLAB () Bool\n  false)\n(define-fun CONFIG_SLOB () Bool\n  true)\n(define-fun CONFIG_PPC_256K_PAGES () Bool\n  false)\n(define-fun CONFIG_LOCKDEP () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/344//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.995480718
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 true))",
+    "model" : "(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  false)\n(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  false)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`p` is read without initialization.",
+      "fileLocation" : "/workspace/727//workspace/varbugs/b62bd7b261b.c",
+      "line" : 24,
+      "analysisTime" : 1.093345167
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_MDEV_CONF true)\n     (= ENABLE_FEATURE_MDEV_RENAME true)\n     (= ENABLE_FEATURE_MDEV_RENAME_REGEXP true))",
+    "model" : "(define-fun ENABLE_FEATURE_MDEV_CONF () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME_REGEXP () Bool\n  true)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "MEMORY_LEAK_C",
+      "description" : "Memory dynamically allocated by `malloc` on line 10 is not freed after the last access at line 12, column 5.",
+      "fileLocation" : "/workspace/164//workspace/varbugs/35ae2e259e4.c",
+      "line" : 12,
+      "analysisTime" : 0.907756313
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= HAVE_ECC true) (= SSL_CTX_set_ecdh_auto false))",
+    "model" : "(define-fun SSL_CTX_set_ecdh_auto () Bool\n  false)\n(define-fun HAVE_ECC () Bool\n  true)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&pid_output` is never used.",
+      "fileLocation" : "/workspace/505//workspace/varbugs/8c4377dd635.c",
+      "line" : 13,
+      "analysisTime" : 1.099085031
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= MARLIN_H true) (= PIDTEMP false) (= PID_DEBUG false))",
+    "model" : "(define-fun PID_DEBUG () Bool\n  false)\n(define-fun MARLIN_H () Bool\n  true)\n(define-fun PIDTEMP () Bool\n  false)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "MEMORY_LEAK_C",
+      "description" : "Memory dynamically allocated by `malloc` on line 10 is not freed after the last access at line 12, column 5.",
+      "fileLocation" : "/workspace/165//workspace/varbugs/35ae2e259e4.c",
+      "line" : 12,
+      "analysisTime" : 1.046282107
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= HAVE_ECC false) (= HAVE_ECC true) (= SSL_CTX_set_ecdh_auto false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/373//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.98434043
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/321//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.998287936
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/351//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 1.068323531
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_I2C false)\n     (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  true)\n(define-fun CONFIG_I2C () Bool\n  false)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&irq` is never used.",
+      "fileLocation" : "/workspace/33//workspace/varbugs/6252547b8a7.c",
+      "line" : 12,
+      "analysisTime" : 0.99291607
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_TWL4030_CORE true)\n     (= CONFIG_IRQ_DOMAIN true)\n     (= CONFIG_OF_IRQ true))",
+    "model" : "(define-fun CONFIG_TWL4030_CORE () Bool\n  true)\n(define-fun CONFIG_IRQ_DOMAIN () Bool\n  true)\n(define-fun CONFIG_OF_IRQ () Bool\n  true)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&n` is never used.",
+      "fileLocation" : "/workspace/546//workspace/varbugs/0f8f8094d28.c",
+      "line" : 39,
+      "analysisTime" : 1.052269626
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_SLOB true)\n     (= CONFIG_FORCE_MAX_ZONEORDER true)\n     (= CONFIG_SLOB false)\n     (= CONFIG_SLAB false)\n     (= CONFIG_PPC_256K_PAGES true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&pdata` is never used.",
+      "fileLocation" : "/workspace/670//workspace/varbugs/d6c7e113959.c",
+      "line" : 5,
+      "analysisTime" : 1.08890985
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_REGULATOR_MAX8660 false)\n     (= CONFIG_OF true)\n     (= CONFIG_REGULATOR_MAX8660 true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&n` is never used.",
+      "fileLocation" : "/workspace/547//workspace/varbugs/0f8f8094d28.c",
+      "line" : 39,
+      "analysisTime" : 0.609360059
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_FORCE_MAX_ZONEORDER false)\n     (= CONFIG_SLOB false)\n     (= CONFIG_SLAB false)\n     (= CONFIG_PPC_256K_PAGES true))",
+    "model" : "(define-fun CONFIG_SLAB () Bool\n  false)\n(define-fun CONFIG_SLOB () Bool\n  false)\n(define-fun CONFIG_PPC_256K_PAGES () Bool\n  true)\n(define-fun CONFIG_LOCKDEP () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&x` is never used.",
+      "fileLocation" : "/workspace/7//workspace/varbugs/30e053248da.c",
+      "line" : 31,
+      "analysisTime" : 0.804234412
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SECURITY false))",
+    "model" : "(define-fun CONFIG_SECURITY () Bool\n  false)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "MEMORY_LEAK_C",
+      "description" : "Memory dynamically allocated by `malloc` on line 10 is not freed after the last access at line 17, column 5.",
+      "fileLocation" : "/workspace/164//workspace/varbugs/35ae2e259e4.c",
+      "line" : 17,
+      "analysisTime" : 0.907756313
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= HAVE_ECC true) (= SSL_CTX_set_ecdh_auto false))",
+    "model" : "(define-fun SSL_CTX_set_ecdh_auto () Bool\n  false)\n(define-fun HAVE_ECC () Bool\n  true)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&irq` is never used.",
+      "fileLocation" : "/workspace/35//workspace/varbugs/6252547b8a7.c",
+      "line" : 12,
+      "analysisTime" : 1.016257303
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_TWL4030_CORE true)\n     (= CONFIG_IRQ_DOMAIN false)\n     (= CONFIG_OF_IRQ false))",
+    "model" : "(define-fun CONFIG_TWL4030_CORE () Bool\n  true)\n(define-fun CONFIG_IRQ_DOMAIN () Bool\n  false)\n(define-fun CONFIG_OF_IRQ () Bool\n  false)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/331//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.916945481
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&len` is never used.",
+      "fileLocation" : "/workspace/644//workspace/varbugs/95755181b82.c",
+      "line" : 39,
+      "analysisTime" : 1.026085927
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_HTTPD_GZIP false)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH false)\n     (= BB_MMU true))",
+    "model" : "(define-fun BB_MMU () Bool\n  true)\n(define-fun ENABLE_FEATURE_HTTPD_GZIP () Bool\n  false)\n(define-fun ENABLE_FEATURE_HTTPD_BASIC_AUTH () Bool\n  false)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&flags` is never used.",
+      "fileLocation" : "/workspace/158//workspace/varbugs/c76df14dfb4.c",
+      "line" : 38,
+      "analysisTime" : 0.911465706
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CROSS_COMPILE false) (= WIN32 true) (= NEED_ENHANCED_ESCAPES true))",
+    "model" : "(define-fun WIN32 () Bool\n  true)\n(define-fun NEED_ENHANCED_ESCAPES () Bool\n  true)\n(define-fun CROSS_COMPILE () Bool\n  false)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "MEMORY_LEAK_C",
+      "description" : "Memory dynamically allocated by `malloc` on line 10 is not freed after the last access at line 12, column 5.",
+      "fileLocation" : "/workspace/162//workspace/varbugs/35ae2e259e4.c",
+      "line" : 12,
+      "analysisTime" : 1.003079305
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= HAVE_ECC true) (= SSL_CTX_set_ecdh_auto true))",
+    "model" : "(define-fun SSL_CTX_set_ecdh_auto () Bool\n  true)\n(define-fun HAVE_ECC () Bool\n  true)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/346//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.849639001
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      7
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/352//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 0.89220115
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`rmm_lock` is read without initialization.",
+      "fileLocation" : "/workspace/574//workspace/varbugs/1b48bb3c1af.c",
+      "line" : 14,
+      "analysisTime" : 0.591900424
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= APU_HAS_LDAP false)\n     (= APR_HAS_SHARED_MEMORY true)\n     (= APU_HAS_LDAP true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/381//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 1.138274538
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_I2C false)\n     (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&len` is never used.",
+      "fileLocation" : "/workspace/640//workspace/varbugs/95755181b82.c",
+      "line" : 39,
+      "analysisTime" : 0.928911736
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_HTTPD_GZIP false)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH true)\n     (= BB_MMU true)\n     (= BB_MMU false)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&argv` is never used.",
+      "fileLocation" : "/workspace/676//workspace/varbugs/061fd0a353e.c",
+      "line" : 16,
+      "analysisTime" : 1.064762874
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF false)\n     (= CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF false))",
+    "model" : "(define-fun CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF () Bool\n  false)\n(define-fun CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF () Bool\n  false)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&n` is never used.",
+      "fileLocation" : "/workspace/551//workspace/varbugs/0f8f8094d28.c",
+      "line" : 39,
+      "analysisTime" : 0.967909413
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_SLOB true)\n     (= CONFIG_SLOB false)\n     (= CONFIG_PPC_256K_PAGES true)\n     (= CONFIG_SLAB true)\n     (= CONFIG_FORCE_MAX_ZONEORDER false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/365//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 1.118026435
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_FSI_DA7210 false)\n     (= CONFIG_SND_SOC_DA7210 true))",
+    "model" : "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  true)\n(define-fun CONFIG_I2C () Bool\n  true)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`head` is read without initialization.",
+      "fileLocation" : "/workspace/502//workspace/varbugs/2631486f1bf.c",
+      "line" : 67,
+      "analysisTime" : 1.083597398
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_LS_RECURSIVE false)\n     (= CONFIG_FEATURE_LS_RECURSIVE true)\n     (= CONFIG_FEATURE_LS_SORTFILES false)\n     (= CONFIG_FEATURE_LS_SORTFILES true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      4
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`head` is read without initialization.",
+      "fileLocation" : "/workspace/497//workspace/varbugs/2631486f1bf.c",
+      "line" : 67,
+      "analysisTime" : 1.084704113
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_LS_RECURSIVE true) (= CONFIG_FEATURE_LS_SORTFILES true))",
+    "model" : "(define-fun CONFIG_FEATURE_LS_RECURSIVE () Bool\n  true)\n(define-fun CONFIG_FEATURE_LS_SORTFILES () Bool\n  true)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/345//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.889306303
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "NULLPTR_DEREFERENCE",
+      "description" : "`eckey` could be null (null value originating from line 10) and is dereferenced.",
+      "fileLocation" : "/workspace/165//workspace/varbugs/35ae2e259e4.c",
+      "line" : 12,
+      "analysisTime" : 1.046282107
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= HAVE_ECC false) (= HAVE_ECC true) (= SSL_CTX_set_ecdh_auto false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&len` is never used.",
+      "fileLocation" : "/workspace/661//workspace/varbugs/95755181b82.c",
+      "line" : 39,
+      "analysisTime" : 1.076115022
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_HTTPD_GZIP false)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH true)\n     (= ENABLE_FEATURE_HTTPD_GZIP true)\n     (= BB_MMU true)\n     (= BB_MMU false))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&len` is never used.",
+      "fileLocation" : "/workspace/645//workspace/varbugs/95755181b82.c",
+      "line" : 39,
+      "analysisTime" : 1.033634483
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_HTTPD_GZIP true)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH false)\n     (= BB_MMU false))",
+    "model" : "(define-fun BB_MMU () Bool\n  false)\n(define-fun ENABLE_FEATURE_HTTPD_GZIP () Bool\n  true)\n(define-fun ENABLE_FEATURE_HTTPD_BASIC_AUTH () Bool\n  false)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&n` is never used.",
+      "fileLocation" : "/workspace/567//workspace/varbugs/0f8f8094d28.c",
+      "line" : 39,
+      "analysisTime" : 1.14984358
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_FORCE_MAX_ZONEORDER false)\n     (= CONFIG_SLOB false)\n     (= CONFIG_PPC_256K_PAGES false)\n     (= CONFIG_SLAB false))",
+    "model" : "(define-fun CONFIG_SLAB () Bool\n  false)\n(define-fun CONFIG_SLOB () Bool\n  false)\n(define-fun CONFIG_PPC_256K_PAGES () Bool\n  false)\n(define-fun CONFIG_LOCKDEP () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  false)",
+    "numConfigs" : [
+      5
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "NULLPTR_DEREFERENCE",
+      "description" : "`ops` could be null (null value originating from line 19) and is dereferenced in the call to `irq_domain_add()`.",
+      "fileLocation" : "/workspace/27//workspace/varbugs/6252547b8a7.c",
+      "line" : 25,
+      "analysisTime" : 1.005765719
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_TWL4030_CORE false)\n     (= CONFIG_IRQ_DOMAIN false)\n     (= CONFIG_OF_IRQ false)\n     (= CONFIG_TWL4030_CORE true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      4
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&len` is never used.",
+      "fileLocation" : "/workspace/642//workspace/varbugs/95755181b82.c",
+      "line" : 39,
+      "analysisTime" : 0.925660676
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_HTTPD_GZIP false)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH false)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH true)\n     (= BB_MMU true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      4
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&thisopt` is never used.",
+      "fileLocation" : "/workspace/70//workspace/varbugs/1a3c8e3d840.c",
+      "line" : 13,
+      "analysisTime" : 0.888706818
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= HAVE_TLSV1_X true))",
+    "model" : "(define-fun HAVE_TLSV1_X () Bool\n  true)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&driver_data` is never used.",
+      "fileLocation" : "/workspace/736//workspace/varbugs/7acf6cd80b2.c",
+      "line" : 39,
+      "analysisTime" : 1.113415529
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_DEVPTS_MULTIPLE_INSTANCES true)\n     (= CONFIG_UNIX98_PTYS false)\n     (= CONFIG_UNIX98_PTYS true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&argc` is never used.",
+      "fileLocation" : "/workspace/677//workspace/varbugs/061fd0a353e.c",
+      "line" : 16,
+      "analysisTime" : 0.941372622
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF false)\n     (= CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF true))",
+    "model" : "(define-fun CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF () Bool\n  false)\n(define-fun CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF () Bool\n  true)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "NULLPTR_DEREFERENCE",
+      "description" : "`ops` could be null (null value originating from line 19) and is dereferenced in the call to `irq_domain_add()`.",
+      "fileLocation" : "/workspace/30//workspace/varbugs/6252547b8a7.c",
+      "line" : 25,
+      "analysisTime" : 0.895866141
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_TWL4030_CORE true)\n     (= CONFIG_IRQ_DOMAIN true)\n     (= CONFIG_OF_IRQ false))",
+    "model" : "(define-fun CONFIG_TWL4030_CORE () Bool\n  true)\n(define-fun CONFIG_IRQ_DOMAIN () Bool\n  true)\n(define-fun CONFIG_OF_IRQ () Bool\n  false)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`length` is read without initialization during the call to `reiserfs_security_init()`.",
+      "fileLocation" : "/workspace/7//workspace/varbugs/30e053248da.c",
+      "line" : 41,
+      "analysisTime" : 0.804234412
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SECURITY false))",
+    "model" : "(define-fun CONFIG_SECURITY () Bool\n  false)",
+    "numConfigs" : [
+      1
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&val` is never used.",
+      "fileLocation" : "/workspace/727//workspace/varbugs/b62bd7b261b.c",
+      "line" : 16,
+      "analysisTime" : 1.093345167
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= ENABLE_FEATURE_MDEV_CONF true)\n     (= ENABLE_FEATURE_MDEV_RENAME true)\n     (= ENABLE_FEATURE_MDEV_RENAME_REGEXP true))",
+    "model" : "(define-fun ENABLE_FEATURE_MDEV_CONF () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME_REGEXP () Bool\n  true)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "MEMORY_LEAK_C",
+      "description" : "Memory dynamically allocated by `malloc`, indirectly via call to `inet_ehash_locks_alloc()` on line 43 is not freed after the last access at line 46, column 1.",
+      "fileLocation" : "/workspace/579//workspace/varbugs/218ad12f42e.c",
+      "line" : 46,
+      "analysisTime" : 1.060482176
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_NUMA false) (= CONFIG_NUMA true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&flags` is never used.",
+      "fileLocation" : "/workspace/154//workspace/varbugs/c76df14dfb4.c",
+      "line" : 38,
+      "analysisTime" : 1.126276152
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CROSS_COMPILE true) (= WIN32 false) (= NEED_ENHANCED_ESCAPES true))",
+    "model" : "(define-fun WIN32 () Bool\n  false)\n(define-fun NEED_ENHANCED_ESCAPES () Bool\n  true)\n(define-fun CROSS_COMPILE () Bool\n  true)",
+    "numConfigs" : [
+      3
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/334//workspace/varbugs/66517915e09.c",
+      "line" : 24,
+      "analysisTime" : 1.032813876
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_SND_SOC_AK4642 true)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_I2C false)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 true))",
+    "model" : "Unsatisfiable",
+    "numConfigs" : [
+      6
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "NULLPTR_DEREFERENCE",
+      "description" : "`buffer` could be null (null value originating from line 39) and is dereferenced.",
+      "fileLocation" : "/workspace/12//workspace/varbugs/221ac329e93.c",
+      "line" : 41,
+      "analysisTime" : 0.766563144
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_KGDB true) (= CONFIG_KPROBES true))",
+    "model" : "(define-fun CONFIG_KPROBES () Bool\n  true)\n(define-fun CONFIG_KGDB () Bool\n  true)",
+    "numConfigs" : [
+      2
+    ]
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&codec_hw_write` is never used.",
+      "fileLocation" : "/workspace/343//workspace/varbugs/66517915e09.c",
+      "line" : 16,
+      "analysisTime" : 0.8460712
+    },
+    "configFiles" : [
+    ],
+    "presenceCondition" : "(and (= CONFIG_I2C false)\n     (= CONFIG_SND_SOC_AK4642 false)\n     (= CONFIG_SND_SOC_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 false)\n     (= CONFIG_SND_FSI_DA7210 true))",
+    "model" : "(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  true)\n(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  false)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+    "numConfigs" : [
+      5
+    ]
+  }
+]
