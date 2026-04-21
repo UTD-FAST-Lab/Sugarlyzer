@@ -1,0 +1,20 @@
+{
+  "originalAlarm": {
+    "alarmType": "unix.Malloc",
+    "description": "Potential leak of memory pointed to by 'eckey'",
+    "fileLocation": "/workspace/varbugs/35ae2e259e4.c",
+    "line": 24,
+    "analysisTime": 0.026419433
+  },
+  "configFiles": [],
+  "presenceCondition": "(or (and HAVE_ECC (not SSL_CTX_set_ecdh_auto))\n    (and HAVE_ECC SSL_CTX_set_ecdh_auto))",
+  "model": "(define-fun SSL_CTX_set_ecdh_auto () Bool\n  true)\n(define-fun HAVE_ECC () Bool\n  true)",
+  "numConfigs": [
+    2,
+    2
+  ],
+  "strategy": "product",
+  "classification": "TRUE",
+  "old_id": "PRODUCT_4",
+  "id": "PRODUCT_30"
+}

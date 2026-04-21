@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.uninitialized.Branch",
+    "description": "Branch condition evaluates to a garbage value",
+    "fileLocation": "/workspace/varbugs/95755181b82.desugared.c",
+    "line": 2645,
+    "analysisTime": 0.068494862
+  },
+  "originalFile": "/workspace/varbugs/95755181b82.c",
+  "sanitizedDescription": "Branch condition evaluates to a garbage value",
+  "lineInputFile": [
+    54,
+    54
+  ],
+  "presenceCondition": "(not __CORRECT_ISO_CPP_STRING_H_PROTO)",
+  "model": "(define-fun __CORRECT_ISO_CPP_STRING_H_PROTO () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 6148.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_51"
+}

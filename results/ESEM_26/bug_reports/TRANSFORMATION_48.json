@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.uninitialized.Assign",
+    "description": "Assigned value is garbage or undefined",
+    "fileLocation": "/workspace/varbugs/31873ec707d.desugared.c",
+    "line": 2285,
+    "analysisTime": 0.056770553
+  },
+  "originalFile": "/workspace/varbugs/31873ec707d.c",
+  "sanitizedDescription": "Assigned value is garbage or undefined",
+  "lineInputFile": [
+    8,
+    8
+  ],
+  "presenceCondition": "(or (and (not __USE_EXTERN_INLINES)\n         (not _STDLIB_H)\n         (not __need_malloc_and_calloc))\n    (and __USE_EXTERN_INLINES (not _STDLIB_H) (not __need_malloc_and_calloc))\n    (and (not _STDLIB_H) __need_malloc_and_calloc)\n    _STDLIB_H)",
+  "model": "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun __USE_EXTERN_INLINES () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 6502.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_48"
+}

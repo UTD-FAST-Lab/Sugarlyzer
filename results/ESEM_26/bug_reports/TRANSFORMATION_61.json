@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "deadcode.DeadStores",
+    "description": "Value stored to '__len_1887' is never read",
+    "fileLocation": "/workspace/varbugs/95755181b82.desugared.c",
+    "line": 2599,
+    "analysisTime": 0.068494862
+  },
+  "originalFile": "/workspace/varbugs/95755181b82.c",
+  "sanitizedDescription": "Value stored to 'len' is never read",
+  "lineInputFile": [
+    39,
+    39
+  ],
+  "presenceCondition": "(and (not __STRICT_ANSI__) (not __need___FILE) (not __STRICT_ANSI__))",
+  "model": "(define-fun __STRICT_ANSI__ () Bool\n  false)\n(define-fun __need___FILE () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 6148.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_61"
+}

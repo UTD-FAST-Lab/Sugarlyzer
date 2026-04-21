@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "unix.Malloc",
+    "description": "Attempt to free released memory",
+    "fileLocation": "/workspace/varbugs/6e2b75740be.desugared.c",
+    "line": 180,
+    "analysisTime": 0.031778124
+  },
+  "originalFile": "/workspace/varbugs/6e2b75740be.c",
+  "sanitizedDescription": "Attempt to free released memory",
+  "lineInputFile": [
+    67,
+    67
+  ],
+  "presenceCondition": "(or (not CONFIG_MODULE_UNLOAD) (and CONFIG_MODULE_UNLOAD (not CONFIG_SMP)))",
+  "model": "(define-fun CONFIG_MODULE_UNLOAD () Bool\n  true)\n(define-fun CONFIG_SMP () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 1183.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_32"
+}

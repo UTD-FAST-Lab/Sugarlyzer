@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.CallAndMessage",
+    "description": "2nd function call argument is an uninitialized value",
+    "fileLocation": "/workspace/varbugs/d05e574ec26.desugared.c",
+    "line": 2350,
+    "analysisTime": 0.068534452
+  },
+  "originalFile": "/workspace/varbugs/d05e574ec26.c",
+  "sanitizedDescription": "2nd function call argument is an uninitialized value",
+  "lineInputFile": [
+    17,
+    17
+  ],
+  "presenceCondition": "(and APR_HAS_SHARED_MEMORY\n     (not __need___FILE)\n     (not _STDLIB_H)\n     (not __malloc_and_calloc_defined)\n     APR_HAS_SHARED_MEMORY)",
+  "model": "(define-fun APR_HAS_SHARED_MEMORY () Bool\n  true)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __need___FILE () Bool\n  false)\n(define-fun __malloc_and_calloc_defined () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 6631.0,
+  "strategy": "transformation",
+  "classification": "FALSE",
+  "old_id": "TRANSFORMATION_46",
+  "id": "TRANSFORMATION_9"
+}

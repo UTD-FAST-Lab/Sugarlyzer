@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "unix.Malloc",
+    "description": "Potential leak of memory pointed to by 'buf'",
+    "fileLocation": "/workspace/varbugs/d05e574ec26.c",
+    "line": 21,
+    "analysisTime": 0.028526947
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= APR_HAS_SHARED_MEMORY true))",
+  "model": "(define-fun APR_HAS_SHARED_MEMORY () Bool\n  true)",
+  "numConfigs": [
+    1
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_37"
+}

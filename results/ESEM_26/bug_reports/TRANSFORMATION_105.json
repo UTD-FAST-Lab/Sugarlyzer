@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "DEAD_STORE",
+    "description": "The value written to `&__lfilename_179` is never used.",
+    "fileLocation": "/workspace/varbugs/a7fc1f83c81.desugared.c",
+    "line": 178,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/a7fc1f83c81.c",
+  "sanitizedDescription": "The value written to `&lfilename` is never used.",
+  "lineInputFile": [
+    15,
+    15
+  ],
+  "presenceCondition": "(or __STRICT_ANSI__ (not __STRICT_ANSI__))",
+  "model": "(define-fun __STRICT_ANSI__ () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 2709.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_105"
+}

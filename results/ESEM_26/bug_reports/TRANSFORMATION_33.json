@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.uninitialized.Branch",
+    "description": "Branch condition evaluates to a garbage value",
+    "fileLocation": "/workspace/varbugs/061fd0a353e.desugared.c",
+    "line": 2365,
+    "analysisTime": 0.099779152
+  },
+  "originalFile": "/workspace/varbugs/061fd0a353e.c",
+  "sanitizedDescription": "Branch condition evaluates to a garbage value",
+  "lineInputFile": [
+    15,
+    15
+  ],
+  "presenceCondition": "(let ((a!1 (and (and (not __USE_EXTERN_INLINES)\n                     (not _STDLIB_H)\n                     (not __need_malloc_and_calloc))\n                (not CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF)))\n      (a!2 (and (and (not __USE_EXTERN_INLINES)\n                     (not _STDLIB_H)\n                     (not __need_malloc_and_calloc))\n                (and (and (not __USE_EXTERN_INLINES)\n                          (not _STDLIB_H)\n                          (not __need_malloc_and_calloc))\n                     CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF)\n                CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF))\n      (a!3 (and (and (not __USE_EXTERN_INLINES)\n                     (not _STDLIB_H)\n                     (not __need_malloc_and_calloc))\n                (and (and (not __USE_EXTERN_INLINES)\n                          (not _STDLIB_H)\n                          (not __need_malloc_and_calloc))\n                     CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF)\n                (not CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF)))\n      (a!4 (and (and __USE_EXTERN_INLINES\n                     (not _STDLIB_H)\n                     (not __need_malloc_and_calloc))\n                (and (and __USE_EXTERN_INLINES\n                          (not _STDLIB_H)\n                          (not __need_malloc_and_calloc))\n                     (not CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF))\n                (not CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF)))\n      (a!5 (and (and __USE_EXTERN_INLINES\n                     (not _STDLIB_H)\n                     (not __need_malloc_and_calloc))\n                (and (and __USE_EXTERN_INLINES\n                          (not _STDLIB_H)\n                          (not __need_malloc_and_calloc))\n                     CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF)\n                CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF))\n      (a!6 (and (and __USE_EXTERN_INLINES\n                     (not _STDLIB_H)\n                     (not __need_malloc_and_calloc))\n                (and (and __USE_EXTERN_INLINES\n                          (not _STDLIB_H)\n                          (not __need_malloc_and_calloc))\n                     (not CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF))\n                CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF))\n      (a!7 (and (and __USE_EXTERN_INLINES\n                     (not _STDLIB_H)\n                     (not __need_malloc_and_calloc))\n                (and (and __USE_EXTERN_INLINES\n                          (not _STDLIB_H)\n                          (not __need_malloc_and_calloc))\n                     CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF)\n                (not CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF))))\n  (or (and (and (not __USE_EXTERN_INLINES)\n                (not _STDLIB_H)\n                (not __need_malloc_and_calloc))\n           a!1\n           (not CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF))\n      a!2\n      (and (and (not __USE_EXTERN_INLINES)\n                (not _STDLIB_H)\n                (not __need_malloc_and_calloc))\n           a!1\n           CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF)\n      a!3\n      a!4\n      a!5\n      a!6\n      a!7))",
+  "model": "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF () Bool\n  false)\n(define-fun __USE_EXTERN_INLINES () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 6920.0,
+  "strategy": "transformation",
+  "classification": "FALSE",
+  "old_id": "TRANSFORMATION_53",
+  "id": "TRANSFORMATION_33"
+}

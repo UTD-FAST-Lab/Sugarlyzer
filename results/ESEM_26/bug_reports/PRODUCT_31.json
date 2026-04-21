@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "deadcode.DeadStores",
+    "description": "Value stored to 'wakeup' is never read",
+    "fileLocation": "/workspace/varbugs/36855dcfc98.c",
+    "line": 6,
+    "analysisTime": 0.020578627
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= CONFIG_BF60x false))",
+  "model": "(define-fun CONFIG_BF60x () Bool\n  false)",
+  "numConfigs": [
+    1
+  ],
+  "strategy": "product",
+  "classification": "TRUE_NEW_OVER",
+  "old_id": "PRODUCT_56",
+  "id": "PRODUCT_31"
+}

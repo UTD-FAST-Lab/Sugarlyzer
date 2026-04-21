@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.NullDereference",
+    "description": "Dereference of undefined pointer value",
+    "fileLocation": "/workspace/varbugs/b62bd7b261b.desugared.c",
+    "line": 2598,
+    "analysisTime": 0.079399944
+  },
+  "originalFile": "/workspace/varbugs/b62bd7b261b.c",
+  "sanitizedDescription": "Dereference of undefined pointer value",
+  "lineInputFile": [
+    24,
+    24
+  ],
+  "presenceCondition": "(or (and __STRICT_ANSI__\n         ENABLE_FEATURE_MDEV_CONF\n         ENABLE_FEATURE_MDEV_RENAME\n         ENABLE_FEATURE_MDEV_RENAME_REGEXP)\n    (and (not __STRICT_ANSI__)\n         ENABLE_FEATURE_MDEV_CONF\n         ENABLE_FEATURE_MDEV_RENAME\n         ENABLE_FEATURE_MDEV_RENAME_REGEXP))",
+  "model": "(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_CONF () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME_REGEXP () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 6010.0,
+  "strategy": "transformation",
+  "classification": "FALSE",
+  "old_id": "TRANSFORMATION_114",
+  "id": "TRANSFORMATION_43"
+}

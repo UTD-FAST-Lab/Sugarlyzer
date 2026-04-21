@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "DEAD_STORE",
+    "description": "The value written to `&buf` is never used.",
+    "fileLocation": "/workspace/134//workspace/varbugs/eef2317b9f5.c",
+    "line": 26,
+    "analysisTime": 1.038668205
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= CONFIG_FEATURE_CLEAN_UP false))",
+  "model": "(define-fun CONFIG_FEATURE_CLEAN_UP () Bool\n  false)",
+  "numConfigs": [
+    1
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_93"
+}

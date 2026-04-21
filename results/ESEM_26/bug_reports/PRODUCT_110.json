@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "USE_AFTER_FREE",
+    "description": "accessing `ch` that was invalidated by call to `free()` during the call to `delete_eth_table()` on line 44.",
+    "fileLocation": "/workspace/400//workspace/varbugs/bc0ffc0e971.c",
+    "line": 43,
+    "analysisTime": 1.039881782
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= ENABLE_FEATURE_CLEAN_UP true))",
+  "model": "(define-fun ENABLE_FEATURE_CLEAN_UP () Bool\n  true)",
+  "numConfigs": [
+    1
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_110"
+}

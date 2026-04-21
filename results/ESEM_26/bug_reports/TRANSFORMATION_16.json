@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.uninitialized.UndefReturn",
+    "description": "Undefined or garbage value returned to caller",
+    "fileLocation": "/workspace/varbugs/63878acfafb.desugared.c",
+    "line": 148,
+    "analysisTime": 0.028059819
+  },
+  "originalFile": "/workspace/varbugs/63878acfafb.c",
+  "sanitizedDescription": "Undefined or garbage value returned to caller",
+  "lineInputFile": [
+    40,
+    40
+  ],
+  "presenceCondition": "CONFIG_ARCH_OMAP3",
+  "model": "(define-fun CONFIG_ARCH_OMAP3 () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 1236.0,
+  "strategy": "transformation",
+  "classification": "FALSE",
+  "old_id": "TRANSFORMATION_178",
+  "id": "TRANSFORMATION_16"
+}

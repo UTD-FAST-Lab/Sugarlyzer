@@ -1,0 +1,20 @@
+{
+  "originalAlarm": {
+    "alarmType": "deadcode.DeadStores",
+    "description": "Value stored to 'x' during its initialization is never read",
+    "fileLocation": "/workspace/varbugs/7acf6cd80b2.c",
+    "line": 8,
+    "analysisTime": 0.043490229
+  },
+  "configFiles": [],
+  "presenceCondition": "(or (and CONFIG_DEVPTS_MULTIPLE_INSTANCES CONFIG_UNIX98_PTYS)\n    (and CONFIG_DEVPTS_MULTIPLE_INSTANCES (not CONFIG_UNIX98_PTYS)))",
+  "model": "(define-fun CONFIG_UNIX98_PTYS () Bool\n  false)\n(define-fun CONFIG_DEVPTS_MULTIPLE_INSTANCES () Bool\n  true)",
+  "numConfigs": [
+    2,
+    2
+  ],
+  "strategy": "product",
+  "classification": "TRUE_NEW_UNDER",
+  "old_id": "PRODUCT_65",
+  "id": "PRODUCT_25"
+}

@@ -1,0 +1,22 @@
+{
+  "originalAlarm": {
+    "alarmType": "deadcode.DeadStores",
+    "description": "Value stored to 'pid_output' is never read",
+    "fileLocation": "/workspace/varbugs/8c4377dd635.c",
+    "line": 21,
+    "analysisTime": 0.026194971
+  },
+  "configFiles": [],
+  "presenceCondition": "(or (and MARLIN_H (not PIDTEMP) (not PID_DEBUG))\n    (and (not MARLIN_H) (not PIDTEMP) (not PID_DEBUG))\n    (and MARLIN_H (not PIDTEMP) PID_DEBUG)\n    (and (not MARLIN_H) (not PIDTEMP) PID_DEBUG))",
+  "model": "(define-fun PID_DEBUG () Bool\n  true)\n(define-fun MARLIN_H () Bool\n  false)\n(define-fun PIDTEMP () Bool\n  false)",
+  "numConfigs": [
+    3,
+    3,
+    3,
+    3
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_2"
+}

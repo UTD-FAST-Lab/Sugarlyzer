@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.uninitialized.Assign",
+    "description": "Assigned value is garbage or undefined",
+    "fileLocation": "/workspace/varbugs/30e053248da.desugared.c",
+    "line": 129,
+    "analysisTime": 0.030557736
+  },
+  "originalFile": "/workspace/varbugs/30e053248da.c",
+  "sanitizedDescription": "Assigned value is garbage or undefined",
+  "lineInputFile": [
+    31,
+    31
+  ],
+  "presenceCondition": "true",
+  "model": "",
+  "feasible": true,
+  "desugaringTime": 915.0,
+  "strategy": "transformation",
+  "classification": "TRUE",
+  "old_id": "TRANSFORMATION_158",
+  "id": "TRANSFORMATION_46"
+}

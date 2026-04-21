@@ -1,0 +1,20 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.CallAndMessage",
+    "description": "1st function call argument is an uninitialized value",
+    "fileLocation": "/workspace/varbugs/7acf6cd80b2.c",
+    "line": 44,
+    "analysisTime": 0.034633505
+  },
+  "configFiles": [],
+  "presenceCondition": "(or (and (not CONFIG_DEVPTS_MULTIPLE_INSTANCES) CONFIG_UNIX98_PTYS)\n    (and CONFIG_DEVPTS_MULTIPLE_INSTANCES CONFIG_UNIX98_PTYS))",
+  "model": "(define-fun CONFIG_UNIX98_PTYS () Bool\n  true)\n(define-fun CONFIG_DEVPTS_MULTIPLE_INSTANCES () Bool\n  true)",
+  "numConfigs": [
+    2,
+    2
+  ],
+  "strategy": "product",
+  "classification": "TRUE_NEW",
+  "old_id": "PRODUCT_67",
+  "id": "PRODUCT_32"
+}

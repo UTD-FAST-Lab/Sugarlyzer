@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.uninitialized.Assign",
+    "description": "Assigned value is garbage or undefined",
+    "fileLocation": "/workspace/varbugs/30e053248da.c",
+    "line": 31,
+    "analysisTime": 0.021785234
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= CONFIG_SECURITY false))",
+  "model": "(define-fun CONFIG_SECURITY () Bool\n  false)",
+  "numConfigs": [
+    1
+  ],
+  "strategy": "product",
+  "classification": "TRUE",
+  "old_id": "PRODUCT_52",
+  "id": "PRODUCT_27"
+}

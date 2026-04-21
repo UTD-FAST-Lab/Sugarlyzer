@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "DEAD_STORE",
+    "description": "The value written to `&pdata` is never used.",
+    "fileLocation": "/workspace/398//workspace/varbugs/d6c7e113959.c",
+    "line": 5,
+    "analysisTime": 1.0188443
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= CONFIG_REGULATOR_MAX8660 true) (= CONFIG_OF true))",
+  "model": "(define-fun CONFIG_REGULATOR_MAX8660 () Bool\n  true)\n(define-fun CONFIG_OF () Bool\n  true)",
+  "numConfigs": [
+    2
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_164"
+}

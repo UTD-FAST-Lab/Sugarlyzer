@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "PULSE_UNINITIALIZED_VALUE",
+    "description": "`__r_193` is read without initialization.",
+    "fileLocation": "/workspace/varbugs/ae249b5fa27.desugared.c",
+    "line": 235,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/ae249b5fa27.c",
+  "sanitizedDescription": "`r` is read without initialization.",
+  "lineInputFile": [
+    19,
+    91
+  ],
+  "presenceCondition": "(and CONFIG_DISCONTIGMEM CONFIG_DISCONTIGMEM (not NDEBUG) (not _ASSERT_H_DECLS))",
+  "model": "(define-fun NDEBUG () Bool\n  false)\n(define-fun _ASSERT_H_DECLS () Bool\n  false)\n(define-fun CONFIG_DISCONTIGMEM () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 5343.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_98"
+}

@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "deadcode.DeadStores",
+    "description": "Value stored to 'flags' is never read",
+    "fileLocation": "/workspace/varbugs/c76df14dfb4.c",
+    "line": 38,
+    "analysisTime": 0.031657176
+  },
+  "configFiles": [],
+  "presenceCondition": "(or (and CROSS_COMPILE (not WIN32) NEED_ENHANCED_ESCAPES)\n    (and CROSS_COMPILE WIN32 NEED_ENHANCED_ESCAPES)\n    (and (not CROSS_COMPILE) WIN32 (not NEED_ENHANCED_ESCAPES))\n    (and (not CROSS_COMPILE) (not WIN32) NEED_ENHANCED_ESCAPES)\n    (and (not CROSS_COMPILE) WIN32 NEED_ENHANCED_ESCAPES))",
+  "model": "(define-fun WIN32 () Bool\n  true)\n(define-fun NEED_ENHANCED_ESCAPES () Bool\n  false)\n(define-fun CROSS_COMPILE () Bool\n  false)",
+  "numConfigs": [
+    3,
+    3,
+    3,
+    3,
+    3
+  ],
+  "strategy": "product",
+  "classification": "TRUE_NEW_OVER",
+  "old_id": "PRODUCT_12",
+  "id": "PRODUCT_36"
+}

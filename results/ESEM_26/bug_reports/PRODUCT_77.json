@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "PULSE_UNINITIALIZED_VALUE",
+    "description": "`driver_data` is read without initialization.",
+    "fileLocation": "/workspace/438//workspace/varbugs/7acf6cd80b2.c",
+    "line": 44,
+    "analysisTime": 0.757740733
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= CONFIG_DEVPTS_MULTIPLE_INSTANCES false) (= CONFIG_UNIX98_PTYS true))",
+  "model": "(define-fun CONFIG_UNIX98_PTYS () Bool\n  true)\n(define-fun CONFIG_DEVPTS_MULTIPLE_INSTANCES () Bool\n  false)",
+  "numConfigs": [
+    2
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_77"
+}

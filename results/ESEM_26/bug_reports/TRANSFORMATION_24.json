@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "unix.Malloc",
+    "description": "Potential leak of memory pointed to by '__ptr_13'",
+    "fileLocation": "/workspace/varbugs/6e2b75740be.desugared.c",
+    "line": 98,
+    "analysisTime": 0.031778124
+  },
+  "originalFile": "/workspace/varbugs/6e2b75740be.c",
+  "sanitizedDescription": "Potential leak of memory pointed to by 'ptr'",
+  "lineInputFile": [
+    39,
+    39
+  ],
+  "presenceCondition": "true",
+  "model": "",
+  "feasible": true,
+  "desugaringTime": 1183.0,
+  "strategy": "transformation",
+  "classification": "TRUE_NEW_OVER",
+  "old_id": "TRANSFORMATION_183",
+  "id": "TRANSFORMATION_24"
+}

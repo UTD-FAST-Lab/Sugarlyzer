@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "PULSE_UNINITIALIZED_VALUE",
+    "description": "`__val_1882` is read without initialization.",
+    "fileLocation": "/workspace/varbugs/b62bd7b261b.desugared.c",
+    "line": 2553,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/b62bd7b261b.c",
+  "sanitizedDescription": "`val` is read without initialization.",
+  "lineInputFile": [
+    14,
+    14
+  ],
+  "presenceCondition": "(or (and __STRICT_ANSI__ (not ENABLE_FEATURE_MDEV_CONF))\n    (and (and __STRICT_ANSI__ ENABLE_FEATURE_MDEV_CONF)\n         (not ENABLE_FEATURE_MDEV_RENAME))\n    (and (and __STRICT_ANSI__ ENABLE_FEATURE_MDEV_CONF)\n         ENABLE_FEATURE_MDEV_RENAME\n         (not ENABLE_FEATURE_MDEV_RENAME_REGEXP))\n    (and (not __STRICT_ANSI__) (not ENABLE_FEATURE_MDEV_CONF))\n    (and (and (not __STRICT_ANSI__) ENABLE_FEATURE_MDEV_CONF)\n         (not ENABLE_FEATURE_MDEV_RENAME))\n    (and (and (not __STRICT_ANSI__) ENABLE_FEATURE_MDEV_CONF)\n         ENABLE_FEATURE_MDEV_RENAME\n         (not ENABLE_FEATURE_MDEV_RENAME_REGEXP)))",
+  "model": "(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_CONF () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME_REGEXP () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 8254.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_82"
+}

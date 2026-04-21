@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "MEMORY_LEAK_C",
+    "description": "Memory dynamically allocated by `malloc` on line 10 is not freed after the last access at line 12, column 5.",
+    "fileLocation": "/workspace/113//workspace/varbugs/35ae2e259e4.c",
+    "line": 12,
+    "analysisTime": 1.062792225
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= HAVE_ECC true) (= SSL_CTX_set_ecdh_auto true))",
+  "model": "(define-fun SSL_CTX_set_ecdh_auto () Bool\n  true)\n(define-fun HAVE_ECC () Bool\n  true)",
+  "numConfigs": [
+    2
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_202"
+}

@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.uninitialized.Assign",
+    "description": "Assigned value is garbage or undefined",
+    "fileLocation": "/workspace/varbugs/5cd6461b6fb.desugared.c",
+    "line": 2383,
+    "analysisTime": 0.057165165
+  },
+  "originalFile": "/workspace/varbugs/5cd6461b6fb.c",
+  "sanitizedDescription": "Assigned value is garbage or undefined",
+  "lineInputFile": [
+    28,
+    28
+  ],
+  "presenceCondition": "(or (and (not CONFIG_FEATURE_HTTPD_CGI)\n         (and (not _STDLIB_H)\n              (not __need_malloc_and_calloc)\n              CONFIG_FEATURE_HTTPD_BASIC_AUTH))\n    (and CONFIG_FEATURE_HTTPD_CGI\n         (and (not _STDLIB_H)\n              (not __need_malloc_and_calloc)\n              CONFIG_FEATURE_HTTPD_BASIC_AUTH)))",
+  "model": "(define-fun CONFIG_FEATURE_HTTPD_CGI () Bool\n  false)\n(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun CONFIG_FEATURE_HTTPD_BASIC_AUTH () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 6075.0,
+  "strategy": "transformation",
+  "classification": "FALSE",
+  "old_id": "TRANSFORMATION_98",
+  "id": "TRANSFORMATION_28"
+}

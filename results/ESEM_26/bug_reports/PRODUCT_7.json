@@ -1,0 +1,20 @@
+{
+  "originalAlarm": {
+    "alarmType": "deadcode.DeadStores",
+    "description": "Value stored to 'val' is never read",
+    "fileLocation": "/workspace/varbugs/b62bd7b261b.c",
+    "line": 16,
+    "analysisTime": 0.043972351
+  },
+  "configFiles": [],
+  "presenceCondition": "(or (and ENABLE_FEATURE_MDEV_CONF\n         ENABLE_FEATURE_MDEV_RENAME\n         ENABLE_FEATURE_MDEV_RENAME_REGEXP)\n    (and ENABLE_FEATURE_MDEV_CONF\n         ENABLE_FEATURE_MDEV_RENAME\n         (not ENABLE_FEATURE_MDEV_RENAME_REGEXP)))",
+  "model": "(define-fun ENABLE_FEATURE_MDEV_CONF () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME_REGEXP () Bool\n  false)",
+  "numConfigs": [
+    3,
+    3
+  ],
+  "strategy": "product",
+  "classification": "TRUE_NEW",
+  "old_id": "PRODUCT_38",
+  "id": "PRODUCT_7"
+}

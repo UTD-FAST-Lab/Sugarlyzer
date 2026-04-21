@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "deadcode.DeadStores",
+    "description": "Value stored to 'thisopt' is never read",
+    "fileLocation": "/workspace/varbugs/1a3c8e3d840.c",
+    "line": 13,
+    "analysisTime": 0.024729633
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= HAVE_TLSV1_X true))",
+  "model": "(define-fun HAVE_TLSV1_X () Bool\n  true)",
+  "numConfigs": [
+    1
+  ],
+  "strategy": "product",
+  "classification": "TRUE_NEW_OVER",
+  "old_id": "PRODUCT_0",
+  "id": "PRODUCT_35"
+}

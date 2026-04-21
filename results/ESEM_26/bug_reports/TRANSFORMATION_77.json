@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.uninitialized.Assign",
+    "description": "Assigned value is garbage or undefined",
+    "fileLocation": "/workspace/varbugs/c708c57e247.desugared.c",
+    "line": 78,
+    "analysisTime": 0.028698843
+  },
+  "originalFile": "/workspace/varbugs/c708c57e247.c",
+  "sanitizedDescription": "Assigned value is garbage or undefined",
+  "lineInputFile": [
+    18,
+    18
+  ],
+  "presenceCondition": "CONFIG_S390_PRNG",
+  "model": "(define-fun CONFIG_S390_PRNG () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 1471.0,
+  "strategy": "transformation",
+  "classification": "TRUE",
+  "old_id": "TRANSFORMATION_212",
+  "id": "TRANSFORMATION_77"
+}

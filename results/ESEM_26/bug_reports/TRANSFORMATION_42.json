@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "unix.MallocSizeof",
+    "description": "Result of 'malloc' is converted to a pointer of type 'struct __dnode_1610', which is incompatible with sizeof operand type 'typeof (__sizeofStandin_1651)'",
+    "fileLocation": "/workspace/varbugs/2631486f1bf.desugared.c",
+    "line": 2574,
+    "analysisTime": 0.081901732
+  },
+  "originalFile": "/workspace/varbugs/2631486f1bf.c",
+  "sanitizedDescription": "Result of 'malloc' is converted to a pointer of type 'struct dnode_1610', which is incompatible with sizeof operand type 'typeof (__sizeofStandin)'",
+  "lineInputFile": [
+    65,
+    65
+  ],
+  "presenceCondition": "(or (and (not CONFIG_FEATURE_LS_SORTFILES)\n         (and (not __need___FILE)\n              (not _STDLIB_H)\n              (not __malloc_and_calloc_defined))\n         (not CONFIG_FEATURE_LS_SORTFILES))\n    (and (not CONFIG_FEATURE_LS_SORTFILES)\n         (and __need___FILE (not _STDLIB_H) (not __malloc_and_calloc_defined))\n         (not CONFIG_FEATURE_LS_SORTFILES))\n    (and CONFIG_FEATURE_LS_SORTFILES\n         (and (not __need___FILE)\n              (not _STDLIB_H)\n              (not __malloc_and_calloc_defined))\n         CONFIG_FEATURE_LS_SORTFILES)\n    (and CONFIG_FEATURE_LS_SORTFILES\n         (and __need___FILE (not _STDLIB_H) (not __malloc_and_calloc_defined))\n         CONFIG_FEATURE_LS_SORTFILES))",
+  "model": "(define-fun CONFIG_FEATURE_LS_SORTFILES () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __need___FILE () Bool\n  false)\n(define-fun __malloc_and_calloc_defined () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 6173.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_42"
+}

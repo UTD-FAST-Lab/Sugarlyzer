@@ -1,0 +1,22 @@
+{
+  "originalAlarm": {
+    "alarmType": "deadcode.DeadStores",
+    "description": "Value stored to 'len' is never read",
+    "fileLocation": "/workspace/varbugs/95755181b82.c",
+    "line": 39,
+    "analysisTime": 0.031801986
+  },
+  "configFiles": [],
+  "presenceCondition": "(or (and ENABLE_FEATURE_HTTPD_GZIP ENABLE_FEATURE_HTTPD_BASIC_AUTH BB_MMU)\n    (and ENABLE_FEATURE_HTTPD_GZIP (not ENABLE_FEATURE_HTTPD_BASIC_AUTH) BB_MMU)\n    (and ENABLE_FEATURE_HTTPD_GZIP\n         (not ENABLE_FEATURE_HTTPD_BASIC_AUTH)\n         (not BB_MMU))\n    (and ENABLE_FEATURE_HTTPD_GZIP ENABLE_FEATURE_HTTPD_BASIC_AUTH (not BB_MMU)))",
+  "model": "(define-fun BB_MMU () Bool\n  false)\n(define-fun ENABLE_FEATURE_HTTPD_GZIP () Bool\n  true)\n(define-fun ENABLE_FEATURE_HTTPD_BASIC_AUTH () Bool\n  true)",
+  "numConfigs": [
+    3,
+    3,
+    3,
+    3
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_28"
+}

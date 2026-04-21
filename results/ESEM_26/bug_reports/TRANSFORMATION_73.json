@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.CallAndMessage",
+    "description": "2nd function call argument is an uninitialized value",
+    "fileLocation": "/workspace/varbugs/ebee301c8b0.desugared.c",
+    "line": 2334,
+    "analysisTime": 0.049411822
+  },
+  "originalFile": "/workspace/varbugs/ebee301c8b0.c",
+  "sanitizedDescription": "2nd function call argument is an uninitialized value",
+  "lineInputFile": [
+    18,
+    18
+  ],
+  "presenceCondition": "(and BB_CP_MV BB_AR BB_CP_MV)",
+  "model": "(define-fun BB_AR () Bool\n  true)\n(define-fun BB_CP_MV () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 6574.0,
+  "strategy": "transformation",
+  "classification": "FALSE",
+  "old_id": "TRANSFORMATION_140",
+  "id": "TRANSFORMATION_73"
+}

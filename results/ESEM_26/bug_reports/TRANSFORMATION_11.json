@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.CallAndMessage",
+    "description": "1st function call argument is an uninitialized value",
+    "fileLocation": "/workspace/varbugs/1b48bb3c1af.desugared.c",
+    "line": 903,
+    "analysisTime": 0.042769278
+  },
+  "originalFile": "/workspace/varbugs/1b48bb3c1af.c",
+  "sanitizedDescription": "1st function call argument is an uninitialized value",
+  "lineInputFile": [
+    14,
+    14
+  ],
+  "presenceCondition": "(or (and (and APU_HAS_LDAP APR_HAS_SHARED_MEMORY)\n         (not __need___FILE)\n         __STRICT_ANSI__\n         __USE_EXTERN_INLINES\n         APU_HAS_LDAP\n         APR_HAS_SHARED_MEMORY)\n    (and (and APU_HAS_LDAP APR_HAS_SHARED_MEMORY)\n         (not __need___FILE)\n         (not __STRICT_ANSI__)\n         __USE_EXTERN_INLINES\n         APU_HAS_LDAP\n         APR_HAS_SHARED_MEMORY)\n    (and (and APU_HAS_LDAP APR_HAS_SHARED_MEMORY)\n         (not __need___FILE)\n         (not __USE_EXTERN_INLINES)\n         APU_HAS_LDAP\n         APR_HAS_SHARED_MEMORY)\n    (and (and APU_HAS_LDAP APR_HAS_SHARED_MEMORY)\n         __need___FILE\n         APU_HAS_LDAP\n         APR_HAS_SHARED_MEMORY))",
+  "model": "(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun APR_HAS_SHARED_MEMORY () Bool\n  true)\n(define-fun __USE_EXTERN_INLINES () Bool\n  true)\n(define-fun __need___FILE () Bool\n  false)\n(define-fun APU_HAS_LDAP () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 5217.0,
+  "strategy": "transformation",
+  "classification": "TRUE",
+  "old_id": "TRANSFORMATION_3",
+  "id": "TRANSFORMATION_11"
+}

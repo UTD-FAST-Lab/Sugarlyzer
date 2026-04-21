@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.NullDereference",
+    "description": "Dereference of null pointer (loaded from variable 'scontext')",
+    "fileLocation": "/workspace/varbugs/1b487ea8a69.c",
+    "line": 14,
+    "analysisTime": 0.026095941
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= ENABLE_SELINUX true) (= ENABLE_FEATURE_STAT_FORMAT false))",
+  "model": "(define-fun ENABLE_FEATURE_STAT_FORMAT () Bool\n  false)\n(define-fun ENABLE_SELINUX () Bool\n  true)",
+  "numConfigs": [
+    2
+  ],
+  "strategy": "product",
+  "classification": "TRUE",
+  "old_id": "PRODUCT_18",
+  "id": "PRODUCT_33"
+}

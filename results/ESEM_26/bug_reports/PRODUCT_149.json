@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "PULSE_UNINITIALIZED_VALUE",
+    "description": "`p` is read without initialization.",
+    "fileLocation": "/workspace/402//workspace/varbugs/061fd0a353e.c",
+    "line": 27,
+    "analysisTime": 1.081850074
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF false)\n     (= CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF true))",
+  "model": "(define-fun CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF () Bool\n  false)\n(define-fun CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF () Bool\n  true)",
+  "numConfigs": [
+    2
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_149"
+}

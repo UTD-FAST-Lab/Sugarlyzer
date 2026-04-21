@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "PULSE_UNINITIALIZED_VALUE",
+    "description": "`info` is read without initialization.",
+    "fileLocation": "/workspace/249//workspace/varbugs/b273d665181.c",
+    "line": 16,
+    "analysisTime": 0.891503987
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= BB_FEATURE_LS_FILETYPES true) (= BB_FEATURE_LS_USERNAME false))",
+  "model": "(define-fun BB_FEATURE_LS_USERNAME () Bool\n  false)\n(define-fun BB_FEATURE_LS_FILETYPES () Bool\n  true)",
+  "numConfigs": [
+    2
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_139"
+}

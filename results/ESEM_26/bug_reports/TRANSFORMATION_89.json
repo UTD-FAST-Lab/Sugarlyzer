@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "DEAD_STORE",
+    "description": "The value written to `&__gdp_695` is never used.",
+    "fileLocation": "/workspace/varbugs/0301ffab3d9.desugared.c",
+    "line": 984,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/0301ffab3d9.c",
+  "sanitizedDescription": "The value written to `&gdp` is never used.",
+  "lineInputFile": [
+    8,
+    8
+  ],
+  "presenceCondition": "(and __need___FILE EXT2FS_ENABLE_SWAPFS)",
+  "model": "(define-fun __need___FILE () Bool\n  true)\n(define-fun EXT2FS_ENABLE_SWAPFS () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 4930.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_89"
+}

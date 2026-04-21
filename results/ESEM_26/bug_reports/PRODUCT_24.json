@@ -1,0 +1,20 @@
+{
+  "originalAlarm": {
+    "alarmType": "deadcode.DeadStores",
+    "description": "Value stored to 'x' during its initialization is never read",
+    "fileLocation": "/workspace/varbugs/30e053248da.c",
+    "line": 31,
+    "analysisTime": 0.021785234
+  },
+  "configFiles": [],
+  "presenceCondition": "true",
+  "model": "",
+  "numConfigs": [
+    1,
+    0
+  ],
+  "strategy": "product",
+  "classification": "TRUE_NEW",
+  "old_id": "PRODUCT_51",
+  "id": "PRODUCT_24"
+}

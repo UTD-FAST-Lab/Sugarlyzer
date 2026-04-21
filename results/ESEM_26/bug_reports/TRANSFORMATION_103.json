@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "PULSE_UNINITIALIZED_VALUE",
+    "description": "`__random_1625` is read without initialization.",
+    "fileLocation": "/workspace/varbugs/5cd6461b6fb.desugared.c",
+    "line": 2383,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/5cd6461b6fb.c",
+  "sanitizedDescription": "`random` is read without initialization.",
+  "lineInputFile": [
+    28,
+    28
+  ],
+  "presenceCondition": "(or (and (not CONFIG_FEATURE_HTTPD_CGI)\n         (and (not _STDLIB_H)\n              (not __need_malloc_and_calloc)\n              CONFIG_FEATURE_HTTPD_BASIC_AUTH))\n    (and CONFIG_FEATURE_HTTPD_CGI\n         (and (not _STDLIB_H)\n              (not __need_malloc_and_calloc)\n              CONFIG_FEATURE_HTTPD_BASIC_AUTH)))",
+  "model": "(define-fun CONFIG_FEATURE_HTTPD_CGI () Bool\n  false)\n(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun CONFIG_FEATURE_HTTPD_BASIC_AUTH () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 7311.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_103"
+}

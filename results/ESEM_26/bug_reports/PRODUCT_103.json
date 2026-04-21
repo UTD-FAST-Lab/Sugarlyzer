@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "DEAD_STORE",
+    "description": "The value written to `&thisopt` is never used.",
+    "fileLocation": "/workspace/52//workspace/varbugs/1a3c8e3d840.c",
+    "line": 13,
+    "analysisTime": 0.902617007
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= HAVE_TLSV1_X false))",
+  "model": "(define-fun HAVE_TLSV1_X () Bool\n  false)",
+  "numConfigs": [
+    1
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_103"
+}

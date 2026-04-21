@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.NullDereference",
+    "description": "Dereference of undefined pointer value",
+    "fileLocation": "/workspace/varbugs/2631486f1bf.desugared.c",
+    "line": 2591,
+    "analysisTime": 0.081901732
+  },
+  "originalFile": "/workspace/varbugs/2631486f1bf.c",
+  "sanitizedDescription": "Dereference of undefined pointer value",
+  "lineInputFile": [
+    67,
+    67
+  ],
+  "presenceCondition": "(or (not CONFIG_FEATURE_LS_SORTFILES) CONFIG_FEATURE_LS_SORTFILES)",
+  "model": "(define-fun CONFIG_FEATURE_LS_SORTFILES () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 6173.0,
+  "strategy": "transformation",
+  "classification": "FALSE",
+  "old_id": "TRANSFORMATION_66",
+  "id": "TRANSFORMATION_23"
+}

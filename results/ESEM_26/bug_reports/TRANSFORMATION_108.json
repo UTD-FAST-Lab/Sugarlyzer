@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "PULSE_UNINITIALIZED_VALUE",
+    "description": "`__sc_1035` is read without initialization.",
+    "fileLocation": "/workspace/varbugs/2a6cbfa00e0.desugared.c",
+    "line": 1520,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/2a6cbfa00e0.c",
+  "sanitizedDescription": "`sc` is read without initialization.",
+  "lineInputFile": [
+    9,
+    9
+  ],
+  "presenceCondition": "(or (and __STRICT_ANSI__\n         (not _STDLIB_H)\n         __STRICT_ANSI__\n         (not __malloc_and_calloc_defined))\n    (and (not __STRICT_ANSI__)\n         (not _STDLIB_H)\n         (not __STRICT_ANSI__)\n         (not __malloc_and_calloc_defined)))",
+  "model": "(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __malloc_and_calloc_defined () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 7464.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_108"
+}

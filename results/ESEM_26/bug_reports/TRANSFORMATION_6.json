@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "deadcode.DeadStores",
+    "description": "Value stored to '__eckey_814' is never read",
+    "fileLocation": "/workspace/varbugs/35ae2e259e4.desugared.c",
+    "line": 1576,
+    "analysisTime": 0.054747669
+  },
+  "originalFile": "/workspace/varbugs/35ae2e259e4.c",
+  "sanitizedDescription": "Value stored to 'eckey' is never read",
+  "lineInputFile": [
+    10,
+    10
+  ],
+  "presenceCondition": "(and (or (and (not _STDLIB_H) __need_malloc_and_calloc) _STDLIB_H)\n     (and (not _STDLIB_H) __need_malloc_and_calloc)\n     (not __malloc_and_calloc_defined)\n     HAVE_ECC)",
+  "model": "(define-fun __need_malloc_and_calloc () Bool\n  true)\n(define-fun HAVE_ECC () Bool\n  true)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __malloc_and_calloc_defined () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 5472.0,
+  "strategy": "transformation",
+  "classification": "TRUE_NEW",
+  "old_id": "TRANSFORMATION_18",
+  "id": "TRANSFORMATION_6"
+}

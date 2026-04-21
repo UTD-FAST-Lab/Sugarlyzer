@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.uninitialized.Branch",
+    "description": "Branch condition evaluates to a garbage value",
+    "fileLocation": "/workspace/varbugs/061fd0a353e.desugared.c",
+    "line": 2406,
+    "analysisTime": 0.099779152
+  },
+  "originalFile": "/workspace/varbugs/061fd0a353e.c",
+  "sanitizedDescription": "Branch condition evaluates to a garbage value",
+  "lineInputFile": [
+    27,
+    27
+  ],
+  "presenceCondition": "(let ((a!1 (or (and (and (not _STDLIB_H) __need_malloc_and_calloc)\n                    CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF\n                    CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF)\n               (and _STDLIB_H\n                    CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF\n                    CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF)))\n      (a!3 (or (and (and (not _STDLIB_H) __need_malloc_and_calloc)\n                    (not CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF)\n                    CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF)\n               (and _STDLIB_H\n                    (not CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF)\n                    CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF))))\n(let ((a!2 (and (or (and (not _STDLIB_H) __need_malloc_and_calloc) _STDLIB_H)\n                a!1))\n      (a!4 (and (or (and (not _STDLIB_H) __need_malloc_and_calloc) _STDLIB_H)\n                a!3)))\n  (or (and (and (not __USE_EXTERN_INLINES)\n                (not _STDLIB_H)\n                (not __need_malloc_and_calloc))\n           (and (not __USE_EXTERN_INLINES)\n                (not _STDLIB_H)\n                (not __need_malloc_and_calloc))\n           CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF\n           CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF)\n      (and (and (not __USE_EXTERN_INLINES)\n                (not _STDLIB_H)\n                (not __need_malloc_and_calloc))\n           (and (not __USE_EXTERN_INLINES)\n                (not _STDLIB_H)\n                (not __need_malloc_and_calloc))\n           (not CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF)\n           CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF)\n      (and (and __USE_EXTERN_INLINES\n                (not _STDLIB_H)\n                (not __need_malloc_and_calloc))\n           (and __USE_EXTERN_INLINES\n                (not _STDLIB_H)\n                (not __need_malloc_and_calloc))\n           CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF\n           CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF)\n      (and (and __USE_EXTERN_INLINES\n                (not _STDLIB_H)\n                (not __need_malloc_and_calloc))\n           (and __USE_EXTERN_INLINES\n                (not _STDLIB_H)\n                (not __need_malloc_and_calloc))\n           (not CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF)\n           CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF)\n      a!2\n      a!4)))",
+  "model": "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF () Bool\n  true)\n(define-fun __USE_EXTERN_INLINES () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 6920.0,
+  "strategy": "transformation",
+  "classification": "TRUE_NEW_OVER",
+  "old_id": "TRANSFORMATION_54",
+  "id": "TRANSFORMATION_12"
+}

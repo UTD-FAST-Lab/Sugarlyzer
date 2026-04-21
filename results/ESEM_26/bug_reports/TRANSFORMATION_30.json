@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "deadcode.DeadStores",
+    "description": "Value stored to '__x_4' during its initialization is never read",
+    "fileLocation": "/workspace/varbugs/7acf6cd80b2.desugared.c",
+    "line": 76,
+    "analysisTime": 0.031470602
+  },
+  "originalFile": "/workspace/varbugs/7acf6cd80b2.c",
+  "sanitizedDescription": "Value stored to 'x' during its initialization is never read",
+  "lineInputFile": [
+    8,
+    8
+  ],
+  "presenceCondition": "CONFIG_DEVPTS_MULTIPLE_INSTANCES",
+  "model": "(define-fun CONFIG_DEVPTS_MULTIPLE_INSTANCES () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 966.0,
+  "strategy": "transformation",
+  "classification": "TRUE_NEW_UNDER",
+  "old_id": "TRANSFORMATION_195",
+  "id": "TRANSFORMATION_30"
+}

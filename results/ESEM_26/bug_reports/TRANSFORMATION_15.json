@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "deadcode.DeadStores",
+    "description": "Value stored to '__n_9' during its initialization is never read",
+    "fileLocation": "/workspace/varbugs/0f8f8094d28.desugared.c",
+    "line": 75,
+    "analysisTime": 0.030720957
+  },
+  "originalFile": "/workspace/varbugs/0f8f8094d28.c",
+  "sanitizedDescription": "Value stored to 'n' during its initialization is never read",
+  "lineInputFile": [
+    39,
+    39
+  ],
+  "presenceCondition": "(or (and CONFIG_SLOB (not CONFIG_FORCE_MAX_ZONEORDER) CONFIG_SLOB)\n    (and (not CONFIG_SLOB) (not CONFIG_FORCE_MAX_ZONEORDER) (not CONFIG_SLOB)))",
+  "model": "(define-fun CONFIG_SLOB () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 1145.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_15"
+}

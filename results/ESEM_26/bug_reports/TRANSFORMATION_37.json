@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.UndefinedBinaryOperatorResult",
+    "description": "The left operand of '+' is a garbage value",
+    "fileLocation": "/workspace/varbugs/60e233a5660.desugared.c",
+    "line": 839,
+    "analysisTime": 0.037109411
+  },
+  "originalFile": "/workspace/varbugs/60e233a5660.c",
+  "sanitizedDescription": "The left operand of '+' is a garbage value",
+  "lineInputFile": [
+    13,
+    13
+  ],
+  "presenceCondition": "(and CONFIG_HOTPLUG (not __need___FILE) CONFIG_HOTPLUG)",
+  "model": "(define-fun __need___FILE () Bool\n  false)\n(define-fun CONFIG_HOTPLUG () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 4713.0,
+  "strategy": "transformation",
+  "classification": "FALSE",
+  "old_id": "TRANSFORMATION_173",
+  "id": "TRANSFORMATION_37"
+}

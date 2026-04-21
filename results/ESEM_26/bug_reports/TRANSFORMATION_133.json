@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "PULSE_UNINITIALIZED_VALUE",
+    "description": "`__v_16` is read without initialization.",
+    "fileLocation": "/workspace/varbugs/63878acfafb.desugared.c",
+    "line": 148,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/63878acfafb.c",
+  "sanitizedDescription": "`v` is read without initialization.",
+  "lineInputFile": [
+    40,
+    40
+  ],
+  "presenceCondition": "CONFIG_ARCH_OMAP3",
+  "model": "(define-fun CONFIG_ARCH_OMAP3 () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 1334.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_133"
+}

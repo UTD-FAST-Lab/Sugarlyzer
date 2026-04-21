@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "deadcode.DeadStores",
+    "description": "Value stored to '__buf_978' is never read",
+    "fileLocation": "/workspace/varbugs/eef2317b9f5.desugared.c",
+    "line": 1878,
+    "analysisTime": 0.060622648
+  },
+  "originalFile": "/workspace/varbugs/eef2317b9f5.c",
+  "sanitizedDescription": "Value stored to 'buf' is never read",
+  "lineInputFile": [
+    26,
+    26
+  ],
+  "presenceCondition": "(and (not CONFIG_FEATURE_CLEAN_UP)\n     (not _STDLIB_H)\n     (not __malloc_and_calloc_defined)\n     (not CONFIG_FEATURE_CLEAN_UP))",
+  "model": "(define-fun CONFIG_FEATURE_CLEAN_UP () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __malloc_and_calloc_defined () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 5788.0,
+  "strategy": "transformation",
+  "classification": "TRUE_NEW",
+  "old_id": "TRANSFORMATION_145",
+  "id": "TRANSFORMATION_57"
+}

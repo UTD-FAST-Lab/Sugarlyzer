@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "MEMORY_LEAK_C",
+    "description": "Memory dynamically allocated by `malloc`, indirectly via call to `inet_ehash_locks_alloc()` on line 43 is not freed after the last access at line 46, column 1.",
+    "fileLocation": "/workspace/344//workspace/varbugs/218ad12f42e.c",
+    "line": 46,
+    "analysisTime": 1.014588203
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= CONFIG_NUMA true))",
+  "model": "(define-fun CONFIG_NUMA () Bool\n  true)",
+  "numConfigs": [
+    1
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_190"
+}

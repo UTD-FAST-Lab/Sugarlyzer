@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "DEAD_STORE",
+    "description": "The value written to `&__x_4` is never used.",
+    "fileLocation": "/workspace/varbugs/7acf6cd80b2.desugared.c",
+    "line": 76,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/7acf6cd80b2.c",
+  "sanitizedDescription": "The value written to `&x` is never used.",
+  "lineInputFile": [
+    8,
+    8
+  ],
+  "presenceCondition": "CONFIG_DEVPTS_MULTIPLE_INSTANCES",
+  "model": "(define-fun CONFIG_DEVPTS_MULTIPLE_INSTANCES () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 2331.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_83"
+}

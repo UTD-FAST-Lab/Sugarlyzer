@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "PULSE_UNINITIALIZED_VALUE",
+    "description": "`__cache_6` is read without initialization.",
+    "fileLocation": "/workspace/varbugs/0f8f8094d28.desugared.c",
+    "line": 71,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/0f8f8094d28.c",
+  "sanitizedDescription": "`cache` is read without initialization.",
+  "lineInputFile": [
+    36,
+    36
+  ],
+  "presenceCondition": "(or (and CONFIG_SLOB (not CONFIG_FORCE_MAX_ZONEORDER) CONFIG_SLOB)\n    (and (not CONFIG_SLOB) (not CONFIG_FORCE_MAX_ZONEORDER) (not CONFIG_SLOB)))",
+  "model": "(define-fun CONFIG_SLOB () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 3732.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_106"
+}

@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "NULLPTR_DEREFERENCE",
+    "description": "`__buffer_2089` could be null (null value originating from line 2423) and is dereferenced.",
+    "fileLocation": "/workspace/varbugs/221ac329e93.desugared.c",
+    "line": 2431,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/221ac329e93.c",
+  "sanitizedDescription": "`buffer` could be null (null value originating from line 2423) and is dereferenced.",
+  "lineInputFile": [
+    41,
+    41
+  ],
+  "presenceCondition": "(let ((a!1 (or (and (and (not CONFIG_KGDB) (not CONFIG_XMON) CONFIG_BDI_SWITCH)\n                    CONFIG_KPROBES)\n               (and (and (not CONFIG_KGDB) CONFIG_XMON) CONFIG_KPROBES)\n               (and CONFIG_KGDB CONFIG_KPROBES))))\n  (and (or (and (not CONFIG_KGDB) (not CONFIG_XMON) CONFIG_BDI_SWITCH)\n           (and (not CONFIG_KGDB) CONFIG_XMON)\n           CONFIG_KGDB)\n       a!1))",
+  "model": "(define-fun CONFIG_BDI_SWITCH () Bool\n  false)\n(define-fun CONFIG_KPROBES () Bool\n  true)\n(define-fun CONFIG_KGDB () Bool\n  false)\n(define-fun CONFIG_XMON () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 6957.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_140"
+}

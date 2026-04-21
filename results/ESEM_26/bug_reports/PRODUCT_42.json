@@ -1,0 +1,22 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.uninitialized.Assign",
+    "description": "Assigned value is garbage or undefined",
+    "fileLocation": "/workspace/varbugs/2631486f1bf.c",
+    "line": 67,
+    "analysisTime": 0.033374227
+  },
+  "configFiles": [],
+  "presenceCondition": "(or (and (not CONFIG_FEATURE_LS_RECURSIVE) (not CONFIG_FEATURE_LS_SORTFILES))\n    (and (not CONFIG_FEATURE_LS_RECURSIVE) CONFIG_FEATURE_LS_SORTFILES)\n    (and CONFIG_FEATURE_LS_RECURSIVE (not CONFIG_FEATURE_LS_SORTFILES))\n    (and CONFIG_FEATURE_LS_RECURSIVE CONFIG_FEATURE_LS_SORTFILES))",
+  "model": "(define-fun CONFIG_FEATURE_LS_RECURSIVE () Bool\n  true)\n(define-fun CONFIG_FEATURE_LS_SORTFILES () Bool\n  false)",
+  "numConfigs": [
+    2,
+    2,
+    2,
+    2
+  ],
+  "strategy": "product",
+  "classification": "TRUE_NEW",
+  "old_id": "PRODUCT_20",
+  "id": "PRODUCT_42"
+}

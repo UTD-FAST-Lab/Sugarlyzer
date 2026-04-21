@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "NULLPTR_DEREFERENCE",
+    "description": "`__eckey_814` could be null (null value originating from line 1466) and is dereferenced.",
+    "fileLocation": "/workspace/varbugs/35ae2e259e4.desugared.c",
+    "line": 1505,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/35ae2e259e4.c",
+  "sanitizedDescription": "`eckey` could be null (null value originating from line 1466) and is dereferenced.",
+  "lineInputFile": [
+    17,
+    17
+  ],
+  "presenceCondition": "(or (and (and (not _STDLIB_H)\n              (not __need_malloc_and_calloc)\n              __USE_EXTERN_INLINES)\n         (and (not _STDLIB_H)\n              __STRICT_ANSI__\n              (not __need_malloc_and_calloc)\n              __USE_EXTERN_INLINES\n              HAVE_ECC)\n         (and (not _STDLIB_H)\n              __STRICT_ANSI__\n              (not __need_malloc_and_calloc)\n              __USE_EXTERN_INLINES\n              HAVE_ECC)\n         (not SSL_CTX_set_ecdh_auto))\n    (and (and (not _STDLIB_H)\n              (not __need_malloc_and_calloc)\n              __USE_EXTERN_INLINES)\n         (and (not _STDLIB_H)\n              (not __STRICT_ANSI__)\n              (not __need_malloc_and_calloc)\n              __USE_EXTERN_INLINES\n              HAVE_ECC)\n         (and (not _STDLIB_H)\n              (not __STRICT_ANSI__)\n              (not __need_malloc_and_calloc)\n              __USE_EXTERN_INLINES\n              HAVE_ECC)\n         (not SSL_CTX_set_ecdh_auto)))",
+  "model": "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun SSL_CTX_set_ecdh_auto () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __USE_EXTERN_INLINES () Bool\n  true)\n(define-fun HAVE_ECC () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 7166.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_121"
+}

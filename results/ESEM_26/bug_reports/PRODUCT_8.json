@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.NonNullParamChecker",
+    "description": "Null pointer passed to 1st parameter expecting 'nonnull'",
+    "fileLocation": "/workspace/varbugs/bbeb0516cf0.c",
+    "line": 6,
+    "analysisTime": 0.025376067
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= APR_FILES_AS_SOCKETS true))",
+  "model": "(define-fun APR_FILES_AS_SOCKETS () Bool\n  true)",
+  "numConfigs": [
+    1
+  ],
+  "strategy": "product",
+  "classification": "TRUE_UNDER",
+  "old_id": "PRODUCT_10",
+  "id": "PRODUCT_8"
+}

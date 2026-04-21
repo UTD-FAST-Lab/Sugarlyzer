@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "DEAD_STORE",
+    "description": "The value written to `&k_crcs` is never used.",
+    "fileLocation": "/workspace/446//workspace/varbugs/5275b1e49f6.c",
+    "line": 25,
+    "analysisTime": 1.076160557
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= CONFIG_FEATURE_INSMOD_VERSION_CHECKING true))",
+  "model": "(define-fun CONFIG_FEATURE_INSMOD_VERSION_CHECKING () Bool\n  true)",
+  "numConfigs": [
+    1
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_97"
+}

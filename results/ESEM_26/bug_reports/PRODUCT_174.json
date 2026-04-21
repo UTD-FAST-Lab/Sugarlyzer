@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "DEAD_STORE",
+    "description": "The value written to `&irq` is never used.",
+    "fileLocation": "/workspace/29//workspace/varbugs/6252547b8a7.c",
+    "line": 12,
+    "analysisTime": 0.801528986
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= CONFIG_TWL4030_CORE true)\n     (= CONFIG_IRQ_DOMAIN false)\n     (= CONFIG_OF_IRQ false))",
+  "model": "(define-fun CONFIG_TWL4030_CORE () Bool\n  true)\n(define-fun CONFIG_IRQ_DOMAIN () Bool\n  false)\n(define-fun CONFIG_OF_IRQ () Bool\n  false)",
+  "numConfigs": [
+    3
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_174"
+}

@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "deadcode.DeadStores",
+    "description": "Value stored to '__driver_data_16' is never read",
+    "fileLocation": "/workspace/varbugs/7acf6cd80b2.desugared.c",
+    "line": 173,
+    "analysisTime": 0.031470602
+  },
+  "originalFile": "/workspace/varbugs/7acf6cd80b2.c",
+  "sanitizedDescription": "Value stored to 'driver_data' is never read",
+  "lineInputFile": [
+    39,
+    39
+  ],
+  "presenceCondition": "CONFIG_UNIX98_PTYS",
+  "model": "(define-fun CONFIG_UNIX98_PTYS () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 966.0,
+  "strategy": "transformation",
+  "classification": "FALSE",
+  "old_id": "TRANSFORMATION_196",
+  "id": "TRANSFORMATION_67"
+}

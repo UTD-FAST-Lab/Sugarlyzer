@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "DEAD_STORE",
+    "description": "The value written to `&__family_1` is never used.",
+    "fileLocation": "/workspace/varbugs/581635e28f1.desugared.c",
+    "line": 29,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/581635e28f1.c",
+  "sanitizedDescription": "The value written to `&family` is never used.",
+  "lineInputFile": [
+    7,
+    7
+  ],
+  "presenceCondition": "true",
+  "model": "",
+  "feasible": true,
+  "desugaringTime": 1748.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_124"
+}

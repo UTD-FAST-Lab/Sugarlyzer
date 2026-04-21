@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "unix.Malloc",
+    "description": "Potential leak of memory pointed to by 'sc'",
+    "fileLocation": "/workspace/varbugs/2a6cbfa00e0.c",
+    "line": 16,
+    "analysisTime": 0.024836864
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= SHARED_MODULE false))",
+  "model": "(define-fun SHARED_MODULE () Bool\n  false)",
+  "numConfigs": [
+    1
+  ],
+  "strategy": "product",
+  "classification": "TRUE",
+  "old_id": "PRODUCT_2",
+  "id": "PRODUCT_43"
+}

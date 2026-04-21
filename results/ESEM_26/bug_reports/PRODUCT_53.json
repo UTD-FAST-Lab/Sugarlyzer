@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "NULLPTR_DEREFERENCE",
+    "description": "`eckey` could be null (null value originating from line 10) and is dereferenced.",
+    "fileLocation": "/workspace/112//workspace/varbugs/35ae2e259e4.c",
+    "line": 12,
+    "analysisTime": 1.080508256
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= HAVE_ECC true) (= SSL_CTX_set_ecdh_auto false))",
+  "model": "(define-fun SSL_CTX_set_ecdh_auto () Bool\n  false)\n(define-fun HAVE_ECC () Bool\n  true)",
+  "numConfigs": [
+    2
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_53"
+}

@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.uninitialized.Branch",
+    "description": "Branch condition evaluates to a garbage value",
+    "fileLocation": "/workspace/varbugs/eef2317b9f5.desugared.c",
+    "line": 1758,
+    "analysisTime": 0.060622648
+  },
+  "originalFile": "/workspace/varbugs/eef2317b9f5.c",
+  "sanitizedDescription": "Branch condition evaluates to a garbage value",
+  "lineInputFile": [
+    30,
+    30
+  ],
+  "presenceCondition": "CONFIG_FEATURE_CLEAN_UP",
+  "model": "(define-fun CONFIG_FEATURE_CLEAN_UP () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 5788.0,
+  "strategy": "transformation",
+  "classification": "FALSE",
+  "old_id": "TRANSFORMATION_143",
+  "id": "TRANSFORMATION_78"
+}

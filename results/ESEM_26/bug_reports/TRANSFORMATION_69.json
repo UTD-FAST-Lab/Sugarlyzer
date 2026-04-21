@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "deadcode.DeadStores",
+    "description": "Value stored to '__lfilename_179' during its initialization is never read",
+    "fileLocation": "/workspace/varbugs/a7fc1f83c81.desugared.c",
+    "line": 178,
+    "analysisTime": 0.029477279
+  },
+  "originalFile": "/workspace/varbugs/a7fc1f83c81.c",
+  "sanitizedDescription": "Value stored to 'lfilename' during its initialization is never read",
+  "lineInputFile": [
+    15,
+    15
+  ],
+  "presenceCondition": "(or __STRICT_ANSI__ (not __STRICT_ANSI__))",
+  "model": "(define-fun __STRICT_ANSI__ () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 1725.0,
+  "strategy": "transformation",
+  "classification": "FALSE",
+  "old_id": "TRANSFORMATION_232",
+  "id": "TRANSFORMATION_69"
+}

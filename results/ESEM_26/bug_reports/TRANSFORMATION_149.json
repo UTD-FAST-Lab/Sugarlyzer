@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "DEAD_STORE",
+    "description": "The value written to `&__n_9` is never used.",
+    "fileLocation": "/workspace/varbugs/0f8f8094d28.desugared.c",
+    "line": 75,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/0f8f8094d28.c",
+  "sanitizedDescription": "The value written to `&n` is never used.",
+  "lineInputFile": [
+    39,
+    39
+  ],
+  "presenceCondition": "(or (and CONFIG_SLOB (not CONFIG_FORCE_MAX_ZONEORDER) CONFIG_SLOB)\n    (and (not CONFIG_SLOB) (not CONFIG_FORCE_MAX_ZONEORDER) (not CONFIG_SLOB)))",
+  "model": "(define-fun CONFIG_SLOB () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 3732.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_149"
+}

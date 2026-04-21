@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.uninitialized.Assign",
+    "description": "Assigned value is garbage or undefined",
+    "fileLocation": "/workspace/varbugs/b62bd7b261b.desugared.c",
+    "line": 2553,
+    "analysisTime": 0.079399944
+  },
+  "originalFile": "/workspace/varbugs/b62bd7b261b.c",
+  "sanitizedDescription": "Assigned value is garbage or undefined",
+  "lineInputFile": [
+    14,
+    14
+  ],
+  "presenceCondition": "(or (and __STRICT_ANSI__ (not ENABLE_FEATURE_MDEV_CONF))\n    (and (and __STRICT_ANSI__ ENABLE_FEATURE_MDEV_CONF)\n         (not ENABLE_FEATURE_MDEV_RENAME))\n    (and (and __STRICT_ANSI__ ENABLE_FEATURE_MDEV_CONF)\n         ENABLE_FEATURE_MDEV_RENAME\n         (not ENABLE_FEATURE_MDEV_RENAME_REGEXP))\n    (and (not __STRICT_ANSI__) (not ENABLE_FEATURE_MDEV_CONF))\n    (and (and (not __STRICT_ANSI__) ENABLE_FEATURE_MDEV_CONF)\n         (not ENABLE_FEATURE_MDEV_RENAME))\n    (and (and (not __STRICT_ANSI__) ENABLE_FEATURE_MDEV_CONF)\n         ENABLE_FEATURE_MDEV_RENAME\n         (not ENABLE_FEATURE_MDEV_RENAME_REGEXP)))",
+  "model": "(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_CONF () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME_REGEXP () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 6010.0,
+  "strategy": "transformation",
+  "classification": "FALSE",
+  "old_id": "TRANSFORMATION_110",
+  "id": "TRANSFORMATION_44"
+}

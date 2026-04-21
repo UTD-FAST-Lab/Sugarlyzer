@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "PULSE_UNINITIALIZED_VALUE",
+    "description": "`length` is read without initialization during the call to `reiserfs_security_init()`.",
+    "fileLocation": "/workspace/6//workspace/varbugs/30e053248da.c",
+    "line": 41,
+    "analysisTime": 0.738250182
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= CONFIG_SECURITY false))",
+  "model": "(define-fun CONFIG_SECURITY () Bool\n  false)",
+  "numConfigs": [
+    1
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_196"
+}

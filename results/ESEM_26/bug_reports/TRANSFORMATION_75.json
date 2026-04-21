@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "deadcode.DeadStores",
+    "description": "Value stored to '__pid_output_699' is never read",
+    "fileLocation": "/workspace/varbugs/8c4377dd635.desugared.c",
+    "line": 861,
+    "analysisTime": 0.031489002
+  },
+  "originalFile": "/workspace/varbugs/8c4377dd635.c",
+  "sanitizedDescription": "Value stored to 'pid_output' is never read",
+  "lineInputFile": [
+    21,
+    21
+  ],
+  "presenceCondition": "(let ((a!1 (and (or (and MARLIN_H (not PIDTEMP))\n                    (and MARLIN_H PIDTEMP PID_DEBUG))\n                (and MARLIN_H (not PIDTEMP))))\n      (a!2 (and (or (and (not MARLIN_H) (not PIDTEMP))\n                    (and (not MARLIN_H) PIDTEMP PID_DEBUG))\n                (and (not MARLIN_H) (not PIDTEMP)))))\n  (or a!1 a!2))",
+  "model": "(define-fun PID_DEBUG () Bool\n  false)\n(define-fun MARLIN_H () Bool\n  true)\n(define-fun PIDTEMP () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 5255.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_75"
+}

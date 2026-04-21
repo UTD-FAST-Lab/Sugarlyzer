@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.NullDereference",
+    "description": "Dereference of undefined pointer value",
+    "fileLocation": "/workspace/varbugs/b62bd7b261b.c",
+    "line": 24,
+    "analysisTime": 0.043972351
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= ENABLE_FEATURE_MDEV_CONF true)\n     (= ENABLE_FEATURE_MDEV_RENAME true)\n     (= ENABLE_FEATURE_MDEV_RENAME_REGEXP true))",
+  "model": "(define-fun ENABLE_FEATURE_MDEV_CONF () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME_REGEXP () Bool\n  true)",
+  "numConfigs": [
+    3
+  ],
+  "strategy": "product",
+  "classification": "FALSE",
+  "old_id": "PRODUCT_39",
+  "id": "PRODUCT_18"
+}

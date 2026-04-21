@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "PULSE_UNINITIALIZED_VALUE",
+    "description": "`__buf_978` is read without initialization.",
+    "fileLocation": "/workspace/varbugs/eef2317b9f5.desugared.c",
+    "line": 1758,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/eef2317b9f5.c",
+  "sanitizedDescription": "`buf` is read without initialization.",
+  "lineInputFile": [
+    30,
+    30
+  ],
+  "presenceCondition": "CONFIG_FEATURE_CLEAN_UP",
+  "model": "(define-fun CONFIG_FEATURE_CLEAN_UP () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 6484.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_92"
+}

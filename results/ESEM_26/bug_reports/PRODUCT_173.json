@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "DEAD_STORE",
+    "description": "The value written to `&argc` is never used.",
+    "fileLocation": "/workspace/403//workspace/varbugs/061fd0a353e.c",
+    "line": 16,
+    "analysisTime": 1.105539391
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF true)\n     (= CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF false))",
+  "model": "(define-fun CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF () Bool\n  true)\n(define-fun CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF () Bool\n  false)",
+  "numConfigs": [
+    2
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_173"
+}

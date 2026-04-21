@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "PULSE_UNINITIALIZED_VALUE",
+    "description": "`__readpage_37` is read without initialization during the call to `__i915_load_modeset_init_35()`.",
+    "fileLocation": "/workspace/varbugs/f7ab9b407b3.desugared.c",
+    "line": 340,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/f7ab9b407b3.c",
+  "sanitizedDescription": "`readpage_37` is read without initialization during the call to `__i915_load_modeset_init()`.",
+  "lineInputFile": [
+    103,
+    103
+  ],
+  "presenceCondition": "CONFIG_DRM_I915",
+  "model": "(define-fun CONFIG_DRM_I915 () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 1582.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_143"
+}

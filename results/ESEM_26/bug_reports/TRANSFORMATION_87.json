@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "PULSE_UNINITIALIZED_VALUE",
+    "description": "`__len_698` is read without initialization.",
+    "fileLocation": "/workspace/varbugs/60e233a5660.desugared.c",
+    "line": 839,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/60e233a5660.c",
+  "sanitizedDescription": "`len` is read without initialization.",
+  "lineInputFile": [
+    13,
+    13
+  ],
+  "presenceCondition": "(and CONFIG_HOTPLUG (not __need___FILE) CONFIG_HOTPLUG)",
+  "model": "(define-fun __need___FILE () Bool\n  false)\n(define-fun CONFIG_HOTPLUG () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 6269.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_87"
+}

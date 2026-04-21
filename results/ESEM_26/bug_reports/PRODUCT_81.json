@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "NULLPTR_DEREFERENCE",
+    "description": "`curr` could be null (null value originating from line 65) and is dereferenced.",
+    "fileLocation": "/workspace/288//workspace/varbugs/2631486f1bf.c",
+    "line": 66,
+    "analysisTime": 1.088214223
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= CONFIG_FEATURE_LS_RECURSIVE true) (= CONFIG_FEATURE_LS_SORTFILES true))",
+  "model": "(define-fun CONFIG_FEATURE_LS_RECURSIVE () Bool\n  true)\n(define-fun CONFIG_FEATURE_LS_SORTFILES () Bool\n  true)",
+  "numConfigs": [
+    2
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_81"
+}

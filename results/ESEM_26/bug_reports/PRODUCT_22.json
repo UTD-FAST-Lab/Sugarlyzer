@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.uninitialized.Branch",
+    "description": "Branch condition evaluates to a garbage value",
+    "fileLocation": "/workspace/varbugs/eef2317b9f5.c",
+    "line": 30,
+    "analysisTime": 0.032538412
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= CONFIG_FEATURE_CLEAN_UP true))",
+  "model": "(define-fun CONFIG_FEATURE_CLEAN_UP () Bool\n  true)",
+  "numConfigs": [
+    1
+  ],
+  "strategy": "product",
+  "classification": "TRUE",
+  "old_id": "PRODUCT_45",
+  "id": "PRODUCT_22"
+}

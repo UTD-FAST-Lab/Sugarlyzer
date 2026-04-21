@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "PULSE_UNINITIALIZED_VALUE",
+    "description": "`rmm_lock` is read without initialization.",
+    "fileLocation": "/workspace/342//workspace/varbugs/1b48bb3c1af.c",
+    "line": 14,
+    "analysisTime": 0.886002863
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= APU_HAS_LDAP true) (= APR_HAS_SHARED_MEMORY true))",
+  "model": "(define-fun APR_HAS_SHARED_MEMORY () Bool\n  true)\n(define-fun APU_HAS_LDAP () Bool\n  true)",
+  "numConfigs": [
+    2
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_70"
+}

@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "MEMORY_LEAK_C",
+    "description": "Memory dynamically allocated by `malloc`, indirectly via call to `extcon_class_init()` on line 107 is not freed after the last access at line 112, column 1.",
+    "fileLocation": "/workspace/84//workspace/varbugs/0dc77b6dabe.c",
+    "line": 112,
+    "analysisTime": 1.153574502
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= CONFIG_ANDROID true) (= CONFIG_SYSFS false) (= CONFIG_EXTCON true))",
+  "model": "(define-fun CONFIG_SYSFS () Bool\n  false)\n(define-fun CONFIG_ANDROID () Bool\n  true)\n(define-fun CONFIG_EXTCON () Bool\n  true)",
+  "numConfigs": [
+    3
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_200"
+}

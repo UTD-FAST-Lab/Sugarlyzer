@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.UndefinedBinaryOperatorResult",
+    "description": "The right operand of '+' is a garbage value",
+    "fileLocation": "/workspace/varbugs/95755181b82.desugared.c",
+    "line": 2576,
+    "analysisTime": 0.068494862
+  },
+  "originalFile": "/workspace/varbugs/95755181b82.c",
+  "sanitizedDescription": "The right operand of '+' is a garbage value",
+  "lineInputFile": [
+    33,
+    34
+  ],
+  "presenceCondition": "(not __need___FILE)",
+  "model": "(define-fun __need___FILE () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 6148.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_17"
+}

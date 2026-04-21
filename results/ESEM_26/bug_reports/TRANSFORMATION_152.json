@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "DEAD_STORE",
+    "description": "The value written to `&__xGridSpacing_2` is never used.",
+    "fileLocation": "/workspace/varbugs/e30bfedce4d.desugared.c",
+    "line": 52,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/e30bfedce4d.c",
+  "sanitizedDescription": "The value written to `&xGridSpacing` is never used.",
+  "lineInputFile": [
+    24,
+    24
+  ],
+  "presenceCondition": "ENABLE_AUTO_BED_LEVELING",
+  "model": "(define-fun ENABLE_AUTO_BED_LEVELING () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 914.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_152"
+}

@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "PULSE_UNINITIALIZED_VALUE",
+    "description": "a value is read without initialization.",
+    "fileLocation": "/workspace/varbugs/6e2b75740be.desugared.c",
+    "line": 156,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/6e2b75740be.c",
+  "sanitizedDescription": "a value is read without initialization.",
+  "lineInputFile": [
+    63,
+    63
+  ],
+  "presenceCondition": "(and CONFIG_MODULE_UNLOAD CONFIG_SMP)",
+  "model": "(define-fun CONFIG_MODULE_UNLOAD () Bool\n  true)\n(define-fun CONFIG_SMP () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 1805.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_90"
+}

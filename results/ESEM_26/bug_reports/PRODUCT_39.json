@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "deadcode.DeadStores",
+    "description": "Value stored to 'k_crcs' is never read",
+    "fileLocation": "/workspace/varbugs/5275b1e49f6.c",
+    "line": 21,
+    "analysisTime": 0.036902188
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= CONFIG_FEATURE_INSMOD_VERSION_CHECKING true))",
+  "model": "(define-fun CONFIG_FEATURE_INSMOD_VERSION_CHECKING () Bool\n  true)",
+  "numConfigs": [
+    1
+  ],
+  "strategy": "product",
+  "classification": "TRUE_NEW",
+  "old_id": "PRODUCT_34",
+  "id": "PRODUCT_39"
+}

@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "DEAD_STORE",
+    "description": "The value written to `&__driver_data_16` is never used.",
+    "fileLocation": "/workspace/varbugs/7acf6cd80b2.desugared.c",
+    "line": 173,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/7acf6cd80b2.c",
+  "sanitizedDescription": "The value written to `&driver_data` is never used.",
+  "lineInputFile": [
+    39,
+    39
+  ],
+  "presenceCondition": "CONFIG_UNIX98_PTYS",
+  "model": "(define-fun CONFIG_UNIX98_PTYS () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 2331.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_153"
+}

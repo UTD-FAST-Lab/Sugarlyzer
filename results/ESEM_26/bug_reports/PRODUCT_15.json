@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.NonNullParamChecker",
+    "description": "Null pointer passed to 2nd parameter expecting 'nonnull'",
+    "fileLocation": "/workspace/varbugs/199501f2a00.c",
+    "line": 21,
+    "analysisTime": 0.036665287
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= ENABLE_FEATURE_MODPROBE_MULTIPLE_OPTIONS false))",
+  "model": "(define-fun ENABLE_FEATURE_MODPROBE_MULTIPLE_OPTIONS () Bool\n  false)",
+  "numConfigs": [
+    1
+  ],
+  "strategy": "product",
+  "classification": "TRUE",
+  "old_id": "PRODUCT_17",
+  "id": "PRODUCT_15"
+}

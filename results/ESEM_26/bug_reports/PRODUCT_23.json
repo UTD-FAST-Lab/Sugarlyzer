@@ -1,0 +1,20 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.NullDereference",
+    "description": "Dereference of null pointer (loaded from variable 'ops')",
+    "fileLocation": "/workspace/varbugs/6252547b8a7.c",
+    "line": 12,
+    "analysisTime": 0.019773602
+  },
+  "configFiles": [],
+  "presenceCondition": "(or (and CONFIG_TWL4030_CORE CONFIG_IRQ_DOMAIN (not CONFIG_OF_IRQ))\n    (and CONFIG_TWL4030_CORE (not CONFIG_IRQ_DOMAIN) (not CONFIG_OF_IRQ)))",
+  "model": "(define-fun CONFIG_TWL4030_CORE () Bool\n  true)\n(define-fun CONFIG_IRQ_DOMAIN () Bool\n  false)\n(define-fun CONFIG_OF_IRQ () Bool\n  false)",
+  "numConfigs": [
+    3,
+    3
+  ],
+  "strategy": "product",
+  "classification": "TRUE",
+  "old_id": "PRODUCT_59",
+  "id": "PRODUCT_23"
+}

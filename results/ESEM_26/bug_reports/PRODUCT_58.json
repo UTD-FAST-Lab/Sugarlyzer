@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "DEAD_STORE",
+    "description": "The value written to `&family` is never used.",
+    "fileLocation": "/workspace/407//workspace/varbugs/581635e28f1.c",
+    "line": 7,
+    "analysisTime": 1.018052475
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= APR_HAVE_IPV6 false))",
+  "model": "(define-fun APR_HAVE_IPV6 () Bool\n  false)",
+  "numConfigs": [
+    1
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_58"
+}

@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "unix.MallocSizeof",
+    "description": "Result of 'malloc' is converted to a pointer of type '__ethtable_t_1885', which is incompatible with sizeof operand type 'struct (anonymous struct at bc0ffc0e971.desugared.c:2715:1)'",
+    "fileLocation": "/workspace/varbugs/bc0ffc0e971.desugared.c",
+    "line": 2739,
+    "analysisTime": 0.109733488
+  },
+  "originalFile": "/workspace/varbugs/bc0ffc0e971.c",
+  "sanitizedDescription": "Result of 'malloc' is converted to a pointer of type 'ethtable_t', which is incompatible with sizeof operand type 'struct (anonymous struct at bc0ffc0e971.desugared.c:2715:1)'",
+  "lineInputFile": [
+    29,
+    29
+  ],
+  "presenceCondition": "(or (and (not __STRICT_ANSI__)\n         (not __need___FILE)\n         (not __STRICT_ANSI__)\n         (not _STDLIB_H)\n         (not __malloc_and_calloc_defined))\n    (and (not __STRICT_ANSI__)\n         __need___FILE\n         (not __STRICT_ANSI__)\n         (not _STDLIB_H)\n         (not __malloc_and_calloc_defined)))",
+  "model": "(define-fun __STRICT_ANSI__ () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __need___FILE () Bool\n  false)\n(define-fun __malloc_and_calloc_defined () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 6974.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_63"
+}

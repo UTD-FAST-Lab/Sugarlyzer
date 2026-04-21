@@ -1,0 +1,20 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.uninitialized.Branch",
+    "description": "Branch condition evaluates to a garbage value",
+    "fileLocation": "/workspace/varbugs/061fd0a353e.c",
+    "line": 27,
+    "analysisTime": 0.040601002
+  },
+  "configFiles": [],
+  "presenceCondition": "(or (and (not CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF)\n         CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF)\n    (and CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF\n         CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF))",
+  "model": "(define-fun CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF () Bool\n  true)\n(define-fun CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF () Bool\n  true)",
+  "numConfigs": [
+    2,
+    2
+  ],
+  "strategy": "product",
+  "classification": "TRUE_NEW",
+  "old_id": "PRODUCT_15",
+  "id": "PRODUCT_9"
+}
