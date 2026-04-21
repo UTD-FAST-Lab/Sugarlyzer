@@ -1,0 +1,12 @@
+FROM ubuntu:22.04
+
+ENV TZ=America/Chicago
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && \
+	DEBIAN_FRONTEND=noninteractive apt-get install -y \
+	openjdk-17-jdk curl xz-utils zlib1g-dev tzdata \
+	autoconf automake libtool git gcc make unzip\
+	&& rm -rf /var/lib/apt/lists/*
+
+COPY TypeChef-VAA /TypeChef-VAA
