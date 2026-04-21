@@ -19,6 +19,7 @@ object Config {
     case INFER
     case CLANG
     case PHASAR
+    case TYPECHEF
   }
 
   case class AppConfig(

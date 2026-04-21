@@ -37,6 +37,10 @@ case class TransformationAlarm(
     desugaringTime: Double
 ) extends StrategyAlarm
 
+case class FamilyAlarm(
+    originalAlarm: ToolAlarm
+) extends StrategyAlarm
+
 trait AnalysisTool {
   def name(): String
   def run(spec: ProgramSpecification)(using AppConfig): IO[List[ToolAlarm]]
@@ -44,8 +48,9 @@ trait AnalysisTool {
 
 object AnalysisTool {
   def apply(tool: Tool): AnalysisTool = tool match {
-    case Tool.INFER  => InferTool
-    case Tool.CLANG  => ClangTool
-    case Tool.PHASAR => PhasarTool
+    case Tool.INFER    => InferTool
+    case Tool.CLANG    => ClangTool
+    case Tool.PHASAR   => PhasarTool
+    case Tool.TYPECHEF => TypeChefTool
   }
 }
