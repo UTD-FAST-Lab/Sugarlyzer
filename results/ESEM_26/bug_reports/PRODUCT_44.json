@@ -1,0 +1,30 @@
+{
+  "originalAlarm": {
+    "alarmType": "deadcode.DeadStores",
+    "description": "Value stored to 'codec_hw_write' during its initialization is never read",
+    "fileLocation": "/workspace/varbugs/66517915e09.c",
+    "line": 16,
+    "analysisTime": 0.02421317
+  },
+  "configFiles": [],
+  "presenceCondition": "(or (and (not CONFIG_SND_SOC_DA7210)\n         (not CONFIG_SND_FSI_AK4642)\n         CONFIG_SND_FSI_DA7210\n         CONFIG_I2C\n         (not CONFIG_SND_SOC_AK4642))\n    (and (not CONFIG_SND_FSI_AK4642)\n         CONFIG_I2C\n         CONFIG_SND_SOC_AK4642\n         (not CONFIG_SND_FSI_DA7210)\n         CONFIG_SND_SOC_DA7210)\n    (and CONFIG_SND_SOC_DA7210\n         (not CONFIG_SND_FSI_AK4642)\n         CONFIG_SND_FSI_DA7210\n         CONFIG_I2C\n         (not CONFIG_SND_SOC_AK4642))\n    (and CONFIG_SND_FSI_DA7210\n         CONFIG_SND_FSI_AK4642\n         CONFIG_I2C\n         CONFIG_SND_SOC_AK4642\n         CONFIG_SND_SOC_DA7210)\n    (and CONFIG_SND_FSI_DA7210\n         CONFIG_SND_FSI_AK4642\n         CONFIG_SND_SOC_DA7210\n         CONFIG_I2C\n         (not CONFIG_SND_SOC_AK4642))\n    (and (not CONFIG_SND_SOC_DA7210)\n         CONFIG_SND_FSI_DA7210\n         CONFIG_SND_FSI_AK4642\n         CONFIG_I2C\n         CONFIG_SND_SOC_AK4642)\n    (and CONFIG_SND_FSI_AK4642\n         (not CONFIG_SND_FSI_DA7210)\n         CONFIG_SND_SOC_DA7210\n         CONFIG_I2C\n         (not CONFIG_SND_SOC_AK4642))\n    (and CONFIG_SND_FSI_AK4642\n         CONFIG_I2C\n         CONFIG_SND_SOC_AK4642\n         (not CONFIG_SND_FSI_DA7210)\n         CONFIG_SND_SOC_DA7210)\n    (and (not CONFIG_SND_SOC_DA7210)\n         CONFIG_I2C\n         CONFIG_SND_SOC_AK4642\n         (not CONFIG_SND_FSI_AK4642)\n         CONFIG_SND_FSI_DA7210)\n    (and (not CONFIG_SND_SOC_DA7210)\n         CONFIG_SND_FSI_DA7210\n         CONFIG_SND_FSI_AK4642\n         CONFIG_I2C\n         (not CONFIG_SND_SOC_AK4642))\n    (and CONFIG_I2C\n         CONFIG_SND_SOC_AK4642\n         CONFIG_SND_SOC_DA7210\n         (not CONFIG_SND_FSI_AK4642)\n         CONFIG_SND_FSI_DA7210)\n    (and (not CONFIG_SND_FSI_AK4642)\n         (not CONFIG_SND_FSI_DA7210)\n         CONFIG_SND_SOC_DA7210\n         CONFIG_I2C\n         (not CONFIG_SND_SOC_AK4642)))",
+  "model": "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  true)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+  "numConfigs": [
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+  ],
+  "strategy": "product",
+  "classification": "TRUE_NEW",
+  "old_id": "PRODUCT_61",
+  "id": "PRODUCT_44"
+}

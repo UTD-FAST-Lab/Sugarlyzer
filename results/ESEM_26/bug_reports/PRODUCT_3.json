@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "unix.Malloc",
+    "description": "Potential leak of memory pointed to by 'clist'",
+    "fileLocation": "/workspace/varbugs/bc0ffc0e971.c",
+    "line": 46,
+    "analysisTime": 0.049432185
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= ENABLE_FEATURE_CLEAN_UP false))",
+  "model": "(define-fun ENABLE_FEATURE_CLEAN_UP () Bool\n  false)",
+  "numConfigs": [
+    1
+  ],
+  "strategy": "product",
+  "classification": "TRUE_NEW",
+  "old_id": "PRODUCT_42",
+  "id": "PRODUCT_3"
+}

@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "DEAD_STORE",
+    "description": "The value written to `&codec_hw_write` is never used.",
+    "fileLocation": "/workspace/218//workspace/varbugs/66517915e09.c",
+    "line": 16,
+    "analysisTime": 1.104568315
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= CONFIG_SND_SOC_DA7210 false)\n     (= CONFIG_SND_FSI_DA7210 true)\n     (= CONFIG_SND_FSI_AK4642 true)\n     (= CONFIG_I2C true)\n     (= CONFIG_SND_SOC_AK4642 true))",
+  "model": "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  false)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  true)\n(define-fun CONFIG_I2C () Bool\n  true)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+  "numConfigs": [
+    5
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_113"
+}

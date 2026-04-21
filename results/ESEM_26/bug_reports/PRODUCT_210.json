@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "DEAD_STORE",
+    "description": "The value written to `&x` is never used.",
+    "fileLocation": "/workspace/439//workspace/varbugs/7acf6cd80b2.c",
+    "line": 8,
+    "analysisTime": 0.980683862
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= CONFIG_DEVPTS_MULTIPLE_INSTANCES true) (= CONFIG_UNIX98_PTYS false))",
+  "model": "(define-fun CONFIG_UNIX98_PTYS () Bool\n  false)\n(define-fun CONFIG_DEVPTS_MULTIPLE_INSTANCES () Bool\n  true)",
+  "numConfigs": [
+    2
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_210"
+}

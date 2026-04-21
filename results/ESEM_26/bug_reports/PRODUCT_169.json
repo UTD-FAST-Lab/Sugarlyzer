@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "DEAD_STORE",
+    "description": "The value written to `&flags` is never used.",
+    "fileLocation": "/workspace/102//workspace/varbugs/c76df14dfb4.c",
+    "line": 42,
+    "analysisTime": 1.113169038
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= CROSS_COMPILE true) (= WIN32 false) (= NEED_ENHANCED_ESCAPES false))",
+  "model": "(define-fun WIN32 () Bool\n  false)\n(define-fun NEED_ENHANCED_ESCAPES () Bool\n  false)\n(define-fun CROSS_COMPILE () Bool\n  true)",
+  "numConfigs": [
+    3
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_169"
+}

@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.uninitialized.Assign",
+    "description": "Assigned value is garbage or undefined",
+    "fileLocation": "/workspace/varbugs/c708c57e247.c",
+    "line": 18,
+    "analysisTime": 0.027623931
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= CONFIG_S390_PRNG true))",
+  "model": "(define-fun CONFIG_S390_PRNG () Bool\n  true)",
+  "numConfigs": [
+    1
+  ],
+  "strategy": "product",
+  "classification": "TRUE",
+  "old_id": "PRODUCT_68",
+  "id": "PRODUCT_10"
+}

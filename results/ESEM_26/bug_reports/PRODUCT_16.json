@@ -1,0 +1,21 @@
+{
+  "originalAlarm": {
+    "alarmType": "deadcode.DeadStores",
+    "description": "Value stored to 'p' is never read",
+    "fileLocation": "/workspace/varbugs/061fd0a353e.c",
+    "line": 16,
+    "analysisTime": 0.043490888
+  },
+  "configFiles": [],
+  "presenceCondition": "(or (and (not CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF)\n         CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF)\n    (and (not CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF)\n         (not CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF))\n    (and CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF\n         CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF))",
+  "model": "(define-fun CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF () Bool\n  false)\n(define-fun CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF () Bool\n  true)",
+  "numConfigs": [
+    2,
+    2,
+    2
+  ],
+  "strategy": "product",
+  "classification": "TRUE_NEW_UNDER",
+  "old_id": "PRODUCT_13",
+  "id": "PRODUCT_16"
+}

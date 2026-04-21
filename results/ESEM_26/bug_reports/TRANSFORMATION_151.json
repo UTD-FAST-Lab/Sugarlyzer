@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "DEAD_STORE",
+    "description": "The value written to `&__irq_3` is never used.",
+    "fileLocation": "/workspace/varbugs/6252547b8a7.desugared.c",
+    "line": 49,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/6252547b8a7.c",
+  "sanitizedDescription": "The value written to `&irq` is never used.",
+  "lineInputFile": [
+    12,
+    12
+  ],
+  "presenceCondition": "(or (and (not CONFIG_TWL4030_CORE) CONFIG_IRQ_DOMAIN) CONFIG_TWL4030_CORE)",
+  "model": "(define-fun CONFIG_TWL4030_CORE () Bool\n  false)\n(define-fun CONFIG_IRQ_DOMAIN () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 1857.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_151"
+}

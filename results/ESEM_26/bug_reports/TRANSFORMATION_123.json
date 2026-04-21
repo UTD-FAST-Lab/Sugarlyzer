@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "DEAD_STORE",
+    "description": "The value written to `&__codec_hw_write_2` is never used.",
+    "fileLocation": "/workspace/varbugs/66517915e09.desugared.c",
+    "line": 57,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/66517915e09.c",
+  "sanitizedDescription": "The value written to `&codec_hw_write` is never used.",
+  "lineInputFile": [
+    16,
+    16
+  ],
+  "presenceCondition": "(and (or (and (not CONFIG_SND_FSI_DA7210) CONFIG_SND_SOC_DA7210)\n         CONFIG_SND_FSI_DA7210)\n     (or (and (not CONFIG_SND_FSI_DA7210) CONFIG_I2C CONFIG_SND_SOC_DA7210)\n         (and CONFIG_SND_FSI_DA7210 CONFIG_I2C)))",
+  "model": "(define-fun CONFIG_SND_SOC_DA7210 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  true)\n(define-fun CONFIG_SND_FSI_DA7210 () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 1623.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_123"
+}

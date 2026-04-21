@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "NULLPTR_DEREFERENCE",
+    "description": "`buffer` could be null (null value originating from line 39) and is dereferenced.",
+    "fileLocation": "/workspace/11//workspace/varbugs/221ac329e93.c",
+    "line": 41,
+    "analysisTime": 0.76671624
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= CONFIG_KGDB true) (= CONFIG_KPROBES true))",
+  "model": "(define-fun CONFIG_KPROBES () Bool\n  true)\n(define-fun CONFIG_KGDB () Bool\n  true)",
+  "numConfigs": [
+    2
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_76"
+}

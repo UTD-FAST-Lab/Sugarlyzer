@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "DEAD_STORE",
+    "description": "The value written to `&__eckey_814` is never used.",
+    "fileLocation": "/workspace/varbugs/35ae2e259e4.desugared.c",
+    "line": 1576,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/35ae2e259e4.c",
+  "sanitizedDescription": "The value written to `&eckey` is never used.",
+  "lineInputFile": [
+    10,
+    10
+  ],
+  "presenceCondition": "(and (or (and (not _STDLIB_H) __need_malloc_and_calloc) _STDLIB_H)\n     (and (not _STDLIB_H) __need_malloc_and_calloc)\n     (not __malloc_and_calloc_defined)\n     HAVE_ECC)",
+  "model": "(define-fun __need_malloc_and_calloc () Bool\n  true)\n(define-fun HAVE_ECC () Bool\n  true)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __malloc_and_calloc_defined () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 7166.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_126"
+}

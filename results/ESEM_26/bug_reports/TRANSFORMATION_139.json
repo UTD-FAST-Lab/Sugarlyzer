@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "PULSE_UNINITIALIZED_VALUE",
+    "description": "`__length_13` is read without initialization during the call to `__reiserfs_security_init_8()`.",
+    "fileLocation": "/workspace/varbugs/30e053248da.desugared.c",
+    "line": 149,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/30e053248da.c",
+  "sanitizedDescription": "`length_13` is read without initialization during the call to `__reiserfs_security_init()`.",
+  "lineInputFile": [
+    41,
+    41
+  ],
+  "presenceCondition": "true",
+  "model": "",
+  "feasible": true,
+  "desugaringTime": 1612.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_139"
+}

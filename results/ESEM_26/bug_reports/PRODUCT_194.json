@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "DEAD_STORE",
+    "description": "The value written to `&len` is never used.",
+    "fileLocation": "/workspace/389//workspace/varbugs/95755181b82.c",
+    "line": 39,
+    "analysisTime": 1.052180477
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= ENABLE_FEATURE_HTTPD_GZIP true)\n     (= ENABLE_FEATURE_HTTPD_BASIC_AUTH true)\n     (= BB_MMU false))",
+  "model": "(define-fun BB_MMU () Bool\n  false)\n(define-fun ENABLE_FEATURE_HTTPD_GZIP () Bool\n  true)\n(define-fun ENABLE_FEATURE_HTTPD_BASIC_AUTH () Bool\n  true)",
+  "numConfigs": [
+    3
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_194"
+}

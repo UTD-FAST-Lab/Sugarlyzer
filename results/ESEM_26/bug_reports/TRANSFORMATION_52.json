@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "deadcode.DeadStores",
+    "description": "Value stored to '__info_1612' is never read",
+    "fileLocation": "/workspace/varbugs/b273d665181.desugared.c",
+    "line": 2553,
+    "analysisTime": 0.069857712
+  },
+  "originalFile": "/workspace/varbugs/b273d665181.c",
+  "sanitizedDescription": "Value stored to 'info' is never read",
+  "lineInputFile": [
+    11,
+    11
+  ],
+  "presenceCondition": "(let ((a!1 (or (and (and (not _STDLIB_H)\n                         __need_malloc_and_calloc\n                         BB_FEATURE_LS_FILETYPES)\n                    BB_FEATURE_LS_USERNAME)\n               (and (and _STDLIB_H BB_FEATURE_LS_FILETYPES)\n                    BB_FEATURE_LS_USERNAME))))\n  (and (or (and (not _STDLIB_H)\n                __need_malloc_and_calloc\n                BB_FEATURE_LS_FILETYPES)\n           (and _STDLIB_H BB_FEATURE_LS_FILETYPES))\n       a!1))",
+  "model": "(define-fun __need_malloc_and_calloc () Bool\n  true)\n(define-fun BB_FEATURE_LS_USERNAME () Bool\n  true)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun BB_FEATURE_LS_FILETYPES () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 4950.0,
+  "strategy": "transformation",
+  "classification": "FALSE",
+  "old_id": "TRANSFORMATION_106",
+  "id": "TRANSFORMATION_52"
+}

@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.uninitialized.Branch",
+    "description": "Branch condition evaluates to a garbage value",
+    "fileLocation": "/workspace/varbugs/5275b1e49f6.desugared.c",
+    "line": 2305,
+    "analysisTime": 0.053686351
+  },
+  "originalFile": "/workspace/varbugs/5275b1e49f6.c",
+  "sanitizedDescription": "Branch condition evaluates to a garbage value",
+  "lineInputFile": [
+    15,
+    15
+  ],
+  "presenceCondition": "(or (and (not __USE_EXTERN_INLINES)\n         (not _STDLIB_H)\n         (not __need_malloc_and_calloc))\n    (and __USE_EXTERN_INLINES (not _STDLIB_H) (not __need_malloc_and_calloc)))",
+  "model": "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun __USE_EXTERN_INLINES () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 5609.0,
+  "strategy": "transformation",
+  "classification": "FALSE",
+  "old_id": "TRANSFORMATION_86",
+  "id": "TRANSFORMATION_35"
+}

@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "unix.Malloc",
+    "description": "Potential leak of memory pointed to by '__mod_11'",
+    "fileLocation": "/workspace/varbugs/6e2b75740be.desugared.c",
+    "line": 185,
+    "analysisTime": 0.031778124
+  },
+  "originalFile": "/workspace/varbugs/6e2b75740be.c",
+  "sanitizedDescription": "Potential leak of memory pointed to by 'mod'",
+  "lineInputFile": [
+    69,
+    69
+  ],
+  "presenceCondition": "true",
+  "model": "",
+  "feasible": true,
+  "desugaringTime": 1183.0,
+  "strategy": "transformation",
+  "classification": "FALSE",
+  "old_id": "TRANSFORMATION_185",
+  "id": "TRANSFORMATION_26"
+}

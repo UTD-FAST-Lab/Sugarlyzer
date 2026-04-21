@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "PULSE_UNINITIALIZED_VALUE",
+    "description": "`__curr_1644` is read without initialization.",
+    "fileLocation": "/workspace/varbugs/2631486f1bf.desugared.c",
+    "line": 2583,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/2631486f1bf.c",
+  "sanitizedDescription": "`curr` is read without initialization.",
+  "lineInputFile": [
+    66,
+    66
+  ],
+  "presenceCondition": "(or (and (not CONFIG_FEATURE_LS_SORTFILES)\n         (and __STRICT_ANSI__ (not _STDLIB_H) (not __need_malloc_and_calloc))\n         (not CONFIG_FEATURE_LS_SORTFILES))\n    (and (not CONFIG_FEATURE_LS_SORTFILES)\n         (and (not __STRICT_ANSI__)\n              (not _STDLIB_H)\n              (not __need_malloc_and_calloc))\n         (not CONFIG_FEATURE_LS_SORTFILES))\n    (and CONFIG_FEATURE_LS_SORTFILES\n         (and __STRICT_ANSI__ (not _STDLIB_H) (not __need_malloc_and_calloc))\n         CONFIG_FEATURE_LS_SORTFILES)\n    (and CONFIG_FEATURE_LS_SORTFILES\n         (and (not __STRICT_ANSI__)\n              (not _STDLIB_H)\n              (not __need_malloc_and_calloc))\n         CONFIG_FEATURE_LS_SORTFILES))",
+  "model": "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun CONFIG_FEATURE_LS_SORTFILES () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 8388.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_144"
+}

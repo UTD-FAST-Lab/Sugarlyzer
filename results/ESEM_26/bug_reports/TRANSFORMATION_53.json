@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.uninitialized.UndefReturn",
+    "description": "Undefined or garbage value returned to caller",
+    "fileLocation": "/workspace/varbugs/51fd36f3fad.desugared.c",
+    "line": 193,
+    "analysisTime": 0.026379228
+  },
+  "originalFile": "/workspace/varbugs/51fd36f3fad.c",
+  "sanitizedDescription": "Undefined or garbage value returned to caller",
+  "lineInputFile": [
+    45,
+    45
+  ],
+  "presenceCondition": "(and (not __int8_t_defined) (not CONFIG_64BIT) (not CONFIG_KTIME_SCALAR))",
+  "model": "(define-fun __int8_t_defined () Bool\n  false)\n(define-fun CONFIG_64BIT () Bool\n  false)\n(define-fun CONFIG_KTIME_SCALAR () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 2405.0,
+  "strategy": "transformation",
+  "classification": "FALSE",
+  "old_id": "TRANSFORMATION_169",
+  "id": "TRANSFORMATION_53"
+}

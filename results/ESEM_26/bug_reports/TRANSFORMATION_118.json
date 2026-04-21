@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "NULLPTR_DEREFERENCE",
+    "description": "`__curr_1644` could be null (null value originating from line 2574) and is dereferenced.",
+    "fileLocation": "/workspace/varbugs/2631486f1bf.desugared.c",
+    "line": 2591,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/2631486f1bf.c",
+  "sanitizedDescription": "`curr` could be null (null value originating from line 2574) and is dereferenced.",
+  "lineInputFile": [
+    67,
+    67
+  ],
+  "presenceCondition": "(not CONFIG_FEATURE_LS_SORTFILES)",
+  "model": "(define-fun CONFIG_FEATURE_LS_SORTFILES () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 8388.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_118"
+}

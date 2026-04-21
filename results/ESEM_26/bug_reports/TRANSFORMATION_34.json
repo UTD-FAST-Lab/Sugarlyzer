@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "unix.Malloc",
+    "description": "Use of memory after it is freed",
+    "fileLocation": "/workspace/varbugs/bc0ffc0e971.desugared.c",
+    "line": 2779,
+    "analysisTime": 0.109733488
+  },
+  "originalFile": "/workspace/varbugs/bc0ffc0e971.c",
+  "sanitizedDescription": "Use of memory after it is freed",
+  "lineInputFile": [
+    43,
+    43
+  ],
+  "presenceCondition": "(or (and __STRICT_ANSI__ ENABLE_FEATURE_CLEAN_UP)\n    (and (not __STRICT_ANSI__) ENABLE_FEATURE_CLEAN_UP))",
+  "model": "(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun ENABLE_FEATURE_CLEAN_UP () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 6974.0,
+  "strategy": "transformation",
+  "classification": "TRUE",
+  "old_id": "TRANSFORMATION_129",
+  "id": "TRANSFORMATION_34"
+}

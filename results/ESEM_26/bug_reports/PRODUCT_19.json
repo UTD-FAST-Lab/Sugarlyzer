@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.CallAndMessage",
+    "description": "1st function call argument is an uninitialized value",
+    "fileLocation": "/workspace/varbugs/1b48bb3c1af.c",
+    "line": 14,
+    "analysisTime": 0.028776188
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= APU_HAS_LDAP true) (= APR_HAS_SHARED_MEMORY true))",
+  "model": "(define-fun APR_HAS_SHARED_MEMORY () Bool\n  true)\n(define-fun APU_HAS_LDAP () Bool\n  true)",
+  "numConfigs": [
+    2
+  ],
+  "strategy": "product",
+  "classification": "TRUE",
+  "old_id": "PRODUCT_1",
+  "id": "PRODUCT_19"
+}

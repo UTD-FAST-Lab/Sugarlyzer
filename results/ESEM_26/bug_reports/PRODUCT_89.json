@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "DEAD_STORE",
+    "description": "The value written to `&pid_output` is never used.",
+    "fileLocation": "/workspace/296//workspace/varbugs/8c4377dd635.c",
+    "line": 13,
+    "analysisTime": 1.212042474
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= MARLIN_H false) (= PIDTEMP true) (= PID_DEBUG true))",
+  "model": "(define-fun PID_DEBUG () Bool\n  true)\n(define-fun MARLIN_H () Bool\n  false)\n(define-fun PIDTEMP () Bool\n  true)",
+  "numConfigs": [
+    3
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_89"
+}

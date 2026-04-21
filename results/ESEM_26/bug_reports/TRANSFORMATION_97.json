@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "MEMORY_LEAK_C",
+    "description": "Memory dynamically allocated by `malloc` on line 1878 is not freed after the last access at line 1878, column 2.",
+    "fileLocation": "/workspace/varbugs/eef2317b9f5.desugared.c",
+    "line": 1878,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/eef2317b9f5.c",
+  "sanitizedDescription": "Memory dynamically allocated by `malloc` on line 1878 is not freed after the last access at line 1878, column 2.",
+  "lineInputFile": [
+    26,
+    26
+  ],
+  "presenceCondition": "(and (not CONFIG_FEATURE_CLEAN_UP)\n     (not _STDLIB_H)\n     (not __malloc_and_calloc_defined)\n     (not CONFIG_FEATURE_CLEAN_UP))",
+  "model": "(define-fun CONFIG_FEATURE_CLEAN_UP () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __malloc_and_calloc_defined () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 6484.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_97"
+}

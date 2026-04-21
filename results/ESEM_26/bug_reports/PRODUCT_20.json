@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.uninitialized.UndefReturn",
+    "description": "Undefined or garbage value returned to caller",
+    "fileLocation": "/workspace/varbugs/e39363a9def.c",
+    "line": 17,
+    "analysisTime": 0.035207968
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= CONFIG_NETPOLL true) (= CONFIG_IPV6 false))",
+  "model": "(define-fun CONFIG_NETPOLL () Bool\n  true)\n(define-fun CONFIG_IPV6 () Bool\n  false)",
+  "numConfigs": [
+    2
+  ],
+  "strategy": "product",
+  "classification": "TRUE",
+  "old_id": "PRODUCT_69",
+  "id": "PRODUCT_20"
+}

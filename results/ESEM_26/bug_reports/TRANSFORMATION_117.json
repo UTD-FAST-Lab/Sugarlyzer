@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "NULLPTR_DEREFERENCE",
+    "description": "`__ops_6` could be null (null value originating from line 67) and is dereferenced in the call to `__irq_domain_add_2()`.",
+    "fileLocation": "/workspace/varbugs/6252547b8a7.desugared.c",
+    "line": 73,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/6252547b8a7.c",
+  "sanitizedDescription": "`ops_6` could be null (null value originating from line 67) and is dereferenced in the call to `__irq_domain_add()`.",
+  "lineInputFile": [
+    25,
+    25
+  ],
+  "presenceCondition": "(and CONFIG_TWL4030_CORE CONFIG_TWL4030_CORE (not CONFIG_OF_IRQ))",
+  "model": "(define-fun CONFIG_TWL4030_CORE () Bool\n  true)\n(define-fun CONFIG_OF_IRQ () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 1857.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_117"
+}

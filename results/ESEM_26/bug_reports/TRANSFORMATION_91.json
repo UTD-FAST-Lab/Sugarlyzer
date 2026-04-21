@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "DEAD_STORE",
+    "description": "The value written to `&__pid_output_699` is never used.",
+    "fileLocation": "/workspace/varbugs/8c4377dd635.desugared.c",
+    "line": 839,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/8c4377dd635.c",
+  "sanitizedDescription": "The value written to `&pid_output` is never used.",
+  "lineInputFile": [
+    13,
+    13
+  ],
+  "presenceCondition": "(or (and (and MARLIN_H PIDTEMP) (not PID_DEBUG))\n    (and MARLIN_H (not PIDTEMP))\n    (and (and MARLIN_H PIDTEMP) PID_DEBUG)\n    (and (and (not MARLIN_H) PIDTEMP) (not PID_DEBUG))\n    (and (not MARLIN_H) (not PIDTEMP))\n    (and (and (not MARLIN_H) PIDTEMP) PID_DEBUG))",
+  "model": "(define-fun PID_DEBUG () Bool\n  false)\n(define-fun MARLIN_H () Bool\n  true)\n(define-fun PIDTEMP () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 5233.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_91"
+}

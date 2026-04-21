@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "deadcode.DeadStores",
+    "description": "Value stored to 'a' during its initialization is never read",
+    "fileLocation": "/workspace/varbugs/b62bd7b261b.c",
+    "line": 14,
+    "analysisTime": 0.041974999
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= ENABLE_FEATURE_MDEV_CONF true)\n     (= ENABLE_FEATURE_MDEV_RENAME true)\n     (= ENABLE_FEATURE_MDEV_RENAME_REGEXP false))",
+  "model": "(define-fun ENABLE_FEATURE_MDEV_CONF () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME_REGEXP () Bool\n  false)",
+  "numConfigs": [
+    3
+  ],
+  "strategy": "product",
+  "classification": "TRUE_NEW",
+  "old_id": "PRODUCT_40",
+  "id": "PRODUCT_11"
+}

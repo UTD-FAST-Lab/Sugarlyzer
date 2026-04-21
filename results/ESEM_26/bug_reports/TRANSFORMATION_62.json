@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "deadcode.DeadStores",
+    "description": "Value stored to '__time_8' during its initialization is never read",
+    "fileLocation": "/workspace/varbugs/831016b09f7.desugared.c",
+    "line": 87,
+    "analysisTime": 0.027344734
+  },
+  "originalFile": "/workspace/varbugs/831016b09f7.c",
+  "sanitizedDescription": "Value stored to 'time' during its initialization is never read",
+  "lineInputFile": [
+    14,
+    14
+  ],
+  "presenceCondition": "SDSUPPORT",
+  "model": "(define-fun SDSUPPORT () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 992.0,
+  "strategy": "transformation",
+  "classification": "FALSE",
+  "old_id": "TRANSFORMATION_229",
+  "id": "TRANSFORMATION_62"
+}

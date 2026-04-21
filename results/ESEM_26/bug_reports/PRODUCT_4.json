@@ -1,0 +1,26 @@
+{
+  "originalAlarm": {
+    "alarmType": "deadcode.DeadStores",
+    "description": "Value stored to 'n' during its initialization is never read",
+    "fileLocation": "/workspace/varbugs/0f8f8094d28.c",
+    "line": 39,
+    "analysisTime": 0.036182534
+  },
+  "configFiles": [],
+  "presenceCondition": "(or (and CONFIG_LOCKDEP\n         CONFIG_SLAB\n         CONFIG_FORCE_MAX_ZONEORDER\n         (not CONFIG_SLOB)\n         (not CONFIG_PPC_256K_PAGES))\n    (and CONFIG_LOCKDEP\n         (not CONFIG_SLOB)\n         CONFIG_PPC_256K_PAGES\n         CONFIG_SLAB\n         (not CONFIG_FORCE_MAX_ZONEORDER))\n    (and CONFIG_LOCKDEP\n         CONFIG_FORCE_MAX_ZONEORDER\n         (not CONFIG_SLOB)\n         (not CONFIG_SLAB)\n         CONFIG_PPC_256K_PAGES)\n    (and CONFIG_LOCKDEP\n         CONFIG_FORCE_MAX_ZONEORDER\n         (not CONFIG_SLOB)\n         (not CONFIG_PPC_256K_PAGES)\n         (not CONFIG_SLAB))\n    (and CONFIG_LOCKDEP\n         CONFIG_SLAB\n         CONFIG_FORCE_MAX_ZONEORDER\n         (not CONFIG_SLOB)\n         CONFIG_PPC_256K_PAGES)\n    (and CONFIG_LOCKDEP\n         (not CONFIG_SLOB)\n         (not CONFIG_PPC_256K_PAGES)\n         CONFIG_SLAB\n         (not CONFIG_FORCE_MAX_ZONEORDER))\n    (and CONFIG_LOCKDEP\n         (not CONFIG_FORCE_MAX_ZONEORDER)\n         (not CONFIG_SLOB)\n         (not CONFIG_SLAB)\n         CONFIG_PPC_256K_PAGES)\n    (and CONFIG_LOCKDEP\n         (not CONFIG_FORCE_MAX_ZONEORDER)\n         (not CONFIG_SLOB)\n         (not CONFIG_PPC_256K_PAGES)\n         (not CONFIG_SLAB)))",
+  "model": "(define-fun CONFIG_SLAB () Bool\n  false)\n(define-fun CONFIG_SLOB () Bool\n  false)\n(define-fun CONFIG_PPC_256K_PAGES () Bool\n  false)\n(define-fun CONFIG_LOCKDEP () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  false)",
+  "numConfigs": [
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5,
+    5
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_4"
+}

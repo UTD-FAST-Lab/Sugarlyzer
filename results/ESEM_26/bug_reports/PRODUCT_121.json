@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "PULSE_UNINITIALIZED_VALUE",
+    "description": "`conv` is read without initialization.",
+    "fileLocation": "/workspace/378//workspace/varbugs/31873ec707d.c",
+    "line": 8,
+    "analysisTime": 0.715671291
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= ULTRA_LCD true))",
+  "model": "(define-fun ULTRA_LCD () Bool\n  true)",
+  "numConfigs": [
+    1
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_121"
+}

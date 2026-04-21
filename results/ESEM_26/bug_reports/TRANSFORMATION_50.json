@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "deadcode.DeadStores",
+    "description": "Value stored to '__wakeup_1' is never read",
+    "fileLocation": "/workspace/varbugs/36855dcfc98.desugared.c",
+    "line": 36,
+    "analysisTime": 0.029230187
+  },
+  "originalFile": "/workspace/varbugs/36855dcfc98.c",
+  "sanitizedDescription": "Value stored to 'wakeup' is never read",
+  "lineInputFile": [
+    6,
+    6
+  ],
+  "presenceCondition": "(not CONFIG_BF60x)",
+  "model": "(define-fun CONFIG_BF60x () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 1418.0,
+  "strategy": "transformation",
+  "classification": "TRUE",
+  "old_id": "TRANSFORMATION_168",
+  "id": "TRANSFORMATION_50"
+}

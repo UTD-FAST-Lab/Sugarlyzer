@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "NULLPTR_DEREFERENCE",
+    "description": "The call to `prepend_new_eth_table` may trigger the following issue: `ch` could be null (from the call to `prepend_new_eth_table()` on line 40) and is dereferenced in the call to `prepend_new_eth_table()`.",
+    "fileLocation": "/workspace/399//workspace/varbugs/bc0ffc0e971.c",
+    "line": 40,
+    "analysisTime": 1.069281004
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= ENABLE_FEATURE_CLEAN_UP false))",
+  "model": "(define-fun ENABLE_FEATURE_CLEAN_UP () Bool\n  false)",
+  "numConfigs": [
+    1
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_170"
+}

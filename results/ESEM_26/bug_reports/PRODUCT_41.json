@@ -1,0 +1,20 @@
+{
+  "originalAlarm": {
+    "alarmType": "deadcode.DeadStores",
+    "description": "Value stored to 'xGridSpacing' during its initialization is never read",
+    "fileLocation": "/workspace/varbugs/e30bfedce4d.c",
+    "line": 24,
+    "analysisTime": 0.035639431
+  },
+  "configFiles": [],
+  "presenceCondition": "(or (and ENABLE_AUTO_BED_LEVELING AUTO_BED_LEVELING_GRID)\n    (and ENABLE_AUTO_BED_LEVELING (not AUTO_BED_LEVELING_GRID)))",
+  "model": "(define-fun AUTO_BED_LEVELING_GRID () Bool\n  false)\n(define-fun ENABLE_AUTO_BED_LEVELING () Bool\n  true)",
+  "numConfigs": [
+    2,
+    2
+  ],
+  "strategy": "product",
+  "classification": "TRUE_NEW_UNDER",
+  "old_id": "PRODUCT_73",
+  "id": "PRODUCT_41"
+}

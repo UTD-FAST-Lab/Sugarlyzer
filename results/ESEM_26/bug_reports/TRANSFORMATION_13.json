@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.uninitialized.Branch",
+    "description": "Branch condition evaluates to a garbage value",
+    "fileLocation": "/workspace/varbugs/b62bd7b261b.desugared.c",
+    "line": 2559,
+    "analysisTime": 0.079399944
+  },
+  "originalFile": "/workspace/varbugs/b62bd7b261b.c",
+  "sanitizedDescription": "Branch condition evaluates to a garbage value",
+  "lineInputFile": [
+    16,
+    395
+  ],
+  "presenceCondition": "(let ((a!1 (or (and __STRICT_ANSI__ (not ENABLE_FEATURE_MDEV_CONF))\n               (and (and __STRICT_ANSI__ ENABLE_FEATURE_MDEV_CONF)\n                    (not ENABLE_FEATURE_MDEV_RENAME))\n               (and (and (and __STRICT_ANSI__ ENABLE_FEATURE_MDEV_CONF)\n                         ENABLE_FEATURE_MDEV_RENAME)\n                    (not ENABLE_FEATURE_MDEV_RENAME_REGEXP))))\n      (a!3 (and (and (and (not __STRICT_ANSI__) ENABLE_FEATURE_MDEV_CONF)\n                     ENABLE_FEATURE_MDEV_RENAME)\n                (not ENABLE_FEATURE_MDEV_RENAME_REGEXP)))\n      (a!5 (and (and (and (not __STRICT_ANSI__) ENABLE_FEATURE_MDEV_CONF)\n                     ENABLE_FEATURE_MDEV_RENAME)\n                ENABLE_FEATURE_MDEV_RENAME_REGEXP)))\n(let ((a!2 (and a!1\n                (and (and (and __STRICT_ANSI__ ENABLE_FEATURE_MDEV_CONF)\n                          ENABLE_FEATURE_MDEV_RENAME)\n                     (not ENABLE_FEATURE_MDEV_RENAME_REGEXP))))\n      (a!4 (or (and (not __STRICT_ANSI__) (not ENABLE_FEATURE_MDEV_CONF))\n               (and (and (not __STRICT_ANSI__) ENABLE_FEATURE_MDEV_CONF)\n                    (not ENABLE_FEATURE_MDEV_RENAME))\n               a!3)))\n  (or a!2\n      (and (and (and __STRICT_ANSI__ ENABLE_FEATURE_MDEV_CONF)\n                ENABLE_FEATURE_MDEV_RENAME)\n           ENABLE_FEATURE_MDEV_RENAME_REGEXP)\n      (and a!4 a!3)\n      a!5)))",
+  "model": "(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_CONF () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME () Bool\n  true)\n(define-fun ENABLE_FEATURE_MDEV_RENAME_REGEXP () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 6010.0,
+  "strategy": "transformation",
+  "classification": "FALSE",
+  "old_id": "TRANSFORMATION_115",
+  "id": "TRANSFORMATION_13"
+}

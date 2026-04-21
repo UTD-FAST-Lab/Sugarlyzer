@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "DEAD_STORE",
+    "description": "The value written to `&driver_data` is never used.",
+    "fileLocation": "/workspace/440//workspace/varbugs/7acf6cd80b2.c",
+    "line": 39,
+    "analysisTime": 1.092588009
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= CONFIG_DEVPTS_MULTIPLE_INSTANCES true) (= CONFIG_UNIX98_PTYS true))",
+  "model": "(define-fun CONFIG_UNIX98_PTYS () Bool\n  true)\n(define-fun CONFIG_DEVPTS_MULTIPLE_INSTANCES () Bool\n  true)",
+  "numConfigs": [
+    2
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_140"
+}

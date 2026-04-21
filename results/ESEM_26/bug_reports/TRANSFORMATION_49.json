@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.uninitialized.Branch",
+    "description": "Branch condition evaluates to a garbage value",
+    "fileLocation": "/workspace/varbugs/6e2b75740be.desugared.c",
+    "line": 75,
+    "analysisTime": 0.031778124
+  },
+  "originalFile": "/workspace/varbugs/6e2b75740be.c",
+  "sanitizedDescription": "Branch condition evaluates to a garbage value",
+  "lineInputFile": [
+    31,
+    31
+  ],
+  "presenceCondition": "(and CONFIG_MODULE_UNLOAD CONFIG_SMP)",
+  "model": "(define-fun CONFIG_MODULE_UNLOAD () Bool\n  true)\n(define-fun CONFIG_SMP () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 1183.0,
+  "strategy": "transformation",
+  "classification": "TRUE_NEW",
+  "old_id": "TRANSFORMATION_182",
+  "id": "TRANSFORMATION_49"
+}

@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "DEAD_STORE",
+    "description": "The value written to `&x` is never used.",
+    "fileLocation": "/workspace/7//workspace/varbugs/30e053248da.c",
+    "line": 31,
+    "analysisTime": 0.882761282
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= CONFIG_SECURITY true))",
+  "model": "(define-fun CONFIG_SECURITY () Bool\n  true)",
+  "numConfigs": [
+    1
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_191"
+}

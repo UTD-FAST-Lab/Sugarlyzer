@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "deadcode.DeadStores",
+    "description": "Value stored to '__gdp_695' is never read",
+    "fileLocation": "/workspace/varbugs/0301ffab3d9.desugared.c",
+    "line": 984,
+    "analysisTime": 0.03405169
+  },
+  "originalFile": "/workspace/varbugs/0301ffab3d9.c",
+  "sanitizedDescription": "Value stored to 'gdp' is never read",
+  "lineInputFile": [
+    8,
+    8
+  ],
+  "presenceCondition": "(and __need___FILE EXT2FS_ENABLE_SWAPFS)",
+  "model": "(define-fun __need___FILE () Bool\n  true)\n(define-fun EXT2FS_ENABLE_SWAPFS () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 5010.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_79"
+}

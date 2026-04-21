@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "NULLPTR_DEREFERENCE",
+    "description": "`__scontext_1613` could be null (null value originating from line 2352) and is dereferenced.",
+    "fileLocation": "/workspace/varbugs/1b487ea8a69.desugared.c",
+    "line": 2358,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/1b487ea8a69.c",
+  "sanitizedDescription": "`scontext` could be null (null value originating from line 2352) and is dereferenced.",
+  "lineInputFile": [
+    14,
+    14
+  ],
+  "presenceCondition": "(or (and (and (not __USE_EXTERN_INLINES)\n              (not _STDLIB_H)\n              (not __need_malloc_and_calloc)\n              (not ENABLE_FEATURE_STAT_FORMAT))\n         __STRICT_ANSI__\n         (not __USE_EXTERN_INLINES)\n         (not _STDLIB_H)\n         (not __need_malloc_and_calloc)\n         ENABLE_SELINUX\n         (not ENABLE_FEATURE_STAT_FORMAT)\n         (not __need___FILE)\n         __STRICT_ANSI__\n         (not __USE_EXTERN_INLINES)\n         (not _STDLIB_H)\n         (not __need_malloc_and_calloc)\n         ENABLE_SELINUX\n         (not ENABLE_FEATURE_STAT_FORMAT))\n    (and (and (not __USE_EXTERN_INLINES)\n              (not _STDLIB_H)\n              (not __need_malloc_and_calloc)\n              (not ENABLE_FEATURE_STAT_FORMAT))\n         (not __STRICT_ANSI__)\n         (not __USE_EXTERN_INLINES)\n         (not _STDLIB_H)\n         (not __need_malloc_and_calloc)\n         ENABLE_SELINUX\n         (not ENABLE_FEATURE_STAT_FORMAT)\n         (not __need___FILE)\n         (not __STRICT_ANSI__)\n         (not __USE_EXTERN_INLINES)\n         (not _STDLIB_H)\n         (not __need_malloc_and_calloc)\n         ENABLE_SELINUX\n         (not ENABLE_FEATURE_STAT_FORMAT)))",
+  "model": "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun __USE_EXTERN_INLINES () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun ENABLE_FEATURE_STAT_FORMAT () Bool\n  false)\n(define-fun ENABLE_SELINUX () Bool\n  true)\n(define-fun __need___FILE () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 8161.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_135"
+}

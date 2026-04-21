@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "PULSE_UNINITIALIZED_VALUE",
+    "description": "`__err_2` is read without initialization.",
+    "fileLocation": "/workspace/varbugs/e39363a9def.desugared.c",
+    "line": 78,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/e39363a9def.c",
+  "sanitizedDescription": "`err` is read without initialization.",
+  "lineInputFile": [
+    17,
+    17
+  ],
+  "presenceCondition": "CONFIG_NETPOLL",
+  "model": "(define-fun CONFIG_NETPOLL () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 2558.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_129"
+}

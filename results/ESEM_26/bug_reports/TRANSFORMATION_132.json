@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "PULSE_UNINITIALIZED_VALUE",
+    "description": "`__driver_data_16` is read without initialization.",
+    "fileLocation": "/workspace/varbugs/7acf6cd80b2.desugared.c",
+    "line": 178,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/7acf6cd80b2.c",
+  "sanitizedDescription": "`driver_data` is read without initialization.",
+  "lineInputFile": [
+    44,
+    44
+  ],
+  "presenceCondition": "CONFIG_UNIX98_PTYS",
+  "model": "(define-fun CONFIG_UNIX98_PTYS () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 2331.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_132"
+}

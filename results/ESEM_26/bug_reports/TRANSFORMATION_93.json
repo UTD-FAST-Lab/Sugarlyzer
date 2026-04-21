@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "DEAD_STORE",
+    "description": "The value written to `&__k_crcs_1621` is never used.",
+    "fileLocation": "/workspace/varbugs/5275b1e49f6.desugared.c",
+    "line": 2327,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/5275b1e49f6.c",
+  "sanitizedDescription": "The value written to `&k_crcs` is never used.",
+  "lineInputFile": [
+    25,
+    25
+  ],
+  "presenceCondition": "(or (and (and (not __USE_EXTERN_INLINES)\n              (not _STDLIB_H)\n              (not __need_malloc_and_calloc))\n         (and (not __USE_EXTERN_INLINES)\n              (not _STDLIB_H)\n              (not __need_malloc_and_calloc)))\n    (and (and __USE_EXTERN_INLINES\n              (not _STDLIB_H)\n              (not __need_malloc_and_calloc))\n         (and __USE_EXTERN_INLINES\n              (not _STDLIB_H)\n              (not __need_malloc_and_calloc))))",
+  "model": "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun __USE_EXTERN_INLINES () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 7601.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_93"
+}

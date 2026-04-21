@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "NULLPTR_DEREFERENCE",
+    "description": "`ops` could be null (null value originating from line 19) and is dereferenced in the call to `irq_domain_add()`.",
+    "fileLocation": "/workspace/24//workspace/varbugs/6252547b8a7.c",
+    "line": 25,
+    "analysisTime": 0.927566522
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= CONFIG_TWL4030_CORE true)\n     (= CONFIG_IRQ_DOMAIN true)\n     (= CONFIG_OF_IRQ false))",
+  "model": "(define-fun CONFIG_TWL4030_CORE () Bool\n  true)\n(define-fun CONFIG_IRQ_DOMAIN () Bool\n  true)\n(define-fun CONFIG_OF_IRQ () Bool\n  false)",
+  "numConfigs": [
+    3
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_208"
+}

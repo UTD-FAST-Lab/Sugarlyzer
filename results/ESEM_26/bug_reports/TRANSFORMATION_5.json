@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "unix.Malloc",
+    "description": "Attempt to free released memory",
+    "fileLocation": "/workspace/varbugs/bc0ffc0e971.desugared.c",
+    "line": 2607,
+    "analysisTime": 0.109733488
+  },
+  "originalFile": "/workspace/varbugs/bc0ffc0e971.c",
+  "sanitizedDescription": "Attempt to free released memory",
+  "lineInputFile": [
+    15,
+    15
+  ],
+  "presenceCondition": "(and (not __STRICT_ANSI__)\n     ENABLE_FEATURE_CLEAN_UP\n     (not __STRICT_ANSI__)\n     (not _STDLIB_H)\n     (not __need_malloc_and_calloc)\n     ENABLE_FEATURE_CLEAN_UP)",
+  "model": "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun ENABLE_FEATURE_CLEAN_UP () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 6974.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_5"
+}

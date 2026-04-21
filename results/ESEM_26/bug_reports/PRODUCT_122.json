@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "DEAD_STORE",
+    "description": "The value written to `&n` is never used.",
+    "fileLocation": "/workspace/309//workspace/varbugs/0f8f8094d28.c",
+    "line": 39,
+    "analysisTime": 1.072616366
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= CONFIG_LOCKDEP true)\n     (= CONFIG_SLOB true)\n     (= CONFIG_PPC_256K_PAGES false)\n     (= CONFIG_SLAB true)\n     (= CONFIG_FORCE_MAX_ZONEORDER false))",
+  "model": "(define-fun CONFIG_SLAB () Bool\n  true)\n(define-fun CONFIG_SLOB () Bool\n  true)\n(define-fun CONFIG_PPC_256K_PAGES () Bool\n  false)\n(define-fun CONFIG_LOCKDEP () Bool\n  true)\n(define-fun CONFIG_FORCE_MAX_ZONEORDER () Bool\n  false)",
+  "numConfigs": [
+    5
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_122"
+}

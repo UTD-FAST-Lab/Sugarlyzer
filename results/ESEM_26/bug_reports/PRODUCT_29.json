@@ -1,0 +1,24 @@
+{
+  "originalAlarm": {
+    "alarmType": "deadcode.DeadStores",
+    "description": "Value stored to 'irq' during its initialization is never read",
+    "fileLocation": "/workspace/varbugs/6252547b8a7.c",
+    "line": 12,
+    "analysisTime": 0.025238856
+  },
+  "configFiles": [],
+  "presenceCondition": "(or (and CONFIG_TWL4030_CORE (not CONFIG_IRQ_DOMAIN) CONFIG_OF_IRQ)\n    (and CONFIG_TWL4030_CORE CONFIG_IRQ_DOMAIN (not CONFIG_OF_IRQ))\n    (and CONFIG_TWL4030_CORE CONFIG_IRQ_DOMAIN CONFIG_OF_IRQ)\n    (and (not CONFIG_TWL4030_CORE) CONFIG_IRQ_DOMAIN CONFIG_OF_IRQ)\n    (and (not CONFIG_TWL4030_CORE) CONFIG_IRQ_DOMAIN (not CONFIG_OF_IRQ))\n    (and CONFIG_TWL4030_CORE (not CONFIG_IRQ_DOMAIN) (not CONFIG_OF_IRQ)))",
+  "model": "(define-fun CONFIG_TWL4030_CORE () Bool\n  true)\n(define-fun CONFIG_IRQ_DOMAIN () Bool\n  false)\n(define-fun CONFIG_OF_IRQ () Bool\n  false)",
+  "numConfigs": [
+    3,
+    3,
+    3,
+    3,
+    3,
+    3
+  ],
+  "strategy": "product",
+  "classification": "TRUE_NEW_UNDER",
+  "old_id": "PRODUCT_58",
+  "id": "PRODUCT_29"
+}

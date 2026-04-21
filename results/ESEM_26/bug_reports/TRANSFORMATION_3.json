@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "deadcode.DeadStores",
+    "description": "Value stored to '__codec_hw_write_7' is never read",
+    "fileLocation": "/workspace/varbugs/66517915e09.desugared.c",
+    "line": 82,
+    "analysisTime": 0.024140122
+  },
+  "originalFile": "/workspace/varbugs/66517915e09.c",
+  "sanitizedDescription": "Value stored to 'codec_hw_write' is never read",
+  "lineInputFile": [
+    24,
+    24
+  ],
+  "presenceCondition": "(and (or (and (not CONFIG_SND_FSI_AK4642) CONFIG_SND_SOC_AK4642)\n         CONFIG_SND_FSI_AK4642)\n     (or (and (not CONFIG_SND_FSI_AK4642) CONFIG_I2C CONFIG_SND_SOC_AK4642)\n         (and CONFIG_SND_FSI_AK4642 CONFIG_I2C)))",
+  "model": "(define-fun CONFIG_SND_FSI_AK4642 () Bool\n  true)\n(define-fun CONFIG_SND_SOC_AK4642 () Bool\n  false)\n(define-fun CONFIG_I2C () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 902.0,
+  "strategy": "transformation",
+  "classification": "TRUE_NEW",
+  "old_id": "TRANSFORMATION_181",
+  "id": "TRANSFORMATION_3"
+}

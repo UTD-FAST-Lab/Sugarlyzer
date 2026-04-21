@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.uninitialized.Assign",
+    "description": "Assigned value is garbage or undefined",
+    "fileLocation": "/workspace/varbugs/31873ec707d.c",
+    "line": 8,
+    "analysisTime": 0.03080128
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= ULTRA_LCD true))",
+  "model": "(define-fun ULTRA_LCD () Bool\n  true)",
+  "numConfigs": [
+    1
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_5"
+}

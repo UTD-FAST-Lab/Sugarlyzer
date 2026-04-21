@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.NullDereference",
+    "description": "Dereference of undefined pointer value",
+    "fileLocation": "/workspace/varbugs/76baeebf7df.desugared.c",
+    "line": 1229,
+    "analysisTime": 0.045772309
+  },
+  "originalFile": "/workspace/varbugs/76baeebf7df.c",
+  "sanitizedDescription": "Dereference of undefined pointer value",
+  "lineInputFile": [
+    137,
+    137
+  ],
+  "presenceCondition": "(or (and CONFIG_PCI\n         (not __need___FILE)\n         __STRICT_ANSI__\n         __USE_EXTERN_INLINES\n         CONFIG_PCI)\n    (and CONFIG_PCI (not __need___FILE) (not __USE_EXTERN_INLINES) CONFIG_PCI)\n    (and CONFIG_PCI\n         (not __need___FILE)\n         (not __STRICT_ANSI__)\n         __USE_EXTERN_INLINES\n         CONFIG_PCI))",
+  "model": "(define-fun CONFIG_PCI () Bool\n  true)\n(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun __USE_EXTERN_INLINES () Bool\n  true)\n(define-fun __need___FILE () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 6573.0,
+  "strategy": "transformation",
+  "classification": "FALSE",
+  "old_id": "TRANSFORMATION_189",
+  "id": "TRANSFORMATION_10"
+}

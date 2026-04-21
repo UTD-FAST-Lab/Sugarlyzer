@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "DEAD_STORE",
+    "description": "The value written to `&someInt` is never used.",
+    "fileLocation": "/workspace/445//workspace/varbugs/5275b1e49f6.c",
+    "line": 9,
+    "analysisTime": 0.949153265
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= CONFIG_FEATURE_INSMOD_VERSION_CHECKING false))",
+  "model": "(define-fun CONFIG_FEATURE_INSMOD_VERSION_CHECKING () Bool\n  false)",
+  "numConfigs": [
+    1
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_167"
+}

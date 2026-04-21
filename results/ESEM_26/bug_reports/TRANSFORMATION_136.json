@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "DEAD_STORE",
+    "description": "The value written to `&__time_8` is never used.",
+    "fileLocation": "/workspace/varbugs/831016b09f7.desugared.c",
+    "line": 87,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/831016b09f7.c",
+  "sanitizedDescription": "The value written to `&time` is never used.",
+  "lineInputFile": [
+    14,
+    14
+  ],
+  "presenceCondition": "SDSUPPORT",
+  "model": "(define-fun SDSUPPORT () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 1722.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_136"
+}

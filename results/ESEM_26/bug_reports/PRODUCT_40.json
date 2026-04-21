@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "unix.Malloc",
+    "description": "Use of memory after it is freed",
+    "fileLocation": "/workspace/varbugs/bc0ffc0e971.c",
+    "line": 43,
+    "analysisTime": 0.041452026
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= ENABLE_FEATURE_CLEAN_UP true))",
+  "model": "(define-fun ENABLE_FEATURE_CLEAN_UP () Bool\n  true)",
+  "numConfigs": [
+    1
+  ],
+  "strategy": "product",
+  "classification": "TRUE",
+  "old_id": "PRODUCT_41",
+  "id": "PRODUCT_40"
+}

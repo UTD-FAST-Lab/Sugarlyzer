@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "core.CallAndMessage",
+    "description": "2nd function call argument is an uninitialized value",
+    "fileLocation": "/workspace/varbugs/b273d665181.c",
+    "line": 16,
+    "analysisTime": 0.03073392
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= BB_FEATURE_LS_FILETYPES true) (= BB_FEATURE_LS_USERNAME false))",
+  "model": "(define-fun BB_FEATURE_LS_USERNAME () Bool\n  false)\n(define-fun BB_FEATURE_LS_FILETYPES () Bool\n  true)",
+  "numConfigs": [
+    2
+  ],
+  "strategy": "product",
+  "classification": "TRUE",
+  "old_id": "PRODUCT_37",
+  "id": "PRODUCT_26"
+}

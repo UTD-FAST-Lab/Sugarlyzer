@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "PULSE_UNINITIALIZED_VALUE",
+    "description": "`__len_1887` is read without initialization.",
+    "fileLocation": "/workspace/varbugs/95755181b82.desugared.c",
+    "line": 2588,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/95755181b82.c",
+  "sanitizedDescription": "`len` is read without initialization.",
+  "lineInputFile": [
+    39,
+    39
+  ],
+  "presenceCondition": "(or (and __STRICT_ANSI__ (not __need___FILE) __STRICT_ANSI__)\n    (and (not __STRICT_ANSI__) (not __need___FILE) (not __STRICT_ANSI__)))",
+  "model": "(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun __need___FILE () Bool\n  false)",
+  "feasible": true,
+  "desugaringTime": 8391.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_107"
+}

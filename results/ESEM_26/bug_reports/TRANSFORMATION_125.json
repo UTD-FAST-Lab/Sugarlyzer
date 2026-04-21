@@ -1,0 +1,23 @@
+{
+  "originalAlarm": {
+    "alarmType": "PULSE_UNINITIALIZED_VALUE",
+    "description": "`__eckey_814` is read without initialization.",
+    "fileLocation": "/workspace/varbugs/35ae2e259e4.desugared.c",
+    "line": 1371,
+    "analysisTime": 4.556807071
+  },
+  "originalFile": "/workspace/varbugs/35ae2e259e4.c",
+  "sanitizedDescription": "`eckey` is read without initialization.",
+  "lineInputFile": [
+    12,
+    12
+  ],
+  "presenceCondition": "(let ((a!1 (and (and (not _STDLIB_H)\n                     __STRICT_ANSI__\n                     (not __need_malloc_and_calloc))\n                (not __USE_EXTERN_INLINES)\n                HAVE_ECC))\n      (a!3 (and (and (not _STDLIB_H)\n                     (not __STRICT_ANSI__)\n                     (not __need_malloc_and_calloc))\n                (not __USE_EXTERN_INLINES)\n                HAVE_ECC))\n      (a!5 (and (and (and (not _STDLIB_H) (not __need_malloc_and_calloc))\n                     __USE_EXTERN_INLINES)\n                (and (and (not _STDLIB_H)\n                          __STRICT_ANSI__\n                          (not __need_malloc_and_calloc))\n                     __USE_EXTERN_INLINES\n                     HAVE_ECC)\n                (and (and (not _STDLIB_H)\n                          __STRICT_ANSI__\n                          (not __need_malloc_and_calloc))\n                     __USE_EXTERN_INLINES\n                     HAVE_ECC)))\n      (a!6 (and (and (not _STDLIB_H)\n                     (not __STRICT_ANSI__)\n                     (not __need_malloc_and_calloc))\n                __USE_EXTERN_INLINES\n                HAVE_ECC)))\n(let ((a!2 (and (and (and (not _STDLIB_H) (not __need_malloc_and_calloc))\n                     (not __USE_EXTERN_INLINES))\n                a!1\n                a!1))\n      (a!4 (and (and (and (not _STDLIB_H) (not __need_malloc_and_calloc))\n                     (not __USE_EXTERN_INLINES))\n                a!3\n                a!3))\n      (a!7 (and (and (and (not _STDLIB_H) (not __need_malloc_and_calloc))\n                     __USE_EXTERN_INLINES)\n                a!6\n                a!6)))\n  (or a!2 a!4 a!5 a!7)))",
+  "model": "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __USE_EXTERN_INLINES () Bool\n  false)\n(define-fun HAVE_ECC () Bool\n  true)",
+  "feasible": true,
+  "desugaringTime": 7166.0,
+  "strategy": "transformation",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "TRANSFORMATION_125"
+}

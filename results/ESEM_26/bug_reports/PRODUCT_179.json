@@ -1,0 +1,19 @@
+{
+  "originalAlarm": {
+    "alarmType": "PULSE_UNINITIALIZED_VALUE",
+    "description": "`head` is read without initialization.",
+    "fileLocation": "/workspace/286//workspace/varbugs/2631486f1bf.c",
+    "line": 67,
+    "analysisTime": 1.065898524
+  },
+  "configFiles": [],
+  "presenceCondition": "(and (= CONFIG_FEATURE_LS_RECURSIVE false) (= CONFIG_FEATURE_LS_SORTFILES true))",
+  "model": "(define-fun CONFIG_FEATURE_LS_RECURSIVE () Bool\n  false)\n(define-fun CONFIG_FEATURE_LS_SORTFILES () Bool\n  true)",
+  "numConfigs": [
+    2
+  ],
+  "strategy": "product",
+  "classification": "UNKNOWN",
+  "old_id": null,
+  "id": "PRODUCT_179"
+}
