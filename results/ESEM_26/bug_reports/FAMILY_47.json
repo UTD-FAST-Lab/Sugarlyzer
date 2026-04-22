@@ -1,0 +1,12 @@
+{
+  "err": "- W [(def(CONFIG_NUMA)&def(CONFIG_DEBUG_PER_CPU_MAPS))] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/76baeebf7df.c:41:11--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/76baeebf7df.c:41:24",
+  "msg": "assignment makes pointer from integer without a cast (const unsigned long* <-obj unsigned long)",
+  "taxonomy_type": "cast_to_pointer",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/76baeebf7df.c",
+  "line_number": 41,
+  "origin": "family",
+  "id": "FAMILY_47",
+  "classification": "TRUE_NEW",
+  "reasoning": "This report is a duplicate of FAMILY_43 (different old_id FAMILY_60 vs FAMILY_57, but same file, same line 41, same presence condition, same message). Line 41 is 'return cpu_none_mask;' inside cpumask_of_node(), which returns 'const cpumask_t*'. cpu_none_mask is declared as 'cpumask_t cpu_none_mask = 0' — an integer value, not a pointer. Returning an integer where a pointer is expected is a genuine type error; the function returns 0 (null pointer) to the caller. The presence condition def(CONFIG_NUMA)&&def(CONFIG_DEBUG_PER_CPU_MAPS) is correct. Not in vbdb. True new positive.",
+  "old_id": "FAMILY_60"
+}

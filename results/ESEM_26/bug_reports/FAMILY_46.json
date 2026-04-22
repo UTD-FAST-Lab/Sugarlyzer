@@ -1,0 +1,12 @@
+{
+  "err": "- W [(!def(CONFIG_NUMA)&def(CONFIG_PCI)&!def(const))] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/76baeebf7df.c:133:2--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/76baeebf7df.c:137:2",
+  "msg": "assignment discards 'const' qualifier from pointer target type (CType(CPointer(CUnsigned(CLong())),true,false,false) = CType(CPointer(CUnsigned(CLong())),false,false,true))",
+  "taxonomy_type": "control_flow",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/76baeebf7df.c",
+  "line_number": 133,
+  "origin": "family",
+  "classification": "FALSE",
+  "reasoning": "Same artifact as FAMILY_45. The presence condition !def(CONFIG_NUMA)&def(CONFIG_PCI)&!def(const) again requires '!def(const)'. In the !CONFIG_NUMA branch, local_cpus_show() calls cpumask_of_node() at line 135, not cpumask_of_pcibus(), so the const-qualifier alignment is even more clearly fine. The warning only arises because the tool treats 'const' as a configuration macro, which it is not in real C code. No real build configuration matches this condition. False positive.",
+  "id": "FAMILY_46",
+  "old_id": "FAMILY_1_NEW"
+}

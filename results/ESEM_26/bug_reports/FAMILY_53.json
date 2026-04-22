@@ -1,0 +1,12 @@
+{
+  "err": "W [def(CONFIG_UNIX98_PTYS)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/7acf6cd80b2.c:39:2--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/7acf6cd80b2.c:39:14",
+  "msg": "warning: Variable driver_data is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/7acf6cd80b2.c",
+  "line_number": 39,
+  "origin": "family",
+  "id": "FAMILY_53",
+  "classification": "TRUE_NEW",
+  "reasoning": "Line 39 is 'driver_data = &some_int;' inside ptmx_open() (guarded by #ifdef CONFIG_UNIX98_PTYS). The only path that reaches line 39 is when nondet() returns false (the goto at line 36 is not taken). After the assignment at line 39, the immediate next statement is 'return 0;' — the function exits without ever reading driver_data. The err_release label can only be reached via the goto at line 36, which precedes the assignment; there is no path from line 39 to err_release. Therefore the assignment is a genuine dead store. The vbdb entry for 7acf6cd80b2 documents the uninitialized pointer dereference (the goto path), not this dead store on the non-goto path. Presence condition def(CONFIG_UNIX98_PTYS) is correctly constrained. New true positive.",
+  "old_id": "FAMILY_63"
+}

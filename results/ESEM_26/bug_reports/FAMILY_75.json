@@ -1,0 +1,12 @@
+{
+  "err": "W [def(CONFIG_SLAB)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/eb91f1d0a53.c:92:2--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/eb91f1d0a53.c:93:0",
+  "msg": "Control flow of non-void function ends here!",
+  "taxonomy_type": "control_flow",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/eb91f1d0a53.c",
+  "line_number": 92,
+  "origin": "family",
+  "id": "FAMILY_75",
+  "classification": "TRUE_NEW",
+  "reasoning": "Lines 90-93: 'static int setup_cpu_cache()' is declared with return type int but contains no return statement — the function simply calls kmalloc_node(GFP_KERNEL) and falls off the end without returning a value. This is a genuine missing-return control_flow bug; in C, falling off the end of a non-void, non-main function without a return statement is undefined behavior. The function is defined inside #ifdef CONFIG_SLAB (line 49), so the presence condition def(CONFIG_SLAB) is correctly constrained. The vbdb entry for eb91f1d0a53 documents the IRQ-disabled + GFP_KERNEL (sleepable) allocation bug where assert(!irqs_disabled) fails under CONFIG_LOCKDEP&&CONFIG_TRACE_IRQFLAGS&&CONFIG_PROVE_LOCKING&&CONFIG_SLAB — a different (runtime assertion) bug. The missing return in setup_cpu_cache is a new finding. New true positive.",
+  "old_id": "FAMILY_67"
+}

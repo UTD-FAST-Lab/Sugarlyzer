@@ -1,0 +1,12 @@
+{
+  "err": "W [(def(CONFIG_X86)&def(CONFIG_ACPI_WMI))] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/f3d83e24154.c:10:9--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/f3d83e24154.c:10:15",
+  "msg": "warning: Variable method is used uninitialized!",
+  "taxonomy_type": "uninitialized_value",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/f3d83e24154.c",
+  "line_number": 10,
+  "origin": "family",
+  "id": "FAMILY_80",
+  "classification": "FALSE",
+  "reasoning": "Line 10 is 'strcpy(method, \"WQ\")'. The tool claims 'method' is used uninitialized here (columns 9-15 pointing to 'method' as the first argument). However, strcpy WRITES to its destination — it does not require method to be initialized beforehand. This is the same false positive pattern as FAMILY_71/72 where strncpy destinations were incorrectly flagged. The real vbdb bug (marked '// (6) ERROR' at line 11) is a buffer overflow: method has 4 bytes, strcpy fills it with 'WQ\\0' (3 bytes), then strncat(method, block_object_id, 2) attempts to append 'XX\\0' requiring 5 bytes total — 1 byte over the buffer capacity. The uninitialized_value claim is a false positive.",
+  "old_id": "FAMILY_69"
+}

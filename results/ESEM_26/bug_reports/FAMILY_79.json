@@ -1,0 +1,12 @@
+{
+  "err": "W [!def(CONFIG_FEATURE_CLEAN_UP)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/eef2317b9f5.c:26:2--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/eef2317b9f5.c:26:6",
+  "msg": "warning: Variable buf is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/eef2317b9f5.c",
+  "line_number": 26,
+  "origin": "family",
+  "id": "FAMILY_79",
+  "classification": "TRUE_NEW",
+  "reasoning": "Line 26 is 'buf = malloc(bufsize);'. Under !def(CONFIG_FEATURE_CLEAN_UP), the #ifdef block at lines 29-33 (which contains the only use of buf: 'if (buf) { free(buf); }') is excluded from compilation. Consequently, buf is assigned by malloc at line 26 but never subsequently read or freed — a genuine dead store and memory leak. Presence condition !def(CONFIG_FEATURE_CLEAN_UP) correctly captures the configuration where the cleanup block is absent. The vbdb entry for eef2317b9f5 documents the uninitialized buf bug under def(CONFIG_FEATURE_CLEAN_UP) — a different finding. New true positive.",
+  "old_id": "FAMILY_33"
+}

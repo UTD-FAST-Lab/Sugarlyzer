@@ -1,0 +1,12 @@
+{
+  "err": "W [(!def(BB_FEATURE_LS_FILETYPES)&def(BB_FEATURE_LS_USERNAME))] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b273d665181.c:11:2--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b273d665181.c:11:7",
+  "msg": "warning: Variable info is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b273d665181.c",
+  "line_number": 11,
+  "origin": "family",
+  "id": "FAMILY_62",
+  "classification": "FALSE",
+  "reasoning": "Line 11 is 'info = 0;' inside #ifdef BB_FEATURE_LS_USERNAME. The presence condition is (!def(BB_FEATURE_LS_FILETYPES) && def(BB_FEATURE_LS_USERNAME)). In this configuration, 'int info' at line 7 is NOT declared (it's inside #ifdef BB_FEATURE_LS_FILETYPES which is excluded). The assignment 'info = 0' at line 11 refers to an undeclared variable in the !FILETYPES && USERNAME config — this configuration does not compile in the original source. The tool is reporting a dead store in an infeasible configuration. While in the lifted family analysis 'info' might be treated as always present, the real code cannot compile in this config, so the dead store finding has no corresponding real bug. False positive.",
+  "old_id": "FAMILY_25"
+}

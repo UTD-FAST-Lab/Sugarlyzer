@@ -1,0 +1,12 @@
+{
+  "err": "W [(def(CONFIG_TWL4030_CORE)|def(CONFIG_IRQ_DOMAIN))] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6252547b8a7.c:12:6--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6252547b8a7.c:12:10",
+  "msg": "warning: Variable irq is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6252547b8a7.c",
+  "line_number": 12,
+  "origin": "family",
+  "id": "FAMILY_33",
+  "classification": "TRUE_NEW",
+  "old_id": "FAMILY_48",
+  "reasoning": "Line 12 is 'int irq = *ops;' inside irq_domain_add(). 'irq' is declared and initialized to *ops but is never subsequently read — the function ends immediately after. Genuine dead store. The function irq_domain_add() is inside #ifdef CONFIG_IRQ_DOMAIN. Since CONFIG_IRQ_DOMAIN is #defined when CONFIG_TWL4030_CORE is defined, the presence condition (def(CONFIG_TWL4030_CORE) | def(CONFIG_IRQ_DOMAIN)) correctly captures all configurations where the function is compiled — it is equivalent to def(CONFIG_IRQ_DOMAIN). Correctly constrained. The vbdb entry (6252547) documents a NullDereference; this dead store of irq is a new finding not in vbdb."
+}

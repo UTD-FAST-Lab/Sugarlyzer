@@ -1,0 +1,12 @@
+{
+  "err": "W [(def(CONFIG_SND_FSI_DA7210)|def(CONFIG_SND_SOC_DA7210))] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/66517915e09.c:16:6--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/66517915e09.c:16:21",
+  "msg": "warning: Variable codec_hw_write is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/66517915e09.c",
+  "line_number": 16,
+  "origin": "family",
+  "id": "FAMILY_37",
+  "classification": "TRUE_NEW_OVER",
+  "old_id": "FAMILY_52",
+  "reasoning": "Line 16 is 'int codec_hw_write = i2c_master_send;' in da7210_init(). The value is assigned but never read (function immediately does 'return 0') — a genuine dead store when CONFIG_I2C is defined (so i2c_master_send exists). However, when !CONFIG_I2C, i2c_master_send is undeclared and line 16 fails to compile — the vbdb-documented UndeclaredIdentifier bug for (SND_FSI_AK4642||SND_FSI_DA7210)&&!I2C. The presence condition (def(CONFIG_SND_FSI_DA7210)|def(CONFIG_SND_SOC_DA7210)) does not require def(CONFIG_I2C), so it includes configs where the code can't compile. True dead store only in configs where CONFIG_I2C is also defined. Condition should be (def(CONFIG_SND_FSI_DA7210)|def(CONFIG_SND_SOC_DA7210))&&def(CONFIG_I2C). New true positive, over-constrained."
+}

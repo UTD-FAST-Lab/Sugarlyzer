@@ -1,0 +1,12 @@
+{
+  "err": "W [True] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/472a474c663.c:21:2--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/472a474c663.c:22:0",
+  "msg": "Control flow of non-void function ends here!",
+  "taxonomy_type": "control_flow",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/472a474c663.c",
+  "line_number": 21,
+  "origin": "family",
+  "id": "FAMILY_24",
+  "classification": "TRUE_NEW",
+  "old_id": "FAMILY_45",
+  "reasoning": "Lines 21-22 are inside APIC_init_uniprocessor(), declared as 'int APIC_init_uniprocessor(void)'. The function body calls enable_IR_x2apic() and then falls off the end with no return statement — undefined behavior for a non-void, non-main function in C. This is a genuine control-flow bug. The presence condition [True] is correctly constrained: the function is not inside any #ifdef and is always compiled. The vbdb entry (472a474) documents a DoubleOpOnResource bug (unrelated); this missing return is a new finding. True positive, correctly constrained."
+}

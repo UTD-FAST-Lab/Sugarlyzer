@@ -1,0 +1,12 @@
+{
+  "err": "W [def(HAS_APACHE_REGEX_LIB)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/dbafef17dd1.c:11:10--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/dbafef17dd1.c:11:16",
+  "msg": "warning: Variable newuri is used uninitialized!",
+  "taxonomy_type": "uninitialized_value",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/dbafef17dd1.c",
+  "line_number": 11,
+  "origin": "family",
+  "id": "FAMILY_72",
+  "classification": "FALSE",
+  "reasoning": "Same file and same false positive as FAMILY_71, now with column range 11:10-11:16 pointing directly to 'newuri' as the first argument of strncpy. strncpy writes to its destination — it does not read from newuri's current contents and does not require prior initialization of the array. The uninitialized_value claim is incorrect. The real vbdb bug is at line 12 (sizeof(newuri-1) vs sizeof(newuri)-1). False positive.",
+  "old_id": "FAMILY_10"
+}

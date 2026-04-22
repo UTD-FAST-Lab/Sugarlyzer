@@ -1,0 +1,12 @@
+{
+  "err": "W [def(SDSUPPORT)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/MARLIN/a7fc1f83c81.c:20:33--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/MARLIN/a7fc1f83c81.c:20:37",
+  "msg": "warning: Variable path is used uninitialized!",
+  "taxonomy_type": "uninitialized_value",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/MARLIN/a7fc1f83c81.c",
+  "line_number": 20,
+  "origin": "family",
+  "id": "FAMILY_58",
+  "classification": "FALSE",
+  "reasoning": "Line 20 is 'if (prepend[0] == \"\\0\") strcat(path, \"/\")'. The tool claims path is used uninitialized here. However, path[0] is explicitly set to '\\0' at line 19 immediately before, making path a valid empty null-terminated string for strcat. Same false positive pattern as FAMILY_57 — the tool fails to account for the path[0] = '\\0' initialization at line 19. False positive.",
+  "old_id": "FAMILY_75"
+}

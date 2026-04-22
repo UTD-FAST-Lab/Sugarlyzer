@@ -1,0 +1,12 @@
+{
+  "err": "W [def(CONFIG_CRYPTO_TEST)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/242f1a34377.c:18:2--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/242f1a34377.c:20:0",
+  "msg": "Control flow of non-void function ends here!",
+  "taxonomy_type": "control_flow",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/242f1a34377.c",
+  "line_number": 18,
+  "origin": "family",
+  "id": "FAMILY_18",
+  "classification": "FALSE",
+  "old_id": "FAMILY_41",
+  "reasoning": "The tool reports 'Control flow of non-void function ends here!' at line 18-20 for the main() function, under presence condition def(CONFIG_CRYPTO_TEST). Two problems: (1) In C99+, main() implicitly returns 0 when control falls off the end — this is not a bug. (2) The missing return in main is unconditional (present in all configurations, not just when CONFIG_CRYPTO_TEST is defined), so the presence condition is also wrong. The real vbdb bug (242f1a3) is an UndefinedSymbol: test_cipher() calls crypto_alloc_ablkcipher() which is only defined under CONFIG_CRYPTO_BLKCIPHER. False positive."
+}

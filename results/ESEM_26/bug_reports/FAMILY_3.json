@@ -1,0 +1,12 @@
+{
+  "err": "W [def(CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/061fd0a353e.c:26:4--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/061fd0a353e.c:27:6",
+  "msg": "Case statement is not terminated by a break!",
+  "taxonomy_type": "case_not_terminated",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/061fd0a353e.c",
+  "line_number": 26,
+  "origin": "family",
+  "id": "FAMILY_3",
+  "classification": "FALSE",
+  "old_id": "FAMILY_13",
+  "reasoning": "The tool reports case_not_terminated at line 26 (case 'R':) when CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF is defined. While case 'R' indeed lacks an explicit break, it is the last case in the switch — the switch closes immediately after #endif. No fall-through to another case is possible, so this is not a real bug. The vbdb-documented bug for this file (061fd0a) is an UndefinedSymbol (goto to a potentially undefined label in case 'U'), not a case-not-terminated issue. False positive."
+}

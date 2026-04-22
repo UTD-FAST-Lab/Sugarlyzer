@@ -1,0 +1,12 @@
+{
+  "err": "W [!def(CONFIG_BF60x)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/36855dcfc98.c:6:2--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/36855dcfc98.c:6:9",
+  "msg": "warning: Variable wakeup is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/36855dcfc98.c",
+  "line_number": 6,
+  "origin": "family",
+  "id": "FAMILY_22",
+  "classification": "TRUE_NEW",
+  "old_id": "FAMILY_43",
+  "reasoning": "When !CONFIG_BF60x, line 6 ('wakeup = 0;') executes inside the #ifndef block, but 'wakeup' is never subsequently read — the function immediately returns 0. This is a genuine dead store. The presence condition [!def(CONFIG_BF60x)] correctly identifies this configuration. The vbdb entry (36855dc) documents the complementary bug: UnusedVariable when def(BF60x) — when the macro IS defined, wakeup is declared but never assigned or used. The tool finds a real dead store in the opposite configuration, which is a distinct new finding not in vbdb. Correctly constrained."
+}

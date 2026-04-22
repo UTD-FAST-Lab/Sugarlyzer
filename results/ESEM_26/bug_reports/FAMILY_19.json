@@ -1,0 +1,12 @@
+{
+  "err": "W [!def(CONFIG_CRYPTO_TEST)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/242f1a34377.c:15:0--null:0:0",
+  "msg": "Control flow of non-void function ends here!",
+  "taxonomy_type": "control_flow",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/242f1a34377.c",
+  "line_number": 15,
+  "origin": "family",
+  "id": "FAMILY_19",
+  "classification": "FALSE",
+  "old_id": "FAMILY_41",
+  "reasoning": "Same file and same missing-return issue in main() as FAMILY_18, but with presence condition !def(CONFIG_CRYPTO_TEST). When !CONFIG_CRYPTO_TEST, main has an empty body {}. Again: (1) In C99+, main() implicitly returns 0 — not a real bug. (2) The missing return in main is unconditional (exists in all configurations), so neither def nor !def CRYPTO_TEST is the right constraint. The presence condition is wrong. False positive, same reasoning as FAMILY_18."
+}

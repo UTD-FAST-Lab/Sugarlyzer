@@ -1,0 +1,12 @@
+{
+  "err": "W [True] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/472a474c663.c:12:22--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/472a474c663.c:12:23",
+  "msg": "warning: Variable c is used uninitialized!",
+  "taxonomy_type": "uninitialized_value",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/472a474c663.c",
+  "line_number": 12,
+  "origin": "family",
+  "id": "FAMILY_23",
+  "classification": "FALSE",
+  "old_id": "FAMILY_44",
+  "reasoning": "Line 12 is 'static char *ptr = &c;'. The tool reports 'c' as used uninitialized at this line. However, 'c' is declared as 'static char c;' — static variables in C are always zero-initialized by default, so c is never truly uninitialized. Furthermore, '&c' merely takes the address of c; it does not read c's value. There is no uninitialized use. The vbdb-documented bug for this file (472a474) is a DoubleOpOnResource (enable_IR_x2apic called twice in SMP configurations — not idempotent), which is a completely different issue. False positive."
+}

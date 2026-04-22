@@ -1,0 +1,12 @@
+{
+  "err": "W [True] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/bc0ffc0e971.c:29:22--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/bc0ffc0e971.c:29:24",
+  "msg": "warning: Variable ch is used uninitialized!",
+  "taxonomy_type": "uninitialized_value",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/bc0ffc0e971.c",
+  "line_number": 29,
+  "origin": "family",
+  "id": "FAMILY_66",
+  "classification": "FALSE",
+  "reasoning": "Line 29 is 'ch = malloc(sizeof(*ch))'. The tool flags ch as uninitialized at the '*ch' inside sizeof(*ch). However, sizeof is a compile-time operator that does not evaluate its operand — it only uses the type of *ch (i.e., ethtable_t) to compute a size. The pointer value of ch is never actually read. This is the same sizeof false positive pattern as FAMILY_36. The real vbdb bug in bc0ffc0e971 (marked '// ERROR' at line 43) is a use-after-free: in the cleanup loop under ENABLE_FEATURE_CLEAN_UP, delete_eth_table(ch) frees ch and ch->ifname, then the for-loop accesses ch->next on the already-freed memory. The uninitialized_value claim for sizeof(*ch) is a false positive.",
+  "old_id": "FAMILY_29"
+}

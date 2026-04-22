@@ -1,0 +1,12 @@
+{
+  "err": "W [def(CONFIG_EP93XX_ETH)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/1f758a4341a.c:32:6--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/1f758a4341a.c:32:19",
+  "msg": "Control flow of non-void function ends here!",
+  "taxonomy_type": "control_flow",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/1f758a4341a.c",
+  "line_number": 32,
+  "origin": "family",
+  "id": "FAMILY_16",
+  "classification": "TRUE_NEW",
+  "old_id": "FAMILY_39",
+  "reasoning": "When CONFIG_EP93XX_ETH is defined, ep93xx_alloc_buffers() (an int-returning function) only has a 'return 1' in the 'if (descs == NULL)' branch. When descs != NULL, control falls off the end of the function without returning a value — undefined behavior. This is a genuine control-flow bug. The presence condition [def(CONFIG_EP93XX_ETH)] is correctly constrained: the bug exists in all configurations where that macro is defined, regardless of CONFIG_ZONE_DMA. The vbdb entry (1f758a4) documents a BehaviorViolation for EP93XX_ETH && !ZONE_DMA (about __alloc_pages_nodemask returning NULL when asked for DMA), which is a separate issue from this missing-return bug. New true positive, correctly constrained."
+}

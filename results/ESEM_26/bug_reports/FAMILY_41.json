@@ -1,0 +1,12 @@
+{
+  "err": "W [True] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6e2b75740be.c:67:7--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6e2b75740be.c:67:10",
+  "msg": "warning: Variable hdr is freed although not dynamically allocted!",
+  "taxonomy_type": "static_free",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6e2b75740be.c",
+  "line_number": 67,
+  "origin": "family",
+  "id": "FAMILY_41",
+  "classification": "FALSE",
+  "old_id": "FAMILY_55",
+  "reasoning": "Line 67 is 'free(hdr)' in the free_hdr: label block. The tool claims hdr is not dynamically allocated. However, hdr is clearly malloc'd at line 24: 'if ((hdr = malloc(2*sizeof(void*))) == NULL)'. free(hdr) is a valid operation on a dynamically allocated pointer. The static_free claim is incorrect — the tool has lost track of hdr's dynamic allocation provenance, possibly due to the complex aliasing and control flow. False positive."
+}

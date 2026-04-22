@@ -1,0 +1,12 @@
+{
+  "err": "W [(def(ENABLE_FEATURE_MDEV_CONF)&def(ENABLE_FEATURE_MDEV_RENAME))] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b62bd7b261b.c:16:2--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b62bd7b261b.c:16:6",
+  "msg": "warning: Variable val is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b62bd7b261b.c",
+  "line_number": 16,
+  "origin": "family",
+  "id": "FAMILY_65",
+  "classification": "TRUE_NEW",
+  "reasoning": "Line 16 is 'val = (s && s[1]) ? s+1 : NULL;'. val is read at lines 14-15 before this assignment, but after line 16, val is never read again — the MDEV_RENAME_REGEXP block (lines 18-34) uses only n, s, a, and p, not val. The reassignment at line 16 is a genuine dead store. The presence condition def(ENABLE_FEATURE_MDEV_CONF)&&def(ENABLE_FEATURE_MDEV_RENAME) correctly matches the two enclosing #ifdef guards at lines 7 and 9; MDEV_RENAME_REGEXP is not required because line 16 is outside that inner guard. The vbdb entry for b62bd7b261b documents the uninitialized 'p' pointer bug — a different issue. New true positive, correctly constrained.",
+  "old_id": "FAMILY_28"
+}

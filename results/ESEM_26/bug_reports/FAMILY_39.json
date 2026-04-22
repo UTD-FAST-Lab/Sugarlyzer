@@ -1,0 +1,12 @@
+{
+  "err": "W [(def(CONFIG_MODULE_UNLOAD)&def(CONFIG_SMP))] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6e2b75740be.c:63:14--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6e2b75740be.c:14:24",
+  "msg": "warning: Variable mod is freed multiple times!",
+  "taxonomy_type": "double_free",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6e2b75740be.c",
+  "line_number": 63,
+  "origin": "family",
+  "id": "FAMILY_39",
+  "classification": "TRUE",
+  "old_id": "FAMILY_53",
+  "reasoning": "The tool reports a double_free: after the while loop where 'mod = module_core(mod)' creates an alias, free(module_core(mod)) at free_core also frees the memory mod points to. Then free(refptr(mod)) in the #if MODULE_UNLOAD&&SMP block dereferences the already-freed mod, and free(hdr) again frees the same underlying allocation. This is a real memory safety violation. The vbdb entry (6e2b757) documents the same issue as UseAfterFree with config 'MODULE_UNLOAD && SMP'. The tool's double_free and the vbdb's UseAfterFree describe the same underlying bug. The presence condition (def(CONFIG_MODULE_UNLOAD)&def(CONFIG_SMP)) exactly matches the vbdb config — correctly constrained. Known bug."
+}

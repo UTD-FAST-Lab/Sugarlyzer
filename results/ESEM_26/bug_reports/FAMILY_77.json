@@ -1,0 +1,12 @@
+{
+  "err": "W [def(CONFIG_FEATURE_CLEAN_UP)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/eef2317b9f5.c:31:9--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/eef2317b9f5.c:31:12",
+  "msg": "warning: Variable buf is used uninitialized!",
+  "taxonomy_type": "uninitialized_value",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/eef2317b9f5.c",
+  "line_number": 31,
+  "origin": "family",
+  "id": "FAMILY_77",
+  "classification": "TRUE",
+  "reasoning": "Same file (eef2317b9f5.c) and same bug as FAMILY_76, now reporting line 31 ('free(buf)') as the uninitialized use. When the goto path is taken (cmd==8 skips malloc), buf is uninitialized and free(buf) attempts to free an indeterminate pointer — undefined behavior. The vbdb marks line 31 with '//ERROR'. Presence condition def(CONFIG_FEATURE_CLEAN_UP) is correctly constrained. Known bug.",
+  "old_id": "FAMILY_31"
+}

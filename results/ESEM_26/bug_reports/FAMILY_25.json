@@ -1,0 +1,12 @@
+{
+  "err": "W [True] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/472a474c663.c:16:4--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/472a474c663.c:16:8",
+  "msg": "warning: Variable ptr is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/472a474c663.c",
+  "line_number": 16,
+  "origin": "family",
+  "id": "FAMILY_25",
+  "classification": "FALSE",
+  "old_id": "FAMILY_46",
+  "reasoning": "Line 16 is 'ptr = NULL;' in enable_IR_x2apic(), where 'ptr' is a 'static char*'. The tool labels this as a dead store because ptr is not read again within that single call. However, ptr is a static variable whose value persists between calls. On a second invocation of enable_IR_x2apic(), ptr (now NULL) is read by '*ptr = a', causing a null dereference — precisely the DoubleOpOnResource bug documented in vbdb (472a474). The assignment to the static variable IS meaningful cross-call; treating it as a dead store ignores static lifetime semantics. False positive."
+}

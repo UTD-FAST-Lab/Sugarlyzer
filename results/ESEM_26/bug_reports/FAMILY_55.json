@@ -1,0 +1,12 @@
+{
+  "err": "W [!def(PIDTEMP)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/MARLIN/8c4377dd635.c:3:26--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/MARLIN/8c4377dd635.c:19:13",
+  "msg": "warning: Variable pid_output is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/MARLIN/8c4377dd635.c",
+  "line_number": 3,
+  "origin": "family",
+  "id": "FAMILY_55",
+  "classification": "TRUE_NEW",
+  "reasoning": "In manage_heater() under !def(PIDTEMP): 'float pid_output = 1' (line 11) is assigned and then overwritten by 'pid_output = 0' (line 19, inside the #else branch) without pid_output being read in between. This makes the initial assignment a genuine dead store. Under PIDTEMP, the #else branch is skipped so pid_output = 1 is also never subsequently read, but the tool's detection focuses on the !PIDTEMP path where the overwrite at line 19 makes the first assignment provably dead. Presence condition !def(PIDTEMP) is correctly constrained. The vbdb entry for 8c4377dd635 documents the SERIAL_ECHO_START call under !MARLIN_H&&PIDTEMP&&PID_DEBUG — a different bug. New true positive.",
+  "old_id": "FAMILY_71"
+}

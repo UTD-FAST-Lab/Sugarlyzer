@@ -1,0 +1,12 @@
+{
+  "err": "W [(def(BB_FEATURE_LS_FILETYPES)&!def(BB_FEATURE_LS_USERNAME))] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b273d665181.c:16:17--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b273d665181.c:16:21",
+  "msg": "warning: Variable info is used uninitialized!",
+  "taxonomy_type": "uninitialized_value",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b273d665181.c",
+  "line_number": 16,
+  "origin": "family",
+  "id": "FAMILY_61",
+  "classification": "TRUE",
+  "reasoning": "Classic variability bug: 'int info' is declared at line 7 under #ifdef BB_FEATURE_LS_FILETYPES, initialized to 0 at line 11 only under #ifdef BB_FEATURE_LS_USERNAME, and used at line 16 (printf(\"%d\", info)) under #ifdef BB_FEATURE_LS_FILETYPES. When BB_FEATURE_LS_FILETYPES is defined but BB_FEATURE_LS_USERNAME is not, info is declared but never initialized before use — a genuine uninitialized read. The vbdb source (b273d665181.c) marks line 16 with '// ERROR', confirming this is a known variability bug. The presence condition def(BB_FEATURE_LS_FILETYPES)&&!def(BB_FEATURE_LS_USERNAME) is correctly constrained — it exactly matches the configuration space where info is undeclared/uninitialized at the point of use. Known bug.",
+  "old_id": "FAMILY_24"
+}

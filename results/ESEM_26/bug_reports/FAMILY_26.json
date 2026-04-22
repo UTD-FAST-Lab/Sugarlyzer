@@ -1,0 +1,12 @@
+{
+  "err": "W [True] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/5275b1e49f6.c:18:4--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/5275b1e49f6.c:18:18",
+  "msg": "warning: Variable m_has_modinfo is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/5275b1e49f6.c",
+  "line_number": 18,
+  "origin": "family",
+  "id": "FAMILY_26",
+  "classification": "TRUE_NEW",
+  "old_id": "FAMILY_20",
+  "reasoning": "Line 18 is 'm_has_modinfo = 1;' in the else branch of an if-else (line 16 assigns m_has_modinfo = 0 in the if branch). After both assignments, m_has_modinfo is never read — the rest of the function only references k_crcs and exit_status. Both assignments are dead stores; the tool flags the else-branch at line 18. The presence condition [True] is correctly constrained since this code is not inside any #ifdef. The vbdb entry (5275b1e) documents an UndeclaredIdentifier bug (!FEATURE_INSMOD_VERSION_CHECKING, about k_crcs), which is unrelated. New true positive, correctly constrained."
+}

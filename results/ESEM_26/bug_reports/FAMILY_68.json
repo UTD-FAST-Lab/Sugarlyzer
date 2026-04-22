@@ -1,0 +1,12 @@
+{
+  "err": "W [((def(CROSS_COMPILE)&!def(NEED_ENHANCED_ESCAPES))|(!def(OS2)&!def(NEED_ENHANCED_ESCAPES)&!def(WIN32)&!def(CROSS_COMPILE)))] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/c76df14dfb4.c:42:6--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/c76df14dfb4.c:42:12",
+  "msg": "warning: Variable flags is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/c76df14dfb4.c",
+  "line_number": 42,
+  "origin": "family",
+  "id": "FAMILY_68",
+  "classification": "TRUE",
+  "reasoning": "Same file (c76df14dfb4.c) and same dead store bug as FAMILY_67, now reporting line 42 ('flags |= T_ESCAPE_SHELL_CMD;') in the #else branch (executed when NEED_ENHANCED_ESCAPES is NOT defined). Same reasoning: flags is assigned here but never read outside the loop — reset to 0 on each next iteration or abandoned at loop exit. The presence condition captures the complement of FAMILY_67: configs where NEED_ENHANCED_ESCAPES is not active. The condition is correctly constrained for the #else branch. Known bug (same vbdb entry c76df14dfb4).",
+  "old_id": "FAMILY_8"
+}

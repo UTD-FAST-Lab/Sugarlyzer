@@ -1,0 +1,12 @@
+{
+  "err": "W [def(CONFIG_FEATURE_CLEAN_UP)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/eef2317b9f5.c:31:9--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/eef2317b9f5.c:31:12",
+  "msg": "warning: Variable buf is freed although not dynamically allocted!",
+  "taxonomy_type": "static_free",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/eef2317b9f5.c",
+  "line_number": 31,
+  "origin": "family",
+  "id": "FAMILY_78",
+  "classification": "TRUE",
+  "reasoning": "Same file and same bug location as FAMILY_76/FAMILY_77, now reported as static_free: 'buf is freed although not dynamically allocated' at line 31. When cmd==8 causes 'goto all_done' to bypass 'buf = malloc(bufsize)' at line 26, buf is uninitialized and thus was never heap-allocated. Calling free(buf) on an uninitialized (non-malloc'd) pointer is undefined behavior — the static_free characterization is an approximation of the underlying uninitialized-pointer-free issue, but the core observation (free called on non-dynamically-allocated memory) is correct. The vbdb marks line 31 with '//ERROR'. Presence condition def(CONFIG_FEATURE_CLEAN_UP) correctly matches the #ifdef guard. Known bug.",
+  "old_id": "FAMILY_32"
+}

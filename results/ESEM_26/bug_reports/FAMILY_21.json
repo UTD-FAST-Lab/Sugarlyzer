@@ -1,0 +1,12 @@
+{
+  "err": "W [def(HAVE_ECC)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/35ae2e259e4.c:10:2--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/35ae2e259e4.c:10:8",
+  "msg": "warning: Variable eckey is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/35ae2e259e4.c",
+  "line_number": 10,
+  "origin": "family",
+  "id": "FAMILY_21",
+  "classification": "FALSE",
+  "old_id": "FAMILY_3",
+  "reasoning": "Line 10 is 'eckey = malloc(sizeof(int))' when HAVE_ECC is defined. The tool reports this as a dead store, but 'eckey' is subsequently read: '*eckey = 30' (line 12) and '*eckey = 15' (line 17 in else) both dereference eckey, which necessarily reads the pointer value assigned at line 10. This is not a dead store. The vbdb-documented bug for this file (35ae2e2) is a MemoryLeak: the allocated memory is never freed before the function returns. The tool misidentifies the issue as a dead store instead of a memory leak. False positive."
+}

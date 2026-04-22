@@ -1,0 +1,12 @@
+{
+  "err": "W [def(ENABLE_AUTO_BED_LEVELING)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/MARLIN/e30bfedce4d.c:24:6--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/MARLIN/e30bfedce4d.c:24:19",
+  "msg": "warning: Variable xGridSpacing is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/MARLIN/e30bfedce4d.c",
+  "line_number": 24,
+  "origin": "family",
+  "id": "FAMILY_73",
+  "classification": "TRUE_NEW",
+  "reasoning": "Line 24 is 'int xGridSpacing = left_probe_bed_position;' inside #ifdef AUTO_BED_LEVELING_GRID (which is itself always defined when ENABLE_AUTO_BED_LEVELING is defined, via line 2's #define). xGridSpacing is assigned here but never read again — the function has no further code that uses it. Genuine dead store. Presence condition def(ENABLE_AUTO_BED_LEVELING) is correctly constrained (AUTO_BED_LEVELING_GRID is a consequence of ENABLE_AUTO_BED_LEVELING, so the combined guard collapses to the single condition). The vbdb entry for e30bfedce4d marks '// ERROR' at line 21 (left_probe_bed_position using LEFT_PROBE_BED_POSITION, which is only defined under AUTO_BED_LEVELING_GRID — a different uninitialized/undefined macro issue). The dead store of xGridSpacing is a new finding. New true positive.",
+  "old_id": "FAMILY_76"
+}

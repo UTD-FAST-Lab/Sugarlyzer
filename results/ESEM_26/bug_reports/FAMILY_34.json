@@ -1,0 +1,12 @@
+{
+  "err": "W [def(CONFIG_MACH_OMAP_H4)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6515e48932c.c:18:2--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6515e48932c.c:20:0",
+  "msg": "Control flow of non-void function ends here!",
+  "taxonomy_type": "control_flow",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6515e48932c.c",
+  "line_number": 18,
+  "origin": "family",
+  "id": "FAMILY_34",
+  "classification": "FALSE",
+  "old_id": "FAMILY_50",
+  "reasoning": "Lines 18-20 are inside main() — the omap_h4_map_io() call and closing brace. The tool reports 'control flow of non-void function ends here' for main() under def(CONFIG_MACH_OMAP_H4). Two problems: (1) In C99+, main() implicitly returns 0 — not a bug. (2) main() lacks an explicit return regardless of CONFIG_MACH_OMAP_H4, so the presence condition is wrong. Same pattern as FAMILY_18/19. The vbdb-documented bug (6515e48) is an UndefinedSymbol (MACH_OMAP_H4 && !ARCH_OMAP2420: omap2_set_globals_242x is undefined). False positive."
+}

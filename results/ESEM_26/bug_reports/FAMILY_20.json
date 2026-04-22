@@ -1,0 +1,12 @@
+{
+  "err": "W [True] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/30e053248da.c:31:6--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/30e053248da.c:31:8",
+  "msg": "warning: Variable x is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/30e053248da.c",
+  "line_number": 31,
+  "origin": "family",
+  "id": "FAMILY_20",
+  "classification": "TRUE_NEW",
+  "old_id": "FAMILY_42",
+  "reasoning": "Line 31 is 'int x = *length;' in reiserfs_security_init(), which is unconditional (no #ifdef guard). 'x' is assigned the dereferenced value of 'length' but is never subsequently read or used in the function — a genuine dead store. The presence condition [True] is correctly constrained: the function is always compiled regardless of configuration. The vbdb entry (30e0532) documents a UninitializedVariable bug (reading *length which may be uninitialized when !CONFIG_SECURITY), which is a related but distinct finding from this dead store of x. New true positive, correctly constrained."
+}

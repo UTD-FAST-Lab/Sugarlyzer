@@ -1,0 +1,12 @@
+{
+  "err": "- W [(def(CONFIG_NUMA)&def(CONFIG_PCI)&!def(const))] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/76baeebf7df.c:133:2--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/76baeebf7df.c:137:2",
+  "msg": "assignment discards 'const' qualifier from pointer target type (CType(CPointer(CUnsigned(CLong())),true,false,false) = CType(CPointer(CUnsigned(CLong())),false,false,true))",
+  "taxonomy_type": "control_flow",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/76baeebf7df.c",
+  "line_number": 133,
+  "origin": "family",
+  "classification": "FALSE",
+  "reasoning": "The warning fires only under presence condition def(CONFIG_NUMA)&def(CONFIG_PCI)&!def(const). The '!def(const)' term reveals the issue: the family-based analysis tool is treating the C keyword 'const' as if it were a preprocessor macro/configuration option. In any real Linux kernel build, 'const' is always a language keyword; there is no #define that enables or disables it. The 'assignment discards const qualifier' warning is a pure artifact of the tool's handling of the const qualifier in its configuration-lifted type system — it does not correspond to a real type error in any actual build configuration. False positive.",
+  "id": "FAMILY_45",
+  "old_id": "FAMILY_0_NEW"
+}

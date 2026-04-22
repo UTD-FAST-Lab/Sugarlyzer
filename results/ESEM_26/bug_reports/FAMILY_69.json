@@ -1,0 +1,12 @@
+{
+  "err": "W [True] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/d7e9711760a.c:20:9--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/d7e9711760a.c:20:10",
+  "msg": "warning: Variable j is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/d7e9711760a.c",
+  "line_number": 20,
+  "origin": "family",
+  "id": "FAMILY_69",
+  "classification": "TRUE_NEW",
+  "reasoning": "Line 20 is 'int i, j;'. Variable i is used as the for-loop counter (lines 21-34), but j is never assigned or read anywhere in add_dquot_ref() — a genuinely unused variable / dead store. The function has no #ifdef guard so the bug exists in all configurations; presence condition [True] is correctly constrained. The vbdb entry for d7e9711760a documents a double-lock deadlock bug (mutex locked at line 22 in the loop, then inode_get_rsv_space() called at line 29 under CONFIG_QUOTA_DEBUG also tries to lock the same mutex — deadlock under CONFIG_QUOTA_DEBUG). The unused j variable is a separate, new finding not documented in vbdb. New true positive.",
+  "old_id": "FAMILY_64"
+}

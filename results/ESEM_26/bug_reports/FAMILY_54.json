@@ -1,0 +1,12 @@
+{
+  "err": "W [True] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/MARLIN/8c4377dd635.c:12:6--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/MARLIN/8c4377dd635.c:12:8",
+  "msg": "warning: Variable e is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/MARLIN/8c4377dd635.c",
+  "line_number": 12,
+  "origin": "family",
+  "id": "FAMILY_54",
+  "classification": "TRUE_NEW",
+  "reasoning": "Line 12 is 'int e = 0;' inside manage_heater(). After this assignment, e is never read again in the function — neither the #ifdef PIDTEMP block (which only uses pid_output and calls SERIAL_ECHO_START) nor the #else branch (which sets pid_output = 0) references e. The dead store is genuine in all configurations, making the presence condition [True] correctly constrained. The vbdb entry for 8c4377dd635 documents a different bug (the SERIAL_ECHO_START call under !MARLIN_H&&PIDTEMP&&PID_DEBUG where serialprint is declared). The dead store of e is a new true positive.",
+  "old_id": "FAMILY_70"
+}

@@ -1,0 +1,12 @@
+{
+  "err": "W [def(CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/061fd0a353e.c:27:10--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/061fd0a353e.c:27:11",
+  "msg": "warning: Variable p is used uninitialized!",
+  "taxonomy_type": "uninitialized_value",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/061fd0a353e.c",
+  "line_number": 27,
+  "origin": "family",
+  "id": "FAMILY_5",
+  "classification": "TRUE_NEW",
+  "old_id": "FAMILY_15",
+  "reasoning": "Same file and same uninitialized variable 'p' issue as FAMILY_4, but at line 27 inside case 'R'. When CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF is defined, case 'R' exists in the switch. When case 'R' is entered, case 'W' is never executed, so 'p' (declared as 'char *p;' without initialization) is uninitialized at line 27 (if(!p)). This is a genuine uninitialized variable use. The presence condition [def(CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF)] is correctly constrained. The vbdb entry for 061fd0a only documents the UndefinedSymbol bug; this uninitialized_value bug at case 'R' is a new finding."
+}

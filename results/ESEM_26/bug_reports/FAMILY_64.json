@@ -1,0 +1,12 @@
+{
+  "err": "W [(def(ENABLE_FEATURE_MDEV_RENAME)&def(ENABLE_FEATURE_MDEV_RENAME_REGEXP)&def(ENABLE_FEATURE_MDEV_CONF))] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b62bd7b261b.c:28:6--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b62bd7b261b.c:28:8",
+  "msg": "warning: Variable p is used uninitialized!",
+  "taxonomy_type": "uninitialized_value",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b62bd7b261b.c",
+  "line_number": 28,
+  "origin": "family",
+  "id": "FAMILY_64",
+  "classification": "TRUE",
+  "reasoning": "Line 28 is 'p += n - 1;' inside the while loop's if-branch. Same uninitialized pointer 'p' bug as FAMILY_63: p is declared at line 11 without initialization and used here before being assigned a valid address. Same presence condition (MDEV_CONF && MDEV_RENAME && MDEV_RENAME_REGEXP) matching the nested #ifdef guards. This is an additional use location of the same known vbdb bug (b62bd7b261b). Known bug, correctly constrained.",
+  "old_id": "FAMILY_27"
+}

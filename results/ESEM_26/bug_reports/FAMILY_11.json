@@ -1,0 +1,12 @@
+{
+  "err": "W [def(HAVE_TLSV1_X)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/1a3c8e3d840.c:13:6--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/1a3c8e3d840.c:13:14",
+  "msg": "warning: Variable thisopt is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/1a3c8e3d840.c",
+  "line_number": 13,
+  "origin": "family",
+  "id": "FAMILY_11",
+  "classification": "TRUE_NEW",
+  "old_id": "FAMILY_1",
+  "reasoning": "When HAVE_TLSV1_X is defined, line 13 is 'thisopt = SSL_PROTOCOL_TLSV1_1;'. The variable 'thisopt' is declared as 'int thisopt' and conditionally assigned in this branch, but is never subsequently read or returned in the function — a genuine dead store. The presence condition [def(HAVE_TLSV1_X)] correctly identifies this: the dead store only arises in configurations where the macro is defined (so SSL_PROTOCOL_TLSV1_1 is available and the assignment compiles). The vbdb entry (1a3c8e3) documents the opposite config: !HAVE_TLSV1_X causes an UndeclaredIdentifier. The dead store in the defined-HAVE_TLSV1_X case is a real but separate issue not in vbdb. New true positive, correctly constrained."
+}

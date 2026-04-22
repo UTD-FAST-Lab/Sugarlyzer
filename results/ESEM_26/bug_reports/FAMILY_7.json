@@ -1,0 +1,12 @@
+{
+  "err": "W [def(CONFIG_LOCKDEP)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/0f8f8094d28.c:41:10--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/0f8f8094d28.c:41:12",
+  "msg": "warning: Variable n is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/0f8f8094d28.c",
+  "line_number": 41,
+  "origin": "family",
+  "id": "FAMILY_7",
+  "classification": "TRUE_NEW",
+  "old_id": "FAMILY_35",
+  "reasoning": "Line 41 is 'int n = *cache;' inside the loop body of init_node_lock_keys(). After this assignment the loop body ends and n is never read — a genuine dead store. The presence condition [def(CONFIG_LOCKDEP)] is correctly constrained: this code only exists in the #ifdef CONFIG_LOCKDEP branch. The vbdb entry for this file (0f8f809) documents an OutOfBoundsRead (kmalloc_caches accessed with an overly wide loop bound), not this dead-store issue. New true positive, correctly constrained."
+}
