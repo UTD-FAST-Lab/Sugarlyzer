@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE",
   "old_id": "PRODUCT_37",
-  "id": "PRODUCT_26"
+  "id": "PRODUCT_26",
+  "reasoning": "b273d665181.c L16: 'printf(\"%d\", info)' where info is uninitialized (// ERROR). info is declared inside #ifdef BB_FEATURE_LS_FILETYPES (L6-8) but only assigned inside #ifdef BB_FEATURE_LS_USERNAME (L10-12). When FILETYPES=T AND !USERNAME, info is declared but never initialized before use at L16. PC=BB_FEATURE_LS_FILETYPES=T AND BB_FEATURE_LS_USERNAME=F exactly captures this condition. Known bug. Correctly constrained PC."
 }

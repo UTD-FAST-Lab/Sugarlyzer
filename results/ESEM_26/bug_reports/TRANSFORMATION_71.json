@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 1761.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE",
   "old_id": "TRANSFORMATION_175",
-  "id": "TRANSFORMATION_71"
+  "id": "TRANSFORMATION_71",
+  "reasoning": "irq = *ops at L12 is a genuine dead store \u2014 irq is never read after initialization in irq_domain_add. L12 is marked // (4) ERROR, confirming this is a VBDB-known bug location (primary known bug is null deref of *ops when ops=NULL; dead store co-occurs). PC = (!TWL4030_CORE AND IRQ_DOMAIN) OR TWL4030_CORE simplifies to IRQ_DOMAIN (TWL4030_CORE implies CONFIG_IRQ_DOMAIN via derived macro at L3-5). Correctly constrained \u2014 bug fires whenever irq_domain_add is compiled (IRQ_DOMAIN=T). No library macros."
 }

@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 8254.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": null,
-  "id": "TRANSFORMATION_155"
+  "id": "TRANSFORMATION_155",
+  "reasoning": "b62bd7b261b.c L16: 'val = (s && s[1]) ? s+1 : NULL;' \u2014 the new value assigned to val at L16 is never subsequently read. Inside #ifdef MDEV_RENAME_REGEXP, 's = a' uses 'a' (L21), not val; and outside REGEXP, val is not used at all after L16. Genuine dead store. PC simplifies to ENABLE_FEATURE_MDEV_CONF AND ENABLE_FEATURE_MDEV_RENAME (STRICT_ANSI terms fully cancel, MDEV_RENAME_REGEXP terms cancel). This exactly captures the scope where L16 exists (#ifdef MDEV_CONF / #ifdef MDEV_RENAME). No restrictive library macros remain. New bug, correctly constrained PC."
 }

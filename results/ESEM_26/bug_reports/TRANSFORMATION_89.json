@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 4930.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "TRANSFORMATION_89"
+  "id": "TRANSFORMATION_89",
+  "reasoning": "gdp is assigned at L7 (gdp = \"group_desc\") and IS read at L10 ((*gdp)++ inside for loop). The dead store alarm is a false positive \u2014 gdp is definitely used after assignment. PC = __need___FILE AND EXT2FS_ENABLE_SWAPFS: __need___FILE=T is a restrictive library macro (defined only transiently during stdio.h internal header processing), confirming this is a desugaring artifact."
 }

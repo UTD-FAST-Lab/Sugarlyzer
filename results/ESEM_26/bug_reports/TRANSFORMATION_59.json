@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 915.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE",
   "old_id": "TRANSFORMATION_159",
-  "id": "TRANSFORMATION_59"
+  "id": "TRANSFORMATION_59",
+  "reasoning": "x = *length at L31 is assigned but never read \u2014 the function returns 0 at L33 and x has no other uses. Genuine dead store in all configs. L31 is marked // (6) ERROR, confirming this is a VBDB-known bug location (same line as the uninitialized read in TRANSFORMATION_46; both bugs co-occur). PC = true is correctly constrained: x is dead regardless of CONFIG_SECURITY."
 }

@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 8310.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "TRANSFORMATION_120"
+  "id": "TRANSFORMATION_120",
+  "reasoning": "xx is initialized at L7 (int16_t xx=x*10) immediately before being read at L8 (conv[0]=(xx>=0)?...). xx is always initialized. Pulse false positive. Note: both ULTRA_LCD=T (conv undeclared) and ULTRA_LCD=F (ftostr51 undeclared at call site) are non-compilable configs, but the alarm is at L8 inside the ULTRA_LCD block. PC = library macros only with no real feature flags confirms this is a desugaring artifact."
 }

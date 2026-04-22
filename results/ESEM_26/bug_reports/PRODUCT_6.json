@@ -24,7 +24,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": "PRODUCT_62",
-  "id": "PRODUCT_6"
+  "id": "PRODUCT_6",
+  "reasoning": "66517915e09.c L24: codec_hw_write dead store in ak4642_init path. The real condition for the dead store is CONFIG_SND_SOC_AK4642=T AND CONFIG_I2C=T. The PC is very broad \u2014 it includes branches where CONFIG_SND_SOC_AK4642=F (e.g., FSI_AK4642=T with SOC_AK4642=F is contradictory since FSI_AK4642=T is a derived macro that implies SOC_AK4642=T; also includes standalone SOC_AK4642=F branches). These non-compilable/contradictory configs over-constrain the PC. New bug (same bug as TRANSFORMATION_119), over-constrained PC."
 }

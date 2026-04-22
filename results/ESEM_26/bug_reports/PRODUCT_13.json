@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE",
   "old_id": "PRODUCT_14",
-  "id": "PRODUCT_13"
+  "id": "PRODUCT_13",
+  "reasoning": "061fd0a353e.c L20: 'if(!p)' branch evaluates garbage value (// ERROR). p is uninitialized when 'case U' is reached without prior 'case W' setting p. Critically, 'goto expected_hwif_error' at L21 targets a label defined only inside #ifdef HDPARM_HDIO_SCAN_HWIF \u2014 so the code only compiles when SCAN_HWIF=T. PC=HDPARM_UNREGISTER=T AND HDPARM_SCAN=T correctly identifies both required conditions. Known bug (// ERROR at L20-21). Correctly constrained PC."
 }

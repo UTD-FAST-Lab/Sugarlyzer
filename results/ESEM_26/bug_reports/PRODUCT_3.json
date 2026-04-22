@@ -13,7 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": "PRODUCT_42",
-  "id": "PRODUCT_3"
+  "id": "PRODUCT_3",
+  "reasoning": "bc0ffc0e971.c L46: 'Potential leak of memory pointed to by clist'. When ENABLE_FEATURE_CLEAN_UP=F, clist is allocated but never freed \u2014 the free() call is guarded by #ifdef ENABLE_FEATURE_CLEAN_UP. Genuine memory leak new bug. PC=!ENABLE_FEATURE_CLEAN_UP correctly constrained. No ERROR comment for this leak (known bugs are the null deref at L30 and use-after-free at L43)."
 }

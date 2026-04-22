@@ -13,7 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": "PRODUCT_10",
-  "id": "PRODUCT_8"
+  "id": "PRODUCT_8",
+  "reasoning": "bbeb0516cf0.c L6: 'Null pointer passed to 1st parameter expecting nonnull'. r=NULL at L18, passed to cgi_handler(r); when APR_FILES_AS_SOCKETS=T, cgi_handler calls cgi_bucket_create(r=NULL); at L6, strcat(NULL, 'something') is called \u2014 strcat's first argument has nonnull attribute, passing NULL is a null pointer violation. PC=APR_FILES_AS_SOCKETS=T correctly constrains the condition for the call path to exist. New bug (no ERROR comment). Correctly constrained PC."
 }

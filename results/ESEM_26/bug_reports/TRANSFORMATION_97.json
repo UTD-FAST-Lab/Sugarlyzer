@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 6484.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "TRANSFORMATION_97"
+  "id": "TRANSFORMATION_97",
+  "reasoning": "Memory leak: buf allocated by malloc at L26 is never freed when CONFIG_FEATURE_CLEAN_UP=F (free is inside the CLEAN_UP block at L31). Genuine memory leak. Same bug as TRANSFORMATION_57 (CSA dead store) and TRANSFORMATION_96 (Pulse dead store), detected here by Pulse MEMORY_LEAK_C. No // ERROR for this scenario, new bug. PC = !CLEAN_UP AND !_STDLIB_H AND !__malloc_and_calloc_defined: restrictive library macros over-constrain the PC."
 }

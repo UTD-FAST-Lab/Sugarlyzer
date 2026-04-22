@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 7601.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "TRANSFORMATION_122"
+  "id": "TRANSFORMATION_122",
+  "reasoning": "someInt is assigned at L9 (int someInt = 1) and IS read at L25 (k_crcs = someInt). The dead store alarm is a false positive \u2014 someInt is used later in the function. The PC covers normal compilation states (_STDLIB_H=T is in the OR), confirming this is not a library-macro-only artifact but still an incorrect alarm."
 }

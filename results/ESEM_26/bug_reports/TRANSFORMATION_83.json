@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 2331.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE",
   "old_id": null,
-  "id": "TRANSFORMATION_83"
+  "id": "TRANSFORMATION_83",
+  "reasoning": "Duplicate of TRANSFORMATION_30: same source file (7acf6cd80b2.c), same line (L8, int x = *inode), same PC (CONFIG_DEVPTS_MULTIPLE_INSTANCES), same bug. x is assigned from the potentially-null inode pointer and never read. Marked // ERROR (7) as a VBDB-known bug. This alarm is from a different analysis tool (DEAD_STORE/Pulse vs deadcode.DeadStores/CSA). Correctly constrained, no library macros."
 }

@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 1722.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "TRANSFORMATION_136"
+  "id": "TRANSFORMATION_136",
+  "reasoning": "831016b09f7.c L14: 'char time[30]' dead store alarm. However, time IS subsequently read \u2014 it is used immediately after declaration (at L15 in the source, via sprintf or similar). This matches TRANSFORMATION_62 (same file, same location, FALSE). The alarm is a false positive; time is not a dead store. PC=SDSUPPORT=T correctly identifies the active configuration, but the alarm itself is incorrect."
 }

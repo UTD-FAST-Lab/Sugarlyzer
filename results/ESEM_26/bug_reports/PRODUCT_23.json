@@ -14,7 +14,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_OVER",
   "old_id": "PRODUCT_59",
-  "id": "PRODUCT_23"
+  "id": "PRODUCT_23",
+  "reasoning": "6252547b8a7.c L12: ops null pointer dereference (// ERROR). In twl_probe(), ops=NULL when !CONFIG_OF_IRQ; irq_domain_add(ops) then dereferences *ops at L12. PC: (TWL4030_CORE AND IRQ_DOMAIN AND !OF_IRQ) OR (TWL4030_CORE AND !IRQ_DOMAIN AND !OF_IRQ). The second branch is contradictory: CONFIG_TWL4030_CORE=T implies CONFIG_IRQ_DOMAIN (derived macro, L3-5 of source), so TWL4030_CORE=T AND !IRQ_DOMAIN is non-compilable. PC is over-constrained by including this contradictory configuration. Known bug."
 }

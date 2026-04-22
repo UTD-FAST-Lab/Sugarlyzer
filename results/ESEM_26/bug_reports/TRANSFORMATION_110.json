@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 8234.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_OVER",
   "old_id": null,
-  "id": "TRANSFORMATION_110"
+  "id": "TRANSFORMATION_110",
+  "reasoning": "Pulse duplicate of TRANSFORMATION_76. info is uninitialized at printf L16 when FILETYPES=T AND !USERNAME \u2014 VBDB-known bug (// ERROR at L16). PC covers both USERNAME=T (where info IS initialized at L11 \u2014 under-constrained aspect) and !USERNAME (bug exists), plus restrictive library macro !_STDLIB_H which prevents firing in normal compilation. Classified as TRUE_OVER: the PC is over-constrained due to restrictive library macros that prevent the alarm from firing in normal FILETYPES=T AND !USERNAME configs."
 }

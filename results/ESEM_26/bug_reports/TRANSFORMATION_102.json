@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 8388.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "TRANSFORMATION_102"
+  "id": "TRANSFORMATION_102",
+  "reasoning": "Same bug as TRANSFORMATION_94: curr from malloc() at L65 can be NULL, dereferenced at L66 (curr->val = rand()%10) without NULL check. Genuine null dereference. No // ERROR at L66, new bug. L65-70 are in main() outside all #ifdef blocks \u2014 bug fires in all configs. PC = !CONFIG_FEATURE_LS_SORTFILES AND !_STDLIB_H AND !__need_malloc_and_calloc: requires !SORTFILES (the complementary constraint to TRANSFORMATION_94 which had SORTFILES=T) plus restrictive library macro !_STDLIB_H. PC is over-constrained."
 }

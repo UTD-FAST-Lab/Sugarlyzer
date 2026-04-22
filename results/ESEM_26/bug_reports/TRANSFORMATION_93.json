@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 7601.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "TRANSFORMATION_93"
+  "id": "TRANSFORMATION_93",
+  "reasoning": "Duplicate of TRANSFORMATION_70 (Pulse tool vs CSA). k_crcs = someInt at L25 (if(r) branch) is never read after assignment \u2014 genuine dead store. No // ERROR at L25, new bug. PC = !_STDLIB_H AND !__need_malloc_and_calloc (library macros only); restrictive !_STDLIB_H makes PC over-constrained. Bug fires in all compilable VERSION_CHECKING=T configs, not just non-standard stdlib states."
 }

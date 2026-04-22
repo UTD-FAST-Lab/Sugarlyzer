@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 2331.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": null,
-  "id": "TRANSFORMATION_153"
+  "id": "TRANSFORMATION_153",
+  "reasoning": "7acf6cd80b2.c L39: driver_data dead store \u2014 Pulse duplicate of TRANSFORMATION_67 (CSA). In the UNIX98_PTYS success path, driver_data is assigned at L39 but this value is never read (overwritten or not used on the success path). PC=CONFIG_UNIX98_PTYS=T \u2014 no library macros, correctly constrained. New bug."
 }

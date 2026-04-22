@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 5343.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "TRANSFORMATION_141"
+  "id": "TRANSFORMATION_141",
+  "reasoning": "ae249b5fa27.c L21: 'return r' claimed as reading r without initialization. However, r is always initialized before use \u2014 the source shows r is assigned via a call earlier in the function. This is a Pulse false positive matching TRANSFORMATION_80 (same file, same location, FALSE). PC=CONFIG_DISCONTIGMEM=T correctly identifies the active config block, but the alarm itself is incorrect since r is always initialized."
 }

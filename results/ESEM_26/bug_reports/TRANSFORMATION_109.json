@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 7166.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "TRANSFORMATION_109"
+  "id": "TRANSFORMATION_109",
+  "reasoning": "eckey is allocated by malloc at L10 when HAVE_ECC=T, but is never freed before return 0 at L24 \u2014 genuine memory leak. The comment at L22-23 confirms the intent (\"return having forgotten to free the memory\"). No // ERROR in the file; new bug. PC = !_STDLIB_H AND __need_malloc_and_calloc AND !__malloc_and_calloc_defined AND HAVE_ECC: real feature flag is HAVE_ECC; the three library macros (!_STDLIB_H, __need_malloc_and_calloc, !__malloc_and_calloc_defined) are all restrictive (non-standard stdlib.h processing state). PC is over-constrained \u2014 bug fires in all HAVE_ECC=T configs, not just this library header state."
 }

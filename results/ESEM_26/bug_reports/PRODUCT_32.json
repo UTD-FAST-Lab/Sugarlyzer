@@ -14,7 +14,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": "PRODUCT_67",
-  "id": "PRODUCT_32"
+  "id": "PRODUCT_32",
+  "reasoning": "7acf6cd80b2.c L44: driver_data passed as uninitialized 1st argument. In the UNIX98_PTYS code path, driver_data is used uninitialized when the success path of an earlier call is not taken correctly. PC: CONFIG_UNIX98_PTYS=T (CONFIG_DEVPTS_MULTIPLE_INSTANCES cancels). No library macros. New bug, correctly constrained PC. Consistent with TRANSFORMATION_56 (TRUE_NEW) and TRANSFORMATION_132 (TRUE_NEW)."
 }

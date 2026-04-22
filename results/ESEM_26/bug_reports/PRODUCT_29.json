@@ -18,7 +18,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": "PRODUCT_58",
-  "id": "PRODUCT_29"
+  "id": "PRODUCT_29",
+  "reasoning": "6252547b8a7.c L12: irq dead store. 'int irq = *ops' assigns irq but irq is never subsequently used (function body ends at L13). Real condition: CONFIG_IRQ_DOMAIN=T (for irq_domain_add to exist, inside #ifdef CONFIG_IRQ_DOMAIN). PC covers many TWL4030/IRQ_DOMAIN/OF_IRQ combinations including contradictory configs: TWL4030_CORE=T AND !CONFIG_IRQ_DOMAIN is impossible (TWL4030_CORE=T is a derived macro that defines CONFIG_IRQ_DOMAIN, L3-5 of source). PC over-constrained by including non-compilable contradictory configurations. New bug."
 }

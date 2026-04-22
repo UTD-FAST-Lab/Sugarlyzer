@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 1857.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": null,
-  "id": "TRANSFORMATION_151"
+  "id": "TRANSFORMATION_151",
+  "reasoning": "6252547b8a7.c L12: 'int irq = *ops;' \u2014 irq is assigned the dereferenced value of ops, but irq is NEVER subsequently used (function body ends at L13). This is a genuine dead store of irq. Note: the same line also has the known bug // (4) ERROR (null deref when ops=NULL from twl_probe), but the dead store of irq is a separate new bug. PC: (!TWL4030_CORE AND CONFIG_IRQ_DOMAIN) OR CONFIG_TWL4030_CORE = CONFIG_IRQ_DOMAIN (since TWL4030_CORE implies IRQ_DOMAIN). The function irq_domain_add exists whenever CONFIG_IRQ_DOMAIN is defined. PC correctly constrained. New bug."
 }

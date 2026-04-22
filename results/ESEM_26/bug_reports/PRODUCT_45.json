@@ -15,7 +15,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": "PRODUCT_11",
-  "id": "PRODUCT_45"
+  "id": "PRODUCT_45",
+  "reasoning": "c76df14dfb4.c L42: 'flags |= T_ESCAPE_SHELL_CMD' dead store inside #else (when !NEED_ENHANCED_ESCAPES). flags is assigned in each loop iteration but the value is discarded (reset to 0 at start of next iteration, never used outside loop). PC covers: (!CROSS AND !WIN AND !NEED), (CROSS AND WIN AND !NEED), (CROSS AND !WIN AND !NEED). These are the valid compilable configs where !NEED_ENHANCED_ESCAPES (note: !CROSS AND WIN implies NEED via auto-define, so that case is correctly excluded). New bug, correctly constrained PC."
 }

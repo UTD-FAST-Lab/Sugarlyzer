@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 7822.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "TRANSFORMATION_113"
+  "id": "TRANSFORMATION_113",
+  "reasoning": "Pulse duplicate of TRANSFORMATION_41. flags is assigned in the loop at L21 and updated at L37-38 or L41-42 in c76df14dfb4.c but never read outside the loop body \u2014 genuine dead store across all real feature flag combinations. New bug. PC contains restrictive library macros making it over-constrained."
 }

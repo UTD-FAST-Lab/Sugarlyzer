@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 6178.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": "TRANSFORMATION_9",
-  "id": "TRANSFORMATION_54"
+  "id": "TRANSFORMATION_54",
+  "reasoning": "sc is assigned from malloc() at L6, so free(sc) at L12 is not passing an uninitialized value in real compilation. PC = !_STDLIB_H AND !__malloc_and_calloc_defined AND SHARED_MODULE \u2014 the restrictive library macros cause malloc to be undeclared in the desugared analysis, so CSA treats sc as garbage. This is a desugaring artifact with no real feature flag constraint beyond SHARED_MODULE. False positive."
 }

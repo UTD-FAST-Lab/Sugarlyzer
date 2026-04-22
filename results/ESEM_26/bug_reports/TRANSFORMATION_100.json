@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 7254.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": null,
-  "id": "TRANSFORMATION_100"
+  "id": "TRANSFORMATION_100",
+  "reasoning": "Pulse duplicate of TRANSFORMATION_29. ch is assigned from malloc() at L29, which can return NULL. ch->ifname = ifname at L30 then dereferences the potentially-NULL ch pointer. Genuine null dereference. No // ERROR at L30 (// ERROR is at L43 for a different bug). New bug. PC = (STRICT_ANSI OR !STRICT_ANSI) = true, correctly constrained \u2014 bug fires in all configs since L29-30 are outside any #ifdef blocks."
 }

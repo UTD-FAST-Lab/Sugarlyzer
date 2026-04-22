@@ -14,7 +14,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": "PRODUCT_66",
-  "id": "PRODUCT_14"
+  "id": "PRODUCT_14",
+  "reasoning": "7acf6cd80b2.c L39: driver_data dead store. In the success path of the UNIX98_PTYS code, driver_data is assigned at L39 but this assigned value is never subsequently read. PC: CONFIG_UNIX98_PTYS=T (CONFIG_DEVPTS_MULTIPLE_INSTANCES cancels \u2014 both T and F variants present). No restrictive library macros. New bug, correctly constrained PC. Consistent with TRANSFORMATION_67 (TRUE_NEW) and TRANSFORMATION_153 (TRUE_NEW)."
 }

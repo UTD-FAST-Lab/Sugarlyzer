@@ -13,7 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": "PRODUCT_34",
-  "id": "PRODUCT_39"
+  "id": "PRODUCT_39",
+  "reasoning": "5275b1e49f6.c L21: k_crcs dead store. The value assigned to k_crcs at L21 is never subsequently read (overwritten or not used). PC=CONFIG_FEATURE_INSMOD_VERSION_CHECKING=T correctly constrains the condition. No library macros. New bug. Consistent with TRANSFORMATION_40 (TRUE_NEW_OVER with library macros); PRODUCT version is correctly constrained."
 }

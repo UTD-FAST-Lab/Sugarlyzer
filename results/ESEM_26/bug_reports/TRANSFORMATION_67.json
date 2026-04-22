@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 966.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": "TRANSFORMATION_196",
-  "id": "TRANSFORMATION_67"
+  "id": "TRANSFORMATION_67",
+  "reasoning": "On the success path of ptmx_open (when nondet() returns false), driver_data = &some_int at L39 is the last use of driver_data before return 0 at L41. driver_data is never read after this assignment. Genuine dead store. No // ERROR at L39 (the // ERROR at L8 marks a different bug on the error path). New bug. PC = CONFIG_UNIX98_PTYS correctly captures when ptmx_open is compiled. No library macros."
 }

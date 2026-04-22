@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 8391.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "TRANSFORMATION_107"
+  "id": "TRANSFORMATION_107",
+  "reasoning": "len is assigned unconditionally at L25-26 (len = sprintf(iobuf, ...)) before being read at L36 (len += sprintf(iobuf + len, ...)). len is always initialized. Pulse false positive from desugared analysis. PC = (STRICT_ANSI OR !STRICT_ANSI) AND !__need___FILE simplifies to !__need___FILE (non-restrictive library macro, always true in normal compilation). No real feature flag constraint."
 }

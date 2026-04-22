@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 7166.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "TRANSFORMATION_148"
+  "id": "TRANSFORMATION_148",
+  "reasoning": "35ae2e259e4.c L12: eckey null pointer dereference \u2014 same bug as TRANSFORMATION_45/125/138. eckey from malloc() can be NULL; *eckey=30 at L12 is a null deref. PC: !_STDLIB_H AND !__need_malloc_and_calloc AND !__USE_EXTERN_INLINES AND HAVE_ECC. The restrictive !_STDLIB_H over-constrains the PC. HAVE_ECC is the real feature flag. New bug, over-constrained PC."
 }

@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 4950.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": "TRANSFORMATION_106",
-  "id": "TRANSFORMATION_52"
+  "id": "TRANSFORMATION_52",
+  "reasoning": "info is assigned at L11 when BB_FEATURE_LS_USERNAME=T, but it IS conditionally read at L16 (printf(\"%d\", info)) inside the BB_FEATURE_LS_FILETYPES block when rand()%2 is true. The dead store alarm is a false positive \u2014 info is read on at least one execution path. The known VBDB bug (// ERROR at L16) is an uninitialized read when FILETYPES=T AND !USERNAME, which is a distinct alarm type."
 }

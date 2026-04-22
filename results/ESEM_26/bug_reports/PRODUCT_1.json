@@ -13,7 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": "PRODUCT_47",
-  "id": "PRODUCT_1"
+  "id": "PRODUCT_1",
+  "reasoning": "eef2317b9f5.c L34: 'Potential leak of memory pointed to by buf'. When CONFIG_FEATURE_CLEAN_UP=F, buf is allocated via malloc(bufsize) at L26 (when cmd!=8) but never freed \u2014 no free() call exists outside the #ifdef CLEAN_UP block. This is a genuine memory leak. PC=!CONFIG_FEATURE_CLEAN_UP correctly identifies the condition under which the leak occurs. New bug (no ERROR comment for the leak itself). Correctly constrained PC."
 }

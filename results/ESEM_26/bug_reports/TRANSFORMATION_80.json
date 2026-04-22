@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 4528.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": "TRANSFORMATION_208",
-  "id": "TRANSFORMATION_80"
+  "id": "TRANSFORMATION_80",
+  "reasoning": "r is assigned at L18 (r = pfnnid_map[pfn]) from a globally initialized array before return (int)r at L21. r is always initialized on the path from L18 to L21. The alarm is a false positive from the desugared analysis, possibly arising from CSA not modeling assert() abort semantics correctly on the desugared path. PC = CONFIG_DISCONTIGMEM, no library macros."
 }

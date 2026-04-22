@@ -13,7 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE",
   "old_id": "PRODUCT_56",
-  "id": "PRODUCT_31"
+  "id": "PRODUCT_31",
+  "reasoning": "36855dcfc98.c L6: 'wakeup=0' dead store inside !CONFIG_BF60x block, never read (known VBDB bug). PC=CONFIG_BF60x=F correctly constrains when this code path is compiled. Known bug. Correctly constrained PC. Consistent with TRANSFORMATION_50 (TRUE)."
 }

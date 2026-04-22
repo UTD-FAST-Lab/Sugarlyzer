@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 1612.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": null,
-  "id": "TRANSFORMATION_142"
+  "id": "TRANSFORMATION_142",
+  "reasoning": "30e053248da.c L31: 'int x = *length;' \u2014 x is assigned the dereferenced value of length but x is NEVER subsequently read (function returns 0 at L33 without using x). This is a genuine dead store of x. Note: the same line also has the known bug // (6) ERROR (reading uninitialized *length when !CONFIG_SECURITY), but the dead store of x itself is a separate new bug. The dead store occurs in all configs where execution reaches L31 (i.e., error=0 after security_old_inode_init_security returns), which is feasible in all configurations. PC=true is reasonable since the function is not inside any #ifdef. New bug, correctly constrained PC."
 }

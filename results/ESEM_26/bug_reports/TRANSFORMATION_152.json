@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 914.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": null,
-  "id": "TRANSFORMATION_152"
+  "id": "TRANSFORMATION_152",
+  "reasoning": "e30bfedce4d.c L24: 'int xGridSpacing = left_probe_bed_position;' \u2014 xGridSpacing is assigned but never subsequently used in the simplified source. Genuine dead store. When ENABLE_AUTO_BED_LEVELING=T, AUTO_BED_LEVELING_GRID is also defined (L1-3: #define AUTO_BED_LEVELING_GRID inside #ifdef ENABLE_AUTO_BED_LEVELING), so L23-25 (#ifdef AUTO_BED_LEVELING_GRID block) is always taken. PC=ENABLE_AUTO_BED_LEVELING=T correctly captures the condition. No library macros. New bug, correctly constrained PC."
 }

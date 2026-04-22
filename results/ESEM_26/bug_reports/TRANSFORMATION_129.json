@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 2558.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_UNDER",
   "old_id": null,
-  "id": "TRANSFORMATION_129"
+  "id": "TRANSFORMATION_129",
+  "reasoning": "e39363a9def.c L17: 'return err' where err is uninitialized. The known bug (// ERROR at L17): when !CONFIG_IPV6, the code executes 'goto put' at L13 immediately, bypassing the 'err = -1' assignment at L9. At the put label (L16), err is returned uninitialized. The bug requires CONFIG_NETPOLL=T (for the function to exist) AND !CONFIG_IPV6 (to take the uninitialized path). The PC is CONFIG_NETPOLL=T only \u2014 it omits the required !CONFIG_IPV6 condition. When CONFIG_IPV6=T, err IS initialized before return. PC is under-constrained (too broad \u2014 includes CONFIG_IPV6=T where err is initialized). Known bug."
 }

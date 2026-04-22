@@ -13,7 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE",
   "old_id": "PRODUCT_52",
-  "id": "PRODUCT_27"
+  "id": "PRODUCT_27",
+  "reasoning": "30e053248da.c L31: 'int x = *length' reads uninitialized *length (// (6) ERROR). When CONFIG_SECURITY=F, security_old_inode_init_security() never writes *len (returns 0 immediately, L14-17), so *length remains uninitialized at L24. The call to reiserfs_security_init then reaches L31 where *length is read. PC=CONFIG_SECURITY=F correctly identifies the failing path. Known bug. Correctly constrained PC. Consistent with TRANSFORMATION_59 (TRUE)."
 }

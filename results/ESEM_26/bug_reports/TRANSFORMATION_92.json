@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 6484.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE",
   "old_id": null,
-  "id": "TRANSFORMATION_92"
+  "id": "TRANSFORMATION_92",
+  "reasoning": "Duplicate of TRANSFORMATION_78 (Pulse tool vs CSA). buf is uninitialized when cmd==8: goto all_done at L23 bypasses buf = malloc(bufsize) at L26, so if(buf) at L30 reads an uninitialized pointer. Known bug marked //WARNING at L30 and //ERROR at L31. PC = CONFIG_FEATURE_CLEAN_UP correctly constrains to when the cleanup block is present. No library macros."
 }

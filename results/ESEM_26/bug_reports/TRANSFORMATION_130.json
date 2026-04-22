@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 8161.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_OVER",
   "old_id": null,
-  "id": "TRANSFORMATION_130"
+  "id": "TRANSFORMATION_130",
+  "reasoning": "1b487ea8a69.c L14: 'printf(\" %lc\\n\", *scontext)' where scontext is initialized to NULL at L7 \u2014 this is a null pointer dereference (// ERROR). Known VBDB bug. Real conditions: ENABLE_SELINUX=T AND !ENABLE_FEATURE_STAT_FORMAT=T (both in PC). Library macros in PC: !_STDLIB_H (restrictive), __USE_EXTERN_INLINES (non-restrictive in normal glibc compilation), !__need_malloc_and_calloc (non-restrictive), !__need___FILE (non-restrictive). The restrictive !_STDLIB_H over-constrains the PC \u2014 the bug also manifests in normal compilation where _STDLIB_H=T. Known bug, PC over-constrained."
 }

@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 7311.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "TRANSFORMATION_103"
+  "id": "TRANSFORMATION_103",
+  "reasoning": "Pulse duplicate of TRANSFORMATION_28. random is assigned at L27 (random = rand()) immediately before being read at L28 (if (random)). random is always initialized. False positive from the desugared analysis with restrictive library macro !_STDLIB_H in PC."
 }

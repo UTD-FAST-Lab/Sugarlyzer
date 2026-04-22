@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 1396.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": null,
-  "id": "TRANSFORMATION_157"
+  "id": "TRANSFORMATION_157",
+  "reasoning": "d6c7e113959.c L5: '*pdata++;' in max8660_pdata_from_dt \u2014 this post-increments the pointer pdata (equivalent to pdata++, discarding the read value). The incremented value of pdata (the local pointer copy) is never subsequently read (function returns 0 immediately). The dead store is of pdata's new value after the increment. The // ERROR comment at L18 in the caller refers to the caller-level bug; the dead store at L5 is a distinct new bug in this function. PC=CONFIG_REGULATOR_MAX8660=T AND CONFIG_OF=T correctly identifies the condition for this function to exist (inside nested #ifdef blocks at L1-2). No library macros. New bug, correctly constrained PC."
 }

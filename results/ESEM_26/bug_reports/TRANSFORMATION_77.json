@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 1471.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE",
   "old_id": "TRANSFORMATION_212",
-  "id": "TRANSFORMATION_77"
+  "id": "TRANSFORMATION_77",
+  "reasoning": "At L18, *((__u64 *)buf + i*8) performs pointer arithmetic beyond the 16-byte buf array. After the first iteration i=8, *((__u64*)buf + 64) reads 512 bytes past buf (64 * sizeof(__u64)=8), yielding undefined garbage. // ERROR at L18 confirms this is a VBDB-known bug. PC = CONFIG_S390_PRNG is a single real feature flag that correctly constrains to when prng_seed is compiled. No library macros."
 }

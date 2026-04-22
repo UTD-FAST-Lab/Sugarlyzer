@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 6785.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "TRANSFORMATION_137"
+  "id": "TRANSFORMATION_137",
+  "reasoning": "b833f064550.c L5: 'long x = 2147483644;' claimed as dead store. However, x IS read at L14 in the printf call: '(long) x, (long) y'. The dead store alarm is a false positive. The PC=__need___FILE=T is a restrictive library macro (only active when stdio.h is being processed for FILE type only), making the alarm additionally suspect as a library header desugaring artifact. Both the alarm and PC are incorrect."
 }

@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 7166.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "TRANSFORMATION_156"
+  "id": "TRANSFORMATION_156",
+  "reasoning": "35ae2e259e4.c L17: '*eckey = 15;' in the else-else branch (when !SSL_CTX_set_ecdh_auto). Pulse detects eckey as read without initialization \u2014 same desugaring-based uninitialized path as TRANSFORMATION_85/121. The PC includes HAVE_ECC=T and !SSL_CTX_set_ecdh_auto=T (real feature flags for this path) plus !_STDLIB_H (restrictive) and !__need_malloc_and_calloc (non-restrictive). The restrictive !_STDLIB_H over-constrains the PC. New bug, over-constrained PC."
 }

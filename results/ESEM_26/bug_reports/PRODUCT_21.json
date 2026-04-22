@@ -13,7 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE",
   "old_id": "PRODUCT_57",
-  "id": "PRODUCT_21"
+  "id": "PRODUCT_21",
+  "reasoning": "472a474c663.c L14: null pointer dereference of ptr (// (6) ERROR). enable_IR_x2apic() sets ptr=NULL after first call (L15-16). When called a second time (via smp_sanity_check \u2192 APIC_init_uniprocessor when !smp_found_config), ptr is NULL and '*ptr = a' at L14 is a null deref. PC=CONFIG_SMP=T correctly constrains the code path that calls enable_IR_x2apic() twice. Known bug. Correctly constrained PC."
 }

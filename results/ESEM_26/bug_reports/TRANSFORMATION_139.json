@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 1612.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_UNDER",
   "old_id": null,
-  "id": "TRANSFORMATION_139"
+  "id": "TRANSFORMATION_139",
+  "reasoning": "30e053248da.c L41: reiserfs_create() declares 'int length' (uninitialized) at L39 and passes &length to reiserfs_security_init() at L41. Inside the callee, when !CONFIG_SECURITY, security_old_inode_init_security() never writes *len, so *length remains uninitialized, and 'int x = *length' at L31 reads uninitialized memory (known bug // (6) ERROR). Pulse detects this as length being read without initialization during the call. PC=true claims the bug manifests in all configurations, but it only occurs when !CONFIG_SECURITY (when CONFIG_SECURITY=T, security_old_inode_init_security may write *len). PC is under-constrained (too broad \u2014 should require !CONFIG_SECURITY). Known bug."
 }

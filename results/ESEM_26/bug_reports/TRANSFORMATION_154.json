@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 6785.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "TRANSFORMATION_154"
+  "id": "TRANSFORMATION_154",
+  "reasoning": "b833f064550.c L6: 'long y = 2147483645;' claimed as dead store. However, y IS read at L14 in the printf call: '(long) x, (long) y'. The alarm is a false positive (same reasoning as TRANSFORMATION_137 for x at L5). The PC=__need___FILE=T is a restrictive library macro, further confirming this is a library header desugaring artifact where the printf call is somehow not visible in the analyzed path."
 }

@@ -13,7 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE",
   "old_id": "PRODUCT_41",
-  "id": "PRODUCT_40"
+  "id": "PRODUCT_40",
+  "reasoning": "bc0ffc0e971.c L43: use-after-free (// ERROR). When ENABLE_FEATURE_CLEAN_UP=T, memory is freed and then accessed again. Known VBDB bug. PC=ENABLE_FEATURE_CLEAN_UP=T correctly constrains when the free() call exists. Known bug, correctly constrained PC. Consistent with TRANSFORMATION_34 and TRANSFORMATION_66 (TRUE)."
 }

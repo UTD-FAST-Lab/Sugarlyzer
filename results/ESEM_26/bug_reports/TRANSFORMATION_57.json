@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 5788.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": "TRANSFORMATION_145",
-  "id": "TRANSFORMATION_57"
+  "id": "TRANSFORMATION_57",
+  "reasoning": "When CONFIG_FEATURE_CLEAN_UP=F, buf is assigned at L26 from malloc(bufsize) but the cleanup block (L29-33) is absent, so buf is never read or freed \u2014 genuine dead store and memory leak. The VBDB // ERROR at L31 marks a different bug (freeing potentially uninitialized buf when CLEAN_UP=T). New bug. PC = !CLEAN_UP AND !_STDLIB_H AND !__malloc_and_calloc_defined: the restrictive library macros (!_STDLIB_H, !__malloc_and_calloc_defined) over-constrain the PC \u2014 the bug fires in all !CLEAN_UP configs, not just when stdlib.h internals are in a non-standard state."
 }

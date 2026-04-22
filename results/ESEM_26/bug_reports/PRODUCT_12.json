@@ -13,7 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": "PRODUCT_46",
-  "id": "PRODUCT_12"
+  "id": "PRODUCT_12",
+  "reasoning": "eef2317b9f5.c L26: 'buf = malloc(bufsize)' dead store when CONFIG_FEATURE_CLEAN_UP=F. When !CLEAN_UP, the only uses of buf (if(buf) and free(buf)) are inside the #ifdef CLEAN_UP block and are not compiled. So the malloc result stored in buf is never subsequently read. Genuine dead store (also a memory leak). PC=!CONFIG_FEATURE_CLEAN_UP correctly constrained. New bug."
 }

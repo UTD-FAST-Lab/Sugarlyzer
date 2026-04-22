@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 4950.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_OVER",
   "old_id": "TRANSFORMATION_105",
-  "id": "TRANSFORMATION_76"
+  "id": "TRANSFORMATION_76",
+  "reasoning": "info is uninitialized at printf at L16 when FILETYPES=T AND !USERNAME \u2014 known bug (// ERROR at L16). The PC includes both BB_FEATURE_LS_USERNAME=T (where info IS initialized at L11, no bug) and !USERNAME (bug exists), making it under-constrained in that dimension. However, the PC also requires restrictive library macros (!_STDLIB_H, __STRICT_ANSI__) which are not satisfied in normal compilation. The restrictive library macros prevent the alarm from triggering in normal FILETYPES=T AND !USERNAME configurations. Classified as TRUE_OVER: the PC is over-constrained due to restrictive library macros."
 }

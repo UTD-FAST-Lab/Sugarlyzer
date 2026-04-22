@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 5233.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": null,
-  "id": "TRANSFORMATION_91"
+  "id": "TRANSFORMATION_91",
+  "reasoning": "pid_output is assigned at L11 (pid_output=1) unconditionally and at L19 (pid_output=0) when !PIDTEMP, but is never read in any configuration. Genuine dead store across all compilable configs. No // ERROR for pid_output (the // ERROR at L16 marks a different bug). New bug. PC covers all combinations of MARLIN_H, PIDTEMP, PID_DEBUG (simplifies to true). Correctly constrained, no library macros."
 }

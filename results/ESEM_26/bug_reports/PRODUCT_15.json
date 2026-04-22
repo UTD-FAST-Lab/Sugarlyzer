@@ -13,7 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE",
   "old_id": "PRODUCT_17",
-  "id": "PRODUCT_15"
+  "id": "PRODUCT_15",
+  "reasoning": "199501f2a00.c L21: 'strcat(buf, dt)' where dt could be NULL (// ERROR). dt is initialized to NULL at L7 and assigned '-i' only conditionally (rand()%2). When ENABLE_FEATURE_MODPROBE_MULTIPLE_OPTIONS=F, the code at L18-22 executes strcat(buf, dt) where dt may be NULL \u2014 null pointer passed to nonnull parameter. PC=!ENABLE_FEATURE_MODPROBE_MULTIPLE_OPTIONS correctly constrains the else-branch path. Known bug."
 }

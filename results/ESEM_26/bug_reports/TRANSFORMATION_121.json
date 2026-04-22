@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 7166.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "TRANSFORMATION_121"
+  "id": "TRANSFORMATION_121",
+  "reasoning": "Pulse duplicate of TRANSFORMATION_85. eckey can be NULL (from SSL_CTX_get_ex_data returning NULL) and is dereferenced at L17 in the else-else branch (HAVE_ECC=T AND !SSL_CTX_set_ecdh_auto). Genuine null dereference. No // ERROR at L17, new bug. PC has real flags HAVE_ECC AND !SSL_CTX_set_ecdh_auto plus restrictive library macros making it over-constrained."
 }

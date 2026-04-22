@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 1418.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE",
   "old_id": "TRANSFORMATION_168",
-  "id": "TRANSFORMATION_50"
+  "id": "TRANSFORMATION_50",
+  "reasoning": "wakeup is assigned at L6 inside #ifndef CONFIG_BF60x but never read afterwards \u2014 genuine dead store. Declaration at L3 is marked // ERROR, confirming this is a VBDB-known bug. PC = !CONFIG_BF60x correctly captures when the assignment is active. No library macros."
 }

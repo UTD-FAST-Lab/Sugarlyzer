@@ -13,7 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": "PRODUCT_0",
-  "id": "PRODUCT_35"
+  "id": "PRODUCT_35",
+  "reasoning": "1a3c8e3d840.c L13: 'thisopt = SSL_PROTOCOL_TLSV1_1' dead store. thisopt is assigned inside 'if (rand() % 2)' but never read afterward (function returns without using thisopt). PC=HAVE_TLSV1_X=T correctly constrains when SSL_PROTOCOL_TLSV1_1 is defined (only compilable config for this file). No library macros. New bug. Consistent with TRANSFORMATION_147 (TRUE_NEW_OVER with restrictive !_STDLIB_H); PRODUCT version is correctly constrained."
 }

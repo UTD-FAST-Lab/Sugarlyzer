@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 7166.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "TRANSFORMATION_125"
+  "id": "TRANSFORMATION_125",
+  "reasoning": "35ae2e259e4.c L12: Pulse tracks eckey as read without initialization, corresponding to the same null-dereference bug as TRANSFORMATION_45 (eckey from malloc() could return NULL, then *eckey=30 is a null deref). The two separate #ifdef HAVE_ECC blocks are desugared independently; Pulse additionally tracks this as an uninitialized read path. PC contains HAVE_ECC (real feature flag) plus restrictive !_STDLIB_H and non-restrictive !__need_malloc_and_calloc. The restrictive !_STDLIB_H over-constrains the PC (bug also manifests in normal compilation with _STDLIB_H=T). New bug, over-constrained PC."
 }
