@@ -19,5 +19,6 @@
   "strategy": "transformation",
   "classification": "FALSE",
   "old_id": "TRANSFORMATION_99",
-  "id": "TRANSFORMATION_8"
+  "id": "TRANSFORMATION_8",
+  "reasoning": "5cd6461b6fb.c L30: `if (http_unauthorized)` \u2014 branch condition allegedly garbage. However, http_unauthorized is assigned at L28 (`int http_unauthorized = random;`) and random is assigned at L27 (`int random = rand() % 2;`), all inside the same #ifdef CONFIG_FEATURE_HTTPD_BASIC_AUTH block. The value IS initialized before use at L30 within the same BASIC_AUTH block. False positive \u2014 CSA may find a desugared path where the BASIC_AUTH runtime variable is treated inconsistently. PC simplifies to BASIC_AUTH=T (plus library macros that cancel out), but the alarm itself is a false positive."
 }

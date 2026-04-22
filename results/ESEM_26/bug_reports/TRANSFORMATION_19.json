@@ -19,5 +19,6 @@
   "strategy": "transformation",
   "classification": "TRUE",
   "old_id": "TRANSFORMATION_184",
-  "id": "TRANSFORMATION_19"
+  "id": "TRANSFORMATION_19",
+  "reasoning": "6e2b75740be.c L63: `free(refptr(mod))` = `free(mod[0])` where mod has been aliased through the while-loop (L47-48: mod=module_core(mod)) making it point to freed memory. Known bug (// ERROR at L63: 'dereferencing already freed mod'). PC = CONFIG_MODULE_UNLOAD=T AND CONFIG_SMP=T \u2014 matches exactly the `#if defined(CONFIG_MODULE_UNLOAD) && defined(CONFIG_SMP)` preprocessor condition that guards the refptr malloc (L29-35) and the free(refptr(mod)) at L62-64. PC correctly constrained."
 }

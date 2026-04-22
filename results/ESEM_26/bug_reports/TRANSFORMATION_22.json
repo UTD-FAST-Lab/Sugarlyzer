@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 5472.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW",
+  "classification": "TRUE_NEW_OVER",
   "old_id": "TRANSFORMATION_17",
-  "id": "TRANSFORMATION_22"
+  "id": "TRANSFORMATION_22",
+  "reasoning": "35ae2e259e4.c L17: `*eckey = 15` \u2014 null dereference when eckey=NULL (malloc at L10 can return NULL). Triggered in the else-else path (rand()=0 AND !SSL_CTX_set_ecdh_auto). New bug (no ERROR at L17; known bug is memory leak). Real condition: HAVE_ECC=T AND !SSL_CTX_set_ecdh_auto. PC simplifies to HAVE_ECC=T AND !SSL_CTX_set_ecdh_auto AND !_STDLIB_H AND !__need_malloc_and_calloc (STRICT_ANSI and EXTERN variants cancel out). The library macros (!_STDLIB_H, !__need_malloc_and_calloc) are restrictive \u2014 not satisfied in real compilation where stdlib.h is fully included. PC is over-constrained \u2014 has correct feature flag condition but additionally restricts to non-real library macro states."
 }

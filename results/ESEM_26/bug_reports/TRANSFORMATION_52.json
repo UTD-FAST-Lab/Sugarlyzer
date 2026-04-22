@@ -17,7 +17,7 @@
   "feasible": true,
   "desugaringTime": 4950.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "UNKNOWN",
   "old_id": "TRANSFORMATION_106",
   "id": "TRANSFORMATION_52"
 }

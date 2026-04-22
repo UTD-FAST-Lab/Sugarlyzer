@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 6631.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "TRUE_NEW_OVER",
   "old_id": "TRANSFORMATION_46",
-  "id": "TRANSFORMATION_9"
+  "id": "TRANSFORMATION_9",
+  "reasoning": "d05e574ec26.c L17: `printf(\"%s\\n\", buf)` where buf may be null/uninitialized. At L16: `char* buf = apr_rmm_addr_get((char*)calloc(rmm_addr, sizeof(char)))` \u2014 rmm_addr=99999999999999999 is extremely large, causing calloc to almost certainly return NULL. apr_rmm_addr_get(NULL) then dereferences the null pointer. buf could be NULL/undefined when passed to printf. New bug (no ERROR). Real condition: APR_HAS_SHARED_MEMORY=T. PC: APR_HAS_SHARED_MEMORY=T AND !__need___FILE AND !_STDLIB_H AND !__malloc_and_calloc_defined. The library macros (!_STDLIB_H, !__malloc_and_calloc_defined) are restrictive, meaning the PC only fires in non-standard stdlib.h states. Over-constrained \u2014 the bug also exists when stdlib.h is fully included (normal compilation state)."
 }

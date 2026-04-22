@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 1145.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_UNDER",
   "old_id": null,
-  "id": "TRANSFORMATION_15"
+  "id": "TRANSFORMATION_15",
+  "reasoning": "0f8f8094d28.c L39: Dead store of `n` (`int n = *cache` is assigned but never read). Not marked with ERROR \u2014 new bug. PC simplifies to !CONFIG_FORCE_MAX_ZONEORDER (SLOB OR !SLOB factors out). The PC is under-constrained: (1) includes CONFIG_SLOB=T paths which are non-compilable in PRODUCT mode (kmalloc_caches undeclared when SLOB=T); (2) the code is inside #ifdef CONFIG_LOCKDEP so LOCKDEP=T is required but absent from PC. Real condition is LOCKDEP=T AND SLOB=F AND !FORCE_MAX_ZONEORDER."
 }

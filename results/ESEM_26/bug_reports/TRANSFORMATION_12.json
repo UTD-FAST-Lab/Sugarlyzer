@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 6920.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "TRUE_NEW",
   "old_id": "TRANSFORMATION_54",
-  "id": "TRANSFORMATION_12"
+  "id": "TRANSFORMATION_12",
+  "reasoning": "061fd0a353e.c L27: `if(!p)` in case 'R' \u2014 branch condition evaluates to garbage because `p` (declared at L7, `char *p;`) is uninitialized when r=0 (case 'W' assignment at L16 is skipped). Not marked with ERROR (the // ERROR is only for case 'U' at L21). New bug. PC simplifies to CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF=T \u2014 CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF appears in both T/F forms and factors out; library macros also cancel out. PC correctly constrained = SCAN_HWIF=T (required to compile the case 'R' block at L26-33)."
 }

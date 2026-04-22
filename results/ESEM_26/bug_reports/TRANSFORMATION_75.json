@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 5255.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_UNDER",
   "old_id": null,
-  "id": "TRANSFORMATION_75"
+  "id": "TRANSFORMATION_75",
+  "reasoning": "8c4377dd635.c: Dead store of `pid_output` \u2014 initialized to 1 at L11, possibly reassigned to 0 at L19 (when !PIDTEMP), but never read in any path (no code uses pid_output after assignment). Not marked ERROR \u2014 new bug. PC simplifies to !PIDTEMP (MARLIN_H branches factor out due to AND structure). PC is under-constrained: the bug also exists when PIDTEMP=T (pid_output=1 at L11 is dead since L19 doesn't execute and pid_output is never used). Real condition: all compilable configs (true, minus MARLIN_H=T AND PIDTEMP=T AND PID_DEBUG=T which is non-compilable)."
 }

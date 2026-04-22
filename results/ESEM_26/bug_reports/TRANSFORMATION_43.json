@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 6010.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "TRUE_NEW",
   "old_id": "TRANSFORMATION_114",
-  "id": "TRANSFORMATION_43"
+  "id": "TRANSFORMATION_43",
+  "reasoning": "p is declared at L11 in b62bd7b261b.c but never assigned before `*p = *s` at L24 inside the REGEXP block \u2014 genuine null/garbage dereference. No // ERROR, so new bug. PC = (STRICT_ANSI AND CONF AND RENAME AND REGEXP) OR (!STRICT_ANSI AND CONF AND RENAME AND REGEXP) simplifies to CONF AND RENAME AND REGEXP. STRICT_ANSI cancels out. Correctly constrained, no restrictive library macros."
 }

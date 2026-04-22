@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 6920.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "TRUE",
   "old_id": "TRANSFORMATION_55",
-  "id": "TRANSFORMATION_4"
+  "id": "TRANSFORMATION_4",
+  "reasoning": "061fd0a353e.c L20: `if(!p)` at L20 in case 'U' \u2014 branch condition evaluates to garbage because `p` is declared at L7 (`char *p;`) but only assigned inside `case 'W':` when `r=1` (L16). If `r=0`, p is never assigned before case 'U' is evaluated. Known bug (// ERROR at L21). PC simplifies to CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF=T (all library macro variants \u2014 EXTERN, _STDLIB_H, __need_malloc_and_calloc \u2014 appear in both T/F forms and cancel out; SCAN_HWIF appears in both T/F). PC correctly constrained = UNREGISTER_HWIF=T (required to compile the case 'U' block at L19-23)."
 }

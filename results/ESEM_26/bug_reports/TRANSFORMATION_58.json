@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 6148.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "TRANSFORMATION_58"
+  "id": "TRANSFORMATION_58",
+  "reasoning": "95755181b82.c L39: 'Right operand of + is garbage' in `iobuf + len`. PC simplifies to !__need___FILE (the __STRICT_ANSI__ OR-branches cancel out). Only a stdio.h library macro, no feature config flags. len is initialized unconditionally at L25-26, so it is never garbage. Same desugaring artifact pattern as TRANSFORMATION_17."
 }

@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 1805.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": null,
-  "id": "TRANSFORMATION_111"
+  "id": "TRANSFORMATION_111",
+  "reasoning": "USE_AFTER_FREE at 6e2b75740be.c L67: hdr is freed at ~L66 then accessed at L67. Bug occurs in the !MODULE_UNLOAD OR !SMP path. No // ERROR at L67 (known bug at L63 is different), so this is a new bug. PC = (!MODULE_UNLOAD) OR (MODULE_UNLOAD AND !SMP) correctly covers the complementary path to the known bug."
 }

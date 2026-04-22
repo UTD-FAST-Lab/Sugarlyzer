@@ -19,5 +19,6 @@
   "strategy": "transformation",
   "classification": "TRUE_NEW_OVER",
   "old_id": "TRANSFORMATION_52",
-  "id": "TRANSFORMATION_25"
+  "id": "TRANSFORMATION_25",
+  "reasoning": "p is assigned at L16 in case 'W' (HDPARM_HDIO_UNREGISTER_HWIF=T, SCAN=F) but the subsequent switch cases that would read p are not reached for input character 'W'. The dead store is real and new (no // ERROR). PC includes restrictive library macro !_STDLIB_H in addition to real flags UNREGISTER AND !SCAN, making it over-constrained."
 }

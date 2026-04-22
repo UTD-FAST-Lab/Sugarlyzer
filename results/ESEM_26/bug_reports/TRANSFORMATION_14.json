@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 6974.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "TRANSFORMATION_14"
+  "id": "TRANSFORMATION_14",
+  "reasoning": "bc0ffc0e971.c L29: MallocSizeof alarm \u2014 `ch = malloc(sizeof(*ch))` type incompatibility. PC: __STRICT_ANSI__=T plus other stdlib macros. All conditions are library header macros, no feature config flags. The type mismatch is a desugaring artifact: the struct ethtable_t gets renamed in the desugared file, causing the sizeof operand type to differ from the cast target. Not a real bug in actual compilation."
 }

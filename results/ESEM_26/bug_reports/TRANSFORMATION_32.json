@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 1183.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": null,
-  "id": "TRANSFORMATION_32"
+  "id": "TRANSFORMATION_32",
+  "reasoning": "6e2b75740be.c L67: 'Attempt to free released memory' at `free(hdr)`. Not marked with ERROR \u2014 new bug. The known bug is at L63 (ERROR: free(refptr(mod)) dereferences freed mod, requires MODULE_UNLOAD=T AND SMP=T). For !MODULE_UNLOAD OR !SMP configs, the L63 block is skipped, but through the while-loop aliasing (L47-48: mod=module_core(mod) makes mod alias its own element), free(module_core(mod)) at L60 ends up freeing memory aliased to hdr, making free(hdr) at L67 a double-free. Two different tools (unix.Malloc in TRANSFORMATION_32 and USE_AFTER_FREE in TRANSFORMATION_111) confirm this. PC !MODULE_UNLOAD OR !SMP correctly identifies configs where L63 does not fire first and L67 is the problematic free."
 }

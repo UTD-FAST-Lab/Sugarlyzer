@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 5609.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW",
+  "classification": "TRUE_NEW_OVER",
   "old_id": "TRANSFORMATION_87",
-  "id": "TRANSFORMATION_7"
+  "id": "TRANSFORMATION_7",
+  "reasoning": "5275b1e49f6.c L16: Dead store of `m_has_modinfo`. At L15-18, `if(r) m_has_modinfo=0; else m_has_modinfo=1;` \u2014 m_has_modinfo is assigned but never used after. New bug (no ERROR comment). The bug exists in all compilable configs (VERSION_CHECKING=T; VERSION_CHECKING=F \u2192 k_crcs undeclared at L25 \u2192 compile error). PC simplifies to !_STDLIB_H AND !__need_malloc_and_calloc \u2014 only library macros, no real feature flags. The `!_STDLIB_H` condition is restrictive (only satisfied before stdlib.h is fully included, not in real compilation). PC is over-constrained \u2014 misses the real compilation states (where _STDLIB_H=T) where the dead store also occurs."
 }

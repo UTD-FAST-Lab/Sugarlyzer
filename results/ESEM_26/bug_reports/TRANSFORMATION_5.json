@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 6974.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_OVER",
   "old_id": null,
-  "id": "TRANSFORMATION_5"
+  "id": "TRANSFORMATION_5",
+  "reasoning": "bc0ffc0e971.c: Known use-after-free bug (// ERROR at L43) \u2014 for loop iterates `ch = ch->next` after `delete_eth_table(ch)` frees ch. Alarm at L15 (inside delete_eth_table). PC: ENABLE_FEATURE_CLEAN_UP=T AND !__STRICT_ANSI__ AND !_STDLIB_H AND !__need_malloc_and_calloc. The library macros restrict the PC to a non-standard stdlib.h inclusion state (before stdlib.h is fully included, !_STDLIB_H=T). In real compilation with #include <stdlib.h>, _STDLIB_H=T and the PC is not satisfied. However, the bug exists whenever CLEAN_UP=T (regardless of stdlib.h state). PC is over-constrained \u2014 misses the real compilation state where the bug also occurs."
 }

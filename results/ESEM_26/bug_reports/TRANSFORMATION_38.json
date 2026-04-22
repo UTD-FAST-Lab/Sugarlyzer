@@ -19,5 +19,6 @@
   "strategy": "transformation",
   "classification": "TRUE_NEW",
   "old_id": "TRANSFORMATION_233",
-  "id": "TRANSFORMATION_38"
+  "id": "TRANSFORMATION_38",
+  "reasoning": "xGridSpacing is assigned at L24 from left_probe_bed_position but is never subsequently read \u2014 genuine dead store. No // ERROR at L24 (the // ERROR at L21 marks left_probe_bed_position). New bug. PC = ENABLE_AUTO_BED_LEVELING, which is the single real feature flag controlling the #ifdef block at L23. Correctly constrained, no library macros."
 }

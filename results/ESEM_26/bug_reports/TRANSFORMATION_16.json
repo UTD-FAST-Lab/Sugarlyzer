@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 1236.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "TRUE",
   "old_id": "TRANSFORMATION_178",
-  "id": "TRANSFORMATION_16"
+  "id": "TRANSFORMATION_16",
+  "reasoning": "63878acfafb.c: Known bug at L16 (// ERROR): `return *_omap3_sram_configure_core_dpll;` where `_omap3_sram_configure_core_dpll` is a static int* initialized to NULL (L9) and never set to non-null because `omap3_sram_restore_context` (the only setter at L24) is inside `#ifdef CONFIG_PM // DISABLED`. The assert at L13-15 checks for non-null but if assertions are disabled, the null pointer is dereferenced. The alarm reports garbage return value. PC = CONFIG_ARCH_OMAP3=T (single real feature flag, no library macros). All relevant code is inside #ifdef CONFIG_ARCH_OMAP3. PC correctly constrained."
 }

@@ -19,5 +19,6 @@
   "strategy": "transformation",
   "classification": "FALSE",
   "old_id": "TRANSFORMATION_86",
-  "id": "TRANSFORMATION_35"
+  "id": "TRANSFORMATION_35",
+  "reasoning": "Branch at L15 checks `if (r)` in 5275b1e49f6.c, where r is always initialized at L6. The alarm is a false positive. PC = !_STDLIB_H AND !__need_malloc_and_calloc contains only library macros (no real feature flags), confirming this is a desugaring artifact."
 }

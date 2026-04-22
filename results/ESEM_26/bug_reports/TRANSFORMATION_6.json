@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 5472.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW",
+  "classification": "FALSE",
   "old_id": "TRANSFORMATION_18",
-  "id": "TRANSFORMATION_6"
+  "id": "TRANSFORMATION_6",
+  "reasoning": "35ae2e259e4.c L10: Dead store of `eckey` at `eckey = malloc(sizeof(int))`. However, eckey IS subsequently read via dereference at L12 (`*eckey = 30`) and L17 (`*eckey = 15`). Dereferencing eckey reads its pointer value, so the stored value at L10 is not dead. False positive from the CSA \u2014 possibly due to the library macro state (!_STDLIB_H AND __need_malloc_and_calloc) representing a non-standard partial stdlib.h include where malloc semantics are not fully modeled. PC includes restrictive library macros alongside HAVE_ECC=T."
 }

@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 6173.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "TRUE_NEW_OVER",
   "old_id": "TRANSFORMATION_68",
-  "id": "TRANSFORMATION_18"
+  "id": "TRANSFORMATION_18",
+  "reasoning": "2631486f1bf.c L66: Null dereference of `curr->val` at L66 \u2014 `curr = malloc(sizeof(struct dnode))` at L65 can return NULL, making `curr->val = rand() % 10` at L66 a null dereference. New bug (no ERROR; ERROR is at L33 for dfree). The bug exists in all compilable configs (loop body is unconditional). PC simplifies to !_STDLIB_H AND !__need_malloc_and_calloc (SORTFILES and STRICT_ANSI factor out) \u2014 only restrictive library macros, no real feature flags. The `!_STDLIB_H` condition is not satisfied in real compilation (stdlib.h IS included \u2192 _STDLIB_H=T). PC is over-constrained \u2014 restricts to non-real library macro states while the bug occurs in all real compilable configs."
 }

@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 5609.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW",
+  "classification": "TRUE_NEW_OVER",
   "old_id": "TRANSFORMATION_89",
-  "id": "TRANSFORMATION_40"
+  "id": "TRANSFORMATION_40",
+  "reasoning": "k_crcs is assigned at L21 in 5275b1e49f6.c (inside VERSION_CHECKING block) but is overwritten at L25 before any read (if r=T) or never read (if r=F, goto out). Dead store is real and new. PC = !_STDLIB_H AND !__need_malloc_and_calloc \u2014 only restrictive library macros, no real feature flags. Bug fires in all compilable VERSION_CHECKING=T configs, so PC is over-constrained."
 }

@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 6502.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "TRANSFORMATION_48"
+  "id": "TRANSFORMATION_48",
+  "reasoning": "31873ec707d.c L8: 'Assigned value is garbage or undefined' at `conv[0]=(xx>=0)?'+':'-'`. PC=true (all configs). The file uses `conv[]` which is never declared in the file \u2014 `conv` is always an undeclared identifier. In PRODUCT mode, ULTRA_LCD=T causes conv undeclared (compile error); ULTRA_LCD=F causes ftostr51 (called unconditionally from main) undeclared (compile error). Every configuration is non-compilable, so this is a false positive / non-compilable config."
 }

@@ -19,5 +19,6 @@
   "strategy": "transformation",
   "classification": "TRUE_NEW",
   "old_id": "TRANSFORMATION_181",
-  "id": "TRANSFORMATION_3"
+  "id": "TRANSFORMATION_3",
+  "reasoning": "66517915e09.c L24: Dead store of `codec_hw_write` in ak4642_init. `int codec_hw_write = i2c_master_send;` at L24 \u2014 codec_hw_write is assigned but never read (function returns 0 immediately). Not marked // ERROR (the ERROR comments refer to the I2C=F non-compilable case). New bug. PC simplifies to CONFIG_SND_SOC_AK4642=T AND CONFIG_I2C=T (no library macros remain after simplification). FSI_AK4642=T implies SOC_AK4642=T (derived macro). Real condition: SOC_AK4642=T (so ak4642_init is compiled) AND I2C=T (so i2c_master_send is defined). PC correctly constrained."
 }

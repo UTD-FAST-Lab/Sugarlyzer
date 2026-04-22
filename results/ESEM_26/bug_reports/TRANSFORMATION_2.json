@@ -19,5 +19,6 @@
   "strategy": "transformation",
   "classification": "FALSE",
   "old_id": "TRANSFORMATION_35",
-  "id": "TRANSFORMATION_2"
+  "id": "TRANSFORMATION_2",
+  "reasoning": "4945115b2e7.c L22: `fclose(dbg)` with dbg allegedly uninitialized. In the original source, `FILE *dbg = fopen(...)` at L8/L10 initializes dbg inside the first #ifdef DEBUG_CGI block. In the desugared code, separate #ifdef blocks become separate if() blocks; the variable dbg is declared and assigned in one if(DEBUG_CGI) block but the analyzer may model it as potentially uninitialized at a subsequent if(DEBUG_CGI) block's fclose call due to the desugared runtime-variable modeling of DEBUG_CGI. Desugaring artifact \u2014 in real compilation with DEBUG_CGI=T, dbg is fully initialized before fclose is reached."
 }
