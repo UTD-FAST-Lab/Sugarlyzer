@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_81"
+  "id": "PRODUCT_81",
+  "reasoning": "Line 66: `curr->val` is dereferenced immediately after malloc at line 65 without a NULL check. If malloc returns NULL, this is a null dereference. The bug is in main() outside any #ifdef block, so it occurs in ALL configurations. No '// ERROR' comment at this location, so this is a new bug not documented in VBDB. The PC (RECURSIVE=T AND SORTFILES=T) is over-constrained \u2014 neither flag affects the malloc/dereference in main(). Classification: TRUE_NEW_OVER."
 }

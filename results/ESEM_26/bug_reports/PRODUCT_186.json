@@ -13,7 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_186"
+  "id": "PRODUCT_186",
+  "reasoning": "When PIDTEMP=F, the entire #ifdef PIDTEMP block is skipped (including the nested PID_DEBUG block). pid_output=1 at L11 overwritten by pid_output=0 at L19, neither ever read \u2014 dead store. PID_DEBUG=T is irrelevant when PIDTEMP=F (the PID_DEBUG block is inside #ifdef PIDTEMP). No '// ERROR' \u2192 new bug not in VBDB. Dead store occurs for any PIDTEMP=F config. PC adds MARLIN_H=F AND PID_DEBUG=T unnecessarily. Over-constrained. Classification: TRUE_NEW_OVER."
 }

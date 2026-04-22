@@ -13,7 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_47"
+  "id": "PRODUCT_47",
+  "reasoning": "The known VBDB bug for 6252547b8a7.c is a core.NullDereference at L12 (PRODUCT_23/TRUE: null deref of ops when OF_IRQ=F). This alarm is DEAD_STORE for irq at L12 (int irq = *ops, but irq is never subsequently read) \u2014 a different, new bug. TWL4030=T internally #defines CONFIG_IRQ_DOMAIN (L4), making the explicit IRQ_DOMAIN=T in the PC redundant. The dead store exists for all TWL4030=T configs regardless of OF_IRQ: when OF_IRQ=T ops is valid and irq is still never read; when OF_IRQ=F a null deref occurs but irq is still dead. The PC unnecessarily includes OF_IRQ=F, missing OF_IRQ=T configs where the dead store also occurs. The true condition is TWL4030=T. Over-constrained (too narrow)."
 }

@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_OVER",
   "old_id": null,
-  "id": "PRODUCT_99"
+  "id": "PRODUCT_99",
+  "reasoning": "MEMORY_LEAK at L17: eckey is allocated at L10 (HAVE_ECC=T) and never freed before return at L24. This is the same known VBDB memory leak as PRODUCT_30 (TRUE, PC=HAVE_ECC). The leak occurs whenever HAVE_ECC=T regardless of SSL_CTX_set_ecdh_auto \u2014 both branches (SSL_CTX=T: 'do something', SSL_CTX=F: '*eckey=15') lead to the same unfreed return. PC adds SSL_CTX_set_ecdh_auto=F unnecessarily, making it more restrictive than needed. The true condition is just HAVE_ECC=T. PC is over-constrained. Classification: TRUE_OVER."
 }

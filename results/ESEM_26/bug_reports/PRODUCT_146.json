@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_146"
+  "id": "PRODUCT_146",
+  "reasoning": "Line 16: `--argc` in main() decrements argc but value is never read again \u2014 dead store. This is in main() outside any #ifdef, occurring in all configurations. No '// ERROR' for argc dead store \u2192 new bug not in VBDB. PC requires UNREGISTER=F AND SCAN=F, but argc is dead regardless of these flags. Over-constrained. Classification: TRUE_NEW_OVER."
 }

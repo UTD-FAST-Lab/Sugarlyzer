@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_95"
+  "id": "PRODUCT_95",
+  "reasoning": "Line 16: `p = *argv++, --argc` \u2014 the post-increment of argv stores a new value in argv that is never read again (dead store of argv). This statement is in main() outside any #ifdef, so the dead store occurs in all configurations (when 'W' case is hit and r is truthy). No '// ERROR' for the argv dead store \u2192 new bug not in VBDB. (The ERROR at L21 is for the uninitialized 'p' bug, a separate known issue.) PC requires UNREGISTER=F AND SCAN=F but the dead store exists regardless of these flags. PC is over-constrained. Classification: TRUE_NEW_OVER."
 }

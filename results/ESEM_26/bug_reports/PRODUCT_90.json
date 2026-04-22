@@ -13,7 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_90"
+  "id": "PRODUCT_90",
+  "reasoning": "Line 38: `flags |= T_ESCAPE_SHELL_CMD` inside the NEED_ENHANCED block. flags is set at L21 (flags=0) and potentially modified at L38, but is never read \u2014 the loop continues and overwrites it, or function returns. Dead store. No '// ERROR' comment \u2192 new bug not in VBDB. CROSS_COMPILE=F is needed to avoid the contradiction (CROSS_COMPILE=T prevents NEED_ENHANCED from being defined). However WIN32=F is unnecessary: the dead store at L38 occurs whenever NEED_ENHANCED=T, whether WIN32 is T or F (WIN32 only determines if NEED_ENHANCED is internally defined, not whether the dead store exists). PC is over-constrained by WIN32=F. Classification: TRUE_NEW_OVER."
 }

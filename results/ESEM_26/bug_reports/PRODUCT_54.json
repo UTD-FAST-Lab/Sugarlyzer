@@ -13,7 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_54"
+  "id": "PRODUCT_54",
+  "reasoning": "The known VBDB bug for 8c4377dd635.c is SERIAL_ECHO_START at L16 when MARLIN_H=T. This alarm is a DEAD_STORE for pid_output: when PIDTEMP=F, pid_output=1 at L11 is assigned then overwritten by pid_output=0 at L19 before ever being read \u2014 the first assignment is dead. New bug. The dead store at L11 (overwritten before read) occurs for ALL PIDTEMP=F configs regardless of MARLIN_H or PID_DEBUG. The PC {MARLIN_H=F, PIDTEMP=F, PID_DEBUG=F} unnecessarily constrains MARLIN_H and PID_DEBUG, missing other PIDTEMP=F combos where the dead store also occurs. Over-constrained."
 }

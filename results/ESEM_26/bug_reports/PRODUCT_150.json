@@ -13,7 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "PRODUCT_150"
+  "id": "PRODUCT_150",
+  "reasoning": "PC is infeasible: TWL4030=T causes '#define CONFIG_IRQ_DOMAIN' at L4 in 6252547b8a7.c, yet PC requires IRQ_DOMAIN=F \u2014 direct contradiction. Configuration cannot exist. Classification: FALSE."
 }

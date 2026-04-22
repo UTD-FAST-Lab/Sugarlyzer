@@ -13,7 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_133"
+  "id": "PRODUCT_133",
+  "reasoning": "Line 12: `int irq = *ops` inside irq_domain_add() (compiled when IRQ_DOMAIN=T). irq is assigned but never read \u2014 dead store. New bug not in VBDB. Required condition: IRQ_DOMAIN=T. TWL4030=F only means twl_probe() is not compiled (doesn't affect irq_domain_add itself). OF_IRQ=T only determines if ops=NULL or not, not whether irq is dead. Both are unnecessary. PC is over-constrained. Classification: TRUE_NEW_OVER."
 }

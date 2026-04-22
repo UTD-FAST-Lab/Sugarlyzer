@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_197"
+  "id": "PRODUCT_197",
+  "reasoning": "Line 16: --argc dead store in main() outside any #ifdef, occurs in all configs. New bug. PC (UNREGISTER=F AND SCAN=T) over-constrained. Classification: TRUE_NEW_OVER."
 }

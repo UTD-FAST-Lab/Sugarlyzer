@@ -16,7 +16,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": null,
-  "id": "PRODUCT_28"
+  "id": "PRODUCT_28",
+  "reasoning": "len is assigned at L25 (sprintf) and possibly incremented at L30 (BASIC_AUTH branch) and L36 (if content_gzip), but its final value is never used \u2014 printf at L38 uses iobuf directly. This is a genuine dead store. No ERROR comment in file and no existing TRUE record for 95755181b82.c, so this is a new bug not in the VBDB. The PC simplifies to GZIP=T (4 clauses covering all combos of BASIC_AUTH and BB_MMU). GZIP=T is required for compilation since content_gzip (L35) is only declared under #ifdef ENABLE_FEATURE_HTTPD_GZIP. Neither BASIC_AUTH nor BB_MMU affect whether len is dead. Correctly constrained."
 }

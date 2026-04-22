@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_56"
+  "id": "PRODUCT_56",
+  "reasoning": "The known VBDB bug for 061fd0a353e.c is p used uninitialized at L20/L21 (case U, UNREGISTER_HWIF=T). This alarm is a DEAD_STORE for argv at L16: p = *argv++, --argc increments argv but the incremented value of argv is never subsequently read in the function \u2014 a genuine dead store. New bug. The dead store of argv after argv++ exists in all configurations regardless of UNREGISTER_HWIF or SCAN_HWIF (neither flag affects whether the incremented argv is used). The PC {UNREGISTER=T, SCAN=T} is unnecessarily narrow, missing configs where argv is also dead after increment. Over-constrained."
 }

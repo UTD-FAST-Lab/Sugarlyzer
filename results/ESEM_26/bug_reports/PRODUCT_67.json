@@ -13,7 +13,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "PRODUCT_67"
+  "id": "PRODUCT_67",
+  "reasoning": "PC contains FSI_DA7210=T AND SOC_DA7210=F (contradictory: #ifdef CONFIG_SND_FSI_DA7210 at L5 defines CONFIG_SND_SOC_DA7210 at L6) and FSI_AK4642=T AND SOC_AK4642=F (contradictory: L1-2 define SOC_AK4642 when FSI_AK4642=T). Infeasible configuration \u2014 false positive."
 }

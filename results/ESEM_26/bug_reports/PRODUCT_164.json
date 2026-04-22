@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": null,
-  "id": "PRODUCT_164"
+  "id": "PRODUCT_164",
+  "reasoning": "Line 5: `*pdata++` in max8660_pdata_from_dt() (compiled when MAX8660=T AND OF=T). This is *(pdata++) \u2014 post-increment stores new value of local pointer pdata, which is never read again \u2014 dead store. No '// ERROR' at L5 (ERROR at L18 is at the call site max8660_pdata_from_dt(&pdata_of) in max8660_probe(), a different function/location). PC = MAX8660=T AND OF=T exactly matches the condition (OF=F uses the other function variant at L9-12 which lacks this dead store). Classification: TRUE_NEW."
 }

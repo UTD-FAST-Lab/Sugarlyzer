@@ -13,7 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_170"
+  "id": "PRODUCT_170",
+  "reasoning": "Line 40: prepend_new_eth_table() called from main(). Inside that function, `ch = malloc(sizeof(*ch))` at L29 without NULL check, then `ch->ifname = ifname` at L30 dereferences ch \u2014 null dereference if malloc returns NULL. Function is outside any #ifdef \u2192 bug occurs in all configs. No '// ERROR' at L29/L30 \u2192 new bug not in VBDB. PC requires CLEAN_UP=F but the null dereference exists regardless of CLEAN_UP. Over-constrained. Classification: TRUE_NEW_OVER."
 }

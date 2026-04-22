@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": null,
-  "id": "PRODUCT_55"
+  "id": "PRODUCT_55",
+  "reasoning": "The known VBDB bug for 35ae2e259e4.c is memory leak (PRODUCT_30: TRUE, unix.Malloc). This alarm detects a null dereference at L17: eckey = malloc() at L10 can return NULL, and when rand()%2==0 (else branch), *eckey = 15 at L17 dereferences it. L17 is inside #else of #if defined(SSL_CTX_set_ecdh_auto) (L14-18), so it is only reached when \\!SSL_CTX_set_ecdh_auto. The PC {HAVE_ECC=T, SSL_CTX_set_ecdh_auto=F} exactly captures when this null dereference occurs \u2014 HAVE_ECC=T is required for the eckey code to compile, and \\!SSL_CTX_set_ecdh_auto is required for L17 to be reached. Correctly constrained. New bug."
 }

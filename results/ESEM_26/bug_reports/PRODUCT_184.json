@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_OVER",
   "old_id": null,
-  "id": "PRODUCT_184"
+  "id": "PRODUCT_184",
+  "reasoning": "MEMORY_LEAK: eckey allocated at L10 (HAVE_ECC=T) and never freed before return at L24. Same known VBDB bug as PRODUCT_30 (TRUE, PC=HAVE_ECC). The leak occurs whenever HAVE_ECC=T regardless of SSL_CTX_set_ecdh_auto \u2014 both branches lead to the same unfreed return. SSL_CTX=T is unnecessary. PC over-constrained. Classification: TRUE_OVER."
 }

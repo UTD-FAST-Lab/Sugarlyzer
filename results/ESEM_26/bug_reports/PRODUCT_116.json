@@ -13,7 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_116"
+  "id": "PRODUCT_116",
+  "reasoning": "send_headers(): `len` accumulates sprintf return values at L25 (and L30/L36 depending on config), but the final printf at L38 uses iobuf directly \u2014 len is never used after its last assignment. Dead store. content_gzip (L35) is only declared when GZIP=T; GZIP=F causes a compile error at L35. So the dead store requires GZIP=T. BASIC_AUTH=F and BB_MMU=F are not required: the dead store exists regardless of these flags (BASIC_AUTH only adds one more len update; BB_MMU affects whether send_headers is reachable at runtime, not its static analysis). No '// ERROR' \u2192 new bug not in VBDB. PC is over-constrained. Classification: TRUE_NEW_OVER."
 }

@@ -13,7 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": null,
-  "id": "PRODUCT_61"
+  "id": "PRODUCT_61",
+  "reasoning": "Known bug for eef2317b9f5.c is uninitialized branch (PRODUCT_22: TRUE). This alarm detects a memory leak: buf = malloc(bufsize) at L26 is allocated but when CLEAN_UP=F, the free(buf) at L31 is not compiled, so buf is leaked. New bug. PC (CLEAN_UP=F) exactly captures when the leak occurs \u2014 allocation happens in the path that skips the cleanup block. Correctly constrained."
 }

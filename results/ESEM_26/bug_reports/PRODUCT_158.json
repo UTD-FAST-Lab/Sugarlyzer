@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_OVER",
   "old_id": null,
-  "id": "PRODUCT_158"
+  "id": "PRODUCT_158",
+  "reasoning": "Line 20: `if(\\!p)` inside case 'U' (compiled when UNREGISTER=T). p is declared but never initialized before use when case 'W' is not taken or r=0 \u2014 uninitialized read. Known VBDB bug: ERROR at L21 marks this issue for UNREGISTER=T. The bug occurs when UNREGISTER=T (regardless of SCAN). SCAN=T would also expose the bug via case 'R', so the true condition is UNREGISTER=T OR SCAN=T. PC requires SCAN=F unnecessarily, making it too narrow. Classification: TRUE_OVER."
 }

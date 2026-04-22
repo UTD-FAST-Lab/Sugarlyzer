@@ -13,7 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE",
   "old_id": null,
-  "id": "PRODUCT_110"
+  "id": "PRODUCT_110",
+  "reasoning": "Line 43 has '// ERROR' \u2014 known VBDB bug. In main() when CLEAN_UP=T: the for loop `for (ch = clist; ch; ch = ch->next)` calls delete_eth_table(ch) at L44, which calls free(ch) at L16. The loop's increment `ch = ch->next` then accesses ch after it has been freed \u2014 use after free. This code is inside '#ifdef ENABLE_FEATURE_CLEAN_UP', so the bug only manifests when CLEAN_UP=T. PC = CLEAN_UP=T exactly matches the condition. Classification: TRUE."
 }

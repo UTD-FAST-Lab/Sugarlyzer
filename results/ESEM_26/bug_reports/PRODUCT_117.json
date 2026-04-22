@@ -13,7 +13,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "PRODUCT_117"
+  "id": "PRODUCT_117",
+  "reasoning": "When I2C=F, i2c_master_send is not declared (L9-11 '#ifdef CONFIG_I2C' block skipped). L16 inside da7210_init() (compiled when SOC_DA7210=T) references i2c_master_send \u2192 undeclared identifier compile error. Configuration is non-compilable. Classification: FALSE."
 }

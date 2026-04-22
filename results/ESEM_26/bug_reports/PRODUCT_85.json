@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE",
   "old_id": null,
-  "id": "PRODUCT_85"
+  "id": "PRODUCT_85",
+  "reasoning": "Line 17 has '// ERROR' \u2014 known VBDB bug. In netpoll_setup() (compiled when NETPOLL=T): when IPV6=F, the #else branch at L13 executes 'goto put' immediately, skipping the 'err = -1' assignment at L9. At label 'put:', 'return err' at L17 reads uninitialized 'err'. When IPV6=T, err is assigned -1 before the goto, so no bug. PC = NETPOLL=T AND IPV6=F exactly matches the conditions under which the bug occurs. Classification: TRUE."
 }

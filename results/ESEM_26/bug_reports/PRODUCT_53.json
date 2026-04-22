@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_53"
+  "id": "PRODUCT_53",
+  "reasoning": "The known VBDB bug for 35ae2e259e4.c is the memory leak of eckey (PRODUCT_30: TRUE, unix.Malloc). This alarm detects a null dereference: eckey = malloc() at L10 can return NULL, and *eckey = 30 at L12 dereferences it \u2014 a genuine new bug. The null dereference at L12 is inside the if(rand()%2) branch; SSL_CTX_set_ecdh_auto only affects the else branch (L14-18) and has no bearing on whether L12 is reached or whether eckey is NULL there. The bug exists for all HAVE_ECC=T configs regardless of SSL_CTX_set_ecdh_auto. The PC unnecessarily includes \\!SSL_CTX_set_ecdh_auto, making it over-constrained (too narrow)."
 }

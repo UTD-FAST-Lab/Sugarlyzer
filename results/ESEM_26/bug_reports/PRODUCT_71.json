@@ -13,7 +13,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "PRODUCT_71"
+  "id": "PRODUCT_71",
+  "reasoning": "PC has CONFIG_SLOB=T. kmalloc_caches is only declared under #ifndef CONFIG_SLOB (L25). When SLOB=T, kmalloc_caches is undeclared, making the reference at L36 a compile error. Alarm from a non-compilable configuration."
 }

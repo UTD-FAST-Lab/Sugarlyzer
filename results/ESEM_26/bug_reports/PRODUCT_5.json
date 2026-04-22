@@ -13,7 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE",
   "old_id": null,
-  "id": "PRODUCT_5"
+  "id": "PRODUCT_5",
+  "reasoning": "conv is used at L8 (conv[0]=(xx>=0)...) and subsequent lines but is never declared in this file. When ULTRA_LCD=T the function ftostr51 is compiled and accesses the undeclared global conv \u2014 a genuine uninitialized/undeclared variable bug. This is the known VBDB variability bug for 31873ec707d.c: it manifests only when ULTRA_LCD=T. The PC (ULTRA_LCD=T) exactly captures the condition. Correctly constrained."
 }

@@ -13,7 +13,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "PRODUCT_62"
+  "id": "PRODUCT_62",
+  "reasoning": "When CONFIG_I2C=F, i2c_master_send is not declared (its declaration at L10 is inside #ifdef CONFIG_I2C). The function da7210_init at L14-18 references i2c_master_send at L16, making this a compile error when I2C=F. Alarm from a non-compilable configuration."
 }

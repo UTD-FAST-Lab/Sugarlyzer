@@ -13,7 +13,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_120"
+  "id": "PRODUCT_120",
+  "reasoning": "Line 41 (reported as L39): `int n = *cache` inside init_node_lock_keys() (LOCKDEP=T). n is assigned but never used \u2014 dead store. SLOB=F ensures kmalloc_caches is declared (no compile error). No '// ERROR' at L41 \u2192 new bug not in VBDB. Required condition: LOCKDEP=T AND SLOB=F. PC adds FORCE_MAX_ZONEORDER=F, SLAB=F, PPC_256K_PAGES=T \u2014 only affecting array bounds, not the dead store. PC is over-constrained. Classification: TRUE_NEW_OVER."
 }

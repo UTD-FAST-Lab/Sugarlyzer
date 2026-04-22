@@ -13,7 +13,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "PRODUCT_209"
+  "id": "PRODUCT_209",
+  "reasoning": "FSI_DA7210=T causes '#define SOC_DA7210' at L6, yet PC requires SOC_DA7210=F \u2014 contradiction. Configuration cannot exist. Classification: FALSE."
 }

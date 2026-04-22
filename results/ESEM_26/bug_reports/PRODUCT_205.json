@@ -13,7 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "PRODUCT_205"
+  "id": "PRODUCT_205",
+  "reasoning": "GZIP=F \u2192 content_gzip not declared (L5-7 skipped). L35 references content_gzip outside #ifdef \u2192 compile error. Non-compilable. Classification: FALSE."
 }

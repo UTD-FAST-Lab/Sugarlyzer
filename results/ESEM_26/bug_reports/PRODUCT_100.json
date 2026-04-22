@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_100"
+  "id": "PRODUCT_100",
+  "reasoning": "Line 16: `p = *argv++, --argc` \u2014 the comma expression decrements argc and stores the new value back, but argc is never read afterward \u2014 dead store of argc. This statement is in main() outside any #ifdef, so the dead store occurs in all configurations. No '// ERROR' for argc dead store \u2192 new bug not in VBDB. PC requires UNREGISTER=T AND SCAN=T, but argc is dead regardless of these flags. PC is over-constrained. Classification: TRUE_NEW_OVER."
 }

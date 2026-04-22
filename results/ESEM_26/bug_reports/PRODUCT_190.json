@@ -13,7 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE",
   "old_id": null,
-  "id": "PRODUCT_190"
+  "id": "PRODUCT_190",
+  "reasoning": "Line 37 has '// ERROR' \u2014 known VBDB bug. Memory leak in 218ad12f42e.c: when NUMA=T, inet_ehash_locks_alloc() allocates x. In inet_ehash_locks_free() with NUMA=T, the free(x) at L32 is only executed when size > PAGE_SIZE. When size <= PAGE_SIZE (statically possible path), x is set to NULL at L37 without being freed \u2014 memory leak. The bug manifests only when NUMA=T (NUMA=F uses the unconditional free at L35). PC = NUMA=T exactly matches. Classification: TRUE."
 }

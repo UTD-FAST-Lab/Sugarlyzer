@@ -13,7 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": null,
-  "id": "PRODUCT_111"
+  "id": "PRODUCT_111",
+  "reasoning": "Line 18: `m_has_modinfo = 1` (or L16: = 0). m_has_modinfo is assigned in the if/else at L15-18 but never read afterward \u2014 dead store. These assignments are outside any #ifdef. No '// ERROR' for m_has_modinfo \u2192 new bug not in VBDB. When VERSION_CHECKING=F, k_crcs at L25 is undeclared (outside #ifdef) \u2192 compile error, making VERSION_CHECKING=F non-compilable. The dead store exists only in compilable configs (VERSION_CHECKING=T). PC = VERSION_CHECKING=T is exactly correct. Classification: TRUE_NEW."
 }

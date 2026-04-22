@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_OVER",
   "old_id": null,
-  "id": "PRODUCT_76"
+  "id": "PRODUCT_76",
+  "reasoning": "Known VBDB bug for 221ac329e93.c at L37 (*buffer = a, ERROR). When KGDB=T (or XMON=T or BDI_SWITCH=T), allocate_buffer() is a macro using malloc(4092) which can return NULL. When KPROBES=T, *buffer = a at L37 dereferences possibly-null buffer \u2014 genuine null dereference. Known bug. The true PC should be KPROBES=T AND (KGDB=T OR XMON=T OR BDI_SWITCH=T). The reported PC {KGDB=T, KPROBES=T} is a subset, missing XMON=T and BDI_SWITCH=T configs. Over-constrained."
 }

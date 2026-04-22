@@ -13,7 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_50"
+  "id": "PRODUCT_50",
+  "reasoning": "No ERROR comment and no TRUE (known) record for b62bd7b261b.c \u2014 all true positives are new bugs. val is assigned at L16 (val = (s && s[1]) ? s+1 : NULL) but is never subsequently read in the function \u2014 a genuine dead store. This is the same bug as PRODUCT_7 (TRUE_NEW, val dead at L16) which correctly has PC = CONF AND RENAME (covering both REGEXP=T and REGEXP=F). PRODUCT_50 additionally constrains to REGEXP=T, but the dead store at L16 also occurs when REGEXP=F (val is assigned at L16 and no code after uses it in the \\!REGEXP path). The PC is over-constrained (too narrow)."
 }

@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_OVER",
   "old_id": null,
-  "id": "PRODUCT_210"
+  "id": "PRODUCT_210",
+  "reasoning": "Line 8: `int x = *inode` in pts_sb_from_inode() (compiled when DEVPTS=T). Known VBDB bug at L8 (ERROR comment). The bug requires DEVPTS=T. UNIX98=F only means ptmx_open() is not compiled, but pts_sb_from_inode() is still defined and analyzable whenever DEVPTS=T. UNIX98=F is unnecessary. PC over-constrained. Classification: TRUE_OVER."
 }

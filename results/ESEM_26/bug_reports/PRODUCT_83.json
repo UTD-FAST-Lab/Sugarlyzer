@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_83"
+  "id": "PRODUCT_83",
+  "reasoning": "Line 39: `driver_data = &some_int` inside ptmx_open() (compiled when UNIX98=T). In the non-goto path, driver_data is assigned at L39 then function returns at L41 \u2014 dead store. No '// ERROR' at L39, so this is a new bug not in VBDB. DEVPTS only controls pts_sb_from_inode() (L8); it has no effect on the dead store at L39. The dead store occurs for any config with UNIX98=T, regardless of DEVPTS. PC adds DEVPTS=F unnecessarily, making it over-constrained. Classification: TRUE_NEW_OVER."
 }

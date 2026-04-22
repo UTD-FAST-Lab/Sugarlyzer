@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_79"
+  "id": "PRODUCT_79",
+  "reasoning": "The known VBDB bug for 35ae2e259e4.c is memory leak (PRODUCT_30). This alarm detects a null dereference at L12 (*eckey = 30 after malloc can return NULL) \u2014 same new bug as PRODUCT_53. The null dereference at L12 is in the if(rand()%2) branch; SSL_CTX_set_ecdh_auto only affects the else branch and is irrelevant to L12. Bug exists for all HAVE_ECC=T configs. PC {HAVE_ECC=T, SSL_CTX_set_ecdh_auto=T} is over-constrained (missing SSL_CTX=F configs where null deref also occurs)."
 }

@@ -16,7 +16,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": null,
-  "id": "PRODUCT_2"
+  "id": "PRODUCT_2",
+  "reasoning": "The known VBDB bug for 8c4377dd635.c is at L16 (SERIAL_ECHO_START called when MARLIN_H=T makes the macro undefined). This alarm is about pid_output=0 at L19 (in the \\!PIDTEMP branch) being written but never subsequently read \u2014 a genuine dead store. This is a different, new bug not in the VBDB. The PC simplifies to \\!PIDTEMP (all 4 clauses cover all combos of MARLIN_H and PID_DEBUG with \\!PIDTEMP). MARLIN_H and PID_DEBUG do not affect whether this dead store occurs, so \\!PIDTEMP is the exact condition. Correctly constrained."
 }

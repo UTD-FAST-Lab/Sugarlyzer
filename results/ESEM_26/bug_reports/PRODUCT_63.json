@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_63"
+  "id": "PRODUCT_63",
+  "reasoning": "Known bug for 2631486f1bf.c is dfree call at L33 (RECURSIVE=T). This alarm: curr = malloc() at L65 can return NULL, then curr->val at L66 is a null dereference. New bug. The null dereference exists in ALL configs \u2014 malloc can return NULL regardless of RECURSIVE or SORTFILES. The PC {RECURSIVE=T, SORTFILES=F} is unnecessarily narrow. Over-constrained."
 }

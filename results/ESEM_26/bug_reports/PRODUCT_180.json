@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_180"
+  "id": "PRODUCT_180",
+  "reasoning": "Line 16: argv++ stores new argv value never read again \u2014 dead store of argv. In main() outside any #ifdef, occurs in all configs. New bug. PC (UNREGISTER=T AND SCAN=F) over-constrained. Classification: TRUE_NEW_OVER."
 }

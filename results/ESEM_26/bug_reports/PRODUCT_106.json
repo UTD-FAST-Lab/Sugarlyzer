@@ -13,7 +13,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_106"
+  "id": "PRODUCT_106",
+  "reasoning": "Line 24: `int codec_hw_write = i2c_master_send` in ak4642_init() (compiled when SOC_AK4642=T). codec_hw_write is assigned but never read \u2014 dead store. I2C=T ensures i2c_master_send is declared. FSI_AK4642=T implies SOC_AK4642=T (consistent), FSI_DA7210=T implies SOC_DA7210=T (consistent). No contradictions in PC. The '// ERROR' at L24 marks the VBDB-known I2C=F compile error; this DEAD_STORE (I2C=T) is a distinct new bug not in VBDB. Required condition: SOC_AK4642=T AND I2C=T. PC adds FSI_AK4642=T, FSI_DA7210=T, SOC_DA7210=T \u2014 all unnecessary for ak4642_init()'s dead store. PC is over-constrained. Classification: TRUE_NEW_OVER."
 }

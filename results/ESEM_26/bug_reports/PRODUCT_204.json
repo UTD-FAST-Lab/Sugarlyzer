@@ -13,7 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_204"
+  "id": "PRODUCT_204",
+  "reasoning": "When PIDTEMP=F, #ifdef PIDTEMP block (including nested PID_DEBUG) is skipped entirely. pid_output=1 at L11, pid_output=0 at L19, neither read \u2014 dead store. PID_DEBUG=T and MARLIN_H=T are irrelevant when PIDTEMP=F. New bug. Dead store occurs for any PIDTEMP=F config. PC over-constrained. Classification: TRUE_NEW_OVER."
 }
