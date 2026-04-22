@@ -13,7 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE",
   "old_id": "PRODUCT_45",
-  "id": "PRODUCT_22"
+  "id": "PRODUCT_22",
+  "reasoning": "eef2317b9f5.c L30: 'if (buf)' branch condition evaluates to garbage value (// WARNING / // ERROR). When cmd=8, the code jumps via 'goto all_done' at L23, skipping the malloc at L26. buf remains uninitialized (declared at L6 but never assigned). When CONFIG_FEATURE_CLEAN_UP=T, the 'if (buf)' at L30 evaluates an uninitialized buf \u2014 garbage value. PC=CONFIG_FEATURE_CLEAN_UP=T correctly constrains when this branch exists. Known bug."
 }

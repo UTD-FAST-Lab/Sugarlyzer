@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 8161.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_OVER",
   "old_id": null,
-  "id": "TRANSFORMATION_135"
+  "id": "TRANSFORMATION_135",
+  "reasoning": "1b487ea8a69.c L14: Same null pointer dereference as TRANSFORMATION_130 (scontext=NULL at L7, dereferenced at L14, // ERROR). Known VBDB bug. PC has !__USE_EXTERN_INLINES instead of __USE_EXTERN_INLINES (T130's variant), but same real conditions: ENABLE_SELINUX=T AND !ENABLE_FEATURE_STAT_FORMAT=T. The restrictive !_STDLIB_H over-constrains the PC \u2014 bug also manifests in normal compilation with _STDLIB_H=T. Known bug, PC over-constrained."
 }

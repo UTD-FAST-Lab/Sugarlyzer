@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 1748.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "TRANSFORMATION_124"
+  "id": "TRANSFORMATION_124",
+  "reasoning": "581635e28f1.c L7: 'int family = APR_INET6;' where family is never subsequently used \u2014 genuine dead store. APR_INET6 is only defined when APR_HAVE_IPV6=T (lines 1-3), so when APR_HAVE_IPV6=F the code referencing APR_INET6 at L7 does not compile. The PC=true claims the bug manifests in all configurations, but it only compiles (and manifests) when APR_HAVE_IPV6=T. PC is over-constrained by including non-compilable APR_HAVE_IPV6=F configs. New bug (no ERROR comment)."
 }

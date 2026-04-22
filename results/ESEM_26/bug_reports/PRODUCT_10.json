@@ -13,7 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE",
   "old_id": "PRODUCT_68",
-  "id": "PRODUCT_10"
+  "id": "PRODUCT_10",
+  "reasoning": "c708c57e247.c L18: known out-of-bounds array access (// ERROR). CSA reports 'Assigned value is garbage or undefined' from the out-of-bounds access. Known VBDB bug (same as TRANSFORMATION_77: TRUE). PC=CONFIG_S390_PRNG=T correctly constrains when this code path exists. No library macros."
 }

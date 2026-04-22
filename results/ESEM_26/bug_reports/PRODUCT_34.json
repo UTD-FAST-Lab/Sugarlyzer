@@ -13,7 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": "PRODUCT_33",
-  "id": "PRODUCT_34"
+  "id": "PRODUCT_34",
+  "reasoning": "5275b1e49f6.c L18: m_has_modinfo dead store. The value assigned to m_has_modinfo at L18 is never subsequently read. PC=CONFIG_FEATURE_INSMOD_VERSION_CHECKING=T correctly constrains when this code exists. No library macros (clean PRODUCT analysis). New bug. Consistent with TRANSFORMATION_39 and TRANSFORMATION_86 (TRUE_NEW_OVER with library macros); PRODUCT version is correctly constrained."
 }

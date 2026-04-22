@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 6574.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": "TRANSFORMATION_139",
-  "id": "TRANSFORMATION_60"
+  "id": "TRANSFORMATION_60",
+  "reasoning": "src is assigned at L15 (src = rand() % 100) unconditionally before copySubFile(src, dst) at L18. The 1st argument is always initialized. The alarm is a false positive, likely arising because the desugared version merges the BB_AR and BB_CP_MV conditionals into runtime branches, causing CSA to mistrack src initialization on some paths. PC = BB_CP_MV AND BB_AR, no library macros."
 }

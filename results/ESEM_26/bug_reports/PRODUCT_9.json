@@ -14,7 +14,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": "PRODUCT_15",
-  "id": "PRODUCT_9"
+  "id": "PRODUCT_9",
+  "reasoning": "061fd0a353e.c L27: 'Branch condition evaluates to a garbage value'. p is declared but uninitialized at L7. In 'case R' (when HDPARM_SCAN_HWIF=T), 'if(!p)' at L27 evaluates p which is uninitialized (p is only set in 'case W' which is a different switch branch). PC: CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF=T (UNREGISTER cancels \u2014 both T and F variants present). New bug (the // ERROR is at L20-21 in the UNREGISTER path; L27 in the SCAN path has no ERROR comment). Correctly constrained PC."
 }

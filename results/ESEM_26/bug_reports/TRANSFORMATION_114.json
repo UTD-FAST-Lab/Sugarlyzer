@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 8391.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "TRANSFORMATION_114"
+  "id": "TRANSFORMATION_114",
+  "reasoning": "The final value of len after len += sprintf(...) at L36 is never read \u2014 printf at L38 uses iobuf not len, and the function returns. Genuine dead store of len. No // ERROR for this specific alarm, new bug. PC = !STRICT_ANSI AND !__need___FILE: !__need___FILE is non-restrictive, but the PC misses the GZIP feature flag constraint (the dead store occurs when GZIP=T triggers the L35-36 block) and excludes STRICT_ANSI=T configs where the same dead store exists. Over-constrained."
 }

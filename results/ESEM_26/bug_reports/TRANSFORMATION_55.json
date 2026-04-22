@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 6010.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": "TRANSFORMATION_111",
-  "id": "TRANSFORMATION_55"
+  "id": "TRANSFORMATION_55",
+  "reasoning": "a is assigned at L14 (char *a = val) and only used at L21 (s = a) inside the RENAME_REGEXP block. When CONF=T AND RENAME=T AND !REGEXP, a is a genuine dead store. No // ERROR, so this is a new bug. The PC = !(CONF AND RENAME AND REGEXP) spans many configs where L14 is not even reached in real compilation (CONF=F or RENAME=F), which are desugaring artifacts. PC is over-constrained."
 }

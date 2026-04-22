@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE",
   "old_id": "PRODUCT_18",
-  "id": "PRODUCT_33"
+  "id": "PRODUCT_33",
+  "reasoning": "1b487ea8a69.c L14: scontext null pointer dereference (// ERROR). scontext is initialized to NULL at L7 (#ifdef ENABLE_SELINUX), then dereferenced at L14 inside #ifndef ENABLE_FEATURE_STAT_FORMAT / #ifdef ENABLE_SELINUX. PC=ENABLE_SELINUX=T AND ENABLE_FEATURE_STAT_FORMAT=F correctly constrains the condition. No library macros (compare with TRANSFORMATION_130 and TRANSFORMATION_135: TRUE_OVER due to restrictive !_STDLIB_H). Known bug, correctly constrained PC."
 }

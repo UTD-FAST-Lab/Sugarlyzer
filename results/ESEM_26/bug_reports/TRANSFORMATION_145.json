@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 8254.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": null,
-  "id": "TRANSFORMATION_145"
+  "id": "TRANSFORMATION_145",
+  "reasoning": "b62bd7b261b.c L24: '*p = *s' where p is uninitialized \u2014 same as TRANSFORMATION_43 (Pulse version). p is declared at L11 ('char *s, *p;') but never assigned before the while loop body at L24 uses it. The bug requires ENABLE_FEATURE_MDEV_CONF AND ENABLE_FEATURE_MDEV_RENAME AND ENABLE_FEATURE_MDEV_RENAME_REGEXP. PC: (STRICT_ANSI OR !STRICT_ANSI) AND MDEV_CONF AND MDEV_RENAME AND MDEV_RENAME_REGEXP \u2014 STRICT_ANSI cancels, leaving MDEV_CONF AND MDEV_RENAME AND MDEV_RENAME_REGEXP. Correctly constrained. New bug."
 }

@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 1582.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_UNDER",
   "old_id": null,
-  "id": "TRANSFORMATION_143"
+  "id": "TRANSFORMATION_143",
+  "reasoning": "f7ab9b407b3.c L103: readpage is declared uninitialized at L102 and passed to i915_load_modeset_init. Through the call chain, *readpage is set to shmem_file_setup() which returns f (the function pointer). When !CONFIG_TMPFS, f=NULL (L17), so *readpage=NULL. Later, read_cache_page_gfp reads *readpage as filler and calls filler(0) \u2014 a null function pointer call (known bug // ERROR at L54). Pulse detects the uninitialized/null propagation starting at L103. PC=CONFIG_DRM_I915=T is under-constrained: the bug only manifests when !CONFIG_TMPFS (so f=NULL), but !CONFIG_TMPFS is absent from the PC. When CONFIG_TMPFS=T, f points to some_fun (non-null) and no bug occurs. Known bug, under-constrained PC."
 }

@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 6574.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": "TRANSFORMATION_140",
-  "id": "TRANSFORMATION_73"
+  "id": "TRANSFORMATION_73",
+  "reasoning": "dst is assigned at L16 (dst = rand() % 200) unconditionally before copySubFile(src, dst) at L18. The 2nd argument is always initialized. False positive from the desugared analysis merging BB_AR and BB_CP_MV conditionals into runtime branches. Duplicate alarm at same location as TRANSFORMATION_60 (which flagged the 1st argument)."
 }

@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 8254.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_UNDER",
   "old_id": null,
-  "id": "TRANSFORMATION_127"
+  "id": "TRANSFORMATION_127",
+  "reasoning": "b62bd7b261b.c L14: 'char *a = val;' is a dead store when ENABLE_FEATURE_MDEV_RENAME_REGEXP is not set, because 'a' is only used at L21 inside #ifdef MDEV_RENAME_REGEXP. The variable 'a' is declared inside #ifdef MDEV_CONF / #ifdef MDEV_RENAME, so if either of those is false the variable does not exist (no dead store). The PC covers !MDEV_CONF and !MDEV_RENAME cases (which are desugaring artifacts where 'a' is not in scope). The STRICT_ANSI terms cancel out (both T and F versions present). Real condition for dead store: MDEV_CONF AND MDEV_RENAME AND !MDEV_RENAME_REGEXP. PC includes cases where MDEV_CONF=F or MDEV_RENAME=F \u2014 under-constrained. No restrictive library macros remain after cancellation. New bug."
 }

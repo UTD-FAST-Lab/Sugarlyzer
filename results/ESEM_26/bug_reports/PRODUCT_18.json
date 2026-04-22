@@ -13,7 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": "PRODUCT_39",
-  "id": "PRODUCT_18"
+  "id": "PRODUCT_18",
+  "reasoning": "b62bd7b261b.c L24: '*p = *s' null/uninitialized dereference. p is declared at L11 ('char *s, *p;') but never assigned before the while loop uses it at L24. PC=MDEV_CONF AND MDEV_RENAME AND MDEV_RENAME_REGEXP correctly constrains the scope where this code path exists. New bug. Correctly constrained PC. Consistent with TRANSFORMATION_43 (TRUE_NEW) and TRANSFORMATION_145 (TRUE_NEW)."
 }

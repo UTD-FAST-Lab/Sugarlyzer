@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 8388.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "TRANSFORMATION_118"
+  "id": "TRANSFORMATION_118",
+  "reasoning": "Pulse duplicate of TRANSFORMATION_104. curr from malloc() at L65 can be NULL, dereferenced at L67 (curr->next = head) without NULL check. No // ERROR at L67, new bug. Bug fires in all configs. PC = !CONFIG_FEATURE_LS_SORTFILES is over-constrained \u2014 the bug fires regardless of SORTFILES."
 }

@@ -24,7 +24,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": "PRODUCT_61",
-  "id": "PRODUCT_44"
+  "id": "PRODUCT_44",
+  "reasoning": "66517915e09.c L16: codec_hw_write dead store in da7210_init path. Real condition: CONFIG_SND_SOC_DA7210=T AND CONFIG_I2C=T. The PC is very complex and includes many FSI/SOC combinations, some with contradictory derived macro relationships (e.g., FSI_DA7210=T AND SOC_DA7210=F is contradictory since FSI_DA7210=T is a derived macro implying SOC_DA7210=T). These non-compilable configs over-constrain the PC. New bug, over-constrained PC. Consistent with TRANSFORMATION_31 and TRANSFORMATION_123 (both TRUE_NEW)."
 }

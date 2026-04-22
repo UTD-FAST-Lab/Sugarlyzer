@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 8388.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "TRANSFORMATION_94"
+  "id": "TRANSFORMATION_94",
+  "reasoning": "curr is allocated by malloc() at L65, which can return NULL. curr is dereferenced at L66 (curr->val = rand()%10) without a NULL check \u2014 genuine null dereference. No // ERROR at L66 (the // ERROR at L33 marks a different dfree bug). New bug. L65-70 are in main() outside all #ifdef blocks, so the bug fires in all configs. PC = CONFIG_FEATURE_LS_SORTFILES AND !_STDLIB_H AND !__need_malloc_and_calloc: SORTFILES requirement and restrictive !_STDLIB_H both over-constrain the PC."
 }

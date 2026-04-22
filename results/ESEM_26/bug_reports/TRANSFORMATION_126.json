@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 7166.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "TRANSFORMATION_126"
+  "id": "TRANSFORMATION_126",
+  "reasoning": "35ae2e259e4.c L10: eckey = malloc(sizeof(int)) is a dead store when the path SSL_CTX_set_ecdh_auto=T is taken and rand()%2=0, causing neither *eckey=30 (L12) nor *eckey=15 (L17) to execute. The assigned pointer value is never subsequently read. This is a real bug in normal compilation. The PC requires !_STDLIB_H (restrictive), __need_malloc_and_calloc=T (restrictive), and !__malloc_and_calloc_defined (restrictive) \u2014 all of which are stdlib.h internal header guards that are not set in normal compilation. The bug also occurs in standard compilation contexts, so the PC is severely over-constrained. New bug (no ERROR comment for this dead store)."
 }

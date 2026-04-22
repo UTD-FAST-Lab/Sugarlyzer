@@ -13,7 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": "PRODUCT_2",
-  "id": "PRODUCT_43"
+  "id": "PRODUCT_43",
+  "reasoning": "2a6cbfa00e0.c L16: 'Potential leak of memory pointed to by sc'. sc is allocated via malloc at L6 but only freed when SHARED_MODULE=T (#ifdef SHARED_MODULE at L11-13). When SHARED_MODULE=F, free() is not compiled in and sc is leaked. PC=SHARED_MODULE=F correctly constrains this condition. New bug (the // ERROR mentioned in summary for 2a6cbfa00e0.c is about strcpy/library artifacts, not this memory leak). Correctly constrained PC."
 }

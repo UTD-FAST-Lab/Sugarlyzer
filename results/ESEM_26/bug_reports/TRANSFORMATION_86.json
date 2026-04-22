@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 7601.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "TRANSFORMATION_86"
+  "id": "TRANSFORMATION_86",
+  "reasoning": "Duplicate of TRANSFORMATION_39 (different tool: Pulse DEAD_STORE vs CSA deadcode.DeadStores). m_has_modinfo is assigned at L16 and L18 in if/else branches but never read afterwards. Genuine dead store. No // ERROR, new bug. PC = !_STDLIB_H AND !__need_malloc_and_calloc (library macros only); restrictive !_STDLIB_H makes PC over-constrained \u2014 bug fires in all compilable configs, not just non-standard stdlib header states."
 }

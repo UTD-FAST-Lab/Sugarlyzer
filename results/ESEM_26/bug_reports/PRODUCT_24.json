@@ -14,7 +14,8 @@
     0
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": "PRODUCT_51",
-  "id": "PRODUCT_24"
+  "id": "PRODUCT_24",
+  "reasoning": "30e053248da.c L31: 'int x = *length' dead store. x is assigned the dereferenced value of length but x is never subsequently read (function returns 0 at L33). Genuine dead store. PC=true correctly captures that the function has no #ifdef guards \u2014 reachable in all configurations when error=0. New bug (the // (6) ERROR at L31 refers to the uninitialized *length read, not the dead store of x). Consistent with TRANSFORMATION_142 (TRUE_NEW)."
 }

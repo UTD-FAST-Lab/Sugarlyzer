@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 1623.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": null,
-  "id": "TRANSFORMATION_123"
+  "id": "TRANSFORMATION_123",
+  "reasoning": "66517915e09.c L16: codec_hw_write dead store in da7210_init path. Pulse duplicate of TRANSFORMATION_31 (CSA). The PC simplifies to CONFIG_SND_SOC_DA7210 AND CONFIG_I2C (since FSI_DA7210 is a derived macro that implies SOC_DA7210, and the OR branches cancel), which is correctly constrained for the path where da7210 is selected but not via FSI. No restrictive library macros. New bug (no ERROR comment for this dead store). PC correctly constrained."
 }

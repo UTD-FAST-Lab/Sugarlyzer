@@ -15,7 +15,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_UNDER",
   "old_id": "PRODUCT_13",
-  "id": "PRODUCT_16"
+  "id": "PRODUCT_16",
+  "reasoning": "061fd0a353e.c L16: 'p = *argv++, --argc' dead store. p is declared (L7) and conditionally assigned in 'case W' (L16, when r!=0). After break, no subsequent code reads p (the switch ends and main returns). The dead store occurs in ALL configurations (case 'W' is not inside any #ifdef). However, the PC only covers 3 of 4 configurations: it misses CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF=T AND CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF=F, where the dead store still exists. PC is under-constrained (too narrow). New bug."
 }

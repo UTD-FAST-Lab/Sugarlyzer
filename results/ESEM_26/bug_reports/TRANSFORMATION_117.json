@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 1857.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE",
   "old_id": null,
-  "id": "TRANSFORMATION_117"
+  "id": "TRANSFORMATION_117",
+  "reasoning": "ops = NULL at L19 when !CONFIG_OF_IRQ (assignment at L22 skipped). irq_domain_add(ops) at L25 passes NULL ops, which is then dereferenced at L12 (*ops). Known bug (// (4) ERROR at L12). PC = CONFIG_TWL4030_CORE AND !CONFIG_OF_IRQ correctly captures when ops remains NULL. No library macros."
 }

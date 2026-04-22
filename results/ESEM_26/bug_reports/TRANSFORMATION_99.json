@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 8388.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "TRANSFORMATION_99"
+  "id": "TRANSFORMATION_99",
+  "reasoning": "curr is allocated by malloc() at L65, which can return NULL. curr is then dereferenced at L67 (curr->next = head) without a NULL check \u2014 genuine null dereference. No // ERROR at L67 (the // ERROR at L33 is for a different bug). New bug. L65-70 are in main() outside all #ifdef blocks, so the bug fires in all configs, not just CONFIG_FEATURE_LS_SORTFILES=T. PC = CONFIG_FEATURE_LS_SORTFILES is over-constrained."
 }

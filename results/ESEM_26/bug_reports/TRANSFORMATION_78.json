@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 5788.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE",
   "old_id": "TRANSFORMATION_143",
-  "id": "TRANSFORMATION_78"
+  "id": "TRANSFORMATION_78",
+  "reasoning": "When cmd==8, goto all_done at L23 bypasses buf = malloc(bufsize) at L26, leaving buf uninitialized. The branch condition if(buf) at L30 then evaluates garbage. This is the VBDB-known bug marked //WARNING at L30 and //ERROR at L31 (if garbage buf is non-null, free(buf) corrupts the heap). PC = CONFIG_FEATURE_CLEAN_UP correctly constrains to when the cleanup block exists. No library macros."
 }

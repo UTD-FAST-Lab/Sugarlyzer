@@ -17,7 +17,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": "PRODUCT_12",
-  "id": "PRODUCT_36"
+  "id": "PRODUCT_36",
+  "reasoning": "c76df14dfb4.c L38: 'flags |= T_ESCAPE_SHELL_CMD' dead store inside #ifdef NEED_ENHANCED_ESCAPES. flags is assigned in the loop body but its value is discarded at each loop iteration (reset to 0 at L21) and never used outside the loop. The dead store at L38 exists only when NEED_ENHANCED_ESCAPES is defined. However, the PC includes '!CROSS_COMPILE AND WIN32 AND !NEED_ENHANCED_ESCAPES' \u2014 a config where L38 does not exist (it's inside #ifdef NEED_ENHANCED_ESCAPES). This over-constrains the PC by including non-compilable cases for L38. New bug."
 }

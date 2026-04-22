@@ -14,7 +14,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": "PRODUCT_38",
-  "id": "PRODUCT_7"
+  "id": "PRODUCT_7",
+  "reasoning": "b62bd7b261b.c L16: val dead store. 'val = (s && s[1]) ? s+1 : NULL' at L16 \u2014 val's new value is never subsequently read. Inside #ifdef MDEV_RENAME_REGEXP, 's = a' (not val) is used; outside REGEXP, val is unused after L16. PC: MDEV_CONF AND MDEV_RENAME (MDEV_RENAME_REGEXP cancels \u2014 both T and F branches present), correctly capturing the scope where L16 exists. No restrictive library macros. New bug, correctly constrained PC. Consistent with TRANSFORMATION_155 (TRUE_NEW)."
 }

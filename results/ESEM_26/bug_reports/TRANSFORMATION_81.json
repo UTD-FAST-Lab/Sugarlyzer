@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 6178.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": "TRANSFORMATION_34",
-  "id": "TRANSFORMATION_81"
+  "id": "TRANSFORMATION_81",
+  "reasoning": "dbg is assigned at L8 (OS2=T) or L10 (OS2=F) inside the first #ifdef DEBUG_CGI block, before it is used at L15 (fprintf(dbg,...)) inside a second #ifdef DEBUG_CGI block. In real compilation with DEBUG_CGI=T, dbg is always initialized. The alarm is a false positive from the desugared analysis treating the two separate #ifdef DEBUG_CGI blocks as independent runtime conditions, allowing a path where the first block is skipped (dbg unassigned) but the second block is entered. PC contains restrictive library macros (!__FILE_defined, !_STDLIB_H) alongside the real feature flag DEBUG_CGI."
 }

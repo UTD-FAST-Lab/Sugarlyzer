@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 2405.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": "TRANSFORMATION_170",
-  "id": "TRANSFORMATION_72"
+  "id": "TRANSFORMATION_72",
+  "reasoning": "expires is assigned in both branches of the if-else at L55-58 (if: expires=ktime_add_ns(time_delta), else: expires=KTIME_MAX) before return expires at L60. Both branches always assign expires, so the return value is never garbage. The alarm is a false positive caused by restrictive library macro !__int8_t_defined in all clauses of the PC \u2014 stdint.h not processed, so s64/u64 typedefs are broken in the desugared analysis, causing CSA to mistrack expires."
 }

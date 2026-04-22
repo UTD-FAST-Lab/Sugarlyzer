@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 7601.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "TRANSFORMATION_112"
+  "id": "TRANSFORMATION_112",
+  "reasoning": "Pulse duplicate of TRANSFORMATION_35. r is assigned at L6 (r = rand() % 2) and IS initialized before the branch at L15 (if(r)). False positive. PC = library macros only (!_STDLIB_H restrictive), confirming desugaring artifact."
 }

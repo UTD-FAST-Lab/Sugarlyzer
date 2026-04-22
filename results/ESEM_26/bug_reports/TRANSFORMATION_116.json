@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 8388.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "TRANSFORMATION_116"
+  "id": "TRANSFORMATION_116",
+  "reasoning": "Pulse duplicate of TRANSFORMATION_94/102. curr from malloc() at L65 can be NULL, dereferenced at L66 (curr->val = rand()%10) without NULL check. Genuine null dereference. No // ERROR at L66, new bug. Bug fires in all configs (L65-66 outside all #ifdefs). PC includes !SORTFILES and restrictive library macros \u2014 over-constrained."
 }

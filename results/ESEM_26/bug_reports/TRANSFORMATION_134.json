@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 2709.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "TRANSFORMATION_134"
+  "id": "TRANSFORMATION_134",
+  "reasoning": "a7fc1f83c81.c L10: 'int len = strlen(prepend) + FILENAME_LENGTH + 1;' \u2014 len IS used at L11 as the VLA dimension: 'char path[len];'. The static analyzer (Pulse) may not recognize VLA dimension expressions as reads of len, producing a spurious dead store alarm. Additionally, the PC=true does not include the required SDSUPPORT=T condition (the cardreader function only exists inside #ifdef SDSUPPORT), making this a false positive both in alarm validity and PC accuracy."
 }

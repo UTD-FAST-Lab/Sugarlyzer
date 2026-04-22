@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 6288.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE",
   "old_id": null,
-  "id": "TRANSFORMATION_95"
+  "id": "TRANSFORMATION_95",
+  "reasoning": "rmm_lock is read without initialization at L14 \u2014 the VBDB-known bug (// ERROR at L14). Pulse duplicate of the CSA alarm. PC: the 4 OR clauses cover all combinations of __need___FILE, __STRICT_ANSI__, and __USE_EXTERN_INLINES, which cancel to true. PC simplifies to APU_HAS_LDAP AND APR_HAS_SHARED_MEMORY, correctly constrained."
 }

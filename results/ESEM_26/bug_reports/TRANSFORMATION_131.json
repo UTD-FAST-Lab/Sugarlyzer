@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 8388.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "TRANSFORMATION_131"
+  "id": "TRANSFORMATION_131",
+  "reasoning": "2631486f1bf.c L66: curr could be null (from malloc) and is dereferenced. Same underlying bug as T74/T99 etc. (curr null deref from malloc in CONFIG_FEATURE_LS_SORTFILES sorting path). PC: CONFIG_FEATURE_LS_SORTFILES AND !_STDLIB_H AND !__need_malloc_and_calloc. The restrictive !_STDLIB_H over-constrains the PC (bug also occurs in normal compilation with _STDLIB_H=T). !__need_malloc_and_calloc is non-restrictive. New bug, over-constrained PC."
 }

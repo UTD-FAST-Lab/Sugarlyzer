@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 6269.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "TRANSFORMATION_87"
+  "id": "TRANSFORMATION_87",
+  "reasoning": "Duplicate of TRANSFORMATION_37 (different tool: Pulse vs CSA). len is assigned at L12 from sprintf(&buf[buflen], \"MODALIAS=\") immediately before being read at L13 (buflen += len + 1). len is always initialized. False positive from the desugared analysis. PC = CONFIG_HOTPLUG AND !__need___FILE (non-restrictive library macro)."
 }

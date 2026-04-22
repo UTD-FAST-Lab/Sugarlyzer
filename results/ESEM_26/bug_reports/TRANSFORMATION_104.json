@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 8388.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "TRANSFORMATION_104"
+  "id": "TRANSFORMATION_104",
+  "reasoning": "Same bug as TRANSFORMATION_99: curr from malloc() at L65 can be NULL, dereferenced at L67 (curr->next = head) without NULL check. Genuine null dereference. No // ERROR at L67, new bug. L65-70 are in main() outside all #ifdef blocks \u2014 bug fires in all configs. PC = !CONFIG_FEATURE_LS_SORTFILES (the complementary constraint to TRANSFORMATION_99 which had SORTFILES=T). Over-constrained \u2014 does not need SORTFILES constraint at all."
 }

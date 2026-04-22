@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 8388.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "TRANSFORMATION_144"
+  "id": "TRANSFORMATION_144",
+  "reasoning": "2631486f1bf.c L66: Pulse reports curr read without initialization. PC simplifies to !_STDLIB_H AND !__need_malloc_and_calloc (CONFIG_FEATURE_LS_SORTFILES cancels out \u2014 both T and F cases appear). The real condition for the curr bug requires CONFIG_FEATURE_LS_SORTFILES=T; its cancellation in the PC makes the PC under-constrained in that dimension. Additionally, !_STDLIB_H is a restrictive library macro that over-constrains the PC. Since !_STDLIB_H is the dominant restrictive constraint that restricts to a non-standard compilation path, classified as TRUE_NEW_OVER."
 }

@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 5609.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": "TRANSFORMATION_91",
-  "id": "TRANSFORMATION_70"
+  "id": "TRANSFORMATION_70",
+  "reasoning": "k_crcs = someInt at L25 (inside if(r) block) is a dead store \u2014 k_crcs is never read after this assignment before the function exits via out:/return. Genuine dead store in the r=true path. No // ERROR at L25, new bug. PC = !_STDLIB_H AND !__need_malloc_and_calloc \u2014 only library macros (restrictive !_STDLIB_H). Bug fires in all compilable VERSION_CHECKING=T configs; PC is over-constrained because it only fires in non-standard stdlib header states."
 }

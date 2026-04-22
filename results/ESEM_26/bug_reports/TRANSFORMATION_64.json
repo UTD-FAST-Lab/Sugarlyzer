@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 4528.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": "TRANSFORMATION_207",
-  "id": "TRANSFORMATION_64"
+  "id": "TRANSFORMATION_64",
+  "reasoning": "r is assigned at L18 from pfnnid_map[pfn] (a valid global array read) immediately before the comparison r != 0xff at L19. r is always initialized; the alarm is a false positive. PC includes restrictive library macro !_ASSERT_H_DECLS (assert.h not yet processed in desugared header state). The known VBDB bug (// (6) ERROR at L19) is the assertion always failing because pfnnid_map is filled with 0xff by memset at L53 \u2014 a different issue entirely."
 }

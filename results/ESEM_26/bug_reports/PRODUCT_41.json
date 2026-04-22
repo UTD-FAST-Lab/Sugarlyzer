@@ -14,7 +14,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": "PRODUCT_73",
-  "id": "PRODUCT_41"
+  "id": "PRODUCT_41",
+  "reasoning": "e30bfedce4d.c L24: xGridSpacing dead store. xGridSpacing is assigned at L24 but never subsequently used. The real condition: ENABLE_AUTO_BED_LEVELING=T (which implies AUTO_BED_LEVELING_GRID via #define at L1-3). The PC covers both AUTO_BED_LEVELING_GRID=T and AUTO_BED_LEVELING_GRID=F with ENABLE_AUTO_BED_LEVELING=T \u2014 but ENABLE=T AND GRID=F is contradictory (ENABLE=T automatically defines GRID). This non-compilable config is included in the PC, making it over-constrained. New bug."
 }

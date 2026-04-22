@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 8388.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": null,
-  "id": "TRANSFORMATION_115"
+  "id": "TRANSFORMATION_115",
+  "reasoning": "Pulse duplicate of TRANSFORMATION_74. head is declared at L60 but uninitialized; on the first loop iteration (i=0), curr->next = head at L67 uses the uninitialized head pointer. Genuine use of uninitialized variable. No // ERROR at L67, new bug. PC = (!SORTFILES OR SORTFILES) = true, correctly constrained."
 }

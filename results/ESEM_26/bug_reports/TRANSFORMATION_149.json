@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 3732.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_UNDER",
   "old_id": null,
-  "id": "TRANSFORMATION_149"
+  "id": "TRANSFORMATION_149",
+  "reasoning": "0f8f8094d28.c L41: 'int n = *cache;' \u2014 n is assigned but never subsequently read (loop body ends, n never used in any subsequent iteration or after the loop). Genuine dead store. PC simplifies to !CONFIG_FORCE_MAX_ZONEORDER (CONFIG_SLOB cancels \u2014 both T and F cases in PC). The bug requires: !CONFIG_SLOB (for kmalloc_caches to be declared) AND CONFIG_LOCKDEP (for init_node_lock_keys to have the actual implementation). PC omits CONFIG_LOCKDEP=T (needed for the function to contain the bug code) and includes CONFIG_SLOB=T (non-compilable \u2014 kmalloc_caches undeclared). PC is under-constrained. New bug."
 }

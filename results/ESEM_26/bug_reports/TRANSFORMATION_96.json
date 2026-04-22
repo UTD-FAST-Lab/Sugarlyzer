@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 6484.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "TRANSFORMATION_96"
+  "id": "TRANSFORMATION_96",
+  "reasoning": "Pulse duplicate of TRANSFORMATION_57. When CONFIG_FEATURE_CLEAN_UP=F, buf is assigned from malloc(bufsize) at L26 but never read or freed (cleanup block absent). Genuine dead store and memory leak. New bug. PC = !CLEAN_UP AND !_STDLIB_H AND !__malloc_and_calloc_defined: restrictive library macros (!_STDLIB_H, !__malloc_and_calloc_defined) over-constrain \u2014 bug fires in all !CLEAN_UP configs, not just non-standard stdlib states."
 }

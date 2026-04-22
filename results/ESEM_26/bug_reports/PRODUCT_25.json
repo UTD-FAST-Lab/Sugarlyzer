@@ -14,7 +14,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE",
   "old_id": "PRODUCT_65",
-  "id": "PRODUCT_25"
+  "id": "PRODUCT_25",
+  "reasoning": "7acf6cd80b2.c L8: 'int x = *inode' known dead store (// ERROR (7)). x is assigned the dereferenced inode value but never subsequently read. PC: CONFIG_DEVPTS_MULTIPLE_INSTANCES=T (CONFIG_UNIX98_PTYS cancels \u2014 both T and F variants present), correctly identifying when this function exists (inside #ifdef CONFIG_DEVPTS_MULTIPLE_INSTANCES). Known bug. Correctly constrained PC. Consistent with TRANSFORMATION_30 and TRANSFORMATION_83 (both TRUE)."
 }

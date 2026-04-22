@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 5887.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "TRANSFORMATION_147"
+  "id": "TRANSFORMATION_147",
+  "reasoning": "1a3c8e3d840.c L13: 'thisopt = SSL_PROTOCOL_TLSV1_1;' inside 'if (rand() % 2)' \u2014 thisopt is assigned but never subsequently used (function returns without reading thisopt). Genuine dead store. SSL_PROTOCOL_TLSV1_1 is only defined when HAVE_TLSV1_X=T (L4), and HAVE_TLSV1_X=F is non-compilable (per VBDB rules for this file), so only HAVE_TLSV1_X=T is analyzed. PC: !_STDLIB_H AND !__need_malloc_and_calloc (STRICT_ANSI and __USE_EXTERN_INLINES cancel). !_STDLIB_H is restrictive \u2014 bug also occurs in normal compilation. No HAVE_TLSV1_X in PC but it's implicitly T (only compilable config). New bug, over-constrained by restrictive !_STDLIB_H."
 }

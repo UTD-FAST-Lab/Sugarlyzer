@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 2331.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": null,
-  "id": "TRANSFORMATION_132"
+  "id": "TRANSFORMATION_132",
+  "reasoning": "7acf6cd80b2.c L44: Pulse duplicate of TRANSFORMATION_56 (driver_data read without initialization). In the UNIX98_PTYS code path, driver_data is used uninitialized when the error path of an earlier call is not taken correctly. PC=CONFIG_UNIX98_PTYS=T \u2014 no library macros, correctly constrained. New bug."
 }

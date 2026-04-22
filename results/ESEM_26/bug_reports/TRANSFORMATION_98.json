@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 5343.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "TRANSFORMATION_98"
+  "id": "TRANSFORMATION_98",
+  "reasoning": "Pulse duplicate of TRANSFORMATION_64. r is assigned at L18 (r = pfnnid_map[pfn]) immediately before being read at L19 (assert(r != 0xff)). r is always initialized. False positive from the desugared analysis; PC includes restrictive library macro !_ASSERT_H_DECLS (assert.h not yet processed), which disrupts the assert macro expansion and causes Pulse to mistrack r."
 }

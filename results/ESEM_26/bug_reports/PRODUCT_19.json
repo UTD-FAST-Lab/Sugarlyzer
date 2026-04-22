@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE",
   "old_id": "PRODUCT_1",
-  "id": "PRODUCT_19"
+  "id": "PRODUCT_19",
+  "reasoning": "1b48bb3c1af.c L14: rmm_lock passed uninitialized as 1st function call argument. Known VBDB bug (// ERROR). PC=APU_HAS_LDAP=T AND APR_HAS_SHARED_MEMORY=T correctly identifies the configuration where this code path is active. Consistent with TRANSFORMATION_95 (TRUE). Known bug, correctly constrained PC."
 }

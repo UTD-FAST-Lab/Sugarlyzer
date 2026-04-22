@@ -13,7 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": "PRODUCT_40",
-  "id": "PRODUCT_11"
+  "id": "PRODUCT_11",
+  "reasoning": "b62bd7b261b.c L14: 'char *a = val' dead store. a is declared and assigned at L14 inside #ifdef MDEV_CONF / #ifdef MDEV_RENAME, but a is only used at L21 inside #ifdef MDEV_RENAME_REGEXP. When MDEV_RENAME_REGEXP=F, a is assigned but never read \u2014 genuine dead store. PC=MDEV_CONF AND MDEV_RENAME AND !MDEV_RENAME_REGEXP precisely captures this condition. No library macros. New bug, correctly constrained PC."
 }

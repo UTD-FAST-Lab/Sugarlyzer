@@ -16,7 +16,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": "PRODUCT_20",
-  "id": "PRODUCT_42"
+  "id": "PRODUCT_42",
+  "reasoning": "2631486f1bf.c L67: curr assigned garbage or undefined value from malloc (null from malloc). The bug only manifests when CONFIG_FEATURE_LS_SORTFILES=T (curr is used in the sort-files code path). PC covers all four combinations of RECURSIVE and SORTFILES \u2014 these cancel out to true, including CONFIG_FEATURE_LS_SORTFILES=F where L67 may not exist. PC is over-constrained (too broad \u2014 includes SORTFILES=F configs where the code at L67 is absent). New bug."
 }

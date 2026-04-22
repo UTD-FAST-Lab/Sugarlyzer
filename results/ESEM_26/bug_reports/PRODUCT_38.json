@@ -13,7 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": "PRODUCT_32",
-  "id": "PRODUCT_38"
+  "id": "PRODUCT_38",
+  "reasoning": "5275b1e49f6.c L16: m_has_modinfo dead store at L16. A second assignment to m_has_modinfo (different from L18 in PRODUCT_34) that is never subsequently read. PC=CONFIG_FEATURE_INSMOD_VERSION_CHECKING=T correctly constrains when this code exists. No library macros. New bug, correctly constrained PC."
 }

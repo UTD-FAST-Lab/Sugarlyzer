@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 7464.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "TRANSFORMATION_108"
+  "id": "TRANSFORMATION_108",
+  "reasoning": "Pulse duplicate of TRANSFORMATION_36. sc is assigned from malloc() at L6 before strcpy(sc, \"something\") at L9. sc is not uninitialized. PC = !_STDLIB_H AND !__malloc_and_calloc_defined (restrictive library macros only) \u2014 stdlib.h not processed in desugared state causes Pulse to mistrack the malloc return value as uninitialized. False positive."
 }
