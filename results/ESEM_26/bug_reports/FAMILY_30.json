@@ -1,0 +1,12 @@
+{
+  "err": "W [True] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/581635e28f1.c:7:2--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/581635e28f1.c:8:0",
+  "msg": "Control flow of non-void function ends here!",
+  "taxonomy_type": "control_flow",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/581635e28f1.c",
+  "line_number": 7,
+  "origin": "family",
+  "id": "FAMILY_30",
+  "classification": "TRUE_NEW_OVER",
+  "old_id": "FAMILY_4",
+  "reasoning": "parse_url() is declared 'int' but has no return statement — control falls off the end, which is undefined behavior. This is a real missing-return bug. However, the presence condition [True] is over-constrained: when !APR_HAVE_IPV6, APR_INET6 is undeclared and line 7 ('int family = APR_INET6;') is a compile error — so the missing-return bug cannot manifest in that configuration. The bug only truly exists when def(APR_HAVE_IPV6). The correct condition should be def(APR_HAVE_IPV6). The vbdb entry (581635e) documents an UndeclaredIdentifier bug for !APR_HAVE_IPV6; this control-flow bug is a new finding. True new, over-constrained presence condition."
+}

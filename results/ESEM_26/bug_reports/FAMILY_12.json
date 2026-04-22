@@ -1,0 +1,12 @@
+{
+  "err": "W [!def(HAVE_TLSV1_X)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/1a3c8e3d840.c:13:6--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/1a3c8e3d840.c:13:14",
+  "msg": "warning: Variable thisopt is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/1a3c8e3d840.c",
+  "line_number": 13,
+  "origin": "family",
+  "id": "FAMILY_12",
+  "classification": "FALSE",
+  "old_id": "FAMILY_1",
+  "reasoning": "When !HAVE_TLSV1_X, SSL_PROTOCOL_TLSV1_1 is not declared (the #define is guarded by #ifdef HAVE_TLSV1_X). Line 13 ('thisopt = SSL_PROTOCOL_TLSV1_1;') would fail to compile in this configuration due to an undeclared identifier — exactly the UndeclaredIdentifier bug documented in vbdb (1a3c8e3) for !HAVE_TLSV1_X. Reporting this as a dead_store is incorrect: there is no dead store in code that cannot compile. The tool is misclassifying the compile error as a dead store. False positive."
+}

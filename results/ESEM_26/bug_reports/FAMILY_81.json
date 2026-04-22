@@ -1,0 +1,12 @@
+{
+  "err": "W [(def(CONFIG_X86)&def(CONFIG_ACPI_WMI))] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/f3d83e24154.c:11:10--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/f3d83e24154.c:11:16",
+  "msg": "warning: Variable method is used uninitialized!",
+  "taxonomy_type": "uninitialized_value",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/f3d83e24154.c",
+  "line_number": 11,
+  "origin": "family",
+  "id": "FAMILY_81",
+  "classification": "FALSE",
+  "reasoning": "Line 11 is 'strncat(method, block_object_id, 2)'. The tool claims method is used uninitialized here. However, strcpy(method, \"WQ\") at line 10 has already initialized method as the string 'WQ\\0' — method[0]='W', method[1]='Q', method[2]='\\0'. strncat reads the destination to find the null terminator before appending, so it requires an initialized null-terminated string. After line 10, method IS a properly initialized string. The uninitialized_value claim is incorrect. The real vbdb bug (marked '// (6) ERROR' at line 11) is a buffer overflow: strncat attempts to append 'XX\\0' starting at method[2], requiring method[2]='X', method[3]='X', method[4]='\\0' — writing past the 4-byte boundary. False positive.",
+  "old_id": "FAMILY_69"
+}

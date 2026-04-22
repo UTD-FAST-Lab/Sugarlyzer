@@ -1,0 +1,12 @@
+{
+  "err": "W [!def(CONFIG_LOCKDEP)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/0f8f8094d28.c:45:0--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/0f8f8094d28.c:54:0",
+  "msg": "Control flow of non-void function ends here!",
+  "taxonomy_type": "control_flow",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/0f8f8094d28.c",
+  "line_number": 45,
+  "origin": "family",
+  "id": "FAMILY_6",
+  "classification": "TRUE_NEW",
+  "old_id": "FAMILY_34",
+  "reasoning": "When !CONFIG_LOCKDEP, the #else branch defines 'init_node_lock_keys()' without a return type, making it implicitly 'int' under C89. The function body is empty and has no return statement, so control falls off the end of an implicitly-int-returning function — undefined behavior. This is a genuine bug and a variability inconsistency: the #ifdef CONFIG_LOCKDEP branch declares the function as 'static void'. The presence condition [!def(CONFIG_LOCKDEP)] correctly identifies the configuration where this occurs. The vbdb entry for this file (0f8f809) documents only an OutOfBoundsRead bug; this control-flow issue is a new finding. Correctly constrained."
+}

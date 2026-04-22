@@ -1,0 +1,12 @@
+{
+  "err": "W [def(CONFIG_RCU_CPU_STALL_INFO)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/1c17e4d4437.c:23:29--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/1c17e4d4437.c:23:39",
+  "msg": "warning: Variable fast_no_hz is used uninitialized!",
+  "taxonomy_type": "uninitialized_value",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/1c17e4d4437.c",
+  "line_number": 23,
+  "origin": "family",
+  "id": "FAMILY_14",
+  "classification": "TRUE_OVER",
+  "old_id": "FAMILY_37",
+  "reasoning": "The variable 'char fast_no_hz[72]' is uninitialized unless CONFIG_RCU_FAST_NO_HZ is defined, in which case print_cpu_stall_fast_no_hz writes to it via sprintf. When !CONFIG_RCU_FAST_NO_HZ, the function body is empty and fast_no_hz remains uninitialized before printf at line 23 — a real bug confirmed in vbdb (1c17e4d) as UninitializedVariable with config 'RCU_CPU_STALL_INFO && !RCU_FAST_NO_HZ'. The tool reports only 'def(CONFIG_RCU_CPU_STALL_INFO)' as the presence condition, but this is over-constrained: in configurations where both CONFIG_RCU_CPU_STALL_INFO and CONFIG_RCU_FAST_NO_HZ are defined, fast_no_hz IS initialized and there is no bug. The condition should be def(CONFIG_RCU_CPU_STALL_INFO) && !def(CONFIG_RCU_FAST_NO_HZ)."
+}

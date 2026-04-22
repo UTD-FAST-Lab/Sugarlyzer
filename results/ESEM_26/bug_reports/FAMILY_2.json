@@ -1,0 +1,12 @@
+{
+  "err": "W [def(CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/061fd0a353e.c:19:4--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/061fd0a353e.c:20:6",
+  "msg": "Case statement is not terminated by a break!",
+  "taxonomy_type": "case_not_terminated",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/061fd0a353e.c",
+  "line_number": 19,
+  "origin": "family",
+  "id": "FAMILY_2",
+  "classification": "FALSE",
+  "old_id": "FAMILY_13",
+  "reasoning": "The tool reports 'case_not_terminated' at line 19 (case 'U':) when CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF is defined. However, examining the source, case 'U' at line 19 is clearly terminated by a break at line 22, which is inside the same #ifdef block. When that macro is defined, the break is always present. The actual known bug in this file (vbdb 061fd0a) is an UndefinedSymbol: the 'goto expected_hwif_error' inside case 'U' targets a label that only exists inside #ifdef CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF. The tool is reporting a completely different and incorrect bug type. This is a false positive."
+}

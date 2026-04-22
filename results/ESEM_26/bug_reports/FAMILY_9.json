@@ -1,0 +1,12 @@
+{
+  "err": "W [!def(ENABLE_FEATURE_MODPROBE_MULTIPLE_OPTIONS)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/199501f2a00.c:19:9--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/199501f2a00.c:19:12",
+  "msg": "warning: Variable buf is used uninitialized!",
+  "taxonomy_type": "uninitialized_value",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/199501f2a00.c",
+  "line_number": 19,
+  "origin": "family",
+  "id": "FAMILY_9",
+  "classification": "FALSE",
+  "old_id": "FAMILY_18",
+  "reasoning": "The tool reports 'buf' as used uninitialized at line 19 (strcat(buf, dt)) when !ENABLE_FEATURE_MODPROBE_MULTIPLE_OPTIONS. However, 'buf' is clearly initialized by strcpy(buf, \"module option(s): \") at line 18, immediately before the strcat call. 'buf' is not uninitialized. The real bug in this file (vbdb 199501f, NullDereference) is that 'dt' may be NULL (initialized to NULL, only conditionally assigned \"-i\"), leading to null dereference in strcat(buf, dt). The tool has identified the wrong variable in its uninitialized_value report. False positive."
+}

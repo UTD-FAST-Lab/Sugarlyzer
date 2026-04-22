@@ -1,0 +1,12 @@
+{
+  "err": "W [def(WIN32X)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/664e3aac6dd.c:11:26--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/664e3aac6dd.c:11:34",
+  "msg": "warning: Variable buffer is used uninitialized!",
+  "taxonomy_type": "uninitialized_value",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/664e3aac6dd.c",
+  "line_number": 11,
+  "origin": "family",
+  "id": "FAMILY_36",
+  "classification": "FALSE",
+  "old_id": "FAMILY_6",
+  "reasoning": "The tool reports 'buffer' as used uninitialized at line 11, columns 26-34, which is 'sizeof(buffer)' in the for-loop condition. sizeof() is a compile-time operator that does not read the contents of buffer; no uninitialized memory access occurs here. The vbdb-documented bug (664e3aa) is a BufferOverflow: after the for loop finishes, i equals sizeof(buffer) (1024), so 'buffer[i] = 0' at line 14 writes one byte past the end of the array. The tool reports the wrong bug at the wrong location. False positive."
+}

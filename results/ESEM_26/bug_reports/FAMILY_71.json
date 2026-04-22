@@ -1,0 +1,12 @@
+{
+  "err": "W [def(HAS_APACHE_REGEX_LIB)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/dbafef17dd1.c:11:37--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/dbafef17dd1.c:11:45",
+  "msg": "warning: Variable newuri is used uninitialized!",
+  "taxonomy_type": "uninitialized_value",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/dbafef17dd1.c",
+  "line_number": 11,
+  "origin": "family",
+  "id": "FAMILY_71",
+  "classification": "FALSE",
+  "reasoning": "Line 11 is 'strncpy(newuri, \"pregsub()\", sizeof(newuri)-1)'. The tool claims newuri is used uninitialized here. However, newuri is the DESTINATION of strncpy, which writes to the array — it does not require newuri to be initialized beforehand. Additionally, 'sizeof(newuri)' is a compile-time operator that evaluates the array's declared size without reading any element. Neither usage reads from the uninitialized newuri array. The real vbdb bug in dbafef17dd1.c is at line 12: 'newuri[sizeof(newuri-1)] = \\'\\0\\'' — 'sizeof(newuri-1)' computes sizeof(char*) (pointer size, 4 or 8) rather than the intended 'sizeof(newuri)-1' (19), placing the null terminator at the wrong index. The uninitialized_value claim is a false positive.",
+  "old_id": "FAMILY_10"
+}

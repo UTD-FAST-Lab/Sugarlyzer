@@ -1,0 +1,12 @@
+{
+  "err": "W [def(CONFIG_FEATURE_CLEAN_UP)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/eef2317b9f5.c:30:6--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/eef2317b9f5.c:30:9",
+  "msg": "warning: Variable buf is used uninitialized!",
+  "taxonomy_type": "uninitialized_value",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/eef2317b9f5.c",
+  "line_number": 30,
+  "origin": "family",
+  "id": "FAMILY_76",
+  "classification": "TRUE",
+  "reasoning": "Line 30 is 'if (buf)' inside #ifdef CONFIG_FEATURE_CLEAN_UP. 'buf' is declared at line 6 without initialization. When cmd == 8 (set when option '-n' is parsed at line 17-18), 'goto all_done' at line 23 bypasses the 'buf = malloc(bufsize)' at line 26. Consequently, buf is uninitialized when 'if (buf)' reads it at line 30, and 'free(buf)' at line 31 then attempts to free an indeterminate pointer — a genuine uninitialized value / invalid free bug. The vbdb source (eef2317b9f5.c) marks line 30 with '//WARNING' and line 31 with '//ERROR', confirming this is a known bug. Presence condition def(CONFIG_FEATURE_CLEAN_UP) correctly matches the #ifdef guard at line 29. Known bug.",
+  "old_id": "FAMILY_31"
+}

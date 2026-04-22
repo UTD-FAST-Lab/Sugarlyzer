@@ -1,0 +1,12 @@
+{
+  "err": "W [def(CONFIG_EP93XX_ETH)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/1f758a4341a.c:38:6--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/1f758a4341a.c:38:28",
+  "msg": "Control flow of non-void function ends here!",
+  "taxonomy_type": "control_flow",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/1f758a4341a.c",
+  "line_number": 38,
+  "origin": "family",
+  "id": "FAMILY_17",
+  "classification": "TRUE_NEW",
+  "old_id": "FAMILY_39",
+  "reasoning": "Line 38 is inside ep93xx_open(), which returns int. It has 'if (ep93xx_alloc_buffers()) return -ENOMEM;' — only one return path. When ep93xx_alloc_buffers() returns 0 (no error), the function exits without a return value — undefined behavior. This is a genuine control-flow bug. The presence condition [def(CONFIG_EP93XX_ETH)] is correctly constrained: ep93xx_open() only exists when that macro is defined. This is a different function than the one in FAMILY_16 but the same file. The vbdb entry documents a BehaviorViolation (separate issue). New true positive, correctly constrained."
+}

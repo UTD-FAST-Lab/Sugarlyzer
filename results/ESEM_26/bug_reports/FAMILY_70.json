@@ -1,0 +1,12 @@
+{
+  "err": "W [def(CONFIG_QUOTA_DEBUG)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/d7e9711760a.c:30:6--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/d7e9711760a.c:30:15",
+  "msg": "warning: Variable reserved is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/d7e9711760a.c",
+  "line_number": 30,
+  "origin": "family",
+  "id": "FAMILY_70",
+  "classification": "TRUE_NEW",
+  "reasoning": "Line 30 is 'reserved = 1;' inside #ifdef CONFIG_QUOTA_DEBUG. 'reserved' is declared and initialized to 0 at line 17 (also under CONFIG_QUOTA_DEBUG) and may be set to 1 at line 30 when inode_get_rsv_space() returns > 0. However, reserved is never read anywhere in the function after either assignment — it is computed but never consumed. This is a genuine dead store. The presence condition def(CONFIG_QUOTA_DEBUG) correctly matches the #ifdef guard enclosing both the declaration (line 17) and the assignment (line 30). The vbdb entry for d7e9711760a documents the double-lock deadlock bug (lock acquired in the loop then re-acquired inside inode_get_rsv_space under CONFIG_QUOTA_DEBUG), not the dead store of reserved. New true positive.",
+  "old_id": "FAMILY_65"
+}

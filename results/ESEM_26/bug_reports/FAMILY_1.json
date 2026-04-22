@@ -1,0 +1,12 @@
+{
+  "err": "W [!def(EXT2FS_ENABLE_SWAPFS)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/0301ffab3d9.c:4:8--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/0301ffab3d9.c:4:11",
+  "msg": "warning: Variable gdp is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/0301ffab3d9.c",
+  "line_number": 4,
+  "origin": "family",
+  "id": "FAMILY_1",
+  "classification": "TRUE",
+  "old_id": "FAMILY_11",
+  "reasoning": "When !EXT2FS_ENABLE_SWAPFS, the variable 'gdp' is declared at line 4 but never assigned or used, since all usage is inside the #ifdef block. This is a real variability bug. The vbdb entry 0301ffa confirms this exact bug as 'UnusedVariable' with config '!EXT2FS_ENABLE_SWAPFS (1st degree)'. The tool reports it as a dead_store, which is a close approximation. The presence condition [!def(EXT2FS_ENABLE_SWAPFS)] exactly matches the vbdb config, so it is correctly constrained. This is a known bug (TRUE, not TRUE_NEW)."
+}

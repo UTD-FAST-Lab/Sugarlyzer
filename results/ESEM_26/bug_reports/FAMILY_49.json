@@ -1,0 +1,12 @@
+{
+  "err": "- W [(def(CONFIG_NUMA)&def(CONFIG_PCI)&!def(const))] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/76baeebf7df.c:133:2--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/76baeebf7df.c:137:2",
+  "msg": "assignment discards 'const' qualifier from pointer target type (CType(CPointer(CUnsigned(CLong())),true,false,false) = CType(CPointer(CUnsigned(CLong())),false,false,true))",
+  "taxonomy_type": "control_flow",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/76baeebf7df.c",
+  "line_number": 133,
+  "origin": "family",
+  "classification": "FALSE",
+  "reasoning": "Duplicate of FAMILY_45 (same file, same lines 133-137, same presence condition def(CONFIG_NUMA)&def(CONFIG_PCI)&!def(const), same message). As with FAMILY_45, the '!def(const)' term is an artifact of the tool treating the C keyword 'const' as a preprocessor configuration macro. No real Linux kernel build satisfies !def(const). The const-qualifier discarding warning is entirely fabricated by the tool's type-lifting mechanism. False positive.",
+  "id": "FAMILY_49",
+  "old_id": "FAMILY_2_NEW"
+}

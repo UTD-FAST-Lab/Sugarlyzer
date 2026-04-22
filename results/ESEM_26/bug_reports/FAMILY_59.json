@@ -1,0 +1,12 @@
+{
+  "err": "W [def(SDSUPPORT)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/MARLIN/a7fc1f83c81.c:22:9--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/MARLIN/a7fc1f83c81.c:22:13",
+  "msg": "warning: Variable path is used uninitialized!",
+  "taxonomy_type": "uninitialized_value",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/MARLIN/a7fc1f83c81.c",
+  "line_number": 22,
+  "origin": "family",
+  "id": "FAMILY_59",
+  "classification": "FALSE",
+  "reasoning": "Line 22 is 'strcat(path, lfilename)'. Same false positive as FAMILY_57 and FAMILY_58: path is correctly initialized as an empty string by path[0] = '\\0' at line 19 before any of these strcat calls. The tool has lost track of the initialization. False positive.",
+  "old_id": "FAMILY_75"
+}

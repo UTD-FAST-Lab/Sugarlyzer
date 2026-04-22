@@ -1,0 +1,12 @@
+{
+  "err": "W [(def(CONFIG_NETPOLL)&!def(CONFIG_IPV6))] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/e39363a9def.c:17:9--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/e39363a9def.c:17:12",
+  "msg": "warning: Variable err is used uninitialized!",
+  "taxonomy_type": "uninitialized_value",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/e39363a9def.c",
+  "line_number": 17,
+  "origin": "family",
+  "id": "FAMILY_74",
+  "classification": "TRUE",
+  "reasoning": "Line 17 is 'return err;' at the put: label. Under def(CONFIG_NETPOLL)&&!def(CONFIG_IPV6): err is declared at line 6 without initialization; the #else branch at line 13 executes 'goto put' unconditionally, jumping directly to 'return err' at line 17 without ever initializing err. This is a genuine uninitialized value bug. Under CONFIG_IPV6, err is set to -1 at line 9 before any goto, so err is always initialized in that config. The presence condition def(CONFIG_NETPOLL)&&!def(CONFIG_IPV6) exactly matches the configuration space where the bug occurs. The vbdb source (e39363a9def.c) marks line 17 with '// ERROR (3)', confirming this is a known variability bug. Known bug, correctly constrained.",
+  "old_id": "FAMILY_66"
+}

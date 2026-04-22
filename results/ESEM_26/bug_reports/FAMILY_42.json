@@ -1,0 +1,12 @@
+{
+  "err": "W [True] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6e2b75740be.c:60:19--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6e2b75740be.c:15:29",
+  "msg": "warning: Variable mod is freed although not dynamically allocted!",
+  "taxonomy_type": "static_free",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6e2b75740be.c",
+  "line_number": 60,
+  "origin": "family",
+  "id": "FAMILY_42",
+  "classification": "FALSE",
+  "old_id": "FAMILY_56",
+  "reasoning": "Line 60 is 'free(module_core(mod))' where module_core(mod) = mod[1]. mod is dynamically allocated (ultimately from hdr=malloc(2*sizeof(void*)) and updated via the while-loop alias to ptr=malloc(512)). The tool claims mod is not dynamically allocated, which is incorrect. Same false positive pattern as FAMILY_40 and FAMILY_41: complex pointer aliasing causes the tool to lose track of dynamic allocation provenance. The static_free claim is wrong. False positive."
+}

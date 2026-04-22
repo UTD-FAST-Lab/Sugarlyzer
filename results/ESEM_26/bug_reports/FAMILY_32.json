@@ -1,0 +1,12 @@
+{
+  "err": "W [def(CONFIG_TWL4030_CORE)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6252547b8a7.c:25:2--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6252547b8a7.c:26:0",
+  "msg": "Control flow of non-void function ends here!",
+  "taxonomy_type": "control_flow",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6252547b8a7.c",
+  "line_number": 25,
+  "origin": "family",
+  "id": "FAMILY_32",
+  "classification": "TRUE_NEW",
+  "old_id": "FAMILY_47",
+  "reasoning": "Lines 25-26 are the final call ('irq_domain_add(ops)') and closing brace of 'int twl_probe()'. The function is declared to return int but has no return statement — control falls off the end, which is undefined behavior. This is a genuine control-flow bug. The presence condition [def(CONFIG_TWL4030_CORE)] is correctly constrained: twl_probe() is inside #ifdef CONFIG_TWL4030_CORE. The vbdb entry (6252547) documents a NullDereference (ops is NULL when dereferenced, config TWL4030_CORE && !OF_IRQ), which is a separate issue. New true positive, correctly constrained."
+}

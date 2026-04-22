@@ -1,0 +1,12 @@
+{
+  "err": "W [True] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/95755181b82.c:36:4--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/95755181b82.c:36:8",
+  "msg": "warning: Variable len is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/95755181b82.c",
+  "line_number": 36,
+  "origin": "family",
+  "id": "FAMILY_56",
+  "classification": "TRUE_NEW_OVER",
+  "reasoning": "Line 36 is 'len += sprintf(iobuf + len, \"Content-Encoding: gzip\\r\\n\");' inside the 'if (content_gzip)' block. After this assignment, len is never read again — line 38 only uses iobuf. The dead store of len is genuine. However, lines 35-36 are only reachable when ENABLE_FEATURE_HTTPD_GZIP is defined: content_gzip is declared at line 6 inside #ifdef ENABLE_FEATURE_HTTPD_GZIP, and its use at line 35 without a guard means the code only compiles/executes correctly in that config. The presence condition [True] is over-constrained; the correct condition is def(ENABLE_FEATURE_HTTPD_GZIP). Not documented in vbdb. New true positive with over-constrained presence condition.",
+  "old_id": "FAMILY_23"
+}

@@ -1,0 +1,12 @@
+{
+  "err": "W [(def(APU_HAS_LDAP)&def(APR_HAS_SHARED_MEMORY))] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/1b48bb3c1af.c:14:15--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/1b48bb3c1af.c:14:23",
+  "msg": "warning: Variable rmm_lock is used uninitialized!",
+  "taxonomy_type": "uninitialized_value",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/1b48bb3c1af.c",
+  "line_number": 14,
+  "origin": "family",
+  "id": "FAMILY_13",
+  "classification": "TRUE",
+  "old_id": "FAMILY_2",
+  "reasoning": "When both APU_HAS_LDAP and APR_HAS_SHARED_MEMORY are defined, 'char* rmm_lock' is declared but never initialized in util_ldap_cache_init(). It is then passed directly to apr_rmm_init(rmm_lock) at line 14, which dereferences it (printing via printf). Using an uninitialized pointer is undefined behavior. This is a real bug. The vbdb entry (1b48bb3) confirms it as UninitializedVariable with config 'APU_HAS_LDAP && APR_HAS_SHARED_MEMORY (2nd degree)'. The presence condition (def(APU_HAS_LDAP) & def(APR_HAS_SHARED_MEMORY)) matches the vbdb config exactly — correctly constrained. Known bug."
+}

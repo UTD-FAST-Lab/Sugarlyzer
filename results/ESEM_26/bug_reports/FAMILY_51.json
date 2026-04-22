@@ -1,0 +1,12 @@
+{
+  "err": "W [def(CONFIG_UNIX98_PTYS)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/7acf6cd80b2.c:44:14--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/7acf6cd80b2.c:44:25",
+  "msg": "warning: Variable driver_data is used uninitialized!",
+  "taxonomy_type": "uninitialized_value",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/7acf6cd80b2.c",
+  "line_number": 44,
+  "origin": "family",
+  "id": "FAMILY_51",
+  "classification": "TRUE",
+  "reasoning": "Line 44 is 'tty_release(driver_data)' inside ptmx_open() (which is gated on #ifdef CONFIG_UNIX98_PTYS). The local variable driver_data is declared at line 33 without initialization. The if(nondet()) block at line 35 jumps to err_release, bypassing the assignment 'driver_data = &some_int' at line 39. Consequently, driver_data is uninitialized when tty_release is called at line 44. This is a genuine uninitialized_value bug — passing an uninitialized pointer into tty_release, which then propagates through devpts_pty_kill and pts_sb_from_inode. The vbdb source (7acf6cd80b2.c) documents exactly this bug chain (numbered ERROR comments 1-7), with the observable crash being *inode dereference under CONFIG_DEVPTS_MULTIPLE_INSTANCES, but the root cause (uninitialized driver_data) only requires CONFIG_UNIX98_PTYS. The presence condition def(CONFIG_UNIX98_PTYS) is correctly constrained for the reported warning at line 44. Known bug.",
+  "old_id": "FAMILY_61"
+}

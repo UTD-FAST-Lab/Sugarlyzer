@@ -1,0 +1,12 @@
+{
+  "err": "W [def(CONFIG_RCU_CPU_STALL_INFO)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/1c17e4d4437.c:24:28--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/1c17e4d4437.c:24:38",
+  "msg": "warning: Variable fast_no_hz is used uninitialized!",
+  "taxonomy_type": "uninitialized_value",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/1c17e4d4437.c",
+  "line_number": 24,
+  "origin": "family",
+  "id": "FAMILY_15",
+  "classification": "TRUE_OVER",
+  "old_id": "FAMILY_37",
+  "reasoning": "Same file and same uninitialized 'fast_no_hz' issue as FAMILY_14, now reported at line 24 (the printf call that reads fast_no_hz). The bug is real when !CONFIG_RCU_FAST_NO_HZ (print_cpu_stall_fast_no_hz does nothing, leaving fast_no_hz uninitialized). The presence condition [def(CONFIG_RCU_CPU_STALL_INFO)] is over-constrained: configurations where both CONFIG_RCU_CPU_STALL_INFO and CONFIG_RCU_FAST_NO_HZ are defined do not exhibit this bug. The correct condition is def(CONFIG_RCU_CPU_STALL_INFO) && !def(CONFIG_RCU_FAST_NO_HZ). Known bug (vbdb 1c17e4d, UninitializedVariable)."
+}

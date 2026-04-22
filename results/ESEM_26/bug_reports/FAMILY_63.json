@@ -1,0 +1,12 @@
+{
+  "err": "W [(def(ENABLE_FEATURE_MDEV_RENAME)&def(ENABLE_FEATURE_MDEV_RENAME_REGEXP)&def(ENABLE_FEATURE_MDEV_CONF))] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b62bd7b261b.c:31:4--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b62bd7b261b.c:31:5",
+  "msg": "warning: Variable p is used uninitialized!",
+  "taxonomy_type": "uninitialized_value",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b62bd7b261b.c",
+  "line_number": 31,
+  "origin": "family",
+  "id": "FAMILY_63",
+  "classification": "TRUE",
+  "reasoning": "Line 31 is 'p++' inside the while loop. 'p' is declared at line 11 as 'char *s, *p;' with no initialization. Under the triple ifdef guard (ENABLE_FEATURE_MDEV_CONF && ENABLE_FEATURE_MDEV_RENAME && ENABLE_FEATURE_MDEV_RENAME_REGEXP), the while loop at line 23 first dereferences p at line 24 ('*p = *s') — an uninitialized pointer dereference. Line 31 (p++) is a further use. The presence condition def(ENABLE_FEATURE_MDEV_RENAME) && def(ENABLE_FEATURE_MDEV_RENAME_REGEXP) && def(ENABLE_FEATURE_MDEV_CONF) correctly matches the three nested #ifdef guards at lines 7, 9, and 18. This is a genuine uninitialized pointer bug documented in vbdb (b62bd7b261b). Known bug, correctly constrained.",
+  "old_id": "FAMILY_27"
+}

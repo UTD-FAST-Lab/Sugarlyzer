@@ -1,0 +1,12 @@
+{
+  "err": "W [def(CONFIG_FEATURE_REMOTE_LOG)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/192c35f6eb2.c:12:27--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/192c35f6eb2.c:12:33",
+  "msg": "warning: Variable line is used uninitialized!",
+  "taxonomy_type": "uninitialized_value",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/192c35f6eb2.c",
+  "line_number": 12,
+  "origin": "family",
+  "id": "FAMILY_8",
+  "classification": "FALSE",
+  "old_id": "FAMILY_16",
+  "reasoning": "The tool reports 'line' as used uninitialized at line 12 when CONFIG_FEATURE_REMOTE_LOG is defined. However, 'line' is declared as 'static char line[512]', which means it has static storage duration and is zero-initialized by default in C. Furthermore, line 11 explicitly calls memset(&line, 0, sizeof(line)) immediately before line is used at line 12. There is no uninitialized use. The vbdb-documented bug for this file (192c35f) is an UnusedVariable with config !FEATURE_REMOTE_LOG — the opposite presence condition — reporting that line is unused when the macro is not defined. The tool has both the wrong bug type and wrong presence condition. False positive."
+}

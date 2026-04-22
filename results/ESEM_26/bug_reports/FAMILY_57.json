@@ -1,0 +1,12 @@
+{
+  "err": "W [def(SDSUPPORT)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/MARLIN/a7fc1f83c81.c:21:9--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/MARLIN/a7fc1f83c81.c:21:13",
+  "msg": "warning: Variable path is used uninitialized!",
+  "taxonomy_type": "uninitialized_value",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/MARLIN/a7fc1f83c81.c",
+  "line_number": 21,
+  "origin": "family",
+  "id": "FAMILY_57",
+  "classification": "FALSE",
+  "reasoning": "Line 21 is 'strcat(path, prepend)'. The tool claims 'path' is used uninitialized here. However, line 19 explicitly sets 'path[0] = \"\\0\"', which initializes path as an empty null-terminated C string — the standard idiom required by strcat. The tool has incorrectly flagged this as an uninitialized use. The real bug in this file (documented by the vbdb comment at line 10: 'Error - not enough space allocated if prepend is empty') is a buffer overflow: when prepend is empty, len = 0 + 13 + 1 = 14, but the concatenated result '/FOLDERNAME12/' requires 15 bytes, causing a 1-byte overrun. The uninitialized_value claim is a false positive.",
+  "old_id": "FAMILY_75"
+}

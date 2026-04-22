@@ -1,0 +1,12 @@
+{
+  "err": "W [def(CONFIG_DEVPTS_MULTIPLE_INSTANCES)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/7acf6cd80b2.c:8:6--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/7acf6cd80b2.c:8:8",
+  "msg": "warning: Variable x is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/7acf6cd80b2.c",
+  "line_number": 8,
+  "origin": "family",
+  "id": "FAMILY_52",
+  "classification": "TRUE_NEW",
+  "reasoning": "Line 8 is 'int x = *inode;' inside pts_sb_from_inode() under #ifdef CONFIG_DEVPTS_MULTIPLE_INSTANCES. x is a local variable assigned here and never read again — the function is void and x has no further uses. This is a genuine dead store of x. The vbdb entry for 7acf6cd80b2 documents the broader bug chain (uninitialized pointer dereference via *inode) but does not document the dead_store of x as a separate finding. The presence condition def(CONFIG_DEVPTS_MULTIPLE_INSTANCES) is correctly constrained — this code block is only compiled when that macro is defined. New true positive.",
+  "old_id": "FAMILY_62"
+}

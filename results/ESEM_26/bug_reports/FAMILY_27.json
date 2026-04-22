@@ -1,0 +1,12 @@
+{
+  "err": "W [True] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/5275b1e49f6.c:16:4--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/5275b1e49f6.c:16:18",
+  "msg": "warning: Variable m_has_modinfo is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/5275b1e49f6.c",
+  "line_number": 16,
+  "origin": "family",
+  "id": "FAMILY_27",
+  "classification": "TRUE_NEW",
+  "old_id": "FAMILY_20",
+  "reasoning": "Same file and same dead store issue as FAMILY_26, but now at line 16 ('m_has_modinfo = 0;' in the if-branch). 'm_has_modinfo' is assigned here but never subsequently read; the rest of the function only uses k_crcs and exit_status. Genuine dead store. The presence condition [True] is correctly constrained. Not documented in vbdb (5275b1e only documents UndeclaredIdentifier for k_crcs). New true positive, correctly constrained."
+}

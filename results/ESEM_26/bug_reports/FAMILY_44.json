@@ -1,0 +1,12 @@
+{
+  "err": "- W [(def(CONFIG_NUMA)&def(CONFIG_DEBUG_PER_CPU_MAPS))] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/76baeebf7df.c:45:11--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/76baeebf7df.c:45:26",
+  "msg": "assignment makes pointer from integer without a cast (const unsigned long* <-obj unsigned long)",
+  "taxonomy_type": "cast_to_pointer",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/76baeebf7df.c",
+  "line_number": 45,
+  "origin": "family",
+  "id": "FAMILY_44",
+  "classification": "TRUE_NEW",
+  "reasoning": "Line 45 is 'return cpu_online_mask;' inside cpumask_of_node() under #ifdef CONFIG_NUMA && #ifdef CONFIG_DEBUG_PER_CPU_MAPS. The function returns 'const cpumask_t*', but cpu_online_mask is declared as 'cpumask_t cpu_online_mask = 0' — an integer value, not a pointer. Returning an integer where a pointer is expected is a genuine type error; the caller receives 0 (null pointer) instead of &cpu_online_mask, which can cause a null dereference in the caller. The presence condition def(CONFIG_NUMA)&&def(CONFIG_DEBUG_PER_CPU_MAPS) correctly identifies when this version of cpumask_of_node is compiled. The vbdb entry for 76baeebf7df documents a NullDereference for X86_32&&NUMA&&PCI (different mechanism), not this cast_to_pointer issue. New true positive, correctly constrained.",
+  "old_id": "FAMILY_60"
+}

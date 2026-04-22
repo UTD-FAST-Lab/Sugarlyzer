@@ -1,0 +1,12 @@
+{
+  "err": "W [True] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/5275b1e49f6.c:25:4--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/5275b1e49f6.c:25:11",
+  "msg": "warning: Variable k_crcs is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/5275b1e49f6.c",
+  "line_number": 25,
+  "origin": "family",
+  "id": "FAMILY_29",
+  "classification": "TRUE_NEW_OVER",
+  "old_id": "FAMILY_22",
+  "reasoning": "Line 25 is 'k_crcs = someInt;' inside 'if (r)' — not guarded by any #ifdef. After this assignment, the code falls through to 'out:' and returns exit_status; k_crcs is never read. This IS a dead store when CONFIG_FEATURE_INSMOD_VERSION_CHECKING is defined (so k_crcs is declared). However, when !CONFIG_FEATURE_INSMOD_VERSION_CHECKING, k_crcs is undeclared and line 25 would be a compile error — not a dead store. The presence condition [True] is over-constrained: it includes the !def(CONFIG_FEATURE_INSMOD_VERSION_CHECKING) configuration where the code cannot compile. The correct condition is def(CONFIG_FEATURE_INSMOD_VERSION_CHECKING). Not in vbdb (which documents UndeclaredIdentifier for !FEATURE_INSMOD_VERSION_CHECKING). New true positive with over-constrained presence condition."
+}

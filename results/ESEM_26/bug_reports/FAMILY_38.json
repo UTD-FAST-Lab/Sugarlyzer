@@ -1,0 +1,12 @@
+{
+  "err": "W [(def(CONFIG_SND_FSI_AK4642)|def(CONFIG_SND_SOC_AK4642))] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/66517915e09.c:24:6--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/66517915e09.c:24:21",
+  "msg": "warning: Variable codec_hw_write is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/66517915e09.c",
+  "line_number": 24,
+  "origin": "family",
+  "id": "FAMILY_38",
+  "classification": "TRUE_NEW_OVER",
+  "old_id": "FAMILY_52",
+  "reasoning": "Same file and same pattern as FAMILY_37, but now for ak4642_init() at line 24 ('int codec_hw_write = i2c_master_send;'). The value is assigned but never read (function immediately returns 0) — genuine dead store when CONFIG_I2C is defined. When !CONFIG_I2C, i2c_master_send is undeclared and line 24 fails to compile. The presence condition (def(CONFIG_SND_FSI_AK4642)|def(CONFIG_SND_SOC_AK4642)) does not require def(CONFIG_I2C), making it over-constrained. The correct condition should also include def(CONFIG_I2C). Not in vbdb (which documents UndeclaredIdentifier for !I2C). New true positive, over-constrained."
+}
