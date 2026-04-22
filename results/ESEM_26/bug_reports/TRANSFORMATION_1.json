@@ -19,5 +19,6 @@
   "strategy": "transformation",
   "classification": "FALSE",
   "old_id": "TRANSFORMATION_231",
-  "id": "TRANSFORMATION_1"
+  "id": "TRANSFORMATION_1",
+  "reasoning": "a7fc1f83c81.c L10: Dead store of `len` = strlen(prepend) + FILENAME_LENGTH + 1. However, `len` IS immediately used at L11 as the VLA size in `char path[len]`. The CSA does not model VLA-size usage as a 'read' of the variable, causing this false alarm. Additionally, SDSUPPORT=F causes cardreader (called unconditionally from main) to be undeclared \u2014 non-compilable. PC = true includes non-compilable SDSUPPORT=F configs. False positive."
 }

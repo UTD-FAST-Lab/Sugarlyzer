@@ -19,5 +19,6 @@
   "strategy": "transformation",
   "classification": "TRUE_NEW",
   "old_id": "TRANSFORMATION_180",
-  "id": "TRANSFORMATION_31"
+  "id": "TRANSFORMATION_31",
+  "reasoning": "codec_hw_write is assigned at L16 inside da7210_init (SOC_DA7210 AND I2C path) but never read \u2014 it is overwritten or the function returns before any use. No // ERROR at L16, so this is a new bug. PC = (FSI_DA7210 OR SOC_DA7210) AND I2C, with no library macros. Correctly constrained."
 }

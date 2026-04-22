@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 915.0,
   "strategy": "transformation",
-  "classification": "TRUE",
+  "classification": "TRUE_UNDER",
   "old_id": "TRANSFORMATION_158",
-  "id": "TRANSFORMATION_46"
+  "id": "TRANSFORMATION_46",
+  "reasoning": "At 30e053248da.c L31, `int x = *length` reads length which is uninitialized when !CONFIG_SECURITY (security_old_inode_init_security does not write *len in that path). This is the VBDB-known bug marked // (6) ERROR. PC = true includes CONFIG_SECURITY=T where *length IS initialized (nondet always returns 42, so *len=0 is always set). PC is too broad \u2014 under-constrained."
 }

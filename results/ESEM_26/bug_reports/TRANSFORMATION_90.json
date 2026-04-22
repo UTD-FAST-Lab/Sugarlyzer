@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 1805.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE",
   "old_id": null,
-  "id": "TRANSFORMATION_90"
+  "id": "TRANSFORMATION_90",
+  "reasoning": "PULSE_UNINITIALIZED_VALUE alarm at 6e2b75740be.c L63 in the MODULE_UNLOAD AND SMP path \u2014 reads freed mod pointer (use-after-free). This is the VBDB-known bug confirmed by // ERROR at L63. PC = CONFIG_MODULE_UNLOAD AND CONFIG_SMP correctly constrains to when both unload and SMP paths are active."
 }

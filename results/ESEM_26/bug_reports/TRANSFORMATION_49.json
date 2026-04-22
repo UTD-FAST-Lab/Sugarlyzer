@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 1183.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW",
+  "classification": "FALSE",
   "old_id": "TRANSFORMATION_182",
-  "id": "TRANSFORMATION_49"
+  "id": "TRANSFORMATION_49",
+  "reasoning": "Branch at 6e2b75740be.c L31 checks refptr(mod). In the MODULE_UNLOAD AND SMP path, mod was just assigned at L30 from list_entry (equivalent to allocation). refptr(mod) is always a valid dereference. The alarm claiming the branch condition is garbage is a false positive from the desugared analysis."
 }

@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 5010.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "TRANSFORMATION_79"
+  "id": "TRANSFORMATION_79",
+  "reasoning": "0301ffab3d9.c L8: 'Value stored to gdp is never read'. PC: __need___FILE=T AND EXT2FS_ENABLE_SWAPFS=T. The __need___FILE=T condition is a stdio.h internal macro \u2014 when __need___FILE=T, stdio.h is not fully included, so printf may not be recognized by the analyzer, making gdp appear unused. In reality, gdp IS read at L10 (`(*gdp)++` dereferences gdp). The library macro __need___FILE=T in the PC indicates a desugaring artifact causing false dead-store detection."
 }

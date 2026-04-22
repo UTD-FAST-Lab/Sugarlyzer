@@ -19,5 +19,6 @@
   "strategy": "transformation",
   "classification": "TRUE_NEW_OVER",
   "old_id": "TRANSFORMATION_92",
-  "id": "TRANSFORMATION_39"
+  "id": "TRANSFORMATION_39",
+  "reasoning": "m_has_modinfo is assigned in both branches of the if-else at L16/L18 in 5275b1e49f6.c but is never read afterwards \u2014 genuine dead store in all compilable configs. New bug (no // ERROR). PC contains only library macros (!_STDLIB_H restrictive), no real feature flags. Bug fires in all normal compilation states, so PC is over-constrained."
 }

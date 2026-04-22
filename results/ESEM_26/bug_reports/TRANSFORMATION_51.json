@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 6148.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "TRANSFORMATION_51"
+  "id": "TRANSFORMATION_51",
+  "reasoning": "95755181b82.c L54: 'Branch condition evaluates to a garbage value'. PC: !__CORRECT_ISO_CPP_STRING_H_PROTO \u2014 a string.h internal library macro only, no feature config flags. L54 is a blank line between the GZIP and BASIC_AUTH ifdef blocks. Desugaring artifact: the library macro condition creates a spurious analysis path in the desugared code that does not correspond to any real configuration."
 }

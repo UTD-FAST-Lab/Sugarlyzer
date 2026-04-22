@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 1183.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "TRUE_NEW",
   "old_id": "TRANSFORMATION_183",
-  "id": "TRANSFORMATION_24"
+  "id": "TRANSFORMATION_24",
+  "reasoning": "6e2b75740be.c L39: Memory leak of `ptr` \u2014 allocated at L37 (`ptr = malloc(512)`) and stored in module_core(mod) at L43, but on the success path (return 0 at L56), ptr/module_core(mod) is never freed. New bug (no ERROR; the known bugs are about free-after-free and uninitialized access). Leak occurs in all configurations since the malloc and the success-path return are unconditionally executed (no #ifdef guard). PC = true. Correctly constrained."
 }

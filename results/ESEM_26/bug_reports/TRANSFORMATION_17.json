@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 6148.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "TRANSFORMATION_17"
+  "id": "TRANSFORMATION_17",
+  "reasoning": "95755181b82.c L33-34: 'Right operand of + is garbage' in `iobuf + len`. PC: !__need___FILE \u2014 a stdio.h internal library macro only, no feature config flags. `len` is unconditionally initialized at L25-26 (outside any #ifdef), so it cannot be garbage. Desugaring artifact: the __need___FILE condition is a stdio.h inclusion guard, making this a spurious path in the desugared analysis."
 }

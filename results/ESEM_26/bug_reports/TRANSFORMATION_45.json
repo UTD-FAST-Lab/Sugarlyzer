@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 5472.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW",
+  "classification": "TRUE_NEW_OVER",
   "old_id": "TRANSFORMATION_14",
-  "id": "TRANSFORMATION_45"
+  "id": "TRANSFORMATION_45",
+  "reasoning": "eckey may be NULL after SSL_CTX_get_ex_data at L11, and is dereferenced at L12 \u2014 real null dereference. No // ERROR at L12, new bug. PC includes restrictive library macros (__STRICT_ANSI__, !_STDLIB_H, !__malloc_and_calloc_defined) alongside HAVE_ECC. Bug fires in all HAVE_ECC=T configs, so PC is over-constrained."
 }

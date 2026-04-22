@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 6148.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_UNDER",
   "old_id": null,
-  "id": "TRANSFORMATION_61"
+  "id": "TRANSFORMATION_61",
+  "reasoning": "95755181b82.c: Dead store of `len` \u2014 assigned at L36 (`len += sprintf(iobuf + len, ...)` inside `if (content_gzip)`) but never read afterwards (only iobuf is used at L38). Not marked ERROR \u2014 new bug. PC: !__STRICT_ANSI__ AND !__need___FILE \u2014 only stdio.h library macros, no feature config flags appear. The PC is under-constrained: (1) missing ENABLE_FEATURE_HTTPD_GZIP=T requirement (GZIP=F causes content_gzip undeclared compile error in PRODUCT mode); (2) the feature config flags are desugared to runtime variables and don't appear in the PC. Real condition: ENABLE_FEATURE_HTTPD_GZIP=T."
 }

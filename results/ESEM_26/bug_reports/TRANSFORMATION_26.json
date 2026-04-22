@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 1183.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "TRUE_NEW",
   "old_id": "TRANSFORMATION_185",
-  "id": "TRANSFORMATION_26"
+  "id": "TRANSFORMATION_26",
+  "reasoning": "mod is allocated at L39 (ptr->mod path) and not freed before function exit at L69. This is a genuine memory leak on all configs (PC=true, simplifies to tautology). No // ERROR marks this as a VBDB-known bug, so it is new. PC=true is correctly constrained (leak exists regardless of configuration)."
 }

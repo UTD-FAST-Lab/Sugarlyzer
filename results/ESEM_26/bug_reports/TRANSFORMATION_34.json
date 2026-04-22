@@ -19,5 +19,6 @@
   "strategy": "transformation",
   "classification": "TRUE",
   "old_id": "TRANSFORMATION_129",
-  "id": "TRANSFORMATION_34"
+  "id": "TRANSFORMATION_34",
+  "reasoning": "Memory management bug at bc0ffc0e971.c L43 inside ENABLE_FEATURE_CLEAN_UP block \u2014 marked // ERROR as a VBDB-known bug. PC = (STRICT_ANSI AND CLEAN_UP) OR (!STRICT_ANSI AND CLEAN_UP) simplifies to CLEAN_UP only (STRICT_ANSI cancels out). No restrictive library macros remain. Correctly constrained."
 }

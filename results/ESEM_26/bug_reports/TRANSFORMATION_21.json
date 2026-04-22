@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 1761.0,
   "strategy": "transformation",
-  "classification": "TRUE",
+  "classification": "TRUE_UNDER",
   "old_id": "TRANSFORMATION_176",
-  "id": "TRANSFORMATION_21"
+  "id": "TRANSFORMATION_21",
+  "reasoning": "6252547b8a7.c L12: Null dereference at `int irq = *ops` where ops=NULL (set at L19, only reassigned to non-null when CONFIG_OF_IRQ=T at L22). Known bug (// ERROR at L12). Real condition: CONFIG_TWL4030_CORE=T AND CONFIG_OF_IRQ=F (ops stays NULL). The derived macro: TWL4030=T \u2192 CONFIG_IRQ_DOMAIN defined (L3-5). PC: (!TWL4030 AND IRQ_DOMAIN) OR TWL4030 = IRQ_DOMAIN=T (since TWL4030\u2192IRQ_DOMAIN). The PC includes TWL4030=F AND IRQ_DOMAIN=T \u2014 in those configs irq_domain_add is defined but twl_probe (the only caller that passes NULL ops) is NOT compiled (inside #ifdef TWL4030). The null deref is unreachable with TWL4030=F. PC under-constrained \u2014 should be TWL4030=T AND OF_IRQ=F, but includes TWL4030=F cases where the bug cannot occur."
 }

@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 966.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW_UNDER",
+  "classification": "TRUE",
   "old_id": "TRANSFORMATION_195",
-  "id": "TRANSFORMATION_30"
+  "id": "TRANSFORMATION_30",
+  "reasoning": "x = *inode at L8 in 7acf6cd80b2.c is marked // ERROR (7) \u2014 a VBDB-known dead store. x is assigned from the potentially-null inode pointer and is never read afterwards. PC = CONFIG_DEVPTS_MULTIPLE_INSTANCES correctly captures when this ifdef block is active. No library macros."
 }

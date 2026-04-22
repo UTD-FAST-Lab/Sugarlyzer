@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 6010.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW_UNDER",
+  "classification": "TRUE_NEW_OVER",
   "old_id": "TRANSFORMATION_112",
-  "id": "TRANSFORMATION_47"
+  "id": "TRANSFORMATION_47",
+  "reasoning": "val is assigned at L16 in b62bd7b261b.c but never read afterwards regardless of REGEXP (neither the REGEXP block nor any code after it reads val). Dead store is real and new. PC spans many configs including CONF=F/RENAME=F where L16 is not even reached \u2014 the PC is over-constrained, including unreachable configs via desugaring artifacts."
 }

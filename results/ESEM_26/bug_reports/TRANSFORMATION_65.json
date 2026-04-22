@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 1145.0,
   "strategy": "transformation",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "TRANSFORMATION_65"
+  "id": "TRANSFORMATION_65",
+  "reasoning": "0f8f8094d28.c L36 (mapped from desugared L71): 'Branch condition evaluates to a garbage value' at `if (!cache)`. PC: !CONFIG_FORCE_MAX_ZONEORDER (SLOB branches cancel out). CONFIG_SLOB=T paths are non-compilable in PRODUCT (kmalloc_caches undeclared). CONFIG_SLOB=F: kmalloc_caches is a globally declared array which is zero-initialized in C (all pointers NULL), so cache = kmalloc_caches[i] = NULL and `if (!cache)` evaluates to true, not garbage. The alarm in the SLOB=T desugared path is a desugaring artifact; in SLOB=F the alarm is a false positive (global zero-initialization not modeled)."
 }

@@ -19,5 +19,6 @@
   "strategy": "transformation",
   "classification": "FALSE",
   "old_id": "TRANSFORMATION_173",
-  "id": "TRANSFORMATION_37"
+  "id": "TRANSFORMATION_37",
+  "reasoning": "The alarm at L13 in 60e233a5660.c claims `len` (left operand of '+') is garbage. But len is assigned immediately at L12 via `len = sprintf(...)`. buflen is a static global initialized to 0. Both operands are always initialized. The PC contains non-restrictive !__need___FILE. False positive from desugared analysis."
 }

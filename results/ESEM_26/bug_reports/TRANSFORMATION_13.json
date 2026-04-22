@@ -19,5 +19,6 @@
   "strategy": "transformation",
   "classification": "FALSE",
   "old_id": "TRANSFORMATION_115",
-  "id": "TRANSFORMATION_13"
+  "id": "TRANSFORMATION_13",
+  "reasoning": "b62bd7b261b.c L16: `val = (s && s[1]) ? s+1 : NULL` \u2014 branch condition (s && s[1]) allegedly garbage. However in the original code, `s = strchr(val, ' ')` at L15 assigns s before L16, both inside the same #ifdef ENABLE_FEATURE_MDEV_RENAME block. In real compilation with CONF=T AND RENAME=T, s IS initialized before use at L16. The alarm with PC involving STRICT_ANSI suggests a desugaring artifact \u2014 the TRANSFORMATION desugaring may create paths where s appears uninitialized due to complex scope handling of nested #ifdef blocks. The unusual lineInputFile range [16, 395] further suggests a desugaring mapping artifact. False positive."
 }

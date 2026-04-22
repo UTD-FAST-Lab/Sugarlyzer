@@ -17,7 +17,8 @@
   "feasible": true,
   "desugaringTime": 6573.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "TRUE_NEW_UNDER",
   "old_id": "TRANSFORMATION_189",
-  "id": "TRANSFORMATION_10"
+  "id": "TRANSFORMATION_10",
+  "reasoning": "76baeebf7df.c L137: `printf(\"mask: %ld\\n\", *mask)` \u2014 null dereference of mask. mask is set from cpumask_of_node which in the !CONFIG_DEBUG_PER_CPU_MAPS variant (L51-53) returns node_to_cpumask_map[node] directly \u2014 this can be NULL if the node has not been set up. The null deref requires CONFIG_NUMA=T (so node_to_cpumask_map is used) and !CONFIG_DEBUG_PER_CPU_MAPS (so the non-checking variant is used) and CONFIG_PCI=T (so local_cpus_show is reachable). New bug (no ERROR). PC simplifies to CONFIG_PCI=T AND !__need___FILE (the `!__need___FILE` is always true in normal compilation, so effectively CONFIG_PCI=T). PC is under-constrained \u2014 missing CONFIG_NUMA=T and !CONFIG_DEBUG_PER_CPU_MAPS requirements. Without CONFIG_NUMA=T, cpumask_of_node always returns &cpu_online_mask (never NULL)."
 }

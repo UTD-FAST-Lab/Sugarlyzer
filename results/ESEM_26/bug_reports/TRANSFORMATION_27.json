@@ -19,5 +19,6 @@
   "strategy": "transformation",
   "classification": "FALSE",
   "old_id": "TRANSFORMATION_157",
-  "id": "TRANSFORMATION_27"
+  "id": "TRANSFORMATION_27",
+  "reasoning": "Branch at L26 checks `if (error)` where error is assigned from the return value of security_old_inode_init_security() at L24. The function always returns an int (0 or -1), so error is always initialized. The 'branch condition is garbage' alarm is a false positive from the desugared analysis."
 }

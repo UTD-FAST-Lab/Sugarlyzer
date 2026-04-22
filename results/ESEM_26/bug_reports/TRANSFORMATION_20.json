@@ -19,5 +19,6 @@
   "strategy": "transformation",
   "classification": "TRUE_NEW_OVER",
   "old_id": "TRANSFORMATION_1",
-  "id": "TRANSFORMATION_20"
+  "id": "TRANSFORMATION_20",
+  "reasoning": "1a3c8e3d840.c: Dead store of `thisopt` \u2014 declared at L9, conditionally assigned at L13 (`thisopt = SSL_PROTOCOL_TLSV1_1` if rand()%2), but never used after assignment. New bug (no ERROR; HAVE_TLSV1_X=F \u2192 SSL_PROTOCOL_TLSV1_1 undefined \u2192 compile error). Real condition: HAVE_TLSV1_X=T. PC simplifies to !_STDLIB_H AND !__need_malloc_and_calloc (no real feature flags; STRICT_ANSI and EXTERN variants cancel out). The `!_STDLIB_H` is restrictive \u2014 not satisfied after stdlib.h is included in real compilation. PC is over-constrained \u2014 misses the real HAVE_TLSV1_X=T condition and restricts to non-real library macro states."
 }

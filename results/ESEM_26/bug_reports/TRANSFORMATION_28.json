@@ -19,5 +19,6 @@
   "strategy": "transformation",
   "classification": "FALSE",
   "old_id": "TRANSFORMATION_98",
-  "id": "TRANSFORMATION_28"
+  "id": "TRANSFORMATION_28",
+  "reasoning": "At 5cd6461b6fb.c L28, `random` is used as a branch condition. random is assigned unconditionally at L27 (immediately before) via `random = rand()`. The alarm claiming it is garbage is a false positive."
 }

@@ -19,5 +19,6 @@
   "strategy": "transformation",
   "classification": "TRUE",
   "old_id": "TRANSFORMATION_3",
-  "id": "TRANSFORMATION_11"
+  "id": "TRANSFORMATION_11",
+  "reasoning": "1b48bb3c1af.c L14: `apr_rmm_init(rmm_lock)` where rmm_lock is declared at L11 (`char* rmm_lock;`) but never initialized. Known bug (// ERROR at L14). PC simplifies to APU_HAS_LDAP=T AND APR_HAS_SHARED_MEMORY=T \u2014 all library macro variants (STRICT_ANSI, USE_EXTERN_INLINES, __need___FILE, __need_malloc_and_calloc) appear in both T/F forms and cancel out completely. The function util_ldap_cache_init requires APU_HAS_LDAP=T, and the apr_rmm_init call requires APR_HAS_SHARED_MEMORY=T. PC correctly constrained."
 }
