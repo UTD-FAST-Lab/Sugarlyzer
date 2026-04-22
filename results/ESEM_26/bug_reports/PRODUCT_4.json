@@ -20,7 +20,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": null,
-  "id": "PRODUCT_4"
+  "id": "PRODUCT_4",
+  "reasoning": "The known VBDB bug for 0f8f8094d28.c is at L36 (int* cache = kmalloc_caches[i] when SLOB=T makes kmalloc_caches undeclared \u2014 compile error). This alarm is about int n = *cache at L41 (reported as L39 by the analyzer after preprocessing): n is initialized but never read \u2014 a genuine dead store and a different, new bug. No existing TRUE record for this file. The PC simplifies to LOCKDEP=T AND \\!SLOB (8 clauses cover all combos of SLAB, FORCE_MAX_ZONEORDER, PPC_256K_PAGES). LOCKDEP=T is required for the function to compile; \\!SLOB is required for kmalloc_caches to be declared. Correctly constrained."
 }

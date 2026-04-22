@@ -13,7 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_134"
+  "id": "PRODUCT_134",
+  "reasoning": "When PIDTEMP=T AND PID_DEBUG=F: pid_output=1 at L11 is never read (no use of pid_output). Dead store. With PID_DEBUG=F, the #ifdef PID_DEBUG block (including SERIAL_ECHO_START) is skipped, so MARLIN_H=T does not cause a compile error. Compilable config. No '// ERROR' for pid_output dead store \u2192 new bug not in VBDB. The dead store occurs for any PIDTEMP=T compilable config; MARLIN_H=T is unnecessary. PC is over-constrained. Classification: TRUE_NEW_OVER."
 }

@@ -13,7 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "PRODUCT_58"
+  "id": "PRODUCT_58",
+  "reasoning": "APR_INET6 is defined at L2 only inside #if APR_HAVE_IPV6 (L1-3). When APR_HAVE_IPV6=F, APR_INET6 is not defined, making int family = APR_INET6 at L7 a compile error (undefined identifier). This alarm comes from analyzing a non-compilable configuration and is a false positive."
 }

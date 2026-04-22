@@ -13,7 +13,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_80"
+  "id": "PRODUCT_80",
+  "reasoning": "No contradictions: FSI_DA7210=T AND SOC_DA7210=T consistent (FSI defines SOC internally), FSI_AK4642=T AND SOC_AK4642=T consistent. Dead store at L16 (codec_hw_write = i2c_master_send in da7210_init, never read) when SOC_DA7210=T AND I2C=T \u2014 new bug. The PC adds irrelevant FSI_DA7210=T, FSI_AK4642=T, SOC_AK4642=T constraints that do not affect da7210_init dead store. PC over-constrained (too narrow)."
 }

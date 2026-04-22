@@ -13,7 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": null,
-  "id": "PRODUCT_37"
+  "id": "PRODUCT_37",
+  "reasoning": "buf is allocated via calloc (through apr_rmm_addr_get) at L16 inside #if APR_HAS_SHARED_MEMORY, used in printf at L17, but never freed \u2014 genuine memory leak. No ERROR comment in file and no existing TRUE record for d05e574ec26.c, so this is a new bug not in the VBDB. The PC (APR_HAS_SHARED_MEMORY=T) exactly captures the condition \u2014 allocation and leak only occur under #if APR_HAS_SHARED_MEMORY. Correctly constrained."
 }

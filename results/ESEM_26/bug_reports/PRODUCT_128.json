@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_OVER",
   "old_id": null,
-  "id": "PRODUCT_128"
+  "id": "PRODUCT_128",
+  "reasoning": "L20/21: `p` is declared but never initialized before use. Case 'U' (compiled when UNREGISTER=T) reads `\\!p` at L20 \u2014 known VBDB bug (ERROR at L21). Case 'R' (compiled when SCAN=T) also reads `\\!p` at L27. The uninitialized read occurs whenever UNREGISTER=T OR SCAN=T. PC requires UNREGISTER=T AND SCAN=T (both), but the bug occurs with just UNREGISTER=T or just SCAN=T alone. PC is over-constrained (too narrow). Classification: TRUE_OVER."
 }

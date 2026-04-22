@@ -13,7 +13,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "PRODUCT_112"
+  "id": "PRODUCT_112",
+  "reasoning": "When SLOB=T, kmalloc_caches is not declared (L25-27 '#ifndef CONFIG_SLOB' block is skipped). L36 references kmalloc_caches[i] inside init_node_lock_keys() (compiled when LOCKDEP=T) \u2192 undeclared identifier compile error. Configuration is non-compilable. Classification: FALSE."
 }

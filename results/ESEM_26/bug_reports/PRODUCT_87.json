@@ -13,7 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_87"
+  "id": "PRODUCT_87",
+  "reasoning": "Line 12: `int irq = *ops` inside irq_domain_add() (compiled when IRQ_DOMAIN=T). irq is assigned but never used after \u2014 dead store in all configurations where this function runs. The '// ERROR' at L12 marks the VBDB-known null dereference bug (when OF_IRQ=F, ops=NULL), but this DEAD_STORE alarm is a distinct new bug not in VBDB. The dead store requires only IRQ_DOMAIN=T (TWL4030=T internally defines IRQ_DOMAIN, so TWL4030=T AND IRQ_DOMAIN=T is equivalent to just TWL4030=T). OF_IRQ only affects whether ops is NULL; irq is dead regardless. PC requires OF_IRQ=T unnecessarily \u2014 over-constrained. Classification: TRUE_NEW_OVER."
 }

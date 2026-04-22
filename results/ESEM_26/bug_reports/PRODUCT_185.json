@@ -13,7 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_185"
+  "id": "PRODUCT_185",
+  "reasoning": "Line 42: `flags |= T_ESCAPE_SHELL_CMD` in the #else branch (NEED_ENHANCED=F). flags set in loop but never read \u2014 dead store. No '// ERROR' \u2192 new bug not in VBDB. CROSS_COMPILE=T prevents NEED_ENHANCED from being defined via WIN32 (else block skipped). NEED_ENHANCED=F is consistent. Dead store occurs whenever NEED_ENHANCED=F. WIN32=T is unnecessary \u2014 with CROSS_COMPILE=T, WIN32 cannot define NEED_ENHANCED anyway. PC over-constrained. Classification: TRUE_NEW_OVER."
 }

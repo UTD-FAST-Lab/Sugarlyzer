@@ -13,7 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": null,
-  "id": "PRODUCT_97"
+  "id": "PRODUCT_97",
+  "reasoning": "Line 25: `k_crcs = someInt` inside `if (r)` branch. k_crcs is declared only when VERSION_CHECKING=T (L12). After the assignment at L25, k_crcs is never read \u2014 dead store. When VERSION_CHECKING=F, k_crcs is undeclared but referenced at L25 (outside #ifdef) \u2192 compile error. No '// ERROR' at L25 \u2192 new bug not in VBDB. PC = VERSION_CHECKING=T exactly matches the compilable configurations where the dead store occurs. Classification: TRUE_NEW."
 }

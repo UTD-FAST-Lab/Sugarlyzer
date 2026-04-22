@@ -13,7 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": null,
-  "id": "PRODUCT_68"
+  "id": "PRODUCT_68",
+  "reasoning": "Known bug for bc0ffc0e971.c is use-after-free in cleanup loop (PRODUCT_40: TRUE, unix.Malloc at L43, CLEAN_UP=T). This alarm detects a memory leak when CLEAN_UP=F: ch = malloc() at L29 is allocated but the cleanup block (L43-47) is not compiled when CLEAN_UP=F, so ch is never freed. New bug. PC (CLEAN_UP=F) exactly captures when the leak occurs. Correctly constrained."
 }

@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE",
   "old_id": null,
-  "id": "PRODUCT_176"
+  "id": "PRODUCT_176",
+  "reasoning": "Line 14 has '// ERROR' \u2014 known VBDB bug. scontext is set to NULL at L7 (inside #ifdef SELINUX). L14 dereferences *scontext \u2014 null dereference. Requires SELINUX=T (for scontext declaration and code block L12-15) AND STAT_FORMAT=F (for the outer #ifndef block L10-18 to be compiled). PC = SELINUX=T AND STAT_FORMAT=F exactly matches. Classification: TRUE."
 }

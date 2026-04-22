@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_OVER",
   "old_id": null,
-  "id": "PRODUCT_202"
+  "id": "PRODUCT_202",
+  "reasoning": "Known VBDB memory leak: eckey allocated at L10 (HAVE_ECC=T) never freed before return at L24. Same bug as PRODUCT_30 (TRUE, PC=HAVE_ECC). Leak occurs whenever HAVE_ECC=T regardless of SSL_CTX. PC adds SSL_CTX=T unnecessarily. Over-constrained. Classification: TRUE_OVER."
 }

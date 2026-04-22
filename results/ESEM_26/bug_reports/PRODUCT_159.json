@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_159"
+  "id": "PRODUCT_159",
+  "reasoning": "Line 44: tty_release(driver_data) called at err_release label. Since nondet() always returns 42, the goto at L36 is always taken, so driver_data is never assigned at L39. driver_data is uninitialized when passed to tty_release() \u2192 uninitialized read. Function ptmx_open() compiled when UNIX98=T. DEVPTS only affects pts_sb_from_inode (L8). No '// ERROR' at L44 \u2192 new bug not in VBDB. Required: UNIX98=T. PC adds DEVPTS=T unnecessarily. Over-constrained. Classification: TRUE_NEW_OVER."
 }

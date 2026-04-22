@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_168"
+  "id": "PRODUCT_168",
+  "reasoning": "Line 27: `if(\\!p)` inside case 'R' (compiled when SCAN=T). p is declared but never initialized before use when case 'W' not taken or r=0 \u2014 uninitialized read. No '// ERROR' at L27 (ERROR at L21 is for the UNREGISTER=T path) \u2192 new bug not in VBDB. Bug requires only SCAN=T. UNREGISTER=T does not affect the SCAN block at L27. PC adds UNREGISTER=T unnecessarily. Over-constrained. Classification: TRUE_NEW_OVER."
 }

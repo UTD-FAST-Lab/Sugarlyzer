@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_115"
+  "id": "PRODUCT_115",
+  "reasoning": "Line 67: `curr->next = head` \u2014 head is declared at L60 (`struct dnode *curr, *head`) but never initialized before this first use. Reading uninitialized head is a bug. This is in main() outside any #ifdef, so it occurs in all configurations. No '// ERROR' at L67 \u2192 new bug not in VBDB. PC requires RECURSIVE=T AND SORTFILES=F, but neither flag affects the head variable in main(). PC is over-constrained. Classification: TRUE_NEW_OVER."
 }

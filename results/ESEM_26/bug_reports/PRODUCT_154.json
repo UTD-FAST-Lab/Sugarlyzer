@@ -13,7 +13,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_154"
+  "id": "PRODUCT_154",
+  "reasoning": "Line 41 (reported L39): `int n = *cache` in init_node_lock_keys() (LOCKDEP=T). n assigned never read \u2014 dead store. SLOB=F ensures kmalloc_caches declared. No '// ERROR' \u2192 new bug. Required: LOCKDEP=T AND SLOB=F. PC adds SLAB=T, FORCE_MAX_ZONEORDER=T, PPC_256K_PAGES=F unnecessarily. Over-constrained. Classification: TRUE_NEW_OVER."
 }

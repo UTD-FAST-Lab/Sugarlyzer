@@ -13,7 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_89"
+  "id": "PRODUCT_89",
+  "reasoning": "L11: `float pid_output = 1` in manage_heater(). When PIDTEMP=T, the else branch (L19) is skipped, and pid_output is never used before function return \u2014 dead store. This dead store exists whenever PIDTEMP=T, regardless of PID_DEBUG or MARLIN_H. No '// ERROR' at L11 \u2192 new bug not in VBDB (ERROR at L16 is for SERIAL_ECHO_START, a different issue). PC requires MARLIN_H=F and PID_DEBUG=T \u2014 MARLIN_H=F is only needed to compile SERIAL_ECHO_START when PID_DEBUG=T, but the dead store also occurs when PID_DEBUG=F (any MARLIN_H). PC is over-constrained. Classification: TRUE_NEW_OVER."
 }

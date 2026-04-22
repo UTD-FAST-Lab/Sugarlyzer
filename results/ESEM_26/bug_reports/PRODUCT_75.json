@@ -13,7 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": null,
-  "id": "PRODUCT_75"
+  "id": "PRODUCT_75",
+  "reasoning": "No ERROR comment and no TRUE record for 581635e28f1.c. APR_INET6 is defined as 6 when APR_HAVE_IPV6=T (L1-3). int family = APR_INET6 at L7 assigns family but family is never subsequently read \u2014 genuine dead store. New bug. The PC (APR_HAVE_IPV6=T) exactly captures when this occurs: IPV6=F makes APR_INET6 undefined (compile error), and IPV6=T is the only valid config for this code. Correctly constrained."
 }

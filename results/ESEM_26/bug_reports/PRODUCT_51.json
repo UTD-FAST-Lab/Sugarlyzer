@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": null,
-  "id": "PRODUCT_51"
+  "id": "PRODUCT_51",
+  "reasoning": "No TRUE (known) record for e30bfedce4d.c; the ERROR comment at L21 marks the known VBDB bug but the alarm is for a different location. This alarm detects xGridSpacing = left_probe_bed_position at L24 (inside #ifdef AUTO_BED_LEVELING_GRID): xGridSpacing is assigned but never subsequently read \u2014 genuine dead store, new bug. ENABLE_AUTO_BED_LEVELING=T internally #defines AUTO_BED_LEVELING_GRID (L2), making the PC {AUTO_BED=T, GRID=T} consistent and correct. The dead store at L24 requires both AUTO_BED=T (for the function block) and GRID=T (for the L23-L24 block). Compare with PRODUCT_41 (TRUE_NEW_UNDER) which incorrectly broadens the PC to include GRID=F, and PRODUCT_163 (UNKNOWN, contradictory: AUTO_BED=T but GRID=F). Correctly constrained."
 }

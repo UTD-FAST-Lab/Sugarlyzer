@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_173"
+  "id": "PRODUCT_173",
+  "reasoning": "Line 16: --argc in main() stores new argc value never read again \u2014 dead store. In main() outside any #ifdef, occurs in all configs. New bug. PC (UNREGISTER=T AND SCAN=F) over-constrained. Classification: TRUE_NEW_OVER."
 }

@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE",
   "old_id": null,
-  "id": "PRODUCT_139"
+  "id": "PRODUCT_139",
+  "reasoning": "Line 16 has '// ERROR' \u2014 known VBDB bug. In list_single(): `info` is declared inside #ifdef FILETYPES (L6-8) and only initialized inside #ifdef USERNAME (L10-12). When FILETYPES=T AND USERNAME=F: info is declared but never initialized, then printf at L16 reads it \u2014 uninitialized value read. When USERNAME=T, info=0 before use \u2192 no bug. PC = FILETYPES=T AND USERNAME=F exactly matches the condition. Classification: TRUE."
 }

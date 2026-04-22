@@ -13,7 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_64"
+  "id": "PRODUCT_64",
+  "reasoning": "Known bug for 30e053248da.c is uninitialized read of *length (PRODUCT_27: TRUE, core.uninitialized.Assign). This alarm detects DEAD_STORE: int x = *length at L31 \u2014 x is assigned but never subsequently read. New bug (same as PRODUCT_24: TRUE_NEW). x is dead in ALL configs regardless of CONFIG_SECURITY. The PC {SECURITY=F} is unnecessarily narrow. Over-constrained."
 }

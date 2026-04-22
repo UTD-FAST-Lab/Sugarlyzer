@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_151"
+  "id": "PRODUCT_151",
+  "reasoning": "Line 66: curr->val dereferenced after malloc at L65 without NULL check \u2014 null dereference in main() outside any #ifdef. Occurs in all configs. No '// ERROR' at L66 \u2192 new bug. PC (RECURSIVE=F AND SORTFILES=F) over-constrained. Classification: TRUE_NEW_OVER."
 }

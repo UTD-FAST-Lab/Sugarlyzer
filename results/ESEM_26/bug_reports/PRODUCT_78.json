@@ -13,7 +13,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "PRODUCT_78"
+  "id": "PRODUCT_78",
+  "reasoning": "PC has FSI_AK4642=T AND SOC_AK4642=F which is contradictory: #ifdef CONFIG_SND_FSI_AK4642 at L1 defines CONFIG_SND_SOC_AK4642 at L2, so FSI_AK4642=T always implies SOC_AK4642 is defined. Infeasible configuration \u2014 false positive."
 }

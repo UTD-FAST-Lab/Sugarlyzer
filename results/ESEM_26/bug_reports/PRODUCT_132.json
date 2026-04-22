@@ -13,7 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": null,
-  "id": "PRODUCT_132"
+  "id": "PRODUCT_132",
+  "reasoning": "Line 13: `thisopt = SSL_PROTOCOL_TLSV1_1` in ssl_cmd_protocol_parse(). When HAVE_TLSV1_X=T, SSL_PROTOCOL_TLSV1_1 is defined (L3-5). thisopt is assigned but never read afterward \u2014 dead store. No '// ERROR' at L13 \u2192 new bug not in VBDB. PC = HAVE_TLSV1_X=T is exact (HAVE_TLSV1_X=F causes compile error at L13). Classification: TRUE_NEW."
 }

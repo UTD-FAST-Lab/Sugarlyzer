@@ -13,7 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_48"
+  "id": "PRODUCT_48",
+  "reasoning": "flags is written at L42 (flags |= T_ESCAPE_SHELL_CMD in the \\!NEED_ENHANCED_ESCAPES path) but is never subsequently read \u2014 the loop body has no use of flags after setting it. Genuine dead store. No ERROR comment and no TRUE record for c76df14dfb4.c; same new bug as PRODUCT_45 (already TRUE_NEW_OVER) at the same line. The dead store at L42 occurs for all \\!NEED_ENHANCED_ESCAPES configs: CROSS_COMPILE=T always gives \\!NEED_ENHANCED_ESCAPES (macro not defined), and CROSS_COMPILE=F + \\!WIN32 also gives \\!NEED_ENHANCED_ESCAPES. The PC {CROSS_COMPILE=F, WIN32=F, NEED_ENHANCED_ESCAPES=F} covers only one of these combos, missing CROSS_COMPILE=T configs. Over-constrained (too narrow)."
 }

@@ -13,7 +13,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_69"
+  "id": "PRODUCT_69",
+  "reasoning": "Known bug for 66517915e09.c is undeclared i2c_master_send when I2C=F. This alarm detects a dead store at L16 (codec_hw_write = i2c_master_send, but codec_hw_write is never read) when I2C=T \u2014 new bug. No contradictions in PC: FSI_AK4642=T implies SOC_AK4642 defined, and SOC_AK4642=T is consistent; FSI_DA7210=F with SOC_DA7210=T is fine (external flag). However, the dead store at L16 requires only SOC_DA7210=T AND I2C=T; the FSI_AK4642=T and SOC_AK4642=T constraints are irrelevant to the da7210_init function. PC is over-constrained (too narrow)."
 }

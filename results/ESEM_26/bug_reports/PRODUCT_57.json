@@ -13,7 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": null,
-  "id": "PRODUCT_57"
+  "id": "PRODUCT_57",
+  "reasoning": "The known VBDB bug for 0dc77b6dabe.c is at L37 (sysfs_link_sibling called a second time returns error because linked\\!=NULL). This alarm detects a memory leak: extcon_class_init() at L107 allocates kobj via class_compat_register; extcon_class_exit() at L108 does nothing (bug: should free); extcon_class_init() at L109 allocates a new kobj and stores it in switch_class, overwriting and leaking the first. New bug. ANDROID=T internally #defines CONFIG_SYSFS (L2), making SYSFS=T in the PC redundant but consistent (not contradictory). The bug requires ANDROID=T (for switch_class to exist and class_compat_register to be called) and EXTCON=T (for extcon functions to be compiled). The PC {ANDROID=T, SYSFS=T, EXTCON=T} correctly captures the bug condition. Correctly constrained."
 }

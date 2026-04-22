@@ -13,7 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "PRODUCT_65"
+  "id": "PRODUCT_65",
+  "reasoning": "When ENABLE_FEATURE_MDEV_RENAME_REGEXP=T, a = val at L14 is read at L21 (s = a, inside #ifdef ENABLE_FEATURE_MDEV_RENAME_REGEXP block). Therefore a is NOT a dead store when REGEXP=T. The alarm incorrectly claims the value stored to a is never used \u2014 false positive."
 }

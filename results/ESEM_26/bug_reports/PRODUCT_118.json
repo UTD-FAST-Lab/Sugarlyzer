@@ -13,7 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "PRODUCT_118"
+  "id": "PRODUCT_118",
+  "reasoning": "PC is infeasible: CROSS_COMPILE=T causes the '#ifdef CROSS_COMPILE' branch at L6-7 to execute, skipping the '#else' block (L8-13) where NEED_ENHANCED_ESCAPES could be defined via WIN32/OS2. With CROSS_COMPILE=T, NEED_ENHANCED_ESCAPES is never defined internally, yet PC requires NEED_ENHANCED_ESCAPES=T \u2014 contradiction. Configuration cannot exist. Classification: FALSE."
 }

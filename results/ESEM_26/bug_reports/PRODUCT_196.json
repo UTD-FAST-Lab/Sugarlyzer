@@ -13,7 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE",
   "old_id": null,
-  "id": "PRODUCT_196"
+  "id": "PRODUCT_196",
+  "reasoning": "Known VBDB bug at L31 (ERROR comment). When SECURITY=F, security_old_inode_init_security() (L14-17) returns 0 without writing to *len. In reiserfs_security_init(), *length at L31 is read uninitialized (length was declared but never initialized in reiserfs_create()). The alarm at L41 (the call site) traces to this uninitialized read. Bug requires SECURITY=F. PC = SECURITY=F exactly matches. Classification: TRUE."
 }

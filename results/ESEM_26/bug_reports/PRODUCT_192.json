@@ -13,7 +13,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "PRODUCT_192"
+  "id": "PRODUCT_192",
+  "reasoning": "I2C=F \u2192 i2c_master_send not declared. ak4642_init() (SOC_AK4642=T) references it \u2192 compile error. Non-compilable. Classification: FALSE."
 }

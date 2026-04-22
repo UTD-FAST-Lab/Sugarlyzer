@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE",
   "old_id": null,
-  "id": "PRODUCT_70"
+  "id": "PRODUCT_70",
+  "reasoning": "The known VBDB bug for 1b48bb3c1af.c is at L14: apr_rmm_init(rmm_lock) called with uninitialized rmm_lock when LDAP=T AND SHARED_MEMORY=T (PRODUCT_19: TRUE, core.CallAndMessage). This alarm detects the same bug at the same line with the same PC using a different checker (PULSE_UNINITIALIZED_VALUE). Same known bug, correctly constrained."
 }

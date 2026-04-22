@@ -13,7 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_86"
+  "id": "PRODUCT_86",
+  "reasoning": "Line 16: `val = (s && s[1]) ? s+1 : NULL` inside make_device() (compiled when CONF=T AND RENAME=T). After this assignment, val is never read again \u2014 the REGEXP block (L18-34) uses 'a' and 's' not 'val'. So val is a dead store at L16 regardless of REGEXP. No '// ERROR' at L16 \u2192 new bug not in VBDB. PC adds REGEXP=F unnecessarily; the dead store exists even when REGEXP=T. The required condition is just CONF=T AND RENAME=T. PC is over-constrained. Classification: TRUE_NEW_OVER."
 }

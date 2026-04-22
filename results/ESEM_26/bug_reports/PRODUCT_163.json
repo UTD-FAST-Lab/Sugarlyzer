@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "FALSE",
   "old_id": null,
-  "id": "PRODUCT_163"
+  "id": "PRODUCT_163",
+  "reasoning": "PC is infeasible: In e30bfedce4d.c, ENABLE_AUTO_BED_LEVELING=T causes '#define AUTO_BED_LEVELING_GRID' at L2, yet PC requires AUTO_BED_LEVELING_GRID=F \u2014 direct contradiction. Configuration cannot exist. Classification: FALSE."
 }

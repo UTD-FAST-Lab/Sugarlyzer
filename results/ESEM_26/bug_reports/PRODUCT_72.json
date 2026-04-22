@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_OVER",
   "old_id": null,
-  "id": "PRODUCT_72"
+  "id": "PRODUCT_72",
+  "reasoning": "The known VBDB bug for 35ae2e259e4.c is memory leak of eckey (PRODUCT_30: TRUE, unix.Malloc, PC=HAVE_ECC). This alarm detects the same memory leak: eckey is allocated at L10 and never freed. The known bug PC is HAVE_ECC=T (covers all SSL_CTX_set_ecdh_auto values). PRODUCT_72 restricts to \\!SSL_CTX_set_ecdh_auto, but the leak exists for all HAVE_ECC=T configs regardless of SSL_CTX. PC is over-constrained (too narrow)."
 }

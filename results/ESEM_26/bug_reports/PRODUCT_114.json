@@ -13,7 +13,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_114"
+  "id": "PRODUCT_114",
+  "reasoning": "Line 24: `int codec_hw_write = i2c_master_send` in ak4642_init() (SOC_AK4642=T, I2C=T). FSI_AK4642=T implies SOC_AK4642=T (consistent). codec_hw_write is assigned but never read \u2014 dead store. No '// ERROR' at L24 for dead store \u2192 new bug not in VBDB. Required condition: SOC_AK4642=T AND I2C=T. PC adds FSI_DA7210=F and SOC_DA7210=T unnecessarily (da7210_init() is irrelevant to ak4642_init()). PC is over-constrained. Classification: TRUE_NEW_OVER."
 }

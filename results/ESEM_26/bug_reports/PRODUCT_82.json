@@ -13,7 +13,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_82"
+  "id": "PRODUCT_82",
+  "reasoning": "Line 24 in ak4642_init(): `int codec_hw_write = i2c_master_send` \u2014 codec_hw_write is assigned but never read (dead store). The function ak4642_init() is compiled when SOC_AK4642=T, and i2c_master_send is declared when I2C=T; so the dead store occurs whenever SOC_AK4642=T AND I2C=T. The '// ERROR' at L24 marks the VBDB undeclared-identifier bug (I2C=F), but this DEAD_STORE alarm (I2C=T) is a distinct new bug not in VBDB. The PC adds FSI_AK4642=F, FSI_DA7210=F, SOC_DA7210=T \u2014 none of these affect ak4642_init(); the bug occurs for any value of those flags as long as SOC_AK4642=T AND I2C=T. PC is over-constrained. Classification: TRUE_NEW_OVER."
 }

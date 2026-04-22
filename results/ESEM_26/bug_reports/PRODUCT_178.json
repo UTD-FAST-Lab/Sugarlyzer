@@ -13,7 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW",
   "old_id": null,
-  "id": "PRODUCT_178"
+  "id": "PRODUCT_178",
+  "reasoning": "Line 24: `*p = *s` inside the REGEXP while loop (compiled when CONF=T AND RENAME=T AND REGEXP=T). p is declared at L11 (`char *s, *p`) but never initialized before this dereference \u2014 uninitialized pointer dereference. No '// ERROR' at L24 \u2192 new bug not in VBDB. PC = CONF=T AND RENAME=T AND REGEXP=T exactly matches the condition where this code runs. Classification: TRUE_NEW."
 }

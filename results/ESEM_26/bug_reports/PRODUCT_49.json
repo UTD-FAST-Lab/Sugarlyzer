@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_49"
+  "id": "PRODUCT_49",
+  "reasoning": "The known VBDB bug for 2631486f1bf.c is at L33 (dfree(arr) called with potentially already-freed/corrupted arr when RECURSIVE=T). This alarm is PULSE_UNINITIALIZED_VALUE for head at L67: in main(), head is declared but never initialized; curr->next = head at the first loop iteration reads an uninitialized value \u2014 a genuine bug. This is a different, new bug not in the VBDB. The uninitialized read of head happens in all configurations regardless of RECURSIVE or SORTFILES (neither flag affects the main loop). The PC {RECURSIVE=F, SORTFILES=F} is unnecessarily narrow \u2014 the bug also exists when RECURSIVE=T or SORTFILES=T. Over-constrained."
 }

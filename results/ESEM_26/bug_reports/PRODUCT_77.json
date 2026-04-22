@@ -13,7 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "UNKNOWN",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
-  "id": "PRODUCT_77"
+  "id": "PRODUCT_77",
+  "reasoning": "Known bug for 7acf6cd80b2.c is dead store at L8 (DEVPTS=T). This alarm detects uninitialized driver_data at L44: in ptmx_open (UNIX98=T), nondet()=42 causes goto err_release, leaving driver_data uninitialized before tty_release(driver_data) at L44. Same new bug as PRODUCT_32 (TRUE_NEW, PC=UNIX98=T). The bug exists for ALL CONFIG_UNIX98_PTYS=T configs regardless of DEVPTS. The PC {DEVPTS=F, UNIX98=T} is unnecessarily narrow. Over-constrained."
 }
