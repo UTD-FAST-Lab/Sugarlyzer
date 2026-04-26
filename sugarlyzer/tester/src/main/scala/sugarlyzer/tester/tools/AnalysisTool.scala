@@ -6,6 +6,7 @@ import cats.effect.{IO}
 import sugarlyzer.common.Config.Tool
 import sugarlyzer.common.Config.AppConfig
 import sugarlyzer.tester.sugarc.PresenceCondition
+import sugarlyzer.tester.strategies.CppcheckTool
 
 case class ToolAlarm(
     alarmType: String,
@@ -47,8 +48,9 @@ trait AnalysisTool {
 
 object AnalysisTool {
   def apply(tool: Tool): AnalysisTool = tool match {
-    case Tool.INFER  => InferTool
-    case Tool.CLANG  => ClangTool
-    case Tool.PHASAR => PhasarTool
+    case Tool.INFER    => InferTool
+    case Tool.CLANG    => ClangTool
+    case Tool.PHASAR   => PhasarTool
+    case Tool.CPPCHECK => CppcheckTool
   }
 }

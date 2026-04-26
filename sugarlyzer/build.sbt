@@ -36,7 +36,8 @@ lazy val commonSettings = Seq(
   libraryDependencies += "org.scalameta" %% "munit"            % "1.2.1" % Test,
   libraryDependencies += "org.scalameta" %% "munit-scalacheck" % "1.2.0" % Test,
   libraryDependencies += "org.typelevel" %% "munit-cats-effect" % "2.1.0" % Test,
-  libraryDependencies += "org.scalamock" %% "scalamock" % "7.5.0" % Test
+  libraryDependencies += "org.scalamock" %% "scalamock" % "7.5.0" % Test,
+  libraryDependencies += "org.scala-lang.modules" %% "scala-xml" % "2.2.0"
 )
 
 lazy val testerOnlySettings = Seq(
