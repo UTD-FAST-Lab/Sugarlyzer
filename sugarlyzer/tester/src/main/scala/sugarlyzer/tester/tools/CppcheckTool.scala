@@ -44,6 +44,9 @@ object CppcheckTool extends AnalysisTool {
             val start = System.nanoTime()
 
             val includeFlags = cmd.arguments.filter(_.startsWith("-I"))
+            val absoluteSource = if (cmd.file.startsWith("/")) cmd.file
+            else s"${cmd.directory}/${cmd.file}"
+
             val cppcheckArgs = Seq(
               "cppcheck",
               "--enable=all",
@@ -51,7 +54,7 @@ object CppcheckTool extends AnalysisTool {
               "--force",
               "--quiet",
               s"--output-file=${reportXMLLocation.toString}"
-            ) ++ includeFlags :+ cmd.file
+            ) ++ includeFlags :+ absoluteSource
 
             val proc = os.proc(cppcheckArgs).call(
               cwd = os.Path(cmd.directory),
@@ -95,37 +98,35 @@ object CppcheckTool extends AnalysisTool {
           val description = (node \ "@msg").text
           val locations   = node \ "location"
 
-          if (locations.isEmpty) {
-            List(
-              ToolAlarm(
-                alarmType = bugType,
-                description = description,
-                line = 0,
-                fileLocation = "Unknown",
-                analysisTime = analysisTime
-              )
-            )
-          } else {
-            locations.map { loc =>
-              val relativeFile = (loc \ "@file").text
-              val line         = (loc \ "@line").text.toIntOption.getOrElse(0)
+          locations.flatMap { loc =>
+            val relativeFile = (loc \ "@file").text
+            val line         = (loc \ "@line").text.toIntOption.getOrElse(0)
 
-              val absolutePath =
+            val absolutePath =
+              if (relativeFile.startsWith("/")) {
+                relativeFile
+              } else {
                 try {
                   (rootDir / os.RelPath(relativeFile)).toString()
                 } catch {
                   case NonFatal(_) => relativeFile
                 }
+              }
 
-              ToolAlarm(
-                alarmType = bugType,
-                description = description,
-                line = line,
-                fileLocation = absolutePath,
-                analysisTime = analysisTime
+            if (os.exists(os.Path(absolutePath))) {
+              Some(
+                ToolAlarm(
+                  alarmType = bugType,
+                  description = description,
+                  line = line,
+                  fileLocation = absolutePath,
+                  analysisTime = analysisTime
+                )
               )
-            }.toList
-          }
+            } else {
+              None
+            }
+          }.toList
         }
       } catch {
         case NonFatal(e) =>
