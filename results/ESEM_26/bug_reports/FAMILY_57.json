@@ -7,6 +7,6 @@
   "origin": "family",
   "id": "FAMILY_57",
   "classification": "FALSE",
-  "reasoning": "Line 21 is 'strcat(path, prepend)'. The tool claims 'path' is used uninitialized here. However, line 19 explicitly sets 'path[0] = \"\\0\"', which initializes path as an empty null-terminated C string — the standard idiom required by strcat. The tool has incorrectly flagged this as an uninitialized use. The real bug in this file (documented by the vbdb comment at line 10: 'Error - not enough space allocated if prepend is empty') is a buffer overflow: when prepend is empty, len = 0 + 13 + 1 = 14, but the concatenated result '/FOLDERNAME12/' requires 15 bytes, causing a 1-byte overrun. The uninitialized_value claim is a false positive.",
+  "reasoning": "FALSE POSITIVE: a7fc1f83c81.c (Marlin SD card). Uninitialized value on 'path' at line 21 ('strcat(path, prepend)'), when def(SDSUPPORT). 'path' is a VLA declared at line 11 and explicitly initialized at line 19 ('path[0] = 0') making it a valid empty string. strcat at line 21 reads from a properly initialized null-terminated string. The alarm is a false positive. The real known vbdb bug is a buffer overflow: when prepend is empty, len=14 bytes but total content written ('/' + lfilename + '/') = 15 bytes (off-by-one overflow noted in line 10 comment).",
   "old_id": "FAMILY_75"
 }

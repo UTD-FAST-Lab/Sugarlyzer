@@ -6,7 +6,7 @@
   "line_number": 21,
   "origin": "family",
   "id": "FAMILY_28",
-  "classification": "TRUE_NEW",
+  "classification": "FALSE",
   "old_id": "FAMILY_22",
-  "reasoning": "Line 21 is 'k_crcs = 0;' inside the #ifdef CONFIG_FEATURE_INSMOD_VERSION_CHECKING block. After this assignment: if r != 0, k_crcs is immediately overwritten by 'k_crcs = someInt' at line 25 before being read; if r == 0, the else branch does 'goto out' and k_crcs is never read. In all paths, the value 0 assigned at line 21 is never read — a genuine dead store. The presence condition [def(CONFIG_FEATURE_INSMOD_VERSION_CHECKING)] is correctly constrained: this code only runs when the macro is defined. The vbdb entry (5275b1e) documents an UndeclaredIdentifier for !FEATURE_INSMOD_VERSION_CHECKING (about k_crcs being used undeclared), which is a different bug in a different configuration. New true positive, correctly constrained."
+  "reasoning": "FALSE POSITIVE: 5275b1e49f6.c (BusyBox insmod). Dead store on 'k_crcs' at line 21 ('k_crcs = 0'), when def(CONFIG_FEATURE_INSMOD_VERSION_CHECKING). When VERSION_CHECKING=true, k_crcs is assigned 0 at line 21, but when r=1 this is overwritten at line 25 (k_crcs = someInt), and when r=0, k_crcs=0 is never read (goto out). The dead store is a simplification artifact — real BusyBox insmod code uses k_crcs extensively for CRC checking of kernel symbols. The known vbdb bug is the UndeclaredIdentifier on k_crcs at line 25 when VERSION_CHECKING=false (k_crcs is declared only inside #ifdef but referenced unconditionally)."
 }

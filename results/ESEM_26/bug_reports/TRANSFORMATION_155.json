@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 8254.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW",
+  "classification": "FALSE",
   "old_id": null,
   "id": "TRANSFORMATION_155",
-  "reasoning": "b62bd7b261b.c L16: 'val = (s && s[1]) ? s+1 : NULL;' \u2014 the new value assigned to val at L16 is never subsequently read. Inside #ifdef MDEV_RENAME_REGEXP, 's = a' uses 'a' (L21), not val; and outside REGEXP, val is not used at all after L16. Genuine dead store. PC simplifies to ENABLE_FEATURE_MDEV_CONF AND ENABLE_FEATURE_MDEV_RENAME (STRICT_ANSI terms fully cancel, MDEV_RENAME_REGEXP terms cancel). This exactly captures the scope where L16 exists (#ifdef MDEV_CONF / #ifdef MDEV_RENAME). No restrictive library macros remain. New bug, correctly constrained PC."
+  "reasoning": "FALSE POSITIVE (SIMPLIFICATION ARTIFACT): b62bd7b261b.c (BusyBox mdev). 'The value written to &val is never used' at line 16 ('val = (s && s[1]) ? s+1 : NULL'). `val` is reassigned at line 16 (inside '#ifdef ENABLE_FEATURE_MDEV_RENAME') after being initially assigned at line 12. After this reassignment, there are no further uses of `val` in the vbdb-simplified code. In real BusyBox mdev code, the updated `val` pointer would be used for subsequent string processing and device name handling, but those uses were stripped by vbdb simplification. The real vbdb bug in this file is the uninitialized pointer `p` used at line 24 ('*p = *s') — identified in TRANSFORMATION_145. This DEAD_STORE alarm is a simplification artifact, consistent with similar FALSE classifications for TRANSFORMATION_82 (same file)."
 }

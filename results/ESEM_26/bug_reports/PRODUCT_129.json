@@ -16,5 +16,5 @@
   "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_129",
-  "reasoning": "PC is infeasible: FSI_DA7210=T causes '#define CONFIG_SND_SOC_DA7210' at L6 in 66517915e09.c, yet PC requires SOC_DA7210=F \u2014 direct contradiction. Configuration cannot exist. Classification: FALSE."
+  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_44/52/91/92/102/106/107/109/113/114/117/125/126 (66517915e09.c), dead store on 'codec_hw_write' at line 16. CONFIG_I2C=false means i2c_master_send is undeclared (inside #ifdef CONFIG_I2C). Tool fails to detect the known UndeclaredIdentifier vbdb bug and reports a spurious dead store instead. Simplification artifact — same pattern as other I2C=false alarms for this file."
 }

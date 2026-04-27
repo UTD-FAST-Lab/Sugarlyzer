@@ -6,7 +6,7 @@
   "line_number": 20,
   "origin": "family",
   "id": "FAMILY_69",
-  "classification": "TRUE_NEW",
-  "reasoning": "Line 20 is 'int i, j;'. Variable i is used as the for-loop counter (lines 21-34), but j is never assigned or read anywhere in add_dquot_ref() — a genuinely unused variable / dead store. The function has no #ifdef guard so the bug exists in all configurations; presence condition [True] is correctly constrained. The vbdb entry for d7e9711760a documents a double-lock deadlock bug (mutex locked at line 22 in the loop, then inode_get_rsv_space() called at line 29 under CONFIG_QUOTA_DEBUG also tries to lock the same mutex — deadlock under CONFIG_QUOTA_DEBUG). The unused j variable is a separate, new finding not documented in vbdb. New true positive.",
+  "classification": "FALSE",
+  "reasoning": "FALSE POSITIVE: d7e9711760a.c (Linux quota). Alarm fires at line 20 ('int i, j;'), condition True. 'j' is declared but never assigned or read anywhere in the function — it is an unused variable, not a dead store. A dead store requires an actual write whose value is never read; here there is no write to j at all. The tool incorrectly treats the declaration as a store. Simplification artifact.",
   "old_id": "FAMILY_64"
 }

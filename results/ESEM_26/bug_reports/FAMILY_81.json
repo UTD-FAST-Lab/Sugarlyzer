@@ -7,6 +7,6 @@
   "origin": "family",
   "id": "FAMILY_81",
   "classification": "FALSE",
-  "reasoning": "Line 11 is 'strncat(method, block_object_id, 2)'. The tool claims method is used uninitialized here. However, strcpy(method, \"WQ\") at line 10 has already initialized method as the string 'WQ\\0' — method[0]='W', method[1]='Q', method[2]='\\0'. strncat reads the destination to find the null terminator before appending, so it requires an initialized null-terminated string. After line 10, method IS a properly initialized string. The uninitialized_value claim is incorrect. The real vbdb bug (marked '// (6) ERROR' at line 11) is a buffer overflow: strncat attempts to append 'XX\\0' starting at method[2], requiring method[2]='X', method[3]='X', method[4]='\\0' — writing past the 4-byte boundary. False positive.",
+  "reasoning": "FALSE POSITIVE: f3d83e24154.c (Linux ACPI WMI / Acer). Alarm fires at line 11, columns 10-16 ('method' as the first argument to strncat), when def(CONFIG_X86) AND def(CONFIG_ACPI_WMI). The tool claims 'method is used uninitialized,' but method was already written by 'strcpy(method, \"WQ\")' at line 10. By line 11, method contains 'WQ\\0' and is fully initialized. strncat reads method to find the end of the existing string, which is valid. The real known vbdb bug is the buffer overflow from strncat writing 'WQXX\\0' (5 bytes) into a 4-byte array, but that is a different issue not captured by this alarm.",
   "old_id": "FAMILY_69"
 }

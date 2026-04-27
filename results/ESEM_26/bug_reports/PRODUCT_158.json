@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "TRUE_OVER",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
   "id": "PRODUCT_158",
-  "reasoning": "Line 20: `if(\\!p)` inside case 'U' (compiled when UNREGISTER=T). p is declared but never initialized before use when case 'W' is not taken or r=0 \u2014 uninitialized read. Known VBDB bug: ERROR at L21 marks this issue for UNREGISTER=T. The bug occurs when UNREGISTER=T (regardless of SCAN). SCAN=T would also expose the bug via case 'R', so the true condition is UNREGISTER=T OR SCAN=T. PC requires SCAN=F unnecessarily, making it too narrow. Classification: TRUE_OVER."
+  "reasoning": "TRUE POSITIVE (NEW, OVER-CONSTRAINED): 061fd0a353e.c (BusyBox hdparm). PULSE_UNINITIALIZED_VALUE on 'p' at line 20 inside case 'U' (compiled when UNREGISTER_HWIF=true). 'p' is declared at line 7 without initialization and is only conditionally assigned in case 'W' (if rand()%2). When case 'U' is taken without prior case 'W' with r=1, p is read uninitialized at line 20 ('if(!p)'). Genuine uninitialized variable read. NEW: The known vbdb bug for UNREGISTER_HWIF=true && SCAN_HWIF=false is UndefinedSymbol: 'expected_hwif_error' label in case 'U' jumps to a label that is only defined inside #ifdef SCAN_HWIF; with SCAN_HWIF=false the label is undefined. The uninitialized p is a different bug. OVER-CONSTRAINED: The alarm at line 20 requires only UNREGISTER_HWIF=true; SCAN_HWIF=false is unnecessary. Configurations with UNREGISTER_HWIF=true && SCAN_HWIF=true are equally vulnerable to the uninitialized p at line 20 (as seen in PRODUCT_128)."
 }

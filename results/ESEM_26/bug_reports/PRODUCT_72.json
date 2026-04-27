@@ -16,5 +16,5 @@
   "classification": "TRUE_OVER",
   "old_id": null,
   "id": "PRODUCT_72",
-  "reasoning": "The known VBDB bug for 35ae2e259e4.c is memory leak of eckey (PRODUCT_30: TRUE, unix.Malloc, PC=HAVE_ECC). This alarm detects the same memory leak: eckey is allocated at L10 and never freed. The known bug PC is HAVE_ECC=T (covers all SSL_CTX_set_ecdh_auto values). PRODUCT_72 restricts to \\!SSL_CTX_set_ecdh_auto, but the leak exists for all HAVE_ECC=T configs regardless of SSL_CTX. PC is over-constrained (too narrow)."
+  "reasoning": "TRUE POSITIVE (KNOWN, OVER-CONSTRAINED): When HAVE_ECC=true, eckey is malloc'd at line 10 and the function returns without freeing it — genuine memory leak. KNOWN BUG: The vbdb entry for 35ae2e259e4.c documents exactly this MemoryLeak when HAVE_ECC=true. OVER-CONSTRAINED: The presence condition requires SSL_CTX_set_ecdh_auto=false. However, when HAVE_ECC=true and SSL_CTX_set_ecdh_auto=true, the #if defined(SSL_CTX_set_ecdh_auto) branch only does '// do something' (a no-op), and eckey is still never freed. The memory leak exists for any value of SSL_CTX_set_ecdh_auto when HAVE_ECC=true. The condition unnecessarily excludes SSL_CTX_set_ecdh_auto=true, making it over-constrained."
 }

@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_54",
-  "reasoning": "The known VBDB bug for 8c4377dd635.c is SERIAL_ECHO_START at L16 when MARLIN_H=T. This alarm is a DEAD_STORE for pid_output: when PIDTEMP=F, pid_output=1 at L11 is assigned then overwritten by pid_output=0 at L19 before ever being read \u2014 the first assignment is dead. New bug. The dead store at L11 (overwritten before read) occurs for ALL PIDTEMP=F configs regardless of MARLIN_H or PID_DEBUG. The PC {MARLIN_H=F, PIDTEMP=F, PID_DEBUG=F} unnecessarily constrains MARLIN_H and PID_DEBUG, missing other PIDTEMP=F combos where the dead store also occurs. Over-constrained."
+  "reasoning": "FALSE POSITIVE: The alarm reports 'pid_output' as a dead store (line ~11-13) when MARLIN_H=false, PIDTEMP=false, PID_DEBUG=false. When PIDTEMP=false, pid_output is initialized to 1 (line 11) and then set to 0 in the #else block (line 19), but never subsequently read. In the real Marlin manage_heater() code, pid_output is the computed PID output value that drives heating elements — it is used throughout the function. The simplified file stripped all subsequent uses of pid_output. This is a simplification artifact. The known vbdb bug for 8c4377dd635.c is WrongFunArgNum: SERIAL_ECHO_START is called with argument ' PIDDEBUG ' but the macro expands to serialprint(echomagic) taking no additional arguments — that bug requires PIDTEMP=true and PID_DEBUG=true, the opposite configuration."
 }

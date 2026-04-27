@@ -20,5 +20,5 @@
   "classification": "TRUE_OVER",
   "old_id": null,
   "id": "TRANSFORMATION_135",
-  "reasoning": "1b487ea8a69.c L14: Same null pointer dereference as TRANSFORMATION_130 (scontext=NULL at L7, dereferenced at L14, // ERROR). Known VBDB bug. PC has !__USE_EXTERN_INLINES instead of __USE_EXTERN_INLINES (T130's variant), but same real conditions: ENABLE_SELINUX=T AND !ENABLE_FEATURE_STAT_FORMAT=T. The restrictive !_STDLIB_H over-constrains the PC \u2014 bug also manifests in normal compilation with _STDLIB_H=T. Known bug, PC over-constrained."
+  "reasoning": "TRUE POSITIVE (OVER-CONSTRAINED): 1b487ea8a69.c (BusyBox stat/SELinux). Same bug as TRANSFORMATION_130 — '`scontext` could be null and is dereferenced' at line 14. 'scontext = NULL' is assigned at line 7 and '*scontext' is dereferenced at line 14, a real null dereference (// ERROR annotation). CORRECTLY CONSTRAINED for application configs: ENABLE_SELINUX=true AND NOT ENABLE_FEATURE_STAT_FORMAT. OVER-CONSTRAINED: this PC instance requires __USE_EXTERN_INLINES=false (versus T130 which required __USE_EXTERN_INLINES=true). Both T130 and T135 together cover all USE_EXTERN_INLINES states but individually each is over-constrained by requiring a specific stdlib guard value. The correct condition is just ENABLE_SELINUX=true AND NOT ENABLE_FEATURE_STAT_FORMAT."
 }

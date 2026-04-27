@@ -16,5 +16,5 @@
   "classification": "TRUE",
   "old_id": "PRODUCT_68",
   "id": "PRODUCT_10",
-  "reasoning": "c708c57e247.c L18: known out-of-bounds array access (// ERROR). CSA reports 'Assigned value is garbage or undefined' from the out-of-bounds access. Known VBDB bug (same as TRANSFORMATION_77: TRUE). PC=CONFIG_S390_PRNG=T correctly constrains when this code path exists. No library macros."
+  "reasoning": "TRUE POSITIVE: In prng_seed(16), the while loop runs twice. In the second iteration, i=8, making *((__u64 *)buf+i*8) = *((__u64 *)buf+64), which reads 64 __u64 positions past buf (a 16-byte array holding only 2 __u64 values). The value read from this out-of-bounds location is garbage/undefined, correctly triggering the core.uninitialized.Assign alarm at line 18. KNOWN BUG: The vbdb entry for c708c57e247.c documents exactly this OutOfBoundsRead at the same line and configuration (CONFIG_S390_PRNG enabled). The tool detects the same root cause from the perspective of reading garbage from the out-of-bounds access. CORRECTLY CONSTRAINED: CONFIG_S390_PRNG==true is correct — prng_seed is only defined and called under this config."
 }

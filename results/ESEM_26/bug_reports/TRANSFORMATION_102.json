@@ -20,5 +20,5 @@
   "classification": "TRUE_NEW_OVER",
   "old_id": null,
   "id": "TRANSFORMATION_102",
-  "reasoning": "Same bug as TRANSFORMATION_94: curr from malloc() at L65 can be NULL, dereferenced at L66 (curr->val = rand()%10) without NULL check. Genuine null dereference. No // ERROR at L66, new bug. L65-70 are in main() outside all #ifdef blocks \u2014 bug fires in all configs. PC = !CONFIG_FEATURE_LS_SORTFILES AND !_STDLIB_H AND !__need_malloc_and_calloc: requires !SORTFILES (the complementary constraint to TRANSFORMATION_94 which had SORTFILES=T) plus restrictive library macro !_STDLIB_H. PC is over-constrained."
+  "reasoning": "TRUE POSITIVE (NEW, OVER-CONSTRAINED): 2631486f1bf.c (BusyBox ls). Same root cause as TRANSFORMATION_94 — '`curr` could be null (null value originating from malloc) and is dereferenced' at line 66 ('curr->val = rand() % 10'). The null dereference after unguarded malloc at line 65 is real. NEW: not the annotated vbdb bug. OVER-CONSTRAINED: the presence condition requires NOT CONFIG_FEATURE_LS_SORTFILES, but lines 65-66 are NOT inside any '#ifdef' block — the bug exists regardless of this flag. Together with TRANSFORMATION_94 (CONFIG_FEATURE_LS_SORTFILES=true), the union covers all configs, confirming the bug is truly config-independent. The stdlib header guards (_STDLIB_H, __need_malloc_and_calloc) are desugaring artifacts."
 }

@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 8388.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
   "id": "TRANSFORMATION_128",
-  "reasoning": "2631486f1bf.c L67: curr null dereference from malloc at L67. curr is assigned via malloc (could return NULL) in the CONFIG_FEATURE_LS_SORTFILES sorting code path. PC=CONFIG_FEATURE_LS_SORTFILES=T \u2014 no library macros, correctly constrained. New bug (no ERROR comment for this specific location). Consistent with similar alarms at L66/L67 in this file (TRANSFORMATION_99, etc.)."
+  "reasoning": "TRUE POSITIVE (NEW, OVER-CONSTRAINED): 2631486f1bf.c (BusyBox ls). Duplicate of TRANSFORMATION_99 — '`curr` could be null (null value from malloc) and is dereferenced' at line 67 ('curr->next = head'). Same root cause: null dereference after unguarded malloc at line 65. NEW: not the annotated vbdb bug. OVER-CONSTRAINED: lines 65-67 are not inside any '#ifdef' — bug exists regardless of CONFIG_FEATURE_LS_SORTFILES."
 }

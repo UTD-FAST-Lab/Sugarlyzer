@@ -8,5 +8,5 @@
   "id": "FAMILY_25",
   "classification": "FALSE",
   "old_id": "FAMILY_46",
-  "reasoning": "Line 16 is 'ptr = NULL;' in enable_IR_x2apic(), where 'ptr' is a 'static char*'. The tool labels this as a dead store because ptr is not read again within that single call. However, ptr is a static variable whose value persists between calls. On a second invocation of enable_IR_x2apic(), ptr (now NULL) is read by '*ptr = a', causing a null dereference — precisely the DoubleOpOnResource bug documented in vbdb (472a474). The assignment to the static variable IS meaningful cross-call; treating it as a dead store ignores static lifetime semantics. False positive."
+  "reasoning": "FALSE POSITIVE: 472a474c663.c (Linux APIC). Dead store on 'ptr' at line 16 ('ptr = NULL'), presence condition True. 'ptr' is a static variable (declared at line 12). After 'ptr = NULL' at line 16, there are no further uses of ptr within the current function invocation — but ptr IS a static variable that persists across calls. The assignment 'ptr = NULL' is NOT a dead store: it sets ptr to NULL so that the NEXT call to enable_IR_x2apic() will dereference NULL (line 14: '*ptr = 'a''), causing a NULL pointer dereference. The tool fails to model static variable state across function calls, incorrectly labeling the assignment as a dead store."
 }

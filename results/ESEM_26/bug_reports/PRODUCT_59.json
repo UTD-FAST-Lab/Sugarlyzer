@@ -16,5 +16,5 @@
   "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_59",
-  "reasoning": "When CONFIG_FEATURE_INSMOD_VERSION_CHECKING=F, k_crcs is not declared (its declaration at L12 is inside #ifdef CONFIG_FEATURE_INSMOD_VERSION_CHECKING). However, L25 (k_crcs = someInt) is outside the #ifdef block and unconditionally references k_crcs, causing a compile error (undeclared identifier). The alarm comes from analyzing a non-compilable configuration and is a false positive."
+  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_34/38 (5275b1e49f6.c). The alarm reports 'm_has_modinfo = 1' (line 18, else branch) as a dead store when CONFIG_FEATURE_INSMOD_VERSION_CHECKING=false. When VERSION_CHECKING=false, k_crcs is not declared (#ifdef guard), m_has_modinfo is assigned in the if-else block but never subsequently read in the simplified file. In the real BusyBox insmod_main() code, m_has_modinfo is used throughout the function. The simplified file stripped those uses. This is a simplification artifact. The known vbdb bug is UndeclaredIdentifier: k_crcs is used at line 25 (unconditionally) but is only declared inside #ifdef VERSION_CHECKING — so when VERSION_CHECKING=false, k_crcs is undeclared."
 }

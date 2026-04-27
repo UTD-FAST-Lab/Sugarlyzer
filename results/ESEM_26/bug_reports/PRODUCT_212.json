@@ -13,8 +13,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_212",
-  "reasoning": "Line 41 (reported L39): `int n = *cache` in init_node_lock_keys() (LOCKDEP=T). n assigned never read \u2014 dead store. SLOB=F ensures kmalloc_caches declared. New bug. Required: LOCKDEP=T AND SLOB=F. PC adds FORCE_MAX_ZONEORDER=T, PPC_256K_PAGES=T, SLAB=F unnecessarily. Over-constrained. Classification: TRUE_NEW_OVER."
+  "reasoning": "FALSE POSITIVE: 0f8f8094d28.c (Linux kmalloc). Dead store on 'n' at line 39 (int n = *cache) inside init_node_lock_keys(), with LOCKDEP=true and SLOB=false. When SLOB=false, kmalloc_caches IS declared and accessible — the known vbdb OutOfBoundsRead/UndeclaredIdentifier bug (which requires SLOB=true) does not apply. The dead store on n is a simplification artifact — real kernel code uses n for lock key initialization. The extra flags (FORCE_MAX_ZONEORDER, PPC_256K_PAGES, SLAB) only affect array size constants and are irrelevant to this particular alarm."
 }

@@ -16,5 +16,5 @@
   "classification": "TRUE_NEW_OVER",
   "old_id": null,
   "id": "PRODUCT_79",
-  "reasoning": "The known VBDB bug for 35ae2e259e4.c is memory leak (PRODUCT_30). This alarm detects a null dereference at L12 (*eckey = 30 after malloc can return NULL) \u2014 same new bug as PRODUCT_53. The null dereference at L12 is in the if(rand()%2) branch; SSL_CTX_set_ecdh_auto only affects the else branch and is irrelevant to L12. Bug exists for all HAVE_ECC=T configs. PC {HAVE_ECC=T, SSL_CTX_set_ecdh_auto=T} is over-constrained (missing SSL_CTX=F configs where null deref also occurs)."
+  "reasoning": "TRUE POSITIVE (NEW, OVER-CONSTRAINED): Same null dereference as PRODUCT_53 — eckey from malloc (line 10) could be NULL and is dereferenced at line 12 ('*eckey = 30' in the if branch). Genuine potential null dereference. NEW BUG: The known vbdb bug for 35ae2e259e4.c is MemoryLeak (eckey never freed when HAVE_ECC=true); the null dereference is a separate issue. OVER-CONSTRAINED: Line 12 is in the unconditional 'if (rand() % 2)' branch, not guarded by SSL_CTX_set_ecdh_auto. The null dereference at line 12 can occur when HAVE_ECC=true regardless of SSL_CTX_set_ecdh_auto. Requiring SSL_CTX_set_ecdh_auto=true is over-constrained — the bug also exists when SSL_CTX_set_ecdh_auto=false (as reported in PRODUCT_53)."
 }

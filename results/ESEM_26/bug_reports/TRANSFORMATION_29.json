@@ -20,5 +20,5 @@
   "classification": "TRUE_NEW",
   "old_id": "TRANSFORMATION_126",
   "id": "TRANSFORMATION_29",
-  "reasoning": "ch is allocated via malloc() at L29 then ch->ifname is accessed at L30. If malloc returns NULL, this is a null dereference. No // ERROR at L30 (the // ERROR is at L43 for a different bug), so this is new. PC = (STRICT_ANSI OR !STRICT_ANSI) = true, tautological \u2014 no real feature flag constraint, correctly captures that the bug exists in all configs."
+  "reasoning": "TRUE POSITIVE NEW (CORRECTLY CONSTRAINED): bc0ffc0e971.c (BusyBox nameif). 'Dereference of undefined pointer value' at line 30 ('ch->ifname = ifname'). 'ch' is assigned from 'malloc(sizeof(ethtable_t))' at line 29 with no NULL check. If malloc returns NULL, 'ch->ifname' at line 30 dereferences NULL. This is a new bug not in vbdb (the known vbdb bug is the double-free/use-after-free in delete_eth_table at lines 13-16). CORRECTLY CONSTRAINED: presence condition is '__STRICT_ANSI__ OR NOT __STRICT_ANSI__' = effectively True. The malloc at line 29 is inside main() unconditionally (no application-level config guards). No application-level config variables appear in the condition, correctly reflecting that the null dereference risk exists in all configurations."
 }

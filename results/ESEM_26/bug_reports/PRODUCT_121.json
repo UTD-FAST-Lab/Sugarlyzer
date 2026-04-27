@@ -16,5 +16,5 @@
   "classification": "TRUE",
   "old_id": null,
   "id": "PRODUCT_121",
-  "reasoning": "Line 8: `conv` is used without initialization in 31873ec707d.c when ULTRA_LCD=T. This is a known VBDB bug \u2014 conv is declared/used inside #ifdef ULTRA_LCD but never initialized before use. PC = ULTRA_LCD=T exactly matches the condition. Classification: TRUE."
+  "reasoning": "TRUE POSITIVE (KNOWN, CORRECTLY CONSTRAINED): 31873ec707d.c (Marlin firmware, ULTRA_LCD feature). The function ftostr51() is defined inside #ifdef ULTRA_LCD and uses a global array 'conv' extensively (lines 8-17). However, 'conv' is never declared anywhere in the simplified vbdb file — the global declaration (char conv[8] or similar) was removed to create the intentional vbdb bug. The tool detects accessing 'conv' (a pointer-like entity that has no valid allocation) as PULSE_UNINITIALIZED_VALUE at line 8. This is the known vbdb UndeclaredIdentifier/uninitialized access bug: using 'conv' without declaration when ULTRA_LCD=true. The presence condition (ULTRA_LCD=true) is correctly constrained — ftostr51() is only compiled when ULTRA_LCD=true, so the bug only exists in this configuration. main() calls ftostr51() unconditionally, so the code path always executes when ULTRA_LCD=true."
 }

@@ -13,8 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW",
+  "classification": "TRUE",
   "old_id": "PRODUCT_10",
   "id": "PRODUCT_8",
-  "reasoning": "bbeb0516cf0.c L6: 'Null pointer passed to 1st parameter expecting nonnull'. r=NULL at L18, passed to cgi_handler(r); when APR_FILES_AS_SOCKETS=T, cgi_handler calls cgi_bucket_create(r=NULL); at L6, strcat(NULL, 'something') is called \u2014 strcat's first argument has nonnull attribute, passing NULL is a null pointer violation. PC=APR_FILES_AS_SOCKETS=T correctly constrains the condition for the call path to exist. New bug (no ERROR comment). Correctly constrained PC."
+  "reasoning": "TRUE POSITIVE: When APR_FILES_AS_SOCKETS is true, cgi_handler calls cgi_bucket_create(r) where r=NULL (from main). Inside cgi_bucket_create, strcat(NULL, 'something') is called, which passes NULL to strcat's first argument that expects non-null. This is a genuine null pointer issue. KNOWN BUG: The vbdb entry documents a UseAfterFree bug at the same location/configuration — the real code passes freed subrequest data (not NULL) to cgi_bucket_create. The simplified file uses NULL to represent the invalid pointer, and the tool detects the resulting null pointer issue. Both point to the same underlying bug path at the same config condition. CORRECTLY CONSTRAINED: The presence condition APR_FILES_AS_SOCKETS==true is correct — the call to cgi_bucket_create only occurs inside the #if APR_FILES_AS_SOCKETS block."
 }

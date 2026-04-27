@@ -16,5 +16,5 @@
   "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_58",
-  "reasoning": "APR_INET6 is defined at L2 only inside #if APR_HAVE_IPV6 (L1-3). When APR_HAVE_IPV6=F, APR_INET6 is not defined, making int family = APR_INET6 at L7 a compile error (undefined identifier). This alarm comes from analyzing a non-compilable configuration and is a false positive."
+  "reasoning": "FALSE POSITIVE: The alarm reports 'family = APR_INET6' (line 7) as a dead store when APR_HAVE_IPV6=false. When APR_HAVE_IPV6=false, APR_INET6 is not defined (it is only #defined inside '#if APR_HAVE_IPV6'). The tool appears to have handled the undefined macro by treating it as a value (likely 0), then flagged the assignment as unused. The known vbdb bug for 581635e28f1.c is UndeclaredIdentifier: APR_INET6 is used at line 7 but only defined when APR_HAVE_IPV6=true, so when APR_HAVE_IPV6=false APR_INET6 is an undeclared identifier. The tool did not detect this undeclared identifier and instead reported a spurious dead store on family."
 }

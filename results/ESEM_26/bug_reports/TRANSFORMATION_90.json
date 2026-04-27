@@ -20,5 +20,5 @@
   "classification": "TRUE",
   "old_id": null,
   "id": "TRANSFORMATION_90",
-  "reasoning": "PULSE_UNINITIALIZED_VALUE alarm at 6e2b75740be.c L63 in the MODULE_UNLOAD AND SMP path \u2014 reads freed mod pointer (use-after-free). This is the VBDB-known bug confirmed by // ERROR at L63. PC = CONFIG_MODULE_UNLOAD AND CONFIG_SMP correctly constrains to when both unload and SMP paths are active."
+  "reasoning": "TRUE POSITIVE (CORRECTLY CONSTRAINED): 6e2b75740be.c (Linux module loader). 'A value is read without initialization' at line 63 ('free(refptr(mod)); // (11) ERROR: dereferencing already freed mod'). The '// ERROR' annotation confirms this is the known vbdb bug. Through aliasing at line 48 ('mod = module_core(mod)'), 'mod' points to 'module_core(mod)'. At line 60 ('free(module_core(mod))'), this memory is freed. At line 63, 'free(refptr(mod))' reads 'mod[0]' — but 'mod' itself points to freed memory after the aliasing, so reading 'mod[0]' accesses freed/uninitialized memory. Pulse correctly reports reading uninitialized (freed) memory. CORRECTLY CONSTRAINED: line 63 is inside '#if defined(CONFIG_MODULE_UNLOAD) && defined(CONFIG_SMP)' — exactly CONFIG_MODULE_UNLOAD=true AND CONFIG_SMP=true."
 }

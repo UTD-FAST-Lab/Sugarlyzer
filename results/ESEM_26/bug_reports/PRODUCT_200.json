@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
   "id": "PRODUCT_200",
-  "reasoning": "PC is infeasible: ANDROID=T causes '#define CONFIG_SYSFS' at L2 in 0dc77b6dabe.c, yet PC requires SYSFS=F \u2014 direct contradiction. Configuration cannot exist. Classification: FALSE."
+  "reasoning": "TRUE POSITIVE (NEW, OVER-CONSTRAINED): 0dc77b6dabe.c (Linux extcon). Lines 1-3: '#ifdef CONFIG_ANDROID #define CONFIG_SYSFS #endif' — CONFIG_ANDROID=true always implies CONFIG_SYSFS=true. The presence condition requires SYSFS=false with ANDROID=true, which is an impossible/contradictory configuration. The underlying memory leak is real: switch_class is allocated via class_compat_register() (inside #ifdef CONFIG_SYSFS) in extcon_class_init()/create_extcon_class(), but extcon_class_exit() never frees it. This is a NEW bug (not in the vbdb known bug list, which lists DoubleOpOnResource for this file). OVER-CONSTRAINED because EXTCON=true is required, but the memory leak actually requires only SYSFS=true (implied by ANDROID=true); EXTCON controls module registration not the leak itself. The impossible SYSFS=false makes the stated presence condition unreachable."
 }

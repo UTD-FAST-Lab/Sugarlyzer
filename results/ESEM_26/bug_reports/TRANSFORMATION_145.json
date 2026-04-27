@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 8254.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW",
+  "classification": "TRUE",
   "old_id": null,
   "id": "TRANSFORMATION_145",
-  "reasoning": "b62bd7b261b.c L24: '*p = *s' where p is uninitialized \u2014 same as TRANSFORMATION_43 (Pulse version). p is declared at L11 ('char *s, *p;') but never assigned before the while loop body at L24 uses it. The bug requires ENABLE_FEATURE_MDEV_CONF AND ENABLE_FEATURE_MDEV_RENAME AND ENABLE_FEATURE_MDEV_RENAME_REGEXP. PC: (STRICT_ANSI OR !STRICT_ANSI) AND MDEV_CONF AND MDEV_RENAME AND MDEV_RENAME_REGEXP \u2014 STRICT_ANSI cancels, leaving MDEV_CONF AND MDEV_RENAME AND MDEV_RENAME_REGEXP. Correctly constrained. New bug."
+  "reasoning": "TRUE POSITIVE (CORRECTLY CONSTRAINED): b62bd7b261b.c (BusyBox mdev). '`p` is read without initialization' at line 24 ('*p = *s'). `p` is declared at line 11 ('char *s, *p') inside '#ifdef ENABLE_FEATURE_MDEV_RENAME' but is never assigned a value before being dereferenced at line 24 inside '#ifdef ENABLE_FEATURE_MDEV_RENAME_REGEXP'. Dereferencing uninitialized pointer `p` (which holds garbage) is a genuine bug — writing to an arbitrary memory location. CORRECTLY CONSTRAINED: PC covers both __STRICT_ANSI__=true and false (stdlib artifact, no constraining effect on the application bug). PC simplifies to: ENABLE_FEATURE_MDEV_CONF AND ENABLE_FEATURE_MDEV_RENAME AND ENABLE_FEATURE_MDEV_RENAME_REGEXP — exactly the three #ifdef guards required for both the declaration of `p` and the dereference '*p = *s' to be compiled and executed."
 }

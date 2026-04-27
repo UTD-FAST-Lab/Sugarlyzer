@@ -16,8 +16,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW",
+  "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_2",
-  "reasoning": "The known VBDB bug for 8c4377dd635.c is at L16 (SERIAL_ECHO_START called when MARLIN_H=T makes the macro undefined). This alarm is about pid_output=0 at L19 (in the \\!PIDTEMP branch) being written but never subsequently read \u2014 a genuine dead store. This is a different, new bug not in the VBDB. The PC simplifies to \\!PIDTEMP (all 4 clauses cover all combos of MARLIN_H and PID_DEBUG with \\!PIDTEMP). MARLIN_H and PID_DEBUG do not affect whether this dead store occurs, so \\!PIDTEMP is the exact condition. Correctly constrained."
+  "reasoning": "FALSE POSITIVE: The alarm reports a dead store on 'pid_output = 0' (line 21, inside the #else branch of #ifdef PIDTEMP). The vbdb file is a simplified reduction of the real codebase to demonstrate the known WrongFunArgNum bug (SERIAL_ECHO_START called with an argument when the macro takes none). In the real code, pid_output is used further after being assigned; the dead store is an artifact of the simplification. Therefore this alarm is a false positive."
 }

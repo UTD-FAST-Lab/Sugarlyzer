@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_133",
-  "reasoning": "Line 12: `int irq = *ops` inside irq_domain_add() (compiled when IRQ_DOMAIN=T). irq is assigned but never read \u2014 dead store. New bug not in VBDB. Required condition: IRQ_DOMAIN=T. TWL4030=F only means twl_probe() is not compiled (doesn't affect irq_domain_add itself). OF_IRQ=T only determines if ops=NULL or not, not whether irq is dead. Both are unnecessary. PC is over-constrained. Classification: TRUE_NEW_OVER."
+  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_124 (6252547b8a7.c, Linux TWL4030). Dead store on 'irq' at line 12 ('int irq = *ops') inside irq_domain_add(), with TWL4030_CORE=false. CONFIG_IRQ_DOMAIN is implicitly defined by CONFIG_TWL4030_CORE (lines 3-5); TWL4030_CORE=false && IRQ_DOMAIN=true is an impossible configuration in practice. With TWL4030_CORE=false, twl_probe() is never called, so the real NullDereference bug (ops=NULL when OF_IRQ=false) doesn't apply. irq is assigned from *ops but never used — simplification artifact."
 }

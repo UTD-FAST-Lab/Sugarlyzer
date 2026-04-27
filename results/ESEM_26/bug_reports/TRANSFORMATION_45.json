@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 5472.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "TRUE_NEW",
   "old_id": "TRANSFORMATION_14",
   "id": "TRANSFORMATION_45",
-  "reasoning": "eckey may be NULL after SSL_CTX_get_ex_data at L11, and is dereferenced at L12 \u2014 real null dereference. No // ERROR at L12, new bug. PC includes restrictive library macros (__STRICT_ANSI__, !_STDLIB_H, !__malloc_and_calloc_defined) alongside HAVE_ECC. Bug fires in all HAVE_ECC=T configs, so PC is over-constrained."
+  "reasoning": "TRUE POSITIVE NEW (CORRECTLY CONSTRAINED): 35ae2e259e4.c (OpenSSL/wolfSSL). 'Dereference of undefined pointer value' at line 12 ('*eckey = 30'). 'eckey' is assigned from 'malloc(sizeof(int))' at line 10 without a NULL check. If malloc returns NULL, '*eckey = 30' dereferences NULL. This is a new bug (no // ERROR annotation in the vbdb file for this location). Same null-after-malloc pattern as TRANSFORMATION_22 (which alarms at line 17) and TRANSFORMATION_18. CORRECTLY CONSTRAINED: HAVE_ECC=true is required since eckey is declared and used inside '#ifdef HAVE_ECC' (lines 5-7, 9-20). Line 12 is in the 'if(rand()%2)' branch before the '#ifdef SSL_CTX_set_ecdh_auto' check, so SSL_CTX_set_ecdh_auto does not appear in the condition — the null dereference at line 12 exists whenever HAVE_ECC=true regardless of SSL_CTX_set_ecdh_auto."
 }

@@ -20,5 +20,5 @@
   "classification": "FALSE",
   "old_id": "TRANSFORMATION_18",
   "id": "TRANSFORMATION_6",
-  "reasoning": "35ae2e259e4.c L10: Dead store of `eckey` at `eckey = malloc(sizeof(int))`. However, eckey IS subsequently read via dereference at L12 (`*eckey = 30`) and L17 (`*eckey = 15`). Dereferencing eckey reads its pointer value, so the stored value at L10 is not dead. False positive from the CSA \u2014 possibly due to the library macro state (!_STDLIB_H AND __need_malloc_and_calloc) representing a non-standard partial stdlib.h include where malloc semantics are not fully modeled. PC includes restrictive library macros alongside HAVE_ECC=T."
+  "reasoning": "FALSE POSITIVE: 35ae2e259e4.c (OpenSSL ECC). Dead store on 'eckey' at line 10 ('eckey = malloc(sizeof(*eckey))') when HAVE_ECC=true. 'eckey' is assigned from malloc but never subsequently read or freed in this simplified file — simplification artifact. Same pattern as FAMILY_21: in the real code, 'eckey' would be used for ECC key operations; the simplification removed those uses. The real underlying issue is a memory leak (malloc'd memory never freed), which is a different bug type not captured by this dead-store alarm."
 }

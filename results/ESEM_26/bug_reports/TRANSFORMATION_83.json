@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 2331.0,
   "strategy": "transformation",
-  "classification": "TRUE",
+  "classification": "FALSE",
   "old_id": null,
   "id": "TRANSFORMATION_83",
-  "reasoning": "Duplicate of TRANSFORMATION_30: same source file (7acf6cd80b2.c), same line (L8, int x = *inode), same PC (CONFIG_DEVPTS_MULTIPLE_INSTANCES), same bug. x is assigned from the potentially-null inode pointer and never read. Marked // ERROR (7) as a VBDB-known bug. This alarm is from a different analysis tool (DEAD_STORE/Pulse vs deadcode.DeadStores/CSA). Correctly constrained, no library macros."
+  "reasoning": "FALSE POSITIVE (SIMPLIFICATION ARTIFACT): 7acf6cd80b2.c (Linux devpts). 'The value written to `&x` is never used' at line 8 ('int x = *inode; // ERROR (7)'). The vbdb simplification removed subsequent uses of 'x' to create a minimal reproducer for the real bug: null dereference at '*inode' (the '// ERROR (7)' annotation confirms this — 'x = *inode' is a null dereference bug, not a dead store). The actual dead store of 'x' is a simplification artifact because the real Linux code used 'x' after this assignment. The DEAD_STORE alarm misidentifies the symptom (dead store of x) rather than the real bug (dereference of uninitialized driver_data propagated through the call chain: ptmx_open → tty_release → pty_close → devpts_pty_kill → pts_sb_from_inode → *inode)."
 }

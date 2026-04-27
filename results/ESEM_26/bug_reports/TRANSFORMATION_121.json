@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 7166.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "TRUE_OVER",
   "old_id": null,
   "id": "TRANSFORMATION_121",
-  "reasoning": "Pulse duplicate of TRANSFORMATION_85. eckey can be NULL (from SSL_CTX_get_ex_data returning NULL) and is dereferenced at L17 in the else-else branch (HAVE_ECC=T AND !SSL_CTX_set_ecdh_auto). Genuine null dereference. No // ERROR at L17, new bug. PC has real flags HAVE_ECC AND !SSL_CTX_set_ecdh_auto plus restrictive library macros making it over-constrained."
+  "reasoning": "TRUE POSITIVE (OVER-CONSTRAINED): 35ae2e259e4.c (Apache mod_ssl). Same bug as TRANSFORMATION_85 — 'eckey could be null (null value from malloc) and is dereferenced' at line 17 ('*eckey = 15'). The null dereference after unguarded malloc at line 10 is real when HAVE_ECC=true AND NOT SSL_CTX_set_ecdh_auto. OVER-CONSTRAINED: this PC instance additionally requires __USE_EXTERN_INLINES=true, which is a stdlib header guard desugaring artifact. The correct condition is just HAVE_ECC=true AND NOT SSL_CTX_set_ecdh_auto — requiring __USE_EXTERN_INLINES=true makes the PC too narrow (excludes __USE_EXTERN_INLINES=false cases where the same bug also exists). Compare with T85 which covered all __STRICT_ANSI__/USE_EXTERN_INLINES combinations and was correctly constrained."
 }

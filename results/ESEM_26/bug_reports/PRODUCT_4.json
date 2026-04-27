@@ -20,8 +20,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW",
+  "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_4",
-  "reasoning": "The known VBDB bug for 0f8f8094d28.c is at L36 (int* cache = kmalloc_caches[i] when SLOB=T makes kmalloc_caches undeclared \u2014 compile error). This alarm is about int n = *cache at L41 (reported as L39 by the analyzer after preprocessing): n is initialized but never read \u2014 a genuine dead store and a different, new bug. No existing TRUE record for this file. The PC simplifies to LOCKDEP=T AND \\!SLOB (8 clauses cover all combos of SLAB, FORCE_MAX_ZONEORDER, PPC_256K_PAGES). LOCKDEP=T is required for the function to compile; \\!SLOB is required for kmalloc_caches to be declared. Correctly constrained."
+  "reasoning": "FALSE POSITIVE: The alarm reports a dead store on 'n' at line 39 ('int n = *cache;' — n is set but never subsequently read). The vbdb file is a simplified reduction of the real Linux kernel code demonstrating the known OutOfBoundsRead bug (kmalloc_caches accessed out of bounds). In the real kernel code, n (cache->node[q]) is actively used; the simplification dropped the subsequent use of n. This dead store is an artifact of simplification and does not represent a real bug."
 }

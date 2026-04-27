@@ -16,5 +16,5 @@
   "classification": "TRUE",
   "old_id": "PRODUCT_1",
   "id": "PRODUCT_19",
-  "reasoning": "1b48bb3c1af.c L14: rmm_lock passed uninitialized as 1st function call argument. Known VBDB bug (// ERROR). PC=APU_HAS_LDAP=T AND APR_HAS_SHARED_MEMORY=T correctly identifies the configuration where this code path is active. Consistent with TRANSFORMATION_95 (TRUE). Known bug, correctly constrained PC."
+  "reasoning": "TRUE POSITIVE: When APU_HAS_LDAP && APR_HAS_SHARED_MEMORY, 'rmm_lock' is declared as 'char* rmm_lock' in util_ldap_cache_init() but never initialized before being passed to apr_rmm_init() at line 14. Inside apr_rmm_init, it is dereferenced via printf. The tool correctly identifies that the 1st argument is uninitialized. KNOWN BUG: The vbdb entry for 1b48bb3c1af.c documents exactly this UninitializedVariable bug at the same location (apr_rmm_init(rmm_lock)) and same configuration (APU_HAS_LDAP && APR_HAS_SHARED_MEMORY). CORRECTLY CONSTRAINED: The presence condition matches the vbdb config exactly — the call to apr_rmm_init is inside #ifdef APR_HAS_SHARED_MEMORY inside #ifdef APU_HAS_LDAP."
 }

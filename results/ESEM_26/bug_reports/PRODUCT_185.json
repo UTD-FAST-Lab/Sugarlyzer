@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_185",
-  "reasoning": "Line 42: `flags |= T_ESCAPE_SHELL_CMD` in the #else branch (NEED_ENHANCED=F). flags set in loop but never read \u2014 dead store. No '// ERROR' \u2192 new bug not in VBDB. CROSS_COMPILE=T prevents NEED_ENHANCED from being defined via WIN32 (else block skipped). NEED_ENHANCED=F is consistent. Dead store occurs whenever NEED_ENHANCED=F. WIN32=T is unnecessary \u2014 with CROSS_COMPILE=T, WIN32 cannot define NEED_ENHANCED anyway. PC over-constrained. Classification: TRUE_NEW_OVER."
+  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_118/127/169 (c76df14dfb4.c, Apache gen_test_char). Dead store on 'flags' at line 42. With CROSS_COMPILE=true and WIN32=true, the known vbdb OSCommandInjection bug DOES apply to this configuration, but the tool reports a dead store on flags instead. The dead store on flags is a simplification artifact — subsequent uses of flags were stripped from the simplified code. The tool failed to detect the real OSCommandInjection bug."
 }

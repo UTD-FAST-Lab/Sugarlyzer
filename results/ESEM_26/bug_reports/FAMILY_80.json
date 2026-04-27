@@ -7,6 +7,6 @@
   "origin": "family",
   "id": "FAMILY_80",
   "classification": "FALSE",
-  "reasoning": "Line 10 is 'strcpy(method, \"WQ\")'. The tool claims 'method' is used uninitialized here (columns 9-15 pointing to 'method' as the first argument). However, strcpy WRITES to its destination — it does not require method to be initialized beforehand. This is the same false positive pattern as FAMILY_71/72 where strncpy destinations were incorrectly flagged. The real vbdb bug (marked '// (6) ERROR' at line 11) is a buffer overflow: method has 4 bytes, strcpy fills it with 'WQ\\0' (3 bytes), then strncat(method, block_object_id, 2) attempts to append 'XX\\0' requiring 5 bytes total — 1 byte over the buffer capacity. The uninitialized_value claim is a false positive.",
+  "reasoning": "FALSE POSITIVE: f3d83e24154.c (Linux ACPI WMI / Acer). Alarm fires at line 10, columns 9-15 ('method' as the destination of strcpy), when def(CONFIG_X86) AND def(CONFIG_ACPI_WMI). The tool claims 'method is used uninitialized,' but strcpy(dest, src) WRITES to its destination — it does not read the existing content of method. 'char method[4]' at line 8 is uninitialized, but strcpy initializes it by writing. The real known vbdb bug in this file is a buffer overflow: strncat at line 11 appends 2 bytes from block_object_id to the 'WQ\0' already in method[4], attempting to write 'WQXX\0' which requires 5 bytes — one past the end of the buffer.",
   "old_id": "FAMILY_69"
 }

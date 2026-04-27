@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_50",
-  "reasoning": "No ERROR comment and no TRUE (known) record for b62bd7b261b.c \u2014 all true positives are new bugs. val is assigned at L16 (val = (s && s[1]) ? s+1 : NULL) but is never subsequently read in the function \u2014 a genuine dead store. This is the same bug as PRODUCT_7 (TRUE_NEW, val dead at L16) which correctly has PC = CONF AND RENAME (covering both REGEXP=T and REGEXP=F). PRODUCT_50 additionally constrains to REGEXP=T, but the dead store at L16 also occurs when REGEXP=F (val is assigned at L16 and no code after uses it in the \\!REGEXP path). The PC is over-constrained (too narrow)."
+  "reasoning": "FALSE POSITIVE: The alarm reports 'val = (s && s[1]) ? s+1 : NULL' (line 16, inside MDEV_RENAME) as a dead store when MDEV_CONF, MDEV_RENAME, and MDEV_RENAME_REGEXP are all true. In the simplified file, val is reassigned at line 16 but then never read again (the REGEXP block uses 'a' and 's' but not 'val'). In the real BusyBox mdev make_device() code, val is used for device rename pattern processing. The simplified file stripped those subsequent uses. This is a simplification artifact. The known vbdb bug for b62bd7b261b.c is UnusedVariable 'p': when !MDEV_RENAME_REGEXP, 'p' is declared at line 11 (inside MDEV_RENAME) but never used since the while loop that accesses p is inside #ifdef MDEV_RENAME_REGEXP."
 }

@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 5609.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "FALSE",
   "old_id": "TRANSFORMATION_89",
   "id": "TRANSFORMATION_40",
-  "reasoning": "k_crcs is assigned at L21 in 5275b1e49f6.c (inside VERSION_CHECKING block) but is overwritten at L25 before any read (if r=T) or never read (if r=F, goto out). Dead store is real and new. PC = !_STDLIB_H AND !__need_malloc_and_calloc \u2014 only restrictive library macros, no real feature flags. Bug fires in all compilable VERSION_CHECKING=T configs, so PC is over-constrained."
+  "reasoning": "FALSE POSITIVE: 5275b1e49f6.c (BusyBox insmod). 'Value stored to k_crcs is never read' at line 21 ('k_crcs = 0' inside #ifdef CONFIG_FEATURE_INSMOD_VERSION_CHECKING). 'k_crcs' is assigned 0 at line 21, then immediately overwritten at line 25 ('k_crcs = someInt' inside 'if (r)') without any intervening read — dead store. The desugaring hoists 'k_crcs' to function scope (declared inside #ifdef INSMOD_VERSION_CHECKING at line 12 but used outside that guard at line 25), making the line-21 assignment a dead store in the desugared form. The presence condition covers all stdlib variants (effectively True, no CONFIG_FEATURE_INSMOD_VERSION_CHECKING constraint) consistent with the hoisting. Simplification artifact: the real insmod code reads k_crcs to perform CRC symbol version checking; the vbdb simplification stripped those reads, leaving only the initialization and overwrite."
 }

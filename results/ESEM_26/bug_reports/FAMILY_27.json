@@ -6,7 +6,7 @@
   "line_number": 16,
   "origin": "family",
   "id": "FAMILY_27",
-  "classification": "TRUE_NEW",
+  "classification": "FALSE",
   "old_id": "FAMILY_20",
-  "reasoning": "Same file and same dead store issue as FAMILY_26, but now at line 16 ('m_has_modinfo = 0;' in the if-branch). 'm_has_modinfo' is assigned here but never subsequently read; the rest of the function only uses k_crcs and exit_status. Genuine dead store. The presence condition [True] is correctly constrained. Not documented in vbdb (5275b1e only documents UndeclaredIdentifier for k_crcs). New true positive, correctly constrained."
+  "reasoning": "FALSE POSITIVE: 5275b1e49f6.c (BusyBox insmod). Dead store on 'm_has_modinfo' at line 16, presence condition True. Same analysis as FAMILY_26 — the subsequent uses of m_has_modinfo were stripped from the simplified vbdb file (simplification artifact). Real BusyBox insmod code uses m_has_modinfo after this assignment. The known vbdb bug is the UndeclaredIdentifier on k_crcs when VERSION_CHECKING=false."
 }

@@ -6,7 +6,7 @@
   "line_number": 26,
   "origin": "family",
   "id": "FAMILY_3",
-  "classification": "FALSE",
+  "classification": "TRUE_NEW",
   "old_id": "FAMILY_13",
-  "reasoning": "The tool reports case_not_terminated at line 26 (case 'R':) when CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF is defined. While case 'R' indeed lacks an explicit break, it is the last case in the switch — the switch closes immediately after #endif. No fall-through to another case is possible, so this is not a real bug. The vbdb-documented bug for this file (061fd0a) is an UndefinedSymbol (goto to a potentially undefined label in case 'U'), not a case-not-terminated issue. False positive."
+  "reasoning": "TRUE POSITIVE (NEW): 061fd0a353e.c (BusyBox hdparm). 'Case statement not terminated by break' at lines 26-27 when CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF is defined. Case 'R' (line 26) genuinely lacks a break: after 'if(!p) goto expected_hwif_error', the code falls through directly to the expected_hwif_error: label and printf — so case 'R' always prints the error message even when p is valid. The //ERROR comment in this file marks line 21 (goto in case 'U'), suggesting the known vbdb bug is the goto to a conditionally-compiled label (PULSE_UNINITIALIZED_VALUE on p). This case fall-through in case 'R' is a distinct NEW bug. CORRECTLY CONSTRAINED: only compiled when SCAN_HWIF=true."
 }

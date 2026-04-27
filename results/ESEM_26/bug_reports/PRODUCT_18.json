@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW",
+  "classification": "FALSE",
   "old_id": "PRODUCT_39",
   "id": "PRODUCT_18",
-  "reasoning": "b62bd7b261b.c L24: '*p = *s' null/uninitialized dereference. p is declared at L11 ('char *s, *p;') but never assigned before the while loop uses it at L24. PC=MDEV_CONF AND MDEV_RENAME AND MDEV_RENAME_REGEXP correctly constrains the scope where this code path exists. New bug. Correctly constrained PC. Consistent with TRANSFORMATION_43 (TRUE_NEW) and TRANSFORMATION_145 (TRUE_NEW)."
+  "reasoning": "FALSE POSITIVE: The alarm fires at line 24 ('*p = *s;' inside #ifdef MDEV_RENAME_REGEXP). 'p' is declared as 'char *s, *p' but never initialized before being dereferenced in the while loop. In the real BusyBox make_device() code, 'p' is initialized to point to a destination buffer before this substitution loop — the simplification removed that initialization step. The known vbdb bug for this file is UnusedVariable (p declared but unused when !MDEV_RENAME_REGEXP); the bug report does not identify an uninitialized pointer issue, confirming that p is properly initialized in real code when REGEXP is enabled. This alarm is a simplification artifact."
 }

@@ -6,7 +6,7 @@
   "line_number": 26,
   "origin": "family",
   "id": "FAMILY_79",
-  "classification": "TRUE_NEW",
-  "reasoning": "Line 26 is 'buf = malloc(bufsize);'. Under !def(CONFIG_FEATURE_CLEAN_UP), the #ifdef block at lines 29-33 (which contains the only use of buf: 'if (buf) { free(buf); }') is excluded from compilation. Consequently, buf is assigned by malloc at line 26 but never subsequently read or freed — a genuine dead store and memory leak. Presence condition !def(CONFIG_FEATURE_CLEAN_UP) correctly captures the configuration where the cleanup block is absent. The vbdb entry for eef2317b9f5 documents the uninitialized buf bug under def(CONFIG_FEATURE_CLEAN_UP) — a different finding. New true positive.",
+  "classification": "FALSE",
+  "reasoning": "FALSE POSITIVE: eef2317b9f5.c (BusyBox). Dead store on 'buf' at line 26 ('buf = malloc(bufsize)') when !def(CONFIG_FEATURE_CLEAN_UP). When FEATURE_CLEAN_UP is false, the cleanup block (lines 29-33) is not compiled, so buf is assigned from malloc but never subsequently read or freed — simplification artifact. In the real BusyBox code, buf would be used to buffer data. The dead store is a consequence of the simplification omitting buf's subsequent uses.",
   "old_id": "FAMILY_33"
 }

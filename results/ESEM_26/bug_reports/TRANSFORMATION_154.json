@@ -20,5 +20,5 @@
   "classification": "FALSE",
   "old_id": null,
   "id": "TRANSFORMATION_154",
-  "reasoning": "b833f064550.c L6: 'long y = 2147483645;' claimed as dead store. However, y IS read at L14 in the printf call: '(long) x, (long) y'. The alarm is a false positive (same reasoning as TRANSFORMATION_137 for x at L5). The PC=__need___FILE=T is a restrictive library macro, further confirming this is a library header desugaring artifact where the printf call is somehow not visible in the analyzed path."
+  "reasoning": "FALSE POSITIVE (STDLIB DESUGARING ARTIFACT): b833f064550.c (Apache status module). 'The value written to &y is never used' at line 6 ('long y = ...'). Same pattern as TRANSFORMATION_137 — `y` IS used in 'printf(\"%f %ld\", (long)x, (long)y)' but the printf call is inside a conditional block gated by '__need___FILE'. When '__need___FILE=true', the printf block is not reached, making `y` appear as a dead store. The PC '__need___FILE=true' is a pure stdio header include-guard state with no application-level config variables. The real vbdb bug (wrong format specifier '%f' for long argument when HAVE_TIMES=false) is a different alarm type. This DEAD_STORE alarm for `y` is a desugaring artifact from the __need___FILE header guard desugaring."
 }

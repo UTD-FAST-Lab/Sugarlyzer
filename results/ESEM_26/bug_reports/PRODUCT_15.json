@@ -16,5 +16,5 @@
   "classification": "TRUE",
   "old_id": "PRODUCT_17",
   "id": "PRODUCT_15",
-  "reasoning": "199501f2a00.c L21: 'strcat(buf, dt)' where dt could be NULL (// ERROR). dt is initialized to NULL at L7 and assigned '-i' only conditionally (rand()%2). When ENABLE_FEATURE_MODPROBE_MULTIPLE_OPTIONS=F, the code at L18-22 executes strcat(buf, dt) where dt may be NULL \u2014 null pointer passed to nonnull parameter. PC=!ENABLE_FEATURE_MODPROBE_MULTIPLE_OPTIONS correctly constrains the else-branch path. Known bug."
+  "reasoning": "TRUE POSITIVE: When ENABLE_FEATURE_MODPROBE_MULTIPLE_OPTIONS is false, the #else branch compiles in 'strcat(buf, dt)' at line 21. 'dt' is initialized to NULL and only conditionally set to '-i' (when rand()%2). When dt remains NULL, strcat(buf, NULL) passes a null pointer to strcat's 2nd parameter which expects non-null — a genuine null dereference. KNOWN BUG: The vbdb entry for 199501f2a00.c documents exactly this NullDereference bug at the same location and same config condition (!FEATURE_MODPROBE_MULTIPLE_OPTIONS). The tool is detecting the same bug. CORRECTLY CONSTRAINED: ENABLE_FEATURE_MODPROBE_MULTIPLE_OPTIONS==false is correct — the strcat call is in the #else branch (disabled when the feature is on), and the null-check guard is only in the #ifdef branch."
 }

@@ -6,7 +6,7 @@
   "line_number": 45,
   "origin": "family",
   "id": "FAMILY_48",
-  "classification": "TRUE_NEW",
-  "reasoning": "Duplicate of FAMILY_44 (different old_id FAMILY_60, same file, same line 45, same presence condition, same message). Line 45 is 'return cpu_online_mask;' inside cpumask_of_node() under #ifdef CONFIG_DEBUG_PER_CPU_MAPS, which returns 'const cpumask_t*'. cpu_online_mask is declared as 'cpumask_t cpu_online_mask = 0' — an integer value, not a pointer. Returning an integer in place of a pointer is a genuine type error. Presence condition def(CONFIG_NUMA)&&def(CONFIG_DEBUG_PER_CPU_MAPS) is correct. Not in vbdb. True new positive.",
+  "classification": "TRUE",
+  "reasoning": "TRUE POSITIVE (CORRECTLY CONSTRAINED): 76baeebf7df.c (Linux NUMA). Identical to FAMILY_44 — 'assignment makes pointer from integer without a cast' at line 45, when def(NUMA) AND def(DEBUG_PER_CPU_MAPS). 'return cpu_online_mask' returns an unsigned long value where const cpumask_t * is expected. Known vbdb bug (WrongReturnType). Same classification as FAMILY_44.",
   "old_id": "FAMILY_60"
 }

@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW",
+  "classification": "TRUE",
   "old_id": null,
   "id": "PRODUCT_178",
-  "reasoning": "Line 24: `*p = *s` inside the REGEXP while loop (compiled when CONF=T AND RENAME=T AND REGEXP=T). p is declared at L11 (`char *s, *p`) but never initialized before this dereference \u2014 uninitialized pointer dereference. No '// ERROR' at L24 \u2192 new bug not in VBDB. PC = CONF=T AND RENAME=T AND REGEXP=T exactly matches the condition where this code runs. Classification: TRUE_NEW."
+  "reasoning": "TRUE POSITIVE (KNOWN, CORRECTLY CONSTRAINED): b62bd7b261b.c (BusyBox mdev make_device). When MDEV_CONF=true, MDEV_RENAME=true, MDEV_RENAME_REGEXP=true: pointer 'p' is declared at line 11 ('char *s, *p') without initialization. In the #ifdef MDEV_RENAME_REGEXP block, the while loop reads and dereferences p at line 24 ('*p = *s') without any prior initialization. This is a genuine use of an uninitialized pointer — accessing arbitrary/garbage memory. The presence condition is correctly constrained: all three flags are necessary — MDEV_CONF=true and MDEV_RENAME=true to reach the block where p is declared, and MDEV_RENAME_REGEXP=true to compile the code that dereferences p. The known vbdb bug for this file is this UninitializedVariable 'p' dereference."
 }

@@ -13,8 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "TRUE",
+  "classification": "FALSE",
   "old_id": "PRODUCT_56",
   "id": "PRODUCT_31",
-  "reasoning": "36855dcfc98.c L6: 'wakeup=0' dead store inside !CONFIG_BF60x block, never read (known VBDB bug). PC=CONFIG_BF60x=F correctly constrains when this code path is compiled. Known bug. Correctly constrained PC. Consistent with TRANSFORMATION_50 (TRUE)."
+  "reasoning": "FALSE POSITIVE: The alarm fires on 'wakeup = 0' at line 6 (inside #ifndef CONFIG_BF60x) when CONFIG_BF60x is false. In the simplified file, wakeup is set to 0 but the function returns 0 immediately without using it. In the real Linux kernel bfin_pm_suspend_mem_enter(), wakeup is used as a return value or in conditional logic after this assignment — the simplification dropped those uses. This is a simplification artifact. The known vbdb bug is an UnusedVariable when CONFIG_BF60x is *enabled* (wakeup declared but never assigned because the assignment is inside #ifndef BF60x) — the opposite configuration."
 }

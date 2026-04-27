@@ -20,5 +20,5 @@
   "classification": "FALSE",
   "old_id": null,
   "id": "TRANSFORMATION_141",
-  "reasoning": "ae249b5fa27.c L21: 'return r' claimed as reading r without initialization. However, r is always initialized before use \u2014 the source shows r is assigned via a call earlier in the function. This is a Pulse false positive matching TRANSFORMATION_80 (same file, same location, FALSE). PC=CONFIG_DISCONTIGMEM=T correctly identifies the active config block, but the alarm itself is incorrect since r is always initialized."
+  "reasoning": "FALSE POSITIVE: ae249b5fa27.c (Linux DISCONTIGMEM/pfn_to_nid). '`r` is read without initialization' at line 21 ('return (int)r'). However, `r` IS assigned at line 18 ('r = pfnnid_map[pfn]') before being read at line 21 — no uninitialized read on any valid execution path. The real vbdb bug (annotated '// (6) ERROR' at line 19) is an assertion failure: 'assert(r != 0xff)' always fails when CONFIG_DISCONTIGMEM=true because 'memset(pfnnid_map, 0xff, sizeof(pfnnid_map))' sets all entries to 0xff. That bug is a logical error (assertion failure), not an uninitialized variable. The PULSE_UNINITIALIZED_VALUE alarm for `r` is a false positive, likely from assert desugaring creating a spurious path where __assert_fail (noreturn) is not properly handled, making `r` appear potentially uninitialized to the analysis."
 }

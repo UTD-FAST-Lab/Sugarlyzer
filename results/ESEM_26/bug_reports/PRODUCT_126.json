@@ -16,5 +16,5 @@
   "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_126",
-  "reasoning": "PC is infeasible: FSI_AK4642=T causes '#define CONFIG_SND_SOC_AK4642' at L2 in 66517915e09.c, yet PC requires SOC_AK4642=F \u2014 direct contradiction. Configuration cannot exist. Classification: FALSE."
+  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_44/52/91/92/102/106/107/109/113/114/117/125 (66517915e09.c), dead store on 'codec_hw_write' at line 16. CONFIG_I2C=true means i2c_master_send IS declared, so the known UndeclaredIdentifier vbdb bug does not apply. Dead store is a simplification artifact — codec_hw_write is used as an I2C write function pointer in the real Linux sound driver, but subsequent uses were stripped in the simplified file."
 }

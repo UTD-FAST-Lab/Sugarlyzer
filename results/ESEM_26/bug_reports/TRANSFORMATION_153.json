@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 2331.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW",
+  "classification": "FALSE",
   "old_id": null,
   "id": "TRANSFORMATION_153",
-  "reasoning": "7acf6cd80b2.c L39: driver_data dead store \u2014 Pulse duplicate of TRANSFORMATION_67 (CSA). In the UNIX98_PTYS success path, driver_data is assigned at L39 but this value is never read (overwritten or not used on the success path). PC=CONFIG_UNIX98_PTYS=T \u2014 no library macros, correctly constrained. New bug."
+  "reasoning": "FALSE POSITIVE (SIMPLIFICATION ARTIFACT): 7acf6cd80b2.c (Linux devpts). 'The value written to &driver_data is never used' at line 39 ('driver_data = &some_int'). On the normal (non-goto) path, 'driver_data = &some_int' is assigned at line 39, then 'return 0' follows at line 41 — and `driver_data` is never read between those two lines. In real devpts code, `driver_data` would be used between the assignment and return (e.g., for pty device setup), but vbdb stripped those uses. The real vbdb bug (uninitialized `driver_data` when 'if(nondet())' takes the 'goto err_release' path, calling 'tty_release(driver_data)' with garbage) was correctly identified as a TRUE POSITIVE in TRANSFORMATION_132. This DEAD_STORE alarm is a simplification artifact."
 }

@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_124",
-  "reasoning": "Line 12: `int irq = *ops` inside irq_domain_add() (compiled when IRQ_DOMAIN=T). irq is assigned but never read \u2014 dead store. The '// ERROR' at L12 marks the VBDB-known null dereference (ops=NULL when OF_IRQ=F); this DEAD_STORE is a distinct new bug not in VBDB. Required condition: IRQ_DOMAIN=T. TWL4030=F only means twl_probe() is not compiled (doesn't affect irq_domain_add itself). OF_IRQ only affects whether ops=NULL or not, not whether irq is dead. Both TWL4030=F and OF_IRQ=F are unnecessary in the PC. PC is over-constrained. Classification: TRUE_NEW_OVER."
+  "reasoning": "FALSE POSITIVE: 6252547b8a7.c (Linux TWL4030). Dead store on 'irq' at line 12 ('int irq = *ops') inside irq_domain_add(), with TWL4030_CORE=false, IRQ_DOMAIN=true, OF_IRQ=false. Note: CONFIG_IRQ_DOMAIN is implicitly defined by CONFIG_TWL4030_CORE (lines 3-5); the configuration TWL4030_CORE=false && IRQ_DOMAIN=true is impossible in practice (IRQ_DOMAIN is only set via the TWL4030_CORE block in this file). The tool treats them as independent variables. irq is assigned from *ops but never used — simplification artifact; real kernel code uses irq for IRQ domain operations. The known vbdb bug (NullDereference ops when TWL4030_CORE=true && OF_IRQ=false) does not apply here because TWL4030_CORE=false means twl_probe() and its null ops are never called."
 }

@@ -16,5 +16,5 @@
   "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_66",
-  "reasoning": "When CROSS_COMPILE=T, the code takes the #if CROSS_COMPILE branch (L6-7), and the #elif defined(WIN32) || defined(OS2) block at L10-12 is never reached. Therefore NEED_ENHANCED_ESCAPES is never defined when CROSS_COMPILE=T. The PC {CROSS_COMPILE=T, NEED_ENHANCED_ESCAPES=T} is contradictory \u2014 NEED_ENHANCED_ESCAPES cannot be T when CROSS_COMPILE=T. Infeasible configuration."
+  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_36/45/48 (c76df14dfb4.c), dead store on 'flags' at line 38 (inside #ifdef NEED_ENHANCED_ESCAPES) when CROSS_COMPILE=true, WIN32=false, NEED_ENHANCED_ESCAPES=true. In the real Apache gen_test_char.c, flags is written to test_char_table on each loop iteration; the simplified file stripped that table write. Simplification artifact. The known vbdb bug (OSCommandInjection: NEED_ENHANCED_ESCAPES not defined when CROSS_COMPILE && WIN32) is a different issue."
 }

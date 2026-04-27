@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_95",
-  "reasoning": "Line 16: `p = *argv++, --argc` \u2014 the post-increment of argv stores a new value in argv that is never read again (dead store of argv). This statement is in main() outside any #ifdef, so the dead store occurs in all configurations (when 'W' case is hit and r is truthy). No '// ERROR' for the argv dead store \u2192 new bug not in VBDB. (The ERROR at L21 is for the uninitialized 'p' bug, a separate known issue.) PC requires UNREGISTER=F AND SCAN=F but the dead store exists regardless of these flags. PC is over-constrained. Classification: TRUE_NEW_OVER."
+  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_56 (061fd0a353e.c), dead store on 'argv' (post-incremented at line 16) when HDIO_UNREGISTER_HWIF=false and HDIO_SCAN_HWIF=false. In the real BusyBox hdparm main(), argv is used to continue parsing command-line arguments. The simplified file stripped subsequent uses. Simplification artifact. When both HWIF flags are false, neither 'case U' nor 'case R' with the expected_hwif_error label is compiled — the known vbdb UndefinedSymbol bug (goto to undefined label) does not occur in this configuration."
 }

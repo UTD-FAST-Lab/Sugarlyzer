@@ -14,8 +14,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW",
+  "classification": "TRUE",
   "old_id": "PRODUCT_4",
   "id": "PRODUCT_30",
-  "reasoning": "35ae2e259e4.c L24: eckey memory leak. eckey is allocated via malloc at L10 when HAVE_ECC=T, but never freed before return. The source comment at L22-23 explicitly states 'return having forgotten to free the memory'. PC: HAVE_ECC=T (SSL_CTX_set_ecdh_auto cancels \u2014 both T and F variants present). No library macros. New bug, correctly constrained PC."
+  "reasoning": "TRUE POSITIVE: When HAVE_ECC is defined, eckey is allocated via malloc(sizeof(int)) at line 10 but the function returns at line 24 without ever calling free(eckey). This is a genuine memory leak. KNOWN BUG: The vbdb entry for 35ae2e259e4.c documents exactly this MemoryLeak (eckey allocated but never freed) with config HAVE_ECC. The tool detects the same bug. CORRECTLY CONSTRAINED: The presence condition simplifies to HAVE_ECC (both variants have HAVE_ECC), which matches the vbdb config exactly — the eckey variable is only declared and allocated inside #ifdef HAVE_ECC."
 }

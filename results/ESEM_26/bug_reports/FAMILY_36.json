@@ -8,5 +8,5 @@
   "id": "FAMILY_36",
   "classification": "FALSE",
   "old_id": "FAMILY_6",
-  "reasoning": "The tool reports 'buffer' as used uninitialized at line 11, columns 26-34, which is 'sizeof(buffer)' in the for-loop condition. sizeof() is a compile-time operator that does not read the contents of buffer; no uninitialized memory access occurs here. The vbdb-documented bug (664e3aa) is a BufferOverflow: after the for loop finishes, i equals sizeof(buffer) (1024), so 'buffer[i] = 0' at line 14 writes one byte past the end of the array. The tool reports the wrong bug at the wrong location. False positive."
+  "reasoning": "FALSE POSITIVE: 664e3aac6dd.c (Apache Win32). Uninitialized value on 'buffer' at line 11, when def(WIN32X). Line 11 is 'for (i = 0; i < sizeof(buffer); i++)' — the alarm at column 26-34 points to 'sizeof(buffer)'. The sizeof operator does NOT read buffer's contents; it evaluates the type at compile time. This is a false positive. The real known vbdb bug in this file is the buffer overflow at line 14: 'buffer[i] = 0' where i = sizeof(buffer) = 1024, writing past the end of the 1024-element array (valid indices 0-1023 only)."
 }

@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_105",
-  "reasoning": "When PIDTEMP=F, the entire #ifdef PIDTEMP block (L13-20) takes the #else branch: pid_output=1 at L11, then pid_output=0 at L19 (overwriting L11), but pid_output is never read. Dead store. The PID_DEBUG and SERIAL_ECHO_START code is inside #ifdef PIDTEMP, so it is never reached when PIDTEMP=F \u2014 MARLIN_H and PID_DEBUG are irrelevant in this path. No '// ERROR' for pid_output dead store \u2192 new bug not in VBDB. The dead store occurs for any config with PIDTEMP=F. PC adds MARLIN_H=T and PID_DEBUG=F unnecessarily. PC is over-constrained. Classification: TRUE_NEW_OVER."
+  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_54/89/104 (8c4377dd635.c), dead store on 'pid_output' when MARLIN_H=true, PIDTEMP=false, PID_DEBUG=false. When MARLIN_H=true, SERIAL_ECHO_START is not defined (#ifndef MARLIN_H block skipped). When PIDTEMP=false, pid_output is set to 1 then to 0 (else branch) but never used. In the real Marlin code, pid_output drives heating elements. Simplification artifact."
 }

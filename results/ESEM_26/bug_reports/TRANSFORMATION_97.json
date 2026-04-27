@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 6484.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "TRUE_NEW",
   "old_id": null,
   "id": "TRANSFORMATION_97",
-  "reasoning": "Memory leak: buf allocated by malloc at L26 is never freed when CONFIG_FEATURE_CLEAN_UP=F (free is inside the CLEAN_UP block at L31). Genuine memory leak. Same bug as TRANSFORMATION_57 (CSA dead store) and TRANSFORMATION_96 (Pulse dead store), detected here by Pulse MEMORY_LEAK_C. No // ERROR for this scenario, new bug. PC = !CLEAN_UP AND !_STDLIB_H AND !__malloc_and_calloc_defined: restrictive library macros over-constrain the PC."
+  "reasoning": "TRUE POSITIVE (NEW, CORRECTLY CONSTRAINED): eef2317b9f5.c (BusyBox syslogd). 'Memory allocated by malloc at line 26 is not freed after last access.' When cmd != 8 (normal path), 'buf = malloc(bufsize)' at line 26 allocates memory. When CONFIG_FEATURE_CLEAN_UP=false, the '#ifdef CONFIG_FEATURE_CLEAN_UP' block (lines 29-33 containing 'free(buf)') is absent, so 'buf' is never freed — a real memory leak. NEW: the annotated vbdb bugs for this file are about the uninitialized 'buf' read/free when cmd==8 takes the goto path (see //WARNING at line 30, //ERROR at line 31); the memory leak on the normal path is a secondary finding not annotated with //ERROR. CORRECTLY CONSTRAINED: NOT CONFIG_FEATURE_CLEAN_UP correctly identifies when 'free(buf)' is absent. Note: the PC also requires NOT _STDLIB_H and NOT __malloc_and_calloc_defined — these are stdlib desugaring artifacts; the real constraint is only NOT CONFIG_FEATURE_CLEAN_UP, making the PC slightly over-constrained relative to real-world configs (the leak exists whenever CONFIG_FEATURE_CLEAN_UP=false, regardless of stdlib header state)."
 }

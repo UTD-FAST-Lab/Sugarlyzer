@@ -6,7 +6,7 @@
   "line_number": 12,
   "origin": "family",
   "id": "FAMILY_54",
-  "classification": "TRUE_NEW",
-  "reasoning": "Line 12 is 'int e = 0;' inside manage_heater(). After this assignment, e is never read again in the function — neither the #ifdef PIDTEMP block (which only uses pid_output and calls SERIAL_ECHO_START) nor the #else branch (which sets pid_output = 0) references e. The dead store is genuine in all configurations, making the presence condition [True] correctly constrained. The vbdb entry for 8c4377dd635 documents a different bug (the SERIAL_ECHO_START call under !MARLIN_H&&PIDTEMP&&PID_DEBUG where serialprint is declared). The dead store of e is a new true positive.",
+  "classification": "FALSE",
+  "reasoning": "FALSE POSITIVE: 8c4377dd635.c (Marlin manage_heater). Dead store on 'e' at line 12 ('int e = 0'), presence condition True. e is assigned 0 but never used in the simplified file — simplification artifact (real Marlin code uses e as the extruder index for PID control loops). The known vbdb bug for this file is the UndeclaredIdentifier on SERIAL_ECHO_START when MARLIN_H=true and PIDTEMP=true.",
   "old_id": "FAMILY_70"
 }

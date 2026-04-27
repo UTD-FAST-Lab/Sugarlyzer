@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "TRUE",
+  "classification": "TRUE_NEW",
   "old_id": "PRODUCT_14",
   "id": "PRODUCT_13",
-  "reasoning": "061fd0a353e.c L20: 'if(!p)' branch evaluates garbage value (// ERROR). p is uninitialized when 'case U' is reached without prior 'case W' setting p. Critically, 'goto expected_hwif_error' at L21 targets a label defined only inside #ifdef HDPARM_HDIO_SCAN_HWIF \u2014 so the code only compiles when SCAN_HWIF=T. PC=HDPARM_UNREGISTER=T AND HDPARM_SCAN=T correctly identifies both required conditions. Known bug (// ERROR at L20-21). Correctly constrained PC."
+  "reasoning": "TRUE POSITIVE: 'p' is declared without initialization (char *p at line 7) and only conditionally assigned in case 'W': if (r) p = *argv++. In case 'U': (line 19-21, inside #ifdef UNREGISTER_HWIF), if the user input 'c' is 'U' without having gone through 'W', p is uninitialized when if(!p) is evaluated at line 20. The branch condition genuinely evaluates to a garbage value. NEW BUG: The vbdb entry for this file documents an UndefinedSymbol bug when UNREGISTER_HWIF && !SCAN_HWIF (goto references a label inside the SCAN_HWIF block). The uninitialized p at line 20 is a different bug. CORRECTLY CONSTRAINED: The presence condition requires UNREGISTER_HWIF && SCAN_HWIF. When UNREGISTER_HWIF && !SCAN_HWIF, the code fails to compile due to the undefined label (the known bug), so the runtime uninitialized-p bug is only observable when SCAN_HWIF is also enabled."
 }

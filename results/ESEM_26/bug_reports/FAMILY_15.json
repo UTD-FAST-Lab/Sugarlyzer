@@ -6,7 +6,7 @@
   "line_number": 24,
   "origin": "family",
   "id": "FAMILY_15",
-  "classification": "TRUE_OVER",
+  "classification": "TRUE_UNDER",
   "old_id": "FAMILY_37",
-  "reasoning": "Same file and same uninitialized 'fast_no_hz' issue as FAMILY_14, now reported at line 24 (the printf call that reads fast_no_hz). The bug is real when !CONFIG_RCU_FAST_NO_HZ (print_cpu_stall_fast_no_hz does nothing, leaving fast_no_hz uninitialized). The presence condition [def(CONFIG_RCU_CPU_STALL_INFO)] is over-constrained: configurations where both CONFIG_RCU_CPU_STALL_INFO and CONFIG_RCU_FAST_NO_HZ are defined do not exhibit this bug. The correct condition is def(CONFIG_RCU_CPU_STALL_INFO) && !def(CONFIG_RCU_FAST_NO_HZ). Known bug (vbdb 1c17e4d, UninitializedVariable)."
+  "reasoning": "TRUE POSITIVE (UNDER-CONSTRAINED): 1c17e4d4437.c (Linux RCU). Same bug as FAMILY_14 — uninitialized 'fast_no_hz' but at the printf use site (line 24) instead of the call site (line 23). When RCU_CPU_STALL_INFO=true and FAST_NO_HZ=false, fast_no_hz is never written by the empty stub, so printf at line 24 reads an uninitialized value. This is the known vbdb bug (//ERROR comment at line 24). UNDER-CONSTRAINED: presence condition is only def(RCU_CPU_STALL_INFO), but the bug only manifests when FAST_NO_HZ=false. Configs where FAST_NO_HZ=true satisfy the presence condition but have no bug (sprintf writes to fast_no_hz). Minimal condition: def(RCU_CPU_STALL_INFO) && !def(RCU_FAST_NO_HZ)."
 }

@@ -6,7 +6,7 @@
   "line_number": 25,
   "origin": "family",
   "id": "FAMILY_32",
-  "classification": "TRUE_NEW",
+  "classification": "FALSE",
   "old_id": "FAMILY_47",
-  "reasoning": "Lines 25-26 are the final call ('irq_domain_add(ops)') and closing brace of 'int twl_probe()'. The function is declared to return int but has no return statement — control falls off the end, which is undefined behavior. This is a genuine control-flow bug. The presence condition [def(CONFIG_TWL4030_CORE)] is correctly constrained: twl_probe() is inside #ifdef CONFIG_TWL4030_CORE. The vbdb entry (6252547) documents a NullDereference (ops is NULL when dereferenced, config TWL4030_CORE && !OF_IRQ), which is a separate issue. New true positive, correctly constrained."
+  "reasoning": "FALSE POSITIVE: 6252547b8a7.c (Linux TWL4030). 'Control flow of non-void function ends here!' at lines 25-26, when def(CONFIG_TWL4030_CORE). twl_probe() is declared as 'int' (line 17) but has no return statement — simplification artifact (real Linux twl_probe returns an error code from device registration). The known vbdb bug for this file is the NULLPTR_DEREFERENCE on ops at line 25 when TWL4030_CORE=true and OF_IRQ=false (ops stays NULL); the missing return is a separate artifact of simplification."
 }

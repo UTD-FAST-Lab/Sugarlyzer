@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_186",
-  "reasoning": "When PIDTEMP=F, the entire #ifdef PIDTEMP block is skipped (including the nested PID_DEBUG block). pid_output=1 at L11 overwritten by pid_output=0 at L19, neither ever read \u2014 dead store. PID_DEBUG=T is irrelevant when PIDTEMP=F (the PID_DEBUG block is inside #ifdef PIDTEMP). No '// ERROR' \u2192 new bug not in VBDB. Dead store occurs for any PIDTEMP=F config. PC adds MARLIN_H=F AND PID_DEBUG=T unnecessarily. Over-constrained. Classification: TRUE_NEW_OVER."
+  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_54/89/104/105/119/134 (8c4377dd635.c, Marlin manage_heater). Dead store on 'pid_output' at line 13. When PIDTEMP=false, the #if PIDTEMP && PID_DEBUG block (containing SERIAL_ECHO_START with wrong args — the known vbdb bug) is NOT compiled. pid_output is set in the else branch but never used — simplification artifact (real Marlin uses pid_output to drive heating elements)."
 }

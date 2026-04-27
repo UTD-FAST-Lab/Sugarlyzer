@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 966.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW",
+  "classification": "FALSE",
   "old_id": "TRANSFORMATION_196",
   "id": "TRANSFORMATION_67",
-  "reasoning": "On the success path of ptmx_open (when nondet() returns false), driver_data = &some_int at L39 is the last use of driver_data before return 0 at L41. driver_data is never read after this assignment. Genuine dead store. No // ERROR at L39 (the // ERROR at L8 marks a different bug on the error path). New bug. PC = CONFIG_UNIX98_PTYS correctly captures when ptmx_open is compiled. No library macros."
+  "reasoning": "FALSE POSITIVE: 7acf6cd80b2.c (Linux devpts). 'Value stored to driver_data is never read' at line 39 ('driver_data = &some_int'). On the success path (nondet()=false), 'driver_data = &some_int' is assigned at line 39 and then the function returns 0 at line 41 without using 'driver_data' again. The only read of 'driver_data' is on the error path ('tty_release(driver_data)' at line 44), which is reached via 'goto err_release' at line 36, bypassing line 39. Simplification artifact: in real Linux ptmx_open(), after successfully setting up driver_data, it would be stored in the tty structure for later use. The vbdb simplification stripped that storage step, leaving 'driver_data = &some_int' as a dead store on the success path. CORRECTLY CONSTRAINED by CONFIG_UNIX98_PTYS since ptmx_open() is inside '#ifdef CONFIG_UNIX98_PTYS'."
 }

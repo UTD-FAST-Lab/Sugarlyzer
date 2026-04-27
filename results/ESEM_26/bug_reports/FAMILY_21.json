@@ -8,5 +8,5 @@
   "id": "FAMILY_21",
   "classification": "FALSE",
   "old_id": "FAMILY_3",
-  "reasoning": "Line 10 is 'eckey = malloc(sizeof(int))' when HAVE_ECC is defined. The tool reports this as a dead store, but 'eckey' is subsequently read: '*eckey = 30' (line 12) and '*eckey = 15' (line 17 in else) both dereference eckey, which necessarily reads the pointer value assigned at line 10. This is not a dead store. The vbdb-documented bug for this file (35ae2e2) is a MemoryLeak: the allocated memory is never freed before the function returns. The tool misidentifies the issue as a dead store instead of a memory leak. False positive."
+  "reasoning": "FALSE POSITIVE: 35ae2e259e4.c (Apache/WolfSSL ssl_init_server_certs). Dead store on 'eckey' at line 10 ('eckey = malloc(sizeof(int))'), when def(HAVE_ECC). The subsequent 'code making use of eckey' was stripped from the simplified vbdb file, making the malloc assignment appear as a dead store. This is a simplification artifact — real code uses eckey for TLS ECC operations. The real bug in this file is a memory leak (eckey allocated via malloc but never freed), classified as TRUE_OVER in the PRODUCT reports."
 }

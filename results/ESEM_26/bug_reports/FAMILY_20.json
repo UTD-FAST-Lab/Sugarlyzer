@@ -6,7 +6,7 @@
   "line_number": 31,
   "origin": "family",
   "id": "FAMILY_20",
-  "classification": "TRUE_NEW",
+  "classification": "FALSE",
   "old_id": "FAMILY_42",
-  "reasoning": "Line 31 is 'int x = *length;' in reiserfs_security_init(), which is unconditional (no #ifdef guard). 'x' is assigned the dereferenced value of 'length' but is never subsequently read or used in the function — a genuine dead store. The presence condition [True] is correctly constrained: the function is always compiled regardless of configuration. The vbdb entry (30e0532) documents a UninitializedVariable bug (reading *length which may be uninitialized when !CONFIG_SECURITY), which is a related but distinct finding from this dead store of x. New true positive, correctly constrained."
+  "reasoning": "FALSE POSITIVE: 30e053248da.c (Linux reiserfs). Dead store on 'x' at line 31 ('int x = *length'), presence condition True (all configs). When CONFIG_SECURITY=true: security_old_inode_init_security writes *len, so *length is valid; x is assigned but never used → simplification artifact (dead store is false). When CONFIG_SECURITY=false: security_old_inode_init_security returns 0 without writing *len, so *length is uninitialized — there IS a real bug (reading uninitialized value) but the alarm misidentifies it as a dead store rather than an uninitialized value read. The dead store alarm is a false positive in both configurations. The known vbdb bug (PULSE_UNINITIALIZED_VALUE on length when SECURITY=false) is classified separately in PRODUCT reports."
 }

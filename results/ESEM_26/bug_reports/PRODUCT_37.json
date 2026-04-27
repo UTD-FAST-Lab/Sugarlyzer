@@ -13,8 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW",
+  "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_37",
-  "reasoning": "buf is allocated via calloc (through apr_rmm_addr_get) at L16 inside #if APR_HAS_SHARED_MEMORY, used in printf at L17, but never freed \u2014 genuine memory leak. No ERROR comment in file and no existing TRUE record for d05e574ec26.c, so this is a new bug not in the VBDB. The PC (APR_HAS_SHARED_MEMORY=T) exactly captures the condition \u2014 allocation and leak only occur under #if APR_HAS_SHARED_MEMORY. Correctly constrained."
+  "reasoning": "FALSE POSITIVE: The alarm reports a potential memory leak of 'buf' allocated via calloc() at line 16 when APR_HAS_SHARED_MEMORY is true. In the simplified file, calloc() stands in for apr_rmm_calloc() (shared memory allocation). In the real Apache code, memory is allocated from a shared memory region managed by APR; it is not a heap malloc that needs to be freed with free(). The simplification replaced apr_rmm_calloc with calloc, creating an apparent malloc leak that does not exist in the real code. The known vbdb bug is a NullDereference — apr_rmm_calloc (calloc here) can return NULL, and if so, apr_rmm_addr_get dereferences it (*ptr = '\\0') — which the tool does NOT detect. The unix.Malloc alarm is a simplification artifact."
 }

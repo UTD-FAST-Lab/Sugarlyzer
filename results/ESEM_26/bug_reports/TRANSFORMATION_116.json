@@ -20,5 +20,5 @@
   "classification": "TRUE_NEW_OVER",
   "old_id": null,
   "id": "TRANSFORMATION_116",
-  "reasoning": "Pulse duplicate of TRANSFORMATION_94/102. curr from malloc() at L65 can be NULL, dereferenced at L66 (curr->val = rand()%10) without NULL check. Genuine null dereference. No // ERROR at L66, new bug. Bug fires in all configs (L65-66 outside all #ifdefs). PC includes !SORTFILES and restrictive library macros \u2014 over-constrained."
+  "reasoning": "TRUE POSITIVE (NEW, OVER-CONSTRAINED): 2631486f1bf.c (BusyBox ls). Duplicate of TRANSFORMATION_102 — same alarm ('curr could be null at line 66, curr->val = rand() % 10'), same presence condition (NOT CONFIG_FEATURE_LS_SORTFILES AND NOT _STDLIB_H AND NOT __need_malloc_and_calloc). The null dereference after unguarded malloc at line 65 is real (NEW: not the annotated vbdb bug). OVER-CONSTRAINED: the bug exists regardless of CONFIG_FEATURE_LS_SORTFILES since lines 65-66 are not inside any '#ifdef'. The stdlib header guards are desugaring artifacts."
 }

@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 1145.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW_UNDER",
+  "classification": "FALSE",
   "old_id": null,
   "id": "TRANSFORMATION_15",
-  "reasoning": "0f8f8094d28.c L39: Dead store of `n` (`int n = *cache` is assigned but never read). Not marked with ERROR \u2014 new bug. PC simplifies to !CONFIG_FORCE_MAX_ZONEORDER (SLOB OR !SLOB factors out). The PC is under-constrained: (1) includes CONFIG_SLOB=T paths which are non-compilable in PRODUCT mode (kmalloc_caches undeclared when SLOB=T); (2) the code is inside #ifdef CONFIG_LOCKDEP so LOCKDEP=T is required but absent from PC. Real condition is LOCKDEP=T AND SLOB=F AND !FORCE_MAX_ZONEORDER."
+  "reasoning": "FALSE POSITIVE: 0f8f8094d28.c (Linux SLAB lock keys). Dead store on 'n' at line 41 ('int n = *cache') inside init_node_lock_keys(). 'n' is assigned but never read in this simplified file — simplification artifact. Same pattern as FAMILY_7: in the real kernel, 'n' would be used to set lock keys for cache objects. The presence condition simplifies to !CONFIG_FORCE_MAX_ZONEORDER with CONFIG_SLOB either true or false; the alarm is a desugaring artifact rather than reflecting real source-level logic. The known vbdb bug for this file is kmalloc_caches being accessed when CONFIG_SLOB is defined (it's not declared in that case), which is different from this alarm."
 }

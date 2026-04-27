@@ -6,7 +6,7 @@
   "line_number": 13,
   "origin": "family",
   "id": "FAMILY_11",
-  "classification": "TRUE_NEW",
+  "classification": "FALSE",
   "old_id": "FAMILY_1",
-  "reasoning": "When HAVE_TLSV1_X is defined, line 13 is 'thisopt = SSL_PROTOCOL_TLSV1_1;'. The variable 'thisopt' is declared as 'int thisopt' and conditionally assigned in this branch, but is never subsequently read or returned in the function — a genuine dead store. The presence condition [def(HAVE_TLSV1_X)] correctly identifies this: the dead store only arises in configurations where the macro is defined (so SSL_PROTOCOL_TLSV1_1 is available and the assignment compiles). The vbdb entry (1a3c8e3) documents the opposite config: !HAVE_TLSV1_X causes an UndeclaredIdentifier. The dead store in the defined-HAVE_TLSV1_X case is a real but separate issue not in vbdb. New true positive, correctly constrained."
+  "reasoning": "FALSE POSITIVE: 1a3c8e3d840.c (Apache SSL). Dead store on 'thisopt' at line 13, when def(HAVE_TLSV1_X). When TLSV1_X is defined, SSL_PROTOCOL_TLSV1_1 is defined as (1<<3), and 'thisopt = SSL_PROTOCOL_TLSV1_1' is a valid assignment. However, thisopt is never used after this assignment — simplification artifact (real Apache code would use thisopt to configure SSL protocol options). The known vbdb bug for this file is the UndeclaredIdentifier on SSL_PROTOCOL_TLSV1_1 when TLSV1_X is NOT defined, which is not detected here."
 }

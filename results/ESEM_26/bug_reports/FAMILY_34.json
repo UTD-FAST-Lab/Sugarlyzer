@@ -8,5 +8,5 @@
   "id": "FAMILY_34",
   "classification": "FALSE",
   "old_id": "FAMILY_50",
-  "reasoning": "Lines 18-20 are inside main() — the omap_h4_map_io() call and closing brace. The tool reports 'control flow of non-void function ends here' for main() under def(CONFIG_MACH_OMAP_H4). Two problems: (1) In C99+, main() implicitly returns 0 — not a bug. (2) main() lacks an explicit return regardless of CONFIG_MACH_OMAP_H4, so the presence condition is wrong. Same pattern as FAMILY_18/19. The vbdb-documented bug (6515e48) is an UndefinedSymbol (MACH_OMAP_H4 && !ARCH_OMAP2420: omap2_set_globals_242x is undefined). False positive."
+  "reasoning": "FALSE POSITIVE: 6515e48932c.c (Linux OMAP). 'Control flow of non-void function ends here!' at lines 18-20, when def(CONFIG_MACH_OMAP_H4). The function in question is main() which lacks an explicit return statement. In C99, main() without an explicit return is valid — it implicitly returns 0. The alarm is a false positive. The known vbdb bug for this file is the UndeclaredIdentifier on omap2_set_globals_242x() when CONFIG_ARCH_OMAP2420=false (the function is only defined inside #if ARCH_OMAP2420, but called unconditionally inside #ifdef MACH_OMAP_H4)."
 }

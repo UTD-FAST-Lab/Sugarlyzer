@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 7822.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "FALSE",
   "old_id": null,
   "id": "TRANSFORMATION_113",
-  "reasoning": "Pulse duplicate of TRANSFORMATION_41. flags is assigned in the loop at L21 and updated at L37-38 or L41-42 in c76df14dfb4.c but never read outside the loop body \u2014 genuine dead store across all real feature flag combinations. New bug. PC contains restrictive library macros making it over-constrained."
+  "reasoning": "FALSE POSITIVE (SIMPLIFICATION ARTIFACT): c76df14dfb4.c (Apache httpd). 'The value written to &flags is never used' at line 21 ('flags = 0' inside the for loop). 'flags' is assigned 0 at line 21 and conditionally modified via 'flags |= T_ESCAPE_SHELL_CMD' (line 38 or 42), but is never read after the loop — subsequent uses (e.g., storing to a lookup table) were stripped by vbdb simplification. The presence condition is dominated by stdlib/string header guards (CROSS_COMPILE, _STDLIB_H, __need_malloc_and_calloc, OS2, NEED_ENHANCED_ESCAPES, etc.) with no meaningful application-level config constraint; the dead store exists regardless of NEED_ENHANCED_ESCAPES since both branches (#ifdef and #else) assign to flags but neither branch's value is ever read after the loop. This is a simplification artifact confirming the real code used the flags values for building a character escape table."
 }

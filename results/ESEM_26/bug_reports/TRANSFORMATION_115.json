@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 8388.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW",
+  "classification": "TRUE",
   "old_id": null,
   "id": "TRANSFORMATION_115",
-  "reasoning": "Pulse duplicate of TRANSFORMATION_74. head is declared at L60 but uninitialized; on the first loop iteration (i=0), curr->next = head at L67 uses the uninitialized head pointer. Genuine use of uninitialized variable. No // ERROR at L67, new bug. PC = (!SORTFILES OR SORTFILES) = true, correctly constrained."
+  "reasoning": "TRUE POSITIVE (CORRECTLY CONSTRAINED): 2631486f1bf.c (BusyBox ls). '`head` is read without initialization' at line 67 ('curr->next = head'). 'head' is declared 'struct dnode *curr, *head' at line 60 without initialization. In the first iteration of the for loop (i=0), 'curr->next = head' at line 67 reads the uninitialized 'head' — the known vbdb bug. CORRECTLY CONSTRAINED: the presence condition is a tautology (CONFIG_FEATURE_LS_SORTFILES OR NOT CONFIG_FEATURE_LS_SORTFILES = always true), correctly reflecting that the uninitialized 'head' bug is config-independent — it exists in ALL configurations because 'head' is never initialized regardless of any compile-time flags. Lines 60-67 are not inside any '#ifdef' block."
 }

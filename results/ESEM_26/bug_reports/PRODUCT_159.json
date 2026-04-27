@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "TRUE",
   "old_id": null,
   "id": "PRODUCT_159",
-  "reasoning": "Line 44: tty_release(driver_data) called at err_release label. Since nondet() always returns 42, the goto at L36 is always taken, so driver_data is never assigned at L39. driver_data is uninitialized when passed to tty_release() \u2192 uninitialized read. Function ptmx_open() compiled when UNIX98=T. DEVPTS only affects pts_sb_from_inode (L8). No '// ERROR' at L44 \u2192 new bug not in VBDB. Required: UNIX98=T. PC adds DEVPTS=T unnecessarily. Over-constrained. Classification: TRUE_NEW_OVER."
+  "reasoning": "TRUE POSITIVE (KNOWN, CORRECTLY CONSTRAINED): 7acf6cd80b2.c (Linux ptmx). 'driver_data' is declared at line 33 without initialization. When nondet() returns true, goto err_release is taken, skipping line 39 ('driver_data = &some_int'), and tty_release(driver_data) is called at line 44 with uninitialized driver_data. This uninitialized pointer flows through pty_close → devpts_pty_kill → pts_sb_from_inode, where it is actually dereferenced at line 8 ('int x = *inode') inside #ifdef CONFIG_DEVPTS_MULTIPLE_INSTANCES. The presence condition (UNIX98_PTYS=true, DEVPTS_MULTIPLE_INSTANCES=true) is correctly constrained: UNIX98_PTYS=true is needed to compile ptmx_open() where the uninitialized driver_data originates; DEVPTS_MULTIPLE_INSTANCES=true is needed for pts_sb_from_inode() to actually dereference the uninitialized pointer. This is the known vbdb UninitializedVariable driver_data bug."
 }

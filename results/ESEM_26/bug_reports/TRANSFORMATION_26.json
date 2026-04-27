@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 1183.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW",
+  "classification": "FALSE",
   "old_id": "TRANSFORMATION_185",
   "id": "TRANSFORMATION_26",
-  "reasoning": "mod is allocated at L39 (ptr->mod path) and not freed before function exit at L69. This is a genuine memory leak on all configs (PC=true, simplifies to tautology). No // ERROR marks this as a VBDB-known bug, so it is new. PC=true is correctly constrained (leak exists regardless of configuration)."
+  "reasoning": "FALSE POSITIVE: 6e2b75740be.c (Linux module). 'Potential leak of memory pointed to by mod' at line 69 (end of function). 'mod' is allocated inside 'hdr' memory at line 38 ('hdr = malloc(hdr->e_shnum * sizeof(*shdr))'). The module struct 'mod' is embedded within or overlaps with 'hdr' allocation. 'free(hdr)' at line 67 frees the entire block including the memory for mod. The analyzer treats 'mod' as an independent allocation and doesn't recognize that freeing 'hdr' also releases 'mod'. This is an alias/overlap tracking limitation — not a true memory leak."
 }

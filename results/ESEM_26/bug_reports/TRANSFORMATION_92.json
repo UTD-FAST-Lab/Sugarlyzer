@@ -20,5 +20,5 @@
   "classification": "TRUE",
   "old_id": null,
   "id": "TRANSFORMATION_92",
-  "reasoning": "Duplicate of TRANSFORMATION_78 (Pulse tool vs CSA). buf is uninitialized when cmd==8: goto all_done at L23 bypasses buf = malloc(bufsize) at L26, so if(buf) at L30 reads an uninitialized pointer. Known bug marked //WARNING at L30 and //ERROR at L31. PC = CONFIG_FEATURE_CLEAN_UP correctly constrains to when the cleanup block is present. No library macros."
+  "reasoning": "TRUE POSITIVE (CORRECTLY CONSTRAINED): eef2317b9f5.c (BusyBox syslogd). Same bug as TRANSFORMATION_78, found by Pulse instead of Clang. '`buf` is read without initialization' at line 30 ('if (buf)'). 'buf' is declared at line 6 without initialization; when cmd==8 (from '-n' option), 'goto all_done' at line 23 bypasses 'buf = malloc(bufsize)' at line 26. Inside '#ifdef CONFIG_FEATURE_CLEAN_UP', 'if (buf)' at line 30 tests the uninitialized 'buf'. The '// WARNING' annotation at line 30 confirms this is the known vbdb bug. CORRECTLY CONSTRAINED: CONFIG_FEATURE_CLEAN_UP=true is necessary and sufficient — lines 29-33 are only compiled under that flag."
 }
