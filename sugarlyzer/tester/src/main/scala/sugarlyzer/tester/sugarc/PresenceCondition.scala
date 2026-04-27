@@ -69,9 +69,10 @@ object PresenceCondition {
     val exprs = tups.map { case (mac, value) =>
       val const = ctx.mkConst(mac, ctx.mkBoolSort())
       val boolValue = value.toLowerCase match {
-        case "true" | "y"  => ctx.mkTrue()
-        case "false" | "n" | "" => ctx.mkFalse()
+        case "true" | "y"                 => ctx.mkTrue()
+        case "false" | "n" | ""           => ctx.mkFalse()
         case i if i.toIntOption.isDefined => ctx.mkInt(i)
+        case s: String                    => ctx.mkString(s)
         case _ => throw new IllegalArgumentException(s"Invalid value: $value")
       }
       ctx.mkEq(const, boolValue)
