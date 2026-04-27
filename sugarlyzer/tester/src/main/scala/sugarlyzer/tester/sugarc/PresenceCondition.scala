@@ -2,6 +2,7 @@ package sugarlyzer.tester.sugarc
 
 import com.microsoft.z3.{BoolExpr, Context, Status}
 import io.circe.Encoder
+import com.typesafe.scalalogging.Logger
 
 case class PresenceCondition(ctx: Context, expr: BoolExpr) {
 
@@ -49,6 +50,7 @@ case class PresenceCondition(ctx: Context, expr: BoolExpr) {
 }
 
 object PresenceCondition {
+  val logger = Logger[PresenceCondition]
   given Encoder[PresenceCondition] {
     def apply(pc: PresenceCondition): io.circe.Json = {
       /* For simplicity, we just encode the string representation of the
@@ -65,6 +67,7 @@ object PresenceCondition {
   def fromTuples(tups: Iterable[(String, String)]): PresenceCondition = {
     /* Transform the list of tuples, which is of the form [("MACRO_NAME", TRUE)]
      * into a conjunction of expressions */
+    logger.info(s"tups are ${tups}")
     val ctx = new Context()
     val exprs = tups.map { case (mac, value) =>
       val const = ctx.mkConst(mac, ctx.mkBoolSort())
