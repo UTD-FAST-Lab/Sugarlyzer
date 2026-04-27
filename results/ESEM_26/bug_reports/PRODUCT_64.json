@@ -13,8 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_64",
-  "reasoning": "Known bug for 30e053248da.c is uninitialized read of *length (PRODUCT_27: TRUE, core.uninitialized.Assign). This alarm detects DEAD_STORE: int x = *length at L31 \u2014 x is assigned but never subsequently read. New bug (same as PRODUCT_24: TRUE_NEW). x is dead in ALL configs regardless of CONFIG_SECURITY. The PC {SECURITY=F} is unnecessarily narrow. Over-constrained."
+  "reasoning": "FALSE POSITIVE: The alarm reports 'int x = *length' (line 31) as a dead store — x is assigned but never used — when CONFIG_SECURITY=false. In the real Linux reiserfs_security_init() code, x (the dereferenced length value) is used for security attribute size processing. The simplified file stripped those uses. This is a simplification artifact. The known vbdb bug for 30e053248da.c is UninitializedVariable when !SECURITY: security_old_inode_init_security() for !SECURITY always returns 0 without writing *len, so 'length' in reiserfs_create() remains uninitialized; 'int x = *length' at line 31 then reads an uninitialized value. The tool did not detect the uninitialized read and instead reported only the dead store on x."
 }

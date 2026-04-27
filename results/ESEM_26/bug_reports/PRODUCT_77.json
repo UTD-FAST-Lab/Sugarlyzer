@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "TRUE_OVER",
   "old_id": null,
   "id": "PRODUCT_77",
-  "reasoning": "Known bug for 7acf6cd80b2.c is dead store at L8 (DEVPTS=T). This alarm detects uninitialized driver_data at L44: in ptmx_open (UNIX98=T), nondet()=42 causes goto err_release, leaving driver_data uninitialized before tty_release(driver_data) at L44. Same new bug as PRODUCT_32 (TRUE_NEW, PC=UNIX98=T). The bug exists for ALL CONFIG_UNIX98_PTYS=T configs regardless of DEVPTS. The PC {DEVPTS=F, UNIX98=T} is unnecessarily narrow. Over-constrained."
+  "reasoning": "TRUE POSITIVE (KNOWN, OVER-CONSTRAINED): When CONFIG_UNIX98_PTYS=true, ptmx_open() is compiled. If nondet() returns true, execution jumps to err_release (line 36) before 'driver_data = &some_int' (line 39), leaving driver_data uninitialized. At line 44, tty_release(driver_data) passes the uninitialized pointer. The alarm correctly detects driver_data being read uninitialized at line 44. KNOWN BUG: The vbdb entry for 7acf6cd80b2.c documents exactly this UninitializedVariable bug in ptmx_open() when UNIX98_PTYS is enabled. OVER-CONSTRAINED: The bug at line 44 exists for any value of CONFIG_DEVPTS_MULTIPLE_INSTANCES when UNIX98_PTYS=true (the goto and uninitialized read are not guarded by DEVPTS_MULTIPLE_INSTANCES). The presence condition requiring DEVPTS_MULTIPLE_INSTANCES=false excludes the DEVPTS_MULTIPLE_INSTANCES=true case, which is also vulnerable. Compare PRODUCT_32 which correctly covers both DEVPTS_MULTIPLE_INSTANCES values."
 }

@@ -6,7 +6,7 @@
   "line_number": 38,
   "origin": "family",
   "id": "FAMILY_67",
-  "classification": "TRUE",
-  "reasoning": "Line 38 is 'flags |= T_ESCAPE_SHELL_CMD;' inside the #ifdef NEED_ENHANCED_ESCAPES block. After this assignment, flags is either reset to 0 at line 21 on the next loop iteration, or the loop terminates and flags is never read again (no use of flags outside the loop). The same applies to line 42 in the #else branch. The value computed in flags is never consumed — a genuine dead store. The vbdb file (c76df14dfb4.c, APACHE) documents this exact pattern where flags is computed per-iteration but thrown away. The presence condition captures configurations where NEED_ENHANCED_ESCAPES is active: directly defined, defined via WIN32/OS2 without CROSS_COMPILE, or defined with CROSS_COMPILE. The condition is correctly constrained. Known bug.",
+  "classification": "FALSE",
+  "reasoning": "FALSE POSITIVE: c76df14dfb4.c (Apache). Dead store on 'flags' at line 38 ('flags |= T_ESCAPE_SHELL_CMD') inside #ifdef NEED_ENHANCED_ESCAPES, under configs where NEED_ENHANCED_ESCAPES is active. 'flags' is set to 0 at line 21 each loop iteration, potentially updated at line 38 or 42, but never used after the assignment — simplification artifact. In the real Apache code the flags value would be stored into an escape table. Same simplification artifact as FAMILY_68.",
   "old_id": "FAMILY_8"
 }

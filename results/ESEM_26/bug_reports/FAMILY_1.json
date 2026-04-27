@@ -6,7 +6,7 @@
   "line_number": 4,
   "origin": "family",
   "id": "FAMILY_1",
-  "classification": "TRUE",
+  "classification": "FALSE",
   "old_id": "FAMILY_11",
-  "reasoning": "When !EXT2FS_ENABLE_SWAPFS, the variable 'gdp' is declared at line 4 but never assigned or used, since all usage is inside the #ifdef block. This is a real variability bug. The vbdb entry 0301ffa confirms this exact bug as 'UnusedVariable' with config '!EXT2FS_ENABLE_SWAPFS (1st degree)'. The tool reports it as a dead_store, which is a close approximation. The presence condition [!def(EXT2FS_ENABLE_SWAPFS)] exactly matches the vbdb config, so it is correctly constrained. This is a known bug (TRUE, not TRUE_NEW)."
+  "reasoning": "FALSE POSITIVE: 0301ffab3d9.c (BusyBox ext2fs). Dead store on 'gdp' at line 4. Presence condition: !def(EXT2FS_ENABLE_SWAPFS) — fires when SWAPFS is NOT defined. When SWAPFS=false, the entire body of ext2fs_open2() that uses gdp is inside #ifdef SWAPFS and is not compiled. gdp is declared but never assigned or used. This is a simplification artifact — in real BusyBox code, gdp would be used outside the #ifdef block, but those uses were stripped. The declaration of an uninitialized, unused pointer does not constitute a true dead store bug."
 }

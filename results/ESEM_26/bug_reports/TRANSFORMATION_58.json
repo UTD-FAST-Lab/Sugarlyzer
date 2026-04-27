@@ -20,5 +20,5 @@
   "classification": "FALSE",
   "old_id": null,
   "id": "TRANSFORMATION_58",
-  "reasoning": "95755181b82.c L39: 'Right operand of + is garbage' in `iobuf + len`. PC simplifies to !__need___FILE (the __STRICT_ANSI__ OR-branches cancel out). Only a stdio.h library macro, no feature config flags. len is initialized unconditionally at L25-26, so it is never garbage. Same desugaring artifact pattern as TRANSFORMATION_17."
+  "reasoning": "FALSE POSITIVE: 95755181b82.c (BusyBox httpd). 'The right operand of + is a garbage value' at line 39 (closing brace of send_headers, mapped from desugared line). The '+' operations in send_headers are 'iobuf + len' at lines 30 and 36. 'len' is assigned unconditionally from sprintf() at line 25. Desugaring artifact: the '#ifdef ENABLE_FEATURE_HTTPD_BASIC_AUTH' block (lines 28-33) and 'content_gzip' (declared inside '#ifdef ENABLE_FEATURE_HTTPD_GZIP') are transformed into if-blocks. After these blocks, 'len' may appear to have been conditionally modified, creating analysis paths where 'len' (hoisted variable) appears potentially garbage. Same desugaring pattern as TRANSFORMATION_8 (http_unauthorized), TRANSFORMATION_17 (len at lines 33-34), and TRANSFORMATION_51 (authorized) for this file. Presence condition is only stdio header guards (NOT __need___FILE) — no application-level config variables."
 }

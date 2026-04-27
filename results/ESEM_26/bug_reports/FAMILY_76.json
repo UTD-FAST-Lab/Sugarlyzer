@@ -7,6 +7,6 @@
   "origin": "family",
   "id": "FAMILY_76",
   "classification": "TRUE",
-  "reasoning": "Line 30 is 'if (buf)' inside #ifdef CONFIG_FEATURE_CLEAN_UP. 'buf' is declared at line 6 without initialization. When cmd == 8 (set when option '-n' is parsed at line 17-18), 'goto all_done' at line 23 bypasses the 'buf = malloc(bufsize)' at line 26. Consequently, buf is uninitialized when 'if (buf)' reads it at line 30, and 'free(buf)' at line 31 then attempts to free an indeterminate pointer — a genuine uninitialized value / invalid free bug. The vbdb source (eef2317b9f5.c) marks line 30 with '//WARNING' and line 31 with '//ERROR', confirming this is a known bug. Presence condition def(CONFIG_FEATURE_CLEAN_UP) correctly matches the #ifdef guard at line 29. Known bug.",
+  "reasoning": "TRUE POSITIVE (CORRECTLY CONSTRAINED): eef2317b9f5.c (BusyBox). Uninitialized value on 'buf' at line 30 ('if (buf)'), when def(CONFIG_FEATURE_CLEAN_UP). 'char *buf' is declared at line 6 without initialization. When cmd==8 (set when '-n' option is parsed), the code executes 'goto all_done' at line 23, bypassing the malloc at line 26. At the all_done label under #ifdef CONFIG_FEATURE_CLEAN_UP, 'if (buf)' at line 30 reads the uninitialized pointer. This is the known vbdb bug (//WARNING annotation at line 30). CORRECTLY CONSTRAINED: def(CONFIG_FEATURE_CLEAN_UP) is necessary and sufficient to compile the cleanup block where the uninitialized buf is read.",
   "old_id": "FAMILY_31"
 }

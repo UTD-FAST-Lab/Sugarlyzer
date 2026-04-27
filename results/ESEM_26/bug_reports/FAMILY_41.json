@@ -8,5 +8,5 @@
   "id": "FAMILY_41",
   "classification": "FALSE",
   "old_id": "FAMILY_55",
-  "reasoning": "Line 67 is 'free(hdr)' in the free_hdr: label block. The tool claims hdr is not dynamically allocated. However, hdr is clearly malloc'd at line 24: 'if ((hdr = malloc(2*sizeof(void*))) == NULL)'. free(hdr) is a valid operation on a dynamically allocated pointer. The static_free claim is incorrect — the tool has lost track of hdr's dynamic allocation provenance, possibly due to the complex aliasing and control flow. False positive."
+  "reasoning": "FALSE POSITIVE: 6e2b75740be.c (Linux module loader). 'Variable hdr is freed although not dynamically allocated!' at line 67, presence condition True. hdr IS dynamically allocated: 'hdr = malloc(2*sizeof(void*))' at line 24. The alarm's claim that hdr is not dynamically allocated is factually incorrect. free(hdr) at line 67 is a proper deallocation of a malloc'd pointer. The alarm is a false positive."
 }

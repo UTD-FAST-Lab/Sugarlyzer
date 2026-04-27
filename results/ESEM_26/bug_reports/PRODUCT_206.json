@@ -13,8 +13,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_206",
-  "reasoning": "Line 24: codec_hw_write dead store in ak4642_init() (SOC_AK4642=T, I2C=T). FSI_AK4642=T implies SOC_AK4642=T (consistent). No contradictions. New bug. Required: SOC_AK4642=T AND I2C=T. PC adds SOC_DA7210=F, FSI_DA7210=F unnecessarily. Over-constrained. Classification: TRUE_NEW_OVER."
+  "reasoning": "FALSE POSITIVE: Same file as many prior entries (66517915e09.c, Linux FSI audio). Dead store on 'codec_hw_write' at line 24. With CONFIG_I2C=true, i2c_master_send IS declared, so the known UndeclaredIdentifier vbdb bug does not apply. The dead store is a simplification artifact — subsequent uses of codec_hw_write were stripped from the simplified code."
 }

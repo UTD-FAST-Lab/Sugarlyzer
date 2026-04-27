@@ -16,5 +16,5 @@
   "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_78",
-  "reasoning": "PC has FSI_AK4642=T AND SOC_AK4642=F which is contradictory: #ifdef CONFIG_SND_FSI_AK4642 at L1 defines CONFIG_SND_SOC_AK4642 at L2, so FSI_AK4642=T always implies SOC_AK4642 is defined. Infeasible configuration \u2014 false positive."
+  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_44/52 (66517915e09.c), dead store on 'codec_hw_write' at line 24 (ak4642_init()). In the simplified file, codec_hw_write is initialized but the function immediately returns 0 without using it; in the real Linux driver code it is used as an I2C write function pointer. Simplification artifact. The known vbdb bug is UndeclaredIdentifier: i2c_master_send referenced outside #ifdef CONFIG_I2C."
 }

@@ -20,5 +20,5 @@
   "classification": "TRUE",
   "old_id": null,
   "id": "TRANSFORMATION_95",
-  "reasoning": "rmm_lock is read without initialization at L14 \u2014 the VBDB-known bug (// ERROR at L14). Pulse duplicate of the CSA alarm. PC: the 4 OR clauses cover all combinations of __need___FILE, __STRICT_ANSI__, and __USE_EXTERN_INLINES, which cancel to true. PC simplifies to APU_HAS_LDAP AND APR_HAS_SHARED_MEMORY, correctly constrained."
+  "reasoning": "TRUE POSITIVE (CORRECTLY CONSTRAINED): 1b48bb3c1af.c (Apache APR LDAP). '`rmm_lock` is read without initialization' at line 14 ('apr_rmm_init(rmm_lock)'). 'char* rmm_lock' is declared at line 11 inside '#ifdef APU_HAS_LDAP' without initialization, then passed to 'apr_rmm_init' at line 14 inside '#ifdef APR_HAS_SHARED_MEMORY' without ever being assigned. The '// ERROR' annotation confirms this is the known vbdb bug. CORRECTLY CONSTRAINED: APU_HAS_LDAP=true is required because the function body and 'rmm_lock' declaration are inside '#ifdef APU_HAS_LDAP'; APR_HAS_SHARED_MEMORY=true is required because the call is inside '#ifdef APR_HAS_SHARED_MEMORY'. The presence condition covers all combinations of header guard variables (__need___FILE, __STRICT_ANSI__, __USE_EXTERN_INLINES) from '#include <stdio.h>' desugaring — effectively equivalent to just APU_HAS_LDAP=true AND APR_HAS_SHARED_MEMORY=true."
 }

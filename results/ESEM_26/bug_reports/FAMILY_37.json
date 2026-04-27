@@ -6,7 +6,7 @@
   "line_number": 16,
   "origin": "family",
   "id": "FAMILY_37",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "FALSE",
   "old_id": "FAMILY_52",
-  "reasoning": "Line 16 is 'int codec_hw_write = i2c_master_send;' in da7210_init(). The value is assigned but never read (function immediately does 'return 0') — a genuine dead store when CONFIG_I2C is defined (so i2c_master_send exists). However, when !CONFIG_I2C, i2c_master_send is undeclared and line 16 fails to compile — the vbdb-documented UndeclaredIdentifier bug for (SND_FSI_AK4642||SND_FSI_DA7210)&&!I2C. The presence condition (def(CONFIG_SND_FSI_DA7210)|def(CONFIG_SND_SOC_DA7210)) does not require def(CONFIG_I2C), so it includes configs where the code can't compile. True dead store only in configs where CONFIG_I2C is also defined. Condition should be (def(CONFIG_SND_FSI_DA7210)|def(CONFIG_SND_SOC_DA7210))&&def(CONFIG_I2C). New true positive, over-constrained."
+  "reasoning": "FALSE POSITIVE: 66517915e09.c (Linux FSI audio). Dead store on 'codec_hw_write' at line 16, when def(FSI_DA7210) OR def(SOC_DA7210). Line 16 is 'int codec_hw_write = i2c_master_send' inside da7210_init(). When CONFIG_I2C=true: i2c_master_send is declared (static int = 0), codec_hw_write=0 is assigned but never used — simplification artifact (real code uses codec_hw_write for audio hardware register writes). When CONFIG_I2C=false: i2c_master_send is undeclared — the tool treats it as 0 and reports a dead store instead of an UndeclaredIdentifier. The known vbdb bug (UndeclaredIdentifier when I2C=false) is not correctly detected."
 }

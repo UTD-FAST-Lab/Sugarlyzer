@@ -6,7 +6,7 @@
   "line_number": 133,
   "origin": "family",
   "classification": "FALSE",
-  "reasoning": "Duplicate of FAMILY_46 (same file, same lines 133-137, same presence condition !def(CONFIG_NUMA)&def(CONFIG_PCI)&!def(const), same message). Same !def(const) artifact as FAMILY_45 and FAMILY_49. The warning is fabricated by the tool's type-lifting of the 'const' keyword into a configuration variable. No real build satisfies this condition. False positive.",
+  "reasoning": "FALSE POSITIVE: 76baeebf7df.c (Linux NUMA). Same alarm as FAMILY_45/46/49 — 'assignment discards const qualifier' at lines 133-137, condition !def(NUMA) AND def(PCI) AND !def(const). The '!def(const)' condition is the key non-standard requirement. False positive from tool treating const as potentially undefined.",
   "id": "FAMILY_50",
   "old_id": "FAMILY_3_NEW"
 }

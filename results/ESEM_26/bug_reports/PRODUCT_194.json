@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_194",
-  "reasoning": "send_headers(): len accumulates sprintf values at L25/L30(BASIC_AUTH)/L36(GZIP), but printf at L38 uses iobuf directly \u2014 len never used after last assignment. Dead store. GZIP=T required (content_gzip must be declared for L35). BASIC_AUTH=T and BB_MMU=F are not required. No '// ERROR' \u2192 new bug. Over-constrained. Classification: TRUE_NEW_OVER."
+  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_116/123/142/152 (95755181b82.c, BusyBox httpd). Dead store on 'len' in send_headers(). With HTTPD_GZIP=true and HTTPD_BASIC_AUTH=true, all len += sprintf() branches are active, but len is never used in an actual write/send call — simplification artifact. With BB_MMU=false, mini_httpd() and handle_incoming_and_exit() are not called from main(). The known vbdb UndeclaredIdentifier bug (content_gzip used outside #ifdef when HTTPD_GZIP=false) does not apply here since HTTPD_GZIP=true."
 }

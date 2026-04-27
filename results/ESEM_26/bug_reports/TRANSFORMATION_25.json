@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 6920.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "FALSE",
   "old_id": "TRANSFORMATION_52",
   "id": "TRANSFORMATION_25",
-  "reasoning": "p is assigned at L16 in case 'W' (HDPARM_HDIO_UNREGISTER_HWIF=T, SCAN=F) but the subsequent switch cases that would read p are not reached for input character 'W'. The dead store is real and new (no // ERROR). PC includes restrictive library macro !_STDLIB_H in addition to real flags UNREGISTER AND !SCAN, making it over-constrained."
+  "reasoning": "FALSE POSITIVE: 061fd0a353e.c (BusyBox hdparm). 'Value stored to p is never read' at line 16 ('p = (void *)(long)arg'). Presence condition: UNREGISTER=true AND NOT SCAN. In case 'U' (HDIO_UNREGISTER_HWIF), p is assigned at line 16 then used in the if(!p) check and goto at lines 20-21 (TRANSFORMATION_4 bug location). However, when SCAN=false, case 'R' (HDIO_SCAN_HWIF) doesn't exist, so only case 'U' uses p. The alarm fires because in the UNREGISTER=true, SCAN=false configuration, case 'U' contains 'p = (void*)(long)arg' then 'if(!p) goto'. The goto at line 21 (expected_hwif_error) may not exist when SCAN=false, creating a compilation issue. More importantly, this is a simplification artifact: in real hdparm there are additional ioctl cases that use p (HDIO_SET_NICE, etc.). The vbdb simplification removed those uses, making p appear as a dead store after case 'U'."
 }

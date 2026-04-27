@@ -16,5 +16,5 @@
   "classification": "TRUE_OVER",
   "old_id": null,
   "id": "PRODUCT_202",
-  "reasoning": "Known VBDB memory leak: eckey allocated at L10 (HAVE_ECC=T) never freed before return at L24. Same bug as PRODUCT_30 (TRUE, PC=HAVE_ECC). Leak occurs whenever HAVE_ECC=T regardless of SSL_CTX. PC adds SSL_CTX=T unnecessarily. Over-constrained. Classification: TRUE_OVER."
+  "reasoning": "TRUE POSITIVE (OVER-CONSTRAINED): Same bug as PRODUCT_184 (35ae2e259e4.c, Apache/WolfSSL ssl_init_server_certs). MEMORY_LEAK_C: eckey is allocated with malloc at line 10 (inside #ifdef HAVE_ECC) and never freed before the function returns. This is the known vbdb MemoryLeak bug. OVER-CONSTRAINED: The memory leak exists whenever HAVE_ECC=true, regardless of SSL_CTX_set_ecdh_auto. When SSL_CTX_set_ecdh_auto=true, the else branch compiles as empty (comment only), but eckey is still allocated and not freed. When SSL_CTX_set_ecdh_auto=false, eckey is still allocated and not freed. The presence condition's requirement for SSL_CTX_set_ecdh_auto=true is unnecessary."
 }

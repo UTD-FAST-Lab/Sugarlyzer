@@ -14,8 +14,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW",
+  "classification": "TRUE",
   "old_id": "PRODUCT_67",
   "id": "PRODUCT_32",
-  "reasoning": "7acf6cd80b2.c L44: driver_data passed as uninitialized 1st argument. In the UNIX98_PTYS code path, driver_data is used uninitialized when the success path of an earlier call is not taken correctly. PC: CONFIG_UNIX98_PTYS=T (CONFIG_DEVPTS_MULTIPLE_INSTANCES cancels). No library macros. New bug, correctly constrained PC. Consistent with TRANSFORMATION_56 (TRUE_NEW) and TRANSFORMATION_132 (TRUE_NEW)."
+  "reasoning": "TRUE POSITIVE: In ptmx_open() (inside #ifdef CONFIG_UNIX98_PTYS), 'driver_data' is declared as 'int *driver_data' without initialization. When nondet() returns true, 'goto err_release' jumps past 'driver_data = &some_int' (line 39). At the err_release label, 'tty_release(driver_data)' at line 44 passes the uninitialized driver_data as the 1st argument. KNOWN BUG: The vbdb entry for 7acf6cd80b2.c documents exactly this UninitializedVariable bug — driver_data is uninitialized when the error path is taken, causing a dereference of an arbitrary address. The tool detects the same bug via the CallAndMessage checker. CORRECTLY CONSTRAINED: The presence condition simplifies to CONFIG_UNIX98_PTYS, which is correct — ptmx_open is only compiled when UNIX98_PTYS is enabled."
 }

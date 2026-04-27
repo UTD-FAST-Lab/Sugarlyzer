@@ -13,8 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW",
+  "classification": "FALSE",
   "old_id": "PRODUCT_35",
   "id": "PRODUCT_17",
-  "reasoning": "5275b1e49f6.c L25: 'k_crcs=someInt' dead store. The value assigned to k_crcs at L25 is never subsequently read. PC=CONFIG_FEATURE_INSMOD_VERSION_CHECKING=T correctly constrains the condition for this code to exist. No library macros (clean PRODUCT analysis). New bug. Consistent with TRANSFORMATION_70 (TRUE_NEW_OVER with library macros); PRODUCT version is correctly constrained."
+  "reasoning": "FALSE POSITIVE: The alarm reports 'k_crcs = someInt' (line 25) as a dead store when CONFIG_FEATURE_INSMOD_VERSION_CHECKING is true. In the simplified vbdb file, k_crcs is assigned at line 25 but the function immediately proceeds to 'return(exit_status)' without using k_crcs. However, in the real BusyBox insmod.c code (trace shows line 3833: 'k_crcs = new_is_kernel_checksummed()'), k_crcs is actively compared and used in subsequent logic. The simplified file stripped those subsequent uses. This dead store is an artifact of the simplification. The known bug is UndeclaredIdentifier (k_crcs used when VERSION_CHECKING is disabled), a different issue."
 }

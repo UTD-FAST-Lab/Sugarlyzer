@@ -13,8 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW",
+  "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_93",
-  "reasoning": "Line 26: `buf = malloc(bufsize)`. When CLEAN_UP=F, the #ifdef block at L29-33 is not compiled, so buf is assigned but never read or freed \u2014 dead store (and memory leak). When CLEAN_UP=T, buf is used at L30 and freed at L31, so no dead store. The '// ERROR' at L31 marks the VBDB-known bug (uninitialized branch, CLEAN_UP=T path); this dead store (CLEAN_UP=F) is a distinct new bug not in VBDB. PC = CLEAN_UP=F exactly matches the condition under which the dead store occurs. Classification: TRUE_NEW."
+  "reasoning": "FALSE POSITIVE: The alarm reports 'buf = malloc(bufsize)' (line 26) as a dead store when CONFIG_FEATURE_CLEAN_UP=false. The malloc'd buffer is assigned to buf but buf is never subsequently read (the function returns without using the buffer contents). In the real BusyBox dmesg code, buf is the buffer for reading kernel ring buffer messages and is used extensively after allocation. The simplified file stripped all subsequent uses of buf. Simplification artifact. Note: PRODUCT_61 for the same file/config correctly detected the memory leak (buf is malloc'd but never freed when CLEAN_UP=false); this alarm is about the dead store aspect of the same issue."
 }

@@ -8,5 +8,5 @@
   "id": "FAMILY_9",
   "classification": "FALSE",
   "old_id": "FAMILY_18",
-  "reasoning": "The tool reports 'buf' as used uninitialized at line 19 (strcat(buf, dt)) when !ENABLE_FEATURE_MODPROBE_MULTIPLE_OPTIONS. However, 'buf' is clearly initialized by strcpy(buf, \"module option(s): \") at line 18, immediately before the strcat call. 'buf' is not uninitialized. The real bug in this file (vbdb 199501f, NullDereference) is that 'dt' may be NULL (initialized to NULL, only conditionally assigned \"-i\"), leading to null dereference in strcat(buf, dt). The tool has identified the wrong variable in its uninitialized_value report. False positive."
+  "reasoning": "FALSE POSITIVE: 199501f2a00.c (BusyBox modprobe). Uninitialized value on 'buf' at line 19, when !def(ENABLE_FEATURE_MODPROBE_MULTIPLE_OPTIONS). Line 19 is 'strcpy(buf, \"module option(s): \")' — strcpy WRITES to buf (initializing it), it does not read from it. The tool incorrectly treats buf's use as the destination of strcpy as 'reading an uninitialized value.' The real bug in this file is at line 21: 'strcat(buf, dt)' where dt can be NULL (when rand()%2 == 0, dt stays NULL), causing a NULL dereference. But that is a different alarm than what is reported here."
 }

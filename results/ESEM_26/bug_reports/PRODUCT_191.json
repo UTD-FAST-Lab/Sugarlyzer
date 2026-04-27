@@ -13,8 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_191",
-  "reasoning": "Line 31: `int x = *length` in reiserfs_security_init(). x is assigned but never read afterward \u2014 dead store. This line is outside any #ifdef, present in all configurations. The '// ERROR' at L31 marks the VBDB-known uninitialized read of *length (SECURITY=F path); the DEAD_STORE of x is a distinct new bug. When SECURITY=T: *length is set to 0 by security_old_inode_init_security(), x=0, dead store. When SECURITY=F: *length is uninitialized (separate known bug), x still dead. Dead store occurs in all configs. PC = SECURITY=T over-constrained. Classification: TRUE_NEW_OVER."
+  "reasoning": "FALSE POSITIVE: 30e053248da.c (Linux reiserfs). Dead store on 'x' at line 31 ('int x = *length') inside reiserfs_security_init(), with CONFIG_SECURITY=true. When SECURITY=true, security_old_inode_init_security() may write *len = 0 (if nondet returns true); the function proceeds to line 31 where x = *length is assigned but never used. Simplification artifact — real reiserfs code uses x (the length value) for subsequent security attribute processing. The known vbdb bug (UninitializedVariable 'length' when SECURITY=false) does not apply here."
 }

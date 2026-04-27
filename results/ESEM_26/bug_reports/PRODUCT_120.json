@@ -13,8 +13,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_120",
-  "reasoning": "Line 41 (reported as L39): `int n = *cache` inside init_node_lock_keys() (LOCKDEP=T). n is assigned but never used \u2014 dead store. SLOB=F ensures kmalloc_caches is declared (no compile error). No '// ERROR' at L41 \u2192 new bug not in VBDB. Required condition: LOCKDEP=T AND SLOB=F. PC adds FORCE_MAX_ZONEORDER=F, SLAB=F, PPC_256K_PAGES=T \u2014 only affecting array bounds, not the dead store. PC is over-constrained. Classification: TRUE_NEW_OVER."
+  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_112 (0f8f8094d28.c), dead store on 'n' (int n = *cache) inside init_node_lock_keys(). When SLOB=false, kmalloc_caches IS declared (inside #ifndef SLOB), so accessing it is valid. n is assigned from *cache but never used — simplification artifact; real kernel code uses the cache value for lock annotation setup. LOCKDEP=true means the function body is compiled. The known vbdb bug (OutOfBoundsRead on kmalloc_caches when SLOB=true) does not apply here because SLOB=false."
 }

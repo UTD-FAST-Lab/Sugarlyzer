@@ -16,5 +16,5 @@
   "classification": "TRUE",
   "old_id": null,
   "id": "PRODUCT_176",
-  "reasoning": "Line 14 has '// ERROR' \u2014 known VBDB bug. scontext is set to NULL at L7 (inside #ifdef SELINUX). L14 dereferences *scontext \u2014 null dereference. Requires SELINUX=T (for scontext declaration and code block L12-15) AND STAT_FORMAT=F (for the outer #ifndef block L10-18 to be compiled). PC = SELINUX=T AND STAT_FORMAT=F exactly matches. Classification: TRUE."
+  "reasoning": "TRUE POSITIVE (KNOWN, CORRECTLY CONSTRAINED): 1b487ea8a69.c (BusyBox stat). When ENABLE_SELINUX=true, 'scontext' is declared and initialized to NULL at line 7. When ENABLE_FEATURE_STAT_FORMAT=false, the #ifndef STAT_FORMAT block (line 10-18) is compiled, which contains a printf that dereferences scontext at line 14 ('printf(\" %lc\\n\", *scontext)'). scontext is NULL, so this is a genuine null pointer dereference. The presence condition (SELINUX=true, STAT_FORMAT=false) is exactly correct: both flags are necessary — SELINUX=true for scontext to be declared, STAT_FORMAT=false for the dereference code path to compile. This is the known vbdb NullDereference bug for this file."
 }

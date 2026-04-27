@@ -20,5 +20,5 @@
   "classification": "FALSE",
   "old_id": null,
   "id": "TRANSFORMATION_89",
-  "reasoning": "gdp is assigned at L7 (gdp = \"group_desc\") and IS read at L10 ((*gdp)++ inside for loop). The dead store alarm is a false positive \u2014 gdp is definitely used after assignment. PC = __need___FILE AND EXT2FS_ENABLE_SWAPFS: __need___FILE=T is a restrictive library macro (defined only transiently during stdio.h internal header processing), confirming this is a desugaring artifact."
+  "reasoning": "FALSE POSITIVE: 0301ffab3d9.c (ext2fs). Identical alarm to TRANSFORMATION_79 — 'Value stored to gdp is never read' at line 8 ('gdp = \"group_desc\"' inside #ifdef EXT2FS_ENABLE_SWAPFS). 'gdp' IS used at line 10 ('printf(\"%c\\n\", (*gdp)++)'). Same desugaring artifact as T79: when __need___FILE=true, the stdio.h desugaring places 'printf' inside 'if(!__need___FILE){...}', making 'gdp' appear as a dead store (assigned at line 8 but the read at line 10 is unreachable when __need___FILE=true). The presence condition __need___FILE=true AND EXT2FS_ENABLE_SWAPFS=true is the same non-standard/artifact configuration identified in T79."
 }

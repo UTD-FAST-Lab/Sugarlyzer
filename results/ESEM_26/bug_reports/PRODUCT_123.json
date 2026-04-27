@@ -16,5 +16,5 @@
   "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_123",
-  "reasoning": "When GZIP=F, content_gzip is not declared (L5-7 '#ifdef ENABLE_FEATURE_HTTPD_GZIP' skipped). L35 inside send_headers() uses content_gzip outside any #ifdef \u2192 undeclared identifier compile error. This configuration is non-compilable. Classification: FALSE."
+  "reasoning": "FALSE POSITIVE: 95755181b82.c (BusyBox httpd), dead store on 'len' at line ~39 with HTTPD_GZIP=false, HTTPD_BASIC_AUTH=true, BB_MMU=true. When ENABLE_FEATURE_HTTPD_GZIP=false, content_gzip is not defined (declared inside #ifdef HTTPD_GZIP at line 6), but it is referenced unconditionally at line 35 ('if (content_gzip)'). This is the known vbdb UndeclaredIdentifier bug: content_gzip used outside its #ifdef guard. The tool treats the undefined content_gzip as 0, making the gzip branch dead code. The dead store on len (assigned but never used in a write call) fires as a simplification artifact. Tool fails to detect the real UndeclaredIdentifier bug and reports spurious dead store instead."
 }

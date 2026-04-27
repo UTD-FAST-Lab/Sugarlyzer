@@ -8,5 +8,5 @@
   "id": "FAMILY_42",
   "classification": "FALSE",
   "old_id": "FAMILY_56",
-  "reasoning": "Line 60 is 'free(module_core(mod))' where module_core(mod) = mod[1]. mod is dynamically allocated (ultimately from hdr=malloc(2*sizeof(void*)) and updated via the while-loop alias to ptr=malloc(512)). The tool claims mod is not dynamically allocated, which is incorrect. Same false positive pattern as FAMILY_40 and FAMILY_41: complex pointer aliasing causes the tool to lose track of dynamic allocation provenance. The static_free claim is wrong. False positive."
+  "reasoning": "FALSE POSITIVE: 6e2b75740be.c (Linux module loader). 'Variable mod is freed although not dynamically allocated!' at line 60 ('free(module_core(mod))'), presence condition True. module_core(mod) is mod[1], which was set to 'ptr' (malloc'd at line 38). So module_core(mod) points to dynamically allocated memory. The alarm's claim that it is not dynamically allocated is factually incorrect. The actual issue at line 60 is that after the aliasing at line 48, freeing module_core(mod) leaves mod as a dangling pointer — but that's a use-after-free issue, not 'freed non-dynamic memory.'"
 }

@@ -16,5 +16,5 @@
   "classification": "TRUE_NEW",
   "old_id": null,
   "id": "PRODUCT_61",
-  "reasoning": "Known bug for eef2317b9f5.c is uninitialized branch (PRODUCT_22: TRUE). This alarm detects a memory leak: buf = malloc(bufsize) at L26 is allocated but when CLEAN_UP=F, the free(buf) at L31 is not compiled, so buf is leaked. New bug. PC (CLEAN_UP=F) exactly captures when the leak occurs \u2014 allocation happens in the path that skips the cleanup block. Correctly constrained."
+  "reasoning": "TRUE POSITIVE (NEW, CORRECTLY CONSTRAINED): When CONFIG_FEATURE_CLEAN_UP=false, buf is malloc'd at line 26 but the #ifdef CLEAN_UP block (lines 29-33) is not compiled, so free(buf) is never called. The malloc'd buffer leaks at function return. This is a genuine memory leak. NEW BUG: The known vbdb bug for eef2317b9f5.c is UninitializedVariable when CLEAN_UP=true — if cmd==8, goto all_done skips the malloc at line 26, leaving buf uninitialized; the CLEAN_UP block then calls 'if (buf)' on uninitialized data and potentially free(garbage). The MemoryLeak when CLEAN_UP=false is a separate, real issue. CORRECTLY CONSTRAINED: When CLEAN_UP=true, free(buf) is called (when buf is valid), so no leak. The presence condition CLEAN_UP=false correctly identifies the only configuration where the leak occurs."
 }

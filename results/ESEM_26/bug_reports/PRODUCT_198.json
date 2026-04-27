@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "TRUE_OVER",
+  "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_198",
-  "reasoning": "Line 8: `int x = *inode` in pts_sb_from_inode() (compiled when DEVPTS=T). Known VBDB bug at L8 (ERROR comment marks this location). The bug requires DEVPTS=T (controlling #ifdef). UNIX98=T only determines whether devpts_pty_kill() is compiled (L12-15) and calls pts_sb_from_inode(); the dead store at L8 is within pts_sb_from_inode() which is also analyzable without being called. Actually UNIX98=T calls devpts_pty_kill which calls pts_sb_from_inode, but the function is defined regardless. The bug occurs whenever DEVPTS=T. PC adds UNIX98=T unnecessarily. Over-constrained. Classification: TRUE_OVER."
+  "reasoning": "FALSE POSITIVE: 7acf6cd80b2.c (Linux ptmx). Dead store on 'x' at line 8 ('int x = *inode') inside pts_sb_from_inode(), compiled when DEVPTS_MULTIPLE_INSTANCES=true. x is assigned from dereferencing inode but never subsequently used — simplification artifact (real kernel code uses x for device node management). Same workspace/config as PRODUCT_159. The known vbdb bug (UninitializedVariable driver_data) is a separate issue."
 }

@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 1623.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW",
+  "classification": "FALSE",
   "old_id": null,
   "id": "TRANSFORMATION_123",
-  "reasoning": "66517915e09.c L16: codec_hw_write dead store in da7210_init path. Pulse duplicate of TRANSFORMATION_31 (CSA). The PC simplifies to CONFIG_SND_SOC_DA7210 AND CONFIG_I2C (since FSI_DA7210 is a derived macro that implies SOC_DA7210, and the OR branches cancel), which is correctly constrained for the path where da7210 is selected but not via FSI. No restrictive library macros. New bug (no ERROR comment for this dead store). PC correctly constrained."
+  "reasoning": "FALSE POSITIVE (SIMPLIFICATION ARTIFACT): 66517915e09.c (Linux sound/DA7210). Same analysis as TRANSFORMATION_119 but for 'da7210_init()' (line 16) instead of 'ak4642_init()' (line 24). 'int codec_hw_write = i2c_master_send; // ERROR' — 'codec_hw_write' is assigned but never used after the assignment because subsequent uses (write operations) were stripped by vbdb simplification. The real vbdb bug (// ERROR at line 16) is that 'i2c_master_send' (declared only inside '#ifdef CONFIG_I2C') is used in 'da7210_init()' without a '#ifdef CONFIG_I2C' guard — accessing undeclared variable when CONFIG_I2C=false. The DEAD_STORE alarm fires when CONFIG_I2C=true (CONFIG_SND_FSI_DA7210 OR CONFIG_SND_SOC_DA7210) — the opposite of the real bug scenario. Simplification artifact."
 }

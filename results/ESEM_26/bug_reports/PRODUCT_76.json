@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "TRUE_OVER",
+  "classification": "TRUE_NEW_OVER",
   "old_id": null,
   "id": "PRODUCT_76",
-  "reasoning": "Known VBDB bug for 221ac329e93.c at L37 (*buffer = a, ERROR). When KGDB=T (or XMON=T or BDI_SWITCH=T), allocate_buffer() is a macro using malloc(4092) which can return NULL. When KPROBES=T, *buffer = a at L37 dereferences possibly-null buffer \u2014 genuine null dereference. Known bug. The true PC should be KPROBES=T AND (KGDB=T OR XMON=T OR BDI_SWITCH=T). The reported PC {KGDB=T, KPROBES=T} is a subset, missing XMON=T and BDI_SWITCH=T configs. Over-constrained."
+  "reasoning": "TRUE POSITIVE (NEW, OVER-CONSTRAINED): When CONFIG_KGDB=true (or XMON/BDI_SWITCH), the allocate_buffer() macro expands to 'buffer = malloc(4092)' with no NULL check. When CONFIG_KPROBES=true, '*buffer = 'a'' dereferences buffer, which could be NULL if malloc fails. Genuine null dereference. NEW BUG: The known vbdb bug for 221ac329e93.c is WriteOnReadOnly when !KGDB && !XMON && !BDI_SWITCH && KPROBES — in that path allocate_buffer() uses memalign+mprotect(PROT_READ) making buffer read-only, and *buffer='a' writes to it causing a kernel panic. The NULL dereference risk when KGDB=true is a distinct issue. OVER-CONSTRAINED: The null dereference occurs whenever (KGDB || XMON || BDI_SWITCH) && KPROBES. The presence condition only requires KGDB=true, missing the XMON=true and BDI_SWITCH=true configurations that also use the malloc path."
 }

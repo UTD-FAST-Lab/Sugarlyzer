@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 7166.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "TRUE",
   "old_id": null,
   "id": "TRANSFORMATION_85",
-  "reasoning": "eckey can be null (from SSL_CTX_get_ex_data returning NULL) and is dereferenced at L17 in the else-else branch (HAVE_ECC=T AND !SSL_CTX_set_ecdh_auto). Genuine null dereference. No // ERROR at L17 (the known bug is the eckey memory leak), so this is a new bug. PC simplifies to !_STDLIB_H AND !__need_malloc_and_calloc AND !__USE_EXTERN_INLINES AND HAVE_ECC AND !SSL_CTX_set_ecdh_auto (STRICT_ANSI cancels out). Restrictive library macro !_STDLIB_H makes PC over-constrained \u2014 bug fires in all HAVE_ECC=T AND !SSL_CTX_set_ecdh_auto configs."
+  "reasoning": "TRUE POSITIVE (CORRECTLY CONSTRAINED): 35ae2e259e4.c (Apache mod_ssl). 'eckey could be null and is dereferenced' at line 17 ('*eckey = 15'). 'eckey = malloc(sizeof(int))' at line 10 can return NULL, and there is no NULL check before 'eckey' is dereferenced at line 17 (and also at line 12). The dereference at line 17 is inside '#else' of '#if defined(SSL_CTX_set_ecdh_auto)', so it is only reached when SSL_CTX_set_ecdh_auto is not defined. CORRECTLY CONSTRAINED: presence condition HAVE_ECC=true AND NOT SSL_CTX_set_ecdh_auto is exactly right — line 17 is inside '#ifdef HAVE_ECC' (lines 9-20) and inside the '#else' branch of '#if defined(SSL_CTX_set_ecdh_auto)' (lines 14-18). The stdlib header guard variables in the PC are desugaring artifacts from '#include <stdlib.h>' (malloc) but do not affect the correctness of the constraint. Note: the file comment suggests the primary vbdb bug is a memory leak ('return having forgotten to free the memory') but the null dereference is a genuine secondary bug found by Pulse."
 }

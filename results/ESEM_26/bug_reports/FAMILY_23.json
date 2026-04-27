@@ -8,5 +8,5 @@
   "id": "FAMILY_23",
   "classification": "FALSE",
   "old_id": "FAMILY_44",
-  "reasoning": "Line 12 is 'static char *ptr = &c;'. The tool reports 'c' as used uninitialized at this line. However, 'c' is declared as 'static char c;' — static variables in C are always zero-initialized by default, so c is never truly uninitialized. Furthermore, '&c' merely takes the address of c; it does not read c's value. There is no uninitialized use. The vbdb-documented bug for this file (472a474) is a DoubleOpOnResource (enable_IR_x2apic called twice in SMP configurations — not idempotent), which is a completely different issue. False positive."
+  "reasoning": "FALSE POSITIVE: 472a474c663.c (Linux APIC). Uninitialized value on 'c' at line 12 ('static char *ptr = &c'), presence condition True. 'static char c' at line 11 is a static variable — in C, static variables are automatically zero-initialized by the runtime. Taking the address of c with '&c' does not read c's value; it only obtains a pointer to c's memory location. The alarm incorrectly identifies this as 'using c uninitialized.' The real known vbdb bug in this file is the NULL dereference on the second call to enable_IR_x2apic() (ptr is set to NULL on first call, then *ptr = 'a' dereferences NULL on second call), which requires CONFIG_SMP=true."
 }

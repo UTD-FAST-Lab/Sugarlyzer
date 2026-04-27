@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_197",
-  "reasoning": "Line 16: --argc dead store in main() outside any #ifdef, occurs in all configs. New bug. PC (UNREGISTER=F AND SCAN=T) over-constrained. Classification: TRUE_NEW_OVER."
+  "reasoning": "FALSE POSITIVE: 061fd0a353e.c (BusyBox hdparm). Dead store on 'argc' at line 16 (comma expression 'p = *argv++, --argc') with UNREGISTER_HWIF=false, SCAN_HWIF=true. argc is decremented in case 'W' but never read again — simplification artifact (real hdparm uses argc for further option processing). Same pattern as PRODUCT_146/173."
 }

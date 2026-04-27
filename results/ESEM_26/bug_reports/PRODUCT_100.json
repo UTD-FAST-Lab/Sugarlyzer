@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_100",
-  "reasoning": "Line 16: `p = *argv++, --argc` \u2014 the comma expression decrements argc and stores the new value back, but argc is never read afterward \u2014 dead store of argc. This statement is in main() outside any #ifdef, so the dead store occurs in all configurations. No '// ERROR' for argc dead store \u2192 new bug not in VBDB. PC requires UNREGISTER=T AND SCAN=T, but argc is dead regardless of these flags. PC is over-constrained. Classification: TRUE_NEW_OVER."
+  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_56/95 (061fd0a353e.c), but alarm on 'argc' (decremented via '--argc' at line 16) rather than 'argv'. The '--argc' post-decrements argc but argc is never used after line 16 in the simplified file. In the real BusyBox hdparm main(), argc is used to control argument parsing loop iterations. Simplification artifact. The known vbdb bug is UndefinedSymbol when HDIO_UNREGISTER_HWIF=true but HDIO_SCAN_HWIF=false."
 }

@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 5609.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "FALSE",
   "old_id": "TRANSFORMATION_91",
   "id": "TRANSFORMATION_70",
-  "reasoning": "k_crcs = someInt at L25 (inside if(r) block) is a dead store \u2014 k_crcs is never read after this assignment before the function exits via out:/return. Genuine dead store in the r=true path. No // ERROR at L25, new bug. PC = !_STDLIB_H AND !__need_malloc_and_calloc \u2014 only library macros (restrictive !_STDLIB_H). Bug fires in all compilable VERSION_CHECKING=T configs; PC is over-constrained because it only fires in non-standard stdlib header states."
+  "reasoning": "FALSE POSITIVE: 5275b1e49f6.c (BusyBox insmod). 'Value stored to k_crcs is never read' at line 25 ('k_crcs = someInt' inside 'if (r)'). After line 25, execution reaches 'out:' and 'return(exit_status)' without reading 'k_crcs'. Simplification artifact: in real BusyBox insmod, 'k_crcs' is used to compare module CRC values with kernel CRC values for version checking. The vbdb simplification stripped those comparison uses, leaving only the assignment. Same pattern as TRANSFORMATION_40 (k_crcs = 0 at line 21, also a dead store). Presence condition is only stdlib header guards (effectively True) — no CONFIG_FEATURE_INSMOD_VERSION_CHECKING constraint."
 }

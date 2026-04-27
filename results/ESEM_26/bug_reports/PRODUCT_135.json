@@ -13,8 +13,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "TRUE_OVER",
   "old_id": null,
   "id": "PRODUCT_135",
-  "reasoning": "SLOB=T \u2192 kmalloc_caches undeclared at L36 (init_node_lock_keys, LOCKDEP=T) \u2192 compile error. Non-compilable. Classification: FALSE."
+  "reasoning": "TRUE POSITIVE (OVER-CONSTRAINED): Same bug as PRODUCT_108 (0f8f8094d28.c, Linux kmalloc). Line 36 accesses kmalloc_caches[i] inside #ifdef CONFIG_LOCKDEP, but kmalloc_caches is declared inside #ifndef CONFIG_SLOB. When SLOB=true, kmalloc_caches is undeclared, and the tool detects accessing it as PULSE_UNINITIALIZED_VALUE on 'cache'. This is the known vbdb OutOfBoundsRead/UndeclaredIdentifier bug — real bug when LOCKDEP=true && SLOB=true. OVER-CONSTRAINED: The core condition is LOCKDEP=true && SLOB=true; the additional flags FORCE_MAX_ZONEORDER=false, PPC_256K_PAGES=true, SLAB=false do not gate the buggy code path and unnecessarily restrict the presence condition."
 }

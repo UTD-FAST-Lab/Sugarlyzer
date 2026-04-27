@@ -7,6 +7,6 @@
   "origin": "family",
   "id": "FAMILY_60",
   "classification": "FALSE",
-  "reasoning": "Line 23 is 'strcat(path, \"/\")'. Same false positive as FAMILY_57, FAMILY_58, and FAMILY_59: path is correctly initialized as an empty string by path[0] = '\\0' at line 19. The tool consistently fails to track the initialization through subsequent strcat calls in this function. False positive.",
+  "reasoning": "FALSE POSITIVE: a7fc1f83c81.c (Marlin SD card). Uninitialized value on 'path' at line 23 ('strcat(path, \"/\")'), when def(SDSUPPORT). path is initialized at line 19. Same analysis as FAMILY_57/58/59 — false positive.",
   "old_id": "FAMILY_75"
 }

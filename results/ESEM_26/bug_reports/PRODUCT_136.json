@@ -16,5 +16,5 @@
   "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_136",
-  "reasoning": "I2C=F \u2192 i2c_master_send not declared (L9-11 skipped). L24 in ak4642_init() (compiled when SOC_AK4642=T) references i2c_master_send \u2192 undeclared identifier compile error. Non-compilable. Classification: FALSE."
+  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_44/52/91/92/102/106/107/109/113/114/117/125/126/129/131 (66517915e09.c), dead store on 'codec_hw_write' at line 24. CONFIG_I2C=false means i2c_master_send is undeclared. Tool fails to detect the known UndeclaredIdentifier vbdb bug and reports a spurious dead store instead. Simplification artifact."
 }

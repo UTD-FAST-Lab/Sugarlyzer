@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW",
+  "classification": "FALSE",
   "old_id": "PRODUCT_40",
   "id": "PRODUCT_11",
-  "reasoning": "b62bd7b261b.c L14: 'char *a = val' dead store. a is declared and assigned at L14 inside #ifdef MDEV_CONF / #ifdef MDEV_RENAME, but a is only used at L21 inside #ifdef MDEV_RENAME_REGEXP. When MDEV_RENAME_REGEXP=F, a is assigned but never read \u2014 genuine dead store. PC=MDEV_CONF AND MDEV_RENAME AND !MDEV_RENAME_REGEXP precisely captures this condition. No library macros. New bug, correctly constrained PC."
+  "reasoning": "FALSE POSITIVE: The alarm reports 'a' (char *a = val at line 14) as a dead store when MDEV_CONF && MDEV_RENAME && !MDEV_RENAME_REGEXP. In the simplified file, 'a' is only used inside #ifdef ENABLE_FEATURE_MDEV_RENAME_REGEXP (s = a), so it appears unused when REGEXP is disabled. However, the known vbdb bug for this file/configuration specifically identifies 'p' (not 'a') as the unused variable. In the real BusyBox make_device() code, 'a' retains the original val pointer and has uses outside the REGEXP block that were removed during simplification. This dead store for 'a' is an artifact of the simplification."
 }

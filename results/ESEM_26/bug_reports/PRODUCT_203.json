@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_203",
-  "reasoning": "Line 67: `curr->next = head` \u2014 head declared at L60 but never initialized before first use. Uninitialized read in main() outside any #ifdef \u2192 all configs. New bug. PC (RECURSIVE=T AND SORTFILES=T) over-constrained. Classification: TRUE_NEW_OVER."
+  "reasoning": "FALSE POSITIVE: Same file as prior entries (2631486f1bf.c, BusyBox ls). PULSE_UNINITIALIZED_VALUE on 'head' at line 67. The initialization 'head = NULL' was stripped by the simplification process — in real code head is initialized before use. This is a simplification artifact. The real bug in this file (NULLPTR_DEREFERENCE on curr via malloc without NULL check) fires unconditionally for any configuration."
 }

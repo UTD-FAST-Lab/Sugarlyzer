@@ -16,5 +16,5 @@
   "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_138",
-  "reasoning": "SLOB=T \u2192 kmalloc_caches undeclared at L36 (init_node_lock_keys, LOCKDEP=T) \u2192 compile error. Non-compilable. Classification: FALSE."
+  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_112/120/122/130/137 (0f8f8094d28.c), dead store on 'n' (int n = *cache) inside init_node_lock_keys(). CONFIG_SLOB=true and CONFIG_SLAB=true simultaneously is a contradictory/impossible configuration in the Linux kernel. Tool treats them as independent booleans. When SLOB=true, kmalloc_caches is undeclared, so cache is derived from accessing undeclared memory. n is assigned but never used — simplification artifact."
 }

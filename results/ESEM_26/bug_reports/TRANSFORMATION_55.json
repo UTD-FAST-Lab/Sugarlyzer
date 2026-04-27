@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 6010.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "FALSE",
   "old_id": "TRANSFORMATION_111",
   "id": "TRANSFORMATION_55",
-  "reasoning": "a is assigned at L14 (char *a = val) and only used at L21 (s = a) inside the RENAME_REGEXP block. When CONF=T AND RENAME=T AND !REGEXP, a is a genuine dead store. No // ERROR, so this is a new bug. The PC = !(CONF AND RENAME AND REGEXP) spans many configs where L14 is not even reached in real compilation (CONF=F or RENAME=F), which are desugaring artifacts. PC is over-constrained."
+  "reasoning": "FALSE POSITIVE: b62bd7b261b.c (BusyBox mdev). 'Value stored to a during its initialization is never read' at line 14 ('char *a = val' inside #ifdef ENABLE_FEATURE_MDEV_RENAME). When ENABLE_FEATURE_MDEV_RENAME_REGEXP=false, the only use of 'a' (at line 21: 's = a' inside #ifdef MDEV_RENAME_REGEXP) is not compiled. Simplification artifact: in real BusyBox mdev, 'a' may be used for other purposes in the RENAME path when RENAME_REGEXP=false (e.g., for non-regexp renaming). The vbdb simplification retained only the RENAME_REGEXP-specific use of 'a', making 'a' appear as a dead store in non-REGEXP configurations. The presence condition (NOT MDEV_RENAME_REGEXP) correctly reflects when the dead store fires, but the underlying cause is simplification rather than a genuine code defect."
 }

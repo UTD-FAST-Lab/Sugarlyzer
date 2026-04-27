@@ -7,6 +7,6 @@
   "origin": "family",
   "id": "FAMILY_72",
   "classification": "FALSE",
-  "reasoning": "Same file and same false positive as FAMILY_71, now with column range 11:10-11:16 pointing directly to 'newuri' as the first argument of strncpy. strncpy writes to its destination — it does not read from newuri's current contents and does not require prior initialization of the array. The uninitialized_value claim is incorrect. The real vbdb bug is at line 12 (sizeof(newuri-1) vs sizeof(newuri)-1). False positive.",
+  "reasoning": "FALSE POSITIVE: dbafef17dd1.c (Apache rewrite). Alarm fires at line 11, columns 10-16 ('newuri' as the first argument to strncpy), when def(HAS_APACHE_REGEX_LIB). The tool claims 'newuri is used uninitialized,' but strncpy(dest, src, n) WRITES to its destination argument — it does not read the existing content of newuri. The real bug in this file is the off-by-one error at line 12 ('newuri[sizeof(newuri-1)]' should be 'newuri[sizeof(newuri)-1]'), but that is not what this alarm captures.",
   "old_id": "FAMILY_10"
 }

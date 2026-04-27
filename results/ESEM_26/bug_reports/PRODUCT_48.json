@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_48",
-  "reasoning": "flags is written at L42 (flags |= T_ESCAPE_SHELL_CMD in the \\!NEED_ENHANCED_ESCAPES path) but is never subsequently read \u2014 the loop body has no use of flags after setting it. Genuine dead store. No ERROR comment and no TRUE record for c76df14dfb4.c; same new bug as PRODUCT_45 (already TRUE_NEW_OVER) at the same line. The dead store at L42 occurs for all \\!NEED_ENHANCED_ESCAPES configs: CROSS_COMPILE=T always gives \\!NEED_ENHANCED_ESCAPES (macro not defined), and CROSS_COMPILE=F + \\!WIN32 also gives \\!NEED_ENHANCED_ESCAPES. The PC {CROSS_COMPILE=F, WIN32=F, NEED_ENHANCED_ESCAPES=F} covers only one of these combos, missing CROSS_COMPILE=T configs. Over-constrained (too narrow)."
+  "reasoning": "FALSE POSITIVE: Same file and variable as PRODUCT_36 and PRODUCT_45 (c76df14dfb4.c), dead store on 'flags' at line 42 (the #else branch when !NEED_ENHANCED_ESCAPES). In the real Apache gen_test_char.c, flags is written to a test_char_table output array on each loop iteration; the simplified file stripped that table write. This is a simplification artifact. The known vbdb bug (OSCommandInjection: NEED_ENHANCED_ESCAPES not defined when CROSS_COMPILE && WIN32) is a different issue."
 }

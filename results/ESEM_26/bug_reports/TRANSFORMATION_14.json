@@ -20,5 +20,5 @@
   "classification": "FALSE",
   "old_id": null,
   "id": "TRANSFORMATION_14",
-  "reasoning": "bc0ffc0e971.c L29: MallocSizeof alarm \u2014 `ch = malloc(sizeof(*ch))` type incompatibility. PC: __STRICT_ANSI__=T plus other stdlib macros. All conditions are library header macros, no feature config flags. The type mismatch is a desugaring artifact: the struct ethtable_t gets renamed in the desugared file, causing the sizeof operand type to differ from the cast target. Not a real bug in actual compilation."
+  "reasoning": "FALSE POSITIVE: bc0ffc0e971.c (BusyBox nameif). 'Result of malloc is converted to pointer of type ethtable_t, incompatible with sizeof operand type struct(anonymous)' at line 29 ('ch = malloc(sizeof(*ch))'). In the original code, 'ethtable_t' is a typedef for 'struct ethtable_s' (defined at lines 7-10), and 'sizeof(*ch)' = sizeof(ethtable_t) — the types are compatible. The alarm is a desugaring artifact: the transformation expanded the typedef definition inline, creating an anonymous struct type in the desugared file that the analyzer treats as a different type from the 'ethtable_t' typedef name, causing a spurious type incompatibility. The presence condition (effectively STRICT_ANSI=true with no application config vars) has no relation to the actual application behavior."
 }

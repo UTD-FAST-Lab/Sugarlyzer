@@ -8,5 +8,5 @@
   "id": "FAMILY_12",
   "classification": "FALSE",
   "old_id": "FAMILY_1",
-  "reasoning": "When !HAVE_TLSV1_X, SSL_PROTOCOL_TLSV1_1 is not declared (the #define is guarded by #ifdef HAVE_TLSV1_X). Line 13 ('thisopt = SSL_PROTOCOL_TLSV1_1;') would fail to compile in this configuration due to an undeclared identifier — exactly the UndeclaredIdentifier bug documented in vbdb (1a3c8e3) for !HAVE_TLSV1_X. Reporting this as a dead_store is incorrect: there is no dead store in code that cannot compile. The tool is misclassifying the compile error as a dead store. False positive."
+  "reasoning": "FALSE POSITIVE: 1a3c8e3d840.c (Apache SSL). Dead store on 'thisopt' at line 13, when !def(HAVE_TLSV1_X). When TLSV1_X is NOT defined, SSL_PROTOCOL_TLSV1_1 is undefined. The tool treats the undefined macro as 0, so 'thisopt = SSL_PROTOCOL_TLSV1_1' becomes 'thisopt = 0' → dead store. The real bug is the UndeclaredIdentifier on SSL_PROTOCOL_TLSV1_1 when TLSV1_X=false, but the tool misreports it as a dead store. The tool missed the actual known vbdb bug."
 }

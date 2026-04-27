@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 5233.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW",
+  "classification": "FALSE",
   "old_id": null,
   "id": "TRANSFORMATION_91",
-  "reasoning": "pid_output is assigned at L11 (pid_output=1) unconditionally and at L19 (pid_output=0) when !PIDTEMP, but is never read in any configuration. Genuine dead store across all compilable configs. No // ERROR for pid_output (the // ERROR at L16 marks a different bug). New bug. PC covers all combinations of MARLIN_H, PIDTEMP, PID_DEBUG (simplifies to true). Correctly constrained, no library macros."
+  "reasoning": "FALSE POSITIVE (SIMPLIFICATION ARTIFACT): 8c4377dd635.c (Marlin firmware). 'The value written to &pid_output is never used' at line 13. 'pid_output' is assigned 1 at line 11 (unconditionally) and potentially 0 at line 19 (when PIDTEMP=false), but neither value is ever read after assignment — subsequent uses were stripped by vbdb simplification. The presence condition covers all combinations of MARLIN_H, PIDTEMP, and PID_DEBUG (always true), confirming this is a config-independent simplification artifact. Note: the real vbdb bug is at line 16 ('SERIAL_ECHO_START(\" PIDDEBUG \")' with // ERROR comment) — when MARLIN_H=true, SERIAL_ECHO_START and serialprint are not defined (they are inside '#ifndef MARLIN_H'), causing use of an undefined macro under PIDTEMP=true AND PID_DEBUG=true AND MARLIN_H=true."
 }

@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 7166.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "TRUE_OVER",
   "old_id": null,
   "id": "TRANSFORMATION_156",
-  "reasoning": "35ae2e259e4.c L17: '*eckey = 15;' in the else-else branch (when !SSL_CTX_set_ecdh_auto). Pulse detects eckey as read without initialization \u2014 same desugaring-based uninitialized path as TRANSFORMATION_85/121. The PC includes HAVE_ECC=T and !SSL_CTX_set_ecdh_auto=T (real feature flags for this path) plus !_STDLIB_H (restrictive) and !__need_malloc_and_calloc (non-restrictive). The restrictive !_STDLIB_H over-constrains the PC. New bug, over-constrained PC."
+  "reasoning": "TRUE POSITIVE (OVER-CONSTRAINED): 35ae2e259e4.c (Apache mod_ssl). Same bug family as TRANSFORMATION_109 — '`eckey` is read without initialization' at line 17 ('*eckey = 15') inside '#else' of '#if defined(SSL_CTX_set_ecdh_auto)' and inside '#ifdef HAVE_ECC'. 'eckey = malloc(sizeof(int))' can return NULL; '*eckey = 15' dereferences it without NULL check. The real bug exists when HAVE_ECC=true AND NOT SSL_CTX_set_ecdh_auto. OVER-CONSTRAINED: compared to TRANSFORMATION_109, this PC is broader — it covers both __USE_EXTERN_INLINES=true and false AND both __STRICT_ANSI__=true and false (all four combinations), but still requires NOT _STDLIB_H AND NOT __need_malloc_and_calloc (stdlib header guard artifacts). These stdlib guard constraints narrow the PC beyond what the application-level bug requires. The correct presence condition for the line 17 bug is simply: HAVE_ECC AND NOT SSL_CTX_set_ecdh_auto."
 }

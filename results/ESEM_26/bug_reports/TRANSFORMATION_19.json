@@ -20,5 +20,5 @@
   "classification": "TRUE",
   "old_id": "TRANSFORMATION_184",
   "id": "TRANSFORMATION_19",
-  "reasoning": "6e2b75740be.c L63: `free(refptr(mod))` = `free(mod[0])` where mod has been aliased through the while-loop (L47-48: mod=module_core(mod)) making it point to freed memory. Known bug (// ERROR at L63: 'dereferencing already freed mod'). PC = CONFIG_MODULE_UNLOAD=T AND CONFIG_SMP=T \u2014 matches exactly the `#if defined(CONFIG_MODULE_UNLOAD) && defined(CONFIG_SMP)` preprocessor condition that guards the refptr malloc (L29-35) and the free(refptr(mod)) at L62-64. PC correctly constrained."
+  "reasoning": "TRUE POSITIVE (CORRECTLY CONSTRAINED): 6e2b75740be.c (Linux module). '1st function call argument is an uninitialized value' at line 63. This is the known vbdb double-free/use-after-free bug for this file (same as FAMILY_39): 'mod' is freed and then passed again to module_free() at line 63 when CONFIG_MODULE_UNLOAD=true AND CONFIG_SMP=true. CORRECTLY CONSTRAINED: the presence condition is CONFIG_MODULE_UNLOAD AND CONFIG_SMP — identical to the constraint from FAMILY_39. Both conditions are necessary and sufficient to compile the code path where 'mod' is double-freed."
 }

@@ -7,6 +7,6 @@
   "origin": "family",
   "id": "FAMILY_74",
   "classification": "TRUE",
-  "reasoning": "Line 17 is 'return err;' at the put: label. Under def(CONFIG_NETPOLL)&&!def(CONFIG_IPV6): err is declared at line 6 without initialization; the #else branch at line 13 executes 'goto put' unconditionally, jumping directly to 'return err' at line 17 without ever initializing err. This is a genuine uninitialized value bug. Under CONFIG_IPV6, err is set to -1 at line 9 before any goto, so err is always initialized in that config. The presence condition def(CONFIG_NETPOLL)&&!def(CONFIG_IPV6) exactly matches the configuration space where the bug occurs. The vbdb source (e39363a9def.c) marks line 17 with '// ERROR (3)', confirming this is a known variability bug. Known bug, correctly constrained.",
+  "reasoning": "TRUE POSITIVE (CORRECTLY CONSTRAINED): e39363a9def.c (Linux netpoll). Uninitialized value on 'err' at line 17 ('return err'), when def(CONFIG_NETPOLL) AND !def(CONFIG_IPV6). 'int err' is declared at line 6 without initialization. When CONFIG_IPV6 is false, the code executes 'goto put' at line 13, bypassing the only assignment 'err = -1' at line 9. At label 'put' (line 16), 'return err' reads the uninitialized err. This is the known vbdb UninitializedVariable bug. CORRECTLY CONSTRAINED: def(NETPOLL) is needed to compile netpoll_setup(), and !def(IPV6) is needed to take the always-goto path that skips the 'err = -1' assignment.",
   "old_id": "FAMILY_66"
 }

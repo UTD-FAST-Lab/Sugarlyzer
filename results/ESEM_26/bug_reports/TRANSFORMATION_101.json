@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 6481.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW_UNDER",
+  "classification": "FALSE",
   "old_id": null,
   "id": "TRANSFORMATION_101",
-  "reasoning": "mask = node_to_cpumask_map[node] at L133 or L135 can return NULL when !CONFIG_DEBUG_PER_CPU_MAPS (the static inline cpumask_of_node without debug guards returns node_to_cpumask_map[node] directly). *mask at L137 then dereferences a NULL pointer. No // ERROR in the file; new bug. PC simplifies to CONFIG_PCI (the three OR clauses cover all combinations of !__need___FILE, STRICT_ANSI, USE_EXTERN_INLINES which cancel to CONFIG_PCI AND !__need___FILE, and !__need___FILE is non-restrictive). PC is under-constrained: it includes CONFIG_DEBUG_PER_CPU_MAPS=T configs where the bug cannot occur (cpumask_of_node has NULL guards in that case)."
+  "reasoning": "FALSE POSITIVE: 76baeebf7df.c (Linux PCI/NUMA). '`mask` is read without initialization' at line 137 ('printf(\"mask: %ld\\n\", *mask)'). In the original code, 'mask' is declared at line 129 and always assigned before use: either 'mask = cpumask_of_pcibus(node)' (line 133, when CONFIG_NUMA=true) or 'mask = cpumask_of_node(node)' (line 135, when CONFIG_NUMA=false) — covering all configurations. Desugaring artifact: 'local_cpus_show' is inside '#ifdef CONFIG_PCI' (line 67). After transformation desugaring, 'mask' is hoisted to function scope (uninitialized) and the '#ifdef CONFIG_NUMA' / '#else' / '#endif' structure around the assignment becomes 'if(CONFIG_NUMA){...}else{...}'. The Pulse analyzer may not track that both branches assign 'mask'. Additionally, 'printf' is inside a conditional from '#include <stdio.h>' desugaring (__need___FILE), creating separate if-blocks where 'mask' reads may appear before assignments. The presence condition correctly requires CONFIG_PCI=true (function is inside #ifdef CONFIG_PCI), but the __need___FILE header guard artifact in the PC confirms desugaring involvement."
 }

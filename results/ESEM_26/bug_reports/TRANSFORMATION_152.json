@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 914.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW",
+  "classification": "FALSE",
   "old_id": null,
   "id": "TRANSFORMATION_152",
-  "reasoning": "e30bfedce4d.c L24: 'int xGridSpacing = left_probe_bed_position;' \u2014 xGridSpacing is assigned but never subsequently used in the simplified source. Genuine dead store. When ENABLE_AUTO_BED_LEVELING=T, AUTO_BED_LEVELING_GRID is also defined (L1-3: #define AUTO_BED_LEVELING_GRID inside #ifdef ENABLE_AUTO_BED_LEVELING), so L23-25 (#ifdef AUTO_BED_LEVELING_GRID block) is always taken. PC=ENABLE_AUTO_BED_LEVELING=T correctly captures the condition. No library macros. New bug, correctly constrained PC."
+  "reasoning": "FALSE POSITIVE (SIMPLIFICATION ARTIFACT): e30bfedce4d.c (Marlin 3D printer). 'The value written to &xGridSpacing is never used' at line 24 ('int xGridSpacing = left_probe_bed_position'). `xGridSpacing` is assigned inside '#ifdef AUTO_BED_LEVELING_GRID' (which is defined inside '#ifdef ENABLE_AUTO_BED_LEVELING') but its downstream uses were stripped by vbdb simplification. In real Marlin code, `xGridSpacing` would be used for bed leveling grid calculations. The real vbdb bug (annotated '// ERROR' at line 21) is at 'int left_probe_bed_position=LEFT_PROBE_BED_POSITION' — in configurations where ENABLE_AUTO_BED_LEVELING=true but AUTO_BED_LEVELING_GRID=false, LEFT_PROBE_BED_POSITION is undefined (only defined inside '#ifdef AUTO_BED_LEVELING_GRID'). The DEAD_STORE alarm for `xGridSpacing` is a simplification artifact unrelated to the actual vbdb bug."
 }

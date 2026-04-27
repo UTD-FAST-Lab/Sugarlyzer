@@ -16,5 +16,5 @@
   "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_174",
-  "reasoning": "PC is infeasible: TWL4030=T causes '#define CONFIG_IRQ_DOMAIN' at L4 in 6252547b8a7.c, yet PC requires IRQ_DOMAIN=F \u2014 direct contradiction. Configuration cannot exist. Classification: FALSE."
+  "reasoning": "FALSE POSITIVE: 6252547b8a7.c (Linux TWL4030). Dead store on 'irq' at line 12 ('int irq = *ops') inside irq_domain_add(), same workspace/config as PRODUCT_150 but different alarm type. TWL4030_CORE=true, IRQ_DOMAIN=false, OF_IRQ=false is a contradictory configuration: CONFIG_IRQ_DOMAIN is implicitly defined by CONFIG_TWL4030_CORE (lines 3-5), so TWL4030_CORE=true && IRQ_DOMAIN=false is impossible in practice. When IRQ_DOMAIN=false, irq_domain_add() body would not be compiled, yet the alarm fires at line 12 inside that body — the result of an impossible configuration analysis. Additionally, irq is assigned from *ops but never used (simplification artifact). The known NullDereference bug (ops=NULL when OF_IRQ=false) is a separate issue detected in PRODUCT_150."
 }

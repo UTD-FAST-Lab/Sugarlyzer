@@ -20,5 +20,5 @@
   "classification": "FALSE",
   "old_id": null,
   "id": "TRANSFORMATION_105",
-  "reasoning": "Pulse duplicate of TRANSFORMATION_69. lfilename is initialized at L15 and IS read at L22 (strcat(path, lfilename)). Dead store alarm is a false positive. PC = (STRICT_ANSI OR !STRICT_ANSI) is a tautology with no real feature flags, indicating a desugaring artifact."
+  "reasoning": "FALSE POSITIVE: a7fc1f83c81.c (Marlin firmware SD card). 'The value written to &lfilename is never used' at line 15 ('char lfilename[FILENAME_LENGTH] = \"FOLDERNAME12\\0\"'). In the original code, 'lfilename' IS used at line 22 ('strcat(path, lfilename)') — it is not a dead store. Desugaring artifact: '#include <string.h>' desugaring places the 'strcat' function declaration inside a conditional based on __STRICT_ANSI__ and other string.h header guards. In the desugared form, 'strcat(path, lfilename)' at line 22 is inside a header-guard conditional if-block, while 'lfilename' assignment at line 15 is outside — making 'lfilename' appear as a dead store on some paths. The presence condition is a tautology (__STRICT_ANSI__ OR NOT __STRICT_ANSI__ = always true) with no application-level configs, confirming this is a purely header-desugaring artifact with no variability dimension."
 }

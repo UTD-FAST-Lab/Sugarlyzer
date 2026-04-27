@@ -16,5 +16,5 @@
   "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_73",
-  "reasoning": "PC has I2C=F (making i2c_master_send undeclared, compile error) AND FSI_AK4642=T AND SOC_AK4642=F (contradictory: FSI_AK4642=T internally defines SOC_AK4642 at L2). Both render this an infeasible configuration."
+  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_44/52/60/62/67/69 (66517915e09.c), dead store on 'codec_hw_write' at line 16 (da7210_init()), now with CONFIG_I2C=false. When I2C=false, i2c_master_send is undeclared — the exact known vbdb bug. The tool appears to have processed the undefined i2c_master_send without flagging UndeclaredIdentifier, instead reporting a dead store artifact. The tool failed to detect the known bug."
 }

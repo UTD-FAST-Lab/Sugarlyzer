@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 5788.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "FALSE",
   "old_id": "TRANSFORMATION_145",
   "id": "TRANSFORMATION_57",
-  "reasoning": "When CONFIG_FEATURE_CLEAN_UP=F, buf is assigned at L26 from malloc(bufsize) but the cleanup block (L29-33) is absent, so buf is never read or freed \u2014 genuine dead store and memory leak. The VBDB // ERROR at L31 marks a different bug (freeing potentially uninitialized buf when CLEAN_UP=T). New bug. PC = !CLEAN_UP AND !_STDLIB_H AND !__malloc_and_calloc_defined: the restrictive library macros (!_STDLIB_H, !__malloc_and_calloc_defined) over-constrain the PC \u2014 the bug fires in all !CLEAN_UP configs, not just when stdlib.h internals are in a non-standard state."
+  "reasoning": "FALSE POSITIVE: eef2317b9f5.c (BusyBox syslogd). 'Value stored to buf is never read' at line 26 ('buf = malloc(bufsize)'). When CONFIG_FEATURE_CLEAN_UP=false, the cleanup block containing 'if(buf) free(buf)' is not compiled, so 'buf' is assigned at line 26 but never subsequently read. Simplification artifact: in real BusyBox syslogd, 'buf' is used to store log messages and is read extensively for I/O operations. The vbdb simplification stripped all those uses, retaining only the malloc allocation and the optional CLEAN_UP cleanup. When CLEAN_UP=false, only the malloc (dead store) and the actual buffer processing (stripped) would exist. The presence condition correctly identifies when buf is not read (CLEAN_UP=false), but the dead store is an artifact of simplification rather than a real defect."
 }

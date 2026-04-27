@@ -16,5 +16,5 @@
   "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_112",
-  "reasoning": "When SLOB=T, kmalloc_caches is not declared (L25-27 '#ifndef CONFIG_SLOB' block is skipped). L36 references kmalloc_caches[i] inside init_node_lock_keys() (compiled when LOCKDEP=T) \u2192 undeclared identifier compile error. Configuration is non-compilable. Classification: FALSE."
+  "reasoning": "FALSE POSITIVE: 0f8f8094d28.c (Linux kmalloc). Dead store on 'n' at line ~41 ('int n = *cache'). In the simplified code, n is assigned from *cache inside init_node_lock_keys() but never used afterwards. This is a simplification artifact — the real kernel code uses the cache value (e.g., for lock annotation setup). Additionally, the presence condition includes CONFIG_SLOB=true and CONFIG_SLAB=true simultaneously, which is a contradictory/impossible configuration in the Linux kernel (only one allocator can be active). The known vbdb bug is OutOfBoundsRead/UndeclaredIdentifier: kmalloc_caches accessed inside #ifdef LOCKDEP but declared inside #ifndef SLOB; that is a separate issue from this dead store on n."
 }

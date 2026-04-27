@@ -8,5 +8,5 @@
   "id": "FAMILY_24",
   "classification": "TRUE_NEW",
   "old_id": "FAMILY_45",
-  "reasoning": "Lines 21-22 are inside APIC_init_uniprocessor(), declared as 'int APIC_init_uniprocessor(void)'. The function body calls enable_IR_x2apic() and then falls off the end with no return statement — undefined behavior for a non-void, non-main function in C. This is a genuine control-flow bug. The presence condition [True] is correctly constrained: the function is not inside any #ifdef and is always compiled. The vbdb entry (472a474) documents a DoubleOpOnResource bug (unrelated); this missing return is a new finding. True positive, correctly constrained."
+  "reasoning": "TRUE POSITIVE (NEW): 472a474c663.c (Linux APIC). 'Control flow of non-void function ends here!' at lines 21-22, presence condition True. APIC_init_uniprocessor() is declared as 'int' (line 19) but has no return statement — it calls enable_IR_x2apic() and the function body ends without returning a value. This is a genuine missing-return bug in a non-void function. NEW: The known vbdb bug for this file (marked by //ERROR at line 21) is about enable_IR_x2apic() not being idempotent (second call dereferences NULL ptr), not about the missing return in APIC_init_uniprocessor. CORRECTLY CONSTRAINED: True is correct since APIC_init_uniprocessor is always compiled (not inside any #ifdef)."
 }

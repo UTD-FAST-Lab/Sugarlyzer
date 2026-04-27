@@ -8,5 +8,5 @@
   "id": "FAMILY_10",
   "classification": "FALSE",
   "old_id": "FAMILY_18",
-  "reasoning": "Same file and same false positive as FAMILY_9. Line 21 is 'strcat(buf, dt)'. The tool reports 'buf' as uninitialized, but 'buf' is initialized by 'strcpy(buf, \"module option(s): \")' at line 19, immediately before this call. 'buf' is not uninitialized at line 21. The real bug (vbdb 199501f) is a NullDereference via 'dt', not an uninitialized 'buf'. False positive."
+  "reasoning": "FALSE POSITIVE: 199501f2a00.c (BusyBox modprobe). Uninitialized value on 'buf' at line 21 ('strcat(buf, dt)'), when !def(ENABLE_FEATURE_MODPROBE_MULTIPLE_OPTIONS). However, 'buf' was initialized by 'strcpy(buf, \"module option(s): \")' at line 19 — it is NOT uninitialized at line 21. The alarm about buf being uninitialized is incorrect. Note: there IS a real bug at line 21 — 'strcat(buf, dt)' where dt could be NULL (when rand()%2 == 0) — but that is a NULL pointer dereference on dt, not an uninitialized buf."
 }

@@ -13,8 +13,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_106",
-  "reasoning": "Line 24: `int codec_hw_write = i2c_master_send` in ak4642_init() (compiled when SOC_AK4642=T). codec_hw_write is assigned but never read \u2014 dead store. I2C=T ensures i2c_master_send is declared. FSI_AK4642=T implies SOC_AK4642=T (consistent), FSI_DA7210=T implies SOC_DA7210=T (consistent). No contradictions in PC. The '// ERROR' at L24 marks the VBDB-known I2C=F compile error; this DEAD_STORE (I2C=T) is a distinct new bug not in VBDB. Required condition: SOC_AK4642=T AND I2C=T. PC adds FSI_AK4642=T, FSI_DA7210=T, SOC_DA7210=T \u2014 all unnecessary for ak4642_init()'s dead store. PC is over-constrained. Classification: TRUE_NEW_OVER."
+  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_44/52/91/92/102 (66517915e09.c), dead store on 'codec_hw_write' at line 24. When all five configs (SND_FSI_DA7210, SND_FSI_AK4642, I2C, SND_SOC_AK4642, SND_SOC_DA7210) are all true, i2c_master_send IS defined and codec_hw_write is assigned and used as a function pointer in the real driver. This is a simplification artifact — the real code uses codec_hw_write in da7210_init() after it is assigned. The known vbdb bug is UndeclaredIdentifier for i2c_master_send when CONFIG_I2C=false; this config has I2C=true so that bug cannot appear here."
 }

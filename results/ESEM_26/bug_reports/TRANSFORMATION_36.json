@@ -20,5 +20,5 @@
   "classification": "FALSE",
   "old_id": "TRANSFORMATION_8",
   "id": "TRANSFORMATION_36",
-  "reasoning": "The alarm claims `sc` (first argument to strcpy at L9 in 2a6cbfa00e0.c) is uninitialized. But sc is assigned at L6 from malloc(). The PC contains only restrictive library macros (!_STDLIB_H, !__malloc_and_calloc_defined) with no real feature flags \u2014 this is a desugaring artifact where stdlib.h internals are in a non-standard state, causing CSA to mistrack the malloc return value."
+  "reasoning": "FALSE POSITIVE: 2a6cbfa00e0.c (Apache SSL). '1st function call argument is an uninitialized value' at line 9 ('strcpy(sc, \"something\")'). 'sc' is assigned from malloc() at line 6 unconditionally. 'sc' is always initialized (either a valid pointer or NULL) before strcpy at line 9. Desugaring artifact: the presence condition is only stdlib header guards (effectively True for application logic), reflecting that the transformation of '#include <stdlib.h>' places malloc() inside conditional if-blocks. When the analyzer takes a path where the stdlib if-block is not entered, 'sc' appears uninitialized. The known vbdb bug in this file is a memory leak (sc not freed unless SHARED_MODULE is defined), which is a separate issue not captured by this alarm."
 }

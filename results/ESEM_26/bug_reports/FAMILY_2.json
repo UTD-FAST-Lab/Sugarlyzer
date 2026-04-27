@@ -8,5 +8,5 @@
   "id": "FAMILY_2",
   "classification": "FALSE",
   "old_id": "FAMILY_13",
-  "reasoning": "The tool reports 'case_not_terminated' at line 19 (case 'U':) when CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF is defined. However, examining the source, case 'U' at line 19 is clearly terminated by a break at line 22, which is inside the same #ifdef block. When that macro is defined, the break is always present. The actual known bug in this file (vbdb 061fd0a) is an UndefinedSymbol: the 'goto expected_hwif_error' inside case 'U' targets a label that only exists inside #ifdef CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF. The tool is reporting a completely different and incorrect bug type. This is a false positive."
+  "reasoning": "FALSE POSITIVE: 061fd0a353e.c (BusyBox hdparm). 'Case statement not terminated by break' at lines 19-20 when CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF is defined. However, case 'U' (line 19) DOES have a break at line 22 — the case IS properly terminated. The alarm appears to be a false alarm from the family-based tool incorrectly analyzing the case structure with conditional compilation. The real known bug in this file is PULSE_UNINITIALIZED_VALUE on 'p' (used at line 20/27 without guaranteed initialization), not a missing break."
 }

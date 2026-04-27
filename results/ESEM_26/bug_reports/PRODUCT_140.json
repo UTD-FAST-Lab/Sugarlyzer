@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_140",
-  "reasoning": "Line 39: `driver_data = &some_int` in ptmx_open() (compiled when UNIX98=T). When the non-goto path is taken, driver_data is assigned at L39 then function returns at L41 \u2014 dead store. DEVPTS only controls pts_sb_from_inode() at L8; it has no effect on the dead store at L39. The dead store occurs for any config with UNIX98=T. No '// ERROR' at L39 \u2192 new bug not in VBDB. PC adds DEVPTS=T unnecessarily. Over-constrained. Classification: TRUE_NEW_OVER."
+  "reasoning": "FALSE POSITIVE: 7acf6cd80b2.c (Linux ptmx). Dead store on 'driver_data' at line 39 ('driver_data = &some_int') inside ptmx_open() with UNIX98_PTYS=true, DEVPTS_MULTIPLE_INSTANCES=true. The assignment at line 39 is only reached when nondet() returns false (the goto err_release is NOT taken); the function then immediately returns 0 at line 41 without using driver_data again. So the assignment IS a dead store in this code path. However, this is a simplification artifact — the real ptmx_open() code uses driver_data after line 39 (storing it for later use). The actual known vbdb bug is UninitializedVariable driver_data: when the goto IS taken (nondet()=true), driver_data is uninitialized when passed to tty_release() at line 44; the tool did not detect this and instead reported the spurious dead store."
 }

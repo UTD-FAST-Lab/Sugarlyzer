@@ -16,5 +16,5 @@
   "classification": "FALSE",
   "old_id": null,
   "id": "PRODUCT_117",
-  "reasoning": "When I2C=F, i2c_master_send is not declared (L9-11 '#ifdef CONFIG_I2C' block skipped). L16 inside da7210_init() (compiled when SOC_DA7210=T) references i2c_master_send \u2192 undeclared identifier compile error. Configuration is non-compilable. Classification: FALSE."
+  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_44/52/91/92/102/106/107/109/113/114 (66517915e09.c), dead store on 'codec_hw_write' at line 16. CONFIG_I2C=false means i2c_master_send is undeclared (defined only inside #ifdef CONFIG_I2C). The real vbdb bug should be UndeclaredIdentifier for i2c_master_send, but the tool reports a spurious dead store instead — same pattern as other 66517915e09.c alarms with I2C=false. Simplification artifact."
 }

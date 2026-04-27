@@ -6,7 +6,7 @@
   "line_number": 24,
   "origin": "family",
   "id": "FAMILY_38",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "FALSE",
   "old_id": "FAMILY_52",
-  "reasoning": "Same file and same pattern as FAMILY_37, but now for ak4642_init() at line 24 ('int codec_hw_write = i2c_master_send;'). The value is assigned but never read (function immediately returns 0) — genuine dead store when CONFIG_I2C is defined. When !CONFIG_I2C, i2c_master_send is undeclared and line 24 fails to compile. The presence condition (def(CONFIG_SND_FSI_AK4642)|def(CONFIG_SND_SOC_AK4642)) does not require def(CONFIG_I2C), making it over-constrained. The correct condition should also include def(CONFIG_I2C). Not in vbdb (which documents UndeclaredIdentifier for !I2C). New true positive, over-constrained."
+  "reasoning": "FALSE POSITIVE: 66517915e09.c (Linux FSI audio). Dead store on 'codec_hw_write' at line 24, when def(FSI_AK4642) OR def(SOC_AK4642). Same analysis as FAMILY_37 but for the AK4642 code path in ak4642_init(). When I2C=true: simplification artifact (uses stripped). When I2C=false: tool reports dead store instead of UndeclaredIdentifier on i2c_master_send. False positive in all configurations."
 }

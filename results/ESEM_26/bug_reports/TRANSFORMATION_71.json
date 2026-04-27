@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 1761.0,
   "strategy": "transformation",
-  "classification": "TRUE",
+  "classification": "FALSE",
   "old_id": "TRANSFORMATION_175",
   "id": "TRANSFORMATION_71",
-  "reasoning": "irq = *ops at L12 is a genuine dead store \u2014 irq is never read after initialization in irq_domain_add. L12 is marked // (4) ERROR, confirming this is a VBDB-known bug location (primary known bug is null deref of *ops when ops=NULL; dead store co-occurs). PC = (!TWL4030_CORE AND IRQ_DOMAIN) OR TWL4030_CORE simplifies to IRQ_DOMAIN (TWL4030_CORE implies CONFIG_IRQ_DOMAIN via derived macro at L3-5). Correctly constrained \u2014 bug fires whenever irq_domain_add is compiled (IRQ_DOMAIN=T). No library macros."
+  "reasoning": "FALSE POSITIVE: 6252547b8a7.c (Linux TWL4030). 'Value stored to irq during its initialization is never read' at line 12 ('int irq = *ops'). 'irq_domain_add' is a void function. 'irq' is assigned from '*ops' at line 12 but never used again — the function has no return value and no further use of 'irq'. Simplification artifact: in real Linux IRQ domain code, 'irq' would be used to register the interrupt domain. The vbdb simplification stripped all uses of 'irq' after the assignment. The // (4) ERROR annotation at line 12 refers to the NULL dereference of 'ops' (not a dead store), which is the known vbdb bug reported by TRANSFORMATION_21. Presence condition: CONFIG_TWL4030_CORE OR CONFIG_IRQ_DOMAIN correctly reflects when irq_domain_add() is compiled (#ifdef CONFIG_IRQ_DOMAIN, where that macro is defined when CONFIG_TWL4030_CORE is set)."
 }

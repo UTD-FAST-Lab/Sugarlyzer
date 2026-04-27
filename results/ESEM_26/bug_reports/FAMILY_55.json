@@ -6,7 +6,7 @@
   "line_number": 3,
   "origin": "family",
   "id": "FAMILY_55",
-  "classification": "TRUE_NEW",
-  "reasoning": "In manage_heater() under !def(PIDTEMP): 'float pid_output = 1' (line 11) is assigned and then overwritten by 'pid_output = 0' (line 19, inside the #else branch) without pid_output being read in between. This makes the initial assignment a genuine dead store. Under PIDTEMP, the #else branch is skipped so pid_output = 1 is also never subsequently read, but the tool's detection focuses on the !PIDTEMP path where the overwrite at line 19 makes the first assignment provably dead. Presence condition !def(PIDTEMP) is correctly constrained. The vbdb entry for 8c4377dd635 documents the SERIAL_ECHO_START call under !MARLIN_H&&PIDTEMP&&PID_DEBUG — a different bug. New true positive.",
+  "classification": "FALSE",
+  "reasoning": "FALSE POSITIVE: 8c4377dd635.c (Marlin manage_heater). Dead store on 'pid_output' from line 3 to 19, when !def(PIDTEMP). When PIDTEMP=false, pid_output=1 at line 11 is overwritten by pid_output=0 at line 19, and pid_output is never used after either assignment. Simplification artifact — real Marlin code uses pid_output to drive the heating element. Same analysis as PRODUCT_186/204. The known vbdb bug (UndeclaredIdentifier on SERIAL_ECHO_START when MARLIN_H=true && PIDTEMP=true) is not triggered here.",
   "old_id": "FAMILY_71"
 }

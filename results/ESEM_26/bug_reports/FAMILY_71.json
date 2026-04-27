@@ -7,6 +7,6 @@
   "origin": "family",
   "id": "FAMILY_71",
   "classification": "FALSE",
-  "reasoning": "Line 11 is 'strncpy(newuri, \"pregsub()\", sizeof(newuri)-1)'. The tool claims newuri is used uninitialized here. However, newuri is the DESTINATION of strncpy, which writes to the array — it does not require newuri to be initialized beforehand. Additionally, 'sizeof(newuri)' is a compile-time operator that evaluates the array's declared size without reading any element. Neither usage reads from the uninitialized newuri array. The real vbdb bug in dbafef17dd1.c is at line 12: 'newuri[sizeof(newuri-1)] = \\'\\0\\'' — 'sizeof(newuri-1)' computes sizeof(char*) (pointer size, 4 or 8) rather than the intended 'sizeof(newuri)-1' (19), placing the null terminator at the wrong index. The uninitialized_value claim is a false positive.",
+  "reasoning": "FALSE POSITIVE: dbafef17dd1.c (Apache rewrite). Alarm fires at line 11, columns 37-45 ('sizeof(newuri)' inside strncpy call), when def(HAS_APACHE_REGEX_LIB). The tool claims 'newuri' used in sizeof(newuri) is 'used uninitialized,' but sizeof evaluates the TYPE of its operand at compile time — it does not dereference or read the runtime value of newuri. This is the same pattern as FAMILY_66 (sizeof(*ch)). False positive from the tool misidentifying a compile-time sizeof operation as a runtime read.",
   "old_id": "FAMILY_10"
 }

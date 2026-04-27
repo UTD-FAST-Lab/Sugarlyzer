@@ -6,7 +6,7 @@
   "line_number": 41,
   "origin": "family",
   "id": "FAMILY_47",
-  "classification": "TRUE_NEW",
-  "reasoning": "This report is a duplicate of FAMILY_43 (different old_id FAMILY_60 vs FAMILY_57, but same file, same line 41, same presence condition, same message). Line 41 is 'return cpu_none_mask;' inside cpumask_of_node(), which returns 'const cpumask_t*'. cpu_none_mask is declared as 'cpumask_t cpu_none_mask = 0' — an integer value, not a pointer. Returning an integer where a pointer is expected is a genuine type error; the function returns 0 (null pointer) to the caller. The presence condition def(CONFIG_NUMA)&&def(CONFIG_DEBUG_PER_CPU_MAPS) is correct. Not in vbdb. True new positive.",
+  "classification": "TRUE",
+  "reasoning": "TRUE POSITIVE (CORRECTLY CONSTRAINED): 76baeebf7df.c (Linux NUMA). Identical to FAMILY_43 — 'assignment makes pointer from integer without a cast' at line 41, when def(NUMA) AND def(DEBUG_PER_CPU_MAPS). 'return cpu_none_mask' returns an unsigned long value where const cpumask_t * is expected. Known vbdb bug (WrongReturnType). Same classification as FAMILY_43.",
   "old_id": "FAMILY_60"
 }

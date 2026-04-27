@@ -6,7 +6,7 @@
   "line_number": 133,
   "origin": "family",
   "classification": "FALSE",
-  "reasoning": "Same artifact as FAMILY_45. The presence condition !def(CONFIG_NUMA)&def(CONFIG_PCI)&!def(const) again requires '!def(const)'. In the !CONFIG_NUMA branch, local_cpus_show() calls cpumask_of_node() at line 135, not cpumask_of_pcibus(), so the const-qualifier alignment is even more clearly fine. The warning only arises because the tool treats 'const' as a configuration macro, which it is not in real C code. No real build configuration matches this condition. False positive.",
+  "reasoning": "FALSE POSITIVE: 76baeebf7df.c (Linux NUMA). Same alarm as FAMILY_45 — 'assignment discards const qualifier' at lines 133-137, condition !def(NUMA) AND def(PCI) AND !def(const). The '!def(const)' condition makes this fire under the non-standard scenario where 'const' is not defined as a macro. Same analysis as FAMILY_45 — false positive from the tool treating const as an undefined identifier.",
   "id": "FAMILY_46",
   "old_id": "FAMILY_1_NEW"
 }

@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 966.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW",
+  "classification": "TRUE",
   "old_id": "TRANSFORMATION_197",
   "id": "TRANSFORMATION_56",
-  "reasoning": "driver_data is declared at L33 but only assigned at L39 (driver_data = &some_int). The goto err_release at L36 bypasses this assignment, so tty_release(driver_data) at L44 receives an uninitialized pointer. This is a genuine bug in the call chain. No // ERROR at L44 (the // ERROR at L8 marks the downstream *inode dereference, a different alarm). New bug. PC = CONFIG_UNIX98_PTYS correctly captures when the ptmx_open function (containing this path) is compiled. No library macros."
+  "reasoning": "TRUE POSITIVE (CORRECTLY CONSTRAINED): 7acf6cd80b2.c (Linux devpts). '1st function call argument is an uninitialized value' at line 44 ('tty_release(driver_data)'). In ptmx_open() (inside #ifdef CONFIG_UNIX98_PTYS), 'driver_data' is declared at line 33 but not initialized. When nondet() is true (line 35), execution jumps via goto to err_release at line 43, then calls tty_release(driver_data) at line 44 with uninitialized driver_data. The known vbdb bug chain: uninitialized driver_data → tty_release → pty_close (only when CONFIG_UNIX98_PTYS, line 19) → devpts_pty_kill → pts_sb_from_inode → '*inode' (// ERROR (7) at line 8) where the uninitialized pointer is dereferenced when CONFIG_DEVPTS_MULTIPLE_INSTANCES is true. CORRECTLY CONSTRAINED: CONFIG_UNIX98_PTYS=true is required for ptmx_open() and the pty_close→devpts_pty_kill call chain to be compiled. The uninitialized driver_data at line 44 is independently alarmed here."
 }
