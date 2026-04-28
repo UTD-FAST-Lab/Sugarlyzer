@@ -6,7 +6,7 @@
   "line_number": 23,
   "origin": "family",
   "id": "FAMILY_14",
-  "classification": "TRUE_UNDER",
+  "classification": "",
   "old_id": "FAMILY_37",
-  "reasoning": "TRUE POSITIVE (UNDER-CONSTRAINED): 1c17e4d4437.c (Linux RCU). Uninitialized value on 'fast_no_hz' at line 23, when def(CONFIG_RCU_CPU_STALL_INFO). 'char fast_no_hz[72]' is declared at line 21 without initialization. print_cpu_stall_fast_no_hz(fast_no_hz, cpu) is called at line 23. When CONFIG_RCU_FAST_NO_HZ=false, the function is an empty stub (lines 14-16) that writes nothing to fast_no_hz — so fast_no_hz remains uninitialized when printf at line 24 reads it (the //ERROR comment confirms this is the known vbdb bug). However, when CONFIG_RCU_FAST_NO_HZ=true, the function calls sprintf(cp, 'foobar') which writes to fast_no_hz — no bug exists. UNDER-CONSTRAINED: The presence condition only requires RCU_CPU_STALL_INFO=true, but the bug only exists when FAST_NO_HZ=false. The condition should be def(RCU_CPU_STALL_INFO) && !def(RCU_FAST_NO_HZ)."
+  "reasoning": ""
 }

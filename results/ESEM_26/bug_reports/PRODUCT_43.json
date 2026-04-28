@@ -13,8 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "TRUE",
+  "classification": "",
   "old_id": "PRODUCT_2",
   "id": "PRODUCT_43",
-  "reasoning": "TRUE POSITIVE: When SHARED_MODULE is false, the #ifdef SHARED_MODULE block (lines 11-13) is not compiled, so free(sc) is never called. The malloc'd buffer 'sc' leaks on return. KNOWN BUG: The vbdb entry for 2a6cbfa00e0.c documents exactly this MemoryLeak when !SHARED_MODULE — cleanup functions were only called inside SHARED_MODULE, which is no longer defined, causing leaks. CORRECTLY CONSTRAINED: When SHARED_MODULE is true, free(sc) is called and there is no leak. The presence condition SHARED_MODULE==false matches the known bug config exactly."
+  "reasoning": ""
 }

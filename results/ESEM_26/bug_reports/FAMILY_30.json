@@ -6,7 +6,7 @@
   "line_number": 7,
   "origin": "family",
   "id": "FAMILY_30",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "FAMILY_4",
-  "reasoning": "FALSE POSITIVE: 581635e28f1.c (Apache httpd). 'Control flow of non-void function ends here!' at lines 7-8, presence condition True. parse_url() assigns 'int family = APR_INET6' but has no return statement. This is a simplification artifact — real Apache parse_url() uses family to parse URL protocol and returns a status code. The simplification stripped the code that uses family and the return statement. The known vbdb bug for this file is the UndeclaredIdentifier on APR_INET6 when APR_HAVE_IPV6=false (APR_INET6 is only defined inside #if APR_HAVE_IPV6)."
+  "reasoning": ""
 }

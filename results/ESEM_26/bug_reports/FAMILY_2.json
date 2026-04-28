@@ -6,7 +6,7 @@
   "line_number": 19,
   "origin": "family",
   "id": "FAMILY_2",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "FAMILY_13",
-  "reasoning": "FALSE POSITIVE: 061fd0a353e.c (BusyBox hdparm). 'Case statement not terminated by break' at lines 19-20 when CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF is defined. However, case 'U' (line 19) DOES have a break at line 22 — the case IS properly terminated. The alarm appears to be a false alarm from the family-based tool incorrectly analyzing the case structure with conditional compilation. The real known bug in this file is PULSE_UNINITIALIZED_VALUE on 'p' (used at line 20/27 without guaranteed initialization), not a missing break."
+  "reasoning": ""
 }

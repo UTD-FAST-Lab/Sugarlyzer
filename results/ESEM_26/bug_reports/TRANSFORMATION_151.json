@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 1857.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_151",
-  "reasoning": "FALSE POSITIVE (SIMPLIFICATION ARTIFACT): 6252547b8a7.c (Linux TWL4030). 'The value written to &irq is never used' at line 12 ('int irq = *ops; // (4) ERROR'). `irq` is assigned '*ops' but never subsequently used in the vbdb-simplified code. In real Linux irq_domain_add code, `irq` would be used for IRQ domain setup, but those uses were stripped by vbdb simplification. The real vbdb bug at line 12 (annotated '// (4) ERROR') is the null pointer dereference '*ops' when 'ops=NULL' (set at line 19 when NOT CONFIG_OF_IRQ AND CONFIG_TWL4030_CORE) — this was correctly identified as a TRUE POSITIVE in TRANSFORMATION_117. The DEAD_STORE alarm for `irq` is a simplification artifact from stripping downstream uses of the IRQ value."
+  "reasoning": ""
 }

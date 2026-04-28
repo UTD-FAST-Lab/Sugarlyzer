@@ -6,7 +6,7 @@
   "line_number": 41,
   "origin": "family",
   "id": "FAMILY_7",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "FAMILY_35",
-  "reasoning": "FALSE POSITIVE: 0f8f8094d28.c (Linux kmalloc). Dead store on 'n' at line 41 ('int n = *cache'), when def(CONFIG_LOCKDEP). When LOCKDEP=true, init_node_lock_keys() is compiled and 'n' is assigned from dereferencing cache but never used afterward. This is a simplification artifact — real Linux kernel code uses n for lock key initialization. Same pattern as PRODUCT_212. The known vbdb bug for this file (OutOfBoundsRead/UndeclaredIdentifier on kmalloc_caches when SLOB=true) is a separate issue."
+  "reasoning": ""
 }

@@ -13,8 +13,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_107",
-  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_44/52/91/92/102/106 (66517915e09.c), dead store on 'codec_hw_write' at line 24. CONFIG_I2C=false means i2c_master_send is not defined (declared inside #ifdef CONFIG_I2C). The real bug here should be UndeclaredIdentifier for i2c_master_send (the known vbdb bug), but the tool instead reports a spurious dead store — same pattern seen in other 66517915e09.c alarms with I2C=false. Simplification artifact."
+  "reasoning": ""
 }

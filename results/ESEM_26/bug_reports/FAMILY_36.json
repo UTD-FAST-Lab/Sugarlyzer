@@ -6,7 +6,7 @@
   "line_number": 11,
   "origin": "family",
   "id": "FAMILY_36",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "FAMILY_6",
-  "reasoning": "FALSE POSITIVE: 664e3aac6dd.c (Apache Win32). Uninitialized value on 'buffer' at line 11, when def(WIN32X). Line 11 is 'for (i = 0; i < sizeof(buffer); i++)' — the alarm at column 26-34 points to 'sizeof(buffer)'. The sizeof operator does NOT read buffer's contents; it evaluates the type at compile time. This is a false positive. The real known vbdb bug in this file is the buffer overflow at line 14: 'buffer[i] = 0' where i = sizeof(buffer) = 1024, writing past the end of the 1024-element array (valid indices 0-1023 only)."
+  "reasoning": ""
 }

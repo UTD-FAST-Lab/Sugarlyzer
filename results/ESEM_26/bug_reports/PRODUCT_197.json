@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_197",
-  "reasoning": "FALSE POSITIVE: 061fd0a353e.c (BusyBox hdparm). Dead store on 'argc' at line 16 (comma expression 'p = *argv++, --argc') with UNREGISTER_HWIF=false, SCAN_HWIF=true. argc is decremented in case 'W' but never read again — simplification artifact (real hdparm uses argc for further option processing). Same pattern as PRODUCT_146/173."
+  "reasoning": ""
 }

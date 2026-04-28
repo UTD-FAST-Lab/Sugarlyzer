@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_153",
-  "reasoning": "FALSE POSITIVE: 061fd0a353e.c (BusyBox hdparm). Dead store on 'argv' at line 16 (the comma expression 'p = *argv++, --argc' also increments argv). With UNREGISTER_HWIF=false and SCAN_HWIF=true, case 'R' uses p (potentially uninitialized — see PRODUCT_149), but argv itself is incremented and then never dereferenced again in the simplified code. The argv increment is a simplification artifact — real hdparm continues using argv for option processing. The known vbdb bug (UndefinedSymbol 'expected_hwif_error') does not apply to this configuration."
+  "reasoning": ""
 }

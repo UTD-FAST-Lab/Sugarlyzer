@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 1183.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_32",
-  "reasoning": "FALSE POSITIVE: 6e2b75740be.c (Linux module). 'Attempt to free released memory' at line 67 ('free(hdr)'). The presence condition is NOT (CONFIG_MODULE_UNLOAD AND CONFIG_SMP) — i.e., the complement of the known vbdb bug condition. In this configuration, the #if CONFIG_MODULE_UNLOAD && CONFIG_SMP blocks (lines 29-36 and 62-64) are not compiled. The concern would be that free(module_core(mod)) at line 60 frees the same memory as hdr. However, hdr (malloc'd at line 24) and module_core(mod) point to distinct allocations: module_core(mod) = mod[1] = ptr (the 512-byte block from line 38). Even after the while loop reassigns mod to ptr via 'mod = module_core(mod)', free(module_core(mod)) = free(ptr[1]), which is distinct from hdr. The analyzer is confused by the complex while-loop aliasing (mod changes to point into the ptr buffer, memcpy copies pointer values), but the actual free(hdr) at line 67 never double-frees already-released memory. Alias tracking limitation — the known vbdb bug in this file is the double-free of refptr(mod) at line 63, requiring CONFIG_MODULE_UNLOAD && CONFIG_SMP (captured correctly by TRANSFORMATION_19)."
+  "reasoning": ""
 }

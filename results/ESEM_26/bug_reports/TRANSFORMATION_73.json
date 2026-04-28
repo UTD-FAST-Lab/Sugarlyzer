@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 6574.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "TRANSFORMATION_140",
   "id": "TRANSFORMATION_73",
-  "reasoning": "FALSE POSITIVE: ebee301c8b0.c (BusyBox). '2nd function call argument is an uninitialized value' at line 18 ('copySubFile(src, dst)'). 'dst = rand() % 200' at line 16 is assigned before the call at line 18, both inside '#if BB_CP_MV'. 'dst' is always initialized before the call. Same desugaring artifact as TRANSFORMATION_60 (which alarms on the 1st argument 'src'): the transformation creates separate if-blocks for BB_CP_MV (rand() assignments) and BB_AR (copySubFile call), making 'dst' appear potentially uninitialized on paths where 'if(BB_CP_MV)' is not seen as preceding 'if(BB_AR)'. Presence condition correctly requires both BB_CP_MV AND BB_AR."
+  "reasoning": ""
 }

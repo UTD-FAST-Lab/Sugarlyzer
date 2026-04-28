@@ -13,8 +13,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_88",
-  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_44/52/73/84 (66517915e09.c), dead store on 'codec_hw_write' at line 16 (da7210_init()), with CONFIG_I2C=false. When I2C=false, i2c_master_send is undeclared — the exact known vbdb UndeclaredIdentifier bug. The tool processed the undefined identifier without flagging it, reporting a dead store artifact instead. Simplification artifact for the dead store; the known bug is not detected."
+  "reasoning": ""
 }

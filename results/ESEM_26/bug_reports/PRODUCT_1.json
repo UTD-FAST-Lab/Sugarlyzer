@@ -13,8 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW",
+  "classification": "",
   "old_id": "PRODUCT_47",
   "id": "PRODUCT_1",
-  "reasoning": "TRUE POSITIVE: When CONFIG_FEATURE_CLEAN_UP is false, the #ifdef block containing free(buf) is compiled out. buf is malloc'd at line 24 (when cmd != 8) but never freed, constituting a real memory leak. NEW BUG: The vbdb entry for eef2317b9f5.c documents an UninitializedVariable bug — when CONFIG_FEATURE_CLEAN_UP is *enabled* and -n is used, buf is uninitialized when free(buf) is called. The tool found a different bug (memory leak when the feature is *disabled*), so this is a new bug not in vbdb. CORRECTLY CONSTRAINED: The presence condition CONFIG_FEATURE_CLEAN_UP==false precisely identifies the compile-time configuration under which the free() code is excluded and the leak can occur."
+  "reasoning": ""
 }

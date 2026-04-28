@@ -6,7 +6,7 @@
   "line_number": 21,
   "origin": "family",
   "id": "FAMILY_57",
-  "classification": "FALSE",
-  "reasoning": "FALSE POSITIVE: a7fc1f83c81.c (Marlin SD card). Uninitialized value on 'path' at line 21 ('strcat(path, prepend)'), when def(SDSUPPORT). 'path' is a VLA declared at line 11 and explicitly initialized at line 19 ('path[0] = 0') making it a valid empty string. strcat at line 21 reads from a properly initialized null-terminated string. The alarm is a false positive. The real known vbdb bug is a buffer overflow: when prepend is empty, len=14 bytes but total content written ('/' + lfilename + '/') = 15 bytes (off-by-one overflow noted in line 10 comment).",
+  "classification": "",
+  "reasoning": "",
   "old_id": "FAMILY_75"
 }

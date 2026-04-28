@@ -6,7 +6,7 @@
   "line_number": 12,
   "origin": "family",
   "id": "FAMILY_8",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "FAMILY_16",
-  "reasoning": "FALSE POSITIVE: 192c35f6eb2.c (BusyBox syslogd). Uninitialized value on 'line' at line 12, when def(CONFIG_FEATURE_REMOTE_LOG). 'line' is declared as 'static char line[512]' at line 6. Static variables in C are automatically zero-initialized by the C runtime — they are always initialized before use. The alarm is incorrect. Additionally, line 12 itself calls memset(&line, 0, sizeof(line)) which explicitly zeros it before use at line 13. No real bug exists here."
+  "reasoning": ""
 }

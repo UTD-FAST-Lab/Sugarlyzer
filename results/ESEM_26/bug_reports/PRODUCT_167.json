@@ -13,8 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_167",
-  "reasoning": "FALSE POSITIVE: 5275b1e49f6.c (BusyBox insmod). Dead store on 'someInt' at line 9 ('int someInt = 1') when VERSION_CHECKING=false. When VERSION_CHECKING=false, k_crcs is not declared (inside #ifdef), but it is used unconditionally at line 25 ('k_crcs = someInt') — that's the known vbdb UndeclaredIdentifier bug. The tool, unable to track the use of someInt through the undeclared k_crcs assignment, reports someInt as a dead store. This is a secondary artifact of the tool mishandling the UndeclaredIdentifier scenario. In the real code, someInt is meaningfully used via k_crcs. False positive."
+  "reasoning": ""
 }

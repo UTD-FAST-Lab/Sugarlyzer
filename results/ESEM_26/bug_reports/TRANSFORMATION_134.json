@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 2709.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_134",
-  "reasoning": "FALSE POSITIVE (VLA DESUGARING ARTIFACT): a7fc1f83c81.c (Marlin firmware). 'The value written to &len is never used' at line 10 ('int len = strlen(prepend) + FILENAME_LENGTH + 1; // Error'). 'len' IS used at line 11 ('char path[len]') as the size of a variable-length array (VLA). The transformation approach desugars VLAs by replacing 'char path[len]' with a fixed-size array or removing the VLA declaration, causing 'len' to appear unused. The presence condition is always true (__STRICT_ANSI__ OR NOT __STRICT_ANSI__) with no application-level configs, confirming this is a purely desugaring artifact. Note: the comment at line 10 annotates the real vbdb bug — insufficient buffer allocation when prepend is empty — but that is a buffer overflow bug at the VLA level, not a dead store."
+  "reasoning": ""
 }

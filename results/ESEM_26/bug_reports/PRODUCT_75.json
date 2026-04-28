@@ -13,8 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_75",
-  "reasoning": "FALSE POSITIVE: The alarm reports 'int family = APR_INET6' (line 7) as a dead store when APR_HAVE_IPV6=true. When IPV6=true, APR_INET6 is defined as 6, so family=6 is valid, but family is never subsequently used in the simplified parse_url(). In the real Apache ab.c, family is used for socket address family selection. Simplification artifact. Note: the known vbdb bug for 581635e28f1.c is UndeclaredIdentifier when APR_HAVE_IPV6=false (APR_INET6 is undefined). When APR_HAVE_IPV6=true the known bug does not exist."
+  "reasoning": ""
 }

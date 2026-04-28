@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 1722.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_136",
-  "reasoning": "FALSE POSITIVE: 831016b09f7.c (Marlin firmware). 'The value written to &time is never used' at line 14 ('char time[30] = \"time_here\"'). 'time' IS used at line 15 ('lcd_setstatus(time, true) // ERROR') within the same '#ifdef SDSUPPORT' block. Desugaring artifact: 'lcd_setstatus' is defined as either a 2-argument function (when ULTRA_LCD=true) or a 1-argument function (when ULTRA_LCD=false). In the desugared form, the 2-argument call 'lcd_setstatus(time, true)' at line 15 may be inside 'if(ULTRA_LCD)' while 'time' is assigned outside that conditional, making 'time' appear unused. Note: the real vbdb bug (// ERROR at line 15) is calling 'lcd_setstatus(time, true)' with 2 arguments when ULTRA_LCD=false causes it to resolve to the 1-argument version — type/argument mismatch. The DEAD_STORE alarm is a desugaring artifact, not the real bug."
+  "reasoning": ""
 }

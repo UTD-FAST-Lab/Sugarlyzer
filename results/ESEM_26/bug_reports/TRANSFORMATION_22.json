@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 5472.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW",
+  "classification": "",
   "old_id": "TRANSFORMATION_17",
   "id": "TRANSFORMATION_22",
-  "reasoning": "TRUE POSITIVE NEW (CORRECTLY CONSTRAINED): 35ae2e259e4.c (OpenSSL/wolfSSL). 'Dereference of undefined pointer value' at line 17 ('*eckey = 15'). 'eckey' is assigned from malloc(sizeof(ecc_key)) at line 10 with no NULL check, then dereferenced at line 17 with '*eckey = 15'. If malloc returns NULL, this is a null dereference. This is a new bug not in vbdb (the // ERROR annotation for this file refers to a different issue). CORRECTLY CONSTRAINED: presence condition simplifies to HAVE_ECC=true AND NOT SSL_CTX_set_ecdh_auto=true. The malloc and dereference are inside '#ifdef HAVE_ECC' and '#ifndef SSL_CTX_set_ecdh_auto' blocks, so the condition correctly identifies exactly when this code path exists. Header guard variables (stdlib, strict_ansi, etc.) do not affect the application logic."
+  "reasoning": ""
 }

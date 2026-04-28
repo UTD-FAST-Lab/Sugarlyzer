@@ -17,8 +17,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "PRODUCT_12",
   "id": "PRODUCT_36",
-  "reasoning": "FALSE POSITIVE: The alarm reports 'flags |= T_ESCAPE_SHELL_CMD' (line 38, inside the for loop) as a dead store — flags is set but never read after each iteration or after the loop. In the real Apache gen_test_char.c, flags is written to an output character table (test_char_table) on each loop iteration. The simplified file stripped that table write, making flags appear as a dead store. This is a simplification artifact. The known vbdb bug (OSCommandInjection: NEED_ENHANCED_ESCAPES not defined when CROSS_COMPILE && WIN32) is a different issue."
+  "reasoning": ""
 }

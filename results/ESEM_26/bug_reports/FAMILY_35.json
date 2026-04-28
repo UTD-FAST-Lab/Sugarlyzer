@@ -6,7 +6,7 @@
   "line_number": 15,
   "origin": "family",
   "id": "FAMILY_35",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "FAMILY_50",
-  "reasoning": "FALSE POSITIVE: 6515e48932c.c (Linux OMAP). 'Control flow of non-void function ends here!' at line 15 (main), when !def(CONFIG_MACH_OMAP_H4). When MACH_OMAP_H4=false, main() is an empty body with no calls and no return. In C99, main() without an explicit return is valid (implicit return 0). Same false positive pattern as FAMILY_34."
+  "reasoning": ""
 }

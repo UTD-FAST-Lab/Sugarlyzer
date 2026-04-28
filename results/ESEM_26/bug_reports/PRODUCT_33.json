@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "TRUE",
+  "classification": "",
   "old_id": "PRODUCT_18",
   "id": "PRODUCT_33",
-  "reasoning": "TRUE POSITIVE: When ENABLE_SELINUX is true and ENABLE_FEATURE_STAT_FORMAT is false, scontext is initialized to NULL (inside #ifdef ENABLE_SELINUX). Inside the #ifndef ENABLE_FEATURE_STAT_FORMAT block, 'printf(\" %lc\n\", *scontext)' dereferences the NULL scontext pointer. This is a genuine null dereference. KNOWN BUG: The vbdb entry for 1b487ea8a69.c documents exactly this NullDereference bug for SELINUX && !FEATURE_STAT_FORMAT. The tool detects the same bug. CORRECTLY CONSTRAINED: The presence condition ENABLE_SELINUX==true && ENABLE_FEATURE_STAT_FORMAT==false matches the vbdb config exactly — scontext is only NULL-initialized when SELINUX is on, and the dereference only occurs in the !STAT_FORMAT path."
+  "reasoning": ""
 }

@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_65",
-  "reasoning": "FALSE POSITIVE: The alarm reports 'char *a = val' (line 14, inside MDEV_RENAME) as a dead store when MDEV_CONF=true, MDEV_RENAME=true, MDEV_RENAME_REGEXP=false. When RENAME_REGEXP=false, the #ifdef RENAME_REGEXP block (lines 18-33) is not compiled, so the only use of 'a' — 's = a' at line 21 — is absent. In the real BusyBox mdev make_device() code, 'a' (saving the original val pointer) is used for rename operations outside the REGEXP block as well. The simplified file preserved only the REGEXP-specific use. This is a simplification artifact. The known vbdb bug for b62bd7b261b.c is UnusedVariable 'p': when !MDEV_RENAME_REGEXP, 'p' is declared inside MDEV_RENAME but never used since the while loop that accesses p is inside #ifdef MDEV_RENAME_REGEXP."
+  "reasoning": ""
 }

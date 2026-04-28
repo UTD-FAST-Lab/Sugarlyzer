@@ -6,7 +6,7 @@
   "line_number": 36,
   "origin": "family",
   "id": "FAMILY_56",
-  "classification": "FALSE",
-  "reasoning": "FALSE POSITIVE: 95755181b82.c (BusyBox httpd). Dead store on 'len' at line 36 ('len += sprintf(iobuf + len, ...)'), presence condition True. After all len assignments in send_headers(), the function only calls printf(iobuf) — len is never used after assignment — simplification artifact (real code uses len to track the header buffer position). When GZIP=false: content_gzip is undeclared (treated as 0), making line 36 unreachable, so the alarm fires spuriously in that configuration too. The known vbdb bug is the UndeclaredIdentifier on content_gzip when GZIP=false.",
+  "classification": "",
+  "reasoning": "",
   "old_id": "FAMILY_23"
 }

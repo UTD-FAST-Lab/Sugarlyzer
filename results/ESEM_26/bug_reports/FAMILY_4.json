@@ -6,7 +6,7 @@
   "line_number": 20,
   "origin": "family",
   "id": "FAMILY_4",
-  "classification": "TRUE_NEW",
+  "classification": "",
   "old_id": "FAMILY_15",
-  "reasoning": "TRUE POSITIVE (NEW): 061fd0a353e.c (BusyBox hdparm). Uninitialized value on 'p' at line 20, when CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF is defined. 'char *p' is declared at line 7 without initialization. In case 'W', p is only conditionally assigned (if(r) p = *argv++). In case 'U' (compiled when UNREGISTER=true), 'if(!p)' at line 20 uses p without guaranteed initialization — if case 'W' was not entered or r was 0, p is uninitialized. This matches the known vbdb uninitialized-p bug pattern. Classified as NEW because the known vbdb bug for this file appears to be about the goto to a conditionally-compiled label rather than the uninitialized-value alarm type. CORRECTLY CONSTRAINED: UNREGISTER=true is necessary and sufficient for the alarm at line 20 to be compiled."
+  "reasoning": ""
 }

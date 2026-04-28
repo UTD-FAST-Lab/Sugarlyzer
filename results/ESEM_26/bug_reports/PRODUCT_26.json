@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "TRUE",
+  "classification": "",
   "old_id": "PRODUCT_37",
   "id": "PRODUCT_26",
-  "reasoning": "TRUE POSITIVE: When BB_FEATURE_LS_FILETYPES is true and BB_FEATURE_LS_USERNAME is false, 'info' is declared (int info inside #ifdef FILETYPES) but never initialized (info = 0 is inside #ifdef USERNAME which is disabled). The printf call at line 16 passes the uninitialized 'info' as its 2nd argument. KNOWN BUG: The vbdb entry for b273d665181.c documents exactly this UninitializedVariable bug for BB_FEATURE_LS_FILETYPES && !BB_FEATURE_LS_USERNAME. The tool detects the same bug via the CallAndMessage checker. CORRECTLY CONSTRAINED: The presence condition matches the vbdb config exactly — info is only uninitialized when FILETYPES is on and USERNAME is off."
+  "reasoning": ""
 }

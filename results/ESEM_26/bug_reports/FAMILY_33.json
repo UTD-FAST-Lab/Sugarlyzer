@@ -6,7 +6,7 @@
   "line_number": 12,
   "origin": "family",
   "id": "FAMILY_33",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "FAMILY_48",
-  "reasoning": "FALSE POSITIVE: 6252547b8a7.c (Linux TWL4030). Dead store on 'irq' at line 12 ('int irq = *ops'), when def(TWL4030_CORE) OR def(IRQ_DOMAIN). irq is assigned from dereferencing ops but never used in the simplified file — simplification artifact (real kernel code uses irq for IRQ domain management). Note: CONFIG_IRQ_DOMAIN is implicitly defined by CONFIG_TWL4030_CORE (lines 3-5), so the two conditions in the presence condition are related, not truly independent. The known vbdb bug is the NULLPTR_DEREFERENCE on ops when OF_IRQ=false."
+  "reasoning": ""
 }

@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_179",
-  "reasoning": "FALSE POSITIVE: Same file and same bug pattern as PRODUCT_115 (2631486f1bf.c, BusyBox ls). PULSE_UNINITIALIZED_VALUE on 'head' at line 67 ('curr->next = head') when LS_RECURSIVE=false, LS_SORTFILES=true. 'head' is declared at line 60 ('struct dnode *curr, *head') without initialization. In the real BusyBox ls code, head would be initialized to NULL before the loop. The missing 'head = NULL' initialization is a simplification artifact. The alarm fires in unconditional code (not gated by any #ifdef), so the presence condition is irrelevant."
+  "reasoning": ""
 }

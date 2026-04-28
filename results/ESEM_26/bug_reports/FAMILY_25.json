@@ -6,7 +6,7 @@
   "line_number": 16,
   "origin": "family",
   "id": "FAMILY_25",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "FAMILY_46",
-  "reasoning": "FALSE POSITIVE: 472a474c663.c (Linux APIC). Dead store on 'ptr' at line 16 ('ptr = NULL'), presence condition True. 'ptr' is a static variable (declared at line 12). After 'ptr = NULL' at line 16, there are no further uses of ptr within the current function invocation — but ptr IS a static variable that persists across calls. The assignment 'ptr = NULL' is NOT a dead store: it sets ptr to NULL so that the NEXT call to enable_IR_x2apic() will dereference NULL (line 14: '*ptr = 'a''), causing a NULL pointer dereference. The tool fails to model static variable state across function calls, incorrectly labeling the assignment as a dead store."
+  "reasoning": ""
 }

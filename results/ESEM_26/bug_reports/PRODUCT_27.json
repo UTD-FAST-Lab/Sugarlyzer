@@ -13,8 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "TRUE",
+  "classification": "",
   "old_id": "PRODUCT_52",
   "id": "PRODUCT_27",
-  "reasoning": "TRUE POSITIVE: When CONFIG_SECURITY is false, security_old_inode_init_security() returns 0 without writing to *len. In reiserfs_create(), 'length' is declared as 'int length' without initialization. It is passed by reference to reiserfs_security_init(). Inside that function, error = 0 (returned by the !SECURITY version of security_old_inode_init_security), so the 'if (error)' branch that would set *length=0 is not taken. 'int x = *length' at line 31 then assigns the garbage/undefined value of 'length'. KNOWN BUG: The vbdb entry for 30e053248da.c documents exactly this UninitializedVariable bug (length not written when !SECURITY, causing garbage read). The presence condition CONFIG_SECURITY==false matches the vbdb config. CORRECTLY CONSTRAINED: The bug only occurs in the !SECURITY configuration where security_old_inode_init_security is the no-op version."
+  "reasoning": ""
 }

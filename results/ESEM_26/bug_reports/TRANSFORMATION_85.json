@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 7166.0,
   "strategy": "transformation",
-  "classification": "TRUE",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_85",
-  "reasoning": "TRUE POSITIVE (CORRECTLY CONSTRAINED): 35ae2e259e4.c (Apache mod_ssl). 'eckey could be null and is dereferenced' at line 17 ('*eckey = 15'). 'eckey = malloc(sizeof(int))' at line 10 can return NULL, and there is no NULL check before 'eckey' is dereferenced at line 17 (and also at line 12). The dereference at line 17 is inside '#else' of '#if defined(SSL_CTX_set_ecdh_auto)', so it is only reached when SSL_CTX_set_ecdh_auto is not defined. CORRECTLY CONSTRAINED: presence condition HAVE_ECC=true AND NOT SSL_CTX_set_ecdh_auto is exactly right — line 17 is inside '#ifdef HAVE_ECC' (lines 9-20) and inside the '#else' branch of '#if defined(SSL_CTX_set_ecdh_auto)' (lines 14-18). The stdlib header guard variables in the PC are desugaring artifacts from '#include <stdlib.h>' (malloc) but do not affect the correctness of the constraint. Note: the file comment suggests the primary vbdb bug is a memory leak ('return having forgotten to free the memory') but the null dereference is a genuine secondary bug found by Pulse."
+  "reasoning": ""
 }

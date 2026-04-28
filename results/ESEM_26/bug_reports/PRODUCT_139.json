@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "TRUE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_139",
-  "reasoning": "TRUE POSITIVE (KNOWN, CORRECTLY CONSTRAINED): b273d665181.c (BusyBox ls list_single). When BB_FEATURE_LS_FILETYPES=true, 'info' is declared at line 7 inside #ifdef LS_FILETYPES. When BB_FEATURE_LS_USERNAME=false, the initialization 'info = 0' at line 11 (inside #ifdef LS_USERNAME) is skipped. At line 16, 'printf(\"%d\", info)' reads the uninitialized 'info'. This is the known vbdb UninitializedVariable bug: info is used without initialization when LS_FILETYPES=true and LS_USERNAME=false. The presence condition (LS_FILETYPES=true, LS_USERNAME=false) is exactly correct — these are the precise conditions under which the bug exists."
+  "reasoning": ""
 }

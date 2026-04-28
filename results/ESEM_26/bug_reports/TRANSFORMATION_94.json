@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 8388.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_94",
-  "reasoning": "TRUE POSITIVE (NEW, OVER-CONSTRAINED): 2631486f1bf.c (BusyBox ls). '`curr` could be null (null value originating from malloc) and is dereferenced' at line 66 ('curr->val = rand() % 10'). 'curr = malloc(sizeof(struct dnode))' at line 65 can return NULL; there is no NULL check before 'curr->val' is dereferenced at line 66. This is a real null dereference bug. NEW: the annotated vbdb bug for this file is the uninitialized 'head' pointer (not null-after-malloc). OVER-CONSTRAINED: the presence condition requires CONFIG_FEATURE_LS_SORTFILES=true, but lines 65-66 (the malloc and dereference) are NOT inside any '#ifdef' block — the null dereference exists in ALL configurations regardless of CONFIG_FEATURE_LS_SORTFILES. The correct condition is unconstrained (any config). Requiring CONFIG_FEATURE_LS_SORTFILES=true makes the PC too narrow, excluding CONFIG_FEATURE_LS_SORTFILES=false where the same bug also exists."
+  "reasoning": ""
 }

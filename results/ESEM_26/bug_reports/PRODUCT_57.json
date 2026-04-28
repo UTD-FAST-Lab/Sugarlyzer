@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_57",
-  "reasoning": "TRUE POSITIVE (NEW, CORRECTLY CONSTRAINED): The alarm reports that memory allocated by extcon_class_init() on line 107 (via kobject_create_and_add -> malloc) is never freed. Tracing the flow: (1) extcon_class_init() allocates kobj and sets switch_class=kobj; (2) extcon_class_exit() does nothing ('return;') — kobj is NOT freed; (3) a second extcon_class_init() fails because 'switch' is already registered in sysfs_link_sibling, so it returns NULL. The original kobj is leaked. This is a genuine memory leak. NEW BUG: The known vbdb bug is DoubleOpOnResource — the module fails to load a second time because switch_class was not deregistered in extcon_class_exit(). The memory leak is a related consequence of the same cleanup omission but is a distinct issue type. CORRECTLY CONSTRAINED: The bug requires EXTCON=true (for extcon functions) and ANDROID=true (which #defines SYSFS and enables class_compat_register path). The SYSFS=true term is redundant with ANDROID=true in this simplified file but does not cause over- or under-constraint."
+  "reasoning": ""
 }

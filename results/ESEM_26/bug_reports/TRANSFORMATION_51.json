@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 6148.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_51",
-  "reasoning": "FALSE POSITIVE: 95755181b82.c (BusyBox httpd). 'Branch condition evaluates to a garbage value' at line 54 (maps to 'if(!authorized)' at line 56 in the original). 'authorized' is declared inside '#if ENABLE_FEATURE_HTTPD_BASIC_AUTH' (line 10) and used inside '#ifdef ENABLE_FEATURE_HTTPD_BASIC_AUTH' (line 56). Desugaring artifact: the transformation hoists 'authorized' to function/global scope. On paths where ENABLE_FEATURE_HTTPD_BASIC_AUTH=false, 'authorized' is never initialized but the if-block at lines 55-58 is still present in the desugared form, making '!authorized' a garbage branch condition. Presence condition is only the C++ string header guard (NOT __CORRECT_ISO_CPP_STRING_H_PROTO) — no ENABLE_FEATURE_HTTPD_BASIC_AUTH constraint — consistent with the desugaring not tracking the BASIC_AUTH guard on 'authorized'. Same desugaring pattern as TRANSFORMATION_8 and TRANSFORMATION_17 for this file."
+  "reasoning": ""
 }

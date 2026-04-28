@@ -6,7 +6,7 @@
   "line_number": 8,
   "origin": "family",
   "id": "FAMILY_52",
-  "classification": "FALSE",
-  "reasoning": "FALSE POSITIVE: 7acf6cd80b2.c (Linux ptmx). Dead store on 'x' at line 8 ('int x = *inode'), when def(CONFIG_DEVPTS_MULTIPLE_INSTANCES). x is assigned from dereferencing inode but never used in the simplified file — simplification artifact (real kernel code uses x for device node management). Same as PRODUCT_198 classification.",
+  "classification": "",
+  "reasoning": "",
   "old_id": "FAMILY_62"
 }

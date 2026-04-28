@@ -13,8 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW",
+  "classification": "",
   "old_id": "PRODUCT_42",
   "id": "PRODUCT_3",
-  "reasoning": "TRUE POSITIVE: When ENABLE_FEATURE_CLEAN_UP is false, the #ifdef block containing the cleanup loop is compiled out. Memory allocated via prepend_new_eth_table (malloc for ethtable_t nodes) is never freed, constituting a real memory leak. NEW BUG: The vbdb entry for bc0ffc0e971.c documents a UseAfterFree bug when ENABLE_FEATURE_CLEAN_UP is *enabled* (for-loop increments ch->next after delete_eth_table frees ch). The tool found a different bug (memory leak when the feature is *disabled*), so this is a new bug not in vbdb. CORRECTLY CONSTRAINED: The presence condition ENABLE_FEATURE_CLEAN_UP==false precisely identifies when the cleanup loop is excluded and the leak occurs."
+  "reasoning": ""
 }

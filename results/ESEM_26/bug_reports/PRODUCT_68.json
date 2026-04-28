@@ -13,8 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_68",
-  "reasoning": "TRUE POSITIVE (NEW, CORRECTLY CONSTRAINED): When ENABLE_FEATURE_CLEAN_UP=false, delete_eth_table() is a no-op (empty body). prepend_new_eth_table() allocates a struct via malloc (line 29) and adds it to clist. When main() exits, clist is never freed — genuine memory leak. NEW BUG: The known vbdb bug for bc0ffc0e971.c is UseAfterFree when CLEAN_UP=true — the for loop at line 43 accesses ch->next after delete_eth_table(ch) has already freed ch. The MemoryLeak when CLEAN_UP=false is a separate real issue. CORRECTLY CONSTRAINED: When CLEAN_UP=true, the for loop calls delete_eth_table() which frees each node (though with the use-after-free bug). When CLEAN_UP=false, no freeing occurs at all, causing the leak. The presence condition CLEAN_UP=false is correct."
+  "reasoning": ""
 }

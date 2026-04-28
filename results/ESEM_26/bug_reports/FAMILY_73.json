@@ -6,7 +6,7 @@
   "line_number": 24,
   "origin": "family",
   "id": "FAMILY_73",
-  "classification": "FALSE",
-  "reasoning": "FALSE POSITIVE: e30bfedce4d.c (Marlin auto bed leveling). Dead store on 'xGridSpacing' at line 24 ('int xGridSpacing = left_probe_bed_position') when def(ENABLE_AUTO_BED_LEVELING). 'xGridSpacing' is assigned but never used in this simplified file — simplification artifact (in the real Marlin firmware, xGridSpacing drives the grid probe step calculations). Note: when ENABLE_AUTO_BED_LEVELING is defined, AUTO_BED_LEVELING_GRID is always also defined (line 2), so the presence condition def(ENABLE_AUTO_BED_LEVELING) correctly scopes this alarm.",
+  "classification": "",
+  "reasoning": "",
   "old_id": "FAMILY_76"
 }

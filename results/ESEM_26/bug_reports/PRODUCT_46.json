@@ -13,8 +13,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_46",
-  "reasoning": "FALSE POSITIVE: The alarm reports 'int n = *cache' (line ~41 in 0f8f8094d28.c, inside init_node_lock_keys()) as a dead store. In the simplified file, n is assigned but never subsequently used. In the real Linux kernel init_node_lock_keys() code, n (or the cache value) is used for lockdep key initialization. The simplified file stripped those uses. Additionally, when CONFIG_SLOB=true, kmem_cache_init_late() is never called from main (#ifndef CONFIG_SLOB guards it), making init_node_lock_keys unreachable — the dead store is in unreachable code. The known vbdb bug for 0f8f8094d28.c is OutOfBoundsRead: when SLOB=true, kmalloc_caches is not declared (#ifndef SLOB) but accessed in init_node_lock_keys (#ifdef LOCKDEP), causing an out-of-bounds/undefined reference. The tool does not detect that bug."
+  "reasoning": ""
 }

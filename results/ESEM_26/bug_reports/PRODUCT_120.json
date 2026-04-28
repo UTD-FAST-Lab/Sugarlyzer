@@ -13,8 +13,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_120",
-  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_112 (0f8f8094d28.c), dead store on 'n' (int n = *cache) inside init_node_lock_keys(). When SLOB=false, kmalloc_caches IS declared (inside #ifndef SLOB), so accessing it is valid. n is assigned from *cache but never used — simplification artifact; real kernel code uses the cache value for lock annotation setup. LOCKDEP=true means the function body is compiled. The known vbdb bug (OutOfBoundsRead on kmalloc_caches when SLOB=true) does not apply here because SLOB=false."
+  "reasoning": ""
 }

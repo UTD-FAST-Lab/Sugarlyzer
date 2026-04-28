@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_210",
-  "reasoning": "FALSE POSITIVE: 7acf6cd80b2.c (Linux ptmx). Dead store on 'x' at line 8 inside pts_sb_from_inode(), with CONFIG_UNIX98_PTYS=false. The known vbdb bug (UninitializedVariable on driver_data) requires UNIX98_PTYS=true to compile ptmx_open. With UNIX98_PTYS=false, ptmx_open is not compiled. The dead store on x in pts_sb_from_inode is a simplification artifact — real kernel code uses x for device node management. Same pattern as PRODUCT_198."
+  "reasoning": ""
 }

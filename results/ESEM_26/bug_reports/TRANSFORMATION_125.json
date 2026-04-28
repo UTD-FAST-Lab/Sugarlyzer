@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 7166.0,
   "strategy": "transformation",
-  "classification": "TRUE",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_125",
-  "reasoning": "TRUE POSITIVE (CORRECTLY CONSTRAINED): 35ae2e259e4.c (Apache mod_ssl). '`eckey` is read without initialization' at line 12 ('*eckey = 30'). Same root cause as TRANSFORMATION_85: 'eckey = malloc(sizeof(int))' at line 10 can return NULL (or in the desugared form, 'eckey' appears uninitialized when malloc is in a header guard conditional), and '*eckey = 30' at line 12 dereferences the potentially-null/uninitialized 'eckey'. CORRECTLY CONSTRAINED: HAVE_ECC=true is the only real application config requirement — lines 9-20 are inside '#ifdef HAVE_ECC' and line 12 is outside the '#if defined(SSL_CTX_set_ecdh_auto)' conditional (unlike line 17 in T85). The presence condition covers all combinations of stdlib header guards with HAVE_ECC=true — effectively equivalent to just HAVE_ECC=true for real-world configurations."
+  "reasoning": ""
 }

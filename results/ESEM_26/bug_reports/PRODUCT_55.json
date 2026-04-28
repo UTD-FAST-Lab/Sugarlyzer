@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_55",
-  "reasoning": "TRUE POSITIVE (NEW, CORRECTLY CONSTRAINED): The alarm reports that eckey (from malloc at line 10) could be NULL and is dereferenced at line 17 ('*eckey = 15') when HAVE_ECC=true and SSL_CTX_set_ecdh_auto=false. Line 17 is inside '#else' of '#if defined(SSL_CTX_set_ecdh_auto)', so it is only compiled when SSL_CTX_set_ecdh_auto=false. The null dereference is genuine — malloc can return NULL with no check. NEW BUG: The known vbdb bug for 35ae2e259e4.c is MemoryLeak (eckey never freed when HAVE_ECC=true); the null dereference is a separate issue. CORRECTLY CONSTRAINED: The bug at line 17 exists only when HAVE_ECC=true (for the malloc) and SSL_CTX_set_ecdh_auto=false (for the else branch to compile), matching the presence condition exactly."
+  "reasoning": ""
 }

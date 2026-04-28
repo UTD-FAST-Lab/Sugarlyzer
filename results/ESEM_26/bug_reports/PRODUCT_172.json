@@ -13,8 +13,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_172",
-  "reasoning": "FALSE POSITIVE: Same file as many prior entries (66517915e09.c), dead store on 'codec_hw_write' at line 16. CONFIG_I2C=false means i2c_master_send is undeclared (defined only inside #ifdef CONFIG_I2C). Tool fails to detect the known UndeclaredIdentifier vbdb bug and reports a spurious dead store. Simplification artifact."
+  "reasoning": ""
 }

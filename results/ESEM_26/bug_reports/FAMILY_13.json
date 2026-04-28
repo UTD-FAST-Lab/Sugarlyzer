@@ -6,7 +6,7 @@
   "line_number": 14,
   "origin": "family",
   "id": "FAMILY_13",
-  "classification": "TRUE",
+  "classification": "",
   "old_id": "FAMILY_2",
-  "reasoning": "TRUE POSITIVE (CORRECTLY CONSTRAINED): 1b48bb3c1af.c (Apache LDAP). Uninitialized value on 'rmm_lock' at line 14, when def(APU_HAS_LDAP) && def(APR_HAS_SHARED_MEMORY). 'char* rmm_lock' is declared at line 11 without initialization. Inside #ifdef APR_HAS_SHARED_MEMORY, apr_rmm_init(rmm_lock) is called at line 14, which passes the uninitialized pointer to printf(\"%s\\n\", rmm_lock) — a use of an uninitialized value. The //ERROR comment confirms this is the known vbdb UninitializedVariable bug. CORRECTLY CONSTRAINED: APU_HAS_LDAP is required to compile util_ldap_cache_init(), and APR_HAS_SHARED_MEMORY is required to compile the call at line 14. Both conditions are necessary and together sufficient."
+  "reasoning": ""
 }

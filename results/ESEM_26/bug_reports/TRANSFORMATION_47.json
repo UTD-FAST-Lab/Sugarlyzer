@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 6010.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "TRANSFORMATION_112",
   "id": "TRANSFORMATION_47",
-  "reasoning": "FALSE POSITIVE: b62bd7b261b.c (BusyBox mdev). 'Value stored to val is never read' at line 16 ('val = (s && s[1]) ? s+1 : NULL'). 'val' is reassigned at line 16 from its initial value set at line 12, but is never subsequently read in the simplified file. Simplification artifact: in real BusyBox mdev, 'val' (after the reassignment to point past the first space in the permission string) is used to parse device rename patterns. The vbdb simplification stripped those uses, leaving 'val' as a dead store after line 16. Line 16 is inside '#ifdef ENABLE_FEATURE_MDEV_RENAME'; the wide presence condition covering various MDEV configurations reflects the hoisting artifact of the nested #ifdef desugaring."
+  "reasoning": ""
 }

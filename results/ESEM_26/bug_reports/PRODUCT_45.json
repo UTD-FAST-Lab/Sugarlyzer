@@ -15,8 +15,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "PRODUCT_11",
   "id": "PRODUCT_45",
-  "reasoning": "FALSE POSITIVE: Same file and variable as PRODUCT_36 (c76df14dfb4.c), but alarm at line 42 (the #else branch: 'flags |= T_ESCAPE_SHELL_CMD' when !NEED_ENHANCED_ESCAPES) vs line 38 (the #ifdef branch). In both cases, flags is set inside the for loop but never subsequently read because the real Apache gen_test_char.c writes flags to an output character table (test_char_table) on each iteration. The simplified file stripped that table write, making flags appear as a dead store. This is a simplification artifact. The known vbdb bug (OSCommandInjection: NEED_ENHANCED_ESCAPES not defined when CROSS_COMPILE && WIN32) is a different issue."
+  "reasoning": ""
 }

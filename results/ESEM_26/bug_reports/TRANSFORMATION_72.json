@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 2405.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "TRANSFORMATION_170",
   "id": "TRANSFORMATION_72",
-  "reasoning": "FALSE POSITIVE: 51fd36f3fad.c (Linux ktime). 'Undefined or garbage value returned to caller' at line 60 ('return expires'). 'expires' is assigned from either 'ktime_add_ns(time_delta)' (line 56) or 'KTIME_MAX' (line 58) in a complete if-else. Desugaring artifact: same root cause as TRANSFORMATION_53. In the desugared form, 'ktime_add_ns' (when it is a function rather than a macro) wraps its body inside 'if(!(BITS_PER_LONG==64 || CONFIG_KTIME_SCALAR))'. On paths where this inner condition is not taken, 'ktime_add_ns' returns garbage (as reported by TRANSFORMATION_53). The caller 'tick_nohz_stop_sched_tick' then assigns this garbage to 'expires' and returns it. In the original code, 'ktime_add_ns' is only called as a function when the macro version is not active — so the inner condition is always met and the function always returns a valid value. Presence condition simplifies to NOT __int8_t_defined (effectively True for application logic)."
+  "reasoning": ""
 }

@@ -6,7 +6,7 @@
   "line_number": 16,
   "origin": "family",
   "id": "FAMILY_61",
-  "classification": "TRUE",
-  "reasoning": "TRUE POSITIVE (CORRECTLY CONSTRAINED): b273d665181.c (BusyBox ls). Uninitialized value on 'info' at line 16, when def(BB_FEATURE_LS_FILETYPES) AND !def(BB_FEATURE_LS_USERNAME). 'int info' is declared inside #ifdef LS_FILETYPES but its initialization ('info = 0') is inside #ifdef LS_USERNAME. When FILETYPES=true and USERNAME=false: info is declared but never initialized, then used at line 16 inside #ifdef LS_FILETYPES. This is the known vbdb UninitializedVariable bug. CORRECTLY CONSTRAINED: FILETYPES=true is required (to compile info declaration and use), and USERNAME=false is required (so initialization is skipped). Both conditions are necessary and sufficient.",
+  "classification": "",
+  "reasoning": "",
   "old_id": "FAMILY_24"
 }

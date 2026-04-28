@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_151",
-  "reasoning": "TRUE POSITIVE (NEW, OVER-CONSTRAINED): Same bug as PRODUCT_63/81/101 — 2631486f1bf.c (BusyBox ls). 'curr' from malloc at line 65 could be NULL and is immediately dereferenced at line 66 ('curr->val = rand() % 10'). Genuine potential null dereference with no NULL check after malloc(). NEW: The known vbdb bug for this file is MemoryLeak when SORTFILES && RECURSIVE (dfree uses wrong array head). The malloc NULL dereference is a different bug. OVER-CONSTRAINED: The malloc and dereference are in unconditional main() code, unguarded by any #ifdef. The null dereference can occur for any combination of LS_RECURSIVE and LS_SORTFILES. The presence condition (RECURSIVE=false, SORTFILES=false) excludes three other equally-vulnerable flag combinations."
+  "reasoning": ""
 }

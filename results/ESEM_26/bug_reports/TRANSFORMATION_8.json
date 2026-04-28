@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 6075.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "TRANSFORMATION_99",
   "id": "TRANSFORMATION_8",
-  "reasoning": "FALSE POSITIVE: 5cd6461b6fb.c (BusyBox httpd). 'Branch condition evaluates to a garbage value' at line 30 ('if (http_unauthorized)') when CONFIG_FEATURE_HTTPD_BASIC_AUTH=true. In the original code, 'http_unauthorized' is declared and assigned at lines 27-28 inside the SAME '#ifdef CONFIG_FEATURE_HTTPD_BASIC_AUTH' block as the branch at line 30. When BASIC_AUTH=true, 'http_unauthorized = random' (line 28) always executes before the branch at line 30 — no garbage value. The alarm is a transformation artifact: the desugaring may hoist 'http_unauthorized' to function scope and/or split the single '#ifdef' block into separate 'if()' blocks, creating a code path where the assignment block is skipped but the branch is still reached. Same desugaring artifact pattern as TRANSFORMATION_2."
+  "reasoning": ""
 }

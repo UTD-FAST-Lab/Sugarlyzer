@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_152",
-  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_116/123/142 (95755181b82.c, BusyBox httpd). Dead store on 'len' with ENABLE_FEATURE_HTTPD_GZIP=false, HTTPD_BASIC_AUTH=true, BB_MMU=false. When HTTPD_GZIP=false, content_gzip is undeclared (declared inside #ifdef HTTPD_GZIP); it is referenced unconditionally at line 35 — the known vbdb UndeclaredIdentifier bug. Tool treats undefined content_gzip as 0, making the gzip branch dead code, then reports dead store on len (simplification artifact) instead of the real UndeclaredIdentifier."
+  "reasoning": ""
 }

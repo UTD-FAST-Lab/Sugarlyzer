@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_48",
-  "reasoning": "FALSE POSITIVE: Same file and variable as PRODUCT_36 and PRODUCT_45 (c76df14dfb4.c), dead store on 'flags' at line 42 (the #else branch when !NEED_ENHANCED_ESCAPES). In the real Apache gen_test_char.c, flags is written to a test_char_table output array on each loop iteration; the simplified file stripped that table write. This is a simplification artifact. The known vbdb bug (OSCommandInjection: NEED_ENHANCED_ESCAPES not defined when CROSS_COMPILE && WIN32) is a different issue."
+  "reasoning": ""
 }

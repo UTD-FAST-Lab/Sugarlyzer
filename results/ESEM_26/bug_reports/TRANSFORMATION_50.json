@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 1418.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "TRANSFORMATION_168",
   "id": "TRANSFORMATION_50",
-  "reasoning": "FALSE POSITIVE: 36855dcfc98.c (Linux Blackfin). 'Value stored to wakeup is never read' at line 6 ('wakeup = 0' inside #ifndef CONFIG_BF60x). When CONFIG_BF60x=false, 'wakeup' is assigned 0 but never subsequently used — the function simply returns 0. Simplification artifact: in real Linux Blackfin PM code, 'wakeup' is used to store and restore the CPU wakeup configuration during suspend/resume. The vbdb simplification stripped all reads/uses of 'wakeup', leaving only the assignment. The known vbdb bug (// ERROR at line 3) is that 'wakeup' is uninitialized when CONFIG_BF60x=true (no assignment under that config), which is a different alarm. The dead store at line 6 is not a real bug — it's an artifact of simplification."
+  "reasoning": ""
 }

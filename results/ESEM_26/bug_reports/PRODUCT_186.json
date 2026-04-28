@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_186",
-  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_54/89/104/105/119/134 (8c4377dd635.c, Marlin manage_heater). Dead store on 'pid_output' at line 13. When PIDTEMP=false, the #if PIDTEMP && PID_DEBUG block (containing SERIAL_ECHO_START with wrong args — the known vbdb bug) is NOT compiled. pid_output is set in the else branch but never used — simplification artifact (real Marlin uses pid_output to drive heating elements)."
+  "reasoning": ""
 }

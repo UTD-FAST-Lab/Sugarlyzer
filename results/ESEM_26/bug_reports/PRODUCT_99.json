@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "TRUE_OVER",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_99",
-  "reasoning": "TRUE POSITIVE (KNOWN, OVER-CONSTRAINED): Same as PRODUCT_72 — eckey is malloc'd at line 10 when HAVE_ECC=true and never freed, causing a memory leak. The alarm's 'last access' is line 17 ('*eckey = 15', inside #if !defined(SSL_CTX_set_ecdh_auto)) vs line 12 in PRODUCT_72. KNOWN BUG: The vbdb entry documents the MemoryLeak when HAVE_ECC=true. OVER-CONSTRAINED: Same reasoning as PRODUCT_72 — the memory leak exists for any value of SSL_CTX_set_ecdh_auto when HAVE_ECC=true (no free() in any branch). The condition requiring SSL_CTX_set_ecdh_auto=false excludes the SSL_CTX_set_ecdh_auto=true configuration."
+  "reasoning": ""
 }

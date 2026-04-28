@@ -6,7 +6,7 @@
   "line_number": 41,
   "origin": "family",
   "id": "FAMILY_43",
-  "classification": "TRUE",
+  "classification": "",
   "old_id": "FAMILY_60",
-  "reasoning": "TRUE POSITIVE (CORRECTLY CONSTRAINED): 76baeebf7df.c (Linux NUMA). 'Assignment makes pointer from integer without a cast (const unsigned long* <- obj unsigned long)' at line 41, when def(CONFIG_NUMA) AND def(CONFIG_DEBUG_PER_CPU_MAPS). Line 41: 'return cpu_none_mask' inside cpumask_of_node() which has return type 'const cpumask_t *'. cpu_none_mask is declared as 'cpumask_t cpu_none_mask = 0' — a plain unsigned long, NOT a pointer. The function should return '&cpu_none_mask' (address) but returns the VALUE instead. This is the known vbdb bug (WrongReturnType/cast_to_pointer). The #else version at lines 59-62 correctly returns '&cpu_online_mask'. CORRECTLY CONSTRAINED: NUMA=true compiles this code path; DEBUG_PER_CPU_MAPS=true selects the buggy version vs. the correct version at lines 51-54."
+  "reasoning": ""
 }

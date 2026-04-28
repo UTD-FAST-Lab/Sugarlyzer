@@ -6,7 +6,7 @@
   "line_number": 24,
   "origin": "family",
   "id": "FAMILY_15",
-  "classification": "TRUE_UNDER",
+  "classification": "",
   "old_id": "FAMILY_37",
-  "reasoning": "TRUE POSITIVE (UNDER-CONSTRAINED): 1c17e4d4437.c (Linux RCU). Same bug as FAMILY_14 — uninitialized 'fast_no_hz' but at the printf use site (line 24) instead of the call site (line 23). When RCU_CPU_STALL_INFO=true and FAST_NO_HZ=false, fast_no_hz is never written by the empty stub, so printf at line 24 reads an uninitialized value. This is the known vbdb bug (//ERROR comment at line 24). UNDER-CONSTRAINED: presence condition is only def(RCU_CPU_STALL_INFO), but the bug only manifests when FAST_NO_HZ=false. Configs where FAST_NO_HZ=true satisfy the presence condition but have no bug (sprintf writes to fast_no_hz). Minimal condition: def(RCU_CPU_STALL_INFO) && !def(RCU_FAST_NO_HZ)."
+  "reasoning": ""
 }

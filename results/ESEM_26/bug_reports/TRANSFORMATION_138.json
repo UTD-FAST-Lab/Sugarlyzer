@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 7166.0,
   "strategy": "transformation",
-  "classification": "TRUE_OVER",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_138",
-  "reasoning": "TRUE POSITIVE (OVER-CONSTRAINED): 35ae2e259e4.c (Apache mod_ssl). Same bug family as TRANSFORMATION_85/T121/T125 — '`eckey` could be null and is dereferenced' at line 12 ('*eckey = 30'). 'eckey = malloc(sizeof(int))' at line 10 can return NULL; '*eckey = 30' dereferences it without NULL check. OVER-CONSTRAINED: the PC requires __USE_EXTERN_INLINES=true — a stdlib desugaring artifact. The correct condition is just HAVE_ECC=true (line 12 is inside '#ifdef HAVE_ECC' and not inside any SSL_CTX_set_ecdh_auto conditional). Requiring __USE_EXTERN_INLINES=true makes the PC too narrow, excluding __USE_EXTERN_INLINES=false cases (covered by TRANSFORMATION_125). Compare: T125 covers all USE_EXTERN_INLINES/STRICT_ANSI combinations for line 12; T138 covers only USE_EXTERN_INLINES=true cases for line 12."
+  "reasoning": ""
 }

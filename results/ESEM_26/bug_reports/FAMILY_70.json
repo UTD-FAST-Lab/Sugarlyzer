@@ -6,7 +6,7 @@
   "line_number": 30,
   "origin": "family",
   "id": "FAMILY_70",
-  "classification": "FALSE",
-  "reasoning": "FALSE POSITIVE: d7e9711760a.c (Linux quota). Dead store on 'reserved' at line 30 ('reserved = 1') when def(CONFIG_QUOTA_DEBUG). 'reserved' is declared at line 17 ('int reserved = 0') and assigned again at line 30, but never read — simplification artifact. In the real kernel quota code, 'reserved' would be used to track reserved quota space and acted upon. The known vbdb bug for this file is the mutex double-lock issue at line 8 (inode_get_rsv_space acquires i_lock while add_dquot_ref already holds it), which is unrelated to this alarm.",
+  "classification": "",
+  "reasoning": "",
   "old_id": "FAMILY_65"
 }

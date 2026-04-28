@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 5255.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_75",
-  "reasoning": "FALSE POSITIVE: 8c4377dd635.c (Marlin firmware). 'Value stored to pid_output is never read' at line 21 (maps to 'pid_output = 0' at line 19, inside '#else' of '#ifdef PIDTEMP'). When PIDTEMP=false, 'pid_output = 0' at line 19 overwrites the initial 'float pid_output = 1' (line 11), but 'pid_output' is never subsequently read — the function returns without using it. Simplification artifact: in real Marlin firmware, 'pid_output' is used to drive heater PWM output. The vbdb simplification stripped all uses of 'pid_output', leaving only the initialization and the conditional reassignment. When PIDTEMP=true, 'pid_output = 1' (line 11) is also a dead store (but that alarm isn't reported here). Presence condition simplifies to NOT PIDTEMP — correctly capturing when the line 19 assignment fires — but the underlying cause is simplification, not a real defect."
+  "reasoning": ""
 }

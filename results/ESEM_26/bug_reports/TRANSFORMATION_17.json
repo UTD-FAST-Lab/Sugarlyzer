@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 6148.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_17",
-  "reasoning": "FALSE POSITIVE: 95755181b82.c (BusyBox httpd). 'The right operand of '+' is a garbage value' mapped to original lines 33-34 (which are the '#endif' terminating the BASIC_AUTH block and an empty line). The presence condition is effectively True (only the header guard __need___FILE). The '+' operations in this function are 'iobuf + len' at lines 30 and 36. 'len' is always assigned at lines 25-26 unconditionally before any use. Transformation artifact: the Clang analyzer may see 'len' as potentially garbage due to how the '#ifdef ENABLE_FEATURE_HTTPD_BASIC_AUTH' block is desugared into an 'if()' block — a modified 'len' inside the if block might appear uninitialized/stale in the analysis after the block ends. Same desugaring artifact pattern as TRANSFORMATION_8."
+  "reasoning": ""
 }

@@ -6,7 +6,7 @@
   "line_number": 20,
   "origin": "family",
   "id": "FAMILY_58",
-  "classification": "FALSE",
-  "reasoning": "FALSE POSITIVE: a7fc1f83c81.c (Marlin SD card). Uninitialized value on 'path' at line 20 ('strcat(path, \"/\")'), when def(SDSUPPORT). path is initialized at line 19 ('path[0] = 0') before this line 20 strcat call. Same analysis as FAMILY_57 — path IS initialized before use. False positive.",
+  "classification": "",
+  "reasoning": "",
   "old_id": "FAMILY_75"
 }

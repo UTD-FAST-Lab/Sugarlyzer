@@ -13,8 +13,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_199",
-  "reasoning": "FALSE POSITIVE: Same file as many prior entries (66517915e09.c, Linux FSI audio). Dead store on 'codec_hw_write' at line 24. With CONFIG_I2C=true, i2c_master_send IS declared, so the known UndeclaredIdentifier vbdb bug does not apply. The dead store is a simplification artifact — subsequent uses of codec_hw_write were stripped from the simplified code. Tool fails to detect any real bug here."
+  "reasoning": ""
 }

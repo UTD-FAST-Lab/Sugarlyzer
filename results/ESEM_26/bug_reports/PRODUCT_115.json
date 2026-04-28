@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_115",
-  "reasoning": "FALSE POSITIVE: 2631486f1bf.c (BusyBox ls). PULSE_UNINITIALIZED_VALUE on 'head' at line 67 ('curr->next = head') when LS_RECURSIVE=true, LS_SORTFILES=false. In the simplified vbdb file, 'head' is declared at line 60 ('struct dnode *curr, *head') but is never initialized. At line 67, head is read in 'curr->next = head'. In real BusyBox ls code, head would be initialized to NULL before the loop. The missing 'head = NULL' initialization is a simplification artifact. The alarm fires unconditionally (no CONFIG guards around the linked list building code), so the presence condition is irrelevant. The known vbdb bug for this file is MemoryLeak when SORTFILES && RECURSIVE."
+  "reasoning": ""
 }

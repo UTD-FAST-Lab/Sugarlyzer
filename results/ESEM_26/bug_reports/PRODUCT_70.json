@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "TRUE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_70",
-  "reasoning": "TRUE POSITIVE: When APU_HAS_LDAP=true and APR_HAS_SHARED_MEMORY=true, util_ldap_cache_init() is compiled. Inside it, 'char* rmm_lock' (line 11) is declared but never initialized. Inside #ifdef APR_HAS_SHARED_MEMORY, apr_rmm_init(rmm_lock) is called passing the uninitialized pointer (line 14), which then uses it in printf. The alarm correctly identifies rmm_lock being read uninitialized at line 14. KNOWN BUG: The vbdb entry for 1b48bb3c1af.c documents exactly this UninitializedVariable bug — rmm_lock is used uninitialized when APU_HAS_LDAP && APR_HAS_SHARED_MEMORY. CORRECTLY CONSTRAINED: When APU_HAS_LDAP=false, util_ldap_cache_init is not compiled. When APR_HAS_SHARED_MEMORY=false, the apr_rmm_init call is not compiled. The presence condition matches the known bug configuration exactly."
+  "reasoning": ""
 }

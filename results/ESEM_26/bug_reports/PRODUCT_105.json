@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_105",
-  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_54/89/104 (8c4377dd635.c), dead store on 'pid_output' when MARLIN_H=true, PIDTEMP=false, PID_DEBUG=false. When MARLIN_H=true, SERIAL_ECHO_START is not defined (#ifndef MARLIN_H block skipped). When PIDTEMP=false, pid_output is set to 1 then to 0 (else branch) but never used. In the real Marlin code, pid_output drives heating elements. Simplification artifact."
+  "reasoning": ""
 }

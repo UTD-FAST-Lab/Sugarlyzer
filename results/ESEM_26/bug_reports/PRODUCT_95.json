@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_95",
-  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_56 (061fd0a353e.c), dead store on 'argv' (post-incremented at line 16) when HDIO_UNREGISTER_HWIF=false and HDIO_SCAN_HWIF=false. In the real BusyBox hdparm main(), argv is used to continue parsing command-line arguments. The simplified file stripped subsequent uses. Simplification artifact. When both HWIF flags are false, neither 'case U' nor 'case R' with the expected_hwif_error label is compiled — the known vbdb UndefinedSymbol bug (goto to undefined label) does not occur in this configuration."
+  "reasoning": ""
 }

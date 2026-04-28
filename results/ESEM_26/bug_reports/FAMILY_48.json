@@ -6,7 +6,7 @@
   "line_number": 45,
   "origin": "family",
   "id": "FAMILY_48",
-  "classification": "TRUE",
-  "reasoning": "TRUE POSITIVE (CORRECTLY CONSTRAINED): 76baeebf7df.c (Linux NUMA). Identical to FAMILY_44 — 'assignment makes pointer from integer without a cast' at line 45, when def(NUMA) AND def(DEBUG_PER_CPU_MAPS). 'return cpu_online_mask' returns an unsigned long value where const cpumask_t * is expected. Known vbdb bug (WrongReturnType). Same classification as FAMILY_44.",
+  "classification": "",
+  "reasoning": "",
   "old_id": "FAMILY_60"
 }

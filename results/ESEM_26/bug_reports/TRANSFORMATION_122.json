@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 7601.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_122",
-  "reasoning": "FALSE POSITIVE (SIMPLIFICATION ARTIFACT): 5275b1e49f6.c (BusyBox insmod). 'The value written to &someInt is never used' at line 9 ('int someInt = 1'). 'someInt' IS read at line 25 ('k_crcs = someInt') in the original code, but 'k_crcs' is itself a dead store (see TRANSFORMATION_93). The presence condition covers stdlib header states (_STDLIB_H, __need_malloc_and_calloc) — essentially always true — with no application-level configs. This is a desugaring/simplification artifact: in the desugared form, 'k_crcs = someInt' at line 25 may be inside a header guard conditional while 'someInt' is assigned outside, making 'someInt' appear as a dead store on some paths."
+  "reasoning": ""
 }

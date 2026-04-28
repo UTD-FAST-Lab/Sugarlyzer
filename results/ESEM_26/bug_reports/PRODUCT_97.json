@@ -13,8 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_97",
-  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_39 (5275b1e49f6.c), dead store on 'k_crcs' at line 25 ('k_crcs = someInt') when VERSION_CHECKING=true. k_crcs is assigned at line 21 (k_crcs=0, inside #ifdef) and again at line 25 (unconditionally), but never read afterward. In the real BusyBox insmod code, k_crcs is used for CRC checking. Simplification artifact. The known vbdb bug is UndeclaredIdentifier: k_crcs is used at line 25 unconditionally but only declared inside #ifdef VERSION_CHECKING, so when VERSION_CHECKING=false k_crcs is undeclared."
+  "reasoning": ""
 }

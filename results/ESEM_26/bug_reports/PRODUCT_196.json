@@ -13,8 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "TRUE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_196",
-  "reasoning": "TRUE POSITIVE (KNOWN, CORRECTLY CONSTRAINED): 30e053248da.c (Linux reiserfs). When CONFIG_SECURITY=false, security_old_inode_init_security() (lines 14-17) just returns 0 without writing to *len. In reiserfs_create() (line 39), 'length' is declared without initialization, passed to reiserfs_security_init(). Inside reiserfs_security_init, error = 0 (function returns 0 but never writes to *length), so the if (error) branch is skipped, and at line 31 'int x = *length' reads the uninitialized length. PULSE reports this as 'length read without initialization during the call to reiserfs_security_init()' at line 41. This is the known vbdb UninitializedVariable bug. The presence condition (SECURITY=false) is exactly correct."
+  "reasoning": ""
 }

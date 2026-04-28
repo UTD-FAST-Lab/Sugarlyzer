@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 7171.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "TRANSFORMATION_44",
   "id": "TRANSFORMATION_41",
-  "reasoning": "FALSE POSITIVE: c76df14dfb4.c (Apache httpd). 'Value stored to flags is never read' at lines 4-42. 'flags' is set to 0 at line 21 and then modified with 'flags |= T_ESCAPE_SHELL_CMD' at line 38 or 42, but is never read after the loop. Simplification artifact: in real Apache httpd, this loop builds a character escape lookup table — 'flags' would be stored to an array (e.g., 'ap_escape_table[c] = flags'). The vbdb simplification stripped the array and its storage use, leaving only the 'flags' computation. The for loop iterates over all 256 character values, computing flags, but since the result is never stored to a table or used, it appears as a dead store. The presence condition covers both NEED_ENHANCED_ESCAPES=true and =false paths (different sets of special characters) — both are simplification artifacts."
+  "reasoning": ""
 }

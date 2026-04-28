@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_149",
-  "reasoning": "TRUE POSITIVE (NEW, OVER-CONSTRAINED): 061fd0a353e.c (BusyBox hdparm). 'p' is declared at line 7 without initialization. It is only conditionally assigned in case 'W' (when rand()%2 is true). Case 'R' (line 26-28, compiled when SCAN_HWIF=true) reads p at line 27 ('if(!p) goto expected_hwif_error'). If the switch enters case 'R' without first executing case 'W' with r=1, p is read uninitialized — genuine bug. NEW: The known vbdb bug is UndefinedSymbol 'expected_hwif_error' label (in case 'U' when UNREGISTER_HWIF=true, jumping to a label only defined when SCAN_HWIF=true); this uninitialized p bug is a different issue. OVER-CONSTRAINED: The uninitialized p at line 27 (case 'R') requires only SCAN_HWIF=true — UNREGISTER_HWIF=false is an unnecessary constraint. Configurations with UNREGISTER_HWIF=true && SCAN_HWIF=true are also vulnerable to the same uninitialized p read at line 27."
+  "reasoning": ""
 }

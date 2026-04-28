@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 6178.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "TRANSFORMATION_9",
   "id": "TRANSFORMATION_54",
-  "reasoning": "FALSE POSITIVE: 2a6cbfa00e0.c (Apache SSL). '1st function call argument is an uninitialized value' at line 12 ('free(sc)' inside #ifdef SHARED_MODULE). 'sc' is assigned from 'malloc(sizeof(char) * 45)' at line 6 unconditionally. 'sc' is always initialized before 'free(sc)' at line 12. Desugaring artifact: same pattern as TRANSFORMATION_36 for this file. The '#include <stdlib.h>' desugaring wraps malloc() inside a conditional if-block (based on _STDLIB_H, __need_malloc_and_calloc, etc.). 'sc' is hoisted to function scope; on paths where the stdlib if-block is not entered, 'sc' appears uninitialized. The free(sc) call at line 12 is inside '#ifdef SHARED_MODULE', so presence condition correctly requires SHARED_MODULE=true alongside the stdlib guards."
+  "reasoning": ""
 }

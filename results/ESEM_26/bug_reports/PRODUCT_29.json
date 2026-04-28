@@ -18,8 +18,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "PRODUCT_58",
   "id": "PRODUCT_29",
-  "reasoning": "FALSE POSITIVE: The alarm reports 'irq' (int irq = *ops at line 12 in irq_domain_add()) as a dead store — irq is initialized but never subsequently used in the simplified file. In the real Linux kernel irq_domain_add() code, the dereferenced ops value is actively used for IRQ domain operations. The simplified file stripped those subsequent uses, making irq appear as a dead store. This is a simplification artifact. The known vbdb bug (NullDereference: ops is NULL when !OF_IRQ) is a separate issue from this dead store alarm."
+  "reasoning": ""
 }

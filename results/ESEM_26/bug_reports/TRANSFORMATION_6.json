@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 5472.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "TRANSFORMATION_18",
   "id": "TRANSFORMATION_6",
-  "reasoning": "FALSE POSITIVE: 35ae2e259e4.c (OpenSSL ECC). Dead store on 'eckey' at line 10 ('eckey = malloc(sizeof(*eckey))') when HAVE_ECC=true. 'eckey' is assigned from malloc but never subsequently read or freed in this simplified file — simplification artifact. Same pattern as FAMILY_21: in the real code, 'eckey' would be used for ECC key operations; the simplification removed those uses. The real underlying issue is a memory leak (malloc'd memory never freed), which is a different bug type not captured by this dead-store alarm."
+  "reasoning": ""
 }

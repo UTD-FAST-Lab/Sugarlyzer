@@ -6,7 +6,7 @@
   "line_number": 21,
   "origin": "family",
   "id": "FAMILY_10",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "FAMILY_18",
-  "reasoning": "FALSE POSITIVE: 199501f2a00.c (BusyBox modprobe). Uninitialized value on 'buf' at line 21 ('strcat(buf, dt)'), when !def(ENABLE_FEATURE_MODPROBE_MULTIPLE_OPTIONS). However, 'buf' was initialized by 'strcpy(buf, \"module option(s): \")' at line 19 — it is NOT uninitialized at line 21. The alarm about buf being uninitialized is incorrect. Note: there IS a real bug at line 21 — 'strcat(buf, dt)' where dt could be NULL (when rand()%2 == 0) — but that is a NULL pointer dereference on dt, not an uninitialized buf."
+  "reasoning": ""
 }

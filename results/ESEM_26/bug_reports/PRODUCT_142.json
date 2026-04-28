@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_142",
-  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_116/123 (95755181b82.c, BusyBox httpd). Dead store on 'len' at line ~39. With ENABLE_FEATURE_HTTPD_GZIP=true, content_gzip IS defined; with BASIC_AUTH=true, the len += sprintf for WWW-Authenticate also fires; with BB_MMU=true, mini_httpd() is called. Despite all features enabled, len accumulates sprintf return values but is never used in an actual write/send call — simplification artifact. The known vbdb bug (UndeclaredIdentifier content_gzip when HTTPD_GZIP=false) does not apply since HTTPD_GZIP=true here."
+  "reasoning": ""
 }

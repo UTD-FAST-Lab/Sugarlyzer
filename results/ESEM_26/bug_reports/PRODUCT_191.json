@@ -13,8 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_191",
-  "reasoning": "FALSE POSITIVE: 30e053248da.c (Linux reiserfs). Dead store on 'x' at line 31 ('int x = *length') inside reiserfs_security_init(), with CONFIG_SECURITY=true. When SECURITY=true, security_old_inode_init_security() may write *len = 0 (if nondet returns true); the function proceeds to line 31 where x = *length is assigned but never used. Simplification artifact — real reiserfs code uses x (the length value) for subsequent security attribute processing. The known vbdb bug (UninitializedVariable 'length' when SECURITY=false) does not apply here."
+  "reasoning": ""
 }

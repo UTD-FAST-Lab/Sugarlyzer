@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 7311.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_146",
-  "reasoning": "FALSE POSITIVE: 5cd6461b6fb.c (BusyBox httpd). '`http_unauthorized` is read without initialization' at line 30 ('if (http_unauthorized)'). `http_unauthorized` IS initialized at line 28 ('int http_unauthorized = random') before being read at line 30. Both lines 27-32 are inside '#ifdef CONFIG_FEATURE_HTTPD_BASIC_AUTH'. Desugaring artifact: when '#ifdef BASIC_AUTH' is converted to 'if(CONFIG_FEATURE_HTTPD_BASIC_AUTH) {...}', the variable declarations may be hoisted to function scope, making PULSE think `http_unauthorized` might be uninitialized on alternative paths. The real vbdb bug (annotated '//ERROR' at line 21) is a format-string mismatch: 'printf(\"%ld\\r\\n\", total)' uses '%ld' but when CONFIG_LFS=true, 'total' is 'long long' rather than 'long'. This PULSE_UNINITIALIZED_VALUE alarm is a false positive from desugaring."
+  "reasoning": ""
 }

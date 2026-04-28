@@ -6,7 +6,7 @@
   "line_number": 32,
   "origin": "family",
   "id": "FAMILY_16",
-  "classification": "TRUE_NEW",
+  "classification": "",
   "old_id": "FAMILY_39",
-  "reasoning": "TRUE POSITIVE (NEW): 1f758a4341a.c (Linux EP93XX Ethernet). 'Control flow of non-void function ends here!' at line 32, when def(CONFIG_EP93XX_ETH). Function ep93xx_alloc_buffers() (lines 29-34): it returns 1 when descs==NULL (line 33), but has NO return statement when descs!=NULL — control flow falls off the end of a non-void function. This is a genuine missing-return bug. NEW: the //ERROR comment is at line 39 (inside ep93xx_open, a separate function), suggesting the known vbdb bug is in ep93xx_open; the control flow bug in ep93xx_alloc_buffers is a distinct finding. CORRECTLY CONSTRAINED: def(EP93XX_ETH) is necessary and sufficient to compile ep93xx_alloc_buffers."
+  "reasoning": ""
 }

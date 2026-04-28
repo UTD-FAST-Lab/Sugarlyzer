@@ -13,8 +13,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_156",
-  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_112/122/155 (0f8f8094d28.c), dead store on 'n' (int n = *cache) inside init_node_lock_keys() when LOCKDEP=true, SLOB=true, SLAB=false. When SLOB=true, kmalloc_caches is undeclared (inside #ifndef SLOB); cache is derived from accessing undeclared/undefined memory. n is assigned from *cache but never used — simplification artifact. The tool misses the actual OutOfBoundsRead/UndeclaredIdentifier on kmalloc_caches and reports the secondary dead store on n."
+  "reasoning": ""
 }

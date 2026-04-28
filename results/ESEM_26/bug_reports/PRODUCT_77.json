@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "TRUE_OVER",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_77",
-  "reasoning": "TRUE POSITIVE (KNOWN, OVER-CONSTRAINED): When CONFIG_UNIX98_PTYS=true, ptmx_open() is compiled. If nondet() returns true, execution jumps to err_release (line 36) before 'driver_data = &some_int' (line 39), leaving driver_data uninitialized. At line 44, tty_release(driver_data) passes the uninitialized pointer. The alarm correctly detects driver_data being read uninitialized at line 44. KNOWN BUG: The vbdb entry for 7acf6cd80b2.c documents exactly this UninitializedVariable bug in ptmx_open() when UNIX98_PTYS is enabled. OVER-CONSTRAINED: The bug at line 44 exists for any value of CONFIG_DEVPTS_MULTIPLE_INSTANCES when UNIX98_PTYS=true (the goto and uninitialized read are not guarded by DEVPTS_MULTIPLE_INSTANCES). The presence condition requiring DEVPTS_MULTIPLE_INSTANCES=false excludes the DEVPTS_MULTIPLE_INSTANCES=true case, which is also vulnerable. Compare PRODUCT_32 which correctly covers both DEVPTS_MULTIPLE_INSTANCES values."
+  "reasoning": ""
 }

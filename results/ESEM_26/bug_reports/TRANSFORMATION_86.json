@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 7601.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_86",
-  "reasoning": "FALSE POSITIVE (SIMPLIFICATION ARTIFACT): 5275b1e49f6.c (BusyBox insmod). 'The value written to &m_has_modinfo is never used' at line 18 ('m_has_modinfo = 1'). In the simplified vbdb code, 'm_has_modinfo' is assigned at lines 16 and 18 but never subsequently read — subsequent uses were stripped by vbdb simplification. The presence condition contains ONLY stdlib header guard variables (__USE_EXTERN_INLINES, _STDLIB_H, __need_malloc_and_calloc) from desugaring of '#include <stdlib.h>' — no application-level configs — confirming this is a desugaring artifact with no meaningful variability constraint. The dead store is an artifact of the simplified reproducer, not a real bug in the original code."
+  "reasoning": ""
 }

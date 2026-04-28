@@ -6,7 +6,7 @@
   "line_number": 3,
   "origin": "family",
   "id": "FAMILY_55",
-  "classification": "FALSE",
-  "reasoning": "FALSE POSITIVE: 8c4377dd635.c (Marlin manage_heater). Dead store on 'pid_output' from line 3 to 19, when !def(PIDTEMP). When PIDTEMP=false, pid_output=1 at line 11 is overwritten by pid_output=0 at line 19, and pid_output is never used after either assignment. Simplification artifact — real Marlin code uses pid_output to drive the heating element. Same analysis as PRODUCT_186/204. The known vbdb bug (UndeclaredIdentifier on SERIAL_ECHO_START when MARLIN_H=true && PIDTEMP=true) is not triggered here.",
+  "classification": "",
+  "reasoning": "",
   "old_id": "FAMILY_71"
 }

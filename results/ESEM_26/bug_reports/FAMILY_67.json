@@ -6,7 +6,7 @@
   "line_number": 38,
   "origin": "family",
   "id": "FAMILY_67",
-  "classification": "FALSE",
-  "reasoning": "FALSE POSITIVE: c76df14dfb4.c (Apache). Dead store on 'flags' at line 38 ('flags |= T_ESCAPE_SHELL_CMD') inside #ifdef NEED_ENHANCED_ESCAPES, under configs where NEED_ENHANCED_ESCAPES is active. 'flags' is set to 0 at line 21 each loop iteration, potentially updated at line 38 or 42, but never used after the assignment — simplification artifact. In the real Apache code the flags value would be stored into an escape table. Same simplification artifact as FAMILY_68.",
+  "classification": "",
+  "reasoning": "",
   "old_id": "FAMILY_8"
 }

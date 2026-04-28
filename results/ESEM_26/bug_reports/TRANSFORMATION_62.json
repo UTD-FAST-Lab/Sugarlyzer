@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 992.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "TRANSFORMATION_229",
   "id": "TRANSFORMATION_62",
-  "reasoning": "FALSE POSITIVE: 831016b09f7.c (Marlin firmware). 'Value stored to time during its initialization is never read' at line 14 ('char time[30] = \"time_here\"'). 'time' is passed as the 1st argument to 'lcd_setstatus(time, true)' at line 15. Simplification artifact: the 'lcd_setstatus' function body is simplified to an empty body ('{}') in the vbdb file. The Clang analyzer determines that the empty-body function does not actually read its argument, so 'time' is considered a dead store despite being passed as a function argument. In real Marlin firmware, 'lcd_setstatus' displays the message on the LCD. The // ERROR annotation at line 15 refers to the known vbdb bug: 'lcd_setstatus(time, true)' passes 2 arguments but when ULTRA_LCD=false, 'lcd_setstatus' only accepts 1 parameter — a function signature mismatch. The dead store alarm is an artifact of the empty function body."
+  "reasoning": ""
 }

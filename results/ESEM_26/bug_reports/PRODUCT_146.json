@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_146",
-  "reasoning": "FALSE POSITIVE: 061fd0a353e.c (BusyBox hdparm). Dead store on 'argc' at line 16 ('p = *argv++, --argc') inside case 'W' of the switch, with UNREGISTER_HWIF=false and SCAN_HWIF=false. When neither UNREGISTER_HWIF nor SCAN_HWIF is true, neither case 'U' nor case 'R' are compiled, so p and argc are never read after the assignment in case 'W'. argc is decremented but never used — simplification artifact (real hdparm code uses argc in subsequent option processing). The known vbdb bug (UndefinedSymbol 'expected_hwif_error' when UNREGISTER_HWIF=true && SCAN_HWIF=false) does not apply to this configuration."
+  "reasoning": ""
 }

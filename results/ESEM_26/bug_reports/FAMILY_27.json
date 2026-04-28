@@ -6,7 +6,7 @@
   "line_number": 16,
   "origin": "family",
   "id": "FAMILY_27",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "FAMILY_20",
-  "reasoning": "FALSE POSITIVE: 5275b1e49f6.c (BusyBox insmod). Dead store on 'm_has_modinfo' at line 16, presence condition True. Same analysis as FAMILY_26 — the subsequent uses of m_has_modinfo were stripped from the simplified vbdb file (simplification artifact). Real BusyBox insmod code uses m_has_modinfo after this assignment. The known vbdb bug is the UndeclaredIdentifier on k_crcs when VERSION_CHECKING=false."
+  "reasoning": ""
 }

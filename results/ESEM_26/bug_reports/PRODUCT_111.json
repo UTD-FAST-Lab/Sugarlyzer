@@ -13,8 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_111",
-  "reasoning": "FALSE POSITIVE: 5275b1e49f6.c (BusyBox insmod). Dead store on 'm_has_modinfo' at line 18. In the simplified vbdb file, m_has_modinfo is assigned in an if/else block (line 16 = 0, line 18 = 1) but never used afterwards. In real BusyBox insmod code, m_has_modinfo is used to track module ELF info availability. Simplification artifact — subsequent uses of m_has_modinfo were stripped. The alarm fires unconditionally (not gated by VERSION_CHECKING), so the presence condition (VERSION_CHECKING=true) is irrelevant to this alarm. The known vbdb bug for this file is UndeclaredIdentifier: k_crcs used at line 25 unconditionally but only declared inside #ifdef VERSION_CHECKING; that bug requires VERSION_CHECKING=false."
+  "reasoning": ""
 }

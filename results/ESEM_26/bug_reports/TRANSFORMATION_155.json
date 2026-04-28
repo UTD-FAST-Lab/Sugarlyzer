@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 8254.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_155",
-  "reasoning": "FALSE POSITIVE (SIMPLIFICATION ARTIFACT): b62bd7b261b.c (BusyBox mdev). 'The value written to &val is never used' at line 16 ('val = (s && s[1]) ? s+1 : NULL'). `val` is reassigned at line 16 (inside '#ifdef ENABLE_FEATURE_MDEV_RENAME') after being initially assigned at line 12. After this reassignment, there are no further uses of `val` in the vbdb-simplified code. In real BusyBox mdev code, the updated `val` pointer would be used for subsequent string processing and device name handling, but those uses were stripped by vbdb simplification. The real vbdb bug in this file is the uninitialized pointer `p` used at line 24 ('*p = *s') — identified in TRANSFORMATION_145. This DEAD_STORE alarm is a simplification artifact, consistent with similar FALSE classifications for TRANSFORMATION_82 (same file)."
+  "reasoning": ""
 }

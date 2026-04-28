@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_198",
-  "reasoning": "FALSE POSITIVE: 7acf6cd80b2.c (Linux ptmx). Dead store on 'x' at line 8 ('int x = *inode') inside pts_sb_from_inode(), compiled when DEVPTS_MULTIPLE_INSTANCES=true. x is assigned from dereferencing inode but never subsequently used — simplification artifact (real kernel code uses x for device node management). Same workspace/config as PRODUCT_159. The known vbdb bug (UninitializedVariable driver_data) is a separate issue."
+  "reasoning": ""
 }
