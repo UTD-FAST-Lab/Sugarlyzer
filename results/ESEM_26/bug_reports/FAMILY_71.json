@@ -6,7 +6,7 @@
   "line_number": 11,
   "origin": "family",
   "id": "FAMILY_71",
-  "classification": "FALSE",
-  "reasoning": "FALSE POSITIVE: dbafef17dd1.c (Apache rewrite). Alarm fires at line 11, columns 37-45 ('sizeof(newuri)' inside strncpy call), when def(HAS_APACHE_REGEX_LIB). The tool claims 'newuri' used in sizeof(newuri) is 'used uninitialized,' but sizeof evaluates the TYPE of its operand at compile time — it does not dereference or read the runtime value of newuri. This is the same pattern as FAMILY_66 (sizeof(*ch)). False positive from the tool misidentifying a compile-time sizeof operation as a runtime read.",
+  "classification": "",
+  "reasoning": "",
   "old_id": "FAMILY_10"
 }

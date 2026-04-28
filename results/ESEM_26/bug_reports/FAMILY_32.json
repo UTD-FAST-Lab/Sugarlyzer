@@ -6,7 +6,7 @@
   "line_number": 25,
   "origin": "family",
   "id": "FAMILY_32",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "FAMILY_47",
-  "reasoning": "FALSE POSITIVE: 6252547b8a7.c (Linux TWL4030). 'Control flow of non-void function ends here!' at lines 25-26, when def(CONFIG_TWL4030_CORE). twl_probe() is declared as 'int' (line 17) but has no return statement — simplification artifact (real Linux twl_probe returns an error code from device registration). The known vbdb bug for this file is the NULLPTR_DEREFERENCE on ops at line 25 when TWL4030_CORE=true and OF_IRQ=false (ops stays NULL); the missing return is a separate artifact of simplification."
+  "reasoning": ""
 }

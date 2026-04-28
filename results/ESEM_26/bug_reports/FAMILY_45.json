@@ -5,8 +5,8 @@
   "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/76baeebf7df.c",
   "line_number": 133,
   "origin": "family",
-  "classification": "FALSE",
-  "reasoning": "FALSE POSITIVE: 76baeebf7df.c (Linux NUMA). 'Assignment discards const qualifier' at lines 133-137, when def(NUMA) AND def(PCI) AND !def(const). The condition '!def(const)' means the alarm fires when the 'const' keyword is not defined as a macro. In standard C, 'const' is a language keyword, not a macro — it is always 'defined' in the sense that it is always available. This is a tool artifact: when the family analysis treats 'const' as an undeclared identifier (i.e., !def(const)), it removes the const qualifier from types, causing spurious const-discarding warnings. Under normal compilation, no const is discarded in this code.",
+  "classification": "",
+  "reasoning": "",
   "id": "FAMILY_45",
   "old_id": "FAMILY_0_NEW"
 }

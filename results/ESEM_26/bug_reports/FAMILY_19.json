@@ -6,7 +6,7 @@
   "line_number": 15,
   "origin": "family",
   "id": "FAMILY_19",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "FAMILY_41",
-  "reasoning": "FALSE POSITIVE: 242f1a34377.c (Linux crypto). 'Control flow of non-void function ends here!' at line 15 (main), when !def(CONFIG_CRYPTO_TEST). When CRYPTO_TEST=false, main() is an empty body with no test_cipher() call and no return statement. Same analysis as FAMILY_18: in C99, falling off the end of main() is equivalent to returning 0 — this is not a real bug. The alarm is a false positive from applying a non-void function rule to main()."
+  "reasoning": ""
 }

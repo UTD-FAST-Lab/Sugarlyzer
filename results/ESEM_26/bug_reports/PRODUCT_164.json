@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_164",
-  "reasoning": "FALSE POSITIVE: d6c7e113959.c (Linux MAX8660 regulator). Dead store on 'pdata' at line 5 ('*pdata++; return 0') inside max8660_pdata_from_dt() when CONFIG_OF=true. The post-increment of pdata (a local parameter) is never used since the function immediately returns. This is a simplification artifact — the real Linux driver code would populate the pdata structure from device tree data. The known vbdb bug for this file is WrongFunArgNum/TypeMismatch: when CONFIG_OF=false, max8660_pdata_from_dt() expects int** but max8660_probe() calls it with int* (&pdata_of); with CONFIG_OF=true (this config), the signatures match and the known bug does not apply."
+  "reasoning": ""
 }

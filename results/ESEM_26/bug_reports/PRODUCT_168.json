@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_168",
-  "reasoning": "TRUE POSITIVE (NEW, OVER-CONSTRAINED): 061fd0a353e.c (BusyBox hdparm). PULSE_UNINITIALIZED_VALUE on 'p' at line 27 inside case 'R' (compiled when SCAN_HWIF=true). 'p' is declared at line 7 without initialization and is only conditionally assigned in case 'W'. When case 'R' is entered without prior assignment in case 'W', p is read uninitialized at line 27 ('if(!p)'). Genuine uninitialized variable read. NEW: The known vbdb bug is UndefinedSymbol 'expected_hwif_error' label when UNREGISTER_HWIF=true && SCAN_HWIF=false; this uninitialized p in case 'R' is a different bug. OVER-CONSTRAINED: The alarm at line 27 (case 'R') requires only SCAN_HWIF=true; UNREGISTER_HWIF=true is unnecessary. Configurations with UNREGISTER_HWIF=false && SCAN_HWIF=true are equally vulnerable (as seen in PRODUCT_149)."
+  "reasoning": ""
 }

@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 1612.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_142",
-  "reasoning": "FALSE POSITIVE (SIMPLIFICATION ARTIFACT): 30e053248da.c (Linux ReiserFS). 'The value written to &x is never used' at line 31 ('int x = *length; // ERROR'). `x` receives the value of `*length` but its subsequent uses were stripped by vbdb simplification, making the assignment appear as a dead store. The real vbdb bug here is not a dead store of `x` — it is that `length` is uninitialized when CONFIG_SECURITY=false (covered by TRANSFORMATION_139). The DEAD_STORE alarm for `x` is a simplification artifact from vbdb stripping downstream uses of `x`."
+  "reasoning": ""
 }

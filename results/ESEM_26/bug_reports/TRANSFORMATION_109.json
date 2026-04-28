@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 7166.0,
   "strategy": "transformation",
-  "classification": "TRUE_OVER",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_109",
-  "reasoning": "TRUE POSITIVE (OVER-CONSTRAINED): 35ae2e259e4.c (Apache mod_ssl). 'Memory allocated by malloc at line 10 is not freed.' The file comment '// return having forgotten to free the memory' confirms this is the known vbdb bug. 'eckey = malloc(sizeof(int))' inside '#ifdef HAVE_ECC' (line 10) is never freed before the function returns — real memory leak. OVER-CONSTRAINED: the correct condition is simply HAVE_ECC=true (the malloc is inside '#ifdef HAVE_ECC' and the function never frees eckey). The presence condition additionally requires non-standard stdlib header guard state (__need_malloc_and_calloc=true AND NOT _STDLIB_H AND NOT __malloc_and_calloc_defined). In real compilations, '#include <stdlib.h>' sets _STDLIB_H=true; requiring these guards to be false/true in non-standard ways restricts the PC to desugaring-artifact configurations. The memory leak exists in all HAVE_ECC=true configurations regardless of stdlib header processing state."
+  "reasoning": ""
 }

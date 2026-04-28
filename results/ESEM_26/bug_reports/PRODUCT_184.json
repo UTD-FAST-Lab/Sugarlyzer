@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "TRUE_OVER",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_184",
-  "reasoning": "TRUE POSITIVE (OVER-CONSTRAINED): Same file as PRODUCT_97/98 etc. (35ae2e259e4.c, Apache SSL). MEMORY_LEAK_C: eckey is allocated with malloc at line 10 (inside #ifdef HAVE_ECC) and never freed before the function returns. This is the known vbdb MemoryLeak bug. OVER-CONSTRAINED: The memory leak exists whenever HAVE_ECC=true, regardless of SSL_CTX_set_ecdh_auto. When SSL_CTX_set_ecdh_auto=true, the else branch at line 14-18 compiles as empty code (comment only), but eckey is still allocated at line 10 and not freed. When SSL_CTX_set_ecdh_auto=false, eckey is still allocated and not freed. The presence condition's requirement for SSL_CTX_set_ecdh_auto=true is unnecessary."
+  "reasoning": ""
 }

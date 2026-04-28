@@ -13,8 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "TRUE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_110",
-  "reasoning": "TRUE POSITIVE (KNOWN, CORRECTLY CONSTRAINED): Same file and bug as PRODUCT_40 (bc0ffc0e971.c). The known vbdb bug is UseAfterFree when ENABLE_FEATURE_CLEAN_UP=true: in delete_eth_table(), 'ch' is freed at line 44, but ch->next is accessed at line 43 (loop increment after free). The presence condition (CLEAN_UP=true) is exactly correct — the free() call only occurs inside the #ifdef ENABLE_FEATURE_CLEAN_UP block. The alarm correctly identifies this real bug."
+  "reasoning": ""
 }

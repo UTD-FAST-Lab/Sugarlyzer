@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 8391.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_114",
-  "reasoning": "FALSE POSITIVE (SIMPLIFICATION ARTIFACT): 95755181b82.c (BusyBox httpd). 'The value written to &len is never used' — the last assignment to 'len' (either at line 30 or line 36) is never read after the headers-building loop. In this simplified vbdb code, 'printf(\"headers: %%s\", iobuf)' at line 38 doesn't use 'len' and the function returns without using 'len' further. The real code would have used 'len' to track the response length for sending headers. The presence condition contains ONLY header guard variables (__STRICT_ANSI__, __need___FILE) with no application-level configs, confirming this is a desugaring artifact. Related to TRANSFORMATION_107 (same file, uninitialized 'len' vs dead store of 'len')."
+  "reasoning": ""
 }

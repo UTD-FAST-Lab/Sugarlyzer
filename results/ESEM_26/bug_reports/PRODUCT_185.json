@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_185",
-  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_118/127/169 (c76df14dfb4.c, Apache gen_test_char). Dead store on 'flags' at line 42. With CROSS_COMPILE=true and WIN32=true, the known vbdb OSCommandInjection bug DOES apply to this configuration, but the tool reports a dead store on flags instead. The dead store on flags is a simplification artifact — subsequent uses of flags were stripped from the simplified code. The tool failed to detect the real OSCommandInjection bug."
+  "reasoning": ""
 }

@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_51",
-  "reasoning": "FALSE POSITIVE: Same file and variable as PRODUCT_41 (e30bfedce4d.c). The alarm reports 'xGridSpacing = left_probe_bed_position' (line 24, inside #ifdef AUTO_BED_LEVELING_GRID) as a dead store when ENABLE_AUTO_BED_LEVELING=true and AUTO_BED_LEVELING_GRID=true. In the real Marlin process_commands() code, xGridSpacing is used throughout the auto bed leveling grid logic. The simplified file stripped all subsequent uses. This is a simplification artifact. The known vbdb bug is UndeclaredIdentifier (AUTO_BED_LEVELING && !AUTO_BED_LEVELING_GRID): LEFT_PROBE_BED_POSITION is referenced but only defined when AUTO_BED_LEVELING_GRID is set."
+  "reasoning": ""
 }

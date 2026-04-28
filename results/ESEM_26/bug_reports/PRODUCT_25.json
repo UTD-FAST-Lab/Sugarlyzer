@@ -14,8 +14,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "PRODUCT_65",
   "id": "PRODUCT_25",
-  "reasoning": "FALSE POSITIVE: The alarm reports 'x' (int x = *inode at line 8) as a dead store inside #ifdef CONFIG_DEVPTS_MULTIPLE_INSTANCES in pts_sb_from_inode(). In the simplified file, x is assigned from *inode but never used (the function returns void). In the real Linux kernel code, pts_sb_from_inode() uses the dereferenced inode value to check 'inode->i_sb->s_magic == DEVPTS_SUPER_MAGIC' and return the superblock. The simplified file stripped those subsequent uses of x. This dead store is a simplification artifact. The known bug (UninitializedVariable: driver_data uninitialized when ptmx_open takes the error path) is a separate issue."
+  "reasoning": ""
 }

@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 8161.0,
   "strategy": "transformation",
-  "classification": "TRUE_OVER",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_135",
-  "reasoning": "TRUE POSITIVE (OVER-CONSTRAINED): 1b487ea8a69.c (BusyBox stat/SELinux). Same bug as TRANSFORMATION_130 — '`scontext` could be null and is dereferenced' at line 14. 'scontext = NULL' is assigned at line 7 and '*scontext' is dereferenced at line 14, a real null dereference (// ERROR annotation). CORRECTLY CONSTRAINED for application configs: ENABLE_SELINUX=true AND NOT ENABLE_FEATURE_STAT_FORMAT. OVER-CONSTRAINED: this PC instance requires __USE_EXTERN_INLINES=false (versus T130 which required __USE_EXTERN_INLINES=true). Both T130 and T135 together cover all USE_EXTERN_INLINES states but individually each is over-constrained by requiring a specific stdlib guard value. The correct condition is just ENABLE_SELINUX=true AND NOT ENABLE_FEATURE_STAT_FORMAT."
+  "reasoning": ""
 }

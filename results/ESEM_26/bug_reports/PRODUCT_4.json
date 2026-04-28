@@ -20,8 +20,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_4",
-  "reasoning": "FALSE POSITIVE: The alarm reports a dead store on 'n' at line 39 ('int n = *cache;' — n is set but never subsequently read). The vbdb file is a simplified reduction of the real Linux kernel code demonstrating the known OutOfBoundsRead bug (kmalloc_caches accessed out of bounds). In the real kernel code, n (cache->node[q]) is actively used; the simplification dropped the subsequent use of n. This dead store is an artifact of simplification and does not represent a real bug."
+  "reasoning": ""
 }

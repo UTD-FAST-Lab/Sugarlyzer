@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_134",
-  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_54/89/104/105/119 (8c4377dd635.c, Marlin manage_heater). Dead store on 'pid_output' at line 13. When MARLIN_H=true, PIDTEMP=true, PID_DEBUG=false: the #if PIDTEMP && PID_DEBUG block containing SERIAL_ECHO_START (the known WrongFunArgNum vbdb bug) is NOT compiled because PID_DEBUG=false. When MARLIN_H=true, the #ifndef MARLIN_H block is also not compiled (SERIAL_ECHO_START not defined). pid_output is set but never used — simplification artifact (real Marlin uses pid_output to drive heating elements)."
+  "reasoning": ""
 }

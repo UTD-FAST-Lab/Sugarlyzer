@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "TRUE_OVER",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_72",
-  "reasoning": "TRUE POSITIVE (KNOWN, OVER-CONSTRAINED): When HAVE_ECC=true, eckey is malloc'd at line 10 and the function returns without freeing it — genuine memory leak. KNOWN BUG: The vbdb entry for 35ae2e259e4.c documents exactly this MemoryLeak when HAVE_ECC=true. OVER-CONSTRAINED: The presence condition requires SSL_CTX_set_ecdh_auto=false. However, when HAVE_ECC=true and SSL_CTX_set_ecdh_auto=true, the #if defined(SSL_CTX_set_ecdh_auto) branch only does '// do something' (a no-op), and eckey is still never freed. The memory leak exists for any value of SSL_CTX_set_ecdh_auto when HAVE_ECC=true. The condition unnecessarily excludes SSL_CTX_set_ecdh_auto=true, making it over-constrained."
+  "reasoning": ""
 }

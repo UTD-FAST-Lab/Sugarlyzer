@@ -13,8 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "PRODUCT_33",
   "id": "PRODUCT_34",
-  "reasoning": "FALSE POSITIVE: The alarm reports 'm_has_modinfo = 1' (line 18, in the else branch) as a dead store when CONFIG_FEATURE_INSMOD_VERSION_CHECKING is true. In the simplified vbdb file, m_has_modinfo is assigned in the if-else block but never subsequently used (the function proceeds to return exit_status). In the real BusyBox insmod_main() code, m_has_modinfo is used in conditional logic throughout the function. The simplified file stripped those uses. This is a simplification artifact. The known vbdb bug (UndeclaredIdentifier: k_crcs used when VERSION_CHECKING is disabled) is a different issue."
+  "reasoning": ""
 }

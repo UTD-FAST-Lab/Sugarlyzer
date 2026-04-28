@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_215",
-  "reasoning": "FALSE POSITIVE: Same file as prior entries (95755181b82.c, BusyBox httpd). Dead store on 'len' at line 39. With ENABLE_FEATURE_HTTPD_GZIP=true, content_gzip IS declared — the known vbdb UndeclaredIdentifier bug does not apply in this configuration. The dead store on len is a simplification artifact — subsequent uses of len were stripped from the simplified code by the vbdb simplification process."
+  "reasoning": ""
 }

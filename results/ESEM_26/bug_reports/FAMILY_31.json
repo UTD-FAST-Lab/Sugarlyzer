@@ -6,7 +6,7 @@
   "line_number": 7,
   "origin": "family",
   "id": "FAMILY_31",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "FAMILY_5",
-  "reasoning": "FALSE POSITIVE: 581635e28f1.c (Apache httpd). Dead store on 'family' at line 7, presence condition True. When APR_HAVE_IPV6=true: family = 6 (APR_INET6 is defined) but never used — simplification artifact (real code uses family to configure URL parsing). When APR_HAVE_IPV6=false: APR_INET6 is undefined, tool treats it as 0, and reports dead store instead of UndeclaredIdentifier. In both cases the dead store alarm is a false positive."
+  "reasoning": ""
 }

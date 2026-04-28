@@ -14,8 +14,8 @@
     0
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "PRODUCT_51",
   "id": "PRODUCT_24",
-  "reasoning": "FALSE POSITIVE: The alarm reports 'x' (int x = *length at line 31) as a dead store — x is initialized but never subsequently read, as the function returns 0 immediately after. In the real Linux reiserfs code, the length value (sec->length) is actively used after this assignment (e.g., 'if (sec->length && reiserfs_xattrs_initialized(...))'). The dead store is an artifact of simplification that omitted the subsequent use of x. The known bug (UninitializedVariable: length not written by security_old_inode_init_security when !SECURITY) is a separate issue from this dead store alarm."
+  "reasoning": ""
 }

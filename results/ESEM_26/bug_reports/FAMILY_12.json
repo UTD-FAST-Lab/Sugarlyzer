@@ -6,7 +6,7 @@
   "line_number": 13,
   "origin": "family",
   "id": "FAMILY_12",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "FAMILY_1",
-  "reasoning": "FALSE POSITIVE: 1a3c8e3d840.c (Apache SSL). Dead store on 'thisopt' at line 13, when !def(HAVE_TLSV1_X). When TLSV1_X is NOT defined, SSL_PROTOCOL_TLSV1_1 is undefined. The tool treats the undefined macro as 0, so 'thisopt = SSL_PROTOCOL_TLSV1_1' becomes 'thisopt = 0' → dead store. The real bug is the UndeclaredIdentifier on SSL_PROTOCOL_TLSV1_1 when TLSV1_X=false, but the tool misreports it as a dead store. The tool missed the actual known vbdb bug."
+  "reasoning": ""
 }

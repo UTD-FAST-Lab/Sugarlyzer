@@ -6,7 +6,7 @@
   "line_number": 39,
   "origin": "family",
   "id": "FAMILY_53",
-  "classification": "FALSE",
-  "reasoning": "FALSE POSITIVE: 7acf6cd80b2.c (Linux ptmx). Dead store on 'driver_data' at line 39 ('driver_data = &some_int'), when def(CONFIG_UNIX98_PTYS). On the non-goto path, driver_data is assigned at line 39 and the function immediately returns at line 41 without using driver_data. This is a simplification artifact — real ptmx_open would use driver_data for TTY device management after the assignment. The known vbdb bug (uninitialized driver_data on the goto path) is classified separately in FAMILY_51.",
+  "classification": "",
+  "reasoning": "",
   "old_id": "FAMILY_63"
 }

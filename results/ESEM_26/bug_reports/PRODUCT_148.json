@@ -13,8 +13,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_148",
-  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_112/120/122/130/137 (0f8f8094d28.c), dead store on 'n' (int n = *cache) inside init_node_lock_keys(). When SLOB=false and LOCKDEP=true, the function is compiled and kmalloc_caches IS declared. n is assigned from *cache but never used — simplification artifact. The known vbdb bug (OutOfBoundsRead on kmalloc_caches when SLOB=true) does not apply since SLOB=false."
+  "reasoning": ""
 }

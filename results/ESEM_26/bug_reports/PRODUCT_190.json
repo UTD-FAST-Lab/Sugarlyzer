@@ -13,8 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "TRUE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_190",
-  "reasoning": "TRUE POSITIVE (KNOWN, CORRECTLY CONSTRAINED): 218ad12f42e.c (Linux inet). When CONFIG_NUMA=true, the preprocessor causes 'x = NULL' at line 37 to become the else-body of 'if (size > PAGE_SIZE) free(x); else x = NULL;' inside inet_ehash_locks_free(). When inet_ehash_locks_alloc allocates via the else-branch malloc (line 21, triggered when size <= PAGE_SIZE), inet_ehash_locks_free takes the else branch (x = NULL) without freeing the allocated memory — a genuine memory leak. The tool detects this as MEMORY_LEAK_C. The presence condition (NUMA=true) is correctly constrained: when NUMA=false, 'free(x)' and 'x = NULL' are both executed sequentially as independent statements (not conditional), so no leak occurs. The vbdb bug for this file is exactly this preprocessor-induced memory leak when NUMA=true."
+  "reasoning": ""
 }

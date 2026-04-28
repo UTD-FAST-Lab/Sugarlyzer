@@ -6,7 +6,7 @@
   "line_number": 16,
   "origin": "family",
   "id": "FAMILY_65",
-  "classification": "FALSE",
-  "reasoning": "FALSE POSITIVE: b62bd7b261b.c (BusyBox mdev). Dead store on 'val' at line 16 ('val = (s && s[1]) ? s+1 : NULL'), when def(MDEV_CONF) AND def(MDEV_RENAME). val is reassigned at line 16 but never used afterward in the simplified file — simplification artifact (real mdev code uses val to process device configuration tokens). Not the known vbdb bug (which is the uninitialized p in the RENAME_REGEXP block).",
+  "classification": "",
+  "reasoning": "",
   "old_id": "FAMILY_28"
 }

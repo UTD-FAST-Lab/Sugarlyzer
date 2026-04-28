@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 5887.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_147",
-  "reasoning": "FALSE POSITIVE (SIMPLIFICATION ARTIFACT): 1a3c8e3d840.c (Apache mod_ssl). 'The value written to &thisopt is never used' at line 13 ('thisopt = SSL_PROTOCOL_TLSV1_1'). `thisopt` is assigned inside 'if (rand() % 2)' but is never read elsewhere in the function. In real Apache ssl_cmd_protocol_parse code, `thisopt` would be used to accumulate a bitmask of allowed protocols, but vbdb simplification stripped all subsequent reads and uses of `thisopt`. The PC contains ONLY stdlib header guard states (_STDLIB_H, __need_malloc_and_calloc, __USE_EXTERN_INLINES, __STRICT_ANSI__) with no application-level config variable (HAVE_TLSV1_X) — confirming this is a simplification/desugaring artifact with no meaningful application config constraint."
+  "reasoning": ""
 }

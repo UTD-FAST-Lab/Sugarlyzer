@@ -6,7 +6,7 @@
   "line_number": 26,
   "origin": "family",
   "id": "FAMILY_79",
-  "classification": "FALSE",
-  "reasoning": "FALSE POSITIVE: eef2317b9f5.c (BusyBox). Dead store on 'buf' at line 26 ('buf = malloc(bufsize)') when !def(CONFIG_FEATURE_CLEAN_UP). When FEATURE_CLEAN_UP is false, the cleanup block (lines 29-33) is not compiled, so buf is assigned from malloc but never subsequently read or freed — simplification artifact. In the real BusyBox code, buf would be used to buffer data. The dead store is a consequence of the simplification omitting buf's subsequent uses.",
+  "classification": "",
+  "reasoning": "",
   "old_id": "FAMILY_33"
 }

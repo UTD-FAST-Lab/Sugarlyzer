@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_133",
-  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_124 (6252547b8a7.c, Linux TWL4030). Dead store on 'irq' at line 12 ('int irq = *ops') inside irq_domain_add(), with TWL4030_CORE=false. CONFIG_IRQ_DOMAIN is implicitly defined by CONFIG_TWL4030_CORE (lines 3-5); TWL4030_CORE=false && IRQ_DOMAIN=true is an impossible configuration in practice. With TWL4030_CORE=false, twl_probe() is never called, so the real NullDereference bug (ops=NULL when OF_IRQ=false) doesn't apply. irq is assigned from *ops but never used — simplification artifact."
+  "reasoning": ""
 }

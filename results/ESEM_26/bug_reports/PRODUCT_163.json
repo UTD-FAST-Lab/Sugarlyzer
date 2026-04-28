@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_163",
-  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_20/50 etc. (e30bfedce4d.c, Marlin auto bed leveling). Dead store on 'xGridSpacing' at line 24. When AUTO_BED_LEVELING_GRID=false, the known vbdb UndeclaredIdentifier bug fires (xGridSpacing and other grid variables are only declared inside #ifdef AUTO_BED_LEVELING_GRID but used when ENABLE_AUTO_BED_LEVELING=true). The tool treats the undeclared identifier as 0 and reports a spurious dead store instead of the real UndeclaredIdentifier bug. Simplification artifact / tool failure to detect real bug."
+  "reasoning": ""
 }

@@ -13,8 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW",
+  "classification": "",
   "old_id": "PRODUCT_46",
   "id": "PRODUCT_12",
-  "reasoning": "TRUE POSITIVE: When CONFIG_FEATURE_CLEAN_UP is false, the #ifdef block containing 'if (buf) { free(buf); }' is compiled out. buf is assigned via malloc at line 26 but the stored pointer value is never subsequently read (since the only reads are inside the disabled block). This is a genuine dead store. NEW BUG: The vbdb entry for eef2317b9f5.c documents an UninitializedVariable bug when CONFIG_FEATURE_CLEAN_UP is *enabled*. The dead store (and associated memory leak) when CLEAN_UP is disabled is a new bug not in vbdb (same root cause as PRODUCT_1 which found the memory leak alarm on the same line/config). CORRECTLY CONSTRAINED: CONFIG_FEATURE_CLEAN_UP==false precisely identifies when the cleanup block is absent and buf's value goes unread."
+  "reasoning": ""
 }

@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 8388.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_99",
-  "reasoning": "TRUE POSITIVE (NEW, OVER-CONSTRAINED): 2631486f1bf.c (BusyBox ls). '`curr` could be null (null value originating from malloc) and is dereferenced' at line 67 ('curr->next = head'). Same root cause as TRANSFORMATION_94 (null dereference after malloc without NULL check at line 65). 'curr = malloc(sizeof(struct dnode))' can return NULL; 'curr->next = head' at line 67 would then dereference NULL. NEW: the annotated vbdb bug is the uninitialized 'head' pointer, not null-after-malloc. OVER-CONSTRAINED: line 67 is NOT inside any '#ifdef' block — the null dereference exists in ALL configurations regardless of CONFIG_FEATURE_LS_SORTFILES. Requiring CONFIG_FEATURE_LS_SORTFILES=true is too narrow; the correct condition is unconstrained (any config). The sort() call inside '#ifdef CONFIG_FEATURE_LS_SORTFILES' likely causes Pulse to trace a specific execution path that reveals the bug, but the bug itself is config-independent."
+  "reasoning": ""
 }

@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 8388.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_144",
-  "reasoning": "TRUE POSITIVE NEW (OVER-CONSTRAINED): 2631486f1bf.c (BusyBox ls). '`curr` is read without initialization' at line 66. Same null-after-malloc bug family as TRANSFORMATION_94/T102 — 'curr = malloc(sizeof(*curr))' (no NULL check); 'curr' is used without NULL check. This alarm covers BOTH CONFIG_FEATURE_LS_SORTFILES=true and CONFIG_FEATURE_LS_SORTFILES=false (the application-level config is covered for both values). OVER-CONSTRAINED: the PC still requires stdlib header guard conditions NOT _STDLIB_H AND NOT __need_malloc_and_calloc (desugaring artifacts from the malloc expansion). These stdlib conditions are not application-level configs — they are header include-guard states that are always true at compile time. The correct condition for the bug is just that malloc is used (always the case here), not tied to specific stdlib header guard states."
+  "reasoning": ""
 }

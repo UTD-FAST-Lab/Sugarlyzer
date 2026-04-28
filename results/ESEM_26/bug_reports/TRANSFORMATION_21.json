@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 1761.0,
   "strategy": "transformation",
-  "classification": "TRUE_UNDER",
+  "classification": "",
   "old_id": "TRANSFORMATION_176",
   "id": "TRANSFORMATION_21",
-  "reasoning": "TRUE POSITIVE (UNDER-CONSTRAINED): 6252547b8a7.c (Linux TWL4030). 'Dereference of null pointer (loaded from variable ops)' at line 12 ('int irq = *ops'). In twl_probe(), ops=NULL is passed to irq_domain_add(). irq_domain_add() dereferences ops unconditionally at line 12. This is the known vbdb NULL dereference bug (// (4) ERROR at line 12). UNDER-CONSTRAINED: The presence condition is '(not CONFIG_TWL4030_CORE AND CONFIG_IRQ_DOMAIN) OR CONFIG_TWL4030_CORE', which simplifies to 'CONFIG_TWL4030_CORE OR CONFIG_IRQ_DOMAIN'. The bug is in irq_domain_add() which is only called from twl_probe(), which is guarded by #ifdef CONFIG_TWL4030_CORE. Without CONFIG_TWL4030_CORE=true, twl_probe() is not compiled and the call path to the bug does not exist. The condition CONFIG_IRQ_DOMAIN=true alone is insufficient — the bug requires CONFIG_TWL4030_CORE=true. Including (not CONFIG_TWL4030_CORE AND CONFIG_IRQ_DOMAIN) in the presence condition is over-broad."
+  "reasoning": ""
 }

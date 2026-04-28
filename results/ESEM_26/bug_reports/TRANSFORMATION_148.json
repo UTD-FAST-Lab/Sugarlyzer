@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 7166.0,
   "strategy": "transformation",
-  "classification": "TRUE_OVER",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_148",
-  "reasoning": "TRUE POSITIVE (OVER-CONSTRAINED): 35ae2e259e4.c (Apache mod_ssl). Same bug family as TRANSFORMATION_85/T125/T138 — '`eckey` could be null and is dereferenced' at line 12 ('*eckey = 30'). 'eckey = malloc(sizeof(int))' at line 10 can return NULL; '*eckey = 30' dereferences it without NULL check inside '#ifdef HAVE_ECC'. OVER-CONSTRAINED: the PC requires __USE_EXTERN_INLINES=false (stdlib header artifact) — the complement of TRANSFORMATION_138 (which required __USE_EXTERN_INLINES=true). The correct condition is just HAVE_ECC=true; whether __USE_EXTERN_INLINES is true or false doesn't affect whether the bug exists. TRANSFORMATION_125 correctly covers all __USE_EXTERN_INLINES and __STRICT_ANSI__ combinations for line 12. T148 covers only the __USE_EXTERN_INLINES=false half, making it over-constrained (excludes the USE_EXTERN_INLINES=true cases covered by T138)."
+  "reasoning": ""
 }

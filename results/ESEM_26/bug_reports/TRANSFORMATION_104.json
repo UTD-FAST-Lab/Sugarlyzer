@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 8388.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_104",
-  "reasoning": "TRUE POSITIVE (NEW, OVER-CONSTRAINED): 2631486f1bf.c (BusyBox ls). Same root cause as TRANSFORMATION_94/99/102 — '`curr` could be null (null value originating from malloc) and is dereferenced' at line 67 ('curr->next = head'). The null dereference after unguarded malloc at line 65 is real. NEW: not the annotated vbdb bug. OVER-CONSTRAINED: the presence condition requires NOT CONFIG_FEATURE_LS_SORTFILES, but lines 65-67 are NOT inside any '#ifdef' block — the bug exists regardless of this flag. This is the counterpart of TRANSFORMATION_99 (which fires under CONFIG_FEATURE_LS_SORTFILES=true); together they confirm the bug is config-independent."
+  "reasoning": ""
 }

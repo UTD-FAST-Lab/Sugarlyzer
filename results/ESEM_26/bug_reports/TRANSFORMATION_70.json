@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 5609.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "TRANSFORMATION_91",
   "id": "TRANSFORMATION_70",
-  "reasoning": "FALSE POSITIVE: 5275b1e49f6.c (BusyBox insmod). 'Value stored to k_crcs is never read' at line 25 ('k_crcs = someInt' inside 'if (r)'). After line 25, execution reaches 'out:' and 'return(exit_status)' without reading 'k_crcs'. Simplification artifact: in real BusyBox insmod, 'k_crcs' is used to compare module CRC values with kernel CRC values for version checking. The vbdb simplification stripped those comparison uses, leaving only the assignment. Same pattern as TRANSFORMATION_40 (k_crcs = 0 at line 21, also a dead store). Presence condition is only stdlib header guards (effectively True) — no CONFIG_FEATURE_INSMOD_VERSION_CHECKING constraint."
+  "reasoning": ""
 }

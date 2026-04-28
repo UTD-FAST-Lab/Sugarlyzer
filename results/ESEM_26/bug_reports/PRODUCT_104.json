@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_104",
-  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_54/89 (8c4377dd635.c), dead store on 'pid_output' when MARLIN_H=true, PIDTEMP=true, PID_DEBUG=true. When MARLIN_H=true, the '#ifndef MARLIN_H' block is not compiled (SERIAL_ECHO_START macro and echomagic are not defined). pid_output is initialized to 1 but never subsequently used. In the real Marlin manage_heater() code, pid_output drives heating elements. Simplification artifact. The known vbdb bug (WrongFunArgNum: SERIAL_ECHO_START called with extra argument) requires MARLIN_H=false (for SERIAL_ECHO_START to be defined) — this configuration negates that."
+  "reasoning": ""
 }

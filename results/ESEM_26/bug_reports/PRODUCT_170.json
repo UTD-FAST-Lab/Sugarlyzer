@@ -13,8 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_170",
-  "reasoning": "TRUE POSITIVE (NEW, OVER-CONSTRAINED): Same bug as PRODUCT_165 — bc0ffc0e971.c (BusyBox nameif). NULLPTR_DEREFERENCE: inside prepend_new_eth_table(), ch = malloc(sizeof(*ch)) at line 29 could return NULL but ch is immediately dereferenced at line 30 without a NULL check. Genuine potential null dereference. NEW: The known vbdb bug is UseAfterFree when CLEAN_UP=true; this malloc-NULL-dereference is a different bug. OVER-CONSTRAINED: The prepend_new_eth_table() code is unconditional (not gated by any #ifdef). The presence condition (CLEAN_UP=false) is irrelevant to this alarm — the same bug exists regardless of CLEAN_UP value (as also seen in PRODUCT_165 with CLEAN_UP=true)."
+  "reasoning": ""
 }

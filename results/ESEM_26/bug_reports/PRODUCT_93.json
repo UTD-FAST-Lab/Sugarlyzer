@@ -13,8 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_93",
-  "reasoning": "FALSE POSITIVE: The alarm reports 'buf = malloc(bufsize)' (line 26) as a dead store when CONFIG_FEATURE_CLEAN_UP=false. The malloc'd buffer is assigned to buf but buf is never subsequently read (the function returns without using the buffer contents). In the real BusyBox dmesg code, buf is the buffer for reading kernel ring buffer messages and is used extensively after allocation. The simplified file stripped all subsequent uses of buf. Simplification artifact. Note: PRODUCT_61 for the same file/config correctly detected the memory leak (buf is malloc'd but never freed when CLEAN_UP=false); this alarm is about the dead store aspect of the same issue."
+  "reasoning": ""
 }

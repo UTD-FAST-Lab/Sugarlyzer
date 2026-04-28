@@ -13,8 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_37",
-  "reasoning": "FALSE POSITIVE: The alarm reports a potential memory leak of 'buf' allocated via calloc() at line 16 when APR_HAS_SHARED_MEMORY is true. In the simplified file, calloc() stands in for apr_rmm_calloc() (shared memory allocation). In the real Apache code, memory is allocated from a shared memory region managed by APR; it is not a heap malloc that needs to be freed with free(). The simplification replaced apr_rmm_calloc with calloc, creating an apparent malloc leak that does not exist in the real code. The known vbdb bug is a NullDereference — apr_rmm_calloc (calloc here) can return NULL, and if so, apr_rmm_addr_get dereferences it (*ptr = '\\0') — which the tool does NOT detect. The unix.Malloc alarm is a simplification artifact."
+  "reasoning": ""
 }

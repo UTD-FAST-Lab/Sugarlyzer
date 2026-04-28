@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 8161.0,
   "strategy": "transformation",
-  "classification": "TRUE_OVER",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_130",
-  "reasoning": "TRUE POSITIVE (OVER-CONSTRAINED): 1b487ea8a69.c (BusyBox stat/SELinux). '`scontext` could be null and is dereferenced' at line 14 ('printf(\" %lc\\n\", *scontext); // ERROR'). 'scontext = NULL' is assigned at line 7 inside '#ifdef ENABLE_SELINUX' and never changed to non-NULL before the dereference at line 14 (the getfilecon call was stripped by vbdb simplification). Dereferencing NULL at line 14 is a real bug confirmed by the '// ERROR' annotation. CORRECTLY CONSTRAINED for application configs: ENABLE_SELINUX=true (required for 'scontext' declaration and the printf call to be compiled) AND NOT ENABLE_FEATURE_STAT_FORMAT (required for the '#ifndef ENABLE_FEATURE_STAT_FORMAT' block to be compiled). OVER-CONSTRAINED: the PC additionally requires __USE_EXTERN_INLINES=true, NOT _STDLIB_H, NOT __need_malloc_and_calloc, NOT __need___FILE — these are stdlib/stdio desugaring artifacts. The correct condition is just ENABLE_SELINUX=true AND NOT ENABLE_FEATURE_STAT_FORMAT; the stdlib guard requirements make the PC unnecessarily narrow."
+  "reasoning": ""
 }

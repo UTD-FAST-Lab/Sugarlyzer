@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_86",
-  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_50/65 (b62bd7b261b.c). The alarm reports 'val = (s && s[1]) ? s+1 : NULL' (line 16, inside MDEV_RENAME) as a dead store when MDEV_CONF=true, MDEV_RENAME=true, MDEV_RENAME_REGEXP=false. When RENAME_REGEXP=false, the only subsequent use of val is in the stripped REGEXP block, so val appears unused. In the real BusyBox mdev code, val is used for device rename pattern processing outside the REGEXP block as well. Simplification artifact. The known vbdb bug is UnusedVariable 'p' when !MDEV_RENAME_REGEXP."
+  "reasoning": ""
 }

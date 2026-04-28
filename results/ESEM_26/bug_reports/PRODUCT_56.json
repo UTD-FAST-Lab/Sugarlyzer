@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_56",
-  "reasoning": "FALSE POSITIVE: The alarm reports the incremented value of 'argv' (from 'p = *argv++, --argc' at line 16) as a dead store — after the post-increment, argv is never used again in the simplified function. In the real BusyBox hdparm main(), argv would be used to continue parsing command-line arguments after the switch statement. The simplified file stripped all subsequent uses. This is a simplification artifact. The known vbdb bug for 061fd0a353e.c is UndefinedSymbol: 'goto expected_hwif_error' at line 21 (inside #ifdef HDIO_UNREGISTER_HWIF) jumps to a label that is only defined inside #ifdef HDIO_SCAN_HWIF — so when UNREGISTER_HWIF=true but SCAN_HWIF=false, the label is undefined. The presence condition requires both flags true, so the known bug is not triggered in this configuration."
+  "reasoning": ""
 }

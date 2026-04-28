@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 915.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "TRANSFORMATION_159",
   "id": "TRANSFORMATION_59",
-  "reasoning": "FALSE POSITIVE: 30e053248da.c (Linux reiserfs). 'Value stored to x during its initialization is never read' at line 31 ('int x = *length'). 'x' is initialized from '*length' but never subsequently used — the function returns 0 immediately after. Simplification artifact: in real reiserfs, the security xattr length (x) is used for further extended attribute processing. The vbdb simplification stripped all uses of 'x', making it a dead store. The presence condition is True (all configurations), consistent with the dead store existing whenever line 31 is reached. Note: TRANSFORMATION_46 alarms at the same line for the actual uninitialized read of '*length' when CONFIG_SECURITY=false — that is the known vbdb bug. This alarm is about the dead store of the result, which is a separate simplification artifact."
+  "reasoning": ""
 }

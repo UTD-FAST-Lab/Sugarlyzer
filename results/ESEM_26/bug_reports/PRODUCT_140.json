@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_140",
-  "reasoning": "FALSE POSITIVE: 7acf6cd80b2.c (Linux ptmx). Dead store on 'driver_data' at line 39 ('driver_data = &some_int') inside ptmx_open() with UNIX98_PTYS=true, DEVPTS_MULTIPLE_INSTANCES=true. The assignment at line 39 is only reached when nondet() returns false (the goto err_release is NOT taken); the function then immediately returns 0 at line 41 without using driver_data again. So the assignment IS a dead store in this code path. However, this is a simplification artifact — the real ptmx_open() code uses driver_data after line 39 (storing it for later use). The actual known vbdb bug is UninitializedVariable driver_data: when the goto IS taken (nondet()=true), driver_data is uninitialized when passed to tty_release() at line 44; the tool did not detect this and instead reported the spurious dead store."
+  "reasoning": ""
 }

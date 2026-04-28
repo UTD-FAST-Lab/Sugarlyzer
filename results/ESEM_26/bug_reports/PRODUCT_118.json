@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_118",
-  "reasoning": "FALSE POSITIVE: Same file as earlier PRODUCT entries (c76df14dfb4.c, Apache gen_test_char). Dead store on 'flags' at line 38. In the simplified vbdb file, 'flags' is assigned but its subsequent uses are stripped — a simplification artifact. The real gen_test_char code uses flags to pass options to the character generation function. The known vbdb bug for this file is OSCommandInjection when CROSS_COMPILE=true && WIN32=true; the presence condition includes both of those flags plus NEED_ENHANCED_ESCAPES=true which does not affect the flags variable's dead store status."
+  "reasoning": ""
 }

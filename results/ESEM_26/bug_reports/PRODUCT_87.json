@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_87",
-  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_47 (6252547b8a7.c), dead store on 'irq' at line 12 ('int irq = *ops'), now with CONFIG_OF_IRQ=true. When OF_IRQ=true, 'ops = &irq_domain_simple_ops' (line 22) makes ops non-NULL, so the dereference is safe. However, irq is still assigned and never subsequently used. In the real Linux irq_domain_add() code, irq would be used for IRQ domain setup. Simplification artifact. The known vbdb bug (NullDereference when TWL4030_CORE=true && OF_IRQ=false) does not apply here since OF_IRQ=true means ops is properly initialized."
+  "reasoning": ""
 }

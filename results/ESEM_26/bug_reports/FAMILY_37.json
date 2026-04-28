@@ -6,7 +6,7 @@
   "line_number": 16,
   "origin": "family",
   "id": "FAMILY_37",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "FAMILY_52",
-  "reasoning": "FALSE POSITIVE: 66517915e09.c (Linux FSI audio). Dead store on 'codec_hw_write' at line 16, when def(FSI_DA7210) OR def(SOC_DA7210). Line 16 is 'int codec_hw_write = i2c_master_send' inside da7210_init(). When CONFIG_I2C=true: i2c_master_send is declared (static int = 0), codec_hw_write=0 is assigned but never used — simplification artifact (real code uses codec_hw_write for audio hardware register writes). When CONFIG_I2C=false: i2c_master_send is undeclared — the tool treats it as 0 and reports a dead store instead of an UndeclaredIdentifier. The known vbdb bug (UndeclaredIdentifier when I2C=false) is not correctly detected."
+  "reasoning": ""
 }

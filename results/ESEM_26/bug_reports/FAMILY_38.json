@@ -6,7 +6,7 @@
   "line_number": 24,
   "origin": "family",
   "id": "FAMILY_38",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "FAMILY_52",
-  "reasoning": "FALSE POSITIVE: 66517915e09.c (Linux FSI audio). Dead store on 'codec_hw_write' at line 24, when def(FSI_AK4642) OR def(SOC_AK4642). Same analysis as FAMILY_37 but for the AK4642 code path in ak4642_init(). When I2C=true: simplification artifact (uses stripped). When I2C=false: tool reports dead store instead of UndeclaredIdentifier on i2c_master_send. False positive in all configurations."
+  "reasoning": ""
 }

@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_100",
-  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_56/95 (061fd0a353e.c), but alarm on 'argc' (decremented via '--argc' at line 16) rather than 'argv'. The '--argc' post-decrements argc but argc is never used after line 16 in the simplified file. In the real BusyBox hdparm main(), argc is used to control argument parsing loop iterations. Simplification artifact. The known vbdb bug is UndefinedSymbol when HDIO_UNREGISTER_HWIF=true but HDIO_SCAN_HWIF=false."
+  "reasoning": ""
 }

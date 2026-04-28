@@ -6,7 +6,7 @@
   "line_number": 38,
   "origin": "family",
   "id": "FAMILY_17",
-  "classification": "TRUE",
+  "classification": "",
   "old_id": "FAMILY_39",
-  "reasoning": "TRUE POSITIVE (CORRECTLY CONSTRAINED): 1f758a4341a.c (Linux EP93XX Ethernet). 'Control flow of non-void function ends here!' at line 38, when def(CONFIG_EP93XX_ETH). Function ep93xx_open() (lines 36-40): 'if (ep93xx_alloc_buffers()) return -ENOMEM;' — when ep93xx_alloc_buffers() returns 0, ep93xx_open falls off the end without a return value. The //ERROR comment at line 39 marks this as the known vbdb bug (missing return success path in ep93xx_open). CORRECTLY CONSTRAINED: def(EP93XX_ETH) is the only required condition — both ep93xx_open and ep93xx_alloc_buffers are only compiled when EP93XX_ETH=true."
+  "reasoning": ""
 }

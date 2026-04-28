@@ -6,7 +6,7 @@
   "line_number": 92,
   "origin": "family",
   "id": "FAMILY_75",
-  "classification": "FALSE",
-  "reasoning": "FALSE POSITIVE: eb91f1d0a53.c (Linux SLAB/lockdep). Control flow alarm at line 92 for 'static int setup_cpu_cache()' having no return statement, when def(CONFIG_SLAB). The function body just calls 'kmalloc_node(GFP_KERNEL)' with no return — simplification artifact. In the real Linux kernel, setup_cpu_cache() returns an int error code. The known vbdb bug for this file is the lockdep assertion failure (assert(!irqs_disabled) at line 36 fires when GFP_KERNEL allocation is attempted after local_irq_disable()), which is unrelated to this alarm.",
+  "classification": "",
+  "reasoning": "",
   "old_id": "FAMILY_67"
 }

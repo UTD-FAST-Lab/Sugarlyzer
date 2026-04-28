@@ -13,8 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "TRUE",
+  "classification": "",
   "old_id": "PRODUCT_57",
   "id": "PRODUCT_21",
-  "reasoning": "TRUE POSITIVE: When CONFIG_SMP is enabled, native_smp_prepare_cpus() calls enable_IR_x2apic() first (step 3), then smp_sanity_check() which may call APIC_init_uniprocessor() (step 5), which calls enable_IR_x2apic() again (step 6). The static pointer 'ptr' is set to NULL by the first call; the second call hits '*ptr = a' at line 14, dereferencing NULL. The null dereference is genuine. KNOWN BUG: The vbdb entry documents this as DoubleOpOnResource — enable_IR_x2apic is not idempotent and the double call causes a kernel panic. The tool detects the null dereference which is the direct consequence of this double-call bug. Same underlying bug. CORRECTLY CONSTRAINED: CONFIG_SMP==true is correct — the double-call path (native_smp_prepare_cpus and smp_sanity_check) is only compiled when SMP is enabled."
+  "reasoning": ""
 }

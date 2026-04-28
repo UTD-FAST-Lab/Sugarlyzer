@@ -6,7 +6,7 @@
   "line_number": 20,
   "origin": "family",
   "id": "FAMILY_69",
-  "classification": "FALSE",
-  "reasoning": "FALSE POSITIVE: d7e9711760a.c (Linux quota). Alarm fires at line 20 ('int i, j;'), condition True. 'j' is declared but never assigned or read anywhere in the function — it is an unused variable, not a dead store. A dead store requires an actual write whose value is never read; here there is no write to j at all. The tool incorrectly treats the declaration as a store. Simplification artifact.",
+  "classification": "",
+  "reasoning": "",
   "old_id": "FAMILY_64"
 }

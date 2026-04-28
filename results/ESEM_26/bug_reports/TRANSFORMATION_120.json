@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 8310.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_120",
-  "reasoning": "FALSE POSITIVE (SIMPLIFICATION ARTIFACT): 31873ec707d.c (Marlin firmware). '`conv` is read without initialization' at line 8 ('conv[0]=(xx>=0)?...'). 'conv' is used as a global character array but is never declared in this file — its declaration was stripped by vbdb simplification (in the real Marlin code, 'conv' is a global buffer). The presence condition covers all combinations of stdlib header guards (always true) with no application-level configs, confirming no meaningful variability constraint. Also note: the function 'ftostr51' is inside '#ifdef ULTRA_LCD' but 'main()' calls it without a '#ifdef ULTRA_LCD' guard — when ULTRA_LCD=false, the function is undefined. These are both simplification artifacts."
+  "reasoning": ""
 }

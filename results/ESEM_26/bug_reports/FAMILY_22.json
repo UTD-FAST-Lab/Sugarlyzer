@@ -6,7 +6,7 @@
   "line_number": 6,
   "origin": "family",
   "id": "FAMILY_22",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "FAMILY_43",
-  "reasoning": "FALSE POSITIVE: 36855dcfc98.c (Linux Blackfin PM). Dead store on 'wakeup' at line 6, when !def(CONFIG_BF60x). When BF60x is NOT defined, 'wakeup = 0' is executed at line 6 but wakeup is never subsequently used — simplification artifact (real code would use wakeup to track wake events). The //ERROR comment at line 3 indicates the known vbdb bug is the uninitialized wakeup when BF60x=true (the #ifndef block is skipped, wakeup is never assigned). The dead store alarm fires for the wrong configuration (when BF60x=false, where assignment exists but uses are stripped)."
+  "reasoning": ""
 }

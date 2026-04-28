@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "TRUE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_85",
-  "reasoning": "TRUE POSITIVE: When CONFIG_NETPOLL=true and CONFIG_IPV6=false, netpoll_setup() is compiled. Inside the function, 'int err' (line 6) is declared uninitialized. The #ifdef CONFIG_IPV6 block (which sets err=-1) is skipped. Instead, execution jumps directly to 'goto put' (line 13) and then 'return err' (line 17) returns the uninitialized value. KNOWN BUG: The vbdb entry for e39363a9def.c documents exactly this UninitializedVariable when NETPOLL && !IPV6 — netpoll_setup() returns an uninitialized error code. CORRECTLY CONSTRAINED: The uninitialized read occurs only when NETPOLL=true (compiles the function) and IPV6=false (skips the err initialization block). The presence condition matches the known bug exactly."
+  "reasoning": ""
 }

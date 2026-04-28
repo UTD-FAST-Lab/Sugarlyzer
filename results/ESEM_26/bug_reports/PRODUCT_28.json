@@ -16,8 +16,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_28",
-  "reasoning": "FALSE POSITIVE: The alarm fires on 'len' at line 39 inside send_headers(). 'len' is used as a running offset for sequential sprintf() calls that build the iobuf string. After the last 'len += sprintf(iobuf + len, ...)' the function calls printf('headers: %s', iobuf) which uses iobuf directly without needing len. The last write to len is therefore technically a dead store. However, this is a normal and correct C buffer-building pattern where len is only needed as an intermediate offset, not as a final result. This is not a real bug. The known vbdb bug (BehaviorViolation: gzip encoding incorrectly applied to error messages) is a different issue entirely."
+  "reasoning": ""
 }

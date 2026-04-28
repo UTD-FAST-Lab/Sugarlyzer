@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 1725.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "TRANSFORMATION_231",
   "id": "TRANSFORMATION_1",
-  "reasoning": "FALSE POSITIVE: a7fc1f83c81.c (Marlin). Dead store on 'len' at line 10 ('int len = strlen(prepend) + FILENAME_LENGTH + 1'). In the original source, 'len' IS read on line 11 as the size of the VLA 'char path[len]'. The alarm arises because the desugaring transformation replaced the VLA, making 'len' appear unused in the transformed file. In the original code 'len' is not a dead store. Additionally the presence condition is effectively True (STRICT_ANSI OR !STRICT_ANSI), but the function is inside #ifdef SDSUPPORT so the actual constraint requires def(SDSUPPORT)."
+  "reasoning": ""
 }

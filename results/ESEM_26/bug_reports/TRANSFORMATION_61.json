@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 6148.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_61",
-  "reasoning": "FALSE POSITIVE: 95755181b82.c (BusyBox httpd). 'Value stored to len is never read' at line 39 (closing brace of send_headers()). 'len' receives its last value from a sprintf assignment (at line 36 for content_gzip or line 30 for BASIC_AUTH), but is never subsequently read — the printf at line 38 uses 'iobuf' directly, not 'len'. Simplification artifact: in real BusyBox/Apache httpd, 'len' is used to track the total header length for subsequent operations (e.g., write() calls, content-length headers). The vbdb simplification replaced those operations with a bare printf(), leaving 'len' as a dead store. Presence condition is only C header guards (NOT __STRICT_ANSI__ AND NOT __need___FILE) — no application-level config variables."
+  "reasoning": ""
 }

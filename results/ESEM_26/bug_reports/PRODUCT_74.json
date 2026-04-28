@@ -13,8 +13,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_74",
-  "reasoning": "FALSE POSITIVE: Same file and variable as PRODUCT_46/71 (0f8f8094d28.c), dead store on 'n' in init_node_lock_keys(). In the simplified file, n is assigned but never used; in the real Linux kernel code it is used for lockdep key initialization. Simplification artifact. The known vbdb bug is OutOfBoundsRead: when SLOB=true, kmalloc_caches is not declared (#ifndef SLOB) but accessed inside init_node_lock_keys (#ifdef LOCKDEP)."
+  "reasoning": ""
 }

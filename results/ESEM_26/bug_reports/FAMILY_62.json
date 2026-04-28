@@ -6,7 +6,7 @@
   "line_number": 11,
   "origin": "family",
   "id": "FAMILY_62",
-  "classification": "FALSE",
-  "reasoning": "FALSE POSITIVE: b273d665181.c (BusyBox ls). Dead store on 'info' at line 11 ('info = 0'), when !def(BB_FEATURE_LS_FILETYPES) AND def(BB_FEATURE_LS_USERNAME). When FILETYPES=false, 'int info' is not declared (the declaration is inside #ifdef FILETYPES). At line 11, 'info = 0' attempts to assign to an undeclared variable — the real bug should be an UndeclaredIdentifier. The tool treats the undeclared info as 0 and reports a spurious dead store instead. False positive from the tool mishandling undeclared identifiers.",
+  "classification": "",
+  "reasoning": "",
   "old_id": "FAMILY_25"
 }

@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 7166.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_126",
-  "reasoning": "FALSE POSITIVE: 35ae2e259e4.c (Apache mod_ssl). 'The value written to &eckey is never used' at line 10 ('eckey = malloc(sizeof(int))'). In the original code, 'eckey' IS used at lines 12 ('*eckey = 30') and 17 ('*eckey = 15') — it is not a dead store. Desugaring artifact: '#include <stdlib.h>' desugaring places 'malloc' inside a conditional based on stdlib header guards (__need_malloc_and_calloc=true, _STDLIB_H=false, __malloc_and_calloc_defined=false). In the desugared form, 'eckey = malloc(...)' at line 10 is inside a non-standard stdlib header guard if-block, while '*eckey = 30' at line 12 and '*eckey = 15' at line 17 are outside — making 'eckey' appear as a dead store. Related to TRANSFORMATION_109 (same PC, same line, but MEMORY_LEAK_C vs DEAD_STORE alarm type)."
+  "reasoning": ""
 }

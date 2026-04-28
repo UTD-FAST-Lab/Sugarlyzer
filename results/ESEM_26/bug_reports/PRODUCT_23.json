@@ -14,8 +14,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "TRUE",
+  "classification": "",
   "old_id": "PRODUCT_59",
   "id": "PRODUCT_23",
-  "reasoning": "TRUE POSITIVE: When CONFIG_TWL4030_CORE is defined, it also defines CONFIG_IRQ_DOMAIN via the #define inside the #ifdef. In twl_probe(), ops is initialized to NULL and only set to &irq_domain_simple_ops inside #ifdef CONFIG_OF_IRQ. When !CONFIG_OF_IRQ, ops remains NULL when passed to irq_domain_add(), which dereferences it at line 12 ('int irq = *ops'). KNOWN BUG: The vbdb entry for 6252547b8a7.c documents exactly this NullDereference bug for TWL4030_CORE && !OF_IRQ. The presence condition (which simplifies to TWL4030_CORE && !OF_IRQ in both variants) matches the vbdb config. CORRECTLY CONSTRAINED: The condition correctly identifies the configuration where ops is NULL when irq_domain_add is called."
+  "reasoning": ""
 }

@@ -13,8 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "PRODUCT_32",
   "id": "PRODUCT_38",
-  "reasoning": "FALSE POSITIVE: Same file and variable as PRODUCT_34 (5275b1e49f6.c), alarm at line 16 (the if-branch assignment 'm_has_modinfo = 0') vs line 18 (the else-branch). When CONFIG_FEATURE_INSMOD_VERSION_CHECKING is true, m_has_modinfo is assigned in the conditional block but never subsequently read in the simplified file. In the real BusyBox insmod_main() code, m_has_modinfo is used extensively throughout the function. The simplified file stripped those uses. This is a simplification artifact. The known vbdb bug (UndeclaredIdentifier: k_crcs used when VERSION_CHECKING is disabled) is a different issue."
+  "reasoning": ""
 }

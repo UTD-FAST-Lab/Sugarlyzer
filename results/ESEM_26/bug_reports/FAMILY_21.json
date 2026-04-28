@@ -6,7 +6,7 @@
   "line_number": 10,
   "origin": "family",
   "id": "FAMILY_21",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "FAMILY_3",
-  "reasoning": "FALSE POSITIVE: 35ae2e259e4.c (Apache/WolfSSL ssl_init_server_certs). Dead store on 'eckey' at line 10 ('eckey = malloc(sizeof(int))'), when def(HAVE_ECC). The subsequent 'code making use of eckey' was stripped from the simplified vbdb file, making the malloc assignment appear as a dead store. This is a simplification artifact — real code uses eckey for TLS ECC operations. The real bug in this file is a memory leak (eckey allocated via malloc but never freed), classified as TRUE_OVER in the PRODUCT reports."
+  "reasoning": ""
 }

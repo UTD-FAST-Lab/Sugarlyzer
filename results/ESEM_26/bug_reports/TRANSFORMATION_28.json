@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 6075.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "TRANSFORMATION_98",
   "id": "TRANSFORMATION_28",
-  "reasoning": "FALSE POSITIVE: 5cd6461b6fb.c (BusyBox httpd). 'Assigned value is garbage or undefined' at line 28 ('http_unauthorized = random'). 'random' is assigned at line 27 ('random = rand() % 2') unconditionally before line 28. This is the same desugaring artifact pattern as TRANSFORMATION_8: the '#ifdef CONFIG_FEATURE_HTTPD_BASIC_AUTH' block containing lines 27-28 is transformed into an 'if(CONFIG_FEATURE_HTTPD_BASIC_AUTH){}' block. When the analyzer merges paths from inside and outside the if-block, variables modified inside the block may appear potentially uninitialized/stale on the merged path. 'random' is genuinely assigned from rand() before being stored to 'http_unauthorized'. Presence condition simplifies to CONFIG_FEATURE_HTTPD_BASIC_AUTH=true (CGI doesn't matter), consistent with the #ifdef guard."
+  "reasoning": ""
 }

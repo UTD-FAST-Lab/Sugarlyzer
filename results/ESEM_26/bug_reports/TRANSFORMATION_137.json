@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 6785.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_137",
-  "reasoning": "FALSE POSITIVE: b833f064550.c (Apache status module). 'The value written to &x is never used' at line 5 ('long x = 2147483644'). 'x' IS used at line 14 ('(long) x') as an argument to printf. Desugaring artifact: '#include <stdio.h>' desugaring places 'printf' inside a conditional based on '__need___FILE'. When '__need___FILE=true', 'printf(...)' is inside 'if(!__need___FILE) {...}' and is not reached. Thus 'x' (only used in printf) appears as a dead store on the __need___FILE=true path. The presence condition '__need___FILE=true' is a pure stdio header guard with no application-level configs. Note: the real vbdb bug is the wrong format specifier in 'printf(\"%f %ld\", (long)x, (long)y)' when HAVE_TIMES=false — '%f' expects float but receives a long."
+  "reasoning": ""
 }

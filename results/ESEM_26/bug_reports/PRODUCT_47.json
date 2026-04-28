@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_47",
-  "reasoning": "FALSE POSITIVE: The alarm reports 'int irq = *ops' (line 12, in irq_domain_add()) as a dead store — irq is assigned but never used. In the real Linux kernel code, irq would be used for IRQ domain setup after being read from ops. The simplified file stripped those subsequent uses. This is a simplification artifact. The known vbdb bug for 6252547b8a7.c is NullDereference: when TWL4030_CORE=true and OF_IRQ=false, ops stays NULL (line 19), and irq_domain_add(ops) dereferences it at line 12 ('int irq = *ops'). The tool detects only the dead store aspect, not the null dereference. Note: CONFIG_IRQ_DOMAIN is implicitly #defined when CONFIG_TWL4030_CORE is true (line 4), so IRQ_DOMAIN=true and TWL4030_CORE=true are redundant in the presence condition."
+  "reasoning": ""
 }

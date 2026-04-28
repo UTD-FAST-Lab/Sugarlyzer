@@ -13,8 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_103",
-  "reasoning": "FALSE POSITIVE: The alarm reports 'thisopt = SSL_PROTOCOL_TLSV1_1' (line 13) as a dead store when HAVE_TLSV1_X=false. When TLSV1_X=false, SSL_PROTOCOL_TLSV1_1 is not defined (only defined inside '#ifdef HAVE_TLSV1_X'). The tool appears to have handled the undefined macro by treating it as 0, then flagged the assignment to thisopt as unused. The known vbdb bug for 1a3c8e3d840.c is UndeclaredIdentifier: SSL_PROTOCOL_TLSV1_1 is used when HAVE_TLSV1_X=false, which causes an undeclared identifier error. The tool failed to detect the undeclared identifier and instead reported a spurious dead store (same pattern as PRODUCT_58/103)."
+  "reasoning": ""
 }

@@ -6,7 +6,7 @@
   "line_number": 12,
   "origin": "family",
   "id": "FAMILY_54",
-  "classification": "FALSE",
-  "reasoning": "FALSE POSITIVE: 8c4377dd635.c (Marlin manage_heater). Dead store on 'e' at line 12 ('int e = 0'), presence condition True. e is assigned 0 but never used in the simplified file — simplification artifact (real Marlin code uses e as the extruder index for PID control loops). The known vbdb bug for this file is the UndeclaredIdentifier on SERIAL_ECHO_START when MARLIN_H=true and PIDTEMP=true.",
+  "classification": "",
+  "reasoning": "",
   "old_id": "FAMILY_70"
 }

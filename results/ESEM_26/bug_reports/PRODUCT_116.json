@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_116",
-  "reasoning": "FALSE POSITIVE: 95755181b82.c (BusyBox httpd send_headers). Dead store on 'len' inside send_headers(): len accumulates sprintf() return values but in the simplified code is never used for an actual write/send call (the final printf on line 38 uses iobuf directly, not len). In real BusyBox httpd code, len would be used for write() or writev() system calls. Simplification artifact — subsequent use of len was stripped. Also note: with BB_MMU=false, mini_httpd() and handle_incoming_and_exit() are never called from main(), meaning send_headers() itself is unreachable at runtime in this configuration, though the static analyzer still analyzes it in isolation. The known vbdb bug for this file is likely UndeclaredIdentifier: content_gzip referenced unconditionally at line 35 but only declared inside #ifdef ENABLE_FEATURE_HTTPD_GZIP; this config has HTTPD_GZIP=true so content_gzip IS defined."
+  "reasoning": ""
 }

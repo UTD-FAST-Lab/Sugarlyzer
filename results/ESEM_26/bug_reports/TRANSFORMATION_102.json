@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 8388.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW_OVER",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_102",
-  "reasoning": "TRUE POSITIVE (NEW, OVER-CONSTRAINED): 2631486f1bf.c (BusyBox ls). Same root cause as TRANSFORMATION_94 — '`curr` could be null (null value originating from malloc) and is dereferenced' at line 66 ('curr->val = rand() % 10'). The null dereference after unguarded malloc at line 65 is real. NEW: not the annotated vbdb bug. OVER-CONSTRAINED: the presence condition requires NOT CONFIG_FEATURE_LS_SORTFILES, but lines 65-66 are NOT inside any '#ifdef' block — the bug exists regardless of this flag. Together with TRANSFORMATION_94 (CONFIG_FEATURE_LS_SORTFILES=true), the union covers all configs, confirming the bug is truly config-independent. The stdlib header guards (_STDLIB_H, __need_malloc_and_calloc) are desugaring artifacts."
+  "reasoning": ""
 }

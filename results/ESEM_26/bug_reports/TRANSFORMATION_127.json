@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 8254.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_127",
-  "reasoning": "FALSE POSITIVE: b62bd7b261b.c (BusyBox mdev). 'The value written to &a is never used' at line 14 ('char *a = val'). 'a' is declared at line 14 inside '#ifdef ENABLE_FEATURE_MDEV_RENAME' and used ONLY at line 21 ('s = a') inside '#ifdef ENABLE_FEATURE_MDEV_RENAME_REGEXP'. When RENAME_REGEXP=false (PC condition), 'a' is assigned but the only read at line 21 is absent — superficially a dead store. However, the presence condition is UNDER-CONSTRAINED: it includes cases where ENABLE_FEATURE_MDEV_CONF=false or ENABLE_FEATURE_MDEV_RENAME=false, where 'a' is never assigned in the original code either. After transformation desugaring, 'char *a' is hoisted to function scope and the assignment at line 14 becomes 'if(CONF && RENAME) { a = val; }' — when CONF=false or RENAME=false, 'a' was never declared/assigned in the original but the hoisted variable makes the alarm fire. The correct condition for a real dead store would be RENAME=true AND NOT REGEXP. The alarm is primarily a desugaring artifact from hoisting."
+  "reasoning": ""
 }

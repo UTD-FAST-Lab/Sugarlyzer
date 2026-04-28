@@ -13,8 +13,8 @@
     5
   ],
   "strategy": "product",
-  "classification": "TRUE_OVER",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_187",
-  "reasoning": "TRUE POSITIVE (OVER-CONSTRAINED): Same bug as PRODUCT_108/135/157/181/183 (0f8f8094d28.c, Linux kmalloc). PULSE_UNINITIALIZED_VALUE on 'cache' at line 36 — accessing kmalloc_caches[i] when kmalloc_caches is undeclared (inside #ifndef SLOB) when SLOB=true. Known vbdb OutOfBoundsRead/UndeclaredIdentifier bug. OVER-CONSTRAINED: Core condition is LOCKDEP=true && SLOB=true; SLAB=true is also contradictory with SLOB=true (mutually exclusive in Linux); FORCE_MAX_ZONEORDER=true and PPC_256K_PAGES=true are irrelevant."
+  "reasoning": ""
 }

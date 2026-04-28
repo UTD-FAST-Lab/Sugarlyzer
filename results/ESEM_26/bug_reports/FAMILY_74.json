@@ -6,7 +6,7 @@
   "line_number": 17,
   "origin": "family",
   "id": "FAMILY_74",
-  "classification": "TRUE",
-  "reasoning": "TRUE POSITIVE (CORRECTLY CONSTRAINED): e39363a9def.c (Linux netpoll). Uninitialized value on 'err' at line 17 ('return err'), when def(CONFIG_NETPOLL) AND !def(CONFIG_IPV6). 'int err' is declared at line 6 without initialization. When CONFIG_IPV6 is false, the code executes 'goto put' at line 13, bypassing the only assignment 'err = -1' at line 9. At label 'put' (line 16), 'return err' reads the uninitialized err. This is the known vbdb UninitializedVariable bug. CORRECTLY CONSTRAINED: def(NETPOLL) is needed to compile netpoll_setup(), and !def(IPV6) is needed to take the always-goto path that skips the 'err = -1' assignment.",
+  "classification": "",
+  "reasoning": "",
   "old_id": "FAMILY_66"
 }

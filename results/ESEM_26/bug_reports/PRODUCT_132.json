@@ -13,8 +13,8 @@
     1
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_132",
-  "reasoning": "FALSE POSITIVE: Same file as PRODUCT_58/103 (1a3c8e3d840.c, Apache SSL), dead store on 'thisopt' at line 13 when HAVE_TLSV1_X=true. When TLSV1_X=true, SSL_PROTOCOL_TLSV1_1 IS defined (inside #ifdef HAVE_TLSV1_X), so the known vbdb UndeclaredIdentifier bug (SSL_PROTOCOL_TLSV1_1 used when HAVE_TLSV1_X=false) does not apply. thisopt is assigned SSL_PROTOCOL_TLSV1_1 but never subsequently used — simplification artifact."
+  "reasoning": ""
 }

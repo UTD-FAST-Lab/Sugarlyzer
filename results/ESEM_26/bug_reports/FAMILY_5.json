@@ -6,7 +6,7 @@
   "line_number": 27,
   "origin": "family",
   "id": "FAMILY_5",
-  "classification": "TRUE_NEW",
+  "classification": "",
   "old_id": "FAMILY_15",
-  "reasoning": "TRUE POSITIVE (NEW): 061fd0a353e.c (BusyBox hdparm). Uninitialized value on 'p' at line 27, when CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF is defined. Same root cause as FAMILY_4: 'char *p' declared at line 7 without initialization, only conditionally assigned in case 'W'. In case 'R' (compiled when SCAN=true), 'if(!p)' at line 27 uses p without guaranteed initialization. Same bug as FAMILY_4 but at a different use site and gated by a different flag. This is the same NEW bug. CORRECTLY CONSTRAINED: SCAN=true is necessary and sufficient for the alarm at line 27."
+  "reasoning": ""
 }

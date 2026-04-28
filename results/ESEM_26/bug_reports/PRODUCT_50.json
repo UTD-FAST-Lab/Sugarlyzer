@@ -13,8 +13,8 @@
     3
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_50",
-  "reasoning": "FALSE POSITIVE: The alarm reports 'val = (s && s[1]) ? s+1 : NULL' (line 16, inside MDEV_RENAME) as a dead store when MDEV_CONF, MDEV_RENAME, and MDEV_RENAME_REGEXP are all true. In the simplified file, val is reassigned at line 16 but then never read again (the REGEXP block uses 'a' and 's' but not 'val'). In the real BusyBox mdev make_device() code, val is used for device rename pattern processing. The simplified file stripped those subsequent uses. This is a simplification artifact. The known vbdb bug for b62bd7b261b.c is UnusedVariable 'p': when !MDEV_RENAME_REGEXP, 'p' is declared at line 11 (inside MDEV_RENAME) but never used since the while loop that accesses p is inside #ifdef MDEV_RENAME_REGEXP."
+  "reasoning": ""
 }

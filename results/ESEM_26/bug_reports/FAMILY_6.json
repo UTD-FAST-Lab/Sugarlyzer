@@ -6,7 +6,7 @@
   "line_number": 45,
   "origin": "family",
   "id": "FAMILY_6",
-  "classification": "TRUE_NEW",
+  "classification": "",
   "old_id": "FAMILY_34",
-  "reasoning": "TRUE POSITIVE (NEW): 0f8f8094d28.c (Linux kmalloc). 'Control flow of non-void function ends here' at lines 45-54, when !def(CONFIG_LOCKDEP). When LOCKDEP=false, the #else branch defines 'init_node_lock_keys()' without a return type (line 50: K&R/C89-style implicit int) but with an empty body — the function never returns a value despite having an implicit int return type. This is a genuine control flow bug. NEW: the known vbdb bug for this file is the OutOfBoundsRead/UndeclaredIdentifier on kmalloc_caches when SLOB=true; this control flow issue is a separate, distinct bug. CORRECTLY CONSTRAINED: !def(LOCKDEP) is exactly the condition that compiles the else-branch stub with the missing return."
+  "reasoning": ""
 }

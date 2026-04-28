@@ -6,7 +6,7 @@
   "line_number": 11,
   "origin": "family",
   "id": "FAMILY_72",
-  "classification": "FALSE",
-  "reasoning": "FALSE POSITIVE: dbafef17dd1.c (Apache rewrite). Alarm fires at line 11, columns 10-16 ('newuri' as the first argument to strncpy), when def(HAS_APACHE_REGEX_LIB). The tool claims 'newuri is used uninitialized,' but strncpy(dest, src, n) WRITES to its destination argument — it does not read the existing content of newuri. The real bug in this file is the off-by-one error at line 12 ('newuri[sizeof(newuri-1)]' should be 'newuri[sizeof(newuri)-1]'), but that is not what this alarm captures.",
+  "classification": "",
+  "reasoning": "",
   "old_id": "FAMILY_10"
 }

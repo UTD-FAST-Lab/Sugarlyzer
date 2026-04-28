@@ -6,7 +6,7 @@
   "line_number": 10,
   "origin": "family",
   "id": "FAMILY_80",
-  "classification": "FALSE",
-  "reasoning": "FALSE POSITIVE: f3d83e24154.c (Linux ACPI WMI / Acer). Alarm fires at line 10, columns 9-15 ('method' as the destination of strcpy), when def(CONFIG_X86) AND def(CONFIG_ACPI_WMI). The tool claims 'method is used uninitialized,' but strcpy(dest, src) WRITES to its destination — it does not read the existing content of method. 'char method[4]' at line 8 is uninitialized, but strcpy initializes it by writing. The real known vbdb bug in this file is a buffer overflow: strncat at line 11 appends 2 bytes from block_object_id to the 'WQ\0' already in method[4], attempting to write 'WQXX\0' which requires 5 bytes — one past the end of the buffer.",
+  "classification": "",
+  "reasoning": "",
   "old_id": "FAMILY_69"
 }

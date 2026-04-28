@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 6920.0,
   "strategy": "transformation",
-  "classification": "TRUE_NEW",
+  "classification": "",
   "old_id": "TRANSFORMATION_54",
   "id": "TRANSFORMATION_12",
-  "reasoning": "TRUE POSITIVE NEW (CORRECTLY CONSTRAINED): 061fd0a353e.c (BusyBox hdparm). 'Branch condition evaluates to a garbage value' at line 27 ('if(!p)' in case 'R'). 'char *p' is declared at line 7 without initialization. When case 'R' is entered without first going through case 'W' (which conditionally sets p at line 16), 'p' is uninitialized and '!p' evaluates a garbage value. This is the same bug as FAMILY_5 (TRUE_NEW). NOT in vbdb. CORRECTLY CONSTRAINED: the presence condition requires CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF=true (necessary — case 'R' and the expected_hwif_error: label are inside #ifdef SCAN) and covers both UNREGISTER=true and UNREGISTER=false cases (correct — the bug at line 27 in case 'R' does not depend on UNREGISTER). SCAN=false cases are never included."
+  "reasoning": ""
 }

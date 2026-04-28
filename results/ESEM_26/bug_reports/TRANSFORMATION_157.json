@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 1396.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "TRANSFORMATION_157",
-  "reasoning": "FALSE POSITIVE: d6c7e113959.c (Linux regulator MAX8660). 'The value written to &pdata is never used' at line 5 ('*pdata++'). In 'max8660_pdata_from_dt(int *pdata)' (CONFIG_OF=true version), '*pdata++' is '*(pdata++)' due to C operator precedence — it increments the local pointer `pdata` but the new pointer value is never read before function return, creating a dead store of the pointer increment. The real vbdb bug is at line 18 ('max8660_pdata_from_dt(&pdata_of); // ERROR'): when CONFIG_OF=false, the function expects 'int **pdata' but the call passes '&pdata_of' (type 'int *'), causing a type/argument mismatch. The DEAD_STORE alarm is for the CONFIG_OF=true branch — the wrong branch for the actual vbdb bug. The *pdata++ expression is either a simplification artifact or an operator-precedence bug (*pdata++ vs (*pdata)++), but neither matches the known vbdb error annotation at line 18."
+  "reasoning": ""
 }

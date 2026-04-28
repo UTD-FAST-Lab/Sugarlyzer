@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 6010.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "TRANSFORMATION_110",
   "id": "TRANSFORMATION_44",
-  "reasoning": "FALSE POSITIVE: b62bd7b261b.c (BusyBox mdev). 'Assigned value is garbage or undefined' at line 14 ('char *a = val'). 'val' is assigned 'mode - device permissions' at line 12, unconditionally before line 14. 'val' cannot be garbage when evaluated at line 14. Desugaring artifact: all of lines 10-33 are inside nested #ifdef blocks (MDEV_CONF, MDEV_RENAME, MDEV_RENAME_REGEXP). The transformation hoists 'val', 'a', 's', 'p' to function scope and wraps their assignments in if-blocks. The presence condition fires for cases where ENABLE_FEATURE_MDEV_RENAME_REGEXP=false — in those cases, the '#ifdef MDEV_RENAME_REGEXP' block containing 'while(*s)' is not compiled, so the while loop (TRANSFORMATION_43's bug) doesn't exist. But in the desugared form, 'val' might be hoisted outside the 'if(MDEV_RENAME)' block, making it appear potentially uninitialized on some paths. In all configurations where line 14 is actually compiled (MDEV_CONF=true AND MDEV_RENAME=true), 'val' is always assigned at line 12 first."
+  "reasoning": ""
 }

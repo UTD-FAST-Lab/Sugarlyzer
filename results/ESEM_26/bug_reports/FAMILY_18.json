@@ -6,7 +6,7 @@
   "line_number": 18,
   "origin": "family",
   "id": "FAMILY_18",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "FAMILY_41",
-  "reasoning": "FALSE POSITIVE: 242f1a34377.c (Linux crypto). 'Control flow of non-void function ends here!' at lines 18-20, when def(CONFIG_CRYPTO_TEST). The function in question is main() which lacks an explicit return statement. In C99 and later, main() is special: falling off the end of main() is equivalent to returning 0 — no control flow bug exists. The alarm is a false positive from applying a non-void function rule to main(). The real known vbdb bug for this file is the UndeclaredIdentifier on crypto_alloc_ablkcipher() when CONFIG_CRYPTO_BLKCIPHER=false (test_cipher calls it but it's only defined inside #ifdef CRYPTO_BLKCIPHER)."
+  "reasoning": ""
 }

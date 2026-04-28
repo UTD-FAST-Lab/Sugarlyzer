@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 6974.0,
   "strategy": "transformation",
-  "classification": "TRUE",
+  "classification": "",
   "old_id": "TRANSFORMATION_129",
   "id": "TRANSFORMATION_34",
-  "reasoning": "TRUE POSITIVE (CORRECTLY CONSTRAINED): bc0ffc0e971.c (BusyBox nameif). 'Use of memory after it is freed' at line 43 ('for (ch = clist; ch; ch = ch->next)'). In the for loop, delete_eth_table(ch) is called at line 44, which frees ch->ifname and ch (lines 13-14). After the loop body, the loop increment 'ch = ch->next' uses the freed 'ch' — use-after-free. This is the known vbdb bug (// ERROR at line 43). Same bug as TRANSFORMATION_5 (which alarms at line 15 inside delete_eth_table), but the analyzer reports the use-after-free at the loop's next pointer read (line 43). CORRECTLY CONSTRAINED: ENABLE_FEATURE_CLEAN_UP=true is required since the for loop is inside '#ifdef ENABLE_FEATURE_CLEAN_UP'. The STRICT_ANSI variants cancel out — only ENABLE_FEATURE_CLEAN_UP matters."
+  "reasoning": ""
 }

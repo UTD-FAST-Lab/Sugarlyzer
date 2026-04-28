@@ -17,8 +17,8 @@
   "feasible": true,
   "desugaringTime": 6178.0,
   "strategy": "transformation",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": "TRANSFORMATION_35",
   "id": "TRANSFORMATION_2",
-  "reasoning": "FALSE POSITIVE: 4945115b2e7.c (Apache CGI). Alarm fires at line 22 ('fclose(dbg)') when DEBUG_CGI=true. In the original source, 'dbg' is assigned at lines 8 or 10 inside '#ifdef DEBUG_CGI', and fclose(dbg) at line 22 is also inside '#ifdef DEBUG_CGI'. Both blocks are always resolved together at compile time so dbg is always initialized before fclose. The alarm is a transformation artifact: the desugaring converts each '#ifdef DEBUG_CGI' block into a separate 'if(DEBUG_CGI){}' block, making the analyzer see a path where the assignment in the first block ran but the analyzer cannot guarantee dbg is initialized when it reaches the second block. The real known vbdb bug in this file is a resource leak (dbg not closed when rand()%2 is true, line 19), not an uninitialized value. The effective presence condition simplifies to def(DEBUG_CGI); the header-guard variables (__STRICT_ANSI__, _STDLIB_H, etc.) are standard library implementation details."
+  "reasoning": ""
 }

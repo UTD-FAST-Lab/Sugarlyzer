@@ -13,8 +13,8 @@
     2
   ],
   "strategy": "product",
-  "classification": "FALSE",
+  "classification": "",
   "old_id": null,
   "id": "PRODUCT_180",
-  "reasoning": "FALSE POSITIVE: 061fd0a353e.c (BusyBox hdparm). Dead store on 'argv' at line 16 ('p = *argv++, --argc') with UNREGISTER_HWIF=true, SCAN_HWIF=false. The post-increment of argv (a local parameter copy) is never used since no further option processing exists in the simplified code. This is a simplification artifact — real hdparm uses argv for continued option parsing. The known vbdb bug (UndefinedSymbol 'expected_hwif_error' when UNREGISTER_HWIF=true && SCAN_HWIF=false) is a different alarm not detected here."
+  "reasoning": ""
 }

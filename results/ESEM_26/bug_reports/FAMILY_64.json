@@ -6,7 +6,7 @@
   "line_number": 28,
   "origin": "family",
   "id": "FAMILY_64",
-  "classification": "TRUE",
-  "reasoning": "TRUE POSITIVE (CORRECTLY CONSTRAINED): b62bd7b261b.c (BusyBox mdev). Uninitialized value on 'p' at line 28 ('p += n - 1'), same condition as FAMILY_63. 'char *p' is uninitialized and used at line 24 (*p = *s), line 28 (p += n-1), and line 31 (p++). All three are manifestations of the same known vbdb UninitializedVariable bug. CORRECTLY CONSTRAINED: all three MDEV flags are necessary and sufficient.",
+  "classification": "",
+  "reasoning": "",
   "old_id": "FAMILY_27"
 }

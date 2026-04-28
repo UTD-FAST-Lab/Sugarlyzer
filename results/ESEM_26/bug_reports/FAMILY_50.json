@@ -5,8 +5,8 @@
   "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/76baeebf7df.c",
   "line_number": 133,
   "origin": "family",
-  "classification": "FALSE",
-  "reasoning": "FALSE POSITIVE: 76baeebf7df.c (Linux NUMA). Same alarm as FAMILY_45/46/49 — 'assignment discards const qualifier' at lines 133-137, condition !def(NUMA) AND def(PCI) AND !def(const). The '!def(const)' condition is the key non-standard requirement. False positive from tool treating const as potentially undefined.",
+  "classification": "",
+  "reasoning": "",
   "id": "FAMILY_50",
   "old_id": "FAMILY_3_NEW"
 }
