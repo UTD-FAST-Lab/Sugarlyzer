@@ -1,0 +1,20 @@
+[
+  {
+    "id": "FAMILY_1",
+    "old_id": "FAMILY_11",
+    "classification": "TRUE",
+    "reasoning": "The bug is confirmed in the VarBugs Database as an UnusedVariable at commit 0301ffab3d9. When EXT2FS_ENABLE_SWAPFS is not defined, the variable 'gdp' is declared but never assigned or used, making it a dead store. The presence condition '!def(EXT2FS_ENABLE_SWAPFS)' exactly matches the vbdb Config entry '!EXT2FS_ENABLE_SWAPFS (1st degree)'. The PC is correctly and precisely constrained to the configuration where the bug occurs."
+  },
+  {
+    "id": "PRODUCT_1",
+    "old_id": "PRODUCT_47",
+    "classification": "FALSE",
+    "reasoning": "The alarm reports a memory leak when CONFIG_FEATURE_CLEAN_UP=false, but in BusyBox's design, the FEATURE_CLEAN_UP flag is specifically intended to optionally add memory cleanup code \u2014 not freeing memory before process exit when this flag is disabled is deliberate, not a bug. This is a different alarm type (unix.Malloc/memory leak) from the vbdb-documented bug (UninitializedVariable/free of uninitialized pointer when FEATURE_CLEAN_UP=true). The static analyzer is flagging an intentional architectural decision in BusyBox as a defect."
+  },
+  {
+    "id": "TRANSFORMATION_1",
+    "old_id": "TRANSFORMATION_231",
+    "classification": "FALSE",
+    "reasoning": "The alarm reports a dead store on `len`, but `len` is actually used as the size expression in the VLA declaration `char path[len]` \u2014 this is a genuine read of the value. The static analyzer failed to treat the VLA size evaluation as a 'use', making this a false positive. Additionally, the presence condition simplifies to a tautology (STRICT_ANSI OR NOT STRICT_ANSI), referencing a compiler-internal macro rather than the actual feature flag SDSUPPORT that guards the relevant code. As a TRANSFORMATION report, this is a desugaring artifact \u2014 the vbdb entry for this commit documents a StackBasedBufferOverflow, a completely different alarm type at a different location (line 74/strcat), not a DeadStores issue on the `len` variable at line 10."
+  }
+]
