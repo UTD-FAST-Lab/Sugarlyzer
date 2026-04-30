@@ -70,15 +70,16 @@ object PresenceCondition {
     logger.info(s"tups are ${tups}")
     val ctx = new Context()
     val exprs = tups.map { case (mac, value) =>
-      val const = ctx.mkConst(mac, ctx.mkBoolSort())
-      val boolValue = value.toLowerCase match {
-        case "true" | "y"                 => ctx.mkTrue()
-        case "false" | "n"                => ctx.mkFalse()
-        case i if i.toIntOption.isDefined => ctx.mkInt(i)
-        case s: String                    => ctx.mkString(s)
-        case _ => throw new IllegalArgumentException(s"Invalid value: $value")
+      value.toLowerCase match {
+        case "true" | "y" =>
+          ctx.mkEq(ctx.mkConst(mac, ctx.mkBoolSort()), ctx.mkTrue())
+        case "false" | "n" =>
+          ctx.mkEq(ctx.mkConst(mac, ctx.mkBoolSort()), ctx.mkFalse())
+        case i if i.toIntOption.isDefined =>
+          ctx.mkEq(ctx.mkConst(mac, ctx.mkIntSort()), ctx.mkInt(i))
+        case s =>
+          ctx.mkEq(ctx.mkConst(mac, ctx.mkStringSort()), ctx.mkString(s))
       }
-      ctx.mkEq(const, boolValue)
     }
     PresenceCondition(ctx, ctx.mkAnd(exprs.toSeq*))
   }
