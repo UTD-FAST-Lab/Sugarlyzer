@@ -44,7 +44,7 @@ Your task: classify each report using the labels below.
 ## Key Analysis Principles
 
 **Only analyze the source code given.**
-These bug reports are from excerpts of well-known programs. Only reason based on the snippet of source code given to you.
+These bug reports are from excerpts of well-known programs. Only reason based on the snippet of source code given to you. For example, for a dead store report, only think about the code that is provided; do not infer that the variable is used elsewhere in the real code.
 
 **Contradictory configurations → FALSE**
 If a macro X is defined by #define when flag Y=T, then a PC saying X=F AND Y=T is contradictory (infeasible). Such alarms are false positives.
@@ -254,7 +254,6 @@ Classify this bug report."""
     # Attempt 1: adaptive thinking
     message = _call_api(client, user_content, thinking={"type": "adaptive"})
     text = _extract_response(message)
-    print(f"Text is {text}")
 
     # Attempt 2: thinking disabled — forces a plain text block every time
     if not text:
