@@ -101,7 +101,7 @@ object SugarCRunner {
       cmd.runWithFileRedirects(
         getOutputPath(fileToDesugar),
         logFile,
-        Some(1.second)
+        Some(10.minutes)
       )
     }
 
