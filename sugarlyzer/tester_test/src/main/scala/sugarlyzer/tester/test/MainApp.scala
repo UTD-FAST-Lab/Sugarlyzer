@@ -9,17 +9,22 @@ import com.microsoft.z3.*
 import sugarlyzer.tester.sugarc.PresenceConditionParser
 import sugarlyzer.tester.tools.ToolAlarm
 import sugarlyzer.tester.strategies.ProductStrategy
+import cats.data.OptionT
+import cats.implicits.*
 
 object MainApp extends IOApp.Simple {
   def run: IO[Unit] = {
     val sample1 = "/resources/sample1.c"
     for {
-      _   <- IO.println("Starting tester integration tests...")
-      _   <- IO.println("=== INTEGRATION TEST 1: SugarC Integration ===")
-      _   <- IO.println(s"Testing on ${sample1}")
-      opt <- analyzeFile(sample1)
-      (resFile, logFile) <- opt
-      _ <- IO.println(s"Logfile at $logFile, resFile at $resFile")
+      _         <- IO.println("Starting tester integration tests...")
+      _         <- IO.println("=== INTEGRATION TEST 1: SugarC Integration ===")
+      _         <- IO.println(s"Testing on ${sample1}")
+      resultOpt <- analyzeFile(sample1).value
+      _ <- resultOpt match {
+        case Some((resFile, logFile)) =>
+          IO.println(s"Logfile at $logFile, resFile at $resFile")
+        case None => IO.raiseError(new Exception("analyzeFile returned None"))
+      }
       _ <- IO.println("=== INTEGRATION TEST 2: Z3 Test ===")
       _ <- IO.println("Checking that Z3 works")
       _ <- testZ3()
@@ -41,7 +46,7 @@ object MainApp extends IOApp.Simple {
     )
   }
 
-  def analyzeFile(file: String): IO[Option[(ResultFile, LogFile)]] =
+  def analyzeFile(file: String): OptionT[IO, (ResultFile, LogFile)] =
     SugarCRunner.desugarFile(
       fileToDesugar = os.Path(file),
       logFile = os.Path("/log.txt"),
@@ -59,7 +64,7 @@ object MainApp extends IOApp.Simple {
         "/SugarlyzerConfig/stdinc/usr/lib/gcc/x86_64-linux-gnu/9/include"
       ),
       commandLineDeclarations = List.empty
-    ).value
+    )
 
   def testZ3(): IO[Unit] = {
     println("Creating Z3 context")
