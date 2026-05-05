@@ -40,7 +40,7 @@ object MainApp extends IOApp.Simple {
     )
   }
 
-  def analyzeFile(file: String): IO[(ResultFile, LogFile)] =
+  def analyzeFile(file: String): IO[Option[(ResultFile, LogFile)]] =
     SugarCRunner.desugarFile(
       fileToDesugar = os.Path(file),
       logFile = os.Path("/log.txt"),
@@ -58,7 +58,7 @@ object MainApp extends IOApp.Simple {
         "/SugarlyzerConfig/stdinc/usr/lib/gcc/x86_64-linux-gnu/9/include"
       ),
       commandLineDeclarations = List.empty
-    )
+    ).value
 
   def testZ3(): IO[Unit] = {
     println("Creating Z3 context")
