@@ -14,10 +14,11 @@ object MainApp extends IOApp.Simple {
   def run: IO[Unit] = {
     val sample1 = "/resources/sample1.c"
     for {
-      _ <- IO.println("Starting tester integration tests...")
-      _ <- IO.println("=== INTEGRATION TEST 1: SugarC Integration ===")
-      _ <- IO.println(s"Testing on ${sample1}")
-      (resFile, logFile) <- analyzeFile(sample1)
+      _   <- IO.println("Starting tester integration tests...")
+      _   <- IO.println("=== INTEGRATION TEST 1: SugarC Integration ===")
+      _   <- IO.println(s"Testing on ${sample1}")
+      opt <- analyzeFile(sample1)
+      (resFile, logFile) <- opt
       _ <- IO.println(s"Logfile at $logFile, resFile at $resFile")
       _ <- IO.println("=== INTEGRATION TEST 2: Z3 Test ===")
       _ <- IO.println("Checking that Z3 works")
