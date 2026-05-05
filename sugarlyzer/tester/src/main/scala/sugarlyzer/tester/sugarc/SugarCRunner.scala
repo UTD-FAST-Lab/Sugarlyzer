@@ -1,11 +1,14 @@
 package sugarlyzer.tester.sugarc
 
+import cats.data.OptionT
 import cats.effect.IO
 import os.Path
 import java.io.File
 import com.typesafe.scalalogging.Logger
 import sugarlyzer.util.CommandBuilder
 import cats.implicits.*
+import scala.concurrent.duration.*
+import java.util.concurrent.TimeoutException
 import scala.util.matching.Regex
 import com.microsoft.z3.Context
 import sugarlyzer.tester.tools.ToolAlarm
@@ -73,9 +76,7 @@ object SugarCRunner {
       includedFiles: Iterable[Path] = Seq(),
       includedDirectories: Iterable[Path] = Seq(),
       commandLineDeclarations: Iterable[String] = Nil
-  ): IO[(CommandBuilder.ResultFile, CommandBuilder.LogFile)] = {
-    /* If recommended space exists, write it to a file, and add it to the
-     * included files */
+  ): OptionT[IO, (CommandBuilder.ResultFile, CommandBuilder.LogFile)] = {
     val recommendedSpaceFileIO: IO[Option[Path]] = recommendedSpace match {
       case Some(rs) =>
         for {
@@ -85,7 +86,7 @@ object SugarCRunner {
       case None => IO.pure(None)
     }
 
-    recommendedSpaceFileIO.flatMap { rsFileOpt =>
+    val run = recommendedSpaceFileIO.flatMap { rsFileOpt =>
       val cmd = buildDesugarCommand(
         fileToDesugar,
         rsFileOpt,
@@ -97,8 +98,17 @@ object SugarCRunner {
         includedDirectories,
         commandLineDeclarations
       )
-      cmd.runWithFileRedirects(getOutputPath(fileToDesugar), logFile)
+      cmd.runWithFileRedirects(
+        getOutputPath(fileToDesugar),
+        logFile,
+        Some(1.second)
+      )
     }
+
+    OptionT(run.map(Some(_)).recover { case _: TimeoutException =>
+      logger.warn(s"Desugaring timed out for $fileToDesugar")
+      None
+    })
   }
 
   def mapLineNumber(

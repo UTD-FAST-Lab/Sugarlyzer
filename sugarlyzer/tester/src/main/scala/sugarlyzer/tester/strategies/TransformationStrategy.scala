@@ -104,7 +104,7 @@ object TransformationStrategy extends AnalysisStrategy {
           restrict = spec.name.toLowerCase() == "busybox"
         )
 
-        operation.timed.map { case (duration, _) =>
+        operation.value.timed.map { case (duration, _) =>
           ctx.file.toString -> duration.toMillis.toDouble
         }
       }
