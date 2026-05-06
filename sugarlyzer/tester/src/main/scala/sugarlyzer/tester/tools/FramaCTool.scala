@@ -20,6 +20,7 @@ import org.eclipse.cdt.core.parser.DefaultLogService
 import org.eclipse.cdt.core.parser.IncludeFileContentProvider
 import org.eclipse.cdt.core.model.ILanguage
 
+import com.github.tototoshi.csv.CSVReader
 import scala.util.control.NonFatal
 
 object FramaCTool extends AnalysisTool {
@@ -144,68 +145,31 @@ object FramaCTool extends AnalysisTool {
   def parseCSV(csvPath: os.Path, analysisTime: Double): List[ToolAlarm] = {
     if (!os.exists(csvPath)) return List.empty
     try {
-      val lines = os.read.lines(csvPath).toList
-      if (lines.size <= 1) return List.empty
-
-      val headers = parseCSVRow(lines.head).map(_.toLowerCase.trim)
-      val fileIdx = headers.indexWhere(h => h == "source file" || h == "file")
-      val lineIdx = headers.indexWhere(h => h == "line")
-      val kindIdx =
-        headers.indexWhere(h => h.contains("kind") || h == "property")
-      val statusIdx = headers.indexWhere(h => h == "status")
-      val descIdx   = headers.indexWhere(h => h.contains("desc"))
-
-      lines.tail.flatMap { rawLine =>
-        val cols = parseCSVRow(rawLine)
-        def col(idx: Int): String =
-          if (idx >= 0 && idx < cols.length) cols(idx) else ""
-
-        val file   = col(fileIdx)
-        val lineNo = col(lineIdx).toIntOption.getOrElse(0)
-        val kind   = col(kindIdx)
-        val status = col(statusIdx)
-        val desc   = col(descIdx)
-
-        if (file.nonEmpty) {
-          val fullDesc = if (status.nonEmpty) s"[$status] $desc" else desc
-          Some(ToolAlarm(
-            alarmType = kind,
-            description = fullDesc,
-            fileLocation = file,
-            line = lineNo,
-            analysisTime = analysisTime
-          ))
-        } else None
+      val reader = CSVReader.open(csvPath.toIO)
+      try {
+        reader.allWithHeaders().flatMap { row =>
+          val file   = row.getOrElse("file", "")
+          val lineNo = row.get("line").flatMap(_.toIntOption).getOrElse(0)
+          val kind   = row.getOrElse("property kind", "")
+          val status = row.getOrElse("status", "")
+          if (file.nonEmpty) {
+            val fullDesc = if (status.nonEmpty) s"[$status] $kind" else kind
+            Some(ToolAlarm(
+              alarmType = kind,
+              description = fullDesc,
+              fileLocation = file,
+              line = lineNo,
+              analysisTime = analysisTime
+            ))
+          } else None
+        }
+      } finally {
+        reader.close()
       }
     } catch {
       case NonFatal(e) =>
         println(s"Failed to parse CSV at $csvPath: ${e.getMessage}")
         List.empty
     }
-  }
-
-  private def parseCSVRow(line: String): List[String] = {
-    val buf      = scala.collection.mutable.ListBuffer[String]()
-    val field    = new StringBuilder
-    var inQuotes = false
-    var i        = 0
-    while (i < line.length) {
-      line.charAt(i) match {
-        case '"'
-            if inQuotes && i + 1 < line.length && line.charAt(i + 1) == '"' =>
-          field.append('"')
-          i += 1
-        case '"' =>
-          inQuotes = !inQuotes
-        case ',' if !inQuotes =>
-          buf += field.toString
-          field.clear()
-        case c =>
-          field.append(c)
-      }
-      i += 1
-    }
-    buf += field.toString
-    buf.toList
   }
 }
