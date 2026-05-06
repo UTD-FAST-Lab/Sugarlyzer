@@ -45,7 +45,8 @@ lazy val testerOnlySettings = Seq(
     "com.github.mhoffrog.attached" % "org.eclipse.cdt.core"       % "5.11.0",
     "org.eclipse.platform"         % "org.eclipse.equinox.common" % "3.18.0",
     "org.eclipse.platform"         % "org.eclipse.core.runtime"   % "3.29.0",
-    "org.eclipse.platform"         % "org.eclipse.core.resources" % "3.23.200"
+    "org.eclipse.platform"         % "org.eclipse.core.resources" % "3.23.200",
+    "com.github.tototoshi"        %% "scala-csv"                  % "2.0.0"
   )
 )
 
