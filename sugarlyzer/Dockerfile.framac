@@ -5,8 +5,10 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && \
   DEBIAN_FRONTEND=noninteractive apt-get install -y \
-  gcc g++ opam autoconf graphviz libcairo2-dev libexpat1-dev \
+  gcc g++ opam autoconf openjdk-17-jdk graphviz libcairo2-dev libexpat1-dev \
   libgmp-dev libgtk-3-dev libgtksourceview-3.0-dev pkg-config zlib1g-dev
+
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64/
 
 RUN opam init --compiler 4.14.1 --disable-sandboxing
 
