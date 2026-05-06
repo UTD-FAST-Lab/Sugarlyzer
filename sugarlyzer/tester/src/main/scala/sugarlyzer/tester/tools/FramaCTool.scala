@@ -1,7 +1,5 @@
 package sugarlyzer.tester.tools
 
-import sugarlyzer.common.Config.AppConfig
-
 import cats.effect.IO
 import cats.syntax.all.*
 
@@ -26,9 +24,7 @@ import scala.util.control.NonFatal
 object FramaCTool extends AnalysisTool {
   def name(): String = "Frama-C"
 
-  def run(spec: ProgramSpecification)(using
-      config: AppConfig
-  ): IO[List[ToolAlarm]] = {
+  def run(spec: ProgramSpecification): IO[List[ToolAlarm]] = {
     for {
       _      <- IO.println(s"[TOOL] Running spec ${spec}")
       alarms <- analyzeFiles(spec)
@@ -36,9 +32,7 @@ object FramaCTool extends AnalysisTool {
     } yield alarms
   }
 
-  def analyzeFiles(spec: ProgramSpecification)(using
-      config: AppConfig
-  ): IO[List[ToolAlarm]] = {
+  def analyzeFiles(spec: ProgramSpecification): IO[List[ToolAlarm]] = {
     val rootDir             = os.Path(spec.rootDir)
     val compileCommandsPath = rootDir / "compile_commands.json"
 
