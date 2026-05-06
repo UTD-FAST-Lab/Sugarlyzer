@@ -102,15 +102,25 @@ object FramaCTool extends AnalysisTool {
     os.remove.all(resultDir)
     os.makeDir.all(resultDir)
 
-    val csvOutput    = resultDir / "report.csv"
-    val incFlags     = ctx.incDirs.flatMap(d => List("-I", d.toString))
-    val includeFlags = ctx.incFiles.flatMap(f => List("-include", f.toString))
+    val csvOutput = resultDir / "report.csv"
+    val incFlags  = ctx.incDirs.flatMap(d => List("-I", d.toString))
+
+    // -D/-U and -include must go through -cpp-extra-args in Frama-C
+    val defArgs = ctx.cmdLineDefs.grouped(2).collect { case List(f, v) =>
+      s"$f$v"
+    }.toList
+    val includeArgs = ctx.incFiles.map(f => s"-include ${f.toString}")
+    val cppExtras   = defArgs ++ includeArgs
+    val cppExtraArg =
+      if (cppExtras.nonEmpty)
+        List(s"""-cpp-extra-args="${cppExtras.mkString(" ")}"""")
+      else List.empty
 
     val start = System.nanoTime()
 
     val proc = os.proc(
       List("frama-c", "-eva", "-main", funcName) ++
-        incFlags ++ includeFlags ++ ctx.cmdLineDefs ++
+        incFlags ++ cppExtraArg ++
         List(
           ctx.file.toString,
           "-then",
