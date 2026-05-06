@@ -1,0 +1,12 @@
+{
+  "err": "W [True] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/472a474c663.c:16:4--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/472a474c663.c:16:8",
+  "msg": "warning: Variable ptr is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/472a474c663.c",
+  "line_number": 16,
+  "origin": "family",
+  "id": "FAMILY_25",
+  "classification": "",
+  "old_id": "FAMILY_46",
+  "reasoning": ""
+}

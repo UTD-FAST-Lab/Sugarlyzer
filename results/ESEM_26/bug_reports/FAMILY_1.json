@@ -1,0 +1,12 @@
+{
+  "err": "W [!def(EXT2FS_ENABLE_SWAPFS)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/0301ffab3d9.c:4:8--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/0301ffab3d9.c:4:11",
+  "msg": "warning: Variable gdp is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/0301ffab3d9.c",
+  "line_number": 4,
+  "origin": "family",
+  "id": "FAMILY_1",
+  "classification": "",
+  "old_id": "FAMILY_11",
+  "reasoning": ""
+}

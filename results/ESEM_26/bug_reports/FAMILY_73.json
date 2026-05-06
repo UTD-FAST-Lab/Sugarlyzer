@@ -1,0 +1,12 @@
+{
+  "err": "W [def(ENABLE_AUTO_BED_LEVELING)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/MARLIN/e30bfedce4d.c:24:6--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/MARLIN/e30bfedce4d.c:24:19",
+  "msg": "warning: Variable xGridSpacing is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/MARLIN/e30bfedce4d.c",
+  "line_number": 24,
+  "origin": "family",
+  "id": "FAMILY_73",
+  "classification": "",
+  "reasoning": "",
+  "old_id": "FAMILY_76"
+}

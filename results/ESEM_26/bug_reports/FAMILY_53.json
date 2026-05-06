@@ -1,0 +1,12 @@
+{
+  "err": "W [def(CONFIG_UNIX98_PTYS)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/7acf6cd80b2.c:39:2--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/7acf6cd80b2.c:39:14",
+  "msg": "warning: Variable driver_data is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/7acf6cd80b2.c",
+  "line_number": 39,
+  "origin": "family",
+  "id": "FAMILY_53",
+  "classification": "",
+  "reasoning": "",
+  "old_id": "FAMILY_63"
+}

@@ -1,0 +1,12 @@
+{
+  "err": "W [def(CONFIG_SLAB)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/eb91f1d0a53.c:92:2--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/eb91f1d0a53.c:93:0",
+  "msg": "Control flow of non-void function ends here!",
+  "taxonomy_type": "control_flow",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/eb91f1d0a53.c",
+  "line_number": 92,
+  "origin": "family",
+  "id": "FAMILY_75",
+  "classification": "",
+  "reasoning": "",
+  "old_id": "FAMILY_67"
+}

@@ -1,0 +1,12 @@
+{
+  "err": "W [(def(APU_HAS_LDAP)&def(APR_HAS_SHARED_MEMORY))] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/1b48bb3c1af.c:14:15--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/1b48bb3c1af.c:14:23",
+  "msg": "warning: Variable rmm_lock is used uninitialized!",
+  "taxonomy_type": "uninitialized_value",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/1b48bb3c1af.c",
+  "line_number": 14,
+  "origin": "family",
+  "id": "FAMILY_13",
+  "classification": "",
+  "old_id": "FAMILY_2",
+  "reasoning": ""
+}

@@ -1,0 +1,12 @@
+{
+  "err": "W [def(CONFIG_UNIX98_PTYS)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/7acf6cd80b2.c:44:14--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/7acf6cd80b2.c:44:25",
+  "msg": "warning: Variable driver_data is used uninitialized!",
+  "taxonomy_type": "uninitialized_value",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/7acf6cd80b2.c",
+  "line_number": 44,
+  "origin": "family",
+  "id": "FAMILY_51",
+  "classification": "",
+  "reasoning": "",
+  "old_id": "FAMILY_61"
+}

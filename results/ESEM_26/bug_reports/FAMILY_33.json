@@ -1,0 +1,12 @@
+{
+  "err": "W [(def(CONFIG_TWL4030_CORE)|def(CONFIG_IRQ_DOMAIN))] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6252547b8a7.c:12:6--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6252547b8a7.c:12:10",
+  "msg": "warning: Variable irq is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6252547b8a7.c",
+  "line_number": 12,
+  "origin": "family",
+  "id": "FAMILY_33",
+  "classification": "",
+  "old_id": "FAMILY_48",
+  "reasoning": ""
+}

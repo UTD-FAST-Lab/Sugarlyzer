@@ -1,0 +1,12 @@
+{
+  "err": "W [True] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/581635e28f1.c:7:2--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/581635e28f1.c:8:0",
+  "msg": "Control flow of non-void function ends here!",
+  "taxonomy_type": "control_flow",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/581635e28f1.c",
+  "line_number": 7,
+  "origin": "family",
+  "id": "FAMILY_30",
+  "classification": "",
+  "old_id": "FAMILY_4",
+  "reasoning": ""
+}

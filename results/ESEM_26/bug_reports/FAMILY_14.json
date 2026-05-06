@@ -1,0 +1,12 @@
+{
+  "err": "W [def(CONFIG_RCU_CPU_STALL_INFO)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/1c17e4d4437.c:23:29--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/1c17e4d4437.c:23:39",
+  "msg": "warning: Variable fast_no_hz is used uninitialized!",
+  "taxonomy_type": "uninitialized_value",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/1c17e4d4437.c",
+  "line_number": 23,
+  "origin": "family",
+  "id": "FAMILY_14",
+  "classification": "",
+  "old_id": "FAMILY_37",
+  "reasoning": ""
+}

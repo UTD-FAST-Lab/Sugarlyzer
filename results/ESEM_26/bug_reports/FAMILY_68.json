@@ -1,0 +1,12 @@
+{
+  "err": "W [((def(CROSS_COMPILE)&!def(NEED_ENHANCED_ESCAPES))|(!def(OS2)&!def(NEED_ENHANCED_ESCAPES)&!def(WIN32)&!def(CROSS_COMPILE)))] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/c76df14dfb4.c:42:6--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/c76df14dfb4.c:42:12",
+  "msg": "warning: Variable flags is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/c76df14dfb4.c",
+  "line_number": 42,
+  "origin": "family",
+  "id": "FAMILY_68",
+  "classification": "",
+  "reasoning": "",
+  "old_id": "FAMILY_8"
+}

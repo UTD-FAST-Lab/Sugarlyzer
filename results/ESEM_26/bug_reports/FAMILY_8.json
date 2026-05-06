@@ -1,0 +1,12 @@
+{
+  "err": "W [def(CONFIG_FEATURE_REMOTE_LOG)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/192c35f6eb2.c:12:27--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/192c35f6eb2.c:12:33",
+  "msg": "warning: Variable line is used uninitialized!",
+  "taxonomy_type": "uninitialized_value",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/192c35f6eb2.c",
+  "line_number": 12,
+  "origin": "family",
+  "id": "FAMILY_8",
+  "classification": "",
+  "old_id": "FAMILY_16",
+  "reasoning": ""
+}

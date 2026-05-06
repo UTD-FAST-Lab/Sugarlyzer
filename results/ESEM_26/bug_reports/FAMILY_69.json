@@ -1,0 +1,12 @@
+{
+  "err": "W [True] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/d7e9711760a.c:20:9--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/d7e9711760a.c:20:10",
+  "msg": "warning: Variable j is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/d7e9711760a.c",
+  "line_number": 20,
+  "origin": "family",
+  "id": "FAMILY_69",
+  "classification": "",
+  "reasoning": "",
+  "old_id": "FAMILY_64"
+}
