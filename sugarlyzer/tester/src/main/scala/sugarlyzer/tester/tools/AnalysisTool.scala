@@ -51,5 +51,6 @@ object AnalysisTool {
     case Tool.CLANG    => ClangTool
     case Tool.PHASAR   => PhasarTool
     case Tool.CPPCHECK => CppcheckTool
+    case Tool.FRAMAC   => FramaCTool
   }
 }
