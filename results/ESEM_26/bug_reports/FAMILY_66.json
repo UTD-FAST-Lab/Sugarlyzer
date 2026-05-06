@@ -1,0 +1,12 @@
+{
+  "err": "W [True] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/bc0ffc0e971.c:29:22--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/bc0ffc0e971.c:29:24",
+  "msg": "warning: Variable ch is used uninitialized!",
+  "taxonomy_type": "uninitialized_value",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/bc0ffc0e971.c",
+  "line_number": 29,
+  "origin": "family",
+  "id": "FAMILY_66",
+  "classification": "",
+  "reasoning": "",
+  "old_id": "FAMILY_29"
+}

@@ -1,0 +1,12 @@
+{
+  "err": "W [def(HAVE_ECC)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/35ae2e259e4.c:10:2--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/35ae2e259e4.c:10:8",
+  "msg": "warning: Variable eckey is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/35ae2e259e4.c",
+  "line_number": 10,
+  "origin": "family",
+  "id": "FAMILY_21",
+  "classification": "",
+  "old_id": "FAMILY_3",
+  "reasoning": ""
+}

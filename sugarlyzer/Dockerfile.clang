@@ -1,0 +1,55 @@
+FROM ubuntu:22.04
+
+ENV TZ=America/Chicago
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && \
+	DEBIAN_FRONTEND=noninteractive apt-get install -y \
+	openjdk-17-jdk curl xz-utils zlib1g-dev tzdata \
+	libselinux1-dev selinux-basics selinux-utils \
+	libcurl4-openssl-dev libssl-dev libsqlite3-dev\
+	git cmake build-essential python3 clang-11 \
+	pkg-config make gcc autoconf automake libtool\
+	libtirpc-dev unzip\
+	&& rm -rf /var/lib/apt/lists/*
+
+RUN git clone https://github.com/smack-team/smack.git /tmp/libsmack && \
+	cd /tmp/libsmack && \
+	./autogen.sh && \
+	./configure --prefix=/usr --with-attr && \
+	make && \
+	make install && \
+	rm -rf /tmp/libsmack
+
+WORKDIR /llvm-project
+
+RUN git clone https://github.com/llvm/llvm-project.git . && \
+	git checkout release/20 \
+	&& mkdir build \
+	&& cd build \
+	&& cmake \
+	-DLLVM_ENABLE_PROJECTS=clang \
+	-DCMAKE_BUILD_TYPE=Release \
+	-G "Unix Makefiles" ../llvm \
+	&& make -j 64 \
+	&& make install\
+	&& cd / \
+	&& rm -rf /llvm-project
+
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64/
+
+# Build Z3 from source with Java bindings
+RUN git clone --depth 1 --branch z3-4.13.3 https://github.com/Z3Prover/z3.git /tmp/z3-src && \
+	cd /tmp/z3-src && \
+	python3 scripts/mk_make.py --java && \
+	cd build && \
+	make -j$(nproc) && \
+	mkdir -p /opt/z3/bin && \
+	cp libz3.so libz3java.so com.microsoft.z3.jar /opt/z3/bin/ && \
+	rm -rf /tmp/z3-src
+
+ENV LD_LIBRARY_PATH="/opt/z3/bin:${LD_LIBRARY_PATH}"
+
+WORKDIR /
+COPY tester.jar .
+COPY SugarlyzerConfig /SugarlyzerConfig

@@ -1,0 +1,12 @@
+{
+  "err": "W [def(CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/061fd0a353e.c:20:10--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/061fd0a353e.c:20:11",
+  "msg": "warning: Variable p is used uninitialized!",
+  "taxonomy_type": "uninitialized_value",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/061fd0a353e.c",
+  "line_number": 20,
+  "origin": "family",
+  "id": "FAMILY_4",
+  "classification": "",
+  "old_id": "FAMILY_15",
+  "reasoning": ""
+}

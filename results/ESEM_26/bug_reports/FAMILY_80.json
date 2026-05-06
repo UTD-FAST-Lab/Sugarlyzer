@@ -1,0 +1,12 @@
+{
+  "err": "W [(def(CONFIG_X86)&def(CONFIG_ACPI_WMI))] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/f3d83e24154.c:10:9--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/f3d83e24154.c:10:15",
+  "msg": "warning: Variable method is used uninitialized!",
+  "taxonomy_type": "uninitialized_value",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/f3d83e24154.c",
+  "line_number": 10,
+  "origin": "family",
+  "id": "FAMILY_80",
+  "classification": "",
+  "reasoning": "",
+  "old_id": "FAMILY_69"
+}

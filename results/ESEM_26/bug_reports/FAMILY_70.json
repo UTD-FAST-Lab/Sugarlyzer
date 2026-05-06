@@ -1,0 +1,12 @@
+{
+  "err": "W [def(CONFIG_QUOTA_DEBUG)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/d7e9711760a.c:30:6--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/d7e9711760a.c:30:15",
+  "msg": "warning: Variable reserved is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/d7e9711760a.c",
+  "line_number": 30,
+  "origin": "family",
+  "id": "FAMILY_70",
+  "classification": "",
+  "reasoning": "",
+  "old_id": "FAMILY_65"
+}

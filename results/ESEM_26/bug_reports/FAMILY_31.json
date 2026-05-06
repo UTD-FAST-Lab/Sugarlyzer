@@ -1,0 +1,12 @@
+{
+  "err": "W [True] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/581635e28f1.c:7:6--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/581635e28f1.c:7:13",
+  "msg": "warning: Variable family is a dead store!",
+  "taxonomy_type": "dead_store",
+  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/581635e28f1.c",
+  "line_number": 7,
+  "origin": "family",
+  "id": "FAMILY_31",
+  "classification": "",
+  "old_id": "FAMILY_5",
+  "reasoning": ""
+}

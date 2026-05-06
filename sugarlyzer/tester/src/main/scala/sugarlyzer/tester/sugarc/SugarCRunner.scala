@@ -1,0 +1,196 @@
+package sugarlyzer.tester.sugarc
+
+import cats.data.OptionT
+import cats.effect.IO
+import os.Path
+import java.io.File
+import com.typesafe.scalalogging.Logger
+import sugarlyzer.util.CommandBuilder
+import cats.implicits.*
+import scala.concurrent.duration.*
+import java.util.concurrent.TimeoutException
+import scala.util.matching.Regex
+import com.microsoft.z3.Context
+import sugarlyzer.tester.tools.ToolAlarm
+object SugarCRunner {
+
+  val logger = Logger[SugarCRunner.type]
+
+  private def getTempFile(): IO[Path] =
+    IO.blocking(os.temp())
+
+  private def writeToFile(file: Path, content: Iterable[String]): IO[Unit] =
+    IO.blocking(os.write(file, content))
+
+  /** Builds the command for desugaring, exposed for testing */
+  private[sugarc] def buildDesugarCommand(
+      fileToDesugar: Path,
+      rsFileOpt: Option[Path],
+      noStdLibs: Boolean,
+      keepMem: Boolean,
+      makeMain: Boolean,
+      restrict: Boolean = false,
+      includedFiles: Iterable[Path],
+      includedDirectories: Iterable[Path],
+      commandLineDeclarations: Iterable[String]
+  ): CommandBuilder = {
+    val allIncludedFiles = rsFileOpt.toSeq ++ includedFiles
+
+    var cmd = CommandBuilder(
+      program = "java"
+    ).args(
+      "-Djava.library.path=/opt/z3/bin",
+      "-Xmx32g",
+      "superc.SugarC",
+      "-showActions",
+      "-useBDD"
+    ).args(
+      allIncludedFiles.flatMap(p => Seq("-include", p.toString())).toSeq*
+    ).args(
+      includedDirectories.flatMap(p => Seq("-I", p.toString())).toSeq*
+    ).args(
+      commandLineDeclarations.toSeq*
+    )
+
+    if noStdLibs then cmd = cmd.arg("-nostdinc")
+    if keepMem then cmd = cmd.arg("-keep-mem")
+    if makeMain then cmd = cmd.arg("-make-main")
+    if restrict then cmd = cmd.args("-restrictConfigToPrefix", "KGENMACRO_")
+    cmd = cmd.args(fileToDesugar.toString)
+    logger.debug(s"Sugarc cmd is ${cmd.show}")
+    cmd.in(File(fileToDesugar.toURI).getParentFile())
+  }
+
+  /** Computes the output file path for a desugared file */
+  private[sugarc] def getOutputPath(fileToDesugar: Path): Path =
+    fileToDesugar / os.up / (fileToDesugar.baseName + ".desugared.c")
+
+  def desugarFile(
+      fileToDesugar: Path,
+      logFile: Path,
+      recommendedSpace: Option[Iterable[String]] = None,
+      noStdLibs: Boolean = true,
+      keepMem: Boolean = true,
+      makeMain: Boolean = true,
+      restrict: Boolean = false,
+      includedFiles: Iterable[Path] = Seq(),
+      includedDirectories: Iterable[Path] = Seq(),
+      commandLineDeclarations: Iterable[String] = Nil
+  ): OptionT[IO, (CommandBuilder.ResultFile, CommandBuilder.LogFile)] = {
+    val recommendedSpaceFileIO: IO[Option[Path]] = recommendedSpace match {
+      case Some(rs) =>
+        for {
+          fi <- getTempFile()
+          _  <- writeToFile(fi, rs)
+        } yield Some(fi)
+      case None => IO.pure(None)
+    }
+
+    val run = recommendedSpaceFileIO.flatMap { rsFileOpt =>
+      val cmd = buildDesugarCommand(
+        fileToDesugar,
+        rsFileOpt,
+        noStdLibs,
+        keepMem,
+        makeMain,
+        restrict,
+        includedFiles,
+        includedDirectories,
+        commandLineDeclarations
+      )
+      cmd.runWithFileRedirects(
+        getOutputPath(fileToDesugar),
+        logFile,
+        Some(10.minutes)
+      )
+    }
+
+    OptionT(run.map(Some(_)).recover { case _: TimeoutException =>
+      logger.warn(s"Desugaring timed out for $fileToDesugar")
+      None
+    })
+  }
+
+  def mapLineNumber(
+      alarm: ToolAlarm,
+      file: Path
+  ): Option[(Int, Int)] = {
+    val lines      = os.read(file).split("\n").toList
+    val line       = lines(alarm.line - 1)
+    val rangeRegex = """(?:.*)// L(.*):L(.*)$""".r
+    val lineRegex  = """(?:.*)// L(.*)$""".r
+    line match {
+      case rangeRegex(start, end) =>
+        logger.debug(s"Mapped line ${alarm.line} to range $start-$end")
+        Some((start.toInt, end.toInt))
+      case lineRegex(num) =>
+        logger.debug(s"Mapped line ${alarm.line} to line $num")
+        Some((num.toInt, num.toInt))
+      case _ =>
+        logger.warn(
+          s"Couldn't map line ${alarm.line} in file $file ($line), defaulting to original line"
+        )
+        None
+    }
+  }
+  def findPresenceCondition(
+      alarm: ToolAlarm,
+      file: Path
+  ): PresenceCondition = {
+    // Open the file
+    var results = List.empty[String]
+    val lines   = os.read(file).split("\n").toList
+    // Find the line with the alarm
+    val alarmLine    = alarm.line
+    var counter      = 0
+    val regex: Regex = raw"if \((__static_condition_default_\d+)\(\)\).*".r
+
+    // Walk backwards from the line before the alarm line.
+    // We skip the alarm line itself because it may contain a closing }
+    // that belongs to an enclosing block (e.g. `malloc(...); }`), which
+    // would incorrectly offset the brace counter.
+    for {
+      i <- (alarmLine - 2) to 0 by -1
+    } do {
+      val line = lines(i)
+      counter -= line.count(_ == '{')
+      counter += line.count(_ == '}')
+      if counter < 0 then {
+        line match {
+          case regex(condition) =>
+            logger.debug(
+              s"Found presence condition for alarm at line ${alarmLine} at line " + i
+            )
+            results = condition :: results
+          case _ =>
+        }
+        counter = 0
+      }
+    }
+    // For each presence condition, parse the actual condition expression
+    val conditionRegex: Regex =
+      """__static_condition_renaming\(\"(.*)\", \"(.*)\"\);""".r
+    val ctx = new Context()
+    val exprs = for {
+      r <- results
+      l <- lines.filter(_.contains(s"__static_condition_renaming(\"$r\""))
+      expr <- l match {
+        case conditionRegex(oldName, newName) =>
+          logger.debug(
+            s"Found renamed presence condition: $oldName -> $newName"
+          )
+          Some(PresenceConditionParser.parse(ctx, newName))
+        case _ =>
+          logger.debug("Couldn't match regular expression")
+          None
+      }
+    } yield expr
+
+    val combined = exprs match {
+      case Nil      => ctx.mkTrue()
+      case e :: Nil => e
+      case _        => ctx.mkAnd(exprs*)
+    }
+    PresenceCondition(ctx, combined)
+  }
+}
