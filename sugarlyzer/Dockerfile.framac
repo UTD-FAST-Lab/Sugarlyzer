@@ -11,3 +11,4 @@ RUN apt-get update && \
 RUN opam init --compiler 4.14.1 --disable-sandboxing
 
 RUN opam install frama-c --yes
+ENV PATH=/root/.opam/4.14.1/bin:$PATH
