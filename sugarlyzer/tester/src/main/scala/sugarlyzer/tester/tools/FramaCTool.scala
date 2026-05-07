@@ -145,9 +145,11 @@ object FramaCTool extends AnalysisTool {
         s"Frama-C failed for $funcName in ${ctx.file.last}: exit ${proc.exitCode}"
       )
 
-    val alarms = parseCSV(csvOutput, analysisTime)
-    logger.info(s"Alarms are ${alarms}")
-    alarms
+    parseCSV(csvOutput, analysisTime).filter(ta =>
+      !ta.alarmType.contains("precondition") && !ta.alarmType.contains(
+        "postcondition"
+      ) && ta.fileLocation.endsWith(".c")
+    )
   }
 
   def parseCSV(csvPath: os.Path, analysisTime: Double): List[ToolAlarm] = {
