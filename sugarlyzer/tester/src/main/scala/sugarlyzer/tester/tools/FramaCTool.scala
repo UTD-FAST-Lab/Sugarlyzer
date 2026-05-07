@@ -20,8 +20,10 @@ import org.eclipse.cdt.core.model.ILanguage
 
 import com.github.tototoshi.csv.CSVReader
 import scala.util.control.NonFatal
+import com.typesafe.scalalogging.Logger
 
 object FramaCTool extends AnalysisTool {
+  val logger         = Logger[FramaCTool.type]
   def name(): String = "Frama-C"
 
   def run(spec: ProgramSpecification): IO[List[ToolAlarm]] = {
@@ -143,7 +145,9 @@ object FramaCTool extends AnalysisTool {
         s"Frama-C failed for $funcName in ${ctx.file.last}: exit ${proc.exitCode}"
       )
 
-    parseCSV(csvOutput, analysisTime)
+    val alarms = parseCSV(csvOutput, analysisTime)
+    logger.info(s"Alarms are ${alarms}")
+    alarms
   }
 
   def parseCSV(csvPath: os.Path, analysisTime: Double): List[ToolAlarm] = {
