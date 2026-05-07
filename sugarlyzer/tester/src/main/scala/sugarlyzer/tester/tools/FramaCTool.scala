@@ -153,15 +153,17 @@ object FramaCTool extends AnalysisTool {
   def parseCSV(csvPath: os.Path, analysisTime: Double): List[ToolAlarm] = {
     if (!os.exists(csvPath)) return List.empty
     try {
+      logger.info(s"Opening $csvPath")
       val reader = CSVReader.open(csvPath.toIO)
       try {
         reader.allWithHeaders().flatMap { row =>
-          val file   = row.getOrElse("file", "")
+          val file = row.getOrElse("file", "")
+          logger.info(s"File was $file")
           val lineNo = row.get("line").flatMap(_.toIntOption).getOrElse(0)
           val kind   = row.getOrElse("property kind", "")
           val status = row.getOrElse("status", "")
           if (file.nonEmpty) {
-            val fullDesc = if (status.nonEmpty) s"[$status] $kind" else kind
+            val fullDesc = if (status.nonEmpty) s"[$kind] $status" else kind
             Some(ToolAlarm(
               alarmType = kind,
               description = fullDesc,
