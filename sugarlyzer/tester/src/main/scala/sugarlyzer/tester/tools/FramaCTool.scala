@@ -18,10 +18,9 @@ import org.eclipse.cdt.core.parser.DefaultLogService
 import org.eclipse.cdt.core.parser.IncludeFileContentProvider
 import org.eclipse.cdt.core.model.ILanguage
 
-import com.github.tototoshi.csv.CSVReader
+import com.github.tototoshi.csv.{CSVReader, TSVFormat}
 import scala.util.control.NonFatal
 import com.typesafe.scalalogging.Logger
-import com.github.tototoshi.csv.DefaultCSVFormat
 
 object FramaCTool extends AnalysisTool {
   val logger         = Logger[FramaCTool.type]
@@ -154,11 +153,7 @@ object FramaCTool extends AnalysisTool {
   def parseCSV(csvPath: os.Path, analysisTime: Double): List[ToolAlarm] = {
     if (!os.exists(csvPath)) return List.empty
     try {
-      logger.info(s"Opening $csvPath")
-      given csvFormat: DefaultCSVFormat {
-        override val delimiter: Char = '\t'
-      }
-      val reader = CSVReader.open(csvPath.toIO)(using csvFormat)
+      val reader = CSVReader.open(csvPath.toIO)(using new TSVFormat {})
       try {
         reader.allWithHeaders().flatMap { row =>
           logger.info(s"row is $row")
