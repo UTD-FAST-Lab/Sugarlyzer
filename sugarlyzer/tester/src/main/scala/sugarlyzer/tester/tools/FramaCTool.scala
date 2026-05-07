@@ -158,7 +158,7 @@ object FramaCTool extends AnalysisTool {
       given csvFormat: DefaultCSVFormat {
         override val delimiter: Char = '\t'
       }
-      val reader = CSVReader.open(csvPath.toIO)
+      val reader = CSVReader.open(csvPath.toIO)(using csvFormat)
       try {
         reader.allWithHeaders().flatMap { row =>
           logger.info(s"row is $row")
