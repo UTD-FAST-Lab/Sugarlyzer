@@ -157,8 +157,8 @@ object FramaCTool extends AnalysisTool {
       val reader = CSVReader.open(csvPath.toIO)
       try {
         reader.allWithHeaders().flatMap { row =>
-          val file = row.getOrElse("file", "")
-          logger.info(s"File was $file")
+          logger.info(s"row is $row")
+          val file   = row.getOrElse("file", "")
           val lineNo = row.get("line").flatMap(_.toIntOption).getOrElse(0)
           val kind   = row.getOrElse("property kind", "")
           val status = row.getOrElse("status", "")
