@@ -1,0 +1,32 @@
+FROM ubuntu:22.04
+
+ENV TZ=America/Chicago
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && \
+  DEBIAN_FRONTEND=noninteractive apt-get install -y \
+  gcc g++ opam autoconf openjdk-17-jdk graphviz libcairo2-dev libexpat1-dev \
+  libgmp-dev libgtk-3-dev libgtksourceview-3.0-dev pkg-config zlib1g-dev
+
+ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64/
+
+RUN opam init --compiler 4.14.1 --disable-sandboxing
+
+RUN opam install frama-c --yes
+ENV PATH=/root/.opam/4.14.1/bin:$PATH
+
+# Build Z3 from source with Java bindings
+RUN git clone --depth 1 --branch z3-4.13.3 https://github.com/Z3Prover/z3.git /tmp/z3-src && \
+  cd /tmp/z3-src && \
+  python3 scripts/mk_make.py --java && \
+  cd build && \
+  make -j$(nproc) && \
+  mkdir -p /opt/z3/bin && \
+  cp libz3.so libz3java.so com.microsoft.z3.jar /opt/z3/bin/ && \
+  rm -rf /tmp/z3-src
+
+ENV LD_LIBRARY_PATH="/opt/z3/bin:${LD_LIBRARY_PATH}"
+
+WORKDIR /
+COPY tester.jar .
+COPY SugarlyzerConfig /SugarlyzerConfig

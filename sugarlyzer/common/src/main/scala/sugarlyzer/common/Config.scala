@@ -20,6 +20,7 @@ object Config {
     case CLANG
     case PHASAR
     case CPPCHECK
+    case FRAMAC
   }
 
   case class AppConfig(
