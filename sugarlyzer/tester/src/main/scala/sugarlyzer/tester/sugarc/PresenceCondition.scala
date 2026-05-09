@@ -78,7 +78,7 @@ object PresenceCondition {
         case i if i.toIntOption.isDefined =>
           ctx.mkEq(ctx.mkConst(mac, ctx.mkIntSort()), ctx.mkInt(i))
         case s =>
-          ctx.mkEq(ctx.mkConst(mac, ctx.mkStringSort()), ctx.mkString(s))
+          ctx.mkBoolConst(s"${mac}=${s}")
       }
     }
     PresenceCondition(ctx, ctx.mkAnd(exprs.toSeq*))

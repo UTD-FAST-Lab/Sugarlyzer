@@ -1,0 +1,1842 @@
+[
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__buf_9209` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/p12.desugared.c",
+      "line" : 11178,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/p12.c",
+    "sanitizedDescription" : "`buf` is read without initialization.",
+    "lineInputFile" : [
+      143,
+      146
+    ],
+    "presenceCondition" : "(or (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         CONFIG_PLATFORM_SOLARIS)\n    (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (not CONFIG_PLATFORM_SOLARIS)))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 38489.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "NULLPTR_DEREFERENCE",
+      "description" : "`__start_9228` could be null (null value originating from line 11270) and is dereferenced.",
+      "fileLocation" : "/workspace/axtls-code/ssl/loader.desugared.c",
+      "line" : 11389,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/loader.c",
+    "sanitizedDescription" : "`start` could be null (null value originating from line 11270) and is dereferenced.",
+    "lineInputFile" : [
+      257,
+      257
+    ],
+    "presenceCondition" : "true",
+    "model" : "",
+    "feasible" : true,
+    "desugaringTime" : 30284.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__buf_9176` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/p12.desugared.c",
+      "line" : 10993,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/p12.c",
+    "sanitizedDescription" : "`buf` is read without initialization.",
+    "lineInputFile" : [
+      99,
+      99
+    ],
+    "presenceCondition" : "(or (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         CONFIG_PLATFORM_SOLARIS)\n    (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (not CONFIG_PLATFORM_SOLARIS)))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 38489.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__ssl_12249` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1_clnt.desugared.c",
+      "line" : 15923,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1_clnt.c",
+    "sanitizedDescription" : "`ssl` is read without initialization.",
+    "lineInputFile" : [
+      51,
+      70
+    ],
+    "presenceCondition" : "(or (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         CONFIG_PLATFORM_SOLARIS)\n    (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (not CONFIG_PLATFORM_SOLARIS)))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 39406.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__ex_8508` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/httpd/axhttpd.desugared.c",
+      "line" : 11062,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/httpd/axhttpd.c",
+    "sanitizedDescription" : "`ex` is read without initialization.",
+    "lineInputFile" : [
+      476,
+      476
+    ],
+    "presenceCondition" : "(and (not __STRICT_ANSI__)\n     (not __STRICT_ANSI__)\n     (not _STDLIB_H)\n     (not __malloc_and_calloc_defined))",
+    "model" : "(define-fun __STRICT_ANSI__ () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __malloc_and_calloc_defined () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 36271.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__buf_9258` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/p12.desugared.c",
+      "line" : 11707,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/p12.c",
+    "sanitizedDescription" : "`buf` is read without initialization.",
+    "lineInputFile" : [
+      252,
+      252
+    ],
+    "presenceCondition" : "(or (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         CONFIG_PLATFORM_SOLARIS)\n    (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (not CONFIG_PLATFORM_SOLARIS)))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 38489.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&__decrypted_bi_11999` is never used.",
+      "fileLocation" : "/workspace/axtls-code/ssl/x509.desugared.c",
+      "line" : 16609,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/x509.c",
+    "sanitizedDescription" : "The value written to `&decrypted_bi` is never used.",
+    "lineInputFile" : [
+      401,
+      401
+    ],
+    "presenceCondition" : "(or CONFIG_PLATFORM_SOLARIS (not CONFIG_PLATFORM_SOLARIS))",
+    "model" : "(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 31912.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__q2_11547` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/crypto/bigint.desugared.c",
+      "line" : 17890,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/crypto/bigint.c",
+    "sanitizedDescription" : "`q2` is read without initialization.",
+    "lineInputFile" : [
+      1287,
+      1287
+    ],
+    "presenceCondition" : "true",
+    "model" : "",
+    "feasible" : true,
+    "desugaringTime" : 38771.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__buf_9229` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1_svr.desugared.c",
+      "line" : 11960,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1_svr.c",
+    "sanitizedDescription" : "`buf` is read without initialization.",
+    "lineInputFile" : [
+      313,
+      313
+    ],
+    "presenceCondition" : "(let ((a!1 (and (and (not _STDLIB_H)\n                     (not __need_malloc_and_calloc)\n                     (not _BITS_TYPESIZES_H))\n                (not __USE_EXTERN_INLINES)\n                (not __time_t_defined)\n                (not __int8_t_defined)))\n      (a!2 (and (and (not _STDLIB_H)\n                     (not __need_malloc_and_calloc)\n                     (not _BITS_TYPESIZES_H))\n                __USE_EXTERN_INLINES\n                (not __time_t_defined)\n                (not __int8_t_defined)))\n      (a!3 (and (not _STDLIB_H)\n                __need_malloc_and_calloc\n                (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined))))\n(let ((a!4 (and (and (not _BITS_TYPESIZES_H)\n                     (not __time_t_defined)\n                     (not __int8_t_defined))\n                (or (and a!2 (not CONFIG_PLATFORM_SOLARIS))\n                    (and a!3 (not CONFIG_PLATFORM_SOLARIS))))))\n  (or (and (and (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined))\n           a!1\n           CONFIG_PLATFORM_SOLARIS)\n      (and (and (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined))\n           a!1\n           (not CONFIG_PLATFORM_SOLARIS))\n      (and (and (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined))\n           (or (and a!2 CONFIG_PLATFORM_SOLARIS)\n               (and a!3 CONFIG_PLATFORM_SOLARIS)))\n      a!4)))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun __USE_EXTERN_INLINES () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 30868.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__aes_ctx_9360` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1.desugared.c",
+      "line" : 13632,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1.c",
+    "sanitizedDescription" : "`aes_ctx` is read without initialization.",
+    "lineInputFile" : [
+      1010,
+      1010
+    ],
+    "presenceCondition" : "(let ((a!1 (and (not _STDLIB_H)\n                (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined)\n                (not __malloc_and_calloc_defined))))\n  (or (and (and (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined))\n           CONFIG_PLATFORM_SOLARIS\n           a!1\n           CONFIG_PLATFORM_SOLARIS)\n      (and (and (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined))\n           (not CONFIG_PLATFORM_SOLARIS)\n           a!1\n           (not CONFIG_PLATFORM_SOLARIS))))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __malloc_and_calloc_defined () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 32536.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__pub_len_11704` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/asn1.desugared.c",
+      "line" : 16193,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/asn1.c",
+    "sanitizedDescription" : "`pub_len` is read without initialization.",
+    "lineInputFile" : [
+      286,
+      286
+    ],
+    "presenceCondition" : "(not CONFIG_PLATFORM_SOLARIS)",
+    "model" : "(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 39047.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__ciph_info_9475` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1.desugared.c",
+      "line" : 14772,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1.c",
+    "sanitizedDescription" : "`ciph_info` is read without initialization.",
+    "lineInputFile" : [
+      1212,
+      1212
+    ],
+    "presenceCondition" : "(and (not _BITS_TYPESIZES_H) (not __time_t_defined) (not __int8_t_defined))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 32536.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__pkt_size_12360` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1_clnt.desugared.c",
+      "line" : 17735,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1_clnt.c",
+    "sanitizedDescription" : "`pkt_size` is read without initialization.",
+    "lineInputFile" : [
+      92,
+      92
+    ],
+    "presenceCondition" : "(and (not _BITS_TYPESIZES_H) (not __time_t_defined) (not __int8_t_defined))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 39406.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__buf_9199` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1_svr.desugared.c",
+      "line" : 11255,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1_svr.c",
+    "sanitizedDescription" : "`buf` is read without initialization.",
+    "lineInputFile" : [
+      146,
+      146
+    ],
+    "presenceCondition" : "(let ((a!1 (and (and (not _STDLIB_H)\n                     (not __need_malloc_and_calloc)\n                     (not _BITS_TYPESIZES_H))\n                (not __USE_EXTERN_INLINES)\n                (not __time_t_defined)\n                (not __int8_t_defined)))\n      (a!2 (and (and (not _STDLIB_H)\n                     (not __need_malloc_and_calloc)\n                     (not _BITS_TYPESIZES_H))\n                __USE_EXTERN_INLINES\n                (not __time_t_defined)\n                (not __int8_t_defined)))\n      (a!3 (and (not _STDLIB_H)\n                __need_malloc_and_calloc\n                (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined))))\n(let ((a!4 (and (and (not _BITS_TYPESIZES_H)\n                     (not __time_t_defined)\n                     (not __int8_t_defined))\n                (or (and a!2 (not CONFIG_PLATFORM_SOLARIS))\n                    (and a!3 (not CONFIG_PLATFORM_SOLARIS))))))\n  (or (and (and (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined))\n           a!1\n           CONFIG_PLATFORM_SOLARIS)\n      (and (and (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined))\n           a!1\n           (not CONFIG_PLATFORM_SOLARIS))\n      (and (and (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined))\n           (or (and a!2 CONFIG_PLATFORM_SOLARIS)\n               (and a!3 CONFIG_PLATFORM_SOLARIS)))\n      a!4)))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun __USE_EXTERN_INLINES () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 30868.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__q_9341` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1.desugared.c",
+      "line" : 13424,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1.c",
+    "sanitizedDescription" : "`q` is read without initialization.",
+    "lineInputFile" : [
+      972,
+      972
+    ],
+    "presenceCondition" : "(let ((a!1 (and (and (and (not _BITS_TYPESIZES_H)\n                          (not __time_t_defined)\n                          (not __int8_t_defined))\n                     CONFIG_PLATFORM_SOLARIS)\n                (and (and (not _BITS_TYPESIZES_H)\n                          (not __time_t_defined)\n                          (not __int8_t_defined))\n                     CONFIG_PLATFORM_SOLARIS)))\n      (a!2 (and (and (not _BITS_TYPESIZES_H)\n                     (not __time_t_defined)\n                     (not __int8_t_defined))\n                (not CONFIG_PLATFORM_SOLARIS))))\n  (or a!1 (and a!2 a!2)))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 32536.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__handshake_type_9506` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1.desugared.c",
+      "line" : 15912,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1.c",
+    "sanitizedDescription" : "`handshake_type` is read without initialization.",
+    "lineInputFile" : [
+      1478,
+      1478
+    ],
+    "presenceCondition" : "(let ((a!1 (and (and (not __STRICT_ANSI__) (not _STDLIB_H))\n                (not __need_malloc_and_calloc)\n                (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined)))\n      (a!3 (and (and (not __STRICT_ANSI__) (not _STDLIB_H))\n                __need_malloc_and_calloc\n                (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined)))\n      (a!4 (and (not __STRICT_ANSI__)\n                _STDLIB_H\n                (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined)))\n      (a!7 (and (and (not _BITS_TYPESIZES_H)\n                     (not __time_t_defined)\n                     (not __int8_t_defined))\n                (not CONFIG_PLATFORM_SOLARIS))))\n(let ((a!2 (and (and (and (not _BITS_TYPESIZES_H)\n                          (not __time_t_defined)\n                          (not __int8_t_defined))\n                     CONFIG_PLATFORM_SOLARIS)\n                a!1\n                CONFIG_PLATFORM_SOLARIS))\n      (a!5 (or (and a!3 CONFIG_PLATFORM_SOLARIS)\n               (and a!4 CONFIG_PLATFORM_SOLARIS)\n               (and (and __STRICT_ANSI__\n                         (not _BITS_TYPESIZES_H)\n                         (not __time_t_defined)\n                         (not __int8_t_defined))\n                    CONFIG_PLATFORM_SOLARIS)))\n      (a!8 (or (and a!3 (not CONFIG_PLATFORM_SOLARIS))\n               (and a!4 (not CONFIG_PLATFORM_SOLARIS))\n               (and (and __STRICT_ANSI__\n                         (not _BITS_TYPESIZES_H)\n                         (not __time_t_defined)\n                         (not __int8_t_defined))\n                    (not CONFIG_PLATFORM_SOLARIS)))))\n(let ((a!6 (and (and (and (not _BITS_TYPESIZES_H)\n                          (not __time_t_defined)\n                          (not __int8_t_defined))\n                     CONFIG_PLATFORM_SOLARIS)\n                a!5)))\n  (or a!2 a!6 (and a!7 a!1 (not CONFIG_PLATFORM_SOLARIS)) (and a!7 a!8)))))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 32536.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__len_9260` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/p12.desugared.c",
+      "line" : 11824,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/p12.c",
+    "sanitizedDescription" : "`len` is read without initialization.",
+    "lineInputFile" : [
+      273,
+      273
+    ],
+    "presenceCondition" : "(and (not _BITS_TYPESIZES_H) (not __time_t_defined) (not __int8_t_defined))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 38489.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__session_id_9903` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/samples/c/axssl.desugared.c",
+      "line" : 33053,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/samples/c/axssl.c",
+    "sanitizedDescription" : "`session_id` is read without initialization.",
+    "lineInputFile" : [
+      896,
+      896
+    ],
+    "presenceCondition" : "(or (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (and (not __need___FILE)\n              (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         CONFIG_PLATFORM_SOLARIS)\n    (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (and (not __need___FILE)\n              (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (not CONFIG_PLATFORM_SOLARIS)))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun __need___FILE () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 32332.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__b64_file_passwd_9818` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/httpd/proc.desugared.c",
+      "line" : 16294,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/httpd/proc.c",
+    "sanitizedDescription" : "`b64_file_passwd` is read without initialization.",
+    "lineInputFile" : [
+      1122,
+      1122
+    ],
+    "presenceCondition" : "(or (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (not __need___FILE)\n         __STRICT_ANSI__\n         (not _BITS_TYPESIZES_H)\n         (not __FILE_defined)\n         (not __time_t_defined)\n         (not __int8_t_defined))\n    (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (not __need___FILE)\n         (not __STRICT_ANSI__)\n         (not _BITS_TYPESIZES_H)\n         (not __FILE_defined)\n         (not __time_t_defined)\n         (not __int8_t_defined))\n    (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         __need___FILE\n         __STRICT_ANSI__\n         (not _BITS_TYPESIZES_H)\n         (not __FILE_defined)\n         (not __time_t_defined)\n         (not __int8_t_defined))\n    (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         __need___FILE\n         (not __STRICT_ANSI__)\n         (not _BITS_TYPESIZES_H)\n         (not __FILE_defined)\n         (not __time_t_defined)\n         (not __int8_t_defined)))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun __FILE_defined () Bool\n  false)\n(define-fun __need___FILE () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 30744.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__dp_9501` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/httpd/proc.desugared.c",
+      "line" : 12575,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/httpd/proc.c",
+    "sanitizedDescription" : "`dp` is read without initialization.",
+    "lineInputFile" : [
+      260,
+      260
+    ],
+    "presenceCondition" : "(or (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (not __need___FILE)\n         __STRICT_ANSI__\n         (not _BITS_TYPESIZES_H)\n         (not __time_t_defined)\n         (not __int8_t_defined))\n    (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (not __need___FILE)\n         (not __STRICT_ANSI__)\n         (not _BITS_TYPESIZES_H)\n         (not __time_t_defined)\n         (not __int8_t_defined))\n    (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         __need___FILE\n         __STRICT_ANSI__\n         (not _BITS_TYPESIZES_H)\n         (not _STDLIB_H)\n         (not __time_t_defined)\n         (not __int8_t_defined)))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun __need___FILE () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 30744.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__q_9341` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1.desugared.c",
+      "line" : 13398,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1.c",
+    "sanitizedDescription" : "`q` is read without initialization.",
+    "lineInputFile" : [
+      963,
+      963
+    ],
+    "presenceCondition" : "(let ((a!1 (and (and (and (not _BITS_TYPESIZES_H)\n                          (not __time_t_defined)\n                          (not __int8_t_defined))\n                     CONFIG_PLATFORM_SOLARIS)\n                (and (and (not _BITS_TYPESIZES_H)\n                          (not __time_t_defined)\n                          (not __int8_t_defined))\n                     CONFIG_PLATFORM_SOLARIS)))\n      (a!2 (and (and (not _BITS_TYPESIZES_H)\n                     (not __time_t_defined)\n                     (not __int8_t_defined))\n                (not CONFIG_PLATFORM_SOLARIS))))\n  (or a!1 (and a!2 a!2)))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 32536.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&__decrypted_bi_11241` is never used.",
+      "fileLocation" : "/workspace/axtls-code/crypto/rsa.desugared.c",
+      "line" : 15220,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/crypto/rsa.c",
+    "sanitizedDescription" : "The value written to `&decrypted_bi` is never used.",
+    "lineInputFile" : [
+      161,
+      162
+    ],
+    "presenceCondition" : "(or CONFIG_PLATFORM_SOLARIS (not CONFIG_PLATFORM_SOLARIS))",
+    "model" : "(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 31973.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__fp_9814` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/httpd/proc.desugared.c",
+      "line" : 16473,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/httpd/proc.c",
+    "sanitizedDescription" : "`fp` is read without initialization.",
+    "lineInputFile" : [
+      1135,
+      1135
+    ],
+    "presenceCondition" : "(or (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (not __need___FILE)\n         __STRICT_ANSI__\n         (not _BITS_TYPESIZES_H)\n         (not __FILE_defined)\n         (not __time_t_defined)\n         (not __int8_t_defined))\n    (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         __need___FILE\n         __STRICT_ANSI__\n         (not _BITS_TYPESIZES_H)\n         (not __FILE_defined)\n         (not __time_t_defined)\n         (not __int8_t_defined)))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun __FILE_defined () Bool\n  false)\n(define-fun __need___FILE () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 30744.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__pid_9640` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/httpd/proc.desugared.c",
+      "line" : 14925,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/httpd/proc.c",
+    "sanitizedDescription" : "`pid` is read without initialization.",
+    "lineInputFile" : [
+      656,
+      656
+    ],
+    "presenceCondition" : "(and (not _BITS_TYPESIZES_H)\n     (not __time_t_defined)\n     (not __int8_t_defined)\n     (not __need___FILE)\n     __STRICT_ANSI__\n     (not _BITS_TYPESIZES_H)\n     (not __off_t_defined)\n     (not __time_t_defined)\n     (not __int8_t_defined))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun __need___FILE () Bool\n  false)\n(define-fun __off_t_defined () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 30744.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__cert_sig_12019` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/x509.desugared.c",
+      "line" : 17381,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/x509.c",
+    "sanitizedDescription" : "`cert_sig` is read without initialization.",
+    "lineInputFile" : [
+      576,
+      576
+    ],
+    "presenceCondition" : "(and (not _BITS_TYPESIZES_H) (not __time_t_defined))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 31912.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__num_11412` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/crypto/bigint.desugared.c",
+      "line" : 16551,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/crypto/bigint.c",
+    "sanitizedDescription" : "`num` is read without initialization.",
+    "lineInputFile" : [
+      585,
+      691
+    ],
+    "presenceCondition" : "(let ((a!1 (and (and (and (not _BITS_TYPESIZES_H)\n                          (not __need___FILE)\n                          (not _IO_MTSAFE_IO))\n                     _IO_USE_OLD_IO_FILE)\n                CONFIG_PLATFORM_SOLARIS))\n      (a!2 (and (and (and (not _BITS_TYPESIZES_H)\n                          (not __need___FILE)\n                          (not _IO_MTSAFE_IO))\n                     _IO_USE_OLD_IO_FILE)\n                (not CONFIG_PLATFORM_SOLARIS)))\n      (a!3 (and (and (not _BITS_TYPESIZES_H)\n                     (not __need___FILE)\n                     (not _IO_MTSAFE_IO))\n                (not _IO_USE_OLD_IO_FILE))))\n  (or a!1\n      a!2\n      (and a!3 CONFIG_PLATFORM_SOLARIS)\n      (and a!3 (not CONFIG_PLATFORM_SOLARIS))))",
+    "model" : "(define-fun _IO_MTSAFE_IO () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun _IO_USE_OLD_IO_FILE () Bool\n  true)\n(define-fun __need___FILE () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 38771.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__buf_9258` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/p12.desugared.c",
+      "line" : 11789,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/p12.c",
+    "sanitizedDescription" : "`buf` is read without initialization.",
+    "lineInputFile" : [
+      267,
+      270
+    ],
+    "presenceCondition" : "(and (not _BITS_TYPESIZES_H)\n     (not __time_t_defined)\n     (not __int8_t_defined)\n     (not _STDLIB_H)\n     (not _BITS_TYPESIZES_H)\n     (not __time_t_defined)\n     (not __int8_t_defined)\n     CONFIG_PLATFORM_SOLARIS)",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 38489.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__ssl_9861` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/httpd/proc.desugared.c",
+      "line" : 16904,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/httpd/proc.c",
+    "sanitizedDescription" : "`ssl` is read without initialization.",
+    "lineInputFile" : [
+      1231,
+      1231
+    ],
+    "presenceCondition" : "(let ((a!1 (and (and (not __need___FILE)\n                     (not _BITS_TYPESIZES_H)\n                     (not __time_t_defined)\n                     (not __int8_t_defined))\n                CONFIG_PLATFORM_SOLARIS))\n      (a!2 (and (and (not __need___FILE)\n                     (not _BITS_TYPESIZES_H)\n                     (not __time_t_defined)\n                     (not __int8_t_defined))\n                (not CONFIG_PLATFORM_SOLARIS)))\n      (a!3 (and (and __need___FILE (not _BITS_TYPESIZES_H))\n                (not _STDLIB_H)\n                (not __time_t_defined)\n                (not __int8_t_defined)))\n      (a!4 (and (and __need___FILE (not _BITS_TYPESIZES_H))\n                _STDLIB_H\n                (not __time_t_defined)\n                (not __int8_t_defined))))\n  (or (and (and (not __need___FILE)\n                (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined))\n           a!1\n           a!1)\n      (and (and (not __need___FILE)\n                (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined))\n           a!2\n           a!2)\n      (and a!3\n           (and a!3 CONFIG_PLATFORM_SOLARIS)\n           (and a!3 CONFIG_PLATFORM_SOLARIS))\n      (and a!3\n           (and a!3 (not CONFIG_PLATFORM_SOLARIS))\n           (and a!3 (not CONFIG_PLATFORM_SOLARIS)))\n      (and a!4\n           (and a!4 CONFIG_PLATFORM_SOLARIS)\n           (and a!4 CONFIG_PLATFORM_SOLARIS))\n      (and a!4\n           (and a!4 (not CONFIG_PLATFORM_SOLARIS))\n           (and a!4 (not CONFIG_PLATFORM_SOLARIS)))))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun __need___FILE () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 30744.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__cert_size_9765` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1.desugared.c",
+      "line" : 18278,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1.c",
+    "sanitizedDescription" : "`cert_size` is read without initialization.",
+    "lineInputFile" : [
+      2022,
+      2022
+    ],
+    "presenceCondition" : "(and (not _BITS_TYPESIZES_H) (not __time_t_defined) (not __int8_t_defined))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 32536.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__uni_pass_9219` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/p12.desugared.c",
+      "line" : 11284,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/p12.c",
+    "sanitizedDescription" : "`uni_pass` is read without initialization.",
+    "lineInputFile" : [
+      173,
+      173
+    ],
+    "presenceCondition" : "(or (and (not _STDLIB_H) __STRICT_ANSI__) (and _STDLIB_H __STRICT_ANSI__))",
+    "model" : "(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun _STDLIB_H () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 38489.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__buf_12353` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1_clnt.desugared.c",
+      "line" : 17712,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1_clnt.c",
+    "sanitizedDescription" : "`buf` is read without initialization.",
+    "lineInputFile" : [
+      426,
+      426
+    ],
+    "presenceCondition" : "(or (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         CONFIG_PLATFORM_SOLARIS)\n    (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (not CONFIG_PLATFORM_SOLARIS)))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 39406.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__buf_9762` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1.desugared.c",
+      "line" : 18220,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1.c",
+    "sanitizedDescription" : "`buf` is read without initialization.",
+    "lineInputFile" : [
+      2002,
+      2002
+    ],
+    "presenceCondition" : "(or (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         CONFIG_PLATFORM_SOLARIS)\n    (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (not CONFIG_PLATFORM_SOLARIS)))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 32536.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__secret_length_9242` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1_svr.desugared.c",
+      "line" : 12273,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1_svr.c",
+    "sanitizedDescription" : "`secret_length` is read without initialization.",
+    "lineInputFile" : [
+      386,
+      386
+    ],
+    "presenceCondition" : "(and (not _BITS_TYPESIZES_H) (not __time_t_defined) (not __int8_t_defined))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 30868.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__q_len_11712` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/asn1.desugared.c",
+      "line" : 16202,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/asn1.c",
+    "sanitizedDescription" : "`q_len` is read without initialization.",
+    "lineInputFile" : [
+      296,
+      296
+    ],
+    "presenceCondition" : "(not CONFIG_PLATFORM_SOLARIS)",
+    "model" : "(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 39047.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__qInv_len_11715` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/asn1.desugared.c",
+      "line" : 16202,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/asn1.c",
+    "sanitizedDescription" : "`qInv_len` is read without initialization.",
+    "lineInputFile" : [
+      296,
+      296
+    ],
+    "presenceCondition" : "(not CONFIG_PLATFORM_SOLARIS)",
+    "model" : "(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 39047.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__is_client_9486` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1.desugared.c",
+      "line" : 14812,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1.c",
+    "sanitizedDescription" : "`is_client` is read without initialization.",
+    "lineInputFile" : [
+      1232,
+      1232
+    ],
+    "presenceCondition" : "(and (not _BITS_TYPESIZES_H) (not __time_t_defined) (not __int8_t_defined))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 32536.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__rv_9621` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/httpd/proc.desugared.c",
+      "line" : 14123,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/httpd/proc.c",
+    "sanitizedDescription" : "`rv` is read without initialization.",
+    "lineInputFile" : [
+      555,
+      555
+    ],
+    "presenceCondition" : "(and (not _BITS_TYPESIZES_H) (not __time_t_defined) (not __int8_t_defined))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 30744.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "NULLPTR_DEREFERENCE",
+      "description" : "`__certs_9771` could be null (null value originating from line 18235) and is dereferenced.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1.desugared.c",
+      "line" : 18400,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1.c",
+    "sanitizedDescription" : "`certs` could be null (null value originating from line 18235) and is dereferenced.",
+    "lineInputFile" : [
+      2059,
+      2059
+    ],
+    "presenceCondition" : "(and (not _BITS_TYPESIZES_H) (not __time_t_defined) (not __int8_t_defined))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 32536.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__buf_12321` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1_clnt.desugared.c",
+      "line" : 17291,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1_clnt.c",
+    "sanitizedDescription" : "`buf` is read without initialization.",
+    "lineInputFile" : [
+      330,
+      330
+    ],
+    "presenceCondition" : "(let ((a!1 (and (and (not _STDLIB_H)\n                     (not __need_malloc_and_calloc)\n                     (not _BITS_TYPESIZES_H))\n                (not __USE_EXTERN_INLINES)\n                (not __time_t_defined)\n                (not __int8_t_defined)))\n      (a!2 (and (and (not _STDLIB_H)\n                     (not __need_malloc_and_calloc)\n                     (not _BITS_TYPESIZES_H))\n                __USE_EXTERN_INLINES\n                (not __time_t_defined)\n                (not __int8_t_defined)))\n      (a!3 (and (not _STDLIB_H)\n                __need_malloc_and_calloc\n                (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined))))\n(let ((a!4 (and (and (not _BITS_TYPESIZES_H)\n                     (not __time_t_defined)\n                     (not __int8_t_defined))\n                (or (and a!2 (not CONFIG_PLATFORM_SOLARIS))\n                    (and a!3 (not CONFIG_PLATFORM_SOLARIS))))))\n  (or (and (and (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined))\n           a!1\n           CONFIG_PLATFORM_SOLARIS)\n      (and (and (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined))\n           a!1\n           (not CONFIG_PLATFORM_SOLARIS))\n      (and (and (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined))\n           (or (and a!2 CONFIG_PLATFORM_SOLARIS)\n               (and a!3 CONFIG_PLATFORM_SOLARIS)))\n      a!4)))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun __USE_EXTERN_INLINES () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 39406.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__type_11933` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/x509.desugared.c",
+      "line" : 16000,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/x509.c",
+    "sanitizedDescription" : "`type` is read without initialization.",
+    "lineInputFile" : [
+      247,
+      247
+    ],
+    "presenceCondition" : "(or (and (and (not _BITS_TYPESIZES_H) (not __time_t_defined))\n         CONFIG_PLATFORM_SOLARIS)\n    (and (and (not _BITS_TYPESIZES_H) (not __time_t_defined))\n         (not CONFIG_PLATFORM_SOLARIS)))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 31912.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__tm_ptr_12291` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1_clnt.desugared.c",
+      "line" : 16615,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1_clnt.c",
+    "sanitizedDescription" : "`tm_ptr` is read without initialization.",
+    "lineInputFile" : [
+      206,
+      206
+    ],
+    "presenceCondition" : "(and (not _BITS_TYPESIZES_H)\n     (not __time_t_defined)\n     (not __int8_t_defined)\n     (not _STDLIB_H)\n     (not __STRICT_ANSI__)\n     (not __need_malloc_and_calloc)\n     (not _SYS_WAIT_H)\n     (not _BITS_TYPESIZES_H)\n     (not __time_t_defined)\n     (not __int8_t_defined)\n     (not CONFIG_PLATFORM_SOLARIS))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  false)\n(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun _SYS_WAIT_H () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 39406.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__rv_9543` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/httpd/proc.desugared.c",
+      "line" : 13182,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/httpd/proc.c",
+    "sanitizedDescription" : "`rv` is read without initialization.",
+    "lineInputFile" : [
+      324,
+      324
+    ],
+    "presenceCondition" : "(and (not _BITS_TYPESIZES_H) (not __time_t_defined) (not __int8_t_defined))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 30744.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&__q_9476` is never used.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1.desugared.c",
+      "line" : 14901,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1.c",
+    "sanitizedDescription" : "The value written to `&q` is never used.",
+    "lineInputFile" : [
+      1253,
+      1253
+    ],
+    "presenceCondition" : "(or (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         CONFIG_PLATFORM_SOLARIS)\n    (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (not CONFIG_PLATFORM_SOLARIS)))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 32536.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__buf_9238` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1_svr.desugared.c",
+      "line" : 12239,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1_svr.c",
+    "sanitizedDescription" : "`buf` is read without initialization.",
+    "lineInputFile" : [
+      373,
+      373
+    ],
+    "presenceCondition" : "(or (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         CONFIG_PLATFORM_SOLARIS)\n    (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (not CONFIG_PLATFORM_SOLARIS)))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 30868.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__biR_11509` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/crypto/bigint.desugared.c",
+      "line" : 17590,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/crypto/bigint.c",
+    "sanitizedDescription" : "`biR` is read without initialization.",
+    "lineInputFile" : [
+      1113,
+      1113
+    ],
+    "presenceCondition" : "true",
+    "model" : "",
+    "feasible" : true,
+    "desugaringTime" : 38771.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__stream_8257` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/crypto/crypto_misc.desugared.c",
+      "line" : 10168,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/crypto/crypto_misc.c",
+    "sanitizedDescription" : "`stream` is read without initialization.",
+    "lineInputFile" : [
+      73,
+      73
+    ],
+    "presenceCondition" : "(or (and CONFIG_PLATFORM_SOLARIS\n         (and __need___FILE (not __FILE_defined))\n         CONFIG_PLATFORM_SOLARIS)\n    (and (not CONFIG_PLATFORM_SOLARIS)\n         (and __need___FILE (not __FILE_defined))\n         (not CONFIG_PLATFORM_SOLARIS)))",
+    "model" : "(define-fun __FILE_defined () Bool\n  false)\n(define-fun __need___FILE () Bool\n  true)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 30064.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__file_exists_9560` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/httpd/proc.desugared.c",
+      "line" : 13380,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/httpd/proc.c",
+    "sanitizedDescription" : "`file_exists` is read without initialization.",
+    "lineInputFile" : [
+      411,
+      411
+    ],
+    "presenceCondition" : "(or (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         CONFIG_PLATFORM_SOLARIS)\n    (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (not CONFIG_PLATFORM_SOLARIS)))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 30744.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__dQ_len_11714` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/asn1.desugared.c",
+      "line" : 16202,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/asn1.c",
+    "sanitizedDescription" : "`dQ_len` is read without initialization.",
+    "lineInputFile" : [
+      296,
+      296
+    ],
+    "presenceCondition" : "(not CONFIG_PLATFORM_SOLARIS)",
+    "model" : "(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 39047.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__priv_len_11703` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/asn1.desugared.c",
+      "line" : 16193,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/asn1.c",
+    "sanitizedDescription" : "`priv_len` is read without initialization.",
+    "lineInputFile" : [
+      286,
+      286
+    ],
+    "presenceCondition" : "(not CONFIG_PLATFORM_SOLARIS)",
+    "model" : "(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 39047.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__size_11395` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/crypto/bigint.desugared.c",
+      "line" : 16408,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/crypto/bigint.c",
+    "sanitizedDescription" : "`size` is read without initialization.",
+    "lineInputFile" : [
+      655,
+      655
+    ],
+    "presenceCondition" : "true",
+    "model" : "",
+    "feasible" : true,
+    "desugaringTime" : 38771.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__pkt_size_9262` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1_svr.desugared.c",
+      "line" : 12569,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1_svr.c",
+    "sanitizedDescription" : "`pkt_size` is read without initialization.",
+    "lineInputFile" : [
+      92,
+      92
+    ],
+    "presenceCondition" : "(and (not _BITS_TYPESIZES_H) (not __time_t_defined) (not __int8_t_defined))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 30868.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__start_9286` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/loader.desugared.c",
+      "line" : 11644,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/loader.c",
+    "sanitizedDescription" : "`start` is read without initialization.",
+    "lineInputFile" : [
+      408,
+      409
+    ],
+    "presenceCondition" : "(and (not _BITS_TYPESIZES_H) (not __time_t_defined) (not __int8_t_defined))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 30284.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__q_9341` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1.desugared.c",
+      "line" : 13374,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1.c",
+    "sanitizedDescription" : "`q` is read without initialization.",
+    "lineInputFile" : [
+      956,
+      956
+    ],
+    "presenceCondition" : "(or (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         CONFIG_PLATFORM_SOLARIS)\n    (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (not CONFIG_PLATFORM_SOLARIS)))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 32536.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "NULLPTR_DEREFERENCE",
+      "description" : "`__ex_8508` could be null (null value originating from line 11056) and is dereferenced.",
+      "fileLocation" : "/workspace/axtls-code/httpd/axhttpd.desugared.c",
+      "line" : 11062,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/httpd/axhttpd.c",
+    "sanitizedDescription" : "`ex` could be null (null value originating from line 11056) and is dereferenced.",
+    "lineInputFile" : [
+      476,
+      476
+    ],
+    "presenceCondition" : "(and (not __STRICT_ANSI__)\n     (not __STRICT_ANSI__)\n     (not _STDLIB_H)\n     (not __malloc_and_calloc_defined))",
+    "model" : "(define-fun __STRICT_ANSI__ () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __malloc_and_calloc_defined () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 36271.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__ssl_obj_9188` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/loader.desugared.c",
+      "line" : 11068,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/loader.c",
+    "sanitizedDescription" : "`ssl_obj` is read without initialization.",
+    "lineInputFile" : [
+      116,
+      116
+    ],
+    "presenceCondition" : "(let ((a!1 (and (and (not _STDLIB_H)\n                     (not __need_malloc_and_calloc)\n                     (not _BITS_TYPESIZES_H))\n                (not __USE_EXTERN_INLINES)\n                (not __time_t_defined)\n                (not __int8_t_defined)))\n      (a!3 (and (and (not _STDLIB_H)\n                     (not __need_malloc_and_calloc)\n                     (not _BITS_TYPESIZES_H))\n                __USE_EXTERN_INLINES\n                (not __time_t_defined)\n                (not __int8_t_defined)))\n      (a!4 (and (not _STDLIB_H)\n                __need_malloc_and_calloc\n                (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined)))\n      (a!6 (and (and (and (not _BITS_TYPESIZES_H)\n                          (not __time_t_defined)\n                          (not __int8_t_defined))\n                     CONFIG_PLATFORM_SOLARIS)\n                (and _STDLIB_H\n                     (not _BITS_TYPESIZES_H)\n                     (not __time_t_defined)\n                     (not __int8_t_defined))\n                CONFIG_PLATFORM_SOLARIS))\n      (a!7 (and (and (not _BITS_TYPESIZES_H)\n                     (not __time_t_defined)\n                     (not __int8_t_defined))\n                (not CONFIG_PLATFORM_SOLARIS))))\n(let ((a!2 (and (and (and (not _BITS_TYPESIZES_H)\n                          (not __time_t_defined)\n                          (not __int8_t_defined))\n                     CONFIG_PLATFORM_SOLARIS)\n                a!1\n                CONFIG_PLATFORM_SOLARIS))\n      (a!5 (and (and (and (not _BITS_TYPESIZES_H)\n                          (not __time_t_defined)\n                          (not __int8_t_defined))\n                     CONFIG_PLATFORM_SOLARIS)\n                (or (and a!3 CONFIG_PLATFORM_SOLARIS)\n                    (and a!4 CONFIG_PLATFORM_SOLARIS))))\n      (a!8 (and a!7\n                (or (and a!3 (not CONFIG_PLATFORM_SOLARIS))\n                    (and a!4 (not CONFIG_PLATFORM_SOLARIS))))))\n  (or a!2\n      a!5\n      a!6\n      (and a!7 a!1 (not CONFIG_PLATFORM_SOLARIS))\n      a!8\n      (and a!7\n           (and _STDLIB_H\n                (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined))\n           (not CONFIG_PLATFORM_SOLARIS)))))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun __USE_EXTERN_INLINES () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 30284.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__bim_11554` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/crypto/bigint.desugared.c",
+      "line" : 17862,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/crypto/bigint.c",
+    "sanitizedDescription" : "`bim` is read without initialization.",
+    "lineInputFile" : [
+      1272,
+      1272
+    ],
+    "presenceCondition" : "true",
+    "model" : "",
+    "feasible" : true,
+    "desugaringTime" : 38771.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__ctx_11209` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/crypto/bigint.desugared.c",
+      "line" : 14769,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/crypto/bigint.c",
+    "sanitizedDescription" : "`ctx` is read without initialization.",
+    "lineInputFile" : [
+      104,
+      104
+    ],
+    "presenceCondition" : "(and (not _STDLIB_H) (not __malloc_and_calloc_defined))",
+    "model" : "(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __malloc_and_calloc_defined () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 38771.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__tp_8855` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/httpd/axhttpd.desugared.c",
+      "line" : 12224,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/httpd/axhttpd.c",
+    "sanitizedDescription" : "`tp` is read without initialization.",
+    "lineInputFile" : [
+      621,
+      621
+    ],
+    "presenceCondition" : "(or (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         CONFIG_PLATFORM_SOLARIS)\n    (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (not CONFIG_PLATFORM_SOLARIS)))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 36271.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__fp_9832` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/httpd/proc.desugared.c",
+      "line" : 16535,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/httpd/proc.c",
+    "sanitizedDescription" : "`fp` is read without initialization.",
+    "lineInputFile" : [
+      1150,
+      1150
+    ],
+    "presenceCondition" : "(and (not _BITS_TYPESIZES_H)\n     (not __time_t_defined)\n     (not __int8_t_defined)\n     (not __need___FILE)\n     __STRICT_ANSI__\n     (not _BITS_TYPESIZES_H)\n     (not __FILE_defined)\n     (not __time_t_defined)\n     (not __int8_t_defined))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun __FILE_defined () Bool\n  false)\n(define-fun __need___FILE () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 30744.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__w_11479` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/crypto/bigint.desugared.c",
+      "line" : 17078,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/crypto/bigint.c",
+    "sanitizedDescription" : "`w` is read without initialization.",
+    "lineInputFile" : [
+      954,
+      954
+    ],
+    "presenceCondition" : "(or (and (and (not _STDLIB_H) __STRICT_ANSI__) CONFIG_PLATFORM_SOLARIS)\n    (and (and (not _STDLIB_H) __STRICT_ANSI__) (not CONFIG_PLATFORM_SOLARIS))\n    (and (and _STDLIB_H __STRICT_ANSI__) CONFIG_PLATFORM_SOLARIS)\n    (and (and _STDLIB_H __STRICT_ANSI__) (not CONFIG_PLATFORM_SOLARIS)))",
+    "model" : "(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 38771.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&__has_started_12050` is never used.",
+      "fileLocation" : "/workspace/axtls-code/ssl/x509.desugared.c",
+      "line" : 18113,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/x509.c",
+    "sanitizedDescription" : "The value written to `&has_started` is never used.",
+    "lineInputFile" : [
+      34,
+      737
+    ],
+    "presenceCondition" : "(and (and (not _BITS_TYPESIZES_H) (not __time_t_defined))\n     (and (not _BITS_TYPESIZES_H) (not __time_t_defined))\n     (not CONFIG_PLATFORM_SOLARIS))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 31912.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "NULLPTR_DEREFERENCE",
+      "description" : "`__ex_8508` could be null (null value originating from line 11053) and is dereferenced.",
+      "fileLocation" : "/workspace/axtls-code/httpd/axhttpd.desugared.c",
+      "line" : 11062,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/httpd/axhttpd.c",
+    "sanitizedDescription" : "`ex` could be null (null value originating from line 11053) and is dereferenced.",
+    "lineInputFile" : [
+      476,
+      476
+    ],
+    "presenceCondition" : "(and (not __STRICT_ANSI__)\n     (not __STRICT_ANSI__)\n     (not _STDLIB_H)\n     (not __malloc_and_calloc_defined))",
+    "model" : "(define-fun __STRICT_ANSI__ () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __malloc_and_calloc_defined () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 36271.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__rv_9733` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/httpd/proc.desugared.c",
+      "line" : 15483,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/httpd/proc.c",
+    "sanitizedDescription" : "`rv` is read without initialization.",
+    "lineInputFile" : [
+      870,
+      870
+    ],
+    "presenceCondition" : "(and (not _BITS_TYPESIZES_H) (not __time_t_defined) (not __int8_t_defined))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 30744.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__dnslen_11934` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/x509.desugared.c",
+      "line" : 16018,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/x509.c",
+    "sanitizedDescription" : "`dnslen` is read without initialization.",
+    "lineInputFile" : [
+      252,
+      253
+    ],
+    "presenceCondition" : "(let ((a!1 (and (not __need___FILE)\n                (not _BITS_TYPESIZES_H)\n                (not _STDLIB_H)\n                (not __time_t_defined)\n                (not __malloc_and_calloc_defined))))\n  (or (and (and (not _BITS_TYPESIZES_H) (not __time_t_defined))\n           CONFIG_PLATFORM_SOLARIS\n           a!1\n           CONFIG_PLATFORM_SOLARIS)\n      (and (and (not _BITS_TYPESIZES_H) (not __time_t_defined))\n           (not CONFIG_PLATFORM_SOLARIS)\n           a!1\n           (not CONFIG_PLATFORM_SOLARIS))))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __need___FILE () Bool\n  false)\n(define-fun __malloc_and_calloc_defined () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 31912.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__tm_12282` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1_clnt.desugared.c",
+      "line" : 16603,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1_clnt.c",
+    "sanitizedDescription" : "`tm` is read without initialization.",
+    "lineInputFile" : [
+      206,
+      206
+    ],
+    "presenceCondition" : "(let ((a!1 (and (and (not _BITS_TYPESIZES_H)\n                     (not __time_t_defined)\n                     (not __int8_t_defined))\n                (and (and (not _STDLIB_H) (not __STRICT_ANSI__))\n                     (not __need_malloc_and_calloc))\n                (not _SYS_WAIT_H)\n                (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined)\n                CONFIG_PLATFORM_SOLARIS))\n      (a!2 (and (and (not _BITS_TYPESIZES_H)\n                     (not __time_t_defined)\n                     (not __int8_t_defined))\n                (and (and (not _STDLIB_H) (not __STRICT_ANSI__))\n                     (not __need_malloc_and_calloc))\n                _SYS_WAIT_H\n                (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined)\n                CONFIG_PLATFORM_SOLARIS))\n      (a!3 (and (and (and (not _STDLIB_H) (not __STRICT_ANSI__))\n                     __need_malloc_and_calloc\n                     (not _BITS_TYPESIZES_H))\n                (not __clock_t_defined)\n                (not __time_t_defined)\n                (not __int8_t_defined)\n                CONFIG_PLATFORM_SOLARIS))\n      (a!5 (and (and (and (not _STDLIB_H) (not __STRICT_ANSI__))\n                     __need_malloc_and_calloc\n                     (not _BITS_TYPESIZES_H))\n                __clock_t_defined\n                (not __time_t_defined)\n                (not __int8_t_defined)\n                CONFIG_PLATFORM_SOLARIS)))\n(let ((a!4 (or a!3\n               (and (and (not _STDLIB_H)\n                         __STRICT_ANSI__\n                         (not _BITS_TYPESIZES_H))\n                    (not __clock_t_defined)\n                    (not __time_t_defined)\n                    (not __int8_t_defined)\n                    CONFIG_PLATFORM_SOLARIS)\n               (and (and _STDLIB_H (not _BITS_TYPESIZES_H))\n                    (not __clock_t_defined)\n                    (not __time_t_defined)\n                    (not __int8_t_defined)\n                    CONFIG_PLATFORM_SOLARIS)))\n      (a!6 (or a!5\n               (and (and (not _STDLIB_H)\n                         __STRICT_ANSI__\n                         (not _BITS_TYPESIZES_H))\n                    __clock_t_defined\n                    (not __time_t_defined)\n                    (not __int8_t_defined)\n                    CONFIG_PLATFORM_SOLARIS)\n               (and (and _STDLIB_H (not _BITS_TYPESIZES_H))\n                    __clock_t_defined\n                    (not __time_t_defined)\n                    (not __int8_t_defined)\n                    CONFIG_PLATFORM_SOLARIS))))\n  (or a!1\n      a!2\n      (and (and (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined))\n           a!4)\n      (and (and (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined))\n           a!6))))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  false)\n(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun _SYS_WAIT_H () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 39406.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__sess_id_size_9905` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/samples/c/axssl.desugared.c",
+      "line" : 33030,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/samples/c/axssl.c",
+    "sanitizedDescription" : "`sess_id_size` is read without initialization.",
+    "lineInputFile" : [
+      891,
+      891
+    ],
+    "presenceCondition" : "(and (not _BITS_TYPESIZES_H) (not __time_t_defined) (not __int8_t_defined))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 32332.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__oldest_sess_time_9659` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1.desugared.c",
+      "line" : 17234,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1.c",
+    "sanitizedDescription" : "`oldest_sess_time` is read without initialization.",
+    "lineInputFile" : [
+      1819,
+      1819
+    ],
+    "presenceCondition" : "(let ((a!1 (and (and (and (not __STRICT_ANSI__) (not _STDLIB_H))\n                     (not __need_malloc_and_calloc))\n                (not _SYS_WAIT_H)\n                (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined)))\n      (a!3 (and (and (and (not __STRICT_ANSI__) (not _STDLIB_H))\n                     (not __need_malloc_and_calloc))\n                _SYS_WAIT_H\n                (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined)))\n      (a!5 (and (and (not __STRICT_ANSI__) (not _STDLIB_H))\n                __need_malloc_and_calloc\n                (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined)))\n      (a!6 (and (not __STRICT_ANSI__)\n                _STDLIB_H\n                (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined)))\n      (a!7 (and (and __STRICT_ANSI__\n                     (not _BITS_TYPESIZES_H)\n                     (not __time_t_defined)\n                     (not __int8_t_defined))\n                (not __need___FILE)))\n      (a!10 (and (and __STRICT_ANSI__\n                      (not _BITS_TYPESIZES_H)\n                      (not __time_t_defined)\n                      (not __int8_t_defined))\n                 __need___FILE))\n      (a!12 (and (and (not _BITS_TYPESIZES_H)\n                      (not __time_t_defined)\n                      (not __int8_t_defined))\n                 (not CONFIG_PLATFORM_SOLARIS))))\n(let ((a!2 (and (and (and (not _BITS_TYPESIZES_H)\n                          (not __time_t_defined)\n                          (not __int8_t_defined))\n                     CONFIG_PLATFORM_SOLARIS)\n                a!1\n                CONFIG_PLATFORM_SOLARIS))\n      (a!4 (and (and (and (not _BITS_TYPESIZES_H)\n                          (not __time_t_defined)\n                          (not __int8_t_defined))\n                     CONFIG_PLATFORM_SOLARIS)\n                a!3\n                CONFIG_PLATFORM_SOLARIS))\n      (a!8 (or (and (and a!5 (not __need___FILE)) CONFIG_PLATFORM_SOLARIS)\n               (and (and a!6 (not __need___FILE)) CONFIG_PLATFORM_SOLARIS)\n               (and a!7 CONFIG_PLATFORM_SOLARIS)))\n      (a!11 (and (and (and (not _BITS_TYPESIZES_H)\n                           (not __time_t_defined)\n                           (not __int8_t_defined))\n                      CONFIG_PLATFORM_SOLARIS)\n                 (or (and (and a!5 __need___FILE) CONFIG_PLATFORM_SOLARIS)\n                     (and (and a!6 __need___FILE) CONFIG_PLATFORM_SOLARIS)\n                     (and a!10 CONFIG_PLATFORM_SOLARIS))))\n      (a!13 (or (and (and a!5 (not __need___FILE))\n                     (not CONFIG_PLATFORM_SOLARIS))\n                (and (and a!6 (not __need___FILE))\n                     (not CONFIG_PLATFORM_SOLARIS))\n                (and a!7 (not CONFIG_PLATFORM_SOLARIS))))\n      (a!14 (and a!12\n                 (or (and (and a!5 __need___FILE) (not CONFIG_PLATFORM_SOLARIS))\n                     (and (and a!6 __need___FILE) (not CONFIG_PLATFORM_SOLARIS))\n                     (and a!10 (not CONFIG_PLATFORM_SOLARIS))))))\n(let ((a!9 (and (and (and (not _BITS_TYPESIZES_H)\n                          (not __time_t_defined)\n                          (not __int8_t_defined))\n                     CONFIG_PLATFORM_SOLARIS)\n                a!8)))\n  (or a!2\n      a!4\n      a!9\n      a!11\n      (and a!12 a!1 (not CONFIG_PLATFORM_SOLARIS))\n      (and a!12 a!3 (not CONFIG_PLATFORM_SOLARIS))\n      (and a!12 a!13)\n      a!14))))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  false)\n(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun _SYS_WAIT_H () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 32536.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__ret_9513` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1.desugared.c",
+      "line" : 16138,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1.c",
+    "sanitizedDescription" : "`ret` is read without initialization.",
+    "lineInputFile" : [
+      1521,
+      1521
+    ],
+    "presenceCondition" : "(and (not _BITS_TYPESIZES_H) (not __time_t_defined) (not __int8_t_defined))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 32536.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&__mod_len_11886` is never used.",
+      "fileLocation" : "/workspace/axtls-code/ssl/asn1.desugared.c",
+      "line" : 18665,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/asn1.c",
+    "sanitizedDescription" : "The value written to `&mod_len` is never used.",
+    "lineInputFile" : [
+      545,
+      545
+    ],
+    "presenceCondition" : "(and (not _BITS_TYPESIZES_H)\n     (not __time_t_defined)\n     (not CONFIG_PLATFORM_SOLARIS))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 39047.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__aes_ctx_9374` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1.desugared.c",
+      "line" : 13691,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1.c",
+    "sanitizedDescription" : "`aes_ctx` is read without initialization.",
+    "lineInputFile" : [
+      1024,
+      1024
+    ],
+    "presenceCondition" : "(let ((a!1 (and (not _STDLIB_H)\n                (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined)\n                (not __malloc_and_calloc_defined))))\n  (or (and (and (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined))\n           CONFIG_PLATFORM_SOLARIS\n           a!1\n           CONFIG_PLATFORM_SOLARIS)\n      (and (and (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined))\n           (not CONFIG_PLATFORM_SOLARIS)\n           a!1\n           (not CONFIG_PLATFORM_SOLARIS))))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __malloc_and_calloc_defined () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 32536.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__cert_req_size_12356` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1_clnt.desugared.c",
+      "line" : 17735,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1_clnt.c",
+    "sanitizedDescription" : "`cert_req_size` is read without initialization.",
+    "lineInputFile" : [
+      92,
+      92
+    ],
+    "presenceCondition" : "(and (not _BITS_TYPESIZES_H) (not __time_t_defined) (not __int8_t_defined))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 39406.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__ssl_obj_9188` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/loader.desugared.c",
+      "line" : 11076,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/loader.c",
+    "sanitizedDescription" : "`ssl_obj` is read without initialization.",
+    "lineInputFile" : [
+      117,
+      117
+    ],
+    "presenceCondition" : "(or (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         CONFIG_PLATFORM_SOLARIS)\n    (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (not CONFIG_PLATFORM_SOLARIS)))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 30284.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&__hmac_len_9210` is never used.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1.desugared.c",
+      "line" : 12520,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1.c",
+    "sanitizedDescription" : "The value written to `&hmac_len` is never used.",
+    "lineInputFile" : [
+      692,
+      692
+    ],
+    "presenceCondition" : "(or (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         CONFIG_PLATFORM_SOLARIS)\n    (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (not CONFIG_PLATFORM_SOLARIS)))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 32536.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__lenSeq_11963` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/x509.desugared.c",
+      "line" : 16233,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/x509.c",
+    "sanitizedDescription" : "`lenSeq` is read without initialization.",
+    "lineInputFile" : [
+      301,
+      302
+    ],
+    "presenceCondition" : "(or (and (and (not _BITS_TYPESIZES_H) (not __time_t_defined))\n         CONFIG_PLATFORM_SOLARIS)\n    (and (and (not _BITS_TYPESIZES_H) (not __time_t_defined))\n         (not CONFIG_PLATFORM_SOLARIS)))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 31912.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__dP_len_11713` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/asn1.desugared.c",
+      "line" : 16202,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/asn1.c",
+    "sanitizedDescription" : "`dP_len` is read without initialization.",
+    "lineInputFile" : [
+      296,
+      296
+    ],
+    "presenceCondition" : "(not CONFIG_PLATFORM_SOLARIS)",
+    "model" : "(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 39047.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__search_6982` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/httpd/tdate_parse.desugared.c",
+      "line" : 7547,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/httpd/tdate_parse.c",
+    "sanitizedDescription" : "`search` is read without initialization.",
+    "lineInputFile" : [
+      79,
+      79
+    ],
+    "presenceCondition" : "(let ((a!1 (and (not __int8_t_defined)\n                (not __USE_EXTERN_INLINES)\n                (not _STDLIB_H)\n                (not __need_malloc_and_calloc)\n                (not __COMPAR_FN_T))))\n  (or (and (not __int8_t_defined) a!1 CONFIG_PLATFORM_SOLARIS)\n      (and (not __int8_t_defined) a!1 (not CONFIG_PLATFORM_SOLARIS))))",
+    "model" : "(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun __USE_EXTERN_INLINES () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun __COMPAR_FN_T () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 37595.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__delim_9445` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/httpd/proc.desugared.c",
+      "line" : 11754,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/httpd/proc.c",
+    "sanitizedDescription" : "`delim` is read without initialization.",
+    "lineInputFile" : [
+      93,
+      93
+    ],
+    "presenceCondition" : "(and (not _BITS_TYPESIZES_H) (not __time_t_defined) (not __int8_t_defined))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 30744.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__rsa_len_9270` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1_svr.desugared.c",
+      "line" : 12569,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1_svr.c",
+    "sanitizedDescription" : "`rsa_len` is read without initialization.",
+    "lineInputFile" : [
+      92,
+      92
+    ],
+    "presenceCondition" : "(and (not _BITS_TYPESIZES_H) (not __time_t_defined) (not __int8_t_defined))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 30868.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__tp_8855` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/httpd/axhttpd.desugared.c",
+      "line" : 12239,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/httpd/axhttpd.c",
+    "sanitizedDescription" : "`tp` is read without initialization.",
+    "lineInputFile" : [
+      395,
+      624
+    ],
+    "presenceCondition" : "(or (and __STRICT_ANSI__\n         (not _BITS_TYPESIZES_H)\n         (not __time_t_defined)\n         (not __int8_t_defined)\n         CONFIG_HTTP_HAS_DIRECTORIES)\n    (and (not __STRICT_ANSI__)\n         (not _BITS_TYPESIZES_H)\n         (not __time_t_defined)\n         (not __int8_t_defined)\n         CONFIG_HTTP_HAS_DIRECTORIES))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun CONFIG_HTTP_HAS_DIRECTORIES () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 36271.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__tm_9651` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1.desugared.c",
+      "line" : 17302,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1.c",
+    "sanitizedDescription" : "`tm` is read without initialization.",
+    "lineInputFile" : [
+      1829,
+      1829
+    ],
+    "presenceCondition" : "(let ((a!1 (and (and (and (not __STRICT_ANSI__) (not _STDLIB_H))\n                     (not __need_malloc_and_calloc))\n                (not _SYS_WAIT_H)\n                (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined)))\n      (a!3 (and (and (and (not __STRICT_ANSI__) (not _STDLIB_H))\n                     (not __need_malloc_and_calloc))\n                _SYS_WAIT_H\n                (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined)))\n      (a!5 (and (and (not __STRICT_ANSI__) (not _STDLIB_H))\n                __need_malloc_and_calloc\n                (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined)))\n      (a!6 (and (not __STRICT_ANSI__)\n                _STDLIB_H\n                (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined)))\n      (a!7 (and (and __STRICT_ANSI__\n                     (not _BITS_TYPESIZES_H)\n                     (not __time_t_defined)\n                     (not __int8_t_defined))\n                (not __need___FILE)))\n      (a!10 (and (and __STRICT_ANSI__\n                      (not _BITS_TYPESIZES_H)\n                      (not __time_t_defined)\n                      (not __int8_t_defined))\n                 __need___FILE))\n      (a!12 (and (and (not _BITS_TYPESIZES_H)\n                      (not __time_t_defined)\n                      (not __int8_t_defined))\n                 (not CONFIG_PLATFORM_SOLARIS))))\n(let ((a!2 (and (and (and (not _BITS_TYPESIZES_H)\n                          (not __time_t_defined)\n                          (not __int8_t_defined))\n                     CONFIG_PLATFORM_SOLARIS)\n                a!1\n                CONFIG_PLATFORM_SOLARIS))\n      (a!4 (and (and (and (not _BITS_TYPESIZES_H)\n                          (not __time_t_defined)\n                          (not __int8_t_defined))\n                     CONFIG_PLATFORM_SOLARIS)\n                a!3\n                CONFIG_PLATFORM_SOLARIS))\n      (a!8 (or (and (and a!5 (not __need___FILE)) CONFIG_PLATFORM_SOLARIS)\n               (and (and a!6 (not __need___FILE)) CONFIG_PLATFORM_SOLARIS)\n               (and a!7 CONFIG_PLATFORM_SOLARIS)))\n      (a!11 (and (and (and (not _BITS_TYPESIZES_H)\n                           (not __time_t_defined)\n                           (not __int8_t_defined))\n                      CONFIG_PLATFORM_SOLARIS)\n                 (or (and (and a!5 __need___FILE) CONFIG_PLATFORM_SOLARIS)\n                     (and (and a!6 __need___FILE) CONFIG_PLATFORM_SOLARIS)\n                     (and a!10 CONFIG_PLATFORM_SOLARIS))))\n      (a!13 (or (and (and a!5 (not __need___FILE))\n                     (not CONFIG_PLATFORM_SOLARIS))\n                (and (and a!6 (not __need___FILE))\n                     (not CONFIG_PLATFORM_SOLARIS))\n                (and a!7 (not CONFIG_PLATFORM_SOLARIS))))\n      (a!14 (and a!12\n                 (or (and (and a!5 __need___FILE) (not CONFIG_PLATFORM_SOLARIS))\n                     (and (and a!6 __need___FILE) (not CONFIG_PLATFORM_SOLARIS))\n                     (and a!10 (not CONFIG_PLATFORM_SOLARIS))))))\n(let ((a!9 (and (and (and (not _BITS_TYPESIZES_H)\n                          (not __time_t_defined)\n                          (not __int8_t_defined))\n                     CONFIG_PLATFORM_SOLARIS)\n                a!8)))\n  (or a!2\n      a!4\n      a!9\n      a!11\n      (and a!12 a!1 (not CONFIG_PLATFORM_SOLARIS))\n      (and a!12 a!3 (not CONFIG_PLATFORM_SOLARIS))\n      (and a!12 a!13)\n      a!14))))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  false)\n(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun _SYS_WAIT_H () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 32536.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__l_9819` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/httpd/proc.desugared.c",
+      "line" : 16284,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/httpd/proc.c",
+    "sanitizedDescription" : "`l` is read without initialization.",
+    "lineInputFile" : [
+      1115,
+      1115
+    ],
+    "presenceCondition" : "(or (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (not __need___FILE)\n         __STRICT_ANSI__\n         (not _BITS_TYPESIZES_H)\n         (not __FILE_defined)\n         (not __time_t_defined)\n         (not __int8_t_defined))\n    (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (not __need___FILE)\n         (not __STRICT_ANSI__)\n         (not _BITS_TYPESIZES_H)\n         (not __FILE_defined)\n         (not __time_t_defined)\n         (not __int8_t_defined))\n    (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         __need___FILE\n         __STRICT_ANSI__\n         (not _BITS_TYPESIZES_H)\n         (not __FILE_defined)\n         (not __time_t_defined)\n         (not __int8_t_defined))\n    (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         __need___FILE\n         (not __STRICT_ANSI__)\n         (not _BITS_TYPESIZES_H)\n         (not __FILE_defined)\n         (not __time_t_defined)\n         (not __int8_t_defined)))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun __FILE_defined () Bool\n  false)\n(define-fun __need___FILE () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 30744.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__total_cert_len_9768` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1.desugared.c",
+      "line" : 18244,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1.c",
+    "sanitizedDescription" : "`total_cert_len` is read without initialization.",
+    "lineInputFile" : [
+      92,
+      92
+    ],
+    "presenceCondition" : "(and (not _BITS_TYPESIZES_H) (not __time_t_defined) (not __int8_t_defined))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 32536.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__pkt_size_9764` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1.desugared.c",
+      "line" : 18244,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1.c",
+    "sanitizedDescription" : "`pkt_size` is read without initialization.",
+    "lineInputFile" : [
+      92,
+      92
+    ],
+    "presenceCondition" : "(and (not _BITS_TYPESIZES_H) (not __time_t_defined) (not __int8_t_defined))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 32536.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__dnslen_11934` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/x509.desugared.c",
+      "line" : 16047,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/x509.c",
+    "sanitizedDescription" : "`dnslen` is read without initialization.",
+    "lineInputFile" : [
+      261,
+      261
+    ],
+    "presenceCondition" : "(or (and (and (not _BITS_TYPESIZES_H) (not __time_t_defined))\n         CONFIG_PLATFORM_SOLARIS)\n    (and (and (not _BITS_TYPESIZES_H) (not __time_t_defined))\n         (not CONFIG_PLATFORM_SOLARIS)))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 31912.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__w_5425` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/crypto/sha512.desugared.c",
+      "line" : 6760,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/crypto/sha512.c",
+    "sanitizedDescription" : "`w` is read without initialization.",
+    "lineInputFile" : [
+      75,
+      119
+    ],
+    "presenceCondition" : "(and (not __STRICT_ANSI__) CONFIG_PLATFORM_SOLARIS (not __need___FILE))",
+    "model" : "(define-fun __STRICT_ANSI__ () Bool\n  false)\n(define-fun __need___FILE () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 34703.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__last_blk_size_9228` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1.desugared.c",
+      "line" : 12607,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1.c",
+    "sanitizedDescription" : "`last_blk_size` is read without initialization.",
+    "lineInputFile" : [
+      740,
+      740
+    ],
+    "presenceCondition" : "(or (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         CONFIG_PLATFORM_SOLARIS)\n    (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (not CONFIG_PLATFORM_SOLARIS)))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 32536.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "DEAD_STORE",
+      "description" : "The value written to `&__tm_ptr_12290` is never used.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1_clnt.desugared.c",
+      "line" : 16684,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1_clnt.c",
+    "sanitizedDescription" : "The value written to `&tm_ptr` is never used.",
+    "lineInputFile" : [
+      209,
+      209
+    ],
+    "presenceCondition" : "(let ((a!1 (and (not _STDLIB_H)\n                (not __STRICT_ANSI__)\n                __need_malloc_and_calloc\n                (not _BITS_TYPESIZES_H)\n                __clock_t_defined\n                (not __time_t_defined)\n                (not __int8_t_defined)))\n      (a!2 (and (not _STDLIB_H)\n                __STRICT_ANSI__\n                (not _BITS_TYPESIZES_H)\n                __clock_t_defined\n                (not __time_t_defined)\n                (not __int8_t_defined))))\n(let ((a!3 (or (and a!1 CONFIG_PLATFORM_SOLARIS)\n               (and a!2 CONFIG_PLATFORM_SOLARIS)\n               (and (and _STDLIB_H\n                         (not _BITS_TYPESIZES_H)\n                         __clock_t_defined\n                         (not __time_t_defined)\n                         (not __int8_t_defined))\n                    CONFIG_PLATFORM_SOLARIS)))\n      (a!4 (or (and a!1 (not CONFIG_PLATFORM_SOLARIS))\n               (and a!2 (not CONFIG_PLATFORM_SOLARIS))\n               (and (and _STDLIB_H\n                         (not _BITS_TYPESIZES_H)\n                         __clock_t_defined\n                         (not __time_t_defined)\n                         (not __int8_t_defined))\n                    (not CONFIG_PLATFORM_SOLARIS)))))\n  (or (and (and (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined))\n           a!3)\n      (and (and (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined))\n           a!4))))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  false)\n(define-fun __clock_t_defined () Bool\n  true)\n(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  true)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 39406.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__hs_len_9505` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1.desugared.c",
+      "line" : 15894,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1.c",
+    "sanitizedDescription" : "`hs_len` is read without initialization.",
+    "lineInputFile" : [
+      92,
+      92
+    ],
+    "presenceCondition" : "(or (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         CONFIG_PLATFORM_SOLARIS)\n    (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (not CONFIG_PLATFORM_SOLARIS)))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 32536.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__tm_9651` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/ssl/tls1.desugared.c",
+      "line" : 17088,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/ssl/tls1.c",
+    "sanitizedDescription" : "`tm` is read without initialization.",
+    "lineInputFile" : [
+      1784,
+      1785
+    ],
+    "presenceCondition" : "(let ((a!1 (and (and (and (not __STRICT_ANSI__) (not _STDLIB_H))\n                     (not __need_malloc_and_calloc))\n                (not _SYS_WAIT_H)\n                (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined)))\n      (a!3 (and (and (and (not __STRICT_ANSI__) (not _STDLIB_H))\n                     (not __need_malloc_and_calloc))\n                _SYS_WAIT_H\n                (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined)))\n      (a!5 (and (and (not __STRICT_ANSI__) (not _STDLIB_H))\n                __need_malloc_and_calloc\n                (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined)))\n      (a!6 (and (not __STRICT_ANSI__)\n                _STDLIB_H\n                (not _BITS_TYPESIZES_H)\n                (not __time_t_defined)\n                (not __int8_t_defined)))\n      (a!7 (and (and __STRICT_ANSI__\n                     (not _BITS_TYPESIZES_H)\n                     (not __time_t_defined)\n                     (not __int8_t_defined))\n                (not __need___FILE)))\n      (a!10 (and (and __STRICT_ANSI__\n                      (not _BITS_TYPESIZES_H)\n                      (not __time_t_defined)\n                      (not __int8_t_defined))\n                 __need___FILE))\n      (a!12 (and (and (not _BITS_TYPESIZES_H)\n                      (not __time_t_defined)\n                      (not __int8_t_defined))\n                 (not CONFIG_PLATFORM_SOLARIS))))\n(let ((a!2 (and (and (and (not _BITS_TYPESIZES_H)\n                          (not __time_t_defined)\n                          (not __int8_t_defined))\n                     CONFIG_PLATFORM_SOLARIS)\n                a!1\n                CONFIG_PLATFORM_SOLARIS))\n      (a!4 (and (and (and (not _BITS_TYPESIZES_H)\n                          (not __time_t_defined)\n                          (not __int8_t_defined))\n                     CONFIG_PLATFORM_SOLARIS)\n                a!3\n                CONFIG_PLATFORM_SOLARIS))\n      (a!8 (or (and (and a!5 (not __need___FILE)) CONFIG_PLATFORM_SOLARIS)\n               (and (and a!6 (not __need___FILE)) CONFIG_PLATFORM_SOLARIS)\n               (and a!7 CONFIG_PLATFORM_SOLARIS)))\n      (a!11 (and (and (and (not _BITS_TYPESIZES_H)\n                           (not __time_t_defined)\n                           (not __int8_t_defined))\n                      CONFIG_PLATFORM_SOLARIS)\n                 (or (and (and a!5 __need___FILE) CONFIG_PLATFORM_SOLARIS)\n                     (and (and a!6 __need___FILE) CONFIG_PLATFORM_SOLARIS)\n                     (and a!10 CONFIG_PLATFORM_SOLARIS))))\n      (a!13 (or (and (and a!5 (not __need___FILE))\n                     (not CONFIG_PLATFORM_SOLARIS))\n                (and (and a!6 (not __need___FILE))\n                     (not CONFIG_PLATFORM_SOLARIS))\n                (and a!7 (not CONFIG_PLATFORM_SOLARIS))))\n      (a!14 (and a!12\n                 (or (and (and a!5 __need___FILE) (not CONFIG_PLATFORM_SOLARIS))\n                     (and (and a!6 __need___FILE) (not CONFIG_PLATFORM_SOLARIS))\n                     (and a!10 (not CONFIG_PLATFORM_SOLARIS))))))\n(let ((a!9 (and (and (and (not _BITS_TYPESIZES_H)\n                          (not __time_t_defined)\n                          (not __int8_t_defined))\n                     CONFIG_PLATFORM_SOLARIS)\n                a!8)))\n  (or a!2\n      a!4\n      a!9\n      a!11\n      (and a!12 a!1 (not CONFIG_PLATFORM_SOLARIS))\n      (and a!12 a!3 (not CONFIG_PLATFORM_SOLARIS))\n      (and a!12 a!13)\n      a!14))))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  false)\n(define-fun __need_malloc_and_calloc () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun _STDLIB_H () Bool\n  false)\n(define-fun _SYS_WAIT_H () Bool\n  false)\n(define-fun CONFIG_PLATFORM_SOLARIS () Bool\n  true)",
+    "feasible" : true,
+    "desugaringTime" : 32536.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__b64_passwd_9789` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/httpd/proc.desugared.c",
+      "line" : 15989,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/httpd/proc.c",
+    "sanitizedDescription" : "`b64_passwd` is read without initialization.",
+    "lineInputFile" : [
+      1075,
+      1075
+    ],
+    "presenceCondition" : "true",
+    "model" : "",
+    "feasible" : true,
+    "desugaringTime" : 30744.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__res_9889` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/httpd/proc.desugared.c",
+      "line" : 17219,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/httpd/proc.c",
+    "sanitizedDescription" : "`res` is read without initialization.",
+    "lineInputFile" : [
+      1252,
+      1252
+    ],
+    "presenceCondition" : "(or (and (not __need___FILE)\n         (not _BITS_TYPESIZES_H)\n         (not __time_t_defined)\n         (not __int8_t_defined))\n    (and (and __need___FILE (not _BITS_TYPESIZES_H))\n         (not _STDLIB_H)\n         (not __time_t_defined)\n         (not __int8_t_defined))\n    (and (and __need___FILE (not _BITS_TYPESIZES_H))\n         _STDLIB_H\n         (not __time_t_defined)\n         (not __int8_t_defined)))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun __need___FILE () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 30744.0,
+    "strategy" : "transformation"
+  },
+  {
+    "originalAlarm" : {
+      "alarmType" : "PULSE_UNINITIALIZED_VALUE",
+      "description" : "`__fp_9814` is read without initialization.",
+      "fileLocation" : "/workspace/axtls-code/httpd/proc.desugared.c",
+      "line" : 16269,
+      "analysisTime" : 139.838914246
+    },
+    "originalFile" : "/workspace/axtls-code/httpd/proc.c",
+    "sanitizedDescription" : "`fp` is read without initialization.",
+    "lineInputFile" : [
+      1109,
+      1109
+    ],
+    "presenceCondition" : "(or (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         (not __need___FILE)\n         __STRICT_ANSI__\n         (not _BITS_TYPESIZES_H)\n         (not __FILE_defined)\n         (not __time_t_defined)\n         (not __int8_t_defined))\n    (and (and (not _BITS_TYPESIZES_H)\n              (not __time_t_defined)\n              (not __int8_t_defined))\n         __need___FILE\n         __STRICT_ANSI__\n         (not _BITS_TYPESIZES_H)\n         (not __FILE_defined)\n         (not __time_t_defined)\n         (not __int8_t_defined)))",
+    "model" : "(define-fun __time_t_defined () Bool\n  false)\n(define-fun __int8_t_defined () Bool\n  false)\n(define-fun _BITS_TYPESIZES_H () Bool\n  false)\n(define-fun __STRICT_ANSI__ () Bool\n  true)\n(define-fun __FILE_defined () Bool\n  false)\n(define-fun __need___FILE () Bool\n  false)",
+    "feasible" : true,
+    "desugaringTime" : 30744.0,
+    "strategy" : "transformation"
+  }
+]
