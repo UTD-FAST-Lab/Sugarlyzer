@@ -188,10 +188,11 @@ object TransformationStrategy extends AnalysisStrategy {
     ).filter(t => t.lineInputFile.isDefined).toList
   }
 
-  def exportAlarms(alarms: List[Alarm]): IO[Unit] = IO.blocking {
-    val destPath = os.Path("/results")
-    if (!os.exists(destPath)) os.makeDir.all(destPath)
-    val targetFile = destPath / "results.json"
-    os.write.over(targetFile, alarms.asJson.spaces2, createFolders = true)
-  }
+  def exportAlarms(appConfig: AppConfig, alarms: List[Alarm]): IO[Unit] =
+    IO.blocking {
+      val destPath = os.Path("/results")
+      if (!os.exists(destPath)) os.makeDir.all(destPath)
+      val targetFile = destPath / "results.json"
+      os.write.over(targetFile, alarms.asJson.spaces2, createFolders = true)
+    }
 }

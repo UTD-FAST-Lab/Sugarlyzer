@@ -17,7 +17,7 @@ trait AnalysisStrategy {
   ): IO[List[Alarm]]
   def build(appConfig: AppConfig, spec: ProgramSpecification): IO[Unit]
   def deduplicate(alarms: List[Alarm]): List[Alarm]
-  def exportAlarms(alarms: List[Alarm]): IO[Unit]
+  def exportAlarms(appConfig: AppConfig, alarms: List[Alarm]): IO[Unit]
 }
 
 object AnalysisStrategy {
