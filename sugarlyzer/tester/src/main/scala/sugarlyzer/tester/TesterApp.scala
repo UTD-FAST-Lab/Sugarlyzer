@@ -19,6 +19,9 @@ object TesterApp extends IOApp {
           spec <- ProgramFactory.load(config.program)
           // Get the strategy object
           strategy <- IO(AnalysisStrategy(config.strategy))
+
+          _ <- IO.println(s"[TESTER] Configuration: $config")
+
           _ <- {
             // Run the specific phase of the program
             config.phase match {
@@ -47,7 +50,7 @@ object TesterApp extends IOApp {
                     s"[TESTER] deduplicated (length: ${deduplicated_alarms.length})"
                   )
 
-                  _ <- strategy.exportAlarms(deduplicated_alarms)
+                  _ <- strategy.exportAlarms(config, deduplicated_alarms)
                 } yield ExitCode.Success
             }
           }

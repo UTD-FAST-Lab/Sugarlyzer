@@ -67,7 +67,6 @@ object PresenceCondition {
   def fromTuples(tups: Iterable[(String, String)]): PresenceCondition = {
     /* Transform the list of tuples, which is of the form [("MACRO_NAME", TRUE)]
      * into a conjunction of expressions */
-    logger.info(s"tups are ${tups}")
     val ctx = new Context()
     val exprs = tups.map { case (mac, value) =>
       value.toLowerCase match {
