@@ -4,7 +4,6 @@ import sugarlyzer.models.ProgramSpecification
 
 import cats.effect.{IO}
 import sugarlyzer.common.Config.Tool
-import sugarlyzer.common.Config.AppConfig
 import sugarlyzer.tester.sugarc.PresenceCondition
 import sugarlyzer.tester.strategies.CppcheckTool
 
@@ -43,7 +42,7 @@ case class TransformationAlarm(
 
 trait AnalysisTool {
   def name(): String
-  def run(spec: ProgramSpecification)(using AppConfig): IO[List[ToolAlarm]]
+  def run(spec: ProgramSpecification): IO[List[ToolAlarm]]
 }
 
 object AnalysisTool {
@@ -52,5 +51,6 @@ object AnalysisTool {
     case Tool.CLANG    => ClangTool
     case Tool.PHASAR   => PhasarTool
     case Tool.CPPCHECK => CppcheckTool
+    case Tool.FRAMAC   => FramaCTool
   }
 }

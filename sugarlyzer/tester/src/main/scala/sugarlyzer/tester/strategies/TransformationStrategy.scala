@@ -27,7 +27,6 @@ object TransformationStrategy extends AnalysisStrategy {
       spec: ProgramSpecification,
       tool: AnalysisTool
   ): IO[List[TransformationAlarm]] = {
-    given AppConfig = appConfig
     println(s"Running analysis for ${spec.name}")
     val workingDir = os.Path(appConfig.sharedPath) / os.RelPath(spec.rootDir)
     for {
@@ -104,7 +103,7 @@ object TransformationStrategy extends AnalysisStrategy {
           restrict = spec.name.toLowerCase() == "busybox"
         )
 
-        operation.timed.map { case (duration, _) =>
+        operation.value.timed.map { case (duration, _) =>
           ctx.file.toString -> duration.toMillis.toDouble
         }
       }
@@ -188,10 +187,11 @@ object TransformationStrategy extends AnalysisStrategy {
     ).filter(t => t.lineInputFile.isDefined).toList
   }
 
-  def exportAlarms(alarms: List[Alarm]): IO[Unit] = IO.blocking {
-    val destPath = os.Path("/results")
-    if (!os.exists(destPath)) os.makeDir.all(destPath)
-    val targetFile = destPath / "results.json"
-    os.write.over(targetFile, alarms.asJson.spaces2, createFolders = true)
-  }
+  def exportAlarms(appConfig: AppConfig, alarms: List[Alarm]): IO[Unit] =
+    IO.blocking {
+      val destPath = os.Path("/results")
+      if (!os.exists(destPath)) os.makeDir.all(destPath)
+      val targetFile = destPath / "results.json"
+      os.write.over(targetFile, alarms.asJson.spaces2, createFolders = true)
+    }
 }

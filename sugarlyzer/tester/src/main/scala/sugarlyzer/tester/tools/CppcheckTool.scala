@@ -4,7 +4,6 @@ import cats.effect.IO
 import cats.syntax.all._
 import sugarlyzer.tester.tools.AnalysisTool
 import sugarlyzer.models.ProgramSpecification
-import sugarlyzer.common.Config.AppConfig
 import sugarlyzer.tester.tools.ToolAlarm
 import sugarlyzer.tester.parsing.CompileCommands
 import scala.xml.XML
@@ -12,9 +11,7 @@ import scala.util.control.NonFatal
 
 object CppcheckTool extends AnalysisTool {
   def name(): String = { "Cppcheck" }
-  def run(spec: ProgramSpecification)(using
-      config: AppConfig
-  ): IO[List[ToolAlarm]] = {
+  def run(spec: ProgramSpecification): IO[List[ToolAlarm]] = {
     for {
       _      <- IO.println(s"[TOOL] Running spec ${spec}")
       alarms <- analyzeFiles(spec)
@@ -22,9 +19,7 @@ object CppcheckTool extends AnalysisTool {
     } yield (alarms)
   }
 
-  def analyzeFiles(
-      spec: ProgramSpecification
-  )(using config: AppConfig): IO[List[ToolAlarm]] = {
+  def analyzeFiles(spec: ProgramSpecification): IO[List[ToolAlarm]] = {
     val rootDir             = os.Path(spec.rootDir)
     val compileCommandsPath = rootDir / "compile_commands.json"
 

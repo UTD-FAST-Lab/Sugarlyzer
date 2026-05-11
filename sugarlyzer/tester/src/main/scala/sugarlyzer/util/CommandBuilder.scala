@@ -8,6 +8,8 @@ import cats.effect.IO
 import cats.syntax.all._
 import cats.Show
 import java.io.{PrintWriter, FileWriter}
+import scala.concurrent.duration.FiniteDuration
+import java.util.concurrent.TimeoutException
 
 case class CommandBuilder(
     program: String,
@@ -30,7 +32,8 @@ case class CommandBuilder(
   import CommandBuilder.{LogFile, ResultFile}
   def runWithFileRedirects(
       outputFile: Path,
-      logFile: Path
+      logFile: Path,
+      timeout: Option[FiniteDuration] = None
   ): IO[(ResultFile, LogFile)] = {
     val pb = build
     val stdoutWriter = Resource.fromAutoCloseable(
@@ -40,16 +43,28 @@ case class CommandBuilder(
       IO.blocking(PrintWriter(FileWriter(File(logFile.toURI))))
     )
     (stdoutWriter, stderrWriter).tupled.use { (stdoutWriter, stderrWriter) =>
-      IO.blocking {
-        pb.!(ProcessLogger(
-          fout = line => stdoutWriter.println(line),
-          ferr = line => stderrWriter.println(line)
-        ))
-      }.flatMap { status =>
-        IO.println(status) >>
-          IO.blocking(stdoutWriter.flush()) >>
-          IO.blocking(stderrWriter.flush()) >>
-          IO.pure((ResultFile(outputFile), LogFile(logFile)))
+      val pLogger = ProcessLogger(
+        fout = line => stdoutWriter.println(line),
+        ferr = line => stderrWriter.println(line)
+      )
+      val flush =
+        IO.blocking(stdoutWriter.flush()) >> IO.blocking(stderrWriter.flush())
+      timeout match {
+        case None =>
+          IO.blocking(pb.!(pLogger)).flatMap { status =>
+            IO.println(status) >> flush >> IO.pure((ResultFile(outputFile), LogFile(logFile)))
+          }
+        case Some(duration) =>
+          IO.blocking(pb.run(pLogger)).flatMap { process =>
+            val waitForProcess    = IO.blocking(process.exitValue())
+            val killAfterTimeout  = IO.sleep(duration) >> IO.blocking(process.destroy())
+            IO.race(waitForProcess, killAfterTimeout).flatMap {
+              case Left(status) =>
+                IO.println(status) >> flush >> IO.pure((ResultFile(outputFile), LogFile(logFile)))
+              case Right(_) =>
+                IO.raiseError(new TimeoutException(s"Process timed out after $duration"))
+            }
+          }
       }
     }
   }

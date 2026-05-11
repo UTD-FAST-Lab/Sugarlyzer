@@ -1,14 +1,19 @@
 package sugarlyzer.tester.sugarc
 
+import cats.data.OptionT
 import cats.effect.IO
 import os.Path
 import java.io.File
 import com.typesafe.scalalogging.Logger
 import sugarlyzer.util.CommandBuilder
 import cats.implicits.*
+import scala.concurrent.duration.*
+import java.util.concurrent.TimeoutException
 import scala.util.matching.Regex
 import com.microsoft.z3.Context
 import sugarlyzer.tester.tools.ToolAlarm
+import scala.util.Using
+import com.microsoft.z3.Status
 object SugarCRunner {
 
   val logger = Logger[SugarCRunner.type]
@@ -73,9 +78,7 @@ object SugarCRunner {
       includedFiles: Iterable[Path] = Seq(),
       includedDirectories: Iterable[Path] = Seq(),
       commandLineDeclarations: Iterable[String] = Nil
-  ): IO[(CommandBuilder.ResultFile, CommandBuilder.LogFile)] = {
-    /* If recommended space exists, write it to a file, and add it to the
-     * included files */
+  ): OptionT[IO, (CommandBuilder.ResultFile, CommandBuilder.LogFile)] = {
     val recommendedSpaceFileIO: IO[Option[Path]] = recommendedSpace match {
       case Some(rs) =>
         for {
@@ -85,7 +88,7 @@ object SugarCRunner {
       case None => IO.pure(None)
     }
 
-    recommendedSpaceFileIO.flatMap { rsFileOpt =>
+    val run = recommendedSpaceFileIO.flatMap { rsFileOpt =>
       val cmd = buildDesugarCommand(
         fileToDesugar,
         rsFileOpt,
@@ -97,8 +100,17 @@ object SugarCRunner {
         includedDirectories,
         commandLineDeclarations
       )
-      cmd.runWithFileRedirects(getOutputPath(fileToDesugar), logFile)
+      cmd.runWithFileRedirects(
+        getOutputPath(fileToDesugar),
+        logFile,
+        Some(10.minutes)
+      )
     }
+
+    OptionT(run.map(Some(_)).recover { case _: TimeoutException =>
+      logger.warn(s"Desugaring timed out for $fileToDesugar")
+      None
+    })
   }
 
   def mapLineNumber(
@@ -160,27 +172,55 @@ object SugarCRunner {
     // For each presence condition, parse the actual condition expression
     val conditionRegex: Regex =
       """__static_condition_renaming\(\"(.*)\", \"(.*)\"\);""".r
-    val ctx = new Context()
-    val exprs = for {
-      r <- results
-      l <- lines.filter(_.contains(s"__static_condition_renaming(\"$r\""))
-      expr <- l match {
-        case conditionRegex(oldName, newName) =>
-          logger.debug(
-            s"Found renamed presence condition: $oldName -> $newName"
-          )
-          Some(PresenceConditionParser.parse(ctx, newName))
-        case _ =>
-          logger.debug("Couldn't match regular expression")
-          None
-      }
-    } yield expr
 
-    val combined = exprs match {
-      case Nil      => ctx.mkTrue()
-      case e :: Nil => e
-      case _        => ctx.mkAnd(exprs*)
+    Using.resource(new Context()) { ctx =>
+      val exprs = for {
+        r <- results
+        l <- lines.filter(_.contains(s"__static_condition_renaming(\"$r\""))
+        expr <- l match {
+          case conditionRegex(oldName, newName) =>
+            logger.debug(
+              s"Found renamed presence condition: $oldName -> $newName"
+            )
+            Some(PresenceConditionParser.parse(ctx, newName))
+          case _ =>
+            logger.debug("Couldn't match regular expression")
+            None
+        }
+      } yield expr
+      val combined = exprs match {
+        case Nil      => ctx.mkTrue()
+        case e :: Nil => e
+        case _        => ctx.mkAnd(exprs*)
+      }
+
+      val solver = ctx.mkSolver()
+      solver.add(combined)
+      var configs = Set.empty[Map[String, String]]
+
+      while (solver.check() == Status.SATISFIABLE) {
+        val model = solver.getModel
+        val decls = model.getConstDecls
+
+        val config = decls.map { d =>
+          d.getName.toString -> model.getConstInterp(d).toString
+        }.toMap
+
+        configs = configs + config
+
+        val blockClauses = decls.map { d =>
+          ctx.mkEq(ctx.mkConst(d.getName, d.getRange), model.getConstInterp(d))
+        }
+
+        if (blockClauses.nonEmpty) {
+          solver.add(ctx.mkNot(ctx.mkAnd(blockClauses*)))
+        } else {
+          solver.add(ctx.mkFalse())
+        }
+      }
+
+      PresenceCondition(configs)
+
     }
-    PresenceCondition(ctx, combined)
   }
 }

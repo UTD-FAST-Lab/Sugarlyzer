@@ -32,7 +32,6 @@ object ProductStrategy extends AnalysisStrategy {
       spec: ProgramSpecification,
       tool: AnalysisTool
   ): IO[List[ProductAlarm]] = {
-    given AppConfig = appConfig
     println(s"Running analysis for ${spec.name}")
     if spec.name == "varbugs" then {
       val sharedPath = os.Path(appConfig.sharedPath)
@@ -71,46 +70,48 @@ object ProductStrategy extends AnalysisStrategy {
         }
       } yield results.flatten
     } else {
-      (0 until appConfig.sampleSize).toList.parTraverseN(appConfig.jobs) { i =>
-        val iterDir    = os.Path(appConfig.sharedPath) / s"$i" / spec.rootDir
-        val configFile = s"$i.config"
-        for {
-          _           <- IO.println(s"Running analysis for sample $i")
-          rawFindings <- tool.run(spec.copy(rootDir = iterDir.toString))
-          model <- IO.blocking {
-            val configResourcePath =
-              s"programs/${spec.name}/configs/$configFile"
-            Using.resource(Source.fromResource(configResourcePath)) { source =>
-              source.getLines()
-                .map(_.trim)
-                .filter(_.nonEmpty)
-                .map { line =>
-                  if (line.startsWith("#")) {
-                    val key = line.substring(1).trim.split(" ").head
-                    (key, "false")
-                  } else {
-                    val toks = line.split("=", 2)
-                    (toks(0).trim, toks(1).trim)
-                  }
-                }.toList
+      (0 to (appConfig.sampleSize - 1)).toList.parTraverseN(5) {
+        i =>
+          val iterDir    = os.Path(appConfig.sharedPath) / s"$i" / spec.rootDir
+          val configFile = s"$i.config"
+          for {
+            _           <- IO.println(s"Running analysis for sample $i")
+            rawFindings <- tool.run(spec.copy(rootDir = iterDir.toString))
+            model <- IO.blocking {
+              val configResourcePath =
+                s"programs/${spec.name}/configs/$configFile"
+              Using.resource(Source.fromResource(configResourcePath)) {
+                source =>
+                  source.getLines()
+                    .map(_.trim)
+                    .filter(_.nonEmpty)
+                    .map { line =>
+                      if (line.startsWith("#")) {
+                        val key = line.substring(1).trim.split(" ").head
+                        (key, "false")
+                      } else {
+                        val toks = line.split("=", 2)
+                        (toks(0).trim, toks(1).trim)
+                      }
+                    }.toList
+              }
             }
-          }
-          alarms <- IO.blocking {
-            rawFindings.map { finding =>
-              val pc = PresenceCondition.fromTuples(model)
-              ProductAlarm(
-                originalAlarm = finding.copy(fileLocation =
-                  finding.fileLocation.replaceAll(s"/workspace/$i/", "")
-                ),
-                configFiles = List[String](configFile),
-                presenceCondition = pc,
-                model = pc.getModel,
-                numConfigs = List[Int](pc.numConsts)
-              )
+            alarms <- IO.blocking {
+              rawFindings.map { finding =>
+                val pc = PresenceCondition.fromTuples(model)
+                ProductAlarm(
+                  originalAlarm = finding.copy(fileLocation =
+                    finding.fileLocation.replaceAll(s"/workspace/$i/", "")
+                  ),
+                  configFiles = List[String](configFile),
+                  presenceCondition = pc,
+                  model = pc.getModel,
+                  numConfigs = List[Int](pc.numConsts)
+                )
+              }
             }
-          }
 
-        } yield (alarms)
+          } yield (alarms)
       }.map(_.flatten)
     }
   }
@@ -217,16 +218,17 @@ object ProductStrategy extends AnalysisStrategy {
         }
       } yield ()
     } else {
-      (0 until appConfig.sampleSize).toList.parTraverseN(appConfig.jobs) { i =>
-        val iterDir   = sharedPath / s"$i"
-        val finalDest = iterDir / masterSource.last
+      (0 to (appConfig.sampleSize - 1)).toList.parTraverseN(appConfig.jobs) {
+        i =>
+          val iterDir   = sharedPath / s"$i"
+          val finalDest = iterDir / masterSource.last
 
-        for {
-          _ <- setupWorkspace(iterDir, masterSource, finalDest)
-          _ <- injectConfig(i, spec, iterDir)
-          _ <- runBuild(i, spec, iterDir, appConfig)
-          _ <- IO.println(s"Finished preparing sample $i.")
-        } yield ()
+          for {
+            _ <- setupWorkspace(iterDir, masterSource, finalDest)
+            _ <- injectConfig(i, spec, iterDir)
+            _ <- runBuild(i, spec, iterDir, appConfig)
+            _ <- IO.println(s"Finished preparing sample $i.")
+          } yield ()
       }.void
     }
   }
@@ -283,7 +285,7 @@ object ProductStrategy extends AnalysisStrategy {
     os.proc("make", "clean")
       .call(
         cwd = workingDir,
-        check = false,
+        check = true,
         stdout = os.Inherit,
         stderr = os.Inherit
       ): Unit
@@ -291,7 +293,7 @@ object ProductStrategy extends AnalysisStrategy {
     val configResult = os.proc("sh", "-c", "yes | make oldconfig")
       .call(
         cwd = workingDir,
-        check = false,
+        check = true,
         stdout = os.Inherit,
         stderr = os.Inherit
       )
@@ -320,7 +322,7 @@ object ProductStrategy extends AnalysisStrategy {
       val proc = os.proc("bear", "make")
         .call(
           cwd = workingDir,
-          check = false,
+          check = true,
           stdout = os.Inherit,
           stderr = os.Inherit
         )
@@ -363,10 +365,11 @@ object ProductStrategy extends AnalysisStrategy {
       .toList
   }
 
-  def exportAlarms(alarms: List[Alarm]): IO[Unit] = IO.blocking {
-    val destPath = os.Path("/results")
-    if (!os.exists(destPath)) os.makeDir.all(destPath)
-    val targetFile = destPath / "results.json"
-    os.write.over(targetFile, alarms.asJson.spaces2, createFolders = true)
-  }
+  def exportAlarms(appConfig: AppConfig, alarms: List[Alarm]): IO[Unit] =
+    IO.blocking {
+      val destPath = os.Path(s"/${appConfig.resultsDir}")
+      if (!os.exists(destPath)) os.makeDir.all(destPath)
+      val targetFile = destPath / "results.json"
+      os.write.over(targetFile, alarms.asJson.spaces2, createFolders = true)
+    }
 }
