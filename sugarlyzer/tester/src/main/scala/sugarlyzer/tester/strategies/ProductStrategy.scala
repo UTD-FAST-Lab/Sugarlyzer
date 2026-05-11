@@ -32,6 +32,7 @@ object ProductStrategy extends AnalysisStrategy {
       spec: ProgramSpecification,
       tool: AnalysisTool
   ): IO[List[ProductAlarm]] = {
+    given AppConfig = appConfig
     println(s"Running analysis for ${spec.name}")
     if spec.name == "varbugs" then {
       val sharedPath = os.Path(appConfig.sharedPath)
