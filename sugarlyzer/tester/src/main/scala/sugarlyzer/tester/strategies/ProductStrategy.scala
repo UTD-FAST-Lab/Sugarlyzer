@@ -70,7 +70,7 @@ object ProductStrategy extends AnalysisStrategy {
         }
       } yield results.flatten
     } else {
-      (0 to (appConfig.sampleSize - 1)).toList.parTraverseN(5) {
+      (0 to (appConfig.sampleSize - 1)).toList.parTraverseN(appConfig.jobs) {
         i =>
           val iterDir    = os.Path(appConfig.sharedPath) / s"$i" / spec.rootDir
           val configFile = s"$i.config"
