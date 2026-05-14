@@ -21,6 +21,7 @@ import org.eclipse.cdt.core.parser.IncludeFileContentProvider
 import org.eclipse.cdt.core.model.ILanguage
 import com.typesafe.scalalogging.Logger
 import sugarlyzer.tester.sugarc.PresenceCondition
+import scala.collection.parallel.CollectionConverters.*
 
 object ProductStrategy extends AnalysisStrategy {
   val logger = Logger[ProductStrategy.type]
@@ -337,7 +338,7 @@ object ProductStrategy extends AnalysisStrategy {
   }
 
   def deduplicate(alarms: List[ProductAlarm]): List[ProductAlarm] = {
-    alarms
+    alarms.par
       .groupBy(a =>
         (
           a.originalAlarm.fileLocation,
@@ -348,7 +349,7 @@ object ProductStrategy extends AnalysisStrategy {
       )
       .values
       .map { groupedAlarms =>
-        groupedAlarms.reduceLeft { (acc, curr) =>
+        groupedAlarms.reduce { (acc, curr) =>
           val updatedPc =
             (acc.presenceCondition || curr.presenceCondition).simplify
           acc.copy(
