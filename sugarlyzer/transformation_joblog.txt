@@ -1,0 +1,7 @@
+Seq	Host	Starttime	JobRuntime	Send	Receive	Exitval	Signal	Command
+1	:	1778868973.374	   575.628	0	0	0	0	java -jar dispatcher.jar -t clang -p axtls --results_dir ./results_time/clang_axtls_transformation -s transformation -j 40 |& tee -i clang_axtls_transformation.log
+2	:	1778869549.537	   339.947	0	0	0	0	java -jar dispatcher.jar -t clang -p toybox --results_dir ./results_time/clang_toybox_transformation -s transformation -j 40 |& tee -i clang_toybox_transformation.log
+3	:	1778869890.009	   657.371	0	0	0	0	java -jar dispatcher.jar -t clang -p busybox --results_dir ./results_time/clang_busybox_transformation -s transformation -j 40 |& tee -i clang_busybox_transformation.log
+4	:	1778870547.890	   246.009	0	0	0	0	java -jar dispatcher.jar -t infer -p axtls --results_dir ./results_time/infer_axtls_transformation -s transformation -j 40 |& tee -i infer_axtls_transformation.log
+5	:	1778870794.445	   477.164	0	0	0	0	java -jar dispatcher.jar -t infer -p toybox --results_dir ./results_time/infer_toybox_transformation -s transformation -j 40 |& tee -i infer_toybox_transformation.log
+6	:	1778871272.143	  1107.020	0	0	0	0	java -jar dispatcher.jar -t infer -p busybox --results_dir ./results_time/infer_busybox_transformation -s transformation -j 40 |& tee -i infer_busybox_transformation.log
