@@ -91,7 +91,8 @@ object MainApp extends IOApp.Simple {
       line = 2408,
       alarmType = "Sample",
       description = "Sample",
-      analysisTime = 1.0
+      analysisTime = 1.0,
+      target = "Sample"
     )
     val model = SugarCRunner.findPresenceCondition(
       alarm,
