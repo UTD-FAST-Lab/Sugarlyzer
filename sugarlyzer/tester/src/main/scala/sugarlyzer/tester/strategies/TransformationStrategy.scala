@@ -14,6 +14,7 @@ import sugarlyzer.tester.parsing.CompileCommand
 import sugarlyzer.tester.parsing.CompileCommands
 import sugarlyzer.tester.sugarc.SugarCRunner.desugarFile
 import sugarlyzer.tester.sugarc.SugarCRunner
+import scala.collection.parallel.CollectionConverters.*
 
 object TransformationStrategy extends AnalysisStrategy {
   type Alarm = TransformationAlarm
@@ -178,7 +179,7 @@ object TransformationStrategy extends AnalysisStrategy {
 
   def deduplicate(alarms: List[TransformationAlarm])
       : List[TransformationAlarm] = {
-    alarms.groupBy(al =>
+    alarms.par.groupBy(al =>
       (
         al.sanitizedDescription,
         al.lineInputFile,

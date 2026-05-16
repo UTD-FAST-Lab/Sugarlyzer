@@ -92,7 +92,8 @@ object InferTool extends AnalysisTool {
         description = ia.qualifier,
         line = ia.line,
         fileLocation = spec.rootDir + "/" + ia.file,
-        analysisTime = analysisTime
+        analysisTime = analysisTime,
+        target = spec.name
       )
     }
   }

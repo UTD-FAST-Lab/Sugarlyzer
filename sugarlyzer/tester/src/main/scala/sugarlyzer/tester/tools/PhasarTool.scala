@@ -118,7 +118,8 @@ object PhasarTool extends AnalysisTool {
           description = s"Uninitialized variable potential in $func",
           line = line,
           fileLocation = spec.rootDir + "/" + file,
-          analysisTime = 0.0
+          analysisTime = 0.0,
+          target = spec.name
         )
     }.toList
   }
