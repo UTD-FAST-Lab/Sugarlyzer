@@ -15,28 +15,31 @@ class WarningTypes(StrEnum):
     MALLOC_SIZE_OF = auto()
     GARBAGE_VALUE = auto()
     NULL_POINTER_NONNULL_EXPECTED = auto()
+    DISCARD_CONST_QUALIFIER = auto()
 
 
 def get_warning_type(alarm: dict) -> str:
     if alarm['strategy'] == 'family':
-        if "is a dead store" in alarm['err']:
+        if "is a dead store" in alarm['msg']:
             return WarningTypes.DEAD_STORE
-        elif "is used uninitialized" in alarm['err']:
+        elif "is used uninitialized" in alarm['msg']:
             return WarningTypes.UNINITIALIZED_VALUE
-        elif "Control flow of non-void function" in alarm['err']:
+        elif "Control flow of non-void function" in alarm['msg']:
             return WarningTypes.CONTROL_FLOW
-        elif "Case statement is not terminated" in alarm['err']:
+        elif "Case statement is not terminated" in alarm['msg']:
             return WarningTypes.CASE_NOT_TERMINATED
-        elif "is freed although not dynamically" in alarm['err']:
+        elif "is freed although not dynamically" in alarm['msg']:
             return WarningTypes.STATIC_FREE
-        elif "is freed multiple times" in alarm['err']:
+        elif "is freed multiple times" in alarm['msg']:
             return WarningTypes.DOUBLE_FREE
-        elif "makes pointer from" in alarm['err']:
+        elif "makes pointer from" in alarm['msg']:
             return WarningTypes.CAST_TO_POINTER
-        elif "switch statement has dangling code":
+        elif "switch statement has dangling code" in alarm['msg']:
             return WarningTypes.CONTROL_FLOW
+        elif "discards 'const' qualifier" in alarm['msg']:
+            return WarningTypes.DISCARD_CONST_QUALIFIER
         else:
-            raise RuntimeError(f"Couldn't handle {alarm['err']}")
+            raise RuntimeError(f"Couldn't handle {alarm['msg']}")
     else:
         typ = alarm['originalAlarm']['alarmType']
         msg = alarm['originalAlarm']['description']

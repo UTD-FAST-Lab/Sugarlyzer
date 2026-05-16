@@ -285,11 +285,7 @@ object ProductStrategy extends AnalysisStrategy {
     os.proc("make", "clean")
       .call(
         cwd = workingDir,
-<<<<<<< HEAD
         check = true,
-=======
-        check = false,
->>>>>>> ddaab12f6a61479534195609b14c97d360f87d20
         stdout = os.Inherit,
         stderr = os.Inherit
       ): Unit
@@ -297,11 +293,7 @@ object ProductStrategy extends AnalysisStrategy {
     val configResult = os.proc("sh", "-c", "yes | make oldconfig")
       .call(
         cwd = workingDir,
-<<<<<<< HEAD
         check = true,
-=======
-        check = false,
->>>>>>> ddaab12f6a61479534195609b14c97d360f87d20
         stdout = os.Inherit,
         stderr = os.Inherit
       )
@@ -330,11 +322,7 @@ object ProductStrategy extends AnalysisStrategy {
       val proc = os.proc("bear", "make")
         .call(
           cwd = workingDir,
-<<<<<<< HEAD
           check = true,
-=======
-          check = false,
->>>>>>> ddaab12f6a61479534195609b14c97d360f87d20
           stdout = os.Inherit,
           stderr = os.Inherit
         )
@@ -377,7 +365,6 @@ object ProductStrategy extends AnalysisStrategy {
       .toList
   }
 
-<<<<<<< HEAD
   def exportAlarms(appConfig: AppConfig, alarms: List[Alarm]): IO[Unit] =
     IO.blocking {
       val destPath = os.Path(s"/${appConfig.resultsDir}")
@@ -385,12 +372,4 @@ object ProductStrategy extends AnalysisStrategy {
       val targetFile = destPath / "results.json"
       os.write.over(targetFile, alarms.asJson.spaces2, createFolders = true)
     }
-=======
-  def exportAlarms(alarms: List[Alarm]): IO[Unit] = IO.blocking {
-    val destPath = os.Path("/results")
-    if (!os.exists(destPath)) os.makeDir.all(destPath)
-    val targetFile = destPath / "results.json"
-    os.write.over(targetFile, alarms.asJson.spaces2, createFolders = true)
-  }
->>>>>>> ddaab12f6a61479534195609b14c97d360f87d20
 }
