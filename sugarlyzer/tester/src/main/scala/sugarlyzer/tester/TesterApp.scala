@@ -19,9 +19,7 @@ object TesterApp extends IOApp {
           spec <- ProgramFactory.load(config.program)
           // Get the strategy object
           strategy <- IO(AnalysisStrategy(config.strategy))
-
           _ <- IO.println(s"[TESTER] Configuration: $config")
-
           _ <- {
             // Run the specific phase of the program
             config.phase match {
