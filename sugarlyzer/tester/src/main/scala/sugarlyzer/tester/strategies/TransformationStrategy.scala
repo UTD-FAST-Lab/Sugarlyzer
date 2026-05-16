@@ -19,8 +19,10 @@ object TransformationStrategy extends AnalysisStrategy {
   type Alarm = TransformationAlarm
 
   def sanitizeDescription(description: String): String = {
-    val pattern = """__(.*)_(?:\d*)""".r
-    pattern.replaceAllIn(description, m => m.group(1))
+    val pattern_var    = """__(.*)_(?:\d*)""".r
+    val sanitized_desc = pattern_var.replaceAllIn(description, m => m.group(1))
+    val pattern_line   = """line (\d+)""".r
+    pattern_line.replaceAllIn(sanitized_desc, "line X")
   }
   def analyze(
       appConfig: AppConfig,
