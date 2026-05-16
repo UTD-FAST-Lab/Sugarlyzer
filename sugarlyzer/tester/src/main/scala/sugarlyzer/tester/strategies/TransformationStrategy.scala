@@ -20,9 +20,12 @@ object TransformationStrategy extends AnalysisStrategy {
 
   def sanitizeDescription(description: String): String = {
     val pattern_var    = """__(.*)_(?:\d*)""".r
-    val sanitized_desc = pattern_var.replaceAllIn(description, m => m.group(1))
-    val pattern_line   = """line (\d+)""".r
-    pattern_line.replaceAllIn(sanitized_desc, "line X")
+    var sanitized_desc = pattern_var.replaceAllIn(description, m => m.group(1))
+    val pattern_line   = """line \d+""".r
+    sanitized_desc = pattern_line.replaceAllIn(sanitized_desc, "line X")
+    val pattern_column = """column \d+""".r
+    sanitized_desc = pattern_column.replaceAllIn(sanitized_desc, "column Y")
+    sanitized_desc
   }
   def analyze(
       appConfig: AppConfig,
