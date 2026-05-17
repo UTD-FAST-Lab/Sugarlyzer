@@ -1,10 +1,8 @@
 import re
 import sys
 
-pattern = re.compile(r'(\d+):(\d+\.\d+)')
-
-def parse_seconds(m, s):
-    return int(m) * 60 + float(s)
+hms_pattern = re.compile(r'(\d+):(\d+):(\d+(?:\.\d+)?)')
+ms_pattern = re.compile(r'(\d+):(\d+\.\d+)')
 
 times = []
 for path in (line.strip() for line in sys.stdin if line.strip()):
@@ -14,11 +12,14 @@ for path in (line.strip() for line in sys.stdin if line.strip()):
     except OSError as e:
         print(f"warning: {path}: {e}", file=sys.stderr)
         continue
-    match = pattern.search(content)
-    if match:
-        times.append(parse_seconds(match.group(1), match.group(2)))
+    if m := hms_pattern.search(content):
+        t = int(m.group(1)) * 3600 + int(m.group(2)) * 60 + float(m.group(3))
+    elif m := ms_pattern.search(content):
+        t = int(m.group(1)) * 60 + float(m.group(2))
     else:
         print(f"warning: no runtime found in {path}", file=sys.stderr)
+        continue
+    times.append(t)
 
 if times:
     print(f"{sum(times) / len(times):.2f}s  (n={len(times)})")
