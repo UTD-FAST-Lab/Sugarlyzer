@@ -57,33 +57,38 @@ TARGET_ORDER = ["axtls", "toybox", "busybox"]
 TARGET_MACROS = {"axtls": r"\axtls", "toybox": r"\toybox", "busybox": r"\busybox"}
 TOOL_MACROS = {"clang": r"\clang", "infer": r"\infer"}
 
-print(r"\begin{tabular}{ll|rrrrr}\hline")
-print(r"  Program  & Tool   & \multicolumn{2}{c}{Product} & \multicolumn{2}{c}{Transformation} & \centercell{Family}                                                     \\")
-print(r"           &        & \centercell{Analysis}       & \centercell{Deduplication}         & \centercell{Desugaring} & \centercell{Analysis} & \centercell{Analysis} \\ \hline")
+print(r"\begin{tabular}{ll|rrrrrrrr}\hline")
+print(r"  Program  & Tool   & \multicolumn{3}{c}{Product} & \multicolumn{3}{c}{Transformation} & \centercell{Family}                                                     \\")
+print(r"           &        & \centercell{Analysis}       & \centercell{Deduplication}         & \centercell{Total} & \centercell{Desugaring} & \centercell{Analysis} & \centercell{Total} & \centercell{Analysis} \\ \hline")
 
 for target in TARGET_ORDER:
     for i, tool in enumerate(["clang", "infer", "VAA"]):
         prog_label = TARGET_MACROS[target] if i == 0 else ""
 
         if tool == "VAA":
-            print(f"  {prog_label:<8} & VAA    & -  & -  & -  & -  & - \\\\")
+            print(f"  {prog_label:<8} & VAA    & -  & -  & -  & -  & -  & -  & - \\\\")
         else:
             prod_key = f"{tool}_{target}_product"
             trans_key = f"{tool}_{target}_transformation"
 
-            prod_analysis   = avg(times[prod_key]["analysis"])
-            prod_dedup      = avg(times[prod_key]["deduplication"])
+            prod_analysis    = avg(times[prod_key]["analysis"])
+            prod_dedup       = avg(times[prod_key]["deduplication"])
             trans_desugaring = avg(times[trans_key]["desugaring"])
-            trans_analysis  = avg(times[trans_key]["analysis"])
+            trans_analysis   = avg(times[trans_key]["analysis"])
+
+            prod_total  = (prod_analysis + prod_dedup) if (prod_analysis is not None and prod_dedup is not None) else None
+            trans_total = (trans_desugaring + trans_analysis) if (trans_desugaring is not None and trans_analysis is not None) else None
 
             cols = [
                 cell(prod_analysis),
                 cell(prod_dedup),
+                cell(prod_total),
                 cell(trans_desugaring),
                 cell(trans_analysis),
+                cell(trans_total),
                 "-",  # Family: always - for clang/infer
             ]
-            print(f"  {prog_label:<8} & {TOOL_MACROS[tool]:<6} & {cols[0]:<28} & {cols[1]:<35} & {cols[2]:<24} & {cols[3]:<21} & {cols[4]:<21} \\\\")
+            print(f"  {prog_label:<8} & {TOOL_MACROS[tool]:<6} & {cols[0]:<28} & {cols[1]:<35} & {cols[2]:<24} & {cols[3]:<24} & {cols[4]:<21} & {cols[5]:<21} & {cols[6]:<21} \\\\")
 
     print(r"  \hline")
 
