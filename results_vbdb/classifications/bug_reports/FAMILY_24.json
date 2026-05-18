@@ -1,8 +1,8 @@
 {
-  "err": "W [True] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/472a474c663.c:21:2--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/472a474c663.c:22:0",
+  "err": "W [True] file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/472a474c663.c:21:2--file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/472a474c663.c:22:0",
   "msg": "Control flow of non-void function ends here!",
   "taxonomy_type": "control_flow",
-  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/472a474c663.c",
+  "input_file": "/home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/472a474c663.c",
   "line_number": 21,
   "origin": "family",
   "id": "FAMILY_24",

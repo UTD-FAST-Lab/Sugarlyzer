@@ -1,8 +1,8 @@
 {
-  "err": "W [(def(CONFIG_NETPOLL)&!def(CONFIG_IPV6))] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/e39363a9def.c:17:9--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/e39363a9def.c:17:12",
+  "err": "W [(def(CONFIG_NETPOLL)&!def(CONFIG_IPV6))] file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/e39363a9def.c:17:9--file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/e39363a9def.c:17:12",
   "msg": "warning: Variable err is used uninitialized!",
   "taxonomy_type": "uninitialized_value",
-  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/e39363a9def.c",
+  "input_file": "/home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/e39363a9def.c",
   "line_number": 17,
   "origin": "family",
   "id": "FAMILY_74",

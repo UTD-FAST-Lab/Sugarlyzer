@@ -1,8 +1,8 @@
 {
-  "err": "W [def(CONFIG_CRYPTO_TEST)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/242f1a34377.c:18:2--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/242f1a34377.c:20:0",
+  "err": "W [def(CONFIG_CRYPTO_TEST)] file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/242f1a34377.c:18:2--file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/242f1a34377.c:20:0",
   "msg": "Control flow of non-void function ends here!",
   "taxonomy_type": "control_flow",
-  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/242f1a34377.c",
+  "input_file": "/home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/242f1a34377.c",
   "line_number": 18,
   "origin": "family",
   "id": "FAMILY_18",

@@ -1,8 +1,8 @@
 {
-  "err": "W [True] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/472a474c663.c:12:22--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/472a474c663.c:12:23",
+  "err": "W [True] file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/472a474c663.c:12:22--file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/472a474c663.c:12:23",
   "msg": "warning: Variable c is used uninitialized!",
   "taxonomy_type": "uninitialized_value",
-  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/472a474c663.c",
+  "input_file": "/home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/472a474c663.c",
   "line_number": 12,
   "origin": "family",
   "id": "FAMILY_23",

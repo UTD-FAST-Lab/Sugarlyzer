@@ -1,8 +1,8 @@
 {
-  "err": "W [!def(CONFIG_MACH_OMAP_H4)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6515e48932c.c:15:0--null:0:0",
+  "err": "W [!def(CONFIG_MACH_OMAP_H4)] file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6515e48932c.c:15:0--null:0:0",
   "msg": "Control flow of non-void function ends here!",
   "taxonomy_type": "control_flow",
-  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6515e48932c.c",
+  "input_file": "/home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6515e48932c.c",
   "line_number": 15,
   "origin": "family",
   "id": "FAMILY_35",

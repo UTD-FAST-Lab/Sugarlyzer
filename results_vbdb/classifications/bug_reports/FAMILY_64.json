@@ -1,8 +1,8 @@
 {
-  "err": "W [(def(ENABLE_FEATURE_MDEV_RENAME)&def(ENABLE_FEATURE_MDEV_RENAME_REGEXP)&def(ENABLE_FEATURE_MDEV_CONF))] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b62bd7b261b.c:28:6--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b62bd7b261b.c:28:8",
+  "err": "W [(def(ENABLE_FEATURE_MDEV_RENAME)&def(ENABLE_FEATURE_MDEV_RENAME_REGEXP)&def(ENABLE_FEATURE_MDEV_CONF))] file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b62bd7b261b.c:28:6--file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b62bd7b261b.c:28:8",
   "msg": "warning: Variable p is used uninitialized!",
   "taxonomy_type": "uninitialized_value",
-  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b62bd7b261b.c",
+  "input_file": "/home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b62bd7b261b.c",
   "line_number": 28,
   "origin": "family",
   "id": "FAMILY_64",

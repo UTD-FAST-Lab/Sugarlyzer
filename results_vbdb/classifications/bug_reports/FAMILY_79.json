@@ -1,8 +1,8 @@
 {
-  "err": "W [!def(CONFIG_FEATURE_CLEAN_UP)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/eef2317b9f5.c:26:2--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/eef2317b9f5.c:26:6",
+  "err": "W [!def(CONFIG_FEATURE_CLEAN_UP)] file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/eef2317b9f5.c:26:2--file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/eef2317b9f5.c:26:6",
   "msg": "warning: Variable buf is a dead store!",
   "taxonomy_type": "dead_store",
-  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/eef2317b9f5.c",
+  "input_file": "/home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/eef2317b9f5.c",
   "line_number": 26,
   "origin": "family",
   "id": "FAMILY_79",

@@ -1,8 +1,8 @@
 {
-  "err": "W [(!def(BB_FEATURE_LS_FILETYPES)&def(BB_FEATURE_LS_USERNAME))] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b273d665181.c:11:2--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b273d665181.c:11:7",
+  "err": "W [(!def(BB_FEATURE_LS_FILETYPES)&def(BB_FEATURE_LS_USERNAME))] file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b273d665181.c:11:2--file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b273d665181.c:11:7",
   "msg": "warning: Variable info is a dead store!",
   "taxonomy_type": "dead_store",
-  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b273d665181.c",
+  "input_file": "/home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b273d665181.c",
   "line_number": 11,
   "origin": "family",
   "id": "FAMILY_62",

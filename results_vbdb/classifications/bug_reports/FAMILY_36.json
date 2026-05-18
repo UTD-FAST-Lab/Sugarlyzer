@@ -1,8 +1,8 @@
 {
-  "err": "W [def(WIN32X)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/664e3aac6dd.c:11:26--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/664e3aac6dd.c:11:34",
+  "err": "W [def(WIN32X)] file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/664e3aac6dd.c:11:26--file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/664e3aac6dd.c:11:34",
   "msg": "warning: Variable buffer is used uninitialized!",
   "taxonomy_type": "uninitialized_value",
-  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/664e3aac6dd.c",
+  "input_file": "/home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/664e3aac6dd.c",
   "line_number": 11,
   "origin": "family",
   "id": "FAMILY_36",

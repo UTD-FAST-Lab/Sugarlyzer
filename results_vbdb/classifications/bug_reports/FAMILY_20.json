@@ -1,8 +1,8 @@
 {
-  "err": "W [True] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/30e053248da.c:31:6--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/30e053248da.c:31:8",
+  "err": "W [True] file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/30e053248da.c:31:6--file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/30e053248da.c:31:8",
   "msg": "warning: Variable x is a dead store!",
   "taxonomy_type": "dead_store",
-  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/30e053248da.c",
+  "input_file": "/home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/30e053248da.c",
   "line_number": 31,
   "origin": "family",
   "id": "FAMILY_20",

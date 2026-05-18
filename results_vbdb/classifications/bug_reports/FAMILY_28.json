@@ -1,8 +1,8 @@
 {
-  "err": "W [def(CONFIG_FEATURE_INSMOD_VERSION_CHECKING)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/5275b1e49f6.c:21:2--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/5275b1e49f6.c:21:9",
+  "err": "W [def(CONFIG_FEATURE_INSMOD_VERSION_CHECKING)] file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/5275b1e49f6.c:21:2--file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/5275b1e49f6.c:21:9",
   "msg": "warning: Variable k_crcs is a dead store!",
   "taxonomy_type": "dead_store",
-  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/5275b1e49f6.c",
+  "input_file": "/home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/5275b1e49f6.c",
   "line_number": 21,
   "origin": "family",
   "id": "FAMILY_28",

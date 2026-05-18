@@ -1,8 +1,8 @@
 {
-  "err": "W [True] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6e2b75740be.c:60:19--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6e2b75740be.c:15:29",
+  "err": "W [True] file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6e2b75740be.c:60:19--file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6e2b75740be.c:15:29",
   "msg": "warning: Variable mod is freed although not dynamically allocted!",
   "taxonomy_type": "static_free",
-  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6e2b75740be.c",
+  "input_file": "/home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6e2b75740be.c",
   "line_number": 60,
   "origin": "family",
   "id": "FAMILY_42",

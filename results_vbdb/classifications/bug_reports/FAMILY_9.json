@@ -1,8 +1,8 @@
 {
-  "err": "W [!def(ENABLE_FEATURE_MODPROBE_MULTIPLE_OPTIONS)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/199501f2a00.c:19:9--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/199501f2a00.c:19:12",
+  "err": "W [!def(ENABLE_FEATURE_MODPROBE_MULTIPLE_OPTIONS)] file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/199501f2a00.c:19:9--file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/199501f2a00.c:19:12",
   "msg": "warning: Variable buf is used uninitialized!",
   "taxonomy_type": "uninitialized_value",
-  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/199501f2a00.c",
+  "input_file": "/home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/199501f2a00.c",
   "line_number": 19,
   "origin": "family",
   "id": "FAMILY_9",

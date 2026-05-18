@@ -1,8 +1,8 @@
 {
-  "err": "W [(def(CONFIG_MODULE_UNLOAD)&def(CONFIG_SMP))] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6e2b75740be.c:63:14--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6e2b75740be.c:14:24",
+  "err": "W [(def(CONFIG_MODULE_UNLOAD)&def(CONFIG_SMP))] file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6e2b75740be.c:63:14--file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6e2b75740be.c:14:24",
   "msg": "warning: Variable mod is freed multiple times!",
   "taxonomy_type": "double_free",
-  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6e2b75740be.c",
+  "input_file": "/home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/6e2b75740be.c",
   "line_number": 63,
   "origin": "family",
   "id": "FAMILY_39",

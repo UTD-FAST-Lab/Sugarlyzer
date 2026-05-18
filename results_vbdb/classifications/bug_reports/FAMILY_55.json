@@ -1,8 +1,8 @@
 {
-  "err": "W [!def(PIDTEMP)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/MARLIN/8c4377dd635.c:3:26--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/MARLIN/8c4377dd635.c:19:13",
+  "err": "W [!def(PIDTEMP)] file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/MARLIN/8c4377dd635.c:3:26--file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/MARLIN/8c4377dd635.c:19:13",
   "msg": "warning: Variable pid_output is a dead store!",
   "taxonomy_type": "dead_store",
-  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/MARLIN/8c4377dd635.c",
+  "input_file": "/home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/MARLIN/8c4377dd635.c",
   "line_number": 3,
   "origin": "family",
   "id": "FAMILY_55",

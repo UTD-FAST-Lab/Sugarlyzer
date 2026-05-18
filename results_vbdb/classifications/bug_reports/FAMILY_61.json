@@ -1,8 +1,8 @@
 {
-  "err": "W [(def(BB_FEATURE_LS_FILETYPES)&!def(BB_FEATURE_LS_USERNAME))] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b273d665181.c:16:17--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b273d665181.c:16:21",
+  "err": "W [(def(BB_FEATURE_LS_FILETYPES)&!def(BB_FEATURE_LS_USERNAME))] file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b273d665181.c:16:17--file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b273d665181.c:16:21",
   "msg": "warning: Variable info is used uninitialized!",
   "taxonomy_type": "uninitialized_value",
-  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b273d665181.c",
+  "input_file": "/home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/BUSYBOX/b273d665181.c",
   "line_number": 16,
   "origin": "family",
   "id": "FAMILY_61",

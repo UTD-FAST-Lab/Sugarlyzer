@@ -1,8 +1,8 @@
 {
-  "err": "W [def(CONFIG_DEVPTS_MULTIPLE_INSTANCES)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/7acf6cd80b2.c:8:6--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/7acf6cd80b2.c:8:8",
+  "err": "W [def(CONFIG_DEVPTS_MULTIPLE_INSTANCES)] file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/7acf6cd80b2.c:8:6--file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/7acf6cd80b2.c:8:8",
   "msg": "warning: Variable x is a dead store!",
   "taxonomy_type": "dead_store",
-  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/7acf6cd80b2.c",
+  "input_file": "/home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/7acf6cd80b2.c",
   "line_number": 8,
   "origin": "family",
   "id": "FAMILY_52",

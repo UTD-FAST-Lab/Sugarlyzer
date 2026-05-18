@@ -1,8 +1,8 @@
 {
-  "err": "W [!def(CONFIG_BF60x)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/36855dcfc98.c:6:2--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/36855dcfc98.c:6:9",
+  "err": "W [!def(CONFIG_BF60x)] file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/36855dcfc98.c:6:2--file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/36855dcfc98.c:6:9",
   "msg": "warning: Variable wakeup is a dead store!",
   "taxonomy_type": "dead_store",
-  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/36855dcfc98.c",
+  "input_file": "/home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/36855dcfc98.c",
   "line_number": 6,
   "origin": "family",
   "id": "FAMILY_22",

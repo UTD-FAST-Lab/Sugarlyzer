@@ -1,8 +1,8 @@
 {
-  "err": "W [def(HAS_APACHE_REGEX_LIB)] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/dbafef17dd1.c:11:10--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/dbafef17dd1.c:11:16",
+  "err": "W [def(HAS_APACHE_REGEX_LIB)] file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/dbafef17dd1.c:11:10--file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/dbafef17dd1.c:11:16",
   "msg": "warning: Variable newuri is used uninitialized!",
   "taxonomy_type": "uninitialized_value",
-  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/dbafef17dd1.c",
+  "input_file": "/home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/APACHE/dbafef17dd1.c",
   "line_number": 11,
   "origin": "family",
   "id": "FAMILY_72",

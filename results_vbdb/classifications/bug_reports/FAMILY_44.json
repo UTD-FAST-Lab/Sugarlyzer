@@ -1,8 +1,8 @@
 {
-  "err": "- W [(def(CONFIG_NUMA)&def(CONFIG_DEBUG_PER_CPU_MAPS))] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/76baeebf7df.c:45:11--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/76baeebf7df.c:45:26",
+  "err": "- W [(def(CONFIG_NUMA)&def(CONFIG_DEBUG_PER_CPU_MAPS))] file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/76baeebf7df.c:45:11--file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/76baeebf7df.c:45:26",
   "msg": "assignment makes pointer from integer without a cast (const unsigned long* <-obj unsigned long)",
   "taxonomy_type": "cast_to_pointer",
-  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/76baeebf7df.c",
+  "input_file": "/home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/76baeebf7df.c",
   "line_number": 45,
   "origin": "family",
   "id": "FAMILY_44",

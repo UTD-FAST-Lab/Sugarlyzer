@@ -1,8 +1,8 @@
 {
-  "err": "W [(def(CONFIG_SND_FSI_AK4642)|def(CONFIG_SND_SOC_AK4642))] file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/66517915e09.c:24:6--file /home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/66517915e09.c:24:21",
+  "err": "W [(def(CONFIG_SND_FSI_AK4642)|def(CONFIG_SND_SOC_AK4642))] file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/66517915e09.c:24:6--file /home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/66517915e09.c:24:21",
   "msg": "warning: Variable codec_hw_write is a dead store!",
   "taxonomy_type": "dead_store",
-  "input_file": "/home/homen/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/66517915e09.c",
+  "input_file": "/home/anon/Sugarlyzer/resources/programs/varbugs/VarBugsPatches/LINUX/66517915e09.c",
   "line_number": 24,
   "origin": "family",
   "id": "FAMILY_38",
