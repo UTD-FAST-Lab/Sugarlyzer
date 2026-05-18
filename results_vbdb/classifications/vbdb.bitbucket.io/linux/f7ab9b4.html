@@ -1,0 +1,257 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">     NULL function pointer dereferenced if SHMEM is enabled but not TMPFS  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 The `readpage' field of `shmem_aops' only points to a concrete function     when TMPFS is enabled, otherwise it points to NULL. GPU driver for     Intel i915 depends on SHMEM but not on TMPFS, and makes it possible for     a NULL readpage() to be dereferenced by read_cache_page().        Related to commit ca9ab10033d190c1ede85fdf456307bdfdabf079       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/f7ab9b407b3bc83161c2aa74c992ba4782e87c9c">f7ab9b407b3</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> NullDereference</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "DRM_I915 && SHMEM && !TMPFS" (3rd degree)</td></tr>
+            <tr><td width='20%'><b>C-features</b></td><td> FunctionPointers, PointerAliasing, Structs</td></tr>
+            <tr><td width='20%'><b>Fix-in</b></td><td> model</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> drivers/gpu/drm/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#ifdef CONFIG_TMPFS
+#define CONFIG_SHMEM
+#endif
+
+#define NULL ((void*)0)
+
+typedef int filler_t(int);
+
+int some_fun(int n)
+{
+  return n;
+}
+
+#ifdef CONFIG_TMPFS
+filler_t *f = &some_fun;
+#else
+filler_t *f = NULL; // (1)
+#endif
+
+#ifdef CONFIG_SHMEM
+filler_t* shmem_get_inode()
+{
+  return f; // (11)
+}
+#else
+filler_t* ramfs_get_inode()
+{
+  return &some_fun;
+}
+
+#define shmem_get_inode()	ramfs_get_inode()
+#endif /* CONFIG_SHMEM */
+
+filler_t* shmem_file_setup()
+{
+  return shmem_get_inode(); // (10)
+}
+
+#ifdef CONFIG_DRM_I915
+int drm_gem_object_init(filler_t **readpage)
+{
+  *readpage = shmem_file_setup(); // (9)
+  return 0;
+}
+
+void i915_gem_alloc_object(filler_t **readpage)
+{
+  if (drm_gem_object_init(readpage) != 0) // (8)
+    ;
+}
+
+void do_read_cache_page(filler_t *filler)
+{
+  filler(0); // ERROR (18)
+}
+
+void read_cache_page_gfp(filler_t **readpage)
+{
+	filler_t *filler = *readpage; // (15) filler = NULL
+	do_read_cache_page(filler); // (17)
+}
+
+int i915_gem_object_get_pages_gtt(filler_t **readpage)
+{
+  read_cache_page_gfp(readpage); // (15)
+  return 0;
+}
+
+int i915_gem_object_bind_to_gtt(filler_t **readpage)
+{
+  return i915_gem_object_get_pages_gtt(readpage); // (14)
+}
+
+int i915_gem_object_pin(filler_t **readpage)
+{
+  return i915_gem_object_bind_to_gtt(readpage); // (13)
+}
+
+int intel_init_ring_buffer(filler_t **readpage)
+{
+  i915_gem_alloc_object(readpage); // (7) *readpage = NULL
+  return i915_gem_object_pin(readpage); // (12)
+}
+
+int intel_init_render_ring_buffer(filler_t **readpage)
+{
+  return intel_init_ring_buffer(readpage); // (6)
+}
+
+int i915_gem_init_ringbuffer(filler_t **readpage)
+{
+  return intel_init_render_ring_buffer(readpage); // (5)
+}
+
+int i915_load_modeset_init(filler_t **readpage)
+{
+  return i915_gem_init_ringbuffer(readpage); // (4)
+}
+
+int i915_driver_load()
+{
+  filler_t *readpage;
+  return i915_load_modeset_init(&readpage); // (3)
+}
+#endif
+
+int main()
+{
+#ifdef CONFIG_DRM_I915
+  i915_driver_load(); // (2)
+#endif
+  return 0;
+}
+
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/f7ab9b4.c b/simple/f7ab9b4.c
+--- a/simple/f7ab9b4.c
++++ b/simple/f7ab9b4.c
+@@ -1,5 +1,6 @@
+ 
+-#ifdef CONFIG_TMPFS
++#ifdef CONFIG_DRM_I915
++#define CONFIG_TMPFS
+ #define CONFIG_SHMEM
+ #endif
+ 
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#ifdef CONFIG_TMPFS
+#define CONFIG_SHMEM
+#endif
+
+#include &lt;stdlib.h&gt;
+
+typedef int filler_t(int);
+
+int some_fun(int n)
+{
+  return n;
+}
+
+#ifdef CONFIG_TMPFS
+filler_t *f = &some_fun;
+#else
+filler_t *f = NULL;
+#endif
+
+int main()
+{
+#ifdef CONFIG_DRM_I915
+//  i915_driver_load();
+  filler_t *readpage;
+//  return i915_load_modeset_init(&readpage);
+//  i915_gem_alloc_object(readpage);
+  #ifdef CONFIG_SHMEM
+  *readpage = f;
+  #else
+  *readpage = &some_fun;
+  #endif
+  int i = 0;
+  if (i != 0)
+    ;
+//  return i915_gem_object_pin(readpage);
+  filler_t *filler = **readpage;
+  filler(0); // ERROR
+#endif
+  return 0;
+}
+
+</pre></div>
+<div id='trace' class='tabcontent'><pre>
+// shmem_aops only has a function assigned to the readpage field
+// if TMPFS is enabled, otherwise it is NULL
+// see mm/shmem.c:2454
+. call drivers/gpu/drm/i915/i915_dma.c:1862:i915_driver_load()
+. 2011: ret = i915_load_modeset_init(dev);
+.. call drivers/gpu/drm/i915/i915_dma.c:1167:i915_load_modeset_init()
+.. 1192: ret = i915_gem_init_ringbuffer(dev);
+... call drivers/gpu/drm/i915/i915_gem.c:3649:i915_gem_init_ringbuffer()
+... 3654: ret = intel_init_render_ring_buffer(dev);
+.... call drivers/gpu/drm/i915/intel_ringbuffer.c:1271:intel_init_render_ring_buffer()
+.... 1291: return intel_init_ring_buffer(dev, ring);
+..... call drivers/gpu/drm/i915/intel_ringbuffer.c:807:intel_init_ring_buffer()
+
+// setup: function pointer `readpage' set to NULL
+..... 827: obj = i915_gem_alloc_object(dev, ring-&gt;size);
+...... call drivers/gpu/drm/i915/i915_gem.c:3518:i915_gem_alloc_object()
+...... 3528: if (drm_gem_object_init(dev, &obj-&gt;base, size) != 0)
+....... call drivers/gpu/drm/drm_gem.c:134:drm_gem_object_init()
+....... 140: obj-&gt;filp = shmem_file_setup("drm mm object", size, VM_NORESERVE);
+........ call mm/shmem.c:2719:shmem_file_setup()
+........ 2748: inode = shmem_get_inode(root-&gt;d_sb, NULL, S_IFREG | S_IRWXUGO, 0, flags);
+......... [SHMEM] call mm/shmem.c:1577:shmem_get_inode()
+......... 1608: inode-&gt;i_mapping-&gt;a_ops = &shmem_aops;
+
+..... 836: ret = i915_gem_object_pin(obj, PAGE_SIZE, true);
+...... call drivers/gpu/drm/i915/i915_gem.c:3246:i915_gem_object_pin()
+...... 3274: ret = i915_gem_object_bind_to_gtt(obj, alignment,
+....... call drivers/gpu/drm/i915/i915_gem.c:2705:i915_gem_object_bind_to_gtt()
+....... 2779: ret = i915_gem_object_get_pages_gtt(obj, gfpmask);
+........ call drivers/gpu/drm/i915/i915_gem.c:1488:i915_gem_object_get_pages_gtt()
+........ 1508: page = read_cache_page_gfp(mapping, i,
+......... call mm/filemap.c:1815:read_cache_page_gfp()
+......... 1819: filler_t *filler = (filler_t *)mapping-&gt;a_ops-&gt;readpage;
+// so filler is an alias for readpage, which is NULL
+......... 1821: return wait_on_page_read(do_read_cache_page(mapping, index, filler, NULL, gfp));
+.......... call  mm/filemap.c:1728:do_read_cache_page()
+.......... ERROR 1755: err = filler(data, page)
+// filler is pointing to NULL !
+
+</pre></div>
+    </div>
+</body>
+</html>

@@ -1,3 +1,0 @@
-[submodule "resources/programs/varbugs/vbdb"]
-	path = resources/programs/varbugs/vbdb
-	url = https://bitbucket.org/itu-square/vbdb.git

@@ -1,0 +1,352 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">     NULL pointer deference due to invalid cast in x86 NUMA  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 In x86-32bit NUMA, the map from PCI bus number to NUMA node is an     unsigned char array. Invalid entries are marked with (unsigned char)-1,     which is (unsigned char)255. As a result, invalid entries are interpreted     as NUMA node (int)255.      For instance, local_cpus_show() will use this node number to index the     node_to_cpumask_map array, whose entries are initialized for valid nodes     and otherwise left to NULL. If we get such an invalud NUMA node 255, and     it turns out that 255 &gt;= nr_node_ids, then node_to_cpumask_map[255] will     be NULL, and we get a NULL pointer dereference when local_cpus_show() tries     to print the CPU mask.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/76baeebf7df493703eeb4428eac015bdb7fabda6">76baeebf7df</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> NullDereference</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "X86_32 && NUMA && PCI" (3rd degree)</td></tr>
+            <tr><td width='20%'><b>C-features</b></td><td> FunctionPointers, Structs</td></tr>
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> arch/x86/pci</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#ifdef CONFIG_X86_32
+#undef CONFIG_X86_64
+#endif
+
+#include &lt;stdio.h&gt;
+
+  /* #define NR_CPUS 64 */
+typedef unsigned long cpumask_t;
+
+cpumask_t cpu_none_mask = 0;
+cpumask_t cpu_online_mask = 0;
+
+#ifdef CONFIG_NUMA
+#define NODES_SHIFT     8
+#define MAX_NUMNODES    (1 &lt;&lt; NODES_SHIFT)
+
+int nr_node_ids;
+
+cpumask_t* node_to_cpumask_map[MAX_NUMNODES];
+#else
+#define nr_node_ids             1
+#endif
+
+#ifdef CONFIG_NUMA
+
+void setup_node_to_cpumask_map(void)
+{
+  unsigned int node;
+
+  /* allocate the map */
+  for (node = 0; node &lt; nr_node_ids; node++)
+    node_to_cpumask_map[node] = &cpu_online_mask;
+}
+
+#ifdef CONFIG_DEBUG_PER_CPU_MAPS
+const cpumask_t *cpumask_of_node(int node)
+{
+  if (node &gt;= nr_node_ids) {
+    fprintf(stderr, "cpumask_of_node(%d): node &gt; nr_node_ids(%d)\n",
+            node, nr_node_ids);
+    return cpu_none_mask;
+  }
+  if (node_to_cpumask_map[node] == NULL) {
+    fprintf(stderr, "cpumask_of_node(%d): no node_to_cpumask_map!\n", node);
+    return cpu_online_mask;
+  }
+	return node_to_cpumask_map[node];
+}
+#else
+/* Returns a pointer to the cpumask of CPUs on Node 'node'. */
+static inline const cpumask_t *cpumask_of_node(int node)
+{
+	return node_to_cpumask_map[node];
+}
+#endif /* CONFIG_DEBUG_PER_CPU_MAPS */
+
+#else /* !CONFIG_NUMA */
+
+static inline const cpumask_t *cpumask_of_node(int node)
+{
+	return &cpu_online_mask;
+}
+
+static inline void setup_node_to_cpumask_map(void) { }
+#endif
+
+#ifdef CONFIG_PCI
+
+#ifdef CONFIG_NUMA
+
+#define BUS_NR 256
+
+#ifdef CONFIG_X86_64
+
+static int mp_bus_to_node[BUS_NR] = {
+  [0 ... BUS_NR - 1] = -1
+};
+
+int get_mp_bus_to_node(int busnum)
+{
+  int node = -1;
+
+  if (busnum &lt; 0 || busnum &gt; (BUS_NR - 1))
+    return node;
+
+  node = mp_bus_to_node[busnum];
+
+  return node;
+}
+
+#else /* CONFIG_X86_32 */
+
+static unsigned char mp_bus_to_node[BUS_NR] = {
+  [0 ... BUS_NR - 1] = -1
+};
+
+int get_mp_bus_to_node(int busnum)
+{
+  int node;
+
+  if (busnum &lt; 0 || busnum &gt; (BUS_NR - 1))
+    return 0;
+	node = mp_bus_to_node[busnum];
+	return node;
+}
+
+#endif /* CONFIG_X86_32 */
+
+#else
+
+static inline int get_mp_bus_to_node(int busnum)
+{
+  return 0;
+}
+
+#endif /* CONFIG_NUMA */
+
+#ifdef CONFIG_NUMA
+static const cpumask_t *
+cpumask_of_pcibus(int node)
+{
+  return (node == -1) ? &cpu_online_mask
+                       : cpumask_of_node(node);
+}
+#endif
+
+static int local_cpus_show(int node)
+{
+  const cpumask_t *mask;
+  int len = 1;
+
+#ifdef CONFIG_NUMA
+  mask = cpumask_of_pcibus(node);
+#else
+  mask = cpumask_of_node(node);
+#endif
+  printf("mask: %ld\n", *mask);
+
+  return len;
+}
+
+static int dev_attr_show(int node)
+{
+  int ret;
+	ret = local_cpus_show(node);
+	return ret;
+}
+
+int pcibios_scan_root()
+{
+  return get_mp_bus_to_node(0);
+}
+#endif /* CONFIG_PCI */
+
+int main(int argc, char** argv)
+{
+#ifdef CONFIG_NUMA
+  nr_node_ids = rand() % (MAX_NUMNODES-1);
+#endif
+  setup_node_to_cpumask_map();
+#ifdef CONFIG_PCI
+  int node = pcibios_scan_root();
+  dev_attr_show(node);
+#endif
+  return 0;
+}
+
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/76baeeb.c b/simple/76baeeb.c
+--- a/simple/76baeeb.c
++++ b/simple/76baeeb.c
+@@ -91,7 +91,7 @@
+ 
+ #else /* CONFIG_X86_32 */
+ 
+-static unsigned char mp_bus_to_node[BUS_NR] = {
++static int mp_bus_to_node[BUS_NR] = {
+   [0 ... BUS_NR - 1] = -1
+ };
+ 
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#ifdef CONFIG_X86_32
+#undef CONFIG_X86_64
+#endif
+
+#include &lt;stdio.h&gt;
+
+  /* #define NR_CPUS 64 */
+typedef unsigned long cpumask_t;
+
+cpumask_t cpu_none_mask = 0;
+cpumask_t cpu_online_mask = 0;
+
+#ifdef CONFIG_NUMA
+#define NODES_SHIFT     8
+#define MAX_NUMNODES    (1 &lt;&lt; NODES_SHIFT)
+
+int nr_node_ids;
+
+cpumask_t* node_to_cpumask_map[MAX_NUMNODES];
+#else
+#define nr_node_ids             1
+#endif
+
+int main(int argc, char** argv)
+{
+#ifdef CONFIG_NUMA
+  nr_node_ids = rand() % (MAX_NUMNODES-1);
+#endif
+//  setup_node_to_cpumask_map();
+  unsigned int node;
+
+  /* allocate the map */
+  for (node = 0; node &lt; nr_node_ids; node++)
+    node_to_cpumask_map[node] = &cpu_online_mask;
+#ifdef CONFIG_PCI
+//  int node = pcibios_scan_root();
+  #ifdef CONFIG_NUMA
+  #define BUS_NR 256
+  #ifdef CONFIG_X86_64
+  static int mp_bus_to_node[BUS_NR] = {
+    [0 ... BUS_NR - 1] = -1
+  };
+  
+  int node = -1;
+
+  if (busnum &lt; 0 || busnum &gt; (BUS_NR - 1))
+    return node;
+
+  node = mp_bus_to_node[busnum];
+  
+  #else /* CONFIG_X86_32 */
+  static unsigned char mp_bus_to_node[BUS_NR] = {
+    [0 ... BUS_NR - 1] = -1
+  };
+
+  if (busnum &lt; 0 || busnum &gt; (BUS_NR - 1))
+    return 0;
+  node = mp_bus_to_node[busnum];
+  #endif
+  #endif
+
+//  dev_attr_show(node);
+  const cpumask_t *mask;
+  int len = 1;
+
+#ifdef CONFIG_NUMA
+  mask = (node == -1) ? &cpu_online_mask
+                      : 
+                      //cpumask_of_node(node);
+                      #ifdef CONFIG_DEBUG_PER_CPU_MAPS
+                      if (node &gt;= nr_node_ids) {
+                        fprintf(stderr, "cpumask_of_node(%d): node &gt; nr_node_ids(%d)\n",node, nr_node_ids);
+                        cpu_none_mask;
+                      }
+                      if (node_to_cpumask_map[node] == NULL) {
+                        fprintf(stderr, "cpumask_of_node(%d): no node_to_cpumask_map!\n", node);
+                        cpu_online_mask;
+                      }
+	              node_to_cpumask_map[node];
+                      #else
+                      node_to_cpumask_map[node];
+                      #endif
+#else
+  mask = &cpu_online_mask;
+#endif
+  printf("mask: %ld\n", *mask);
+#endif
+  return 0;
+}
+
+</pre></div>
+<div id='trace' class='tabcontent'><pre>
+. call arch/x86/pci/common.c:381:__devinit pcibios_scan_root()
+// called by some pci_*_init() function
+. 403: sd-&gt;node = get_mp_bus_to_node(busnum);
+.. [NUMA && X86_32] call arch/x86/pci/common.c:659:get_mp_bus_to_node()
+.. node = mp_bus_to_node[busnum];
+// `node' has type int but `mp_bus_to_node' is an unsigned char array
+// the default entry value is (unsigned char)-1, i.e. (unsigned char)255
+// thus we could get an (int)255 as a node value
+
+. call drivers/base/core.c:68:dev_attr_show()
+. 75: if (dev_attr-&gt;show)
+. 76: ret = dev_attr-&gt;show(dev, dev_attr, buf);
+.. dyn-call drivers/pci/pci-sysfs.c:71:local_cpus_show()
+.. 77: mask = cpumask_of_pcibus(to_pci_dev(dev)-&gt;bus);
+... [NUMA] call arch/x86/include/asm/pci.h:144:cpumask_of_pcibus()
+... 148: node = __pcibus_to_node(bus);
+.... [NUMA] call arch/x86/include/asm/pci.h:136:__pcibus_to_node()
+.... 140: return sd-&gt;node;
+... 150: cpumask_of_node(node);
+// we take this branch because node equals to (int)255, not to (int)-1
+.... [!DEBUG_PER_CPU_MAPS] call arch/x86/include/asm/topology.h:95:cpumask_of_node()
+.... 97: return node_to_cpumask_map[node];
+// node_to_cpumask_map is a global array of pointers of MAX_NUMNODES entries.
+// entries are initialized to NULL according to ANSI C standard
+// thus if node &gt;= nr_node_ids, mask will be NULL.
+.. 78: len = cpumask_scnprintf(buf, PAGE_SIZE-2, mask);
+// back to local_cpus_show() ... mask == NULL !
+... call include/linux/cpumask.h:943:cpumask_scnprintf()
+... ERROR 946: return bitmap_scnprintf(buf, len, cpumask_bits(srcp), nr_cpumask_bits);
+// cpumask_bits(srcp) is defined as srcp-&gt;bits, and srcp is an alias for mask which is NULL
+
+</pre></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/busybox.png" alt="">&nbsp;busybox</span>
+            <span class="title">     Build system does not support BUILD_LIBBUSYBOX and PIE together  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 Essencially, PIE can be made to work with BUILD_LIBBUSYBOX, but      currently BusyBox build system does not support that.           
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.busybox.net/busybox/commit/cc3f20b9bdf9a46c41877dab4900eb2997b72019">cc3f20b9bdf</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> BehaviorViolation</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> BUILD_LIBBUSYBOX && PIE (2nd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> model</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> root/</td></tr>
+        </table>
+
+        <div class="tabs">
+            
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/cc3f20b.txt b/simple/cc3f20b.txt
+--- a/simple/cc3f20b.txt
++++ b/simple/cc3f20b.txt
+@@ -24,10 +24,12 @@
+ 	default n
+ 	depends on !STATIC
+ 
++# PIE can be made to work with BUILD_LIBBUSYBOX, but currently
++# build system does not support that
+ config BUILD_LIBBUSYBOX
+ 	bool "Build shared libbusybox"
+ 	default n
+-	depends on !FEATURE_PREFER_APPLETS
++	depends on !FEATURE_PREFER_APPLETS && !PIE
+ 	help
+ 	  Build a shared library libbusybox.so.N.N.N which contains all
+ 	  busybox code.
+</pre></div>
+
+<div id='trace' class='tabcontent'><pre>
+</pre></div>
+    </div>
+</body>
+</html>

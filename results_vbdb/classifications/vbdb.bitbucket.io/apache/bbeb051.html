@@ -1,0 +1,76 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/apache.png" alt="">&nbsp;apache</span>
+            <span class="title">     Use of already freed subrequest data could lead to segmentation fault.  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 Function cgi_handler may create a CGI bucket using a subrequest. Subrequests     may last shorter than the main request, and thus the bucket may end up     dereferencing already freed data.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://github.com/apache/httpd/commit/bbeb0516cf06e118c27aa5953983c8171ba2777b">bbeb0516cf0</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> UseAfterFree</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> APR_FILES_AS_SOCKETS (1st degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> modules/generators/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            
+            
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+void cgi_bucket_create(char *r)
+{
+  strcat(r, "something");
+}
+
+void cgi_handler(char *r)
+{
+#if APR_FILES_AS_SOCKETS
+  cgi_bucket_create(r);
+#endif
+}
+
+int main(void)
+{
+  char *r = NULL;
+  cgi_handler(r);
+  return 0;
+}
+</pre></div>
+
+
+<div id='trace' class='tabcontent'><pre>. call modules/generators/mod_cgi.c:724:cgi_handler()
+. // if APR_FILES_AS_SOCKETS is enabled
+. 908: b = cgi_bucket_create(r, ...);
+.. call modules/generators/mod_cgi.c:571:cgi_bucket_create()
+.. ERROR 604: data-&gt;r = r;
+
+</pre></div>
+    </div>
+</body>
+</html>

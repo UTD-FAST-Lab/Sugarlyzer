@@ -1,0 +1,133 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/marlin.png" alt="">&nbsp;marlin</span>
+            <span class="title">     "Stack buffer overflow is empty string  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 If SDSUPPORT is enabled, an error occurs due to the omission of allocating space      for / character for the full path of the item that it is read.            Issue 2434: https://github.com/MarlinFirmware/Marlin/issues/2434"       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://github.com/MarlinFirmware/Marlin/commit/a7fc1f83c81273fd03c2ca576f936a08b53a0e01">a7fc1f83c81</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> StackBasedBufferOverflow</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "SDSUPPORT" (1st degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> mapping</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> cardreader/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>#include&lt;string.h&gt;
+
+/** Number of UTF-16 characters per entry */
+#define FILENAME_LENGTH 13
+
+#ifdef SDSUPPORT
+
+	void cardreader(char *prepend)
+	{
+		int len = strlen(prepend) + FILENAME_LENGTH + 1; // Error - not enough space allocated if prepend is empty 
+		char path[len];
+		// Get the short name for the item, which we know is a folder
+		//char lfilename[FILENAME_LENGTH];
+		//createFilename(lfilename, p);
+		char lfilename[FILENAME_LENGTH] = "FOLDERNAME12\0";
+		// Append the FOLDERNAME12/ to the passed string.
+		// It contains the full path to the "parent" argument.
+		// We now have the full path to the item in this folder.
+		path[0] = '\0';
+		if (prepend[0] == '\0') strcat(path, "/"); // a root slash if prepend is empty 
+		strcat(path, prepend);
+		strcat(path, lfilename);
+		strcat(path, "/");
+
+    }
+#endif
+
+
+int main(int argc, char **argv)
+{
+  cardreader("");
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/a7fc1f8.c b/simple/a7fc1f8.c
+--- a/simple/a7fc1f8.c
++++ b/simple/a7fc1f8.c
+@@ -7,7 +7,7 @@
+ 
+ 	void cardreader(char *prepend)
+ 	{
+-		int len = strlen(prepend) + FILENAME_LENGTH + 1; // Error - not enough space allocated if prepend is empty 
++		int len = strlen(prepend) + FILENAME_LENGTH + 1 + 1;
+ 		char path[len];
+ 		// Get the short name for the item, which we know is a folder
+ 		//char lfilename[FILENAME_LENGTH];
+</pre></div>
+<div id='single' class='tabcontent'><pre>#include&lt;string.h&gt;
+
+/** Number of UTF-16 characters per entry */
+#define FILENAME_LENGTH 13
+
+
+
+int main(int argc, char **argv)
+{
+#ifdef SDSUPPORT
+
+	char *prepend = "";
+	int len = strlen(prepend) + FILENAME_LENGTH + 1; // Error - not enough space allocated if prepend is empty
+	char path[len];
+	// Get the short name for the item, which we know is a folder
+	//char lfilename[FILENAME_LENGTH];
+	//createFilename(lfilename, p);
+	char lfilename[FILENAME_LENGTH] = "FOLDERNAME12\0";
+	// Append the FOLDERNAME12/ to the passed string.
+	// It contains the full path to the "parent" argument.
+	// We now have the full path to the item in this folder.
+	path[0] = '\0';
+	if (prepend[0] == '\0') strcat(path, "/"); // a root slash if prepend is empty 
+	strcat(path, prepend);
+	strcat(path, lfilename);
+	strcat(path, "/");
+#endif
+
+  return 0;
+}
+</pre></div>
+<div id='trace' class='tabcontent'><pre>
+. call  cardreader.cpp:49:  void CardReader::lsDive()
+. 59: // Allocate enough stack space for the full path to a folder
+. 60:  int len = strlen(prepend) + FILENAME_LENGTH + 1;
+//This does not consider the last appended trailing slash (line 74) in the allocation of memory, resulting in a stack buffer overflow
+. 71: if (prepend[0] == '\0') strcat(path, "/"); // a root slash if prepend is empty
+. 72: strcat(path, prepend);
+. 73: strcat(path, lfilename);
+. ERROR: cardreader.cpp: 74  strcat(path, "/");
+</pre></div>
+    </div>
+</body>
+</html>

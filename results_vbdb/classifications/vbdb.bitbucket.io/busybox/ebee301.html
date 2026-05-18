@@ -1,0 +1,94 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/busybox.png" alt="">&nbsp;busybox</span>
+            <span class="title">     The function copySubFile is not defined when !BB_AR.       </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.busybox.net/busybox/commit/ebee301c8b0bfe62cd2ec47f458b7f8710d8f407">ebee301c8b0</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> UndefinedSymbol</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> BB_CP_MV && !BB_AR (2nd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> mapping</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> root/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+
+#if defined (BB_AR)
+void copySubFile(int src, int dst)
+{
+  printf("Copy readSize bytes between two file descriptors");
+}
+#endif
+
+#if defined (BB_CP_MV)
+void copyFile()
+{
+  int src, dst;
+  src = rand() % 100;
+  dst = rand() % 200;
+  
+  copySubFile(src, dst);
+}
+#endif
+
+int main(int argc, char **argv)
+{
+#if defined (BB_CP_MV)
+  copyFile();
+#endif
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/ebee301.c b/simple/ebee301.c
+--- a/simple/ebee301.c
++++ b/simple/ebee301.c
+@@ -2,7 +2,7 @@
+ #include&lt;stdio.h&gt;
+ #include&lt;stdlib.h&gt;
+ 
+-#if defined (BB_AR)
++#if defined (BB_AR) || defined (BB_CP_MV)
+ void copySubFile(int src, int dst)
+ {
+   printf("Copy readSize bytes between two file descriptors");
+</pre></div>
+
+<div id='trace' class='tabcontent'><pre>. call coreutils/mv.c:76:copyFile()
+.. [BB_CP_MV] root/utility.c:396:copySubFile(rfd, wfd, srcStatBuf.st_size);
+... [BB_AR] call root/utility.c:271:copySubFile()
+
+</pre></div>
+    </div>
+</body>
+</html>

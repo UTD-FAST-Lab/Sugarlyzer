@@ -1,0 +1,171 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">       Non-initialized buffer causes kernel panic in JFFS2  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                NOR flash setup function leaves struct field `wbuf_verify' uninitialized,    but this buffer is used when JFFS2_FS_WBUF_VERIFY is enabled.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/bc8cec0dff072f1a45ce7f6b2c5234bb3411ac51">bc8cec0dff0</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> UninitializedVariable</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "JFFS2_FS_WBUF_VERIFY" (1st degree)</td></tr>
+            <tr><td width='20%'><b>C-features</b></td><td> FunctionPointers, Structs</td></tr>
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> fs/jffs2/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#define ENOMEM          12      /* Out of memory */
+
+typedef long unsigned int size_t;
+
+extern void *malloc (size_t __size) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__malloc__)) ;
+
+extern void free (void *__ptr) __attribute__ ((__nothrow__ , __leaf__));
+
+#define WBUF_PAGESIZE 32
+
+unsigned char *wbuf; /* Write-behind buffer for NAND flash */
+#ifdef CONFIG_JFFS2_FS_WBUF_VERIFY
+unsigned char *wbuf_verify; /* read-back buffer for verification */
+#endif
+
+int jffs2_nor_wbuf_flash_setup() {
+  wbuf = malloc(WBUF_PAGESIZE);
+  if (!wbuf)
+    return -ENOMEM;
+
+  return 0;
+}
+
+#ifdef CONFIG_JFFS2_FS_WBUF_VERIFY
+static int jffs2_verify_write()
+{
+  return(int) *wbuf_verify; // ERROR (6)
+}
+#else
+#define jffs2_verify_write() do { } while (0)
+#endif
+
+int __jffs2_flush_wbuf()
+{
+  jffs2_verify_write(); // (5)
+  return 0;
+}
+
+int jffs2_flash_writev()
+{
+  __jffs2_flush_wbuf(); // (4)
+  return 0;
+}
+
+int jffs2_flash_write()
+{
+  return jffs2_flash_writev(); // (3)
+}
+
+int main()
+{
+  jffs2_nor_wbuf_flash_setup(); // (1)
+  jffs2_flash_write(); // (2)
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/bc8cec0.c b/simple/bc8cec0.c
+--- a/simple/bc8cec0.c
++++ b/simple/bc8cec0.c
+@@ -19,6 +19,14 @@
+   if (!wbuf)
+     return -ENOMEM;
+ 
++#ifdef CONFIG_JFFS2_FS_WBUF_VERIFY
++  wbuf_verify = malloc(WBUF_PAGESIZE);
++  if (!wbuf_verify) {
++    free(wbuf);
++    return -ENOMEM;
++  }
++#endif
++  
+   return 0;
+ }
+ 
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#include &lt;errno.h&gt;
+#include &lt;stdlib.h&gt;
+
+#define WBUF_PAGESIZE 32
+
+unsigned char *wbuf; /* Write-behind buffer for NAND flash */
+#ifdef CONFIG_JFFS2_FS_WBUF_VERIFY
+unsigned char *wbuf_verify; /* read-back buffer for verification */
+#endif
+
+int main()
+{
+//  jffs2_nor_wbuf_flash_setup();
+  wbuf = malloc(WBUF_PAGESIZE);
+  if (!wbuf)
+    return -ENOMEM;
+//  jffs2_flash_write();
+  #ifdef CONFIG_JFFS2_FS_WBUF_VERIFY
+  return(int) *wbuf_verify; // ERROR
+  #else
+  do { } while (0);
+  #endif
+  return 0;
+}
+
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. // SETUP
+. // at fs/jffs2/super.c:234 jffs2_get_sb() is set as a method to read a super-block
+. call fs/jffs2/super.c:183:jffs2_get_sb()
+.. call drivers/mtd/mtdsuper.c:125:get_sb_mtd()
+... call drivers/mtd/mtdsuper.c:53:get_sb_mtd_aux()
+... 75: ret = fill_super(sb, data, flags & MS_SILENT ? 1 : 0);
+.... dyn-call fs/jffs2/super.c:148:jffs2_fill_super()
+..... call fs/jffs2/fs.c:474:jffs2_do_fill_super()
+..... 515: ret = jffs2_flash_setup(c);
+...... call fs/jffs2/fs.c:668:jffs2_flash_setup()
+...... 687: ret = jffs2_nor_wbuf_flash_setup(c);
+....... call fs/jffs2/wbuf.c:1257:jffs2_nor_wbuf_flash_setup()
+....... // c-&gt;wbuf_verify is left uninitialized for NOR flash
+
+. // later...
+. call fs/jffs2/wbuf.c:930:jffs2_flash_write()
+.. call fs/jffs2/wbuf.c:782:jffs2_flash_writev()
+... call fs/jffs2/wbuf.c:570:__jffs2_flush_wbuf()
+.... call fs/jffs2/wbuf.c:224:jffs2_verify_write()
+.... // this call only happens when JFFS2_FS_WBUF_VERIFY is enabled
+.... ERROR 231: ret = c-&gt;mtd-&gt;read(c-&gt;mtd, ofs, c-&gt;wbuf_pagesize, &retlen, c-&gt;wbuf_verify);
+
+</pre></div>
+    </div>
+</body>
+</html>

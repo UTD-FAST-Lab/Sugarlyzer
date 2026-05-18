@@ -1,0 +1,125 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">     Insufficient buffer length leads to buffer overflow  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 The char[4] `method' variable does not have enough space for the 2 extra      chars required by strncat(method, ..., 2), since there must also be room      for the final '\0'. The rule is that strncat(dest, src, n) requires     sizeof(dest) &gt;= strlen(dest) + n + 1; and in this case 4 &gt;= 2 + 2 + 1     does not hold.      Note that this bug is *not* revealed by just enabling STACKPROTECTOR,     as it is stated in the commit message.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/f3d83e2415445e5b157bef404d38674e9e8de169">f3d83e24154</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> BufferOverflow</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "X86 && ACPI_WMI" (2nd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> drivers/platform/x86/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#if defined(CONFIG_X86) && defined(CONFIG_ACPI_WMI)
+#include &lt;string.h&gt;
+
+static char block_object_id[3] = "XX";
+
+void wmi_query_block()
+{
+  char method[4]; // (4) just four bytes long
+
+  strcpy(method, "WQ"); // (5) writes two bytes plus '\0'
+  strncat(method, block_object_id, 2); // (6) ERROR: no space for the final '\0'
+}
+
+int get_wmid_devices(void)
+{
+  wmi_query_block(); // (3)
+  return 0;
+}
+
+int acer_wmi_init(void)
+{
+  get_wmid_devices(); // (2)
+  return 0;
+}
+#endif
+
+
+int main()
+{
+#if defined(CONFIG_X86) && defined(CONFIG_ACPI_WMI)
+  acer_wmi_init(); // (1)
+#endif
+  return 0;
+}
+
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/f3d83e2.c b/simple/f3d83e2.c
+--- a/simple/f3d83e2.c
++++ b/simple/f3d83e2.c
+@@ -6,7 +6,7 @@
+ 
+ void wmi_query_block()
+ {
+-  char method[4]; // (4) just four bytes long
++  char method[5]; // (4) just four bytes long
+ 
+   strcpy(method, "WQ"); // (5) writes two bytes plus '\0'
+   strncat(method, block_object_id, 2); // (6) ERROR: no space for the final '\0'
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#if defined(CONFIG_X86) && defined(CONFIG_ACPI_WMI)
+#include &lt;string.h&gt;
+
+static char block_object_id[3] = "XX";
+#endif
+
+int main()
+{
+#if defined(CONFIG_X86) && defined(CONFIG_ACPI_WMI)
+//  acer_wmi_init();
+  char method[4];
+
+  strcpy(method, "WQ");
+  strncat(method, block_object_id, 2); // ERROR
+#endif
+  return 0;
+}
+
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. call init/main.c:740:do_one_initcall()
+. 753: ret.result = fn();
+.. dyn-call drivers/platform/x86/acer-wmi.c:1266:acer_wmi_init()
+... call drivers/platform/x86/acer-wmi.c:1090:get_wmid_devices()
+.... call drivers/platform/x86/wmi.c:322:wmi_query_block()
+.... 331: char method[4];
+.... 378: strcpy(method, "WQ");
+.... ERROR 379: strncat(method, block-&gt;object_id, 2);
+
+</pre></div>
+    </div>
+</body>
+</html>

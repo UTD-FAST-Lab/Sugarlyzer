@@ -1,0 +1,151 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">   Pointer is set to NULL without freeing previously allocated memory  </span>
+        </div>
+        <hr>
+        <div class="desc">
+               When NUMA is enabled and size &gt; PAGE_SIZE, inet_ehash_locks_free()   does not free the memory allocated for `x' but just set this pointer   to NULL.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/218ad12f42e0b6207105cde8fd13017d1ed449e4">218ad12f42e</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> MemoryLeak</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "NUMA && (SMP || DEBUG_SPINLOCK || DEBUG_LOCK_ALLOC)" (2nd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> include/net/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#define ENOMEM      12  /* Out of memory */
+
+#define NULL (void*)0
+
+extern void *malloc (unsigned long __size) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__malloc__)) ;
+
+extern void free (void *__ptr) __attribute__ ((__nothrow__ , __leaf__));
+
+#define PAGE_SIZE 12
+
+int *x = NULL;
+unsigned int size = PAGE_SIZE+1;
+
+int inet_ehash_locks_alloc()
+{
+#ifdef CONFIG_NUMA
+    if (size &gt; PAGE_SIZE)
+      x = malloc(size);
+    else
+#endif
+    x =	malloc(size); // (2)
+    if (!x)
+      return ENOMEM;
+  return 0;
+}
+
+void inet_ehash_locks_free()
+{
+  if (x) {
+#ifdef CONFIG_NUMA
+    if (size &gt; PAGE_SIZE)
+      free(x);
+    else
+#else
+    free(x);
+#endif
+    x = NULL; // (4) ERROR
+  }
+}
+
+int main(void)
+{
+  inet_ehash_locks_alloc(); // (1)
+  inet_ehash_locks_free(); // (3)
+  return 0;
+}
+
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/218ad12.c b/simple/218ad12.c
+--- a/simple/218ad12.c
++++ b/simple/218ad12.c
+@@ -30,9 +30,8 @@
+     if (size &gt; PAGE_SIZE)
+       free(x);
+     else
+-#else
+-    free(x);
+ #endif
++      free(x);
+     x = NULL; // (4) ERROR
+   }
+ }
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#include &lt;errno.h&gt;
+#include &lt;stdlib.h&gt;
+
+#define PAGE_SIZE 12
+
+int *x = NULL;
+unsigned int size = PAGE_SIZE+1;
+
+int main(int argc, char** argv)
+{
+//  inet_ehash_locks_alloc();
+#ifdef CONFIG_NUMA
+  if (size &gt; PAGE_SIZE)
+    x = malloc(size);
+  else
+#endif
+    x =	malloc(size);
+    if (!x)
+      return ENOMEM;
+  
+//  inet_ehash_locks_free();
+  if (x) {
+#ifdef CONFIG_NUMA
+    if (size &gt; PAGE_SIZE)
+      free(x);
+    else
+#else
+      free(x);
+#endif
+    x = NULL; // ERROR
+  }
+  return 0;
+}
+
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. include/net/inet_hashtables.h:147:inet_ehash_locks_alloc()
+. 169: hashinfo-&gt;ehash_locks =	kmalloc(size * sizeof(rwlock_t), GFP_KERNEL);
+. include/net/inet_hashtables.h:180:inet_ehash_locks_free()
+. 128: if (hashinfo-&gt;ehash_locks)
+. ERROR 192: hashinfo-&gt;ehash_locks = NULL;
+</pre></div>
+    </div>
+</body>
+</html>

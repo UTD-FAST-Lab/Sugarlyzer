@@ -1,0 +1,109 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/marlin.png" alt="">&nbsp;marlin</span>
+            <span class="title">     "The LCD can display only around max 320.00 but the users want to see more fine grained steps  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 It is an 16 bit integer overflow problem.           Issue 201: https://github.com/MarlinFirmware/Marlin/issues/201"       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://github.com/MarlinFirmware/Marlin/commit/31873ec707d5ba19de59b046cb1e882b8bd4e1db">31873ec707d</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> IntegerOverflow</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "ULTRA_LCD" (1st degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> lcd/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>#include &lt;stdio.h&gt;
+
+#ifdef ULTRA_LCD
+//  convert float to string with +1234.5 format
+char *ftostr51(float x)
+{
+  int16_t xx=x*10;
+  conv[0]=(xx&gt;=0)?'+':'-';
+  xx=abs(xx);
+  conv[1]=(xx/10000)%10+'0';
+  conv[2]=(xx/1000)%10+'0';
+  conv[3]=(xx/100)%10+'0';
+  conv[4]=(xx/10)%10+'0';
+  conv[5]='.';
+  conv[6]=(xx)%10+'0';
+  conv[7]=0;
+  return conv;
+}
+#endif
+ 
+int main(int argc, char **argv)
+{
+  ftostr51(512.5);
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/31873ec.c b/simple/31873ec.c
+--- a/simple/31873ec.c
++++ b/simple/31873ec.c
+@@ -4,7 +4,7 @@
+ //  convert float to string with +1234.5 format
+ char *ftostr51(float x)
+ {
+-  int16_t xx=x*10;
++  long xx=x*10;
+   conv[0]=(xx&gt;=0)?'+':'-';
+   xx=abs(xx);
+   conv[1]=(xx/10000)%10+'0';
+</pre></div>
+<div id='single' class='tabcontent'><pre>#include &lt;stdio.h&gt;
+
+int main(int argc, char **argv)
+{
+#ifdef ULTRA_LCD
+  float x = 512.5f;
+  int16_t xx=x*10;
+  conv[0]=(xx&gt;=0)?'+':'-';
+  xx=abs(xx);
+  conv[1]=(xx/10000)%10+'0';
+  conv[2]=(xx/1000)%10+'0';
+  conv[3]=(xx/100)%10+'0';
+  conv[4]=(xx/10)%10+'0';
+  conv[5]='.';
+  conv[6]=(xx)%10+'0';
+  conv[7]=0;
+  printf("%l", conv);
+#endif
+  return 0;
+}
+</pre></div>
+<div id='trace' class='tabcontent'><pre>
+. call  ultralcd.pde:2667: char *ftostr51(float &x)
+. ERROR ultralcd.pde:2669  int xx=x*10;
+</pre></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">     Undefined reference to cryptographic function          Function test_cipher() depends on crypto_alloc_ablkcipher(),     which is only available when CRYPTO_BLKCIPHER is enabled.  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                  
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/242f1a343776a621ad5c3446d6f2718d37863cb5">242f1a34377</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> UndefinedSymbol</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "CRYPTO_TEST && !CRYPTO_BLKCIPHER" (2nd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> model</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> crypto/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            
+            
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#ifdef CONFIG_CRYPTO_BLKCIPHER
+void *crypto_alloc_ablkcipher()
+{
+  return (void*)0;
+}
+#endif
+
+#ifdef CONFIG_CRYPTO_TEST
+static void test_cipher()
+{
+  crypto_alloc_ablkcipher();
+}
+#endif
+
+int main(int argc, char** argv)
+{
+#ifdef CONFIG_CRYPTO_TEST
+  test_cipher();
+#endif
+}
+
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/242f1a3.c b/simple/242f1a3.c
+--- a/simple/242f1a3.c
++++ b/simple/242f1a3.c
+@@ -1,3 +1,6 @@
++#ifdef CONFIG_CRYPTO_TEST
++#define CONFIG_CRYPTO_BLKCIPHER
++#endif
+ 
+ #ifdef CONFIG_CRYPTO_BLKCIPHER
+ void *crypto_alloc_ablkcipher()
+</pre></div>
+
+
+    </div>
+</body>
+</html>

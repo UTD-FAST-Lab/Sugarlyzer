@@ -1,0 +1,157 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">     Network interface will fail to go up when !ZONE_DMA  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 If !ZONE_DMA, __alloc_pages_nodemask() will return NULL when asked     for DMA memory, resulting in a driver failure.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/1f758a4341ac83289a549e6ba2d29a08cf639717">1f758a4341a</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> BehaviorViolation</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "EP93XX_ETH && !ZONE_DMA" (2nd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> drivers/net/arm/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#define ENOMEM      12  /* Out of memory */
+
+#define NULL (void*)0
+
+#define ___GFP_WAIT             0x10u
+#define ___GFP_IO               0x40u
+#define ___GFP_FS               0x80u
+#define __GFP_WAIT      ((int)___GFP_WAIT)    /* Can wait and reschedule? */
+#define __GFP_IO        ((int)___GFP_IO)      /* Can start physical IO? */
+#define __GFP_FS        ((int)___GFP_FS)      /* Can call down to low-level FS? */
+#define GFP_KERNEL      (__GFP_WAIT | __GFP_IO | __GFP_FS)
+
+#define ___GFP_DMA              0x01u
+#define __GFP_DMA       ((int)___GFP_DMA)
+#define GFP_DMA         __GFP_DMA
+
+static int some_int = 0;
+
+int* __alloc_pages_nodemask(int gfp_mask)
+{
+#ifndef CONFIG_ZONE_DMA
+  if (gfp_mask & __GFP_DMA)
+    return NULL; // (4)
+#endif
+  return &some_int;
+}
+
+#ifdef CONFIG_EP93XX_ETH
+int ep93xx_alloc_buffers()
+{
+  int *descs = __alloc_pages_nodemask(GFP_KERNEL | GFP_DMA); // (3)
+  if (descs == NULL)
+    return 1; // (5)
+}
+
+int ep93xx_open()
+{
+  if (ep93xx_alloc_buffers()) // (2)
+    return -ENOMEM; // (6) ERROR
+}
+#endif
+
+int main(void)
+{
+#ifdef CONFIG_EP93XX_ETH
+  ep93xx_open(); // (1)
+#endif
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/1f758a4.c b/simple/1f758a4.c
+--- a/simple/1f758a4.c
++++ b/simple/1f758a4.c
+@@ -29,7 +29,7 @@
+ #ifdef CONFIG_EP93XX_ETH
+ int ep93xx_alloc_buffers()
+ {
+-  int *descs = __alloc_pages_nodemask(GFP_KERNEL | GFP_DMA); // (3)
++  int *descs = __alloc_pages_nodemask(GFP_KERNEL); // (3)
+   if (descs == NULL)
+     return 1; // (5)
+ }
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#include &lt;errno.h&gt;
+#include &lt;stdlib.h&gt;
+
+#define ___GFP_WAIT             0x10u
+#define ___GFP_IO               0x40u
+#define ___GFP_FS               0x80u
+#define __GFP_WAIT      ((gfp_t)___GFP_WAIT)    /* Can wait and reschedule? */
+#define __GFP_IO        ((gfp_t)___GFP_IO)      /* Can start physical IO? */
+#define __GFP_FS        ((gfp_t)___GFP_FS)      /* Can call down to low-level FS? */
+#define GFP_KERNEL      (__GFP_WAIT | __GFP_IO | __GFP_FS)
+
+#define ___GFP_DMA              0x01u
+#define __GFP_DMA       ((gfp_t)___GFP_DMA)
+#define GFP_DMA         __GFP_DMA
+
+typedef int gfp_t;
+
+static int some_int = 0;
+
+int main(int argc, char** argv)
+{
+#ifdef CONFIG_EP93XX_ETH
+//  ep93xx_open();
+  #ifndef CONFIG_ZONE_DMA
+  if ((GFP_KERNEL | GFP_DMA) & __GFP_DMA)
+    return NULL;
+  #endif
+  int *descs = &some_int;
+  if (descs == NULL)
+    return -ENOMEM; // ERROR
+#endif
+  return 0;
+}
+</pre></div>
+<div id='trace' class='tabcontent'><pre>// ref a197b59ae6e8bee56fcef37ea2482dc08414e2ac
+. call drivers/net/arm/ep93xx_eth.c:650:ep93xx_open()
+. 655: if (ep93xx_alloc_buffers(ep))
+.. call drivers/net/arm/ep93xx_eth.c:492:ep93xx_alloc_buffers()
+.. 496: ep-&gt;descs = dma_alloc_coherent(dev, sizeof(struct ep93xx_descs), &ep-&gt;descs_dma_addr, GFP_KERNEL | GFP_DMA);
+... call mm/page_alloc.c:2234:__alloc_pages_nodemask()
+... [ZONE_DMA] 2251: if (WARN_ON_ONCE(gfp_mask & __GFP_DMA))
+... [ZONE_DMA] 2252: return NULL;
+.. 498: if (ep-&gt;descs == NULL)
+.. 499: return 1;
+. ERROR 656: return -ENOMEM;
+
+</pre></div>
+    </div>
+</body>
+</html>

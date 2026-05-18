@@ -1,0 +1,227 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">     Function pointer left uninitialized when power management is disabled  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 Initialization procedure omap_sram_init() left     _omap3_sram_configure_core_dpll uninitialized (set to NULL by     default, according to ANSI C), if PM is disabled. When     omap3_configure_core_dpll() is called, also as part of the     initialization procedure, we reach an assertion requiring this     function pointer to be non-null.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/63878acfafbc7a6ff90a2f8b3e31f0889bc61af6">63878acfafb</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> FatalAssertionViolation</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "ARCH_OMAP3 && !PM" (2nd degree)</td></tr>
+            <tr><td width='20%'><b>C-features</b></td><td> FunctionPointers, Structs</td></tr>
+            <tr><td width='20%'><b>Fix-in</b></td><td> mapping, code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> arch/arm</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+extern void __assert_fail (const char *__assertion, const char *__file,
+      unsigned int __line, const char *__function)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__noreturn__));
+
+__attribute__ ((noinline)) int nondet() { return 42; }
+
+#ifdef CONFIG_ARCH_OMAP3
+
+static int* _omap3_sram_configure_core_dpll;
+
+int omap3_configure_core_dpll()
+{
+	((_omap3_sram_configure_core_dpll)
+	? (void) (0)
+	: __assert_fail ("_omap3_sram_configure_core_dpll", "63878ac.c", 16, __PRETTY_FUNCTION__));
+	return *_omap3_sram_configure_core_dpll; // (6) ERROR
+}
+
+#ifdef CONFIG_PM // DISABLED
+static int some_int = 1;
+
+void omap3_sram_restore_context(void)
+{
+	_omap3_sram_configure_core_dpll = &some_int;
+}
+#endif /* CONFIG_PM */
+
+int omap3_core_dpll_m2_set_rate()
+{
+	omap3_configure_core_dpll(); // (5)
+	return 0;
+}
+
+int _omap2_init_reprogram_sdrc(void)
+{
+	int v;
+
+	v = omap3_core_dpll_m2_set_rate(); // (4)
+
+	return v;
+}
+#endif /* CONFIG_ARCH_OMAP3 */
+
+int omap34xx_sram_init(void)
+{
+#if defined(CONFIG_ARCH_OMAP3) && defined(CONFIG_PM) // DISABLED
+	omap3_sram_restore_context();
+#endif
+	return 0;
+}
+
+int omap_sram_init(void)
+{
+	if (nondet())
+		omap34xx_sram_init();
+
+	return 0;
+}
+
+void omap_sdrc_init()
+{
+	omap_sram_init(); // does nothing in ARCH_OPAM3 && !PM
+
+	if (nondet()) { // evaluates to true
+#ifdef CONFIG_ARCH_OMAP3
+		_omap2_init_reprogram_sdrc(); // (3)
+#endif
+	}
+}
+
+void omap3pandora_init(void)
+{
+	omap_sdrc_init(); // (2)
+}
+
+int main(void)
+{
+	omap3pandora_init(); // (1)
+	return 0;
+}
+
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/63878ac.c b/simple/63878ac.c
+--- a/simple/63878ac.c
++++ b/simple/63878ac.c
+@@ -12,14 +12,12 @@
+ 	return *_omap3_sram_configure_core_dpll;
+ }
+ 
+-#ifdef CONFIG_PM
+ static int some_int = 1;
+ 
+ void omap3_sram_restore_context(void)
+ {
+ 	_omap3_sram_configure_core_dpll = &some_int;
+ }
+-#endif /* CONFIG_PM */
+ 
+ int omap3_core_dpll_m2_set_rate()
+ {
+@@ -35,16 +33,21 @@
+ 
+ 	return v;
+ }
+-#endif /* CONFIG_ARCH_OMAP3 */
+ 
+ static inline int omap34xx_sram_init(void)
+ {
+-#if defined(CONFIG_ARCH_OMAP3) && defined(CONFIG_PM)
+ 	omap3_sram_restore_context();
+-#endif
+ 	return 0;
+ }
+ 
++#else
++
++static inline int omap34xx_sram_init(void)
++{
++	return 0;
++}
++#endif /* CONFIG_ARCH_OMAP3 */
++
+ int omap_sram_init(void)
+ {
+ 	if (rand() % 2)
+@@ -73,5 +76,4 @@
+ {
+   omap3pandora_init();
+   return 0;
+-}
+-
++}
+\ No newline at end of file
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#include &lt;assert.h&gt;
+#include &lt;stdlib.h&gt;
+
+#ifdef CONFIG_ARCH_OMAP3
+static int* _omap3_sram_configure_core_dpll;
+#endif
+
+int main(int argc, char** argv)
+{
+//  omap3pandora_init();
+  if (rand() % 2) {
+#if defined(CONFIG_ARCH_OMAP3) && defined(CONFIG_PM)
+    int some_int = 1;
+    _omap3_sram_configure_core_dpll = &some_int;
+#endif
+  }
+
+  if (rand() % 2) {
+#ifdef CONFIG_ARCH_OMAP3
+    int v;
+    assert(_omap3_sram_configure_core_dpll);
+    v = *_omap3_sram_configure_core_dpll; // ERROR
+#endif
+  }
+  return 0;
+}
+
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. call arch/arm/mach-omap2/board-omap3pandora.c:510:omap3pandora_init()
+. 603:omap_sdrc_init(mt46h32m32lf6_sdrc_params,
+.. call arch/arm/mach-omap2/io.c:487:omap_sdrc_init()
+.. 490: omap_sram_init();
+... call arch/arm/plat-omap/sram.c:378:omap_sram_init()
+... 392:omap34xx_sram_init();
+.... call arch/arm/plat-omap/sram.c:365:omap34xx_sram_init()
+// if !PM this function will not initialize _omap3_sram_configure_core_dpll
+.. 494: _omap2_init_reprogram_sdrc();
+... call arch/arm/mach-omap2/io.c:320:_omap2_init_reprogram_sdrc()
+... 335: v = clk_set_rate(dpll3_m2_ck, rate);
+.... dyn-call arch/arm/mach-omap2/clock.c:375:omap2_clk_set_rate()
+..... dyn-call arch/arm/mach-omap2/clkt34xx_dpll3m2.c:50:omap3_core_dpll_m2_set_rate()
+..... 106: omap3_configure_core_dpll(
+...... call arch/arm/plat-omap/sram.c:336:omap3_configure_core_dpll()
+...... ERROR 342: BUG_ON(!_omap3_sram_configure_core_dpll);
+
+</pre></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">     netpoll_setup() returns an uninitialized value (error code)  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                  
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/e39363a9def53dd4086be107dc8b3ebca09f045d">e39363a9def</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> UninitializedVariable</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "NETPOLL && !IPV6" (2nd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> net/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+__attribute__ ((noinline)) int nondet() { return 42; }
+
+#ifdef CONFIG_NETPOLL
+int netpoll_setup()
+{
+  int err;
+
+#ifdef CONFIG_IPV6
+  err = -1;
+  if (nondet())
+    goto put;
+#else
+  goto put; // (2)
+#endif
+
+put:
+  return err; // ERROR (3)
+}
+#endif
+
+int main(void)
+{
+#ifdef CONFIG_NETPOLL
+  netpoll_setup(); // (1)
+#endif
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/e39363a.c b/simple/e39363a.c
+--- a/simple/e39363a.c
++++ b/simple/e39363a.c
+@@ -11,6 +11,7 @@
+   if (nondet())
+     goto put;
+ #else
++  err = -2;
+   goto put; // (2)
+ #endif
+ 
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#ifdef UNK_TRUE
+#define unk() 1
+#else
+#include &lt;stdlib.h&gt;
+#define unk() (rand() % 2)
+#endif
+
+int main()
+{
+#ifdef CONFIG_NETPOLL
+//  netpoll_setup();
+  int err;
+
+#ifdef CONFIG_IPV6
+  err = -1;
+  if (unk())
+    goto put;
+#else
+  goto put;
+#endif
+
+put:
+  return err; // ERROR
+#endif
+  return 0;
+}
+
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. call net/core/netpoll.c:1045:netpoll_setup()
+. [!IPV6] 1143: goto put;
+. ERROR 1162: return err;
+
+</pre></div>
+    </div>
+</body>
+</html>

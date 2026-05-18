@@ -1,0 +1,167 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">    Use of variable before initialization when !SECURITY  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 reiserfs_security_init() assumes that `length' will be     initialized by security_old_inode_init_security(), if     this succeeds. But the mockup implementation of     security_old_inode_init_security() for !SECURITY     succeeds and lefts `length' uninitialized.      Note that `length' is a local variable hence, prior to     initialization, it can hold any value.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/30e053248da178cf6154bb7e950dc8713567e3fa">30e053248da</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> UninitializedVariable</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "REISERFS_FS_SECURITY && !SECURITY" (2nd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> fs/reiserfs/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+__attribute__ ((noinline)) int nondet() { return 42; }
+
+#ifdef CONFIG_SECURITY
+int security_old_inode_init_security(int *len)
+{
+  if (nondet()) {
+    *len = 0;
+    return 0;
+  }
+  else
+    return -1;
+}
+#else
+int security_old_inode_init_security(int *len)
+{
+  return 0;
+}
+#endif
+
+int reiserfs_security_init(int *length)
+{
+  int error;
+
+  error = security_old_inode_init_security(length); // (4) length is never written if !SECURITY
+
+  if (error) { // (5) guaranteed false if !SECURITY
+    *length = 0;
+    return error;
+  }
+
+  int x = *length; // (6) ERROR
+
+  return 0;
+}
+
+int reiserfs_create()
+{
+  int retval;
+  int length; // (2)
+
+  retval = reiserfs_security_init(&length); // (3) length not initialized
+  if (retval &lt; 0)
+  {
+    return retval;
+  }
+
+  return 0;
+}
+
+int main(void)
+{
+  reiserfs_create(); // (1)
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/30e0532.c b/simple/30e0532.c
+--- a/simple/30e0532.c
++++ b/simple/30e0532.c
+@@ -1,3 +1,5 @@
++
++#define EOPNOTSUPP      95      /* Operation not supported on transport endpoint */
+
+ __attribute__ ((noinline)) int nondet() { return 42; }
+
+@@ -14,7 +16,7 @@
+ #else
+ int security_old_inode_init_security(int *len)
+ {
+-  return 0;
++  return -EOPNOTSUPP;
+ }
+ #endif
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#include &lt;stdlib.h&gt;
+
+int main(int argc, char** argv) {
+//  reiserfs_create();
+  int retval;
+  int length;
+
+  int error;
+//  error = security_old_inode_init_security(length);
+#ifdef CONFIG_SECURITY
+  if (rand() % 2) {
+    length = 0;
+    error = 0;
+  }
+  else
+    error = -1;
+#else
+  error = 0;
+#endif
+
+  if (error) {
+    length = 0;
+    retval = error;
+  }
+
+  if (length) { // ERROR
+    // do something
+  }
+
+  if (retval &lt; 0) {
+    return retval;
+  }
+
+  return 0;
+}
+
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. call fs/reiserfs/namei.c:575:reiserfs_create()
+. 586: struct reiserfs_security_handle security;
+. 596: retval = reiserfs_security_init(dir, inode, &dentry-&gt;d_name, &security);
+.. call fs/reiserfs/xattr_security.c:56:reiserfs_security_init()
+.. 69: error = security_old_inode_init_security(inode, dir, qstr, &sec-&gt;name, &sec-&gt;value, &sec-&gt;length);
+.. 79: }
+.. ERROR 81: if (sec-&gt;length && reiserfs_xattrs_initialized(inode-&gt;i_sb))
+
+
+</pre></div>
+    </div>
+</body>
+</html>

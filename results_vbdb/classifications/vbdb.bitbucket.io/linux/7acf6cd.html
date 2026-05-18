@@ -1,0 +1,196 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">     "Dereferencing uninitialized pointer causes Kernel crash  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 During the initialization of a UNIX98 pseudo-terminal by ptmx_open,     a tty_struct structure is allocated. But before its pointer field     link-&gt;driver_data is properly initialized, ptmx_open will try to     allocate an inode structure for the PTY slave. If this allocation     fails, some cleanup code must be executed to free the already     allocated resources. Namely, pty_close will be called to release     the previously opened tty, and this eventually dereferences     tty-&gt;link-&gt;driver_data, which is assumed to have been already     initialized."       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/7acf6cd80b201f77371a5374a786144153629be8">7acf6cd80b2</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> UninitializedVariable</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "UNIX98_PTYS && DEVPTS_MULTIPLE_INSTANCES" (2nd degree)</td></tr>
+            <tr><td width='20%'><b>C-features</b></td><td> FunctionPointers</td></tr>
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> drivers/tty/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+__attribute__ ((noinline)) int nondet() { return 42; }
+
+int some_int = 1;
+
+void pts_sb_from_inode(int *inode)
+{
+#ifdef CONFIG_DEVPTS_MULTIPLE_INSTANCES
+  int x = *inode; // ERROR (7)
+#endif
+}
+
+void devpts_pty_kill(int *inode)
+{
+  pts_sb_from_inode(inode); // (6)
+}
+
+void pty_close(int *driver_data)
+{
+#ifdef CONFIG_UNIX98_PTYS
+  devpts_pty_kill(driver_data); // (5)
+#endif
+}
+
+int tty_release(int *driver_data)
+{
+  pty_close(driver_data); // (4)
+  return 0;
+}
+
+#ifdef CONFIG_UNIX98_PTYS
+int ptmx_open()
+{
+  int *driver_data;
+
+  if (nondet()) {
+    goto err_release; // (2)
+  }
+
+  driver_data = &some_int;
+
+  return 0;
+
+err_release:
+  tty_release(driver_data); // (3)
+  return -1;
+}
+#endif
+
+int main()
+{
+#ifdef CONFIG_UNIX98_PTYS
+  ptmx_open(); // (1)
+#endif
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/7acf6cd.c b/simple/7acf6cd.c
+--- a/simple/7acf6cd.c
++++ b/simple/7acf6cd.c
+@@ -18,7 +18,8 @@
+ void pty_close(int *driver_data)
+ {
+ #ifdef CONFIG_UNIX98_PTYS
+-  devpts_pty_kill(driver_data); // (5)
++  if(driver_data)
++    devpts_pty_kill(driver_data); // (5)
+ #endif
+ }
+
+@@ -32,12 +33,12 @@
+ int ptmx_open()
+ {
+   int *driver_data;
++
++  driver_data = &some_int;
+
+   if (nondet()) {
+     goto err_release; // (2)
+   }
+-
+-  driver_data = &some_int;
+
+   return 0;
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#ifdef UNK_TRUE
+#define unk() 1
+#else
+#include &lt;stdlib.h&gt;
+#define unk() (rand() % 2)
+#endif
+
+int some_int = 1;
+
+int main()
+{
+#ifdef CONFIG_UNIX98_PTYS
+//  ptmx_open();
+  int *driver_data;
+
+  if (unk()) {
+    goto err_release;
+  }
+
+  driver_data = &some_int;
+  
+  return 0;
+
+err_release:
+#ifdef CONFIG_DEVPTS_MULTIPLE_INSTANCES
+  if (*driver_data)
+    ;
+#endif
+  return -1;
+#endif
+}
+
+</pre></div>
+<div id='trace' class='tabcontent'><pre>
+. // setup
+. call drivers/tty/pty.c:807:pty_init()
+.. call drivers/tty/pty.c:739:unix98_pty_init()
+.. 785: tty_set_operations(pts_driver, &pty_unix98_ops);
+
+. call drivers/tty/pty.c:669:ptmx_open()
+. 671: struct tty_struct *tty;
+. // 694: tty = tty_init_dev(ptm_driver, index);
+. // will not set tty-&gt;link-&gt;driver_data
+. 707: tty_add_file(tty, filp);
+. // now filp-&gt;private_data-&gt;tty points to tty
+. 709: slave_inode = devpts_pty_new(inode, ..., tty-&gt;link);
+. // now inode-&gt;i_private points to tty-&gt;link
+. 712: if (IS_ERR(slave_inode)) {
+. 714: goto err_release;
+. // tty-&gt;link-&gt;driver_data is not set, remains undefined
+. 727: tty_release(inode, filp);
+.. call drivers/tty/tty_io.c:1625:tty_release()
+.. 1627: struct tty_struct *tty = file_tty(filp);
+.. // tty_release.tty points to ptmx_open.tty
+.. 1658: tty-&gt;ops-&gt;close(tty, filp);
+... dyn-call drivers/tty/pty.c:35:pty_close()
+... 58: devpts_pty_kill(tty-&gt;link-&gt;driver_data);
+.... call fs/devpts/inode.c:629:devpts_pty_kill()
+.... // inode points to ptmx_open.tty-&gt;link-&gt;driver_data
+.... 631: struct super_block *sb = pts_sb_from_inode(inode);
+..... call fs/devpts/inode.c:137:pts_sb_from_inode()
+..... ERROR 140: if (inode-&gt;i_sb-&gt;s_magic == DEVPTS_SUPER_MAGIC)
+..... // tty-&gt;link-&gt;driver_data, holding an undefined value, is dereferenced
+
+</pre></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/busybox.png" alt="">&nbsp;busybox</span>
+            <span class="title">     The integer variable k_crcs is undeclared when BusyBox is      compiled with !FEATURE_INSMOD_VERSION_CHECKING  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                  
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.busybox.net/busybox/commit/5275b1e49f62c273f5d3ef14f093eb8661f54843">5275b1e49f6</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> UndeclaredIdentifier</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> !FEATURE_INSMOD_VERSION_CHECKING (1st degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> modutils/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(int argc, char** argv)
+{
+  int r = rand() % 2;
+  int m_has_modinfo;
+  int exit_status = -1;
+  int someInt = 1;
+  
+#ifdef CONFIG_FEATURE_INSMOD_VERSION_CHECKING
+  int k_crcs;
+#endif
+
+  if (r)
+    m_has_modinfo = 0;
+  else
+    m_has_modinfo = 1;
+
+#ifdef CONFIG_FEATURE_INSMOD_VERSION_CHECKING
+  k_crcs = 0;
+#endif
+  
+  if (r) {
+    k_crcs = someInt;
+  } else {
+    printf("Not configured to support old kernels");
+    goto out;
+  }
+  
+out:
+  return(exit_status);
+  
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/5275b1e.c b/simple/5275b1e.c
+--- a/simple/5275b1e.c
++++ b/simple/5275b1e.c
+@@ -8,9 +8,7 @@
+   int exit_status = -1;
+   int someInt = 1;
+   
+-#ifdef CONFIG_FEATURE_INSMOD_VERSION_CHECKING
+   int k_crcs;
+-#endif
+ 
+   if (r)
+     m_has_modinfo = 0;
+</pre></div>
+<div id='single' class='tabcontent'><pre>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(int argc, char** argv)
+{
+  int r = rand() % 2;
+  int m_has_modinfo;
+  int exit_status = -1;
+  int someInt = 1;
+  
+#ifdef CONFIG_FEATURE_INSMOD_VERSION_CHECKING
+  int k_crcs;
+#endif
+
+  if (r)
+    m_has_modinfo = 0;
+  else
+    m_has_modinfo = 1;
+
+#ifdef CONFIG_FEATURE_INSMOD_VERSION_CHECKING
+  k_crcs = 0;
+#endif
+  
+  if (r) {
+    k_crcs = someInt;
+  } else {
+    printf("Not configured to support old kernels");
+    goto out;
+  }
+  
+out:
+  return(exit_status);
+  
+  return 0;
+}
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. call modutils/insmod.c:3606:insmod_main();
+. [FEATURE_INSMOD_VERSION_CHECKING] 3622:int k_crcs;
+. ERROR 3833:k_crcs = new_is_kernel_checksummed();
+
+</pre></div>
+    </div>
+</body>
+</html>

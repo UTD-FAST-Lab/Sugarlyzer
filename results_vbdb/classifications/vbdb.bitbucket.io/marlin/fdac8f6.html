@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/marlin.png" alt="">&nbsp;marlin</span>
+            <span class="title">     "Macro is not defined when feature is not enabled.  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                  Macro's value is assigned to a variable, but the macro is only defined when ENABLE_AUTO_BED_LEVELING is enabled, which is not by default.      The variable should only be used when ENABLE_AUTO_BED_LEVELING is enabled."       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://github.com/MarlinFirmware/Marlin/commit/fdac8f6cece835664bb97ff2f53d8fba74e37fc7">fdac8f6cece</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> UndeclaredIdentifier</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "!ENABLE_AUTO_BED_LEVELING" (1st degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> mapping</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> configuration/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>#ifdef ENABLE_AUTO_BED_LEVELING
+	#define Z_PROBE_OFFSET_FROM_EXTRUDER 7
+#endif 
+
+float zprobe_zoffset;
+
+void Config_ResetDefault()
+{	
+	zprobe_zoffset = -Z_PROBE_OFFSET_FROM_EXTRUDER; // ERROR
+}
+
+int main(int argc, char **argv)
+{
+  
+  Config_ResetDefault();
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/fdac8f6.c b/simple/fdac8f6.c
+--- a/simple/fdac8f6.c
++++ b/simple/fdac8f6_fix.c
+@@ -6,7 +6,9 @@ float zprobe_zoffset;
+ 
+ void Config_ResetDefault()
+ {	
++#ifdef ENABLE_AUTO_BED_LEVELING
+ 	zprobe_zoffset = -Z_PROBE_OFFSET_FROM_EXTRUDER; // ERROR
++#endif
+ }
+ 
+ int main(int argc, char **argv)
+</pre></div>
+<div id='single' class='tabcontent'><pre>#ifdef ENABLE_AUTO_BED_LEVELING
+	#define Z_PROBE_OFFSET_FROM_EXTRUDER 7
+#endif 
+
+int main(int argc, char **argv)
+{
+
+float zprobe_zoffset;
+
+zprobe_zoffset = -Z_PROBE_OFFSET_FROM_EXTRUDER; // ERROR
+  
+return 0;
+}
+</pre></div>
+<div id='trace' class='tabcontent'><pre>
+. call  configuration_store.cpp:242: void manage_heater()
+. ERROR 277:  zprobe_zoffset = -Z_PROBE_OFFSET_FROM_EXTRUDER;
+</pre></div>
+    </div>
+</body>
+</html>

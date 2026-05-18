@@ -1,0 +1,76 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/apache.png" alt="">&nbsp;apache</span>
+            <span class="title">     Function ap_get_server_module_loglevel is not declared when !HAVE_SYSLOG  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 In case feature HAVE_SYSLOG is disabled, the include "http_config.h"     does not happen. Because the .h file contains prototypes to functions like     ap_get_server_module_loglevel, the compiler raises an undeclared function.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://github.com/apache/httpd/commit/0900800fbabf57775433aa577e79806ccd88fda7">0900800fbab</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> UndefinedSymbol</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "!HAVE_SYSLOG" (1st degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> include/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            
+            
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>#define APLOG_LEVELMASK 1
+#define APLOG_NOTICE 2
+#define APLOG_MAX 3
+
+#ifdef HAVE_SYSLOG
+//#include "http_config.h" contains ap_get_server_module_loglevel()
+void ap_get_server_module_loglevel();
+#if !defined(AP_DEBUG)
+#define ap_get_server_module_loglevel() do {} while(0)
+#endif /* AP_DEBUG */
+#endif
+
+int main(void)
+{
+#ifndef APLOG_MAX_LOGLEVEL
+    if (APLOG_LEVELMASK &lt;= APLOG_NOTICE)
+      ap_get_server_module_loglevel();
+#else
+    if (APLOG_LEVELMASK &lt;= APLOG_MAX)
+      ap_get_server_module_loglevel();
+#endif
+
+  return 0;
+}
+</pre></div>
+
+
+<div id='trace' class='tabcontent'><pre>. // if HAVE_SYSLOG is disabled
+. ERROR include/http_log.h:177:ap_get_server_module_loglevel()
+
+</pre></div>
+    </div>
+</body>
+</html>

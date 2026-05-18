@@ -1,0 +1,195 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">     Truncation error when converting unsigned long long to long  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 Essentially, the problem is that we try to convert a 64-bit integer     to a 32-bit one. Variable `time_delta' has type u64 which is always     64-bit wide. It holds a value in nanoseconds that is converted to     seconds and stored in a variable of type long. In architectures     where long is 32-bit wide, time_delta/NSEC_PER_SEC may not fit if     time_delta is large enough, and we end up storing a negative number     of seconds.      As a consequence, if the computed expiration time is negative,     this causes an infinite loop.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/51fd36f3fad8447c487137ae26b9d0b3ce77bb25">51fd36f3fad</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> NumericTruncation</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "!64BIT && !KTIME_SCALAR" (2nd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> kernel/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#include &lt;limits.h&gt;
+#include &lt;stdint.h&gt;
+
+typedef int32_t  s32;
+typedef int64_t  s64;
+typedef uint64_t u64;
+
+#ifdef CONFIG_64BIT
+#define BITS_PER_LONG 64
+#else
+#define BITS_PER_LONG 32
+#endif /* CONFIG_64BIT */
+
+#define NSEC_PER_SEC	1000000000L
+
+#define KTIME_MAX			((s64)~((u64)1 &lt;&lt; 63))
+#if (BITS_PER_LONG == 64)
+#define KTIME_SEC_MAX			(KTIME_MAX / NSEC_PER_SEC)
+#else
+#define KTIME_SEC_MAX			LONG_MAX
+#endif
+
+#if (BITS_PER_LONG == 64) || defined(CONFIG_KTIME_SCALAR)
+
+#define ktime_add_ns(nsval) (nsval)
+
+#else	/* !((BITS_PER_LONG == 64) || defined(CONFIG_KTIME_SCALAR)) */
+
+static inline s64 ktime_set(const long secs)
+{
+  return (s64)secs * NSEC_PER_SEC;
+}
+
+s64 ktime_add_ns(u64 nsec)
+{
+  s64 tmp;
+
+  if (nsec &lt; NSEC_PER_SEC) {
+    tmp = nsec;
+  } else {
+    unsigned long sec = nsec / NSEC_PER_SEC;
+    tmp = ktime_set((s32)sec); // ERROR
+  }
+
+  return tmp;
+}
+
+#endif
+
+static u64 tick_nohz_stop_sched_tick()
+{
+  u64 time_delta =(u64) 7881299347898368000;
+  s64 expires;
+
+  if (time_delta &lt; KTIME_MAX)
+    expires = ktime_add_ns(time_delta);
+  else
+    expires = KTIME_MAX;
+    
+  return expires;
+}
+
+int main(int argc, char** argv)
+{
+  tick_nohz_stop_sched_tick();
+  return 0;
+}
+
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/51fd36f.c b/simple/51fd36f.c
+--- a/simple/51fd36f.c
++++ b/simple/51fd36f.c
+@@ -40,6 +40,9 @@
+     tmp = nsec;
+   } else {
+     unsigned long sec = nsec / NSEC_PER_SEC;
++    /* Make sure nsec fits into long */
++    if (nsec &gt; KTIME_SEC_MAX)
++        return KTIME_MAX;
+     tmp = ktime_set((s32)sec); // ERROR
+   }
+ 
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#include &lt;limits.h&gt;
+#include &lt;stdint.h&gt;
+
+typedef int32_t  s32;
+typedef int64_t  s64;
+typedef uint64_t u64;
+
+#ifdef CONFIG_64BIT
+#define BITS_PER_LONG 64
+#else
+#define BITS_PER_LONG 32
+#endif /* CONFIG_64BIT */
+
+#define NSEC_PER_SEC	1000000000L
+
+#define KTIME_MAX			((s64)~((u64)1 &lt;&lt; 63))
+#if (BITS_PER_LONG == 64)
+#define KTIME_SEC_MAX			(KTIME_MAX / NSEC_PER_SEC)
+#else
+#define KTIME_SEC_MAX			LONG_MAX
+#endif
+
+int main(int argc, char** argv)
+{
+//  tick_nohz_stop_sched_tick();
+  u64 time_delta =(u64) 7881299347898368000;
+  s64 expires;
+
+  if (time_delta &lt; KTIME_MAX) {
+    //expires = ktime_add_ns(time_delta);
+    #if defined(BITS_PER_LONG == 64) || defined(CONFIG_KTIME_SCALAR)
+    expires = time_delta;
+    #else
+    s64 tmp;
+
+    if (nsec &lt; NSEC_PER_SEC) {
+      tmp = nsec;
+    } else {
+      unsigned long sec = nsec / NSEC_PER_SEC;
+      tmp = (s64)((s32)sec) * NSEC_PER_SEC; // ERROR
+    }
+
+    expires = tmp;
+    #endif
+  }
+  else
+    expires = KTIME_MAX;
+    
+  return 0;
+}
+
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. call kernel/time/tick-sched.c:318:tick_nohz_stop_sched_tick()
+. 325: u64 time_delta;
+. 332: time_delta = timekeeping_max_deferment();
+. 400: if (time_delta &lt; KTIME_MAX)
+. 401: expires = ktime_add_ns(last_update, time_delta);
+.. call kernel/hrtimer.c:280:ktime_add_ns()
+.. 286: else
+.. 287: unsigned long rem = do_div(nsec, NSEC_PER_SEC);
+// sets nsec to nsec/NSEC_PER_SEC
+.. ERROR 289: tmp = ktime_set((long)nsec, rem);
+// (long)nsec overflows
+
+</pre></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/marlin.png" alt="">&nbsp;marlin</span>
+            <span class="title">     "The function is declared with only one parameter, but in a specific configuration it is called using multiple parameters.           The function is called with more arguments than the function's declaration. This happens     only if a feature is disabled and another one enabled.   </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 Issue 1770: https://github.com/MarlinFirmware/Marlin/issues/1770 "       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://github.com/MarlinFirmware/Marlin/commit/831016b09f753000edb69473cd013e1a79b2fdd1">831016b09f7</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> WrongFunArgNum</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "!ULTRA_LCD && SDSUPPORT" (2nd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> lcd/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>#include&lt;stdbool.h&gt;
+
+#ifdef ULTRA_LCD
+ void lcd_setstatus(const char* message, const bool persist) {};
+ // more functions
+#else
+ void lcd_setstatus(const char* message) {};
+ // more functions
+#endif
+#endif
+
+void getCode() 
+{
+#ifdef SDSUPPORT
+    char time[30] = "time_here";
+    lcd_setstatus(time, true); // ERROR
+#endif
+}
+ 
+int main(int argc, char **argv)
+{
+  getCode();
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/831016b.c b/simple/831016b.c
+--- a/simple/831016b.c
++++ b/simple/831016b.c
+@@ -7,7 +7,7 @@
+  void lcd_setstatus(const char* message, const bool persist) {};
+  // more functions
+ #else
+- void lcd_setstatus(const char* message) {};
++ void lcd_setstatus(const char* message, const bool persist) {};
+  // more functions
+ #endif
+ #endif
+</pre></div>
+
+<div id='trace' class='tabcontent'><pre>
+. call  Marlin_main.cpp:698: void get_command()
+. ERROR: Marlin_main.cpp:849:  lcd_setstatus(time, true);
+</pre></div>
+    </div>
+</body>
+</html>

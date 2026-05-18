@@ -1,0 +1,117 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/apache.png" alt="">&nbsp;apache</span>
+            <span class="title">     "WIN32/OS2 shell characters not escaped correctly when cross-compiling  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 The define NEED_ENHANCED_ESCAPES needs to be used for WIN32 or OS2     operating systems, regardless if the whole apache httpd is     cross-compiled or not. The utility gen_test_char generates the header     file test_char.h, which defines a table test_char_table that is used     to escape special characters, for instance, in shell command strings.     If the special WIN32/OS2 characters \r and % are not escaped correctly,     this could potentially be exploited."       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://github.com/apache/httpd/commit/c76df14dfb451981f66ad47af26574faac980db5">c76df14dfb4</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> OSCommandInjection</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "CROSS_COMPILE && (WIN32 || OS2)" (2nd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> mapping</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> server/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+
+#define T_ESCAPE_SHELL_CMD (0x01)
+
+#ifdef CROSS_COMPILE
+#define APR_HAVE_STDIO_H 1
+#else
+#include &lt;stdlib.h&gt; //apr-related headers
+#if defined(WIN32) || defined(OS2)
+#define NEED_ENHANCED_ESCAPES
+#endif
+#endif
+
+int main(void)
+{
+  unsigned c = 0;
+  unsigned char flags;
+    
+  for (c = 0; c &lt; 256; ++c) {
+    flags = 0;
+    if (c % 20 == 0)
+      printf("\n    ");
+
+        /* escape_shell_cmd */
+#ifdef NEED_ENHANCED_ESCAPES
+        /* Win32/OS2 have many of the same vulnerable characters
+         * as Unix sh, plus the carriage return and percent char.
+         * The proper escaping of these characters varies from unix
+         * since Win32/OS2 use carets or doubled-double quotes,
+         * and neither lf nor cr can be escaped.  We escape unix
+         * specific as well, to assure that cross-compiled unix
+         * applications behave similiarly when invoked on win32/os2.
+         *
+         * Rem please keep in-sync with apr's list in win32/filesys.c
+         */
+      if (c && strchr("&;`'\"|*?~&lt;&gt;^()[]{}$\\\n\r%", c)) {
+        flags |= T_ESCAPE_SHELL_CMD;
+      }
+#else
+      if (c && strchr("&;`'\"|*?~&lt;&gt;^()[]{}$\\\n", c)) {
+        flags |= T_ESCAPE_SHELL_CMD;
+      }
+#endif
+  }
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/apache/simple/c76df14.c b/apache/simple/c76df14.c
+--- a/apache/simple/c76df14.c
++++ b/apache/simple/c76df14.c
+@@ -7,10 +7,11 @@
+ #define APR_HAVE_STDIO_H 1
+ #else
+ #include &lt;stdlib.h&gt; //apr-related headers
++#endif
++
+ #if defined(WIN32) || defined(OS2)
+ #define NEED_ENHANCED_ESCAPES
+ #endif
+-#endif
+ 
+ int main(void)
+ {
+</pre></div>
+
+<div id='trace' class='tabcontent'><pre>. server/gen_test_char.c:17: #ifdef CROSS_COMPILE
+. // NEED_ENHANCED_ESCAPES will not be defined by server/gen_test_char.c:35
+. // Special WIN32/OS2 shell characters will not be escaped !!!
+. ERROR server/gen_test_char.c:101: if (c && strchr("&;`'\"|*?~&lt;&gt;^()[]{}$\\\n", c)) {
+
+</pre></div>
+    </div>
+</body>
+</html>

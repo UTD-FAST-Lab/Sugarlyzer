@@ -1,0 +1,167 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/marlin.png" alt="">&nbsp;marlin</span>
+            <span class="title">     "If Z_MAX is set to a negative value, and Z_DUAL_STEPPER_DRIVERS is enabled,      the compiler complains about undeclared variable.  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 The user do not wants to use Z_MAX, but instead     uses two Z_MIN endstops.In this situation, enabling     Z_DUAL_STEPPER_DRIVERS which by default enables Z_DUAL_ENDSTOPS leads     to a compiler error due to two variables that are uninitialized.      Issue 1911: https://github.com/MarlinFirmware/Marlin/issues/1911"       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://github.com/MarlinFirmware/Marlin/commit/7336e6df070a2f20e5f2cb9b3ac2d40c9da0c8c4">7336e6df070</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> UndeclaredIdentifier</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "Z_DUAL_STEPPER_DRIVERS" (1st degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> mapping</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> movement/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>#include &lt;stdbool.h&gt;
+#include &lt;stdio.h&gt;
+
+#define PIN_EXISTS(PN) (defined(PN##_PIN) && PN##_PIN &gt;= 0)
+#define Z_STEP_PIN 1
+#define HAS_Z_MAX (PIN_EXISTS(Z_MAX))
+#define HAS_Z_MIN (PIN_EXISTS(Z_MIN))
+
+#define WRITE {printf("making pin high or low");}
+
+#ifdef Z_DUAL_STEPPER_DRIVERS
+
+  #define Z_DUAL_ENDSTOPS
+
+  #ifdef Z_DUAL_ENDSTOPS
+    #define Z_MIN 1
+    #define Z_MAX -1
+  #endif
+
+#endif // Z_DUAL_STEPPER_DRIVERS
+
+#ifdef Z_DUAL_ENDSTOPS
+  locked_z_motor = false, 
+  locked_z2_motor = false;
+#endif
+
+#if HAS_Z_MIN
+  static bool old_z_min_endstop = false;
+#endif
+
+#if HAS_Z_MAX
+  static bool old_z_max_endstop = false;
+#endif
+
+#ifdef Z_DUAL_ENDSTOPS
+  static bool old_z2_min_endstop = false;
+  static bool old_z2_max_endstop = false;
+#endif
+
+void function() 
+{
+#ifdef Z_DUAL_STEPPER_DRIVERS
+  #ifdef Z_DUAL_ENDSTOPS
+    if (!old_z_max_endstop && !locked_z_motor) WRITE;
+    if (!old_z2_max_endstop && !locked_z2_motor) WRITE;
+  #endif
+#endif
+}
+
+void main(){}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/7336e6d.c b/simple/7336e6d.c
+--- a/simple/7336e6d.c
++++ b/simple/7336e6d.c
+@@ -24,13 +24,8 @@
+   locked_z2_motor = false;
+ #endif
+ 
+-#if HAS_Z_MIN
+   static bool old_z_min_endstop = false;
+-#endif
+-
+-#if HAS_Z_MAX
+   static bool old_z_max_endstop = false;
+-#endif
+ 
+ #ifdef Z_DUAL_ENDSTOPS
+   static bool old_z2_min_endstop = false;
+</pre></div>
+<div id='single' class='tabcontent'><pre>#include &lt;stdbool.h&gt;
+#include &lt;stdio.h&gt;
+
+#define PIN_EXISTS(PN) (defined(PN##_PIN) && PN##_PIN &gt;= 0)
+#define Z_STEP_PIN 1
+#define HAS_Z_MAX (PIN_EXISTS(Z_MAX))
+#define HAS_Z_MIN (PIN_EXISTS(Z_MIN))
+
+#define WRITE {printf("%s", "making pin high or low");}
+
+#ifdef Z_DUAL_STEPPER_DRIVERS
+
+  #define Z_DUAL_ENDSTOPS
+
+  #ifdef Z_DUAL_ENDSTOPS
+    #define Z_MIN 1
+    #define Z_MAX -1
+  #endif
+
+#endif // Z_DUAL_STEPPER_DRIVERS
+
+void main()
+{
+#ifdef Z_DUAL_ENDSTOPS
+  locked_z_motor = false, 
+  locked_z2_motor = false;
+#endif
+
+#if HAS_Z_MIN
+  static bool old_z_min_endstop = false;
+#endif
+
+#if HAS_Z_MAX
+  static bool old_z_max_endstop = false;
+#endif
+
+#ifdef Z_DUAL_ENDSTOPS
+  static bool old_z2_min_endstop = false;
+  static bool old_z2_max_endstop = false;
+#endif
+
+#ifdef Z_DUAL_STEPPER_DRIVERS
+  #ifdef Z_DUAL_ENDSTOPS
+    if (!old_z_max_endstop && !locked_z_motor) WRITE;
+    if (!old_z2_max_endstop && !locked_z2_motor) WRITE;
+  #endif
+#endif
+}
+</pre></div>
+<div id='trace' class='tabcontent'><pre>
+. call  stepper.cpp:701:  AXIS ##_APPLY_STEP(!INVERT_## AXIS ##_STEP_PIN,0); // Function macro
+. 166: ERROR: if (!(old_z_max_endstop && (count_direction[Z_AXIS] &gt; 0)) && !locked_z_motor) Z_STEP_WRITE(v); \
+</pre></div>
+    </div>
+</body>
+</html>

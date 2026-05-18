@@ -1,0 +1,100 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/marlin.png" alt="">&nbsp;marlin</span>
+            <span class="title">     "String is truncated when SDSUPPORT is enabled   </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 Positioning of string terminator to truncate checksum from the commands     is off by one, causing the last letter of the actual command to be truncated     instead of just the checksum.      This caused checksummed commands targeting existing files to fail since      the last letter of the filename was truncated.      Issue 520 on Octoprint though it is a Marlin bug: https://github.com/foosel/OctoPrint/issues/520     Discussion thread: https://groups.google.com/forum/#!topic/octoprint/C7e_HRaflUM"       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://github.com/MarlinFirmware/Marlin/commit/2d22902d080b08c65ebdf5f8b3f03529ccd58144">2d22902d080</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> BehaviorViolation</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "SDSUPPORT" (1st degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> main</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>#include &lt;string.h&gt;
+
+static char *strchr_pointer = "eiffel~1.gco*57";
+
+void process_commands()
+{
+  char *starpos = NULL;
+#ifdef SDSUPPORT
+    starpos = (strchr(strchr_pointer + 4,'*'));
+    if(starpos!=NULL)
+        *(starpos-1)='\0'; //ERROR
+    assert(strcmp(strchr_pointer,"eiffel~1.gco"));
+#endif
+}
+
+int main(int argc, char** argv)
+{
+    process_commands();
+    return 0;
+}
+
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/2d22902.c b/simple/2d22902.c
+--- a/simple/2d22902.c
++++ b/simple/2d22902.c
+@@ -8,7 +8,7 @@ void process_commands()
+ #ifdef SDSUPPORT
+ 	starpos = (strchr(strchr_pointer + 4,'*'));
+ 	if(starpos!=NULL)
+-		*(starpos-1)='\0'; //ERROR
++		*(starpos)='\0';
+ #endif
+ }
+ 
+</pre></div>
+<div id='single' class='tabcontent'><pre>#include &lt;string.h&gt;
+
+int main(int argc, char** argv)
+{
+static char *strchr_pointer = "eiffel~1.gco*57";
+char *starpos = NULL;
+#ifdef SDSUPPORT
+	starpos = (strchr(strchr_pointer + 4,'*'));
+	if(starpos!=NULL)
+		*(starpos-1)='\0'; //ERROR
+#endif
+return 0;
+}
+
+</pre></div>
+<div id='trace' class='tabcontent'><pre>
+. call  Marlin_main.cpp:1155: void process_commands()
+. 1635: else if(code_seen('M'))
+. ERROR 1696: *(starpos-1)='\0';
+</pre></div>
+    </div>
+</body>
+</html>

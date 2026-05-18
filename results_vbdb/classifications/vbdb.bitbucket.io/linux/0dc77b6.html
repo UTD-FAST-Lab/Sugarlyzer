@@ -1,0 +1,295 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">     Module loading fails due to attempt to double-register compat class  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 The first time the extcon-class module is loaded it registers a     compatibility class "switch", which creates "/class/switch"     in sysfs. When the module is unloaded, however, this class is not     deregistered. Therefore, the second attempt to load the module fails as     it tries to register an already registered compatibility class.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/0dc77b6dabec8fd298392018cc0de5214af2dc43">0dc77b6dabe</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> DoubleOpOnResource</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "EXTCON && SYSFS && ANDROID" (3rd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> drivers/extcon/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#ifdef CONFIG_ANDROID
+#define CONFIG_SYSFS
+#endif
+
+#define ENOMEM      12  /* Out of memory */
+#define EEXIST      17  /* File exists */
+
+#define NULL (void*)0
+
+extern void *malloc (unsigned long __size) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__malloc__)) ;
+
+extern void free (void *__ptr) __attribute__ ((__nothrow__ , __leaf__));
+
+extern int strcmp (const char *__s1, const char *__s2)
+     __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__pure__)) __attribute__ ((__nonnull__ (1, 2)));
+
+#ifdef CONFIG_SYSFS
+static const char *linked = NULL;
+
+int sysfs_link_sibling(const char *s_name)
+{
+  if (linked != NULL)
+    return (!strcmp(s_name,linked)) ? -EEXIST : -ENOMEM;
+
+  linked = s_name;
+  return 0;
+}
+
+void sysfs_unlink_sibling(const char *s_name)
+{
+  if (linked != NULL && !strcmp(s_name,linked))
+    linked = NULL;
+}
+
+int sysfs_create_dir(const char *name)
+{
+  return sysfs_link_sibling(name); // (6,13) ERROR
+}
+
+int kobject_add(const char *name)
+{
+  return sysfs_create_dir(name);
+}
+
+int *kobject_create_and_add(const char *name)
+{
+  int *kobj =(int*) malloc(sizeof(int));
+  if (!kobj)
+    return NULL;
+
+  int retval = kobject_add(name); // (5,12)
+  if (retval)
+  {
+    free(kobj);
+    kobj = NULL;
+  }
+
+  return kobj;
+}
+
+int *class_compat_register(const char *name)
+{
+  int *kobj;
+
+  kobj = kobject_create_and_add(name); // (4,11)
+  if (!kobj)
+    return NULL;
+
+  return kobj;
+}
+
+void class_compat_unregister(const char *name)
+{
+  free(name);
+}
+#endif
+
+#ifdef CONFIG_EXTCON
+#if defined(CONFIG_ANDROID)
+static int *switch_class;
+#endif /* CONFIG_ANDROID */
+
+int create_extcon_class(void)
+{
+#if defined(CONFIG_ANDROID)
+    switch_class = class_compat_register("switch"); // (3,10)
+    if (!switch_class)
+      return -ENOMEM;
+#endif /* CONFIG_ANDROID */
+  return 0;
+}
+
+int extcon_class_init(void)
+{
+  return create_extcon_class(); // (2,9)
+}
+
+void extcon_class_exit(void)
+{
+  return;
+}
+#endif
+
+int main(void)
+{
+#ifdef CONFIG_EXTCON
+  extcon_class_init(); // (1)
+  extcon_class_exit(); // (7)
+  extcon_class_init(); // (8)
+#endif
+  return 0;
+}
+
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/0dc77b6.c b/simple/0dc77b6.c
+--- a/simple/0dc77b6.c
++++ b/simple/0dc77b6.c
+@@ -98,6 +98,9 @@
+ 
+ void extcon_class_exit(void)
+ {
++#if defined(CONFIG_ANDROID)
++    class_compat_unregister("switch");
++#endif
+   return;
+ }
+ #endif
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#ifdef CONFIG_ANDROID
+#define CONFIG_SYSFS
+#endif
+
+#include &lt;errno.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+#ifdef CONFIG_SYSFS
+static const char *linked = NULL;
+
+struct kobject {
+  int __foo;
+};
+
+static struct kobject the_kobj;
+
+struct class_compat {
+  struct kobject *kobj;
+};
+
+static struct class_compat the_cls;
+#endif
+
+int main(int argc, char** argv)
+{
+#ifdef CONFIG_EXTCON
+//  extcon_class_init();
+#if defined(CONFIG_ANDROID)
+  //switch_class = class_compat_register("switch");
+  #ifdef CONFIG_SYSFS
+  struct class_compat *cls;
+
+  cls = &the_cls;
+  //cls-&gt;kobj = kobject_create_and_add(name);
+  struct kobject *kobj = &the_kobj;
+  //int retval = kobject_add(name);
+  if (linked != NULL)
+    return (!strcmp("switch",linked)) ? -EEXIST : -ENOMEM;
+
+  linked = s_name;
+  
+  int retval = 0;
+  if (retval)
+    kobj = NULL;
+
+  cls-&gt;kobj = kobj;
+  if (!cls-&gt;kobj)
+    return NULL;
+
+  switch_class = cls;
+  #endif
+  
+  if (!switch_class)
+    return -ENOMEM;
+#endif /* CONFIG_ANDROID */
+//  extcon_class_exit();
+  //return;
+//  extcon_class_init();
+#if defined(CONFIG_ANDROID)
+  //switch_class = class_compat_register("switch");
+  #ifdef CONFIG_SYSFS
+  cls = &the_cls;
+  //cls-&gt;kobj = kobject_create_and_add(name);
+  *kobj = &the_kobj;
+  //int retval = kobject_add(name);
+  if (linked != NULL)
+    return (!strcmp("switch",linked)) ? -EEXIST : -ENOMEM;
+
+  linked = s_name;
+  
+  retval = 0;
+  if (retval)
+    kobj = NULL;
+
+  cls-&gt;kobj = kobj;
+  if (!cls-&gt;kobj)
+    return NULL;
+
+  switch_class = cls;
+  #endif
+  
+  if (!switch_class)
+    return -ENOMEM;
+#endif /* CONFIG_ANDROID */
+#endif
+  return 0;
+}
+
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. call drivers/extcon/extcon-class.c:814:extcon_class_init()
+. 816: create_extcon_class();
+.. call drivers/extcon/extcon-class.c:530:create_extcon_class()
+.. // if ANDROID is enabled
+.. 539: switch_class = class_compat_register("switch");
+... call drivers/base/class.c:519:class_compat_register()
+... 526: cls-&gt;kobj = kobject_create_and_add(name, &class_kset-&gt;kobj);
+.... call lib/kobject.c:645:kobject_create_and_add()
+.... 654: retval = kobject_add(kobj, parent, "%s", name);
+..... call lib/kobject.c:336:kobject_add()
+...... call lib/kobject.c:156:kobject_add_internal()
+...... 185: error = create_dir(kobj);
+....... call lib/kobject.c:47:create_dir()
+....... 50: error = sysfs_create_dir(kobj);
+........ call fs/sysfs/dir.c:746:sysfs_create_dir()
+........ 767: error = create_dir(kobj, parent_sd, type, ns, kobject_name(kobj), &sd);
+......... 679: create_dir()
+......... 699: rc = sysfs_add_one(&acxt, sd);
+.......... call fs/sysfs/dir.c:525:sysfs_add_one()
+........... call fs/sysfs/dir.c:456:__sysfs_add_one()
+........... 471: ret = sysfs_link_sibling(sd);
+........... 473: return ret;
+...... 192: if (error == -EEXIST)
+...... 204: return error;
+.... 659: kobj = NULL;
+.... 661: return kobj;
+... 529: return NULL;
+.. ERROR 541: return -ENOMEM;
+
+</pre></div>
+    </div>
+</body>
+</html>

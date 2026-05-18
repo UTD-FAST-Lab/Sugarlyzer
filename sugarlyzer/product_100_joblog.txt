@@ -1,7 +1,0 @@
-Seq	Host	Starttime	JobRuntime	Send	Receive	Exitval	Signal	Command
-1	:	1778858546.647	    94.583	0	0	0	0	java -jar dispatcher.jar -t clang -p axtls --results_dir ./results_100/clang_axtls_product --sample_size 100 -s product -j 40 |& tee -i clang_axtls_product_100.log
-2	:	1778858641.766	   369.303	0	0	0	0	java -jar dispatcher.jar -t clang -p toybox --results_dir ./results_100/clang_toybox_product --sample_size 100 -s product -j 40 |& tee -i clang_toybox_product_100.log
-3	:	1778859011.592	  2841.668	0	0	0	0	java -jar dispatcher.jar -t clang -p busybox --results_dir ./results_100/clang_busybox_product --sample_size 100 -s product -j 40 |& tee -i clang_busybox_product_100.log
-4	:	1778861853.773	   390.042	0	0	0	0	java -jar dispatcher.jar -t infer -p axtls --results_dir ./results_100/infer_axtls_product --sample_size 100 -s product -j 40 |& tee -i infer_axtls_product_100.log
-5	:	1778862244.362	   453.792	0	0	0	0	java -jar dispatcher.jar -t infer -p toybox --results_dir ./results_100/infer_toybox_product --sample_size 100 -s product -j 40 |& tee -i infer_toybox_product_100.log
-6	:	1778862698.687	   741.352	0	0	0	0	java -jar dispatcher.jar -t infer -p busybox --results_dir ./results_100/infer_busybox_product --sample_size 100 -s product -j 40 |& tee -i infer_busybox_product_100.log

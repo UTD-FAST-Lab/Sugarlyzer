@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/busybox.png" alt="">&nbsp;busybox</span>
+            <span class="title">     The function shutdown_signal is only defined when !DEBUG_INIT. However, it is      used in a mandatory feature. Thus, all product with DEBUG_INIT enabled has      compile failure.       </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.busybox.net/busybox/commit/cf1f2ace391269655a80e42b692749da0c3d4047">cf1f2ace391</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> UndefinedSymbol</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> DEBUG_INIT (1st degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> mapping</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> init/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt;
+
+#define SIGTERM     15	/* software termination signal from kill */
+#define SIGUSR1     30	/* user defined signal 1 */
+#define SIGUSR2     31	/* user defined signal 2 */
+
+#ifndef ENABLE_DEBUG_INIT
+void shutdown_signal(int sig)
+{
+  char *m;
+
+  if (sig == SIGTERM) {
+    m = "reboot";
+  } else if (sig == SIGUSR2) {
+    m = "poweroff";
+  } else {
+    m = "halt";
+  }
+  printf("Requesting system %s.", m);
+}
+#endif
+
+void open_new_terminal() 
+{
+  shutdown_signal(SIGUSR1); //ERROR
+}
+
+void run()
+{
+  open_new_terminal();
+}
+
+void run_actions()
+{
+  run();
+}
+
+int main(int argc, char** argv)
+{
+  run_actions();
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/cf1f2ac.c b/simple/cf1f2ac.c
+--- a/simple/cf1f2ac.c
++++ b/simple/cf1f2ac.c
+@@ -24,7 +24,11 @@
+ 
+ void open_new_terminal() 
+ {
++#ifndef ENABLE_DEBUG_INIT
+   shutdown_signal(SIGUSR1); //ERROR
++#else
++  _exit(2);
++#endif 
+ }
+ 
+ void run()
+</pre></div>
+
+<div id='trace' class='tabcontent'><pre>. call init/init.c:1069:run_actions(int action)
+.. 635:a-&gt;pid = run(a);
+.. call init/init.c:1069:run(const struct init_action *a)
+... 444:open_new_terminal(a-&gt;terminal, 1);
+... call init/init.c:386:open_new_terminal(const char *device, char fail)
+.... ERROR 398:shutdown_signal(SIGUSR1);
+
+</pre></div>
+    </div>
+</body>
+</html>

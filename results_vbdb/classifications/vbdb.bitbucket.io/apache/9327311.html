@@ -1,0 +1,83 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/apache.png" alt="">&nbsp;apache</span>
+            <span class="title">     Segmentation fault when APR_HAS_SHARED_MEMORY.  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 cache-&gt;rmm_addr can be uninitialized on calling apr_rmm_addr_get,     leading to a segfault.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://github.com/apache/httpd/commit/9327311d30f34811bb3fab2be81e310e3b6acb22">9327311d30f</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> NullDereference</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> APR_HAS_SHARED_MEMORY (1st degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> modules/experimental/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            
+            
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>#include &lt;string.h&gt;
+
+char *rmm_addr;
+
+void util_ald_create_cache(char *rmm_addr)
+{
+#if APR_HAS_SHARED_MEMORY
+  strcat(rmm_addr, "something");
+#else
+  // do something
+#endif
+}
+
+void util_ald_create_caches(char *rmm_addr)
+{
+  util_ald_create_cache(rmm_addr);
+}
+
+int main(void)
+{
+  util_ald_create_caches(rmm_addr);
+  return 0;
+}
+</pre></div>
+
+
+<div id='trace' class='tabcontent'><pre>. call modules/experimental/util_ldap.c:458:util_ldap_cache_comparedn()
+. 471: util_ldap_state_t *st = (util_ldap_state_t *)ap_get_module_config(r-&gt;server-&gt;module_config, &ldap_module);
+. // st-&gt;cache_rmm may be NULL
+. 482: curl = util_ald_create_caches(st, url);
+.. call modules/experimental/util_ldap_cache_mgr.c:211:util_ald_create_caches()
+.. 219: util_ald_create_cache()
+... call modules/experimental/util_ldap_cache_mgr.c:252:util_ald_create_cache()
+... // if APR_HAS_SHARED_MEMORY is enabled
+... // apr_rmm_addr_get will dereference its first argument
+... ERROR 267: apr_rmm_addr_get(st-&gt;cache_rmm, ...);
+
+</pre></div>
+    </div>
+</body>
+</html>

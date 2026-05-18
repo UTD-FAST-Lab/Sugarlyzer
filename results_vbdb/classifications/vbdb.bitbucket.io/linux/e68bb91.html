@@ -1,0 +1,72 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">     Module `i2c-designware-core' gets linked twice causing a linker error  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 Both I2C_DESIGNWARE_PLATFORM and I2C_DESIGNWARE_PCI will add     `i2c-designware-core.o' to the list of object files to be linked     against the respective module. When these features are compiled     built-in in the kernel, both modules are part of a `built-in.o'     object. The linker fails because both `i2c-designware-platform.o'     and `i2c-designware-pci.o' contain duplicate definitions coming     from `i2c-designware-core'.        
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/e68bb91baa0bb9817567bd45d560919e8e26373b">e68bb91baa0</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> MultipleDefinitions</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "I2C_DESIGNWARE_PLATFORM && I2C_DESIGNWARE_PCI" (2nd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> model, mapping, code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> drivers/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            
+            
+            
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#ifdef CONFIG_I2C_DESIGNWARE_PLATFORM
+int i2c_dw_init()
+{
+	return 0;
+}
+#endif
+
+#ifdef CONFIG_I2C_DESIGNWARE_PCI
+int i2c_dw_init()	// ERROR
+{
+	return 0;
+}
+
+#endif
+
+int main(void)
+{
+#if defined(CONFIG_I2C_DESIGNWARE_PLATFORM) || defined(CONFIG_I2C_DESIGNWARE_PCI)
+	i2c_dw_init();
+#endif
+	return 0;
+}
+</pre></div>
+
+
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/marlin.png" alt="">&nbsp;marlin</span>
+            <span class="title">     "The variable is defined as a scalar but initialized with an array of values.  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 Issue 1800: https://github.com/MarlinFirmware/Marlin/issues/1800"       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://github.com/MarlinFirmware/Marlin/commit/fc3c76fc1641370ee76a564299592e283cbcd0c0">fc3c76fc164</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> IncompatibleType</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "HAS_BED_THERMAL_PROTECTION" (1st degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> temperature/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>#include &lt;stdbool.h&gt;
+
+#if HAS_HEATER_THERMAL_PROTECTION || HAS_BED_THERMAL_PROTECTION
+  enum TRState { TRInactive, TRFirstHeating, TRStable };
+  static bool thermal_runaway = false;
+  #if HAS_HEATER_THERMAL_PROTECTION
+    enum TRState thermal_runaway_state_machine[4] = { TRInactive, TRInactive, TRInactive, TRInactive };
+    static unsigned long thermal_runaway_timer[4]; // = {0,0,0,0};
+  #endif
+  #if HAS_BED_THERMAL_PROTECTION
+    static TRState thermal_runaway_bed_state_machine = { TRInactive, TRInactive, TRInactive, TRInactive };
+    static unsigned long thermal_runaway_bed_timer;
+  #endif
+#endif
+
+int main(void)
+{
+return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/fc3c76f.c b/simple/fc3c76f.c
+--- a/simple/fc3c76f.c
++++ b/simple/fc3c76f.c
+@@ -8,7 +8,7 @@
+     static unsigned long thermal_runaway_timer[4]; // = {0,0,0,0};
+   #endif
+   #if HAS_BED_THERMAL_PROTECTION
+-    static TRState thermal_runaway_bed_state_machine = { TRInactive, TRInactive, TRInactive, TRInactive };
++    static TRState thermal_runaway_bed_state_machine = TRInactive;
+     static unsigned long thermal_runaway_bed_timer;
+   #endif
+ #endif
+</pre></div>
+<div id='single' class='tabcontent'><pre>#include &lt;stdbool.h&gt;
+
+int main(void){
+#if HAS_HEATER_THERMAL_PROTECTION || HAS_BED_THERMAL_PROTECTION
+  enum TRState { TRInactive, TRFirstHeating, TRStable };
+  static bool thermal_runaway = false;
+  #if HAS_HEATER_THERMAL_PROTECTION
+    enum TRState thermal_runaway_state_machine[4] = { TRInactive, TRInactive, TRInactive, TRInactive };
+    static unsigned long thermal_runaway_timer[4]; // = {0,0,0,0};
+  #endif
+  #if HAS_BED_THERMAL_PROTECTION
+    static TRState thermal_runaway_bed_state_machine = { TRInactive, TRInactive, TRInactive, TRInactive };
+    static unsigned long thermal_runaway_bed_timer;
+  #endif
+#endif
+return 0;
+}
+</pre></div>
+<div id='trace' class='tabcontent'><pre>
+. ERROR temperature.cpp:87: static TRState thermal_runaway_bed_state_machine = { TRInactive, TRInactive, TRInactive, TRInactive };
+// static scalar object thermal_runaway_bed_state_machine needs one element in initializer
+</pre></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/busybox.png" alt="">&nbsp;busybox</span>
+            <span class="title">    NULL pointer gets dereferenced if !FEATURE_MODPROBE_MULTIPLE_OPTIONS  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 If the pointer dt is null when !FEATURE_MODPROBE_MULTIPLE_OPTIONS is      not set, it would dereference the null.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.busybox.net/busybox/commit/199501f2a00956265a5dba74ea01badab6c331ac">199501f2a00</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> NullDereference</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> !FEATURE_MODPROBE_MULTIPLE_OPTIONS (1st degree)</td></tr>
+            <tr><td width='20%'><b>C-features</b></td><td> Structs</td></tr>
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> modutils/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+void build_dep(void)
+{
+  char * dt = NULL;  
+  
+  if(rand() % 2) {
+    dt = "-i";
+  }
+    
+#ifdef ENABLE_FEATURE_MODPROBE_MULTIPLE_OPTIONS
+  if(dt) {
+    // Do something
+  }
+#else
+  char buf[50];
+  strcpy(buf, "module option(s): ");
+  
+  strcat(buf, dt); // ERROR
+#endif
+}
+
+int main(int argc, char **argv)
+{
+  build_dep();
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/199501f.c b/simple/199501f.c
+--- a/simple/199501f.c
++++ b/simple/199501f.c
+@@ -11,16 +11,16 @@
+     dt = "-i";
+   }
+     
++  if(dt) {
+ #ifdef ENABLE_FEATURE_MODPROBE_MULTIPLE_OPTIONS
+-  if(dt) {
+     // Do something
+-  }
+ #else
+   char buf[50];
+   strcpy(buf, "module option(s): ");
+   
+   strcat(buf, dt); // ERROR
+ #endif
++  }
+ }
+ 
+ int main(int argc, char **argv)
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+int main(int argc, char **argv)
+{
+//  build_dep();
+  char * dt = NULL;  
+  
+  if(rand() % 2) {
+    dt = "-i";
+  }
+    
+#ifdef ENABLE_FEATURE_MODPROBE_MULTIPLE_OPTIONS
+  if(dt) {
+    // Do something
+  }
+#else
+  char buf[50];
+  strcpy(buf, "module option(s): ");
+  
+  strcat(buf, dt); // ERROR
+#endif
+  return 0;
+}
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. call /modutils/modprobe.c:852:depend = build_dep();
+.. 493:struct dep_t *dt;
+.. ERROR [!MULTIPLE_OPTIONS] 506:append_option(dt-&gt;m_options,opt);
+
+</pre></div>
+    </div>
+</body>
+</html>

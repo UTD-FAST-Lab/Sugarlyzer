@@ -1,0 +1,75 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/apache.png" alt="">&nbsp;apache</span>
+            <span class="title">     BufferOverflow when HAS_APACHE_REGEX_LIB.  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 feature HAS_APACHE_REGEX_LIB makes a copy using the strncpy function.     The size of characters copied is sizeof(newuri)-1, but the \0 character     has been assigned to newuri[sizeof(newuri-1)] instead.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://github.com/apache/httpd/commit/dbafef17dd1a6f697b4a12758af0b1b838160fa9">dbafef17dd1</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> BufferOverflow</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "HAS_APACHE_REGEX_LIB" (1st degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> modules/standard/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            
+            
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+#define MAX_STRING_LEN 20
+
+void apply_rewrite_rule()
+{
+  char newuri[MAX_STRING_LEN];
+
+#ifdef HAS_APACHE_REGEX_LIB
+  strncpy(newuri, "pregsub()", sizeof(newuri)-1);
+  newuri[sizeof(newuri-1)] = '\0';
+#endif
+
+  // more code making of 'newuri'
+}
+
+int main(void)
+{
+  apply_rewrite_rule();
+  return 0;
+}
+</pre></div>
+
+
+<div id='trace' class='tabcontent'><pre>. call modules/standard/mod_rewrite.c:1376:apply_rewrite_rule()
+. // if HAS_APACHE_REGEX_LIB is enabled
+. ERROR 1547: newuri[sizeof(newuri-1)] = '\0';
+
+</pre></div>
+    </div>
+</body>
+</html>

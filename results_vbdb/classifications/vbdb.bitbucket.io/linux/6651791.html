@@ -1,0 +1,130 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">     Undefined reference due to missing dependency on I2C  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 SND_FSI_AK4642 enables the compilation of ak4642.c, which depends on     code enabled by I2C. Thus, if I2C is disabled we get a build error.     The same applies for SND_FSI_DA7210.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/66517915e0954ee027b889f452511945f7a9f3ec">66517915e09</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> UndeclaredIdentifier</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "(SND_FSI_AK4642 || SND_FSI_DA7210) && !I2C" (2nd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> model</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> sound/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#ifdef CONFIG_SND_FSI_AK4642
+#define CONFIG_SND_SOC_AK4642
+#endif
+
+#ifdef CONFIG_SND_FSI_DA7210
+#define CONFIG_SND_SOC_DA7210
+#endif
+
+#ifdef CONFIG_I2C
+static int i2c_master_send = 0;
+#endif
+
+#ifdef CONFIG_SND_SOC_DA7210
+static int da7210_init()
+{
+  int codec_hw_write = i2c_master_send; // ERROR
+  return 0;
+}
+#endif
+
+#ifdef CONFIG_SND_SOC_AK4642
+static int ak4642_init()
+{
+  int codec_hw_write = i2c_master_send; // ERROR
+  return 0;
+}
+#endif
+
+int main(int argc, char** argv)
+{
+#ifdef CONFIG_SND_SOC_DA7210
+  da7210_init();
+#endif
+#ifdef CONFIG_SND_SOC_AK4642
+  ak4642_init();
+#endif
+  return 0;
+}
+
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/6651791.c b/simple/6651791.c
+--- a/simple/6651791.c
++++ b/simple/6651791.c
+@@ -1,3 +1,8 @@
++
++#if defined(CONFIG_SND_SOC_SH4_FSI) && defined(CONFIG_I2C)
++#define CONFIG_SND_FSI_AK4642
++#define CONFIG_SND_FSI_DA7210
++#endif
+ 
+ #ifdef CONFIG_SND_FSI_AK4642
+ #define CONFIG_SND_SOC_AK4642
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#ifdef CONFIG_SND_FSI_AK4642
+#define CONFIG_SND_SOC_AK4642
+#endif
+
+#ifdef CONFIG_SND_FSI_DA7210
+#define CONFIG_SND_SOC_DA7210
+#endif
+
+#ifdef CONFIG_I2C
+static int i2c_master_send = 0;
+#endif
+
+int main(int argc, char** argv)
+{
+#ifdef CONFIG_SND_SOC_DA7210
+//  da7210_init();
+  int codec_hw_write = i2c_master_send; // ERROR
+#endif
+#ifdef CONFIG_SND_SOC_AK4642
+//  ak4642_init();
+  int codec_hw_write2 = i2c_master_send; // ERROR
+#endif
+  return 0;
+}
+
+</pre></div>
+<div id='trace' class='tabcontent'><pre>
+. sound/soc/codecs/da7210.c:462: codec-&gt;hw_write		= (hw_write_t)i2c_master_send;
+
+</pre></div>
+    </div>
+</body>
+</html>

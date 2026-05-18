@@ -1,0 +1,132 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/marlin.png" alt="">&nbsp;marlin</span>
+            <span class="title">     "Undefined reference to macro when AUTO_BED_LEVELING && !AUTO_BED_LEVELING_GRID  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 Macros *_PROBE_BED_POSITION are conditionally defined in Configuration.h, only     when (AUTO_BED_LEVELING &&) AUTO_BED_LEVELING_GRID is enabled. This macro is referenced in      
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://github.com/MarlinFirmware/Marlin/commit/e30bfedce4d3565e880cd76589665f322c6ef788">e30bfedce4d</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> UndeclaredIdentifier</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "AUTO_BED_LEVELING && !AUTO_BED_LEVELING_GRID" (2nd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> main/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>#ifdef ENABLE_AUTO_BED_LEVELING
+	#define AUTO_BED_LEVELING_GRID
+
+	#ifdef AUTO_BED_LEVELING_GRID
+
+		// set the rectangle in which to probe
+		#define LEFT_PROBE_BED_POSITION 15
+		
+	  #else  // not AUTO_BED_LEVELING_GRID
+		// with no grid, just probe 3 arbitrary points.  A simple cross-product
+		// is used to esimate the plane of the print bed
+		  #define ABL_PROBE_PT_1_X 15
+
+	#endif // AUTO_BED_LEVELING_GRID
+#endif // AUTO_BED_LEVELING
+
+
+void process_commands(){
+	
+	#ifdef ENABLE_AUTO_BED_LEVELING
+		int left_probe_bed_position=LEFT_PROBE_BED_POSITION; // ERROR
+		
+		#ifdef AUTO_BED_LEVELING_GRID
+			int xGridSpacing = left_probe_bed_position;
+		#else
+			float z_at_pt_1, z_at_pt_2, z_at_pt_3;
+		#endif
+	#endif	
+}
+
+int main(int argc, char** argv)
+{
+	process_commands();
+	return 0;
+}
+
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/e30bfed.c b/simple/e30bfed.c
+--- a/simple/e30bfed.c
++++ b/simple/e30bfed.c
+@@ -18,9 +18,9 @@
+ void process_commands(){
+ 	
+ 	#ifdef ENABLE_AUTO_BED_LEVELING
+-		int left_probe_bed_position=LEFT_PROBE_BED_POSITION; // ERROR
+ 		
+ 		#ifdef AUTO_BED_LEVELING_GRID
++			int left_probe_bed_position=LEFT_PROBE_BED_POSITION;
+ 			int xGridSpacing = left_probe_bed_position;
+ 		#else
+ 			float z_at_pt_1, z_at_pt_2, z_at_pt_3;
+</pre></div>
+<div id='single' class='tabcontent'><pre>#ifdef ENABLE_AUTO_BED_LEVELING
+	#define AUTO_BED_LEVELING_GRID
+
+	#ifdef AUTO_BED_LEVELING_GRID
+
+		// set the rectangle in which to probe
+		#define LEFT_PROBE_BED_POSITION 15
+		
+	  #else  // not AUTO_BED_LEVELING_GRID
+		// with no grid, just probe 3 arbitrary points.  A simple cross-product
+		// is used to esimate the plane of the print bed
+		  #define ABL_PROBE_PT_1_X 15
+
+	#endif // AUTO_BED_LEVELING_GRID
+#endif // AUTO_BED_LEVELING
+
+int main(int argc, char** argv)
+{
+	#ifdef ENABLE_AUTO_BED_LEVELING
+		int left_probe_bed_position=LEFT_PROBE_BED_POSITION; // ERROR
+		
+		#ifdef AUTO_BED_LEVELING_GRID
+			int xGridSpacing = left_probe_bed_position;
+		#else
+			float z_at_pt_1, z_at_pt_2, z_at_pt_3;
+		#endif
+	#endif	
+	return 0;
+}
+
+</pre></div>
+<div id='trace' class='tabcontent'><pre>
+. call Marlin_main.cpp:1414: void process_commands()
+. ERROR 1737: int left_probe_bed_position=LEFT_PROBE_BED_POSITION;
+</pre></div>
+    </div>
+</body>
+</html>
