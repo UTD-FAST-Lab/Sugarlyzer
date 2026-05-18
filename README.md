@@ -1,67 +1,28 @@
-# Artifact for "An Empirical Study of Static Analysis-Based Variability Bug Detection"
+# Framework for Performing Product- and Transformation-based Analysis of C systems
 
-This artifact includes the code and data for RQ2 of our submission entitled "An Empirical Study of Static Analysis-Based Variability Bug Detection."
+This artifact includes the code used to run product- and transformation-based analysis on C SPLs.
 
 # Prerequisites
 
-This application is written for Python version >= 3.13. We suggest using PyEnv to manage multiple Python versions.
-Furthermore, we utilize Docker containers in order to maintain consistent environments across runs, so you must have a working Docker installation. 
+- Docker
+- Java 17+
+- sbt 1.12.9+
+- GNU Parallel if running `runProduct.sh` and `runTransformation.sh`
 
 # Setup
 
-## Product- and Transformation-Based Approaches
-
-First, create a virtual environment.
-
-`python -m venv <name_of_virtual_environment>`
-
-where 'python' points to a python 3.13.0 or higher installation (note that this may be `python3` on your system).
-This will create a new folder.
-
-If, for example, you named your virtual environment 'venv', then you can activate it as follows:
-
-`source ./venv/bin/activate`
-
-Your shell prompt should now have a prefix with the name of the virtual environment.
-Now, when you install dependencies, they will be installed into this virtual environment instead of globally.
-
-In order to install dependencies, from the root directory of the repository, run
-
-`pip install -r requirements.txt`
-
-This will install all of the Python dependencies required. Then, in order to install
-the application, run
-
-`pip install -e .`
-
-This installation will put two executables on your system PATH: `dispatcher`, and `tester`.
-`dispatcher` is the command you run from your host, while `tester` is the command you run from inside the Docker container (under normal usage, a user
-will never invoke `tester` themselves, but it can be useful for debugging to skip
-container creation, which can take quite a while. especially for Clang which needs to clone and build LLVM.)
-
-Simply run `dispatcher --help` from anywhere in order to see the helpdoc on how to
-invoke the tool. Running with the "--baselines" flag causes the tool to run the product-based mode. Otherwise, it will run the transformation-based analysis.
-
-## Family-Based Analysis
-
-The scripts to run the family-based analysis are available under `./scripts/family.` However, these require the TypeChef VAA to be installed, which is non-trivial. We are in the process of providing a virtual machine with the necessary setup so that these experiments can be replicated.
+Navigate to the `sugarlyzer` directory and run `make` to build `dispatcher.jar` and `tester.jar`.
 
 # Usage
 
-An example of running static analysis on desugared code can be seen by running
+Interact with `dispatcher.jar` to do the product-based and transformation-based analyses. Run `java -jar dispatcher.jar --help` to see the options that the application takes. Note that the VBDb benchmark is called 'varbugs' in the JAR options. The analysis will run in a combination of Docker containers. Family-based analysis is run separately; please see the top-level artifact documentation for more information.
 
-```
-dispatcher -t infer -p toybox --jobs <<number of jobs you want to run concurrently>>
-```
+We have provided `runProduct.sh` and `runTransformation.sh.` These run all of the product-based and transformation-based analyses, respectively. You can run individual analyses using `java -jar dispatcher.jar <options>`.
 
-This will run the Infer static analyzer on the desugared code of Toybox. Run with 8 cores, this experiment took about 30 minutes, and produces 21 reports.
+# Results
 
-To run baseline experiments, simply pass the `--baseline` parameter. For example, to run Infer's analysis on 10 random configurations of Toybox, use the following command:
+`results_vbdb` contains the results of running the analysis on the VBDb benchmark, as well as classification artifacts and helper scripts we used.
 
-```
-dispatcher -t infer -p toybox --baselines --sample-size 10 --jobs <<number of jobs you want to run concurrently>
-```
+# Scripts
 
-## Provided Scripts
-
-We have provided `runDesugared.sh` and `runBaselines.sh.` These run the desugared analysis, the product-based analysis, and a small subset of experiments respectively.
+`scripts` contains the notebooks and scripts used to obtain the results reported in RQ2. `preliminary.ipynb` contains the code for running the preliminary study mentioned in Section 5.1. `varbugs.ipynb` computes all the data and creates the Venn diagram and Table 1 for RQ2.1, and `realworld.ipynb` computes the results and creates the Venn diagram for RQ2.2. `performance.py` produces Table 2 based on a performance log directory, assuming each log is named <tool>_<target>_<strategy>.log. Note that family-based results in Table 2 were computed and added manually, as family-based analysis is not a part of this framework.
