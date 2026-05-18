@@ -1,0 +1,120 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">     Disabling PCI support implies that a void* pointer will be dereferenced  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 When PCI is disabled VORTEX_PCI(vp) will always return NULL, which is of     type void*. VORTEX_PCI(vp) is defined by a conditional expression, but      the compiler can infer that the pointer returned is always of this type,     and emits a warning because it is being dereferenced later on.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/d530db0db90378b5674cb78d9c0cfcc83f851a5e">d530db0db90</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> VoidPointerDereference</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "VORTEX && !PCI" (2nd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> drivers/net/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#ifdef CONFIG_VORTEX
+#include &lt;stdlib.h&gt;
+
+int some_int = 1;
+
+
+#ifdef CONFIG_PCI
+#define DEVICE_PCI(dev) ((dev % 2) ? &some_int : NULL)
+#else
+#define DEVICE_PCI(dev) NULL
+#endif
+
+#define VORTEX_PCI(vp) ((vp) ? DEVICE_PCI(vp) : NULL)
+
+void acpi_set_WOL(int vp)
+{
+	if (1) {
+		if (*VORTEX_PCI(vp) &lt; 0) // ERROR
+			return;
+	}
+}
+#endif
+
+int main()
+{
+#ifdef CONFIG_VORTEX
+  acpi_set_WOL(1); 
+#endif
+  return 0;
+}
+
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/d530db0.c b/simple/d530db0.c
+--- a/simple/d530db0.c
++++ b/simple/d530db0.c
+@@ -11,7 +11,7 @@
+ #define DEVICE_PCI(dev) NULL
+ #endif
+ 
+-#define VORTEX_PCI(vp) ((vp) ? DEVICE_PCI(vp) : NULL)
++#define VORTEX_PCI(vp) ((int) (vp) ? DEVICE_PCI(vp) : NULL)
+ 
+ void acpi_set_WOL(int vp)
+ {
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#ifdef CONFIG_VORTEX
+#include &lt;stdlib.h&gt;
+
+int some_int = 1;
+
+
+#ifdef CONFIG_PCI
+#define DEVICE_PCI(dev) ((dev % 2) ? &some_int : NULL)
+#else
+#define DEVICE_PCI(dev) NULL
+#endif
+
+#define VORTEX_PCI(vp) ((vp) ? DEVICE_PCI(vp) : NULL)
+
+int main()
+{
+#ifdef CONFIG_VORTEX
+//  acpi_set_WOL(1); 
+  if (1) {
+    if (*VORTEX_PCI(1) &lt; 0) // ERROR
+      return;
+  }
+#endif
+  return 0;
+}
+
+</pre></div>
+
+    </div>
+</body>
+</html>

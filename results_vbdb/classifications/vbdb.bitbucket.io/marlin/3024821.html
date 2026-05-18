@@ -1,0 +1,115 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/marlin.png" alt="">&nbsp;marlin</span>
+            <span class="title">     "Multiplication of an int with 1000 may overflow in 16-bit architectures  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 Period_seconds * 1000 may overflow in 16-bit architectures,      resulting in a wraparound, thus a negative result. This negative integer,      when interpreted as an unsigned long, it's a very large number.     Thus the comparison may always yield false.      Issue 1309: https://github.com/MarlinFirmware/Marlin/pull/1309"       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://github.com/MarlinFirmware/Marlin/commit/30248214c7fd52333d1c71bebe5ede40dbd76011">30248214c7f</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> IntegerOverflow</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "THERMAL_RUNAWAY_PROTECTION_PERIOD && THERMAL_RUNAWAY_PROTECTION_PERIOD &gt; 0" (2nd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> temperature/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>#include &lt;stdio.h&gt;
+
+unsigned long millis = 123456789l;
+#if defined (THERMAL_RUNAWAY_PROTECTION_PERIOD) && THERMAL_RUNAWAY_PROTECTION_PERIOD &gt; 0
+void thermal_runaway_protection(int *state, unsigned long *timer, float temperature, float target_temperature, int heater_id, int period_seconds, int hysteresis_degc)
+{
+if (temperature &gt;= (target_temperature - hysteresis_degc))
+      {
+        *timer = 123456782l;
+      } 
+      else if ( (millis - *timer) &gt; (period_seconds) * 1000)
+      {
+        printf("%s","Thermal Runaway, system stopped! Heater_ID: ");
+        printf("%d",(int)heater_id);
+        printf("%s","THERMAL RUNAWAY");
+      }
+ }
+#endif
+
+int main(void){
+  thermal_runaway_protection(0, 123456783, 145.0f, 200.0f, 1, 10, 1);
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/3024821.c b/simple/3024821.c
+--- a/simple/3024821.c
++++ b/simple/3024821.c
+@@ -8,7 +8,7 @@ if (temperature &gt;= (target_temperature - hysteresis_degc))
+       {
+         *timer = 123456782l;
+       } 
+-      else if ( (millis - *timer) &gt; (period_seconds) * 1000)
++      else if ( (millis - *timer) &gt; (unsigned long)(period_seconds) * 1000)
+       {
+         printf("%s","Thermal Runaway, system stopped! Heater_ID: ");
+         printf("%d",(int)heater_id);
+</pre></div>
+<div id='single' class='tabcontent'><pre>#include &lt;stdio.h&gt;
+
+int main(void){
+unsigned long millis = 123456789l;
+#if defined (THERMAL_RUNAWAY_PROTECTION_PERIOD) && THERMAL_RUNAWAY_PROTECTION_PERIOD &gt; 0
+  int state = 0;
+  unsigned long *timer = 123456782l;
+  float temperature = 145.0f;
+  float target_temperature = 200.0f;
+  int heater_id = 1;
+  int period_seconds = 10;
+  int hysteresis_degc = 1;
+  
+  
+if (temperature &gt;= (target_temperature - hysteresis_degc))
+      {
+        *timer = 123456782;
+      } 
+      else if ( (millis - *timer) &gt; (period_seconds) * 1000)
+      {
+        printf("%s","Thermal Runaway, system stopped! Heater_ID: ");
+        printf("%d",(int)heater_id);
+        printf("%s","THERMAL RUNAWAY");
+      }
+ 
+#endif
+return 0;
+}
+</pre></div>
+<div id='trace' class='tabcontent'><pre>
+. call  Marlin/temperature.cpp:1017: void thermal_runaway_protection(...)
+. ERROR temperature.cpp:1052:  else if ( (millis() - *timer) &gt; (period_seconds) * 1000) // Comparing an unsigned long with an integer...
+</pre></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">     Selecting ACPI_VIDEO but not its dependencies causes a build error  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 Config option STUB_POULSBO will select ACPI_VIDEO if ACPI is enabled,     but it does not make sure that ACPI_VIDEO dependencies are met as well.     Note that Kconfig will not select dependencies automatically.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/7c6048b7c83690ce59e65922fb2875479a22300e">7c6048b7c83</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> UndefinedSymbol</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "STUB_POULSBO && ACPI_VIDEO && !BACKLIGHT_CLASS_DEVICE" (3rd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> model</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> drivers/gpu/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            
+            
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#if defined(CONFIG_ACPI) && defined(CONFIG_STUB_POULSBO)
+#define CONFIG_ACPI_VIDEO
+#endif
+
+#ifdef CONFIG_BACKLIGHT_CLASS_DEVICE
+void backlight_device_unregister()
+{
+  return;
+}
+#endif
+
+#ifdef CONFIG_ACPI_VIDEO
+static int acpi_video_bus_put_one_device()
+{
+  backlight_device_unregister();
+  return 0;
+}
+#endif
+
+int main(int argc, char** argv)
+{
+#if defined(CONFIG_ACPI) && defined(CONFIG_STUB_POULSBO)
+  acpi_video_bus_put_one_device();
+#endif
+  return 0;
+}
+
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/7c6048b.c b/simple/7c6048b.c
+--- a/simple/7c6048b.c
++++ b/simple/7c6048b.c
+@@ -1,6 +1,7 @@
+ 
+ #if defined(CONFIG_ACPI) && defined(CONFIG_STUB_POULSBO)
+ #define CONFIG_ACPI_VIDEO
++#define CONFIG_BACKLIGHT_CLASS_DEVICE
+ #endif
+ 
+ #ifdef CONFIG_BACKLIGHT_CLASS_DEVICE
+</pre></div>
+
+
+    </div>
+</body>
+</html>

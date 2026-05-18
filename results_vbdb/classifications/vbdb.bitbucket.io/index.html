@@ -1,0 +1,43 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="styles.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="index.html">Home</a>
+        <a class="navigation-link" href="database.html">Database</a>
+    </div>
+    <div class="narrow">
+        The Variability Bugs Database (VBDb) is an effort to document variability bugs in software systems. 
+        Our objective is to understand the complexity and nature of variability bugs (including feature 
+        interaction bugs) occurring in large highly-configurable systems. This understanding should help the 
+        research community to develop techniques to improve the reliability of configurable software.
+
+        Initially, we have documented 42 of these bugs ocurring in the Linux kernel. A qualitative analysis of 
+        this initial collection appeared in ASE 2014. A longer version including other systems appeared in 
+        TOSEM. 
+        
+        The raw data is available as a git repository at: https://bitbucket.org/itu-square/vbdb/
+        <h1>References</h1>
+        Iago Abal, Jean Melo, Stefan Stanciulescu, Claus Brabrand, Márcio Ribeiro, Andrzej Wasowski: 
+        Variability Bugs in Highly Configurable Systems: A Qualitative Analysis. ACM Trans. Softw. Eng. 
+        Methodol. 26(3): 10:1-10:34 (2018) 
+        
+        Iago Abal, Claus Brabrand, Andrzej Wasowski: 
+        42 variability bugs in the linux kernel: a qualitative analysis. ASE 2014: 421-432
+    </div>
+
+    <script>
+        if(window.location.hash)
+        {
+            var loc = window.location.href.replace("#bug/", "");
+            loc += (loc.endsWith(".html")) ? "" : ".html";
+            window.location.replace(loc);
+        }
+    </script>
+</body>
+</html>

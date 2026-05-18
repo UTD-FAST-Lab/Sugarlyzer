@@ -14,13 +14,19 @@ import sugarlyzer.tester.parsing.CompileCommand
 import sugarlyzer.tester.parsing.CompileCommands
 import sugarlyzer.tester.sugarc.SugarCRunner.desugarFile
 import sugarlyzer.tester.sugarc.SugarCRunner
+import scala.collection.parallel.CollectionConverters.*
 
 object TransformationStrategy extends AnalysisStrategy {
   type Alarm = TransformationAlarm
 
   def sanitizeDescription(description: String): String = {
-    val pattern = """__(.*)_(?:\d*)""".r
-    pattern.replaceAllIn(description, m => m.group(1))
+    val pattern_var    = """__(.*)_(?:\d*)""".r
+    var sanitized_desc = pattern_var.replaceAllIn(description, m => m.group(1))
+    val pattern_line   = """line \d+""".r
+    sanitized_desc = pattern_line.replaceAllIn(sanitized_desc, "line X")
+    val pattern_column = """column \d+""".r
+    sanitized_desc = pattern_column.replaceAllIn(sanitized_desc, "column Y")
+    sanitized_desc
   }
   def analyze(
       appConfig: AppConfig,
@@ -173,7 +179,7 @@ object TransformationStrategy extends AnalysisStrategy {
 
   def deduplicate(alarms: List[TransformationAlarm])
       : List[TransformationAlarm] = {
-    alarms.groupBy(al =>
+    alarms.par.groupBy(al =>
       (
         al.sanitizedDescription,
         al.lineInputFile,

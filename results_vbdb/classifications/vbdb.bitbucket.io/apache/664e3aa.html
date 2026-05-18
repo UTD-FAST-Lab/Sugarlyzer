@@ -1,0 +1,79 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/apache.png" alt="">&nbsp;apache</span>
+            <span class="title">     Function "ap_get_win32_interpreter" writes one additional byte into a buffer when WIN32.  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                  
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://github.com/apache/httpd/commit/664e3aac6ddc9935e36e2e1259585b1bb7914f65">664e3aac6dd</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> BufferOverflow</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "WIN32" (1st degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> main/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            
+            
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+#ifdef WIN32
+void ap_get_win32_interpreter()
+{
+  char buffer[1024];
+
+  int i;
+  if (rand() % 2) {
+    for (i = 0; i &lt; sizeof(buffer); i++) {
+      //do something
+    }
+    buffer[i] = '\0';
+  }
+}
+#endif
+
+int main(void)
+{
+#ifdef WIN32
+  ap_get_win32_interpreter();
+#endif
+  return 0;
+}
+</pre></div>
+
+
+<div id='trace' class='tabcontent'><pre>. call main/http_core.c:953:ap_get_win32_interpreter()
+. 1044: for (i = 2; i &lt; sizeof(buffer); i++)
+. // after this for loop, i = sizeof(buffer)
+. ERROR 1050: buffer[i] = '\0';
+
+</pre></div>
+    </div>
+</body>
+</html>

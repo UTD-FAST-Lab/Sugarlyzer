@@ -1,0 +1,85 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">     Null stub missing parameter when !TRACING  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 The actual implementation takes an int argument but     the null stub, for the case when tracing is disabled, does     not declare it.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/e67bc51e574ffe3c4bc1e09cab7658b1e780b4ce">e67bc51e574</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> WrongFunArgNum</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "!TRACING" (1st degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> include/linux/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#ifdef CONFIG_TRACING
+void trace_dump_stack(int skip) {
+  // do something
+  return;
+}
+#else
+static inline void trace_dump_stack(void) { }
+#endif
+
+int main(int argc, char** argv) {
+  trace_dump_stack(0); // ERROR
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/e67bc51.c b/simple/e67bc51.c
+--- a/simple/e67bc51.c
++++ b/simple/e67bc51.c
+@@ -5,7 +5,7 @@
+   return;
+ }
+ #else
+-static inline void trace_dump_stack(void) { }
++static inline void trace_dump_stack(int skip) { }
+ #endif
+ 
+ int main(int argc, char** argv) {
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+int main(int argc, char** argv) {
+//  trace_dump_stack(0); // ERROR
+  #ifdef CONFIG_TRACING
+  // do something
+  return;
+  #else
+  #endif
+  return 0;
+}
+</pre></div>
+
+    </div>
+</body>
+</html>

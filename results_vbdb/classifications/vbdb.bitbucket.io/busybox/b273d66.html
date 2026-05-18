@@ -1,0 +1,119 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/busybox.png" alt="">&nbsp;busybox</span>
+            <span class="title">     Variable 'info' is uninitialized when BusyBox is compiled with      BB_FEATURE_LS_FILETYPES && !BB_FEATURE_LS_USERNAME.  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                  
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.busybox.net/busybox/commit/b273d6651813363d95fd08686d380db8eacf87c1">b273d665181</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> UninitializedVariable</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> BB_FEATURE_LS_FILETYPES && !BB_FEATURE_LS_USERNAME (2nd degree)</td></tr>
+            <tr><td width='20%'><b>C-features</b></td><td> Structs</td></tr>
+            <tr><td width='20%'><b>Fix-in</b></td><td> mapping</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> coreutils/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+void list_single()
+{
+#ifdef BB_FEATURE_LS_FILETYPES
+  int info;
+#endif
+
+#ifdef BB_FEATURE_LS_USERNAME
+  info = 0;
+#endif
+
+#ifdef BB_FEATURE_LS_FILETYPES
+  if (rand() % 2)
+    printf("%d", info); // ERROR
+#endif
+}
+
+void showfiles()
+{
+  list_single();
+}
+
+int main(int argc, char** argv)
+{
+  showfiles();
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/b273d66.c b/simple/b273d66.c
+--- a/simple/b273d66.c
++++ b/simple/b273d66.c
+@@ -4,7 +4,7 @@
+ 
+ void list_single()
+ {
+-#ifdef BB_FEATURE_LS_FILETYPES
++#if defined (BB_FEATURE_LS_FILETYPES) || defined (BB_FEATURE_LS_USERNAME)
+   int info;
+ #endif
+ 
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(int argc, char** argv)
+{
+//  showfiles();
+#ifdef BB_FEATURE_LS_FILETYPES
+  int info;
+#endif
+
+#ifdef BB_FEATURE_LS_USERNAME
+  info = 0;
+#endif
+
+#ifdef BB_FEATURE_LS_FILETYPES
+  if (rand() % 2)
+    printf("%d", info); // ERROR
+#endif
+  return 0;
+}
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. call coreutils/ls.c:823:showfiles()
+.. 424:list_single(dn[i]);
+.. call coreutils/ls.c:524:list_single()
+... [BB_FEATURE_LS_FILETYPES] 533:struct stat info;
+... [BB_FEATURE_LS_USERNAME] 574:memset(&info, 0, sizeof(struct stat));
+... ERROR [BB_FEATURE_LS_FILETYPES] 645:append = append_char(info.st_mode);
+
+</pre></div>
+    </div>
+</body>
+</html>

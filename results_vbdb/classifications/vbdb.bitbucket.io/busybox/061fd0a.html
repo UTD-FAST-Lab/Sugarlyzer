@@ -1,0 +1,146 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/busybox.png" alt="">&nbsp;busybox</span>
+            <span class="title">     The label expected_hwif_error is only visible when      FEATURE_HDPARM_HDIO_SCAN_HWIF is defined.       </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.busybox.net/busybox/commit/061fd0a353ef05de4a96e23c18e25316babee523">061fd0a353e</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> UndefinedSymbol</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> FEATURE_HDPARM_HDIO_UNREGISTER_HWIF && !FEATURE_HDPARM_HDIO_SCAN_HWIF (2nd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> mapping</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> miscutils/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(int argc, char** argv)
+{
+  int r = rand() % 2;
+  char *p;
+  char c;
+  
+  scanf("%c", &c);
+    
+  switch (c)
+  {
+    case 'W':
+      if (r)
+        p = *argv++, --argc;
+      break;
+#ifdef CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF
+    case 'U':
+      if(!p)
+        goto expected_hwif_error; //ERROR
+      break;
+#endif /* CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF */
+
+#ifdef CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF
+    case 'R':
+      if(!p)
+        goto expected_hwif_error;
+
+
+expected_hwif_error:
+  printf("expected hwif value");
+
+#endif /* CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF */
+  }
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/061fd0a.c b/simple/061fd0a.c
+--- a/simple/061fd0a.c
++++ b/simple/061fd0a.c
+@@ -27,12 +27,11 @@
+     case 'R':
+       if(!p)
+         goto expected_hwif_error;
+-
++#endif /* CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF */
+ 
+ expected_hwif_error:
+   printf("expected hwif value");
+ 
+-#endif /* CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF */
+   }
+   return 0;
+ }
+\ No newline at end of file
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(int argc, char** argv)
+{
+  int r = rand() % 2;
+  char *p;
+  char c;
+  
+  scanf("%c", &c);
+    
+  switch (c)
+  {
+    case 'W':
+      if (r)
+        p = *argv++, --argc;
+      break;
+#ifdef CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF
+    case 'U':
+      if(!p)
+        goto expected_hwif_error; //ERROR
+      break;
+#endif /* CONFIG_FEATURE_HDPARM_HDIO_UNREGISTER_HWIF */
+
+#ifdef CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF
+    case 'R':
+      if(!p)
+        goto expected_hwif_error;
+
+
+expected_hwif_error:
+  printf("expected hwif value");
+
+#endif /* CONFIG_FEATURE_HDPARM_HDIO_SCAN_HWIF */
+  }
+  return 0;
+}
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. call miscutils/hdparm.c:2534:hdparm_main(int argc, char **argv)
+. ERROR [FEATURE_HDPARM_HDIO_UNREGISTER_HWIF] 2762:goto expected_hwif_error;
+
+</pre></div>
+    </div>
+</body>
+</html>

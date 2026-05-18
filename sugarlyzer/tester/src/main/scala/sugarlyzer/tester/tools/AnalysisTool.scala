@@ -12,7 +12,8 @@ case class ToolAlarm(
     description: String,
     fileLocation: String,
     line: Int,
-    analysisTime: Double
+    analysisTime: Double,
+    target: String
 )
 
 sealed trait StrategyAlarm {

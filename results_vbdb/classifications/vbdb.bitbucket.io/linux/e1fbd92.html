@@ -1,0 +1,93 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">     Argument type incompatible with `printk' format string          AMIGA's ramdisk support contains a type error (reported as a warning by gcc)     when LBDAF is enabled. The result of `blk_rq_pos(req)' has type `sector_t'     and is printed as an unsigned long value. Yet, when LBDAF is enabled, type     `sector_t' is defined as unsigned long long. There is no safe cast from     unsigned long long to unsigned long.          The fix consists in printing the value as unsigned long long instead,     without losing precision when LBDAF is enabled.  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                  
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/e1fbd9210d5d172f951b1d21eb58383919c4d10d">e1fbd9210d5</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> IncompatibleType</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "AMIGA_Z2RAM && LBDAF" (2nd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> drivers/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#include &lt;stdio.h&gt;
+
+#ifdef CONFIG_LBDAF
+typedef unsigned long long sector_t;
+#else
+typedef unsigned long sector_t;
+#endif
+
+sector_t blk_rq_pos() {
+  return 0;
+}
+
+#ifdef CONFIG_AMIGA_Z2RAM
+static void do_z2_request() {
+  printf("bad access: block=%lu\n", blk_rq_pos()); // ERROR
+}
+#endif
+
+int main() {
+  #ifdef CONFIG_AMIGA_Z2RAM
+  do_z2_request();
+  #endif
+  return 0;
+}
+
+</pre></div>
+
+<div id='single' class='tabcontent'><pre>
+#include &lt;stdio.h&gt;
+
+#ifdef CONFIG_LBDAF
+typedef unsigned long long sector_t;
+#else
+typedef unsigned long sector_t;
+#endif
+
+int main() {
+  #ifdef CONFIG_AMIGA_Z2RAM
+//  do_z2_request();
+  printf("bad access: block=%lu\n", (sector_t) 0); // ERROR
+  #endif
+  return 0;
+}
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. drivers/block/z2ram.c:80: printk( KERN_ERR DEVICE_NAME ": bad access: block=%lu, count=%u\n",
+
+</pre></div>
+    </div>
+</body>
+</html>

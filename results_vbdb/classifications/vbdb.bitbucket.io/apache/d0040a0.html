@@ -1,0 +1,87 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/apache.png" alt="">&nbsp;apache</span>
+            <span class="title">     "Misspelling of feature name induces undeclared struct field  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 Even if RLIMIT_NPROC is enabled the field limits of cgid_req_t will     not be declared, since it is guarded by RLMIT_NPROC (missing an I).     But this field is used by the send_req function if RLIMIT_NPROC is     enabled."       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://github.com/apache/httpd/commit/d0040a07aecfbb8029044397b14f19a0796cee0c">d0040a07aec</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> UndeclaredIdentifier</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "RLIMIT_NPROC && !RLIMIT_CPU && !RLIMIT_DATA && !RLIMIT_VMEM && !RLIMIT_AS" (5th degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> mapping</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td>  server/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+#if defined (RLIMIT_CPU) || defined (RLMIT_NPROC) || defined (RLIMIT_DATA) || defined(RLIMIT_VMEM) || defined(RLIMIT_AS)
+int limits;
+#endif
+
+void send_req()
+{
+#ifdef RLIMIT_NPROC
+  limits = (rand() % 2) ? 1 : 0; // ERROR: limits not declared
+  printf("%d", limits);
+#endif
+}
+
+int main(void)
+{
+  send_req();
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/apache/simple/d0040a0.c b/apache/simple/d0040a0.c
+--- a/apache/simple/d0040a0.c
++++ b/apache/simple/d0040a0.c
+@@ -1,7 +1,7 @@
+ #include &lt;stdio.h&gt;
+ #include &lt;stdlib.h&gt;
+ 
+-#if defined (RLIMIT_CPU) || defined (RLMIT_NPROC) || defined (RLIMIT_DATA) || defined(RLIMIT_VMEM) || defined(RLIMIT_AS)
++#if defined (RLIMIT_CPU) || defined (RLIMIT_NPROC) || defined (RLIMIT_DATA) || defined(RLIMIT_VMEM) || defined(RLIMIT_AS)
+ int limits;
+ #endif
+ 
+</pre></div>
+
+<div id='trace' class='tabcontent'><pre>. modules/generators/mod_cgid.c:206: #if defined (RLIMIT_CPU) || defined (RLMIT_NPROC) || defined (RLIMIT_DATA) || defined(RLIMIT_VMEM) || defined(RLIMIT_AS)
+. modules/generators/mod_cgid.c:207: cgid_rlimit_t limits;
+. call modules/generators/mod_cgid.c :470:send_req()
+. modules/generators/mod_cgid.c:550: #ifdef RLIMIT_NPROC
+. ERROR modules/generators/mod_cgid.c:552: req.limits.limit_nproc = *(core_conf-&gt;limit_nproc);
+
+</pre></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">     Debugging code may derefence a NULL pointer  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 Pointer `dst' may be NULL and, if SCTP_DEBUG_PRINTK is enabled,     is dereferenced by a call to printk.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/ee3f34e857238a4552c68d860348893d7728bcab">ee3f34e8572</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> NullDereference</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "IP_SCTP && IPV6 && SCTP_DBG_MSG" (3rd degree)</td></tr>
+            <tr><td width='20%'><b>C-features</b></td><td> PointerAliasing</td></tr>
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> net/sctp/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#include &lt;stdbool.h&gt;
+#include &lt;stdlib.h&gt;
+
+#ifndef SCTP_DEBUG
+#ifdef CONFIG_SCTP_DBG_MSG
+#define SCTP_DEBUG      1
+#else
+#define SCTP_DEBUG      0
+#endif /* CONFIG_SCTP_DBG */
+#endif /* SCTP_DEBUG */
+
+bool IS_ERR(const void *ptr)
+{
+  return (ptr == (void *)-1);
+}
+
+bool IS_ERR_OR_NULL(const void *ptr)
+{
+  return !ptr || IS_ERR(ptr);
+}
+
+#if SCTP_DEBUG
+#define SCTP_DEBUG_PRINTK(ptr) ((*ptr)++)
+#else
+#define SCTP_DEBUG_PRINTK(ptr)
+#endif
+
+#if defined(CONFIG_IP_SCTP) && defined(CONFIG_IPV6)
+static int some_int = 1;
+
+int *ip6_dst_lookup_flow()
+{
+  return &some_int;
+}
+
+void sctp_v6_get_dst()
+{
+  int *dst = NULL;
+  dst = ip6_dst_lookup_flow();
+  if (!IS_ERR(dst)) {
+    dst = NULL; // (2)
+  }
+  if (!IS_ERR(dst)) {
+    char *rt =(char *) dst; // (3)
+    SCTP_DEBUG_PRINTK(rt); // (4) ERROR
+  }
+}
+#endif
+
+int main()
+{
+#if defined(CONFIG_IP_SCTP) && defined(CONFIG_IPV6)
+  sctp_v6_get_dst(); // (1)
+#endif
+  return 0;
+}
+
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/ee3f34e.c b/simple/ee3f34e.c
+--- a/simple/ee3f34e.c
++++ b/simple/ee3f34e.c
+@@ -41,7 +41,7 @@
+   if (!IS_ERR(dst)) {
+     dst = NULL;
+   }
+-  if (!IS_ERR(dst)) {
++  if (!IS_ERR_OR_NULL(dst)) {
+     char *rt =(char *) dst;
+     SCTP_DEBUG_PRINTK(rt); // ERROR
+   }
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#include &lt;stdbool.h&gt;
+#include &lt;stdlib.h&gt;
+
+#ifndef SCTP_DEBUG
+#ifdef CONFIG_SCTP_DBG_MSG
+#define SCTP_DEBUG      1
+#else
+#define SCTP_DEBUG      0
+#endif /* CONFIG_SCTP_DBG */
+#endif /* SCTP_DEBUG */
+
+#if defined(CONFIG_IP_SCTP) && defined(CONFIG_IPV6)
+static int some_int = 1;
+#endif
+
+int main()
+{
+#if defined(CONFIG_IP_SCTP) && defined(CONFIG_IPV6)
+//  sctp_v6_get_dst();
+  int *dst = NULL;
+  dst = &some_int;
+  if (!(dst == (void *)-1)) {
+    dst = NULL;
+  }
+  if (!(dst == (void *)-1)) {
+    char *rt =(char *) dst;
+//    SCTP_DEBUG_PRINTK(rt); // ERROR
+    #if SCTP_DEBUG
+    ((*rt)++);
+    #else
+    #endif
+  }
+#endif
+  return 0;
+}
+
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. call net/sctp/ipv6.c:257:sctp_v6_get_dst()
+. 265: union sctp_addr *baddr = NULL;
+. 290: dst = ip6_dst_lookup_flow(sk, fl6, NULL, false);
+. 299: if (!IS_ERR(dst))
+. 321:     dst = NULL;
+// somehow `baddr' is still pointing to NULL
+// or maybe `dst' becomes NULL at 344
+. 348: if (!IS_ERR(dst))
+. 350: rt = (struct rt6_info *)dst;
+// `rt' is an alias for `dst'
+. [SCTP_DBG_MSG] 352: SCTP_DEBUG_PRINTK("rt6_dst:%pI6 rt6_src:%pI6\n",
+. ERROR 353:                   &rt-&gt;rt6i_dst.addr, &fl6-&gt;saddr);
+</pre></div>
+    </div>
+</body>
+</html>

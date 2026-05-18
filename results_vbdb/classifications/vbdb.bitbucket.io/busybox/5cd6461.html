@@ -1,0 +1,170 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/busybox.png" alt="">&nbsp;busybox</span>
+            <span class="title">     Due to a wrong format parameter in a printf httpd does not work when     compiled for with the feature LFS (large file support) enabled.       </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.busybox.net/busybox/commit/5cd6461b6fb51e8cf297a49074fce825e1960774">5cd6461b6fb</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> IncompatibleType</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> LFS && (FEATURE_HTTPD_BASIC_AUTH || FEATURE_HTTPD_CGI) (2nd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code, mapping</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> networking/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+#define HTTP_UNAUTHORIZED      401 /* auth needed, respond with auth hdr */
+#define HTTP_NOT_IMPLEMENTED   501 /* used for unrecognized requests */
+#define HTTP_FORBIDDEN         403
+
+
+#ifdef CONFIG_FEATURE_HTTPD_CGI
+static const char request_GET[] = "GET";
+#endif
+
+void sendHeaders(int responseNum)
+{
+  #ifdef CONFIG_LFS
+  long long total = 10LL; 
+  #else
+  long total = 10L;
+  #endif 
+  
+  printf("%ld\r\n", total); //ERROR
+}
+
+void handleIncoming(const char *request)
+{
+#ifdef CONFIG_FEATURE_HTTPD_BASIC_AUTH
+  int random = rand() % 2;
+  int http_unauthorized = random;
+
+  if (http_unauthorized) {
+    sendHeaders(HTTP_UNAUTHORIZED);
+  }
+#endif
+
+#ifdef CONFIG_FEATURE_HTTPD_CGI
+  if (request != request_GET) {
+    sendHeaders(HTTP_NOT_IMPLEMENTED);
+  }
+#endif
+}
+
+int main(int argc, char** argv)
+{
+  const char request[] = "POST";
+  handleIncoming(request);
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/5cd6461.c b/simple/5cd6461.c
+--- a/simple/5cd6461.c
++++ b/simple/5cd6461.c
+@@ -6,6 +6,11 @@
+ #define HTTP_NOT_IMPLEMENTED   501 /* used for unrecognized requests */
+ #define HTTP_FORBIDDEN         403
+ 
++#ifdef CONFIG_LFS
++#define cont_l_fmt "%lld"
++#else
++#define cont_l_fmt "%ld"
++#endif
+ 
+ #ifdef CONFIG_FEATURE_HTTPD_CGI
+ static const char request_GET[] = "GET";
+@@ -19,7 +24,7 @@
+   long total = 10L;
+   #endif 
+   
+-  printf("%ld\r\n", total); //ERROR
++  printf(cont_l_fmt "\r\n", total); //ERROR
+ }
+ 
+ void handleIncoming(const char *request)
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+#define HTTP_UNAUTHORIZED      401 /* auth needed, respond with auth hdr */
+#define HTTP_NOT_IMPLEMENTED   501 /* used for unrecognized requests */
+#define HTTP_FORBIDDEN         403
+
+#ifdef CONFIG_LFS
+#define cont_l_fmt "%lld"
+#else
+#define cont_l_fmt "%ld"
+#endif
+
+#ifdef CONFIG_FEATURE_HTTPD_CGI
+static const char request_GET[] = "GET";
+#endif
+
+int main(int argc, char** argv)
+{
+  const char request[] = "POST";
+//  handleIncoming(request);
+#ifdef CONFIG_LFS
+  long long total = 10LL; 
+#else
+  long total = 10L;
+#endif
+  
+#ifdef CONFIG_FEATURE_HTTPD_BASIC_AUTH
+  int random = rand() % 2;
+  int http_unauthorized = random;
+
+  if (http_unauthorized) {
+    printf("%ld\r\n", total); //ERROR
+  }
+#endif
+
+#ifdef CONFIG_FEATURE_HTTPD_CGI
+  if (request != request_GET)
+    printf("%ld\r\n", total); //ERROR
+#endif
+  return 0;
+}
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. call networking/httpd.c:1412:handleIncoming()
+.. [FEATURE_HTTPD_BASIC_AUTH] 1583:sendHeaders(HTTP_UNAUTHORIZED); or
+.. [FEATURE_HTTPD_CGI] 1611:sendHeaders(HTTP_NOT_IMPLEMENTED);
+.. call sendHeaders(int responseNum)
+... ERROR 942:len += sprintf("%ld\r\n", config-&gt;ContentLength);
+
+</pre></div>
+    </div>
+</body>
+</html>

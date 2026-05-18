@@ -154,7 +154,8 @@ object ClangTool extends AnalysisTool {
           description = description,
           line = line,
           fileLocation = absolutePath,
-          analysisTime = analysisTime
+          analysisTime = analysisTime,
+          target = spec.name
         )
       }.toList
     }

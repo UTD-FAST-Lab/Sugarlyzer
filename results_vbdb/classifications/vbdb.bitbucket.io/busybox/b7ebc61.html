@@ -1,0 +1,110 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/busybox.png" alt="">&nbsp;busybox</span>
+            <span class="title">     The symbol TIME_MASK is only define when FEATURE_LS_TIMESTAMPS is enabled.       </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.busybox.net/busybox/commit/b7ebc61b54ff542935ff4216f80ea53103e8dcf2">b7ebc61b54f</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> UndeclaredIdentifier</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> !FEATURE_LS_TIMESTAMPS (1st degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> mapping</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> coreutils/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#include &lt;stdlib.h&gt;
+
+#ifdef CONFIG_FEATURE_LS_TIMESTAMPS
+#define TIME_MASK       (3U&lt;&lt;23)
+#endif
+
+#define LIST_FILENAME	(1U&lt;&lt;11)
+
+static unsigned int all_fmt;
+
+int main(int argc, char** argv)
+{
+  all_fmt = LIST_FILENAME;
+  
+  if (rand() % 2) {
+    all_fmt &= ~TIME_MASK;
+  }
+  
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/b7ebc61.c b/simple/b7ebc61.c
+--- a/simple/b7ebc61.c
++++ b/simple/b7ebc61.c
+@@ -13,9 +13,11 @@
+ {
+   all_fmt = LIST_FILENAME;
+   
++#ifdef CONFIG_FEATURE_LS_TIMESTAMPS
+   if (rand() % 2) {
+     all_fmt &= ~TIME_MASK;
+   }
++#endif
+   
+   return 0;
+ }
+\ No newline at end of file
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#include &lt;stdlib.h&gt;
+
+#ifdef CONFIG_FEATURE_LS_TIMESTAMPS
+#define TIME_MASK       (3U&lt;&lt;23)
+#endif
+
+#define LIST_FILENAME	(1U&lt;&lt;11)
+
+static unsigned int all_fmt;
+
+int main(int argc, char** argv)
+{
+  all_fmt = LIST_FILENAME;
+  
+  if (rand() % 2) {
+    all_fmt &= ~TIME_MASK;
+  }
+  
+  return 0;
+}
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. [FEATURE_LS_TIMESTAMPS] coreutils/ls.c:144:#define TIME_MASK (3U&lt;&lt;23)
+. ERROR coreutils/ls.c:977:all_fmt &= ~TIME_MASK;
+
+</pre></div>
+    </div>
+</body>
+</html>

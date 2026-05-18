@@ -1,0 +1,226 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/busybox.png" alt="">&nbsp;busybox</span>
+            <span class="title">     "Memory leak freeing an array of pointers  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 There is an array of pointers, the elements of which pointers are all in a      linked list. To free the elements, instead of freeing all the elements in the      array, array[0..nelements], it frees by iterating the linked list starting at      array[0], which it assumes is the head of the list. Unfortunately, if      FEATURE_LS_SORTFILES is enabled, then the array is sorted. This way, array[0]      is no longer the head, but somewhere in the middle of the linked list."           
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.busybox.net/busybox/commit/2631486f1bfac59f9217350effcda627da7be875">2631486f1bf</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> MemoryLeak</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> FEATURE_LS_SORTFILES && FEATURE_LS_RECURSIVE (2nd degree)</td></tr>
+            <tr><td width='20%'><b>C-features</b></td><td> Structs</td></tr>
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> coreutils/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+
+struct dnode {
+   int val;
+   struct dnode *next;
+};
+
+#ifdef CONFIG_FEATURE_LS_RECURSIVE
+void dfree(struct dnode **arr)
+{
+  struct dnode *cur, *next;
+
+  if (arr == NULL)
+    return;
+
+  cur = arr[0]; // is no longer the head
+  while (cur != NULL) {
+    next = cur-&gt;next;
+    free(cur);
+    cur = next;
+  }
+}
+#endif
+
+void showdirs(int **arr)
+{
+  for (int i = 0; i &lt; 5; ++i) {
+    printf("\n%d", *arr[i]-&gt;val);
+  }
+  
+#ifdef CONFIG_FEATURE_LS_RECURSIVE
+  dfree(arr); //ERROR
+#endif
+}
+
+#ifdef CONFIG_FEATURE_LS_SORTFILES
+void sort(int **arr, int size)
+{
+  int **temp;
+  int i, j;
+
+  if (arr == NULL || size &lt; 1)
+    return;
+
+  for(i=0;i&lt;size;i++) {
+    for(j=i;j&lt;size;j++) {
+      if(*arr[i] &gt; *arr[j]) {
+        temp=*arr[i];
+        *arr[i]=*arr[j];
+        *arr[j]=temp;
+      }
+    }
+  }
+}
+#endif
+
+int main(int argc, char **argv)
+{
+  struct dnode *curr, *head;
+  int size = 5;
+  struct dnode *arr[size];
+
+  for (int i = 0; i &lt; size; i++) {
+    curr = (struct dnode *) malloc(sizeof(struct dnode));
+    curr-&gt;val = rand() % 10;
+    curr-&gt;next = head;
+    head = curr;
+    arr[(size-1)-i] = curr;
+  }
+
+  if (rand() % 2) {
+#ifdef CONFIG_FEATURE_LS_SORTFILES
+    sort(arr, size);
+#endif
+    showdirs(arr);
+  }
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/2631486.c b/simple/2631486.c
+--- a/simple/2631486.c
++++ b/simple/2631486.c
+@@ -8,18 +8,15 @@
+ };
+ 
+ #ifdef CONFIG_FEATURE_LS_RECURSIVE
+-void dfree(struct dnode **arr)
++void dfree(struct dnode **arr, int nfiles)
+ {
+-  struct dnode *cur, *next;
+ 
+   if (arr == NULL)
+     return;
+ 
+-  cur = arr[0]; // is no longer the head
+-  while (cur != NULL) {
+-    next = cur-&gt;next;
++  for (i = 0; i &lt; nfiles; i++) {
++    struct dnode *cur = arr[i];
+     free(cur);
+-    cur = next;
+   }
+ }
+ #endif
+@@ -31,7 +28,7 @@
+   }
+   
+ #ifdef CONFIG_FEATURE_LS_RECURSIVE
+-  dfree(arr); //ERROR
++  dfree(arr, 5); //ERROR
+ #endif
+ }
+ 
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#include&lt;stdio.h&gt;
+#include&lt;stdlib.h&gt;
+
+int main(int argc, char **argv)
+{
+  int size = 5;
+  int *arr[size];
+
+  for (int i = 0; i &lt; size; i++) {
+//    setArr(arr, i);
+    int *p = malloc(sizeof(int));
+    *p = rand() % 11;
+    num[index] = p;
+  }
+
+  if (rand() % 2) {
+#ifdef CONFIG_FEATURE_LS_SORTFILES
+//    sort(arr, size);
+    int **temp;
+    int i, j;
+
+    if (arr == NULL || size &lt; 1)
+      return;
+
+    for(i=0;i&lt;size;i++) {
+      for(j=i;j&lt;size;j++) {
+        if(*arr[i] &gt; *arr[j]) {
+          temp=*arr[i];
+          *arr[i]=*arr[j];
+          *arr[j]=temp;
+        }
+      }
+    }
+#endif
+//    showdirs(arr);
+    for (int k = 0; k &lt; 5; ++k) {
+      printf("\n%d", *arr[k]);
+    }
+  
+#ifdef CONFIG_FEATURE_LS_RECURSIVE
+//  dfree(arr); //ERROR
+    int index = 1;
+    int *cur;
+
+    cur = arr[0]; // is no longer the head
+
+    while(i &lt; 5) {
+      free(cur);
+      cur = arr[index++];
+    }
+#endif
+  }
+  return 0;
+}
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. 1132:dnp = dnalloc(nfiles);
+. [FEATURE_LS_SORTFILES] 1157:shellsort(dnp, nfiles);
+. 1159:showdirs(dnd, dndirs, dnfiles == 0);
+. call coreutils/ls.c:523:showdirs(struct dnode **dn, int ndirs, int first)
+.. [FEATURE_LS_RECURSIVE] 564:dfree(subdnp);
+.. call coreutils/ls.c:341:dfree(struct dnode **dnp)
+... ERROR 348:cur = dnp[0];
+
+</pre></div>
+    </div>
+</body>
+</html>

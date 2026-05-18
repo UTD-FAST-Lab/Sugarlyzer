@@ -1,0 +1,166 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/busybox.png" alt="">&nbsp;busybox</span>
+            <span class="title">     "httpd: don't send error messages with gzip encoding  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 If CONFIG_FEATURE_HTTPD_GZIP is enabled and request contained     'Accept-Encoding: gzip', then errors were sent with 'Content-Encoding: gzip'     even though they aren't."           
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.busybox.net/busybox/commit/95755181b828cccaa833d7b8d1d47174b7b360b7">95755181b82</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> BehaviorViolation</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> BB_MMU && FEATURE_HTTPD_GZIP && FEATURE_HTTPD_BASIC_AUTH (3rd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> networking/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+#ifdef ENABLE_FEATURE_HTTPD_GZIP
+int content_gzip = 0;
+#endif
+
+#if ENABLE_FEATURE_HTTPD_BASIC_AUTH
+int authorized = 0;
+#endif
+
+#define HTTP_UNAUTHORIZED  401
+#define IOBUF_SIZE         8192
+char *iobuf = malloc(IOBUF_SIZE);
+
+void send_headers(int responseNum)
+{
+  const char *mime_type;
+  int len;
+  
+  /* error message is HTML */
+  mime_type = responseNum == HTTP_OK ? "application/octet-stream" : "text/html"; 
+  
+  len = sprintf(iobuf, "HTTP/1.0 %d\r\nContent-type: %s\r\n",
+                responseNum, mime_type);
+  
+#ifdef ENABLE_FEATURE_HTTPD_BASIC_AUTH
+  if (responseNum == HTTP_UNAUTHORIZED) {
+    len += sprintf(iobuf + len,
+        "WWW-Authenticate: Basic realm=\"Web Server Authentication\"\r\n");
+  }
+#endif
+  
+  if (content_gzip)
+    len += sprintf(iobuf + len, "Content-Encoding: gzip\r\n");
+    
+  printf("headers: '%s'\n", iobuf);
+}
+
+void send_headers_and_exit(int responseNum)
+{
+  send_headers(responseNum);
+}
+
+void handle_incoming_and_exit()
+{
+
+#ifdef ENABLE_FEATURE_HTTPD_GZIP
+  const char *s = strstr(iobuf, "gzip");
+  if (s)
+    content_gzip = 1;
+#endif
+  
+#ifdef ENABLE_FEATURE_HTTPD_BASIC_AUTH
+  if(!authorized)
+    send_headers_and_exit(HTTP_UNAUTHORIZED);
+#endif
+}
+
+#ifdef BB_MMU
+void mini_httpd()
+{
+  handle_incoming_and_exit();
+}
+#endif
+
+int main(int argc, char** argv)
+{
+#ifdef BB_MMU    
+  mini_httpd();
+#endif
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/9575518.c b/simple/9575518.c
+--- a/simple/9575518.c
++++ b/simple/9575518.c
+@@ -41,6 +41,9 @@
+ 
+ void send_headers_and_exit(int responseNum)
+ {
++#ifdef ENABLE_FEATURE_HTTPD_GZIP
++  content_gzip = 0;
++#endif
+   send_headers(responseNum);
+ }
+ 
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+#ifdef ENABLE_FEATURE_HTTPD_GZIP
+int content_gzip;
+#endif
+
+int main(int argc, char** argv)
+{
+//  mini_httpd();
+#ifdef ENABLE_FEATURE_HTTPD_GZIP
+  if (rand() % 2)
+    content_gzip = 1;
+#endif
+  
+#ifdef ENABLE_FEATURE_HTTPD_BASIC_AUTH
+  if (content_gzip)
+    printf("Content-Encoding: gzip\r\n");
+#endif
+  return 0;
+}
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. [BB_MMU] call networking/httpd.c:2458:mini_httpd()
+.. call 2242:handle_incoming_and_exit()
+... [FEATURE_HTTPD_GZIP] 2095:content_gzip = 1;
+... [FEATURE_HTTPD_BASIC_AUTH] call 2117:send_headers_and_exit()
+.... call 1068:send_headers()
+.... 1044:if(content_gzip){...}
+
+</pre></div>
+    </div>
+</body>
+</html>

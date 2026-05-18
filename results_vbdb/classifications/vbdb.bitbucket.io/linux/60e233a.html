@@ -1,0 +1,136 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">     Failing to preserve invariant causes buffer overflow  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 Function add_uevent_var() shall guarantee that env-&gt;buflen &gt; 0     when it succeeds (i.e. returns 0). However, if !HOTPLUG this     function behaves incorrectly, succeeding but not writing anything     to env-&gt;buf so env-&gt;buflen == 0. A subsequent call to     input_add_uevent_modalias_var() after the env was initialized      executes env-&gt;buf[env-&gt;buflen - 1] = 'x'. The array index is -1,     since env-&gt;buflen == 0, and this statement overwrites env-&gt;envp_idx     which is located right before env-&gt;buf in the stack.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/60e233a56609fd963c59e99bd75c663d63fa91b6">60e233a5660</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> BufferOverflow</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "!HOTPLUG" (1st degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> drivers/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#include &lt;errno.h&gt;
+#include &lt;stdio.h&gt;
+
+#define UEVENT_BUFFER_SIZE		2048	/* buffer for the variables */
+
+static char buf[UEVENT_BUFFER_SIZE];
+static int buflen = 0;
+
+#if defined(CONFIG_HOTPLUG)
+int add_uevent_var()
+{
+  int len = sprintf(&buf[buflen], "MODALIAS=");
+  buflen += len + 1;
+  return 0;
+}
+#else
+int add_uevent_var()
+{ return 0; } // (2)
+#endif
+
+int input_add_uevent_modalias_var()
+{
+  if (add_uevent_var())
+    return -ENOMEM;
+
+  buf[buflen - 1] = 'x'; // ERROR: buflen == 0, so buf[-1] is written.
+  return 0;
+}
+
+int main(int argc, char** argv)
+{
+  input_add_uevent_modalias_var(); // (1)
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/60e233a.c b/simple/60e233a.c
+--- a/simple/60e233a.c
++++ b/simple/60e233a.c
+@@ -16,7 +16,7 @@
+ }
+ #else
+ int add_uevent_var()
+-{ return 0; }
++{ return -ENOMEM; }
+ #endif
+ 
+ int input_add_uevent_modalias_var()
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#include &lt;errno.h&gt;
+#include &lt;stdio.h&gt;
+
+#define UEVENT_BUFFER_SIZE		2048	/* buffer for the variables */
+
+static char buf[UEVENT_BUFFER_SIZE];
+static int buflen = 0;
+
+int main(int argc, char** argv)
+{
+//  input_add_uevent_modalias_var();
+  int r;
+#if defined(CONFIG_HOTPLUG)
+  int len = sprintf(&buf[buflen], "MODALIAS=");
+  buflen += len + 1;
+  r = 0;
+#else
+  r = 0;
+#endif
+  if (r)
+    return -ENOMEM;
+
+  buf[buflen - 1] = 'x'; // ERROR: buflen == 0, so buf[-1] is written.
+  return 0;
+}
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. call drivers/base/core.c:310:show_uevent()
+. 336: env = kzalloc(sizeof(struct kobj_uevent_env), GFP_KERNEL);
+. 341: retval = kset-&gt;uevent_ops-&gt;uevent(kset, &dev-&gt;kobj, env);
+.. dyn-call drivers/base/core.c:243:dev_uevent()
+.. 246: struct device *dev = kobj_to_dev(kobj);
+.. 294: retval = dev-&gt;type-&gt;uevent(dev, env);
+... dyn-call drivers/input/input.c:1485:input_dev_uevent()
+... 1519: INPUT_ADD_HOTPLUG_MODALIAS_VAR(dev);
+.... call drivers/input/input.c:1446:input_add_uevent_modalias_var()
+.... 1451: if (add_uevent_var(env, "MODALIAS="))
+...... call include/linux/kobject.h:225:add_uevent_var()
+...... 227: return 0;
+.... ERROR 1454: len = input_print_modalias(&env-&gt;buf[env-&gt;buflen - 1],
+
+</pre></div>
+    </div>
+</body>
+</html>

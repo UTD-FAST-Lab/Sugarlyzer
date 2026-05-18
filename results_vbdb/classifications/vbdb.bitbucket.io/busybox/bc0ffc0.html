@@ -1,0 +1,156 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/busybox.png" alt="">&nbsp;busybox</span>
+            <span class="title">         The pointer 'ch' is referenced after being freed if FEATURE_CLEAN_UP is enabled.          If FEATURE_CLEAN_UP is defined, then delete_eth_table() frees the previously      allocated memory for the pointer 'ch'. However, after that (in a for loop),      a statement 'ch-&gt;next' dereferences already freed memory.       </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.busybox.net/busybox/commit/bc0ffc0e971c61dc7f09aab2a35966f99cc606ba">bc0ffc0e971</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> UseAfterFree</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> FEATURE_CLEAN_UP (1st degree)</td></tr>
+            <tr><td width='20%'><b>C-features</b></td><td> Structs</td></tr>
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> networking/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+#define IFNAMSIZ 16
+
+typedef struct ethtable_s {
+  struct ethtable_s *next;
+  char *ifname;
+} ethtable_t;
+
+#ifdef ENABLE_FEATURE_CLEAN_UP
+static void delete_eth_table(ethtable_t *ch)
+{
+  free(ch-&gt;ifname);
+  free(ch);
+};
+#else
+void delete_eth_table(ethtable_t *ch)
+{
+}
+#endif
+
+static void prepend_new_eth_table(ethtable_t **clist, char *ifname)
+{
+  ethtable_t *ch;
+  if (strlen(ifname) &gt;= IFNAMSIZ)
+    printf("interface name '%s' too long", ifname);
+  ch = malloc(sizeof(*ch));
+  ch-&gt;ifname = ifname;
+  ch-&gt;next = *clist;
+  *clist = ch;
+}
+
+int main(int argc, char** argv)
+{
+  ethtable_t *clist = NULL;
+  ethtable_t *ch;
+  
+  prepend_new_eth_table(&clist, argv[0]);
+  
+#ifdef ENABLE_FEATURE_CLEAN_UP
+  for (ch = clist; ch; ch = ch-&gt;next) // ERROR
+    delete_eth_table(ch);
+#endif
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/bc0ffc0.c b/simple/bc0ffc0.c
+--- a/simple/bc0ffc0.c
++++ b/simple/bc0ffc0.c
+@@ -39,8 +39,11 @@
+   prepend_new_eth_table(&clist, argv[0]);
+   
+ #ifdef ENABLE_FEATURE_CLEAN_UP
+-  for (ch = clist; ch; ch = ch-&gt;next) // ERROR
++  ethtable_t *next;
++  for (ch = clist; ch; ch = next) { // ERROR
++    next = ch-&gt;next;
+     delete_eth_table(ch);
++  }  
+ #endif
+   return 0;
+ }
+\ No newline at end of file
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+#define IFNAMSIZ 16
+
+typedef struct ethtable_s {
+  struct ethtable_s *next;
+  char *ifname;
+} ethtable_t;
+
+int main(int argc, char** argv)
+{
+  ethtable_t *clist = NULL;
+  ethtable_t *ch;
+  
+//  prepend_new_eth_table(&clist, argv[0]);
+  if (strlen(ifname) &gt;= IFNAMSIZ)
+    printf("interface name '%s' too long", ifname);
+  ch = malloc(sizeof(*ch));
+  ch-&gt;ifname = ifname;
+  ch-&gt;next = *clist;
+  *clist = ch;
+  
+#ifdef ENABLE_FEATURE_CLEAN_UP
+  for (ch = clist; ch; ch = ch-&gt;next) { // ERROR
+//    delete_eth_table(ch);
+    free(ch-&gt;ifname);
+    free(ch);
+  }
+#else
+
+#endif
+  return 0;
+}
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. call networking/nameif.c:240:prepend_new_eth_table()
+.. 194:ch = xzalloc(sizeof(*ch));
+. [FEATURE_CLEAN_UP] call networking/nameif.c:319:delete_eth_table()
+.. [FEATURE_CLEAN_UP] 212:free(ch);
+. ERROR [FEATURE_CLEAN_UP] 318:ch = ch-&gt;next;
+
+</pre></div>
+    </div>
+</body>
+</html>

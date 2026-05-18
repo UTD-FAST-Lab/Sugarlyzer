@@ -1,0 +1,156 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">    NULL pointer on !OF_IRQ gets dereferenced if IRQ_DOMAIN  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 In TWL4030 driver, attempt to register an IRQ domain     with a NULL ops structure; ops is de-referenced when     registering an IRQ domain, but this field is only set     when OF_IRQ.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/6252547b8a7acced581b649af4ebf6d65f63a34b">6252547b8a7</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> NullDereference</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "TWL4030_CORE && !OF_IRQ" (2nd degree)</td></tr>
+            <tr><td width='20%'><b>C-features</b></td><td> FunctionPointers</td></tr>
+            <tr><td width='20%'><b>Fix-in</b></td><td> model, mapping</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> include/linux/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#define NULL (void*)0
+
+#ifdef CONFIG_TWL4030_CORE
+#define CONFIG_IRQ_DOMAIN
+#endif
+
+#ifdef CONFIG_IRQ_DOMAIN
+int irq_domain_simple_ops = 1;
+
+void irq_domain_add(int *ops)
+{
+  int irq = *ops; // (4) ERROR
+}
+#endif
+
+#ifdef CONFIG_TWL4030_CORE
+int twl_probe()
+{
+  int *ops = NULL; // (2)
+
+#ifdef CONFIG_OF_IRQ
+  ops = &irq_domain_simple_ops;
+#endif
+
+  irq_domain_add(ops); // (3)
+}
+#endif
+
+int main()
+{
+#ifdef CONFIG_TWL4030_CORE
+  twl_probe(); // (1)
+#endif
+  return 0;
+}
+
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/6252547.c b/simple/6252547.c
+--- a/simple/6252547.c
++++ b/simple/6252547.c
+@@ -1,10 +1,6 @@
+ 
+ #define NULL (void*)0
+ 
+-#ifdef CONFIG_TWL4030_CORE
+-#define CONFIG_IRQ_DOMAIN
+-#endif
+-
+ #ifdef CONFIG_IRQ_DOMAIN
+ int irq_domain_simple_ops = 1;
+ 
+@@ -17,13 +13,13 @@
+ #ifdef CONFIG_TWL4030_CORE
+ int twl_probe()
+ {
++#ifdef CONFIG_IRQ_DOMAIN
+   int *ops = NULL; // (2)
+ 
+-#ifdef CONFIG_OF_IRQ
+   ops = &irq_domain_simple_ops;
+-#endif
+ 
+   irq_domain_add(ops); // (3)
++#endif
+ }
+ #endif
+ 
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#include &lt;stdlib.h&gt;
+
+#ifdef CONFIG_TWL4030_CORE
+#define CONFIG_IRQ_DOMAIN
+#endif
+
+#ifdef CONFIG_IRQ_DOMAIN
+int irq_domain_simple_ops = 1;
+#endif
+
+int main()
+{
+#ifdef CONFIG_TWL4030_CORE
+//  twl_probe();
+  int *ops = NULL;
+
+#ifdef CONFIG_OF_IRQ
+  ops = &irq_domain_simple_ops;
+#endif
+
+  int irq = *ops; // ERROR
+#endif
+  return 0;
+}
+
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. call drivers/base/dd.c:203:driver_probe_device()
+. 215: ret = really_probe(dev, drv);
+.. 108:really_probe()
+.. 124: if (dev-&gt;bus-&gt;probe)
+... dyn-call drivers/i2c/i2c-core.c:106:i2c_device_probe()
+... 124: status = driver-&gt;probe(client, i2c_match_id(driver-&gt;id_table, client));
+.... dyn-call drivers/mfd/twl-core.c:1190:twl_probe()
+.... [OF_IRQ] 1233: domain.ops = &irq_domain_simple_ops;
+.... 1235: irq_domain_add(&domain);
+..... call kernel/irq/irqdomain.c:20:irq_domain_add()
+..... 30: irq_domain_for_each_irq(domain, hwirq, irq)
+...... call include/linux/irqdomain.h:74:irq_domain_to_irq()
+...... ERROR 77: if (d-&gt;ops-&gt;to_irq)
+
+</pre></div>
+    </div>
+</body>
+</html>

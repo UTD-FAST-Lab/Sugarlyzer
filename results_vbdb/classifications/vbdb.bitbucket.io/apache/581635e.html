@@ -1,0 +1,66 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/apache.png" alt="">&nbsp;apache</span>
+            <span class="title">     Macro APR_INET6 is not declared when !APR_HAVE_IPV6.  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 The file apr_network_io.h defines a MACRO named APR_INET6 in case     feature APR_HAVE_IPV6 is enabled. This MACRO is used in file ab.c,     but there is no #ifdef APR_HAVE_IPV6 encompassing such a use.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://github.com/apache/httpd/commit/581635e28f1f71623878ab3852b68cd49fc7cdb1">581635e28f1</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> UndeclaredIdentifier</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "!APR_HAVE_IPV6" (1st degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> mapping</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> support/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            
+            
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>#if APR_HAVE_IPV6
+#define APR_INET6 6
+#endif
+
+int parse_url()
+{
+  int family = APR_INET6;
+}
+
+int main(void)
+{
+  parse_url();
+  return 0;
+}
+</pre></div>
+
+
+<div id='trace' class='tabcontent'><pre>. // if APR_HAVE_IPV6 is disabled
+. ERROR support/ab.c:972:if (family == APR_INET6)
+
+</pre></div>
+    </div>
+</body>
+</html>

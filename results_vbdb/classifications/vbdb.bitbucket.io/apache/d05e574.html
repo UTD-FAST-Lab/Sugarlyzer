@@ -1,0 +1,108 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/apache.png" alt="">&nbsp;apache</span>
+            <span class="title">     Segmentation fault when APR_HAS_SHARED_MEMORY.  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 developers were passing apr_rmm_calloc() as an argument of the     apr_rmm_addr_get function. However, there was no check regarding     the apr_rmm_calloc result. This pattern happened three times in     the same commit.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://github.com/apache/httpd/commit/d05e574ec26b02d9eb2ec7a37d693f7cb16d10cf">d05e574ec26</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> NullDereference</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> APR_HAS_SHARED_MEMORY (1st degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> modules/experimental/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+long rmm_addr = 99999999999999999;
+
+char* apr_rmm_addr_get(char *ptr)
+{
+  *ptr = '\0';
+  return ptr;
+}
+
+void util_ald_alloc()
+{
+#if APR_HAS_SHARED_MEMORY
+  /* allocate from shared memory */
+  char* buf = apr_rmm_addr_get((char*)calloc(rmm_addr, sizeof(char)));
+  printf("%s\n", buf);
+#else
+  // do something
+#endif
+}
+
+void util_ald_create_cache()
+{
+  util_ald_alloc();
+}
+
+void util_ald_create_caches()
+{
+  util_ald_create_cache();
+}
+
+int main(void)
+{
+  util_ald_create_caches();
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/apache/simple/d05e574.c b/apache/simple/d05e574.c
+--- a/apache/simple/d05e574.c
++++ b/apache/simple/d05e574.c
+@@ -13,7 +13,8 @@ void util_ald_alloc()
+ {
+ #if APR_HAS_SHARED_MEMORY
+   /* allocate from shared memory */
+-  char* buf = apr_rmm_addr_get((char*)calloc(rmm_addr, sizeof(char)));
++  char* block = (char*)calloc(rmm_addr, sizeof(char));
++  char* buf = block ? apr_rmm_addr_get(block) : NULL;
+   printf("%s\n", buf);
+ #else
+   // do something
+</pre></div>
+
+<div id='trace' class='tabcontent'><pre>. call modules/experimental/util_ldap_cache_mgr.c:211:util_ald_create_caches()
+. 219: util_ald_create_cache()
+.. call modules/experimental/util_ldap_cache_mgr.c:252:util_ald_create_cache()
+.. 281: util_ald_alloc()
+... call modules/experimental/util_ldap_cache_mgr.c:95:util_ald_alloc()
+... // if APR_HAS_SHARED_MEMORY is enabled
+... // the result of apr_rmm_calloc will be dereferenced without checking if it is non NULL.
+... ERROR 102: return (void *)apr_rmm_addr_get(cache-&gt;rmm_addr, apr_rmm_calloc(cache-&gt;rmm_addr, size));
+
+</pre></div>
+    </div>
+</body>
+</html>

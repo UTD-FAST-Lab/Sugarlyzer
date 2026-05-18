@@ -1,0 +1,95 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/busybox.png" alt="">&nbsp;busybox</span>
+            <span class="title">     Inverted if usage in ENABLE_DESKTOP          If ENABLE_DESKTOP is not set, BusyBox displays a message. But, note that this     functionality is inverted. Actually, BusyBox needs to print any message only     when ENABLE_DESKTOP is enabled.       </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.busybox.net/busybox/commit/df7b6577c6abaff551b15ccc80917553afde33fb">df7b6577c6a</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> BehaviorViolation</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> !DESKTOP (1st degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> mapping</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> coreutils/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#include &lt;stdio.h&gt;
+
+int main(int argc, char** argv)
+{
+  int n = -1;
+  
+  if (n &lt; 0) { /* error in get_groups() */
+#ifndef ENABLE_DESKTOP
+      printf("can't get groups");
+#else
+      return EXIT_FAILURE;
+#endif
+  }
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/df7b657.c b/simple/df7b657.c
+--- a/simple/df7b657.c
++++ b/simple/df7b657.c
+@@ -6,7 +6,7 @@
+   int n = -1;
+   
+   if (n &lt; 0) { /* error in get_groups() */
+-#ifndef ENABLE_DESKTOP
++#ifdef ENABLE_DESKTOP
+       printf("can't get groups");
+ #else
+       return EXIT_FAILURE;
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#include &lt;stdio.h&gt;
+
+int main(int argc, char** argv)
+{
+  int n = -1;
+  
+  if (n &lt; 0) { /* error in get_groups() */
+#ifndef ENABLE_DESKTOP
+      printf("can't get groups");
+#else
+      return EXIT_FAILURE;
+#endif
+  }
+  return 0;
+}
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. [!ENABLE_DESKTOP] coreutils/id.c:180:bb_error_msg_and_die()
+
+</pre></div>
+    </div>
+</body>
+</html>

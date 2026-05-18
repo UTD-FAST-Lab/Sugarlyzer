@@ -1,0 +1,148 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">     Kernel panic due to double enable_IR_x2apic() call on non-SMP boards  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 If a single-core CPU boots an SMP kernel it will call     enable_IR_x2apic() first from native_smp_prepare_cpus(), and later     from APIC_init_uniprocessor(). This is not an idempotent operation     and such a double call causes a kernel panic.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/472a474c6630efd195d3738339fd1bdc8aa3b1aa">472a474c663</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> DoubleOpOnResource</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "X86 && SMP" (2nd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> mapping</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> arch/x86/kernel/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#define NULL (void*)0
+
+__attribute__ ((noinline)) int nondet() { return 0; }
+
+#ifdef CONFIG_SMP
+int smp_found_config; /* found an SMP configuration at boot time ? */
+#endif
+
+void enable_IR_x2apic(void)
+{
+  static char c;
+  static char *ptr = &c;
+
+  *ptr = 'a';
+  if (ptr)
+    ptr = NULL;
+}
+
+int APIC_init_uniprocessor(void)
+{
+  enable_IR_x2apic(); // (6) ERROR: enable_IR_x2apic() is not idempotent
+}
+
+#ifdef CONFIG_SMP
+int smp_sanity_check()
+{
+  if (!smp_found_config)
+    APIC_init_uniprocessor(); // (5)
+  return 0;
+}
+
+void native_smp_prepare_cpus()
+{
+  enable_IR_x2apic(); // (3) first call
+  smp_sanity_check(); // (4)
+}
+#endif
+
+int main(void)
+{
+#ifdef CONFIG_SMP
+  smp_found_config = nondet(); // (1)
+  native_smp_prepare_cpus(); // (2)
+#endif
+  return 0;
+}
+
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/472a474.c b/simple/472a474.c
+--- a/simple/472a474.c
++++ b/simple/472a474.c
+@@ -19,7 +19,9 @@
+ 
+ int APIC_init_uniprocessor(void)
+ {
++#ifndef CONFIG_SMP
+   enable_IR_x2apic(); // (6) ERROR: enable_IR_x2apic() is not idempotent
++#endif
+ }
+ 
+ #ifdef CONFIG_SMP
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#include &lt;stdbool.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main(int argc, char** argv)
+{
+#ifdef CONFIG_SMP
+  int smp_found_config;
+  smp_found_config = false;
+//  native_smp_prepare_cpus();
+  static int called = 0;
+
+  called++;
+  if (called &gt; 1) 
+    do { fprintf(stderr, "panic!\n"); exit(1); } while(0);
+  
+  if (!smp_found_config) {
+      called = 0;
+
+      called++;
+      if (called &gt; 1) 
+        do { fprintf(stderr, "panic!\n"); exit(1); } while(0);
+  }
+#endif
+  return 0;
+}
+
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. call arch/x86/kernel/smpboot.c:1071:native_smp_prepare_cpus()
+. 1095: enable_IR_x2apic();
+. 1098: if (smp_sanity_check(max_cpus) &lt; 0)
+.. call arch/x86/kernel/smpboot.c:954:smp_sanity_check()
+.. 997: if (!smp_found_config && !acpi_lapic) {
+// do not find SMP configuration, i.e. non-SMP CPU
+.. 1001: if (APIC_init_uniprocessor())
+... call arch/x86/kernel/apic/apic.c:1616:APIC_init_uniprocessor()
+... ERROR 1643: enable_IR_x2apic();
+
+</pre></div>
+    </div>
+</body>
+</html>

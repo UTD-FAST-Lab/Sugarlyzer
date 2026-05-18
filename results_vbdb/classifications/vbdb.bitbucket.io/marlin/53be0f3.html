@@ -1,0 +1,219 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/marlin.png" alt="">&nbsp;marlin</span>
+            <span class="title">     "Not enough delay for BABYSTEPPING if specific DRV8825 stepper driver is used  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 There are several stepper drivers that can be used, each having some     minimum step pulse duration requirements (e.g. for A4988 is 1uS, for DRV8825 is 1.9uS).      Changing the delay to take a larger value, e.g. 2uS has no effect on the steppers     that require a minimum that is less than the set value.           Issue 1900: https://github.com/MarlinFirmware/Marlin/issues/1900 "       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://github.com/MarlinFirmware/Marlin/commit/53be0f3399e9d11c91ec35628f6a736b172dfb1c">53be0f3399e</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> BehaviorViolation</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "BABYSTEPPING && DELTA" (2nd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> movement/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>#include &lt;util/delay.h&gt; // http://download.savannah.gnu.org/releases/avr-libc/binary-releases/ for the util/delay library
+#include &lt;stdbool.h&gt;
+#include &lt;stdio.h&gt;
+
+#define X_AXIS 0
+#define Y_AXIS 1
+#define Z_AXIS 2
+
+#define X 0
+#define Y 1
+#define Z 2
+
+void enable_x()
+{
+	printf("%s", "enabling x axis");
+}
+
+void enable_y()
+{
+	printf("%s", "enabling y axis");
+}
+
+void enable_z()
+{
+	printf("%s", "enabling z axis");
+}
+
+#ifdef BABYSTEPPING
+
+  // MUST ONLY BE CALLED BY AN ISR,
+  // No other ISR should ever interrupt this!
+
+  void babystep(const uint8_t axis, const bool direction) {
+
+    #define BABYSTEP_AXIS(axis, AXIS, INVERT) { \
+        enable_## axis(); \
+        uint8_t old_pin = AXIS; \
+        /* more functions here */ \
+        _delay_us(1U); \ 
+        /* more functions here */ \
+      }
+
+    switch(axis) {
+
+      case X_AXIS:
+        BABYSTEP_AXIS(x, X, false);
+        break;
+
+      case Y_AXIS:
+        BABYSTEP_AXIS(y, Y, false);
+        break;
+     
+      case Z_AXIS: {
+
+        #ifndef DELTA
+
+          BABYSTEP_AXIS(z, Z, false);
+
+        #else // DELTA
+
+          enable_x();
+          enable_y();
+          enable_z();
+          //setup new step
+          //functions to move the x,y,z axis
+          _delay_us(1U);
+          //functions to move the x,y,z axis
+
+        #endif
+
+      } break;
+     
+      default: break;
+    }
+  }
+
+#endif //BABYSTEPPING
+
+int main(void) 
+{
+#ifdef BABYSTEPPING
+    babystep(0, false);
+#endif
+    return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/53be0f3.c b/simple/53be0f3.c
+--- a/simple/53be0f3.c
++++ b/simple/53be0f3.c
+@@ -36,7 +36,7 @@ void enable_z()
+         enable_## axis(); \
+         uint8_t old_pin = AXIS; \
+         /* more functions here */ \
+-        _delay_us(1U); \ 
++        delayMicroseconds(2); \ 
+         /* more functions here */ \
+       }
+ 
+@@ -63,7 +63,7 @@ void enable_z()
+           enable_z();
+           //setup new step
+           //functions to move the x,y,z axis
+-          _delay_us(1U);
++          delayMicroseconds(2);
+           //functions to move the x,y,z axis
+ 
+         #endif
+</pre></div>
+<div id='single' class='tabcontent'><pre>#include &lt;util/delay.h&gt; // http://download.savannah.gnu.org/releases/avr-libc/binary-releases/ for the util/delay library
+#include &lt;stdbool.h&gt;
+#include &lt;stdio.h&gt;
+
+#define X_AXIS 0
+#define Y_AXIS 1
+#define Z_AXIS 2
+
+uint8_t axis = 0;
+
+int main(void) 
+{
+#ifdef BABYSTEPPING
+#define BABYSTEP_AXIS(axis, AXIS, INVERT) { \
+        /* enable_## axis(); */ \
+        uint8_t old_pin = AXIS; \
+        /* more functions here */ \
+        _delay_us(1U); \ 
+        /* more functions here */ \
+      }
+
+    switch(axis) {
+
+      case X_AXIS:
+        printf("%s", "enabling x axis");
+        break;
+
+      case Y_AXIS:
+        printf("%s", "enabling y axis");
+        break;
+     
+      case Z_AXIS: {
+
+        #ifndef DELTA
+
+        printf("%s", "enabling y axis");
+        
+        #else // DELTA
+
+          printf("%s", "enabling x axis");
+          printf("%s", "enabling y axis");
+          printf("%s", "enabling z axis");
+          //setup new step
+          //functions to move the x,y,z axis
+        _delay_us(1U);
+          //functions to move the x,y,z axis
+        
+        #endif
+        break;
+      } 
+     
+      default: break;
+    }
+
+#endif //BABYSTEPPING
+
+    return 0;
+}
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. call stepper.cpp:1136:void babystep()
+. 1138: #define BABYSTEP_AXIS(axis, AXIS, INVERT) { \
+. ERROR 1143:  _delayUs(1U);
+. 1148: switch(axis) {
+.. 1158: case Z_AXIS: {
+.. ERROR 1182: _delayUs(1U);
+</pre></div>
+    </div>
+</body>
+</html>

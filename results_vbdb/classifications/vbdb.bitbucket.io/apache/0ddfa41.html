@@ -1,0 +1,76 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/apache.png" alt="">&nbsp;apache</span>
+            <span class="title">     Function ssl_array_index is unused when !HAVE_TLS_ALPN  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                  
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://github.com/apache/httpd/commit/0ddfa412ee9cd815692c55f06e163c0044b60ee2">0ddfa412ee9</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> DeadCode</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "!HAVE_TLS_ALPN" (1st degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> mapping</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> modules/ssl/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            
+            
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+void ssl_array_index()
+{
+}
+
+#ifdef HAVE_TLS_ALPN
+void ssl_cmp_alpn_protos()
+{
+  ssl_array_index();
+}
+
+void ssl_callback_alpn_select()
+{
+  ssl_cmp_alpn_protos();
+}
+#endif
+
+int main(void)
+{
+#ifdef HAVE_TLS_ALPN
+  ssl_callback_alpn_select();
+#endif
+  return 0;
+}
+</pre></div>
+
+
+<div id='trace' class='tabcontent'><pre>. // if HAVE_TLS_ALPN is disabled
+. ERROR modules/ssl/ssl_engine_kernel.c:2165:ssl_array_index()
+
+</pre></div>
+    </div>
+</body>
+</html>

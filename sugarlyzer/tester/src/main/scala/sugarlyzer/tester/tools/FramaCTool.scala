@@ -97,8 +97,9 @@ object FramaCTool extends AnalysisTool {
       funcIndex: Int,
       funcName: String
   ): IO[List[ToolAlarm]] = IO.blocking {
-    val rootDir  = os.Path(spec.rootDir)
-    val safeFunc = funcName.replaceAll("[^a-zA-Z0-9_]", "_")
+    given ProgramSpecification = spec
+    val rootDir                = os.Path(spec.rootDir)
+    val safeFunc               = funcName.replaceAll("[^a-zA-Z0-9_]", "_")
     val resultDir =
       rootDir / "framac_results" / s"out-${cmdIndex}-${funcIndex}-${safeFunc}"
     os.remove.all(resultDir)
@@ -152,7 +153,9 @@ object FramaCTool extends AnalysisTool {
     )
   }
 
-  def parseCSV(csvPath: os.Path, analysisTime: Double): List[ToolAlarm] = {
+  def parseCSV(csvPath: os.Path, analysisTime: Double)(using
+      spec: ProgramSpecification
+  ): List[ToolAlarm] = {
     if (!os.exists(csvPath)) return List.empty
     try {
       val reader = CSVReader.open(csvPath.toIO)(using new TSVFormat {})
@@ -170,7 +173,8 @@ object FramaCTool extends AnalysisTool {
               description = fullDesc,
               fileLocation = file,
               line = lineNo,
-              analysisTime = analysisTime
+              analysisTime = analysisTime,
+              target = spec.name
             ))
           } else None
         }

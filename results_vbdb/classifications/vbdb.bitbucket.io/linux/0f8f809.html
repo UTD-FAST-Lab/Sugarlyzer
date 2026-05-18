@@ -1,0 +1,192 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">     Array is accessed out of its bounds in some configurations  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 The length of `kmem_caches' is KMALLOC_SHIFT_HIGH + 1, while     init_node_lock_keys() iterates on this array using the value     PAGE_SHIFT + MAX_ORDER as upper-bound. Actually,     KMALLOC_SHIFT_HIGH is a configuration-dependent value defined     as min((MAX_ORDER + PAGE_SHIFT - 1),25). For configurations     where MAX_ORDER + PAGE_SHIFT - 1 &gt; 25, the length of `kmem_caches'     is cut to 26, and init_node_lock_keys() will access this     array out of its bounds.          The bug shows up for LOCKDEP && SLAB, if some additional     configuration like PPC_256K_PAGES && FORCE_MAX_ZONEORDER=11     makes MAX_ORDER + PAGE_SHIFT - 1 &gt; 25.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/0f8f8094d28eb53368ac09186ea6b3a324cc7d44">0f8f8094d28</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> OutOfBoundsRead</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "LOCKDEP && SLAB && !SLOB && PPC_256K_PAGES && FORCE_MAX_ZONEORDER=11" (5th degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> mm/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#ifndef CONFIG_FORCE_MAX_ZONEORDER
+#define MAX_ORDER 11
+#else
+#define MAX_ORDER CONFIG_FORCE_MAX_ZONEORDER
+#endif
+
+#if defined(CONFIG_PPC_256K_PAGES)
+#define PAGE_SHIFT		18
+#elif defined(CONFIG_PPC_64K_PAGES)
+#define PAGE_SHIFT		16
+#elif defined(CONFIG_PPC_16K_PAGES)
+#define PAGE_SHIFT		14
+#else
+#define PAGE_SHIFT		12
+#endif
+
+#ifdef CONFIG_SLAB
+#define KMALLOC_SHIFT_HIGH	((MAX_ORDER + PAGE_SHIFT - 1) &lt;= 25 ? \
+				(MAX_ORDER + PAGE_SHIFT - 1) : 25)
+#else
+#define KMALLOC_SHIFT_HIGH	(PAGE_SHIFT + 1)
+#endif
+
+
+#ifndef CONFIG_SLOB
+int* kmalloc_caches[KMALLOC_SHIFT_HIGH + 1];
+#endif
+
+#ifdef CONFIG_LOCKDEP
+static void init_node_lock_keys()
+{
+  int i;
+
+  for (i = 1; i &lt; PAGE_SHIFT + MAX_ORDER; i++)
+	{
+	  int* cache = kmalloc_caches[i]; // (4) ERROR
+
+	  if (!cache)
+		continue;
+
+	  int n = *cache;
+	}
+}
+
+void init_lock_keys(void)
+{
+  init_node_lock_keys(); // (3)
+}
+#else
+init_node_lock_keys()
+{
+}
+
+void init_lock_keys(void)
+{
+}
+#endif
+
+void kmem_cache_init_late(void)
+{
+  init_lock_keys(); // (2)
+}
+
+int main(void)
+{
+  #ifndef CONFIG_SLOB
+  kmem_cache_init_late(); // (1)
+  #endif
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/0f8f809.c b/simple/0f8f809.c
+--- a/simple/0f8f809.c
++++ b/simple/0f8f809.c
+@@ -32,7 +32,7 @@
+ {
+   int i;
+ 
+-  for (i = 1; i &lt; PAGE_SHIFT + MAX_ORDER; i++)
++  for (i = 1; i &lt; KMALLOC_SHIFT_HIGH; i++)
+ 	{
+ 	  int* cache = &kmalloc_caches[i]; // (4) ERROR
+ 
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#ifndef CONFIG_FORCE_MAX_ZONEORDER
+#define MAX_ORDER 11
+#else
+#define MAX_ORDER CONFIG_FORCE_MAX_ZONEORDER
+#endif
+
+#if defined(CONFIG_PPC_256K_PAGES)
+#define PAGE_SHIFT		18
+#elif defined(CONFIG_PPC_64K_PAGES)
+#define PAGE_SHIFT		16
+#elif defined(CONFIG_PPC_16K_PAGES)
+#define PAGE_SHIFT		14
+#else
+#define PAGE_SHIFT		12
+#endif
+
+#ifdef CONFIG_SLAB
+#define KMALLOC_SHIFT_HIGH	((MAX_ORDER + PAGE_SHIFT - 1) &lt;= 25 ? \
+				(MAX_ORDER + PAGE_SHIFT - 1) : 25)
+#else
+#define KMALLOC_SHIFT_HIGH	(PAGE_SHIFT + 1)
+#endif
+
+
+#ifndef CONFIG_SLOB
+int kmalloc_caches[KMALLOC_SHIFT_HIGH + 1];
+#endif
+
+int main(int argc, char** argv)
+{
+#ifndef CONFIG_SLOB
+//  kmem_cache_init_late();
+  #ifdef CONFIG_LOCKDEP
+  int i;
+
+  for (i = 1; i &lt; PAGE_SHIFT + MAX_ORDER; i++) {
+    int* cache = &kmalloc_caches[i]; // ERROR
+
+    if (!cache)
+      continue;
+
+    int n = *cache;
+  }
+  #else
+  
+  #endif
+#endif
+  return 0;
+}
+
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. call mm/slab.c:1631:kmem_cache_init_late()
+. 1645: init_lock_keys();
+.. [LOCKDEP] call mm/slab.c:602:init_lock_keys()
+.. 607: init_node_lock_keys(node);
+... [LOCKDEP] call mm/slab.c:561:init_node_lock_keys()
+... 568: for (i = 1; i &lt; PAGE_SHIFT + MAX_ORDER; i++) {
+// length(kmalloc_caches) == KMALLOC_SHIFT_HIGH+1
+... 570: struct kmem_cache *cache = kmalloc_caches[i];
+... ERROR 575: n = cache-&gt;node[q];
+</pre></div>
+    </div>
+</body>
+</html>

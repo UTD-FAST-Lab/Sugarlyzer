@@ -1,0 +1,92 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/apache.png" alt="">&nbsp;apache</span>
+            <span class="title">     File descriptor leak ("dbg") with DEBUG_CGI.  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 Return statement occurs before freeing the "dbg" pointer, so we have a leak.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://github.com/apache/httpd/commit/4945115b2e725a60fd4b042fda66c944562094f9">4945115b2e7</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> FileDescriptorLeak</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> DEBUG_CGI (1st degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> modules/generators/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            
+            
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+void run_cgi_child()
+{
+#ifdef DEBUG_CGI
+#ifdef OS2
+  FILE *dbg = fopen("con", "w");
+#else
+  FILE *dbg = fopen("/dev/tty", "w");
+#endif
+#endif
+
+#ifdef DEBUG_CGI
+  fprintf(dbg, "Environment\n");
+#endif
+
+  if(rand() % 2)
+    return; // ERROR: dbg is leaked
+
+#ifdef DEBUG_CGI
+  fclose(dbg);
+#endif
+  return;
+}
+
+void cgi_handler()
+{
+  run_cgi_child();
+}
+
+int main(void)
+{
+  cgi_handler();
+  return 0;
+}
+</pre></div>
+
+
+<div id='trace' class='tabcontent'><pre>. call modules/generators/mod_cgi.c:743:cgi_handler()
+. 826: run_cgi_child()
+.. call modules/generators/mod_cgi.c:371:run_cgi_child()
+.. // if DEBUG_CGI and OS2 are enabled
+.. 395: FILE *dbg = fopen("con", "w");
+.. ERROR 467: return APR_EBADF;
+
+</pre></div>
+    </div>
+</body>
+</html>

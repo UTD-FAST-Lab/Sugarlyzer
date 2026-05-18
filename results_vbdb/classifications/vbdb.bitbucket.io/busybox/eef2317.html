@@ -1,0 +1,141 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/busybox.png" alt="">&nbsp;busybox</span>
+            <span class="title">     If BusyBox is compiled with FEATURE_CLEAN_UP dmesg command segfaults if      invoked with the "-n" option because a free() of an uninitialized pointer.  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                  
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.busybox.net/busybox/commit/eef2317b9f5bdd362a7b8a0169c688245374f0f5">eef2317b9f5</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> UninitializedVariable</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> FEATURE_CLEAN_UP (1st degree)</td></tr>
+            <tr><td width='20%'><b>C-features</b></td><td> PointerArithmetic</td></tr>
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> util-linux/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#include &lt;stdlib.h&gt;
+#include &lt;getopt.h&gt;
+
+int main(int argc, char **argv)
+{
+  char *buf;
+  int bufsize = 8196;
+  int i;
+  int cmd = 3;
+
+  while ((i = getopt(argc, argv, "cn:s:")) &gt; 0) {
+    switch (i) {
+      case 'c':
+        cmd = 4;
+        break;
+      case 'n':
+        cmd = 8;
+        break;
+    }
+  }
+
+  if (cmd == 8) {
+    goto all_done;
+  }
+
+  buf = malloc(bufsize);
+
+all_done:
+#ifdef CONFIG_FEATURE_CLEAN_UP
+  if (buf) { //WARNING
+    free(buf); //ERROR
+  }
+#endif
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/eef2317.c b/simple/eef2317.c
+--- a/simple/eef2317.c
++++ b/simple/eef2317.c
+@@ -4,7 +4,11 @@
+ 
+ int main(int argc, char **argv)
+ {
+-  char *buf;
++  char *buf
++#ifdef CONFIG_FEATURE_CLEAN_UP
++           = NULL
++#endif
++  ;
+   int bufsize = 8196;
+   int i;
+   int cmd = 3;
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#include &lt;stdlib.h&gt;
+#include &lt;getopt.h&gt;
+
+int main(int argc, char **argv)
+{
+  char *buf;
+  int bufsize = 8196;
+  int i;
+  int cmd = 3;
+
+  while ((i = getopt(argc, argv, "cn:s:")) &gt; 0) {
+    switch (i) {
+      case 'c':
+        cmd = 4;
+        break;
+      case 'n':
+        cmd = 8;
+        break;
+    }
+  }
+
+  if (cmd == 8) {
+    goto all_done;
+  }
+
+  buf = malloc(bufsize);
+
+all_done:
+#ifdef CONFIG_FEATURE_CLEAN_UP
+  if (buf) { //WARNING
+    free(buf); //ERROR
+  }
+#endif
+  return 0;
+}
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. call util-linux/dmesg.c:29:dmesg_main();
+. goto:65:all_done;
+. ERROR [FEATURE_CLEAN_UP] 89:free(buf);
+
+</pre></div>
+    </div>
+</body>
+</html>

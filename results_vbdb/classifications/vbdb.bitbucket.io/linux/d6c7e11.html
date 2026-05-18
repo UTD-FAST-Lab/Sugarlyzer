@@ -1,0 +1,94 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">     Mockup implementation expects incompatible pointer type          The actual implementation of `max8660_pdata_from_dt' expects an argument     `pdata' of type `struct max8660_platform_data *' while the mockup     implementation for OF disabled expects a 2-degree pointer.  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                  
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/d6c7e1139591b9ba7c4ad9c5eec748f0a68ad212">d6c7e113959</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> IncompatibleType</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "REGULATOR_MAX8660 && !OF" (2nd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> drivers/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#ifdef CONFIG_REGULATOR_MAX8660
+#ifdef CONFIG_OF
+int max8660_pdata_from_dt(int *pdata)
+{
+	*pdata++;
+	return 0;
+}
+#else
+int max8660_pdata_from_dt(int **pdata)
+{
+	return 0;
+}
+#endif
+
+int max8660_probe()
+{
+	int pdata_of = 0;
+  max8660_pdata_from_dt(&pdata_of); // ERROR
+  return 0;
+}
+#endif
+
+int main() {
+  #ifdef CONFIG_REGULATOR_MAX8660
+  max8660_probe();
+  #endif
+  return 0;
+}
+
+</pre></div>
+
+<div id='single' class='tabcontent'><pre>
+int main() {
+  #ifdef CONFIG_REGULATOR_MAX8660
+//  max8660_probe();
+  int pdata_of = 0;
+
+  #ifdef CONFIG_OF
+  *pdata++;
+  #else
+  #endif
+  
+  #endif
+  return 0;
+}
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. drivers/regulator/max8660.c:393: ret = max8660_pdata_from_dt(dev, of_node, &pdata_of);
+</pre></div>
+    </div>
+</body>
+</html>

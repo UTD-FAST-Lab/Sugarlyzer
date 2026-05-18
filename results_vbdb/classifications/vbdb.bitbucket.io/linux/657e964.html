@@ -1,0 +1,196 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">     Unexpected decrement of the preemption counter  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 __run_timers() executes a task and expects that the preemption count     before the execution equals the preemption count after the execution.     When this task is inet_twdr_hangman() the condition is violated; if     TCP_MD5SIG is enabled we call tcp_put_md5sig_pool(), which entails a      put_cpu().       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/657e9649e745b06675aa5063c84430986cdc3afa">657e9649e74</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> FatalAssertionViolation</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "TCP_MD5SIG && PREEMPT" (2nd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> net/ipv4</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#include &lt;assert.h&gt;
+
+__attribute__ ((noinline)) int nondet() { return 42; }
+
+static int preempt_counter = 0;
+
+#define preempt_count() (preempt_counter)
+
+#ifdef CONFIG_PREEMPT
+#define put_cpu() (preempt_counter--)
+#else
+#define put_cpu()
+#endif
+
+#ifdef CONFIG_TCP_MD5SIG
+#define free_cpu()
+#endif
+
+static inline void tcp_free_md5sig_pool(void)
+{
+  free_cpu();
+}
+
+static inline void tcp_put_md5sig_pool(void)
+{
+  put_cpu(); // (9)
+}
+
+void tcp_twsk_destructor()
+{
+#ifdef CONFIG_TCP_MD5SIG
+  if (nondet())
+    tcp_put_md5sig_pool(); // (8)
+#endif
+}
+
+static inline void twsk_destructor()
+{
+  tcp_twsk_destructor(); // (7)
+}
+
+static void inet_twsk_free()
+{
+  twsk_destructor(); // (6)
+}
+
+void inet_twsk_put()
+{
+  inet_twsk_free(); // (5)
+}
+
+static int inet_twdr_do_twkill_work()
+{
+  inet_twsk_put(); // (4)
+  return 0;
+}
+
+void inet_twdr_hangman()
+{
+  inet_twdr_do_twkill_work(); // (3)
+}
+
+static inline void __run_timers()
+{
+  int preempt_count = preempt_count();
+  inet_twdr_hangman(); // (2)
+  if (preempt_count != preempt_count()) {
+    assert(0); // (10) ERROR
+  }
+}
+
+int main(void)
+{
+  __run_timers(); // (1)
+  return 0;
+}
+
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/657e964.c b/simple/657e964.c
+--- a/simple/657e964.c
++++ b/simple/657e964.c
+@@ -37,7 +37,7 @@
+ {
+ #ifdef CONFIG_TCP_MD5SIG
+   if (unk())
+-    tcp_put_md5sig_pool();
++    tcp_free_md5sig_pool();
+ #endif
+ }
+ 
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#include &lt;assert.h&gt;
+#include &lt;stdbool.h&gt;
+
+#ifdef UNK_TRUE
+#define unk() 1
+#else
+#include &lt;stdlib.h&gt;
+#define unk() (rand() % 2)
+#endif
+
+int main(int argc, char** argv)
+{
+//  __run_timers();
+  int preempt_counter = 0;
+  int preempt_count = preempt_counter;
+//  inet_twdr_hangman();
+  #ifdef CONFIG_TCP_MD5SIG
+  if (unk())
+    #ifdef CONFIG_PREEMPT
+      preempt_counter--
+    #else
+    #endif
+  #endif
+
+  if (preempt_count != preempt_counter) {
+    assert(false); // ERROR
+  }
+  return 0;
+}
+
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. // net/ipv4/tcp_minisocks.c:45: sets a tw_timer to inet_twdr_hangman
+. call kernel/timer.c:929:__run_timers()
+. // eventually the timer is executed
+. 964: int preempt_count = preempt_count();
+. 987: fn(data);
+
+.. dyn-call net/ipv4/inet_timewait_sock.c:201:inet_twdr_hangman()
+.. 213: if (inet_twdr_do_twkill_work(twdr, twdr-&gt;slot)) {
+... call net/ipv4/inet_timewait_sock.c:153:inet_twdr_do_twkill_work()
+... 177: inet_twsk_put(tw);
+.... call net/ipv4/inet_timewait_sock.c:65:inet_twsk_put()
+.... 68: inet_twsk_free(tw);
+..... call net/ipv4/inet_timewait_sock.c:53:inet_twsk_free()
+..... 56: twsk_destructor((struct sock *)tw);
+...... call include/net/timewait_sock.h:33:twsk_destructor()
+...... 39: sk-&gt;sk_prot-&gt;twsk_prot-&gt;twsk_destructor(sk);
+....... dyn-call net/ipv4/tcp_minisocks.c:361:tcp_twsk_destructor()
+....... [TCP_MD5SIG] 366: tcp_put_md5sig_pool();
+........ call include/net/tcp.h:1217:tcp_put_md5sig_pool()
+........ 1220: put_cpu();
+// if CONFIG_PREEMPT put_cpu() decrements preempt_counter
+
+. 991: if (preempt_count != preempt_count()) {
+// thus this test succeeds
+. ERROR 997: BUG();
+
+</pre></div>
+    </div>
+</body>
+</html>

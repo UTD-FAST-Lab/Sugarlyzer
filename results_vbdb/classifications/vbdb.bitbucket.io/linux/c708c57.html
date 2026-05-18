@@ -1,0 +1,128 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">     Memory access beyond buffer limits   </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 In the second iteration of the while loop, when i==8, the memory being     accessed buf+64/sizeof(__u64) is out of the bounds of the buf array.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/c708c57e247775928b9a6bce7b4d8d14883bf39b">c708c57e247</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> OutOfBoundsRead</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "S390 && S390_PRNG" (2nd degree)</td></tr>
+            <tr><td width='20%'><b>C-features</b></td><td> PointerArithmetic</td></tr>
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> arch/s390/crypto</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+typedef unsigned long __u64;
+
+#ifdef CONFIG_S390_PRNG
+static unsigned char parm_block[32] = {
+0x0F,0x2B,0x8E,0x63,0x8C,0x8E,0xD2,0x52,0x64,0xB7,0xA0,0x7B,0x75,0x28,0xB8,0xF4,
+0x75,0x5F,0xD2,0xA6,0x8D,0x97,0x11,0xFF,0x49,0xD8,0x23,0xF3,0x7E,0x21,0xEC,0xA0,
+};
+
+void prng_seed(int nbytes)
+{
+  char buf[16] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
+  int i = 0;
+
+  if (nbytes &gt; 16)
+    return;
+
+  while (nbytes &gt;= 8) {
+    *((__u64 *)parm_block) ^= *((__u64 *)buf+i*8); // ERROR
+    i += 8;
+    nbytes -= 8;
+  }
+}
+#endif
+
+int main(int argc, char *argv[])
+{
+#ifdef CONFIG_S390_PRNG
+  prng_seed(16);
+#endif
+  return 0;
+}
+
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/c708c57.c b/simple/c708c57.c
+--- a/simple/c708c57.c
++++ b/simple/c708c57.c
+@@ -16,7 +16,7 @@
+     return;
+ 
+   while (nbytes &gt;= 8) {
+-    *((__u64 *)parm_block) ^= *((__u64 *)buf+i*8); // ERROR
++    *((__u64 *)parm_block) ^= *((__u64 *)buf+i); // ERROR
+     i += 8;
+     nbytes -= 8;
+   }
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+typedef unsigned long __u64;
+
+#ifdef CONFIG_S390_PRNG
+static unsigned char parm_block[32] = {
+0x0F,0x2B,0x8E,0x63,0x8C,0x8E,0xD2,0x52,0x64,0xB7,0xA0,0x7B,0x75,0x28,0xB8,0xF4,
+0x75,0x5F,0xD2,0xA6,0x8D,0x97,0x11,0xFF,0x49,0xD8,0x23,0xF3,0x7E,0x21,0xEC,0xA0,
+};
+#endif
+
+int main(int argc, char *argv[])
+{
+#ifdef CONFIG_S390_PRNG
+//  prng_seed(16);
+  char buf[16] = {0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
+  int i = 0;
+
+  if (nbytes &gt; 16)
+    return;
+
+  while (nbytes &gt;= 8) {
+    *((__u64 *)parm_block) ^= *((__u64 *)buf+i*8); // ERROR
+    i += 8;
+    nbytes -= 8;
+  }
+#endif
+  return 0;
+}
+
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. call arch/s390/crypto/prng.c:164:prng_init()
+. 187: prng_seed(16);
+.. call arch/s390/crypto/prng.c:69:prng_seed()
+.. ERROR 79: *((__u64 *)parm_block) ^= *((__u64 *)buf+i*8);
+
+</pre></div>
+    </div>
+</body>
+</html>

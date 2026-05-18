@@ -19,9 +19,7 @@ object TesterApp extends IOApp {
           spec <- ProgramFactory.load(config.program)
           // Get the strategy object
           strategy <- IO(AnalysisStrategy(config.strategy))
-
-          _ <- IO.println(s"[TESTER] Configuration: $config")
-
+          _        <- IO.println(s"[TESTER] Configuration: $config")
           _ <- {
             // Run the specific phase of the program
             config.phase match {
@@ -30,22 +28,35 @@ object TesterApp extends IOApp {
               case Phase.BUILD =>
                 for {
                   _ <- IO.println("[TESTER] Running build logic...")
+                  start_time = System.currentTimeMillis()
                   _ <- strategy.build(config, spec)
+                  end_time = System.currentTimeMillis()
+                  _ <- IO.println(
+                    "Build time: " + (end_time - start_time) + " ms"
+                  )
                 } yield ExitCode.Success
               case Phase.ANALYZE =>
                 for {
                   _ <- IO.println("[TESTER] Running analysis logic...")
                   // Get the tools object and run the analysis
                   tool <- IO(AnalysisTool(config.tool))
+                  analysis_start_time = System.currentTimeMillis()
                   alarms <- strategy.analyze(
                     config,
                     spec,
                     tool
                   )
+                  analysis_end_time = System.currentTimeMillis()
                   _ <- IO.println(s"[TESTER] Found ${alarms.length} alarms")
-
+                  _ <- IO.println(
+                    "Analysis time: " + (analysis_end_time - analysis_start_time) + " ms"
+                  )
+                  deduplicated_start_time = System.currentTimeMillis()
                   deduplicated_alarms <- IO(strategy.deduplicate(alarms))
-
+                  deduplicated_end_time = System.currentTimeMillis()
+                  _ <- IO.println(
+                    "Deduplication time: " + (deduplicated_end_time - deduplicated_start_time) + " ms"
+                  )
                   _ <- IO.println(
                     s"[TESTER] deduplicated (length: ${deduplicated_alarms.length})"
                   )

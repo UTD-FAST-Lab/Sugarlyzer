@@ -1,0 +1,220 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">     Function incorrectly returning (int)255 on failure causes kernel panic  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 The value 0xff is used to mark pfnnid_map pages that are not     physically available. But, since pfnnid_map is an array of unsigned values,     0xff is interpreted as 255 and not as -1. As a result, pfn_to_nid() is     returning nid=255 for those pages that are not available in physical     memory. This value is being used by pfn_valid() to index the node_data     array, thus reading data out of node_data bounds.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/91ea8207168793b365322be3c90a4ee9e8b03ed4">91ea8207168</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> OutOfBoundsRead</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "PARISC && DISCONTIGMEM && PROC_PAGE_MONITOR" (3rd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> arch/parisc/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#include &lt;assert.h&gt;
+#include &lt;string.h&gt;
+
+#ifdef CONFIG_NODES_SHIFT
+// NB: parisc's CONFIG_NODES_SHIFT default is 3
+#define NODES_SHIFT     CONFIG_NODES_SHIFT
+#else
+#define NODES_SHIFT     0
+#endif
+
+#define MAX_NUMNODES    (1 &lt;&lt; NODES_SHIFT)
+
+#define node_end_pfn(nid) NODE_DATA(nid)
+
+#define MAX_PHYSMEM_RANGES 8 /* Fix the size for now (current known max is 3) */
+
+#ifdef CONFIG_DISCONTIGMEM
+
+int node_data[MAX_NUMNODES];
+
+#define NODE_DATA(nid)          (node_data[nid])
+
+#define PFNNID_MAP_MAX  512     /* support 512GB */
+unsigned char pfnnid_map[PFNNID_MAP_MAX];
+unsigned long max_pfn = PFNNID_MAP_MAX;
+
+int pfn_to_nid(unsigned int pfn)
+{
+	assert(pfn &lt; PFNNID_MAP_MAX);
+	return (int)pfnnid_map[pfn];
+}
+
+int pfn_valid(unsigned int pfn)
+{
+	int nid = pfn_to_nid(pfn);
+
+	if (nid &gt;= 0)
+		return (pfn &lt; node_end_pfn(nid)); // ERROR
+	return 0;
+}
+
+#endif
+
+#ifndef CONFIG_DISCONTIGMEM
+#define max_pfn 0
+#define pfn_valid(pfn)		(1)
+#endif /* CONFIG_DISCONTIGMEM */
+
+void setup_bootmem(void)
+{
+#ifdef CONFIG_DISCONTIGMEM
+  memset(pfnnid_map, 0xff, sizeof(pfnnid_map));
+#endif
+}
+
+#ifdef CONFIG_PROC_PAGE_MONITOR
+int kpageflags_read()
+{
+  unsigned int pfn = 0;
+
+  for (;pfn&lt;max_pfn;pfn++) {
+    if (pfn_valid(pfn))
+      ;
+  }
+
+  return 0;
+}
+#endif
+
+int main()
+{
+  setup_bootmem();
+#ifdef CONFIG_PROC_PAGE_MONITOR
+  kpageflags_read();
+#endif
+  return 0;
+}
+
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/91ea820.c b/simple/91ea820.c
+--- a/simple/91ea820.c
++++ b/simple/91ea820.c
+@@ -22,13 +22,13 @@
+ #define NODE_DATA(nid)          (node_data[nid])
+ 
+ #define PFNNID_MAP_MAX  512     /* support 512GB */
+-unsigned char pfnnid_map[PFNNID_MAP_MAX];
++signed char pfnnid_map[PFNNID_MAP_MAX];
+ unsigned long max_pfn = PFNNID_MAP_MAX;
+ 
+ int pfn_to_nid(unsigned int pfn)
+ {
+ 	assert(pfn &lt; PFNNID_MAP_MAX);
+-	return (int)pfnnid_map[pfn];
++	return pfnnid_map[pfn];
+ }
+ 
+ int pfn_valid(unsigned int pfn)
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#include &lt;assert.h&gt;
+#include &lt;string.h&gt;
+
+#ifdef CONFIG_NODES_SHIFT
+// NB: parisc's CONFIG_NODES_SHIFT default is 3
+#define NODES_SHIFT     CONFIG_NODES_SHIFT
+#else
+#define NODES_SHIFT     0
+#endif
+
+#define MAX_NUMNODES    (1 &lt;&lt; NODES_SHIFT)
+
+#define node_end_pfn(nid) NODE_DATA(nid)
+
+#define MAX_PHYSMEM_RANGES 8 /* Fix the size for now (current known max is 3) */
+
+#ifdef CONFIG_DISCONTIGMEM
+
+int node_data[MAX_NUMNODES];
+#define NODE_DATA(nid)          (node_data[nid])
+#define PFNNID_MAP_MAX  512     /* support 512GB */
+unsigned char pfnnid_map[PFNNID_MAP_MAX];
+unsigned long max_pfn = PFNNID_MAP_MAX;
+
+#endif
+
+#ifndef CONFIG_DISCONTIGMEM
+#define max_pfn 0
+#define pfn_valid(pfn)		(1)
+#endif /* CONFIG_DISCONTIGMEM */
+
+int main()
+{
+//  setup_bootmem();
+#ifdef CONFIG_DISCONTIGMEM
+  memset(pfnnid_map, 0xff, sizeof(pfnnid_map));
+#endif
+#ifdef CONFIG_PROC_PAGE_MONITOR
+//  kpageflags_read();
+  unsigned int pfn = 0;
+
+  for (;pfn&lt;max_pfn;pfn++) {
+    assert(pfn &lt; PFNNID_MAP_MAX);
+    int nid = (int)pfnnid_map[pfn];
+    if (nid &gt;= 0)
+      return (pfn &lt; node_end_pfn(nid)); // ERROR
+  }
+#endif
+  return 0;
+}
+
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. call arch/parisc/mm/init.c:116:setup_bootmem()
+. 273: for (i = 0; i &lt; MAX_PHYSMEM_RANGES; i++) {
+// MAX_PHYSMEM_RANGES is hardcoded to 8
+. 274: memset(NODE_DATA(i), 0, sizeof(pg_data_t));
+. [DISCONTIGMEM] 277: memset(pfnnid_map, 0xff, sizeof(pfnnid_map));
+// since pfnnid_map is unsigned char[], this is (unsigned char)255
+
+. call fs/proc/page.c:173:kpageflags_read()
+. 188: if (pfn_valid(pfn))
+.. call arch/parisc/include/asm/mmzone.h:52:pfn_valid()
+.. 54: int nid = pfn_to_nid(pfn);
+... call arch/parisc/include/asm/mmzone.h:39:pfn_to_nid()
+... 49: return (int)pfnnid_map[i];
+// if a page is not physically available we will get (int)255 instead of (int)-1
+.. 56: if (nid &gt;= 0)
+.. 57: return (pfn &lt; node_end_pfn(nid));
+... call include/linux/mmzone.h:759:node_end_pfn()
+.... call arch/parisc/include/asm/mmzone.h:16:NODE_DATA()
+.... ERROR 16: &node_data[nid].pg_data
+// node_data[255] may be reading out of bounds
+
+</pre></div>
+    </div>
+</body>
+</html>

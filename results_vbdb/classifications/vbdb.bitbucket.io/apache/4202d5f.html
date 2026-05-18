@@ -1,0 +1,87 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/apache.png" alt="">&nbsp;apache</span>
+            <span class="title">     "Misspelled struct field leads to compiler error          The structure has a member const char * certtdb, but a pointer to     this struct tries to dereference certdb, which obviously does not exist."  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                  
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://github.com/apache/httpd/commit/4202d5fee3e67e2e37c67ee50afe8622c32bc17d">4202d5fee3e</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> UndeclaredIdentifier</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "APR_HAS_LDAP && APR_HAS_LDAP_NETSCAPE_SSL" (2nd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td>  modules/experimental/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>#include &lt;stdio.h&gt;
+
+#ifdef APU_HAS_LDAP
+char certtdb = 'A';
+
+void util_ldap_connection_open()
+{
+#ifdef APU_HAS_LDAP_NETSCAPE_SSL
+  printf("%c", certdb); // ERROR: certdb undeclared
+#endif
+}
+#endif
+           
+int main(void)
+{
+#ifdef APU_HAS_LDAP
+  util_ldap_connection_open();
+#endif
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/apache/simple/4202d5f.c b/apache/simple/4202d5f.c
+--- a/apache/simple/4202d5f.c
++++ b/apache/simple/4202d5f.c
+@@ -1,7 +1,7 @@
+ #include &lt;stdio.h&gt;
+ 
+ #ifdef APU_HAS_LDAP
+-char certtdb = 'A';
++char certdb = 'A';
+ 
+ void util_ldap_connection_open()
+ {
+</pre></div>
+
+<div id='trace' class='tabcontent'><pre>. include/util_ldap.h:92: typedef struct util_ldap_connection_t
+. include/util_ldap.h:108: const char *certtdb;
+. call modules/experimental/util_ldap.c:241:util_ldap_connection_open()
+. // certdb != certtdb
+. ERROR  modules/experimental/util_ldap.c:281: if (!ldc-&gt;certdb)
+
+</pre></div>
+    </div>
+</body>
+</html>

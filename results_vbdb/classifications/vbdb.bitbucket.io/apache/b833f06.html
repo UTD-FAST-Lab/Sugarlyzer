@@ -1,0 +1,81 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/apache.png" alt="">&nbsp;apache</span>
+            <span class="title">     Missing to convert floating point to long integer  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 mod_status does not work when !HAVE_TIMES because a wrong     format parameter in a printf.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://github.com/apache/httpd/commit/b833f064550179e1c3af829798f76c62c3341210">b833f064550</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> IncompatibleType</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "!HAVE_TIMES" (1st degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> modules/generators/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            
+            
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>#include &lt;stdio.h&gt;
+
+void status_handler()
+{
+  long x = 2147483644;
+  long y = 2147483645;
+
+#ifndef HAVE_TIMES
+  printf("%f %ld",
+#else
+  printf("%ld %ld",
+#endif
+
+(long) x, (long) y);
+}
+
+void register_hooks()
+{
+  status_handler();
+}
+
+int main(void)
+{
+  register_hooks();
+  return 0;
+}
+</pre></div>
+
+
+<div id='trace' class='tabcontent'><pre>. call modules/generators/mod_status.c:824:register_hooks()
+. 826: status_handler()
+.. call modules/generators/mod_status.c:237:status_handler()
+.. // if HAVE_TIMES is disabled
+.. ERROR 638: ap_rprintf(r, "]\n %.0f %ld (",
+
+</pre></div>
+    </div>
+</body>
+</html>

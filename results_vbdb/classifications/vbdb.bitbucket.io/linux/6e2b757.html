@@ -1,0 +1,265 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">     module_core is referenced after being freed during error cleanup  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 load_module() allocates memory for the core executable (module_core)     and the initialization code (module_init) of the new module, then     copies the image of the module object included in the module text     segment to module_core. A pointer `mod' to the module object is      mantained across the function. If an error occurs, it may happen that      load_module() frees module_core and then dereferences `mod', but      since `mod' points to the area allocated for module_core, it     dereferences already freed memory.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/6e2b75740bed35df98b8113300579e13ed2ce848">6e2b75740be</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> UseAfterFree</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "MODULE_UNLOAD && SMP" (2nd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> kernel/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#define ENOMEM      12  /* Out of memory */
+
+#define NULL (void*)0
+
+extern void *malloc (unsigned long __size) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__malloc__)) ;
+
+extern void free (void *__ptr) __attribute__ ((__nothrow__ , __leaf__));
+
+__attribute__ ((noinline)) int nondet() { return 42; }
+
+extern void *memcpy (void *__restrict __dest, const void *__restrict __src,
+       unsigned long __n) __attribute__ ((__nothrow__ , __leaf__)) __attribute__ ((__nonnull__ (1, 2)));
+
+#define refptr(mod) (mod[0])
+#define module_core(mod) (mod[1])
+
+int load_module()
+{
+  void *hdr;
+  void **mod;
+  long err = 0;
+  void *ptr = NULL;
+	
+  if ((hdr = malloc(2*sizeof(void*))) == NULL) // (2)
+    return -ENOMEM;
+	
+  mod = (void *)hdr; // (3)
+
+#if defined(CONFIG_MODULE_UNLOAD) && defined(CONFIG_SMP) 
+  refptr(mod) = malloc(32);
+  if (!refptr(mod))
+  {
+    err = -ENOMEM;
+    goto free_mod;
+  }
+#endif
+
+  ptr = malloc(512); // (4)
+  if (!ptr) {
+    err = -ENOMEM;
+    goto free_percpu;
+  }
+  module_core(mod) = ptr; // (5)
+  
+  while (nondet()) {
+    void *dest = module_core(mod); // (6)
+    memcpy(dest, mod, sizeof(2*sizeof(void*))); // (7)
+    mod = module_core(mod); // (8) `mod' and `module_core(mod)' are aliases
+    if (nondet())
+      break;
+  }
+
+  if (nondet())
+    goto free_unload; // (9)
+
+  return 0;
+
+  free_unload:
+  free_core:
+    free(module_core(mod)); // (10) frees `module_core(mod)' and thus `mod' too
+  free_percpu:
+#if defined(CONFIG_MODULE_UNLOAD) && defined(CONFIG_SMP)
+    free(refptr(mod)); // (11) ERROR: dereferencing already freed `mod'.
+#endif
+  free_mod:
+  free_hdr:
+    free(hdr);
+
+  return err;
+}
+
+int main(void) {
+  load_module(); // (1)
+  return 0;
+}
+
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/6e2b757.c b/simple/6e2b757.c
+--- a/simple/6e2b757.c
++++ b/simple/6e2b757.c
+@@ -27,15 +27,6 @@
+ 	
+   mod = (void *)hdr; // (3)
+ 
+-#if defined(CONFIG_MODULE_UNLOAD) && defined(CONFIG_SMP) 
+-  refptr(mod) = malloc(32);
+-  if (!refptr(mod))
+-  {
+-    err = -ENOMEM;
+-    goto free_mod;
+-  }
+-#endif
+-
+   ptr = malloc(512); // (4)
+   if (!ptr) {
+     err = -ENOMEM;
+@@ -51,18 +42,28 @@
+       break;
+   }
+ 
++#if defined(CONFIG_MODULE_UNLOAD) && defined(CONFIG_SMP) 
++  refptr(mod) = malloc(32);
++  if (!refptr(mod))
++  {
++    err = -ENOMEM;
++    goto free_init;
++  }
++#endif
++
+   if (nondet())
+     goto free_unload; // (9)
+ 
+   return 0;
+ 
+   free_unload:
++  free_init:
++#if defined(CONFIG_MODULE_UNLOAD) && defined(CONFIG_SMP)
++    free(refptr(mod)); // (11) ERROR: dereferencing already freed `mod'.
++#endif
+   free_core:
+     free(module_core(mod)); // (10) frees `module_core(mod)' and thus `mod' too
+   free_percpu:
+-#if defined(CONFIG_MODULE_UNLOAD) && defined(CONFIG_SMP)
+-    free(refptr(mod)); // (11) ERROR: dereferencing already freed `mod'.
+-#endif
+   free_mod:
+   free_hdr:
+     free(hdr);
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#include &lt;errno.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+struct module {
+  void *refptr;
+  void *module_core;
+};
+
+int main(int argc, char** argv) {
+//  load_module(64 * 1024);
+  void *hdr;
+  struct module *mod;
+  long err = 0;
+  void *ptr = NULL;
+	
+  if ((hdr = malloc(len)) == NULL)
+    return -ENOMEM;
+	
+  mod = (void *)hdr;
+
+#if defined(CONFIG_MODULE_UNLOAD) && defined(CONFIG_SMP)
+  mod-&gt;refptr = malloc(32);
+  if (!mod-&gt;refptr) {
+    err = -ENOMEM;
+    goto free_mod;
+  }
+#endif
+
+  ptr = malloc(512);
+  if (!ptr) {
+    err = -ENOMEM;
+    goto free_percpu;
+  }
+  mod-&gt;module_core = ptr;
+  
+  while (1) {
+    void *dest = mod-&gt;module_core;
+    memcpy(dest, mod, sizeof(struct module));
+    mod = mod-&gt;module_core; 
+    break;
+  }
+
+  if (rand() % 2)
+    goto free_unload;
+
+  return 0;
+
+  free_unload:
+  free_core:
+    free(mod-&gt;module_core);
+  free_percpu:
+#if defined(CONFIG_MODULE_UNLOAD) && defined(CONFIG_SMP)
+    free(mod-&gt;refptr); // ERROR
+#endif
+  free_mod:
+  free_hdr:
+    free(hdr);
+
+  return 0;
+}
+
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. call kernel/module.c:1861:load_module()
+. 1888: if (len &gt; 64 * 1024 * 1024 || (hdr = vmalloc(len)) == NULL)
+// allocates temporary memory area in hdr
+. 1897: if (copy_from_user(hdr, umod, len) != 0) {
+// copies module's object code from umod (user mode buffer)
+. 1942: modindex = find_sec(hdr, sechdrs, secstrings,
+// find the index of the '.gnu.linkonce.this_module' section, which contains an image of the module structure
+. 1950: mod = (void *)sechdrs[modindex].sh_addr;
+// and make mod point to it
+. 2019: mod-&gt;refptr = percpu_modalloc(sizeof(local_t), __alignof__(local_t),
+. 2045: ptr = module_alloc_update_bounds(mod-&gt;core_size);
+. 2051: mod-&gt;module_core = ptr;
+. 2053: ptr = module_alloc_update_bounds(mod-&gt;init_size);
+. 2059: mod-&gt;module_init = ptr;
+. 2063: for (i = 0; i &lt; hdr-&gt;e_shnum; i++) {
+// transfer sections to module_core and module_init
+// mod is set to point to the modindex section.
+// an init section is identified by INIT_OFFSET_MASK.
+// .gnu.linkonce.this_module belongs to core.
+. 2091: goto free_unload;
+. 2291: module_free(mod, mod-&gt;module_init);
+. 2293: module_free(mod, mod-&gt;module_core);
+// mod was pointing to module_core, which is now freed
+. ERROR 2298: percpu_modfree(mod-&gt;refptr);
+
+</pre></div>
+    </div>
+</body>
+</html>

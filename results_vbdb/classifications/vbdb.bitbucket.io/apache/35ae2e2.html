@@ -1,0 +1,105 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/apache.png" alt="">&nbsp;apache</span>
+            <span class="title">     Pointer "eckey" is assigned, but there is no call to the free function.  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                  
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://github.com/apache/httpd/commit/35ae2e259e42540a782753feb6de5a6d8099784a">35ae2e259e4</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> MemoryLeak</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> HAVE_ECC (1st degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> modules/ssl/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            
+            
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>#include &lt;stdlib.h&gt;
+
+int ssl_init_server_certs()
+{
+#ifdef HAVE_ECC
+  int *eckey;
+#endif
+
+#ifdef HAVE_ECC
+  eckey = malloc(sizeof(int));
+  if (rand() % 2) {
+    *eckey = 30;
+  } else {
+#if defined(SSL_CTX_set_ecdh_auto)
+  // do something
+#else
+  *eckey = 15;
+#endif
+  }
+#endif
+
+  // code making use of 'eckey'
+  // return having forgotten to free the memory
+  return 0;
+}
+
+int ssl_init_server_ctx()
+{
+  return ssl_init_server_certs();
+}
+
+int ssl_init_ConfigureServer()
+{
+  return ssl_init_server_ctx();
+}
+
+int ssl_init_Module()
+{
+  return ssl_init_ConfigureServer();
+}
+
+int main(void)
+{
+  ssl_init_Module();
+  return 0;
+}
+</pre></div>
+
+
+<div id='trace' class='tabcontent'><pre>. call modules/ssl/ssl_engine_init.c:141:ssl_init_Module()
+. 310: ssl_init_ConfigureServer()
+.. call modules/ssl/ssl_engine_init.c:1492:ssl_init_ConfigureServer()
+.. 1505: ssl_init_server_ctx()
+... call modules/ssl/ssl_engine_init.c:1383:ssl_init_server_ctx()
+... 1410: ssl_init_server_certs()
+... call modules/ssl/ssl_engine_init.c:971:ssl_init_server_certs()
+... 1141: SSL_CTX_set_tmp_ecdh(mctx-&gt;ssl_ctx, eckey);
+... ERROR 1150: return APR_SUCCESS;
+
+</pre></div>
+    </div>
+</body>
+</html>

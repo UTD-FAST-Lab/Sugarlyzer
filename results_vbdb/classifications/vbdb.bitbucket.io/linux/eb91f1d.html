@@ -1,0 +1,267 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">     "Warning due to a call to kmalloc() with flags __GFP_WAIT and interrupts enabled  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 The SLAB allocator is initialized by start_kernel() with interrupts disabled.     Later in this process, setup_cpu_cache() performs the per-CPU kmalloc cache     initialization, and will try to allocate memory for these caches passing the     GFP_KERNEL flags. These flags include __GFP_WAIT, which allows the process to     sleep while waiting for memory to be available. Since, interrupts are disabled     during SLAB initialization, this may lead to a deadlock. Enabling LOCKDEP and     other debugging options will detect and report this situation."       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/eb91f1d0a531289e18f5587dc197d12a251c66a3">eb91f1d0a53</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> WeakAssertionViolation</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "SLAB && LOCKDEP && TRACE_IRQFLAGS && PROVE_LOCKING && NUMA" (5th degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> kernel/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#if defined(CONFIG_LOCKDEP) && defined(CONFIG_TRACE_IRQFLAGS) && defined(CONFIG_PROVE_LOCKING)
+#include &lt;assert.h&gt;
+#endif
+#include &lt;stdbool.h&gt;
+
+#define ___GFP_WAIT             0x10u
+#define ___GFP_IO               0x40u
+#define ___GFP_FS               0x80u
+#define ___GFP_HIGH             0x20u
+#define __GFP_HIGH      ((gfp_t)___GFP_HIGH)
+#define __GFP_WAIT      ((gfp_t)___GFP_WAIT)    /* Can wait and reschedule? */
+#define __GFP_IO        ((gfp_t)___GFP_IO)      /* Can start physical IO? */
+#define __GFP_FS        ((gfp_t)___GFP_FS)      /* Can call down to low-level FS? */
+#define GFP_KERNEL      (__GFP_WAIT | __GFP_IO | __GFP_FS)
+#define GFP_ATOMIC      (__GFP_HIGH)
+#define GFP_NOWAIT      (GFP_ATOMIC & ~__GFP_HIGH)
+
+typedef int gfp_t;
+
+bool irqs_disabled = false;
+
+void local_irq_disable(void)
+{
+  irqs_disabled = true;
+}
+
+#if defined(CONFIG_LOCKDEP) && defined(CONFIG_TRACE_IRQFLAGS) && defined(CONFIG_PROVE_LOCKING)
+static void __lockdep_trace_alloc(gfp_t gfp_mask)
+{
+  if (!(gfp_mask & __GFP_WAIT))
+    return;
+
+  if (!(gfp_mask & __GFP_FS))
+    return;
+
+  assert(!irqs_disabled);
+}
+
+void lockdep_trace_alloc(gfp_t gfp_mask)
+{
+  __lockdep_trace_alloc(gfp_mask);
+}
+#else
+void lockdep_trace_alloc(gfp_t gfp_mask)
+{
+}
+#endif
+
+#ifdef CONFIG_SLAB
+
+#ifdef CONFIG_NUMA
+void __cache_alloc_node(gfp_t flags)
+{
+  lockdep_trace_alloc(flags);
+}
+
+void kmem_cache_alloc_node(gfp_t flags)
+{
+  __cache_alloc_node(flags);
+}
+
+#ifdef CONFIG_KMEMTRACE
+void kmem_cache_alloc_node_notrace(gfp_t flags)
+{
+  __cache_alloc_node(flags);
+}
+#else
+void kmem_cache_alloc_node_notrace(gfp_t flags)
+{
+	kmem_cache_alloc_node(flags);
+}
+#endif
+#endif /* CONFIG_NUMA */
+
+
+#ifdef CONFIG_NUMA
+static void kmalloc_node(gfp_t gfp_mask)
+{
+  kmem_cache_alloc_node_notrace(gfp_mask);
+}
+#endif
+
+#if !defined(CONFIG_NUMA)
+void kmalloc_node()
+{
+  return;
+}
+#endif
+
+static int setup_cpu_cache()
+{
+  kmalloc_node(GFP_KERNEL);
+}
+
+void kmem_cache_create()
+{
+  setup_cpu_cache();
+}
+
+void kmem_cache_init(void)
+{
+#ifdef CONFIG_SLAB
+  kmem_cache_create();
+#endif
+}
+#else
+void kmem_cache_init(void)
+{
+}
+#endif
+
+static void mm_init(void)
+{
+  kmem_cache_init();
+}
+
+int main() 
+{
+  local_irq_disable();
+  mm_init();
+  return 0;
+}
+
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/eb91f1d.c b/simple/eb91f1d.c
+--- a/simple/eb91f1d.c
++++ b/simple/eb91f1d.c
+@@ -90,7 +90,7 @@
+ 
+ static int setup_cpu_cache()
+ {
+-  kmalloc_node(GFP_KERNEL);
++  kmalloc_node(GFP_NOWAIT);
+ }
+ 
+ void kmem_cache_create()
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#if defined(CONFIG_LOCKDEP) && defined(CONFIG_TRACE_IRQFLAGS) && defined(CONFIG_PROVE_LOCKING)
+#include &lt;assert.h&gt;
+#endif
+#include &lt;stdbool.h&gt;
+
+#define ___GFP_WAIT             0x10u
+#define ___GFP_IO               0x40u
+#define ___GFP_FS               0x80u
+#define __GFP_WAIT      ((gfp_t)___GFP_WAIT)    /* Can wait and reschedule? */
+#define __GFP_IO        ((gfp_t)___GFP_IO)      /* Can start physical IO? */
+#define __GFP_FS        ((gfp_t)___GFP_FS)      /* Can call down to low-level FS? */
+#define GFP_KERNEL      (__GFP_WAIT | __GFP_IO | __GFP_FS)
+
+typedef int gfp_t;
+
+bool irqs_disabled = false;
+
+int main() 
+{
+//  local_irq_disable();
+  irqs_disabled = true;
+//  mm_init();
+#ifdef CONFIG_SLAB
+//  kmalloc_node(GFP_KERNEL);
+  #ifdef CONFIG_NUMA
+    #ifdef CONFIG_KMEMTRACE
+      #if defined(CONFIG_LOCKDEP) && defined(CONFIG_TRACE_IRQFLAGS) && defined(CONFIG_PROVE_LOCKING)
+      if (!(GFP_KERNEL & __GFP_WAIT))
+        return;
+
+      if (!(GFP_KERNEL & __GFP_FS))
+        return;
+
+      assert(!irqs_disabled);
+      #else
+      #endif
+    #else
+    
+    #endif
+  #endif
+
+  #if !defined(CONFIG_NUMA)
+  return;
+  #endif
+#else
+  
+#endif
+  return 0;
+}
+
+</pre></div>
+<div id='trace' class='tabcontent'><pre>
+// for !KMEMTRACE
+
+. call init/main.c:552:start_kernel()
+. 573: local_irq_disable();
+. 609: mm_init();
+.. call init/main.c:540:mm_init()
+.. 548: kmem_cache_init();
+... call mm/slab.c:1444:kmem_cache_init()
+.... call mm/slab.c:2154:kmem_cache_create()
+.... 2287: if (slab_is_available())
+.... 2288: gfp = GFP_KERNEL;
+// the bug occurs because GFP_KERNEL implies __GFP_WAIT
+// no problem if gfp = GFP_NOWAIT
+.... 2396: if (setup_cpu_cache(cachep, gfp))
+..... call mm/slab.c:2070:setup_cpu_cache()
+..... 2104: kmalloc_node(sizeof(struct kmem_list3),
+..... 2105:              GFP_KERNEL, node);
+...... [NUMA] call include/linux/slab_def.h:102:kmalloc_node()
+...... 129: ret = kmem_cache_alloc_node_notrace(cachep, flags, node);
+....... [!KMEMTRACE] call include/linux/slab_def.h:93:kmem_cache_alloc_node_notrace()
+........ [NUMA] call mm/slab.c:3657:kmem_cache_alloc_node()
+........ 3659: void *ret = __cache_alloc_node(cachep, flags, nodeid, ...)
+......... call mm/slab.c:3351:__cache_alloc_node()
+......... 3357: lockdep_trace_alloc(flags);
+.......... [TRACE_IRQFLAGS,PROVE_LOCKING] call kernel/lockdep.c:2290:lockdep_trace_alloc()
+.......... 2300: __lockdep_trace_alloc()
+........... call kernel/lockdep.c:2263:__lockdep_trace_alloc()
+........... ERROR 2282: if (DEBUG_LOCKS_WARN_ON(irqs_disabled_flags(flags)))
+// gfp == GFP_WAIT is required to reach this WARN_ON
+
+</pre></div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/marlin.png" alt="">&nbsp;marlin</span>
+            <span class="title">    "Macro function is undefined if !ENCODER_RATE_MULTIPLIER  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 Macro function MENU_MULTIPLIER_ITEM_EDIT is called in      lcd_tune_menu() function, but it is undefined if !ENCODER_RATE_MULTIPLIER     TEMP_SENSOR_0 is always defined in Marlin (at least in the example configurations)"       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://github.com/MarlinFirmware/Marlin/commit/b8e79dce897c970afb9c7721f93943046b1410b9">b8e79dce897</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> UndeclaredIdentifier</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "ULTRA_LCD && !ENCODER_RATE_MULTIPLIER && TEMP_SENSOR_0 != 0" (3rd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> lcd/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>#include &lt;stdio.h&gt;
+
+#define MSG_NOZZLE       "Nozzle"
+#define HEATER_0_MAXTEMP 275
+
+#ifdef ULTRA_LCD
+#define MENU_ITEM(type, label, args...) do { \
+    printf("menu item");\
+} while(0)
+
+#define MENU_MULTIPLIER_ITEM(type, label, args...) do { \
+    printf("menu multiplier item");\
+} while(0)
+
+#ifdef ENCODER_RATE_MULTIPLIER
+#define MENU_MULTIPLIER_ITEM_EDIT(type, label, args...) MENU_MULTIPLIER_ITEM(setting_edit_ ## type, label, ## args )
+#else
+#define MENU_ITEM_EDIT(type, label, args...) MENU_ITEM(setting_edit_ ## type, label, ## args )
+#endif
+
+#endif
+
+static void lcd_tune_menu()
+{
+#ifdef ULTRA_LCD
+#if TEMP_SENSOR_0 != 0
+    MENU_MULTIPLIER_ITEM_EDIT(3, MSG_NOZZLE, 0, 0, HEATER_0_MAXTEMP - 15);
+#endif
+#endif
+}
+int main(void)
+{
+	lcd_tune_menu();
+	return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/b8e79dc.c b/simple/b8e79dc.c
+--- a/simple/b8e79dc.c
++++ b/simple/b8e79dc.c
+@@ -15,7 +15,7 @@
+ #ifdef ENCODER_RATE_MULTIPLIER
+ #define MENU_MULTIPLIER_ITEM_EDIT(type, label, args...) MENU_MULTIPLIER_ITEM(setting_edit_ ## type, label, ## args )
+ #else
+-#define MENU_ITEM_EDIT(type, label, args...) MENU_ITEM(setting_edit_ ## type, label, ## args )
++#define MENU_MULTIPLIER_ITEM_EDIT(type, label, args...) MENU_ITEM(setting_edit_ ## type, label, ## args )
+ #endif
+ 
+ #endif
+</pre></div>
+<div id='single' class='tabcontent'><pre>#include &lt;stdio.h&gt;
+
+#define MSG_NOZZLE       "Nozzle"
+#define HEATER_0_MAXTEMP 275
+
+#ifdef ULTRA_LCD
+#define MENU_ITEM(type, label, args...) do { \
+    printf("menu item");\
+} while(0)
+
+#define MENU_MULTIPLIER_ITEM(type, label, args...) do { \
+    printf("menu multiplier item");\
+} while(0)
+
+#ifdef ENCODER_RATE_MULTIPLIER
+#define MENU_MULTIPLIER_ITEM_EDIT(type, label, args...) MENU_MULTIPLIER_ITEM(setting_edit_ ## type, label, ## args )
+#else
+#define MENU_ITEM_EDIT(type, label, args...) MENU_ITEM(setting_edit_ ## type, label, ## args )
+#endif
+
+#endif
+
+int main(void)
+{
+	#ifdef ULTRA_LCD
+	#if TEMP_SENSOR_0 != 0
+		MENU_MULTIPLIER_ITEM_EDIT(3, MSG_NOZZLE, 0, 0, HEATER_0_MAXTEMP - 15);
+	#endif
+	#endif
+	return 0;
+}
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. call Marlin/ultra_lcd.cpp:460: MENU_MULTIPLIER_ITEM_EDIT(int3, MSG_NOZZLE " 2", &target_temperature[1], 0, HEATER_1_MAXTEMP - 15);
+. ERROR ultra_lcd.cpp:179: #define MENU_MULTIPLIER_ITEM_EDIT(type, label, args...) MENU_ITEM(setting_edit_ ## type, label, PSTR(label) , ## args )
+</pre></div>
+    </div>
+</body>
+</html>

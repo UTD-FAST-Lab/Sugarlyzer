@@ -1,0 +1,101 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">     "Undefined reference to macro when !BLK_CGROUP          Macro CFQ_WEIGHT_DEFAULT is conditionally defined in blk-cgroup.h, only     when BLK_CGROUP is enabled. This macro is referenced in block/cfq-iosched.c     (which #include blk-cgroup.h) in a context where the presence of BLK_CGROUP     is not guaranteed. Thus, if BLK_CGROUP is disabled, the compiler cannot     find any definition for CFQ_WEIGHT_DEFAULT."  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                  
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/f48ec1d7885281a9c6cd7779d61f321d1b1fd741">f48ec1d7885</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> UndeclaredIdentifier</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "IOSCHED_CFQ && !BLK_CGROUP" (2nd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> mapping</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> block/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#ifdef CONFIG_BLK_CGROUP
+#define CFQ_WEIGHT_DEFAULT	500
+#endif
+
+#ifdef CONFIG_IOSCHED_CFQ
+static long cfq_scale_slice()
+{
+  long d = 1;
+  d = d * CFQ_WEIGHT_DEFAULT; // ERROR
+  return d;
+}
+#endif
+
+
+int main()
+{
+#ifdef CONFIG_IOSCHED_CFQ
+  cfq_scale_slice();
+#endif
+  return 0;
+}
+
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/f48ec1d.c b/simple/f48ec1d.c
+--- a/simple/f48ec1d.c
++++ b/simple/f48ec1d.c
+@@ -1,7 +1,5 @@
+ 
+-#ifdef CONFIG_BLK_CGROUP
+ #define CFQ_WEIGHT_DEFAULT	500
+-#endif
+ 
+ #ifdef CONFIG_IOSCHED_CFQ
+ static long cfq_scale_slice()
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#ifdef CONFIG_BLK_CGROUP
+#define CFQ_WEIGHT_DEFAULT	500
+#endif
+
+int main()
+{
+#ifdef CONFIG_IOSCHED_CFQ
+//  cfq_scale_slice();
+  long d = 1;
+  d = d * CFQ_WEIGHT_DEFAULT; // ERROR
+#endif
+  return 0;
+}
+
+</pre></div>
+<div id='trace' class='tabcontent'><pre>
+. block/cfq-iosched.c:841: d = d * CFQ_WEIGHT_DEFAULT;
+
+</pre></div>
+    </div>
+</body>
+</html>

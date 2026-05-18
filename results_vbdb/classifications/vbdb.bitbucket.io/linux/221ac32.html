@@ -1,0 +1,137 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">     Attempt to set a breakpoint resulted in kernel panic  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                 Kprobes allows you to break into any kernel routine by modifying the      OPCODE of an instruction (Kernel's text pages). In PPC32, kernel text     pages are write-protected even if KPROBES is enabled. Thus, when     arch_arm_kprobes() attempts to set a breakpoint, i.e. to write a     kernel text address, this causes a segmentation fault.       
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/221ac329e93fe2a676346af2e98e311251648f69">221ac329e93</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> WriteOnReadOnly</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "!PPC64 && KPROBES && !KGDB && !XMON && !BDI_SWITCH" (5th degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> mapping</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> arch/powerpc/kernel/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>#include &lt;unistd.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;malloc.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;errno.h&gt;
+#include &lt;sys/mman.h&gt;
+
+#define handle_error(msg) \
+           do { perror(msg); exit(EXIT_FAILURE); } while (0)
+
+char *buffer;
+
+#if !defined(CONFIG_KGDB) && !defined(CONFIG_XMON) && !defined(CONFIG_BDI_SWITCH)
+void allocate_buffer() {
+   int pagesize;
+
+   pagesize = sysconf(_SC_PAGE_SIZE);
+   if (pagesize == -1)
+       handle_error("sysconf");
+
+   buffer = memalign(pagesize, 4*pagesize);
+   if (buffer == NULL)
+       handle_error("memalign");
+
+   if (mprotect(buffer, 4*pagesize, PROT_READ) == -1)
+       handle_error("mprotect");
+}
+#else
+#define allocate_buffer() ({ buffer = malloc(4092); })
+#endif
+
+
+int main(int argc, char** argv)
+{
+  allocate_buffer();
+#ifdef CONFIG_KPROBES
+  *buffer = 'a'; // ERROR
+#endif
+   return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/221ac32.c b/simple/221ac32.c
+--- a/simple/221ac32.c
++++ b/simple/221ac32.c
+@@ -10,7 +10,7 @@
+ 
+ char *buffer;
+ 
+-#if !defined(CONFIG_KGDB) && !defined(CONFIG_XMON) && !defined(CONFIG_BDI_SWITCH)
++#if !defined(CONFIG_KGDB) && !defined(CONFIG_XMON) && !defined(CONFIG_BDI_SWITCH) && !defined(CONFIG_KPROBES)
+ void allocate_buffer() {
+    int pagesize;
+ 
+</pre></div>
+<div id='single' class='tabcontent'><pre>#include &lt;unistd.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;malloc.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;errno.h&gt;
+#include &lt;sys/mman.h&gt;
+
+int main(int argc, char** argv)
+{
+  char *buffer;
+//  allocate_buffer();
+#if !defined(CONFIG_KGDB) && !defined(CONFIG_XMON) && !defined(CONFIG_BDI_SWITCH)
+  int pagesize;
+
+  pagesize = sysconf(_SC_PAGE_SIZE);
+  if (pagesize == -1)
+    do { perror("sysconf"); exit(EXIT_FAILURE); } while (0);
+
+  buffer = memalign(pagesize, 4*pagesize);
+  if (buffer == NULL)
+    do { perror("memalign"); exit(EXIT_FAILURE); } while (0);
+
+  if (mprotect(buffer, 4*pagesize, PROT_READ) == -1)
+    do { perror("mprotect"); exit(EXIT_FAILURE); } while (0);
+#else
+  buffer = malloc(4092);
+#endif
+
+#ifdef CONFIG_KPROBES
+  *buffer = 'a'; // ERROR
+#endif
+   return 0;
+}
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. arch/powerpc/kernel/kprobes.c:75:arch_arm_kprobe()
+. 77: *p-&gt;addr = BREAKPOINT_INSTRUCTION;
+
+</pre></div>
+    </div>
+</body>
+</html>

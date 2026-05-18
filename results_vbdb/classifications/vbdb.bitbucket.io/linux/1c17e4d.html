@@ -1,0 +1,126 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/linux.png" alt="">&nbsp;linux</span>
+            <span class="title">     An uninitialized string may be displayed if !CONFIG_RCU_FAST_NO_HZ.  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                  
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/1c17e4d4437d8045a596d9f06c1558dc09e2b372">1c17e4d4437</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> UninitializedVariable</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> "TREE_RCU && RCU_CPU_STALL_INFO && !RCU_FAST_NO_HZ" (3rd degree)</td></tr>
+            
+            <tr><td width='20%'><b>Fix-in</b></td><td> code</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> kernel/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+extern int printf (const char *__restrict __format, ...);
+
+extern int sprintf (char *__restrict __s,
+      const char *__restrict __format, ...) __attribute__ ((__nothrow__));
+
+#ifdef CONFIG_RCU_CPU_STALL_INFO
+
+#ifdef CONFIG_RCU_FAST_NO_HZ
+void print_cpu_stall_fast_no_hz(char *cp, int cpu)
+{
+  sprintf(cp, "foobar");
+}
+#else /* #ifdef CONFIG_RCU_FAST_NO_HZ */
+void print_cpu_stall_fast_no_hz(char *cp, int cpu)
+{ // (3)
+}
+#endif /* #else #ifdef CONFIG_RCU_FAST_NO_HZ */
+
+void print_cpu_stall_info(int cpu)
+{
+  char fast_no_hz[72];
+
+  print_cpu_stall_fast_no_hz(fast_no_hz, cpu); // (2)
+  printf("\t%d: %s\n", cpu, fast_no_hz); // ERROR (4)
+}
+#else /* #ifdef CONFIG_RCU_CPU_STALL_INFO */
+void print_cpu_stall_info(int cpu)
+{
+  printf(" %d", cpu);
+}
+#endif /* #else #ifdef CONFIG_RCU_CPU_STALL_INFO */
+
+int main(void)
+{
+#ifdef CONFIG_RCU_CPU_STALL_INFO
+  print_cpu_stall_info(0); // (1)
+#endif
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/1c17e4d.c b/simple/1c17e4d.c
+--- a/simple/1c17e4d.c
++++ b/simple/1c17e4d.c
+@@ -14,6 +14,7 @@
+ #else /* #ifdef CONFIG_RCU_FAST_NO_HZ */
+ void print_cpu_stall_fast_no_hz(char *cp, int cpu)
+ { // (3)
++  *cp = '\0';
+ }
+ #endif /* #else #ifdef CONFIG_RCU_FAST_NO_HZ */
+ 
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#include &lt;stdio.h&gt;
+
+int main(int argc, char** argv) {
+#ifdef CONFIG_RCU_CPU_STALL_INFO
+//  print_cpu_stall_info(0);
+  char fast_no_hz[72];
+  int cpu = 0;
+  
+  #ifdef CONFIG_RCU_FAST_NO_HZ
+  sprintf(fast_no_hz, "foobar");
+  #else
+  
+  #endif
+  printf("\t%d: %s\n", cpu, fast_no_hz); // ERROR
+#else
+  printf(" %d", cpu);
+#endif
+  return 0;
+}
+</pre></div>
+<div id='trace' class='tabcontent'><pre>. call kernel/rcutree_plugin.h:2249: print_cpu_stall_info()
+. 2264: print_cpu_stall_fast_no_hz(fast_no_hz, cpu);
+.. call kernel/rcutree_plugin.h:2225:print_cpu_stall_fast_no_hz()
+.. 2227: }
+// fast_no_hz is left uninitialized
+. ERROR 2265: printk(KERN_ERR "\t%d: (%lu %s) idle=%03x/%llx/%d %s\n",
+</pre></div>
+    </div>
+</body>
+</html>

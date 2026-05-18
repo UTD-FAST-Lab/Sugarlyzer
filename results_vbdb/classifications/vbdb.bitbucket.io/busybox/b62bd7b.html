@@ -1,0 +1,156 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="../styles.css">
+    <script src="../tabs.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="navigation">The Variability Bugs Database
+        <a class="navigation-link" href="../index.html">Home</a>
+        <a class="navigation-link" href="../database.html">Database</a>
+    </div>
+    <div class="content">
+        <div class="heading">
+            <span class="system"><img src="../images/busybox.png" alt="">&nbsp;busybox</span>
+            <span class="title">     Unused variable if MDEV_CONF && MDEV_RENAME && !MDEV_RENAME_REGEXP.          The pointer variable *p is unused when MDEV_CONF and MDEV_RENAME are set      and MDEV_RENAME_REGEXP is not defined.  </span>
+        </div>
+        <hr>
+        <div class="desc">
+                  
+        </div>
+        <div class="desc">
+            Bug fixed by commit <a href="http://git.busybox.net/busybox/commit/b62bd7b261bbfadcaeb7c5fcec8b4921bf5379a6">b62bd7b261b</a>     
+        </div>
+
+        <table>
+            <tr><td width='20%'><b>Type</b></td><td> UnusedVariable</td></tr>
+            <tr><td width='20%'><b>Config</b></td><td> FEATURE_MDEV_CONF && FEATURE_MDEV_RENAME && !FEATURE_MDEV_RENAME_REGEXP (3rd degree)</td></tr>
+            <tr><td width='20%'><b>C-features</b></td><td> PointerArithmetic</td></tr>
+            <tr><td width='20%'><b>Fix-in</b></td><td> mapping</td></tr>
+            <tr><td width='20%'><b>Location</b></td><td> util-linux/</td></tr>
+        </table>
+
+        <div class="tabs">
+            <button class="tab" onclick="tab('simple',this)">Simplified bug</button>
+            <button class="tab" onclick="tab('patch',this)">Simplified patch</button>
+            <button class="tab" onclick="tab('single',this)">Single function bug</button>
+            <button class="tab" onclick="tab('trace',this)">Trace</button>
+        </div>
+
+<div id='simple' class='tabcontent'><pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+void make_device()
+{
+#ifdef ENABLE_FEATURE_MDEV_CONF
+
+#ifdef ENABLE_FEATURE_MDEV_RENAME
+  char *val;
+  char *s, *p;
+  val = "mode - device permissions";
+  
+  char *a = val;
+  s = strchr(val, ' ');
+  val = (s && s[1]) ? s+1 : NULL;
+  
+#ifdef ENABLE_FEATURE_MDEV_RENAME_REGEXP
+  /* substitute %1..9 with off[1..9], if any */
+  int n = 0;
+  s = a;
+  
+  while (*s) {
+    *p = *s;
+    
+    if(rand() % 2) {
+      n++;
+      p += n - 1;
+    }
+    
+    p++;
+    s++;
+  }
+#endif
+
+#endif /* ENABLE_FEATURE_MDEV_RENAME */
+
+#endif
+}
+
+int main(int argc, char** argv)
+{
+  if(rand() % 2)
+    make_device();
+  return 0;
+}
+</pre></div>
+<div id='patch' class='tabcontent'><pre>diff --git a/simple/b62bd7b.c b/simple/b62bd7b.c
+--- a/simple/b62bd7b.c
++++ b/simple/b62bd7b.c
+@@ -9,7 +9,10 @@
+ 
+ #ifdef ENABLE_FEATURE_MDEV_RENAME
+   char *val;
+-  char *s, *p;
++  char *s; 
++#ifdef ENABLE_FEATURE_MDEV_RENAME_REGEXP  
++  char *p;
++#endif  
+   val = "mode - device permissions";
+   
+   char *a = val;
+</pre></div>
+<div id='single' class='tabcontent'><pre>
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+int main(int argc, char** argv)
+{
+  if(rand() % 2) {
+//    make_device();
+#ifdef ENABLE_FEATURE_MDEV_CONF
+
+#ifdef ENABLE_FEATURE_MDEV_RENAME
+    char *val;
+    char *s, *p;
+    val = "mode - device permissions";
+  
+    char *a = val;
+    s = strchr(val, ' ');
+    val = (s && s[1]) ? s+1 : NULL;
+  
+#ifdef ENABLE_FEATURE_MDEV_RENAME_REGEXP
+  /* substitute %1..9 with off[1..9], if any */
+    int n = 0;
+    s = a;
+  
+    while (*s) {
+      *p = *s;
+    
+      if(rand() % 2) {
+        n++;
+        p += n - 1;
+      }
+    
+      p++;
+      s++;
+    }
+#endif
+
+#endif /* ENABLE_FEATURE_MDEV_RENAME */
+
+#endif
+  }
+  return 0;
+}
+</pre></div>
+<div id='trace' class='tabcontent'><pre>
+</pre></div>
+    </div>
+</body>
+</html>
