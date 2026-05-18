@@ -219,16 +219,17 @@ object ProductStrategy extends AnalysisStrategy {
         }
       } yield ()
     } else {
-      (0 until appConfig.sampleSize).toList.parTraverseN(appConfig.jobs) { i =>
-        val iterDir   = sharedPath / s"$i"
-        val finalDest = iterDir / masterSource.last
+      (0 to (appConfig.sampleSize - 1)).toList.parTraverseN(appConfig.jobs) {
+        i =>
+          val iterDir   = sharedPath / s"$i"
+          val finalDest = iterDir / masterSource.last
 
-        for {
-          _ <- setupWorkspace(iterDir, masterSource, finalDest)
-          _ <- injectConfig(i, spec, iterDir)
-          _ <- runBuild(i, spec, iterDir, appConfig)
-          _ <- IO.println(s"Finished preparing sample $i.")
-        } yield ()
+          for {
+            _ <- setupWorkspace(iterDir, masterSource, finalDest)
+            _ <- injectConfig(i, spec, iterDir)
+            _ <- runBuild(i, spec, iterDir, appConfig)
+            _ <- IO.println(s"Finished preparing sample $i.")
+          } yield ()
       }.void
     }
   }
