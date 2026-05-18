@@ -1,6 +1,6 @@
-# Artifact for "An Empirical Study of Static Analysis-Based Variability Bug Detection in C"
+# Framework for Performing Product- and Transformation-based Analysis of C systems
 
-This artifact includes the code and data for RQ2 of our submission entitled "An Empirical Study of Static Analysis-Based Variability Bug Detection in C"
+This artifact includes the code used to run product- and transformation-based analysis on C SPLs.
 
 # Prerequisites
 
