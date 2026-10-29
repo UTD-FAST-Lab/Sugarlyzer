@@ -47,7 +47,8 @@ lazy val testerOnlySettings = Seq(
     "org.eclipse.platform"         % "org.eclipse.core.runtime"   % "3.29.0",
     "org.eclipse.platform"         % "org.eclipse.core.resources" % "3.23.200",
     "com.github.tototoshi"        %% "scala-csv"                  % "2.0.0",
-    "org.scala-lang.modules"      %% "scala-parallel-collections" % "1.2.0"
+    "org.scala-lang.modules"      %% "scala-parallel-collections" % "1.2.0",
+    "tools.aqua" % "z3-turnkey" % "4.14.1"
   )
 )
 
@@ -110,7 +111,6 @@ lazy val tester = project
     name                   := "tester",
     Compile / mainClass    := Some("sugarlyzer.tester.TesterApp"),
     Compile / doc / target := file("tester/docs"),
-    Compile / unmanagedJars += file("/opt/z3/bin/com.microsoft.z3.jar"),
     // Make main resources available to tests
     Test / unmanagedResourceDirectories += (Compile / resourceDirectory).value,
     assembly / assemblyOutputPath := file("tester.jar")

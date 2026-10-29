@@ -26,7 +26,7 @@ for i in $(seq 1 "$ITERATIONS"); do
         java -jar dispatcher.jar \
           -t "$t" \
           -p "$p" \
-	  -s transformation \
+          -s transformation \
           --results_dir "$ITERATION_DIR" 
           --jobs "$JOBS"
     done

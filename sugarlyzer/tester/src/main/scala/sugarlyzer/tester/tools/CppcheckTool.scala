@@ -44,6 +44,7 @@ object CppcheckTool extends AnalysisTool {
 
             val cppcheckArgs = Seq(
               "cppcheck",
+              "--max-configs=1",
               "--enable=all",
               "--xml",
               "--force",

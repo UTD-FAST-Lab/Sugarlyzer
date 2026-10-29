@@ -14,7 +14,7 @@ JOBS="$1"
 ROOT="${3:-.}"
 RESULTS_DIR="$ROOT/experiment_results/product-based"
 
-TOOLS=(infer clang phasar)
+TOOLS=(infer clang cppcheck phasar)
 PROGRAMS=(axtls toybox busybox varbugs)
 ITERATIONS=5
 
@@ -31,7 +31,7 @@ for i in $(seq 1 "$ITERATIONS"); do
         java -jar dispatcher.jar \
           -t "$t" \
           -p "$p" \
-	  -s product \
+          -s product \
           --sample_size "$2" \
           --results_dir "$ITERATION_DIR" \
           --jobs "$JOBS" 
