@@ -1,10 +1,8 @@
-.git
-venv
+**/target
+**/*.jar
 results
-**.log
-**/Dockerfile
-**/#*
-test
-results
-experiment_results
-**/cached_desugared
+results_vbdb
+.bsp/
+.idea/
+.git/
+.gitignore

@@ -22,19 +22,10 @@ for i in $(seq 1 "$ITERATIONS"); do
   for t in "${TOOLS[@]}"; do
     for p in "${PROGRAMS[@]}"; do
       BASE_DIR="$RESULTS_DIR/$t/$p"
-
-        printf "Running %s on %s #%d\n" "$t" "$p" "$i"
-        ITERATION_DIR="$BASE_DIR/run_$i"
-
-        mkdir -p "$ITERATION_DIR"
-
-        java -jar dispatcher.jar \
-          -t "$t" \
-          -p "$p" \
-          -s product \
-          --sample_size "$2" \
-          --results_dir "$ITERATION_DIR" \
-          --jobs "$JOBS" 
+      printf "Running %s on %s #%d\n" "$t" "$p" "$i"
+      ITERATION_DIR="$BASE_DIR/run_$i"
+      mkdir -p "$ITERATION_DIR"
+      ./run.sh -t "$t" -p "$p" -s product -n "$2" -o "$ITERATION_DIR" -j "$JOBS" 
     done
   done
 done
