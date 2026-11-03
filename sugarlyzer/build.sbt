@@ -47,13 +47,14 @@ lazy val testerOnlySettings = Seq(
     "org.eclipse.platform"         % "org.eclipse.core.runtime"   % "3.29.0",
     "org.eclipse.platform"         % "org.eclipse.core.resources" % "3.23.200",
     "com.github.tototoshi"        %% "scala-csv"                  % "2.0.0",
-    "org.scala-lang.modules"      %% "scala-parallel-collections" % "1.2.0"
+    "org.scala-lang.modules"      %% "scala-parallel-collections" % "1.2.0",
+    "tools.aqua"                   % "z3-turnkey"                 % "4.14.1"
   )
 )
 
 lazy val root = project
   .in(file("."))
-  .aggregate(common, dispatcher, tester)
+  .aggregate(common, tester)
   .settings(
     name := "Sugarlyzer",
     // Skip compilation and assembly for the root project
@@ -88,18 +89,6 @@ lazy val common = project
     name := "common"
   )
 
-lazy val dispatcher = project
-  .in(file("dispatcher"))
-  .dependsOn(common)
-  .settings(
-    commonSettings,
-    assemblySettings,
-    name                   := "dispatcher",
-    Compile / mainClass    := Some("sugarlyzer.dispatcher.DispatcherApp"),
-    Compile / doc / target := file("dispatcher/docs"),
-    assembly / assemblyOutputPath := file("dispatcher.jar")
-  )
-
 lazy val tester = project
   .in(file("tester"))
   .dependsOn(common)
@@ -110,7 +99,6 @@ lazy val tester = project
     name                   := "tester",
     Compile / mainClass    := Some("sugarlyzer.tester.TesterApp"),
     Compile / doc / target := file("tester/docs"),
-    Compile / unmanagedJars += file("/opt/z3/bin/com.microsoft.z3.jar"),
     // Make main resources available to tests
     Test / unmanagedResourceDirectories += (Compile / resourceDirectory).value,
     assembly / assemblyOutputPath := file("tester.jar")
@@ -126,7 +114,6 @@ lazy val testerTest = project
     name                   := "tester_test",
     Compile / mainClass    := Some("sugarlyzer.tester.test.MainApp"),
     Compile / doc / target := file("tester_test/docs"),
-    Compile / unmanagedJars += file("/opt/z3/bin/com.microsoft.z3.jar"),
     // Make main resources available to tests
     Test / unmanagedResourceDirectories += (Compile / resourceDirectory).value,
     assembly / assemblyOutputPath := file("tester_test.jar")
