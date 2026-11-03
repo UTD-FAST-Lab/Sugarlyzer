@@ -5,9 +5,9 @@ usage () {
   exit 2
 }
 
-TOOL="" PROGRAM="" STARGET=product SAMPLES=100 JOBS="" OUT=results
+TOOL="" PROGRAM="" STARGET=product SAMPLES=100 JOBS="" OUT="results"
 
-while getopts "t:p:s:n:j:o" opt; do
+while getopts "t:p:s:n:j:o:" opt; do
   case $opt in
     t) TOOL=$OPTARG ;;
     p) PROGRAM=$OPTARG ;;
@@ -18,13 +18,13 @@ while getopts "t:p:s:n:j:o" opt; do
     *) usage ;;
   esac
 done
-case $TOOL in clang|infer) ;; *) usage ;; esac
+case $TOOL in clang|infer|cppcheck) ;; *) usage ;; esac
 case $PROGRAM in axtls|toybox|busybox|varbugs) ;; *) usage ;; esac
 case $STRATEGY in product|transformation) ;; *) usage ;; esac
 
 name="${TOOL}_${PROGRAM}_${STRATEGY}"
-mkdir -p "$OUT/$name"
-results="$(cd "$OUT/$name" && pwd)"
+mkdir -p "$OUT"
+results="$(cd "$OUT" && pwd)"
 volume="sugarlyzer_${name}"
 
 args=(--program "$PROGRAM" --tool "$TOOL" --strategy "$STRATEGY" --sample_size "$SAMPLES")

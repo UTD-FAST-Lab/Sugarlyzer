@@ -94,3 +94,7 @@ RUN apt-get update && apt-get install -y clang-11
 FROM analysis AS infer 
 ARG INFER_VERSION
 RUN curl -sSL "https://github.com/facebook/infer/releases/download/v${INFER_VERSION}/infer-linux-x86_64-v${INFER_VERSION}.tar.xz" | tar -C /opt -xJ && ln -s "/opt/infer-linux-x86_64-v${INFER_VERSION}/bin/infer" /usr/local/bin/infer
+
+FROM analysis AS cppcheck
+RUN apt-get update && apt-get install -y \
+  cppcheck && rm -rf /var/lib/apt/lists/*
