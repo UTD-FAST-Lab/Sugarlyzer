@@ -1,11 +1,11 @@
 #!/bin/bash
 
 usage () {
-    echo "usage: $0 -t clang|infer -p axtls|toybox|busybox|varbugs [-s product|transformation] [-n samples] [-j jobs] [-o outdir] [-k]" >&2
+    echo "usage: $0 -t clang|infer|cppcheck -p axtls|toybox|busybox|varbugs [-s product|transformation] [-n samples] [-j jobs] [-o outdir]" >&2
   exit 2
 }
 
-TOOL="" PROGRAM="" STARGET=product SAMPLES=100 JOBS="" OUT="results"
+TOOL="" PROGRAM="" STRATEGY=product SAMPLES=100 JOBS="" OUT="results"
 
 while getopts "t:p:s:n:j:o:" opt; do
   case $opt in
@@ -31,7 +31,7 @@ args=(--program "$PROGRAM" --tool "$TOOL" --strategy "$STRATEGY" --sample_size "
 [[ -n $JOBS ]] && args+=(--jobs "$JOBS")
 
 phase() {
-docker run --rm \
+docker run --rm --pull=never \
   -v "$volume:/workspace" \
   -v "$results:/results" \
   "sugarlyzer/$1" --phase "$2" "${args[@]}"

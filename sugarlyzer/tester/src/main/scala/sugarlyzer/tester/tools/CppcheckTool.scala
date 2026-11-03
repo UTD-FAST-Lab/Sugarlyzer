@@ -47,7 +47,6 @@ object CppcheckTool extends AnalysisTool {
               "--max-configs=1",
               "--enable=all",
               "--xml",
-              "--force",
               "--quiet",
               s"--output-file=${reportXMLLocation.toString}"
             ) ++ includeFlags :+ absoluteSource

@@ -1,10 +1,4 @@
-
-
-build: build_dispatcher build_tester build_tester_test
-
-build_dispatcher:
-	@echo "Building Dispatcher JAR"
-	sbt "dispatcher/assembly"
+build: build_tester build_tester_test
 
 build_tester:
 	@echo "Building Tester JAR"

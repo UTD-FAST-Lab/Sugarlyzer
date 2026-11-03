@@ -29,8 +29,6 @@ lazy val commonSettings = Seq(
     "io.circe" %% "circe-generic",
     "io.circe" %% "circe-parser"
   ).map(_ % circeVersion),
-  libraryDependencies += "com.github.docker-java" % "docker-java-transport-httpclient5" % "3.3.6",
-  libraryDependencies += "com.github.docker-java" % "docker-java" % "3.3.6",
   libraryDependencies += "com.googlecode.plist"   % "dd-plist"    % "1.27",
   // Test Dependencies
   libraryDependencies += "org.scalameta" %% "munit"            % "1.2.1" % Test,

@@ -5,7 +5,7 @@ ARG SMACK_COMMIT=ea0e275816f44fee867ad8b5228ef8a1ebe60493
 ARG INFER_VERSION=1.2.0
 
 ### Building jars ###
-FROM eclipse-temurin:17-jdk-jammy as jars
+FROM eclipse-temurin:17-jdk-jammy AS jars
 ARG SBT_VERSION
 ARG Z3_TURNKEY_VERSION
 RUN apt-get update && apt-get install -y curl \
@@ -70,7 +70,7 @@ RUN apt-get update && apt-get install -y \
 	openjdk-17-jdk curl xz-utils zlib1g-dev tzdata \
 	libselinux1-dev selinux-basics selinux-utils \
 	libcurl4-openssl-dev libssl-dev libsqlite3-dev\
-	git cmake build-essential python3 clang-11 \
+	git build-essential python3 \
 	pkg-config make gcc autoconf automake libtool\
 	libtirpc-dev unzip \
   && rm -rf /var/lib/apt/lists/*
@@ -93,7 +93,7 @@ RUN apt-get update && apt-get install -y clang-11
 ## INFER RUNNER  ##
 FROM analysis AS infer 
 ARG INFER_VERSION
-RUN curl -sSL "https://github.com/facebook/infer/releases/download/v${INFER_VERSION}/infer-linux-x86_64-v${INFER_VERSION}.tar.xz" | tar -C /opt -xJ && ln -s "/opt/infer-linux-x86_64-v${INFER_VERSION}/bin/infer" /usr/local/bin/infer
+RUN curl -fsSL "https://github.com/facebook/infer/releases/download/v${INFER_VERSION}/infer-linux-x86_64-v${INFER_VERSION}.tar.xz" | tar -C /opt -xJ && ln -s "/opt/infer-linux-x86_64-v${INFER_VERSION}/bin/infer" /usr/local/bin/infer
 
 FROM analysis AS cppcheck
 RUN apt-get update && apt-get install -y \

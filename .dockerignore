@@ -6,3 +6,5 @@ results_vbdb
 .idea/
 .git/
 .gitignore
+experiment_results
+scripts
