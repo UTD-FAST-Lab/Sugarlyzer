@@ -31,10 +31,10 @@ args=(--program "$PROGRAM" --tool "$TOOL" --strategy "$STRATEGY" --sample_size "
 [[ -n $JOBS ]] && args+=(--jobs "$JOBS")
 
 phase() {
-docker run --rm --pull=never \
+docker run --rm --pull=never -t \
   -v "$volume:/workspace" \
   -v "$results:/results" \
-  "sugarlyzer/$1" --phase "$2" "${args[@]}"
+  "sugarlyzer-$1" --phase "$2" "${args[@]}"
 }
 
 {

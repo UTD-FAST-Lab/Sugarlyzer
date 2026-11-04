@@ -1,0 +1,50 @@
+name: Sugarlyzer
+
+services:
+  program:
+    image: sugarlyzer-program
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: program
+    volumes:
+      - workspace:/workspace
+      - ${RESULTS_DIR:-./results}:/results
+
+  clang:
+    image: sugarlyzer-clang
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: clang
+    volumes:
+      - workspace:/workspace
+      - ${RESULTS_DIR:-./results}:/results
+
+  infer:
+    image: sugarlyzer-infer
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: infer
+    volumes:
+      - workspace:/workspace
+      - ${RESULTS_DIR:-./results}:/results
+
+  cppcheck:
+    image: sugarlyzer-cppcheck
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: cppcheck
+    volumes:
+      - workspace:/workspace
+      - ${RESULTS_DIR:-./results}:/results
+
+
+volumes:
+  workspace:
