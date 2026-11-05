@@ -27,7 +27,11 @@ mkdir -p "$OUT"
 results="$(cd "$OUT" && pwd)"
 volume="sugarlyzer_${name}"
 
-args=(--program "$PROGRAM" --tool "$TOOL" --strategy "$STRATEGY" --sample_size "$SAMPLES")
+args=(--program "$PROGRAM" --tool "$TOOL" --strategy "$STRATEGY")
+if [[ $STRATEGY == "PRODUCT" ]]; then
+  args+=(--sample_size "$SAMPLE_SIZE")
+fi
+
 [[ -n $JOBS ]] && args+=(--jobs "$JOBS")
 
 phase() {
