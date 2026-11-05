@@ -18,8 +18,7 @@ COPY sugarlyzer/ ./
 
 RUN --mount=type=cache,target=/root/.cache/coursier \
   sbt tester/assembly \
-  && mkdir /out && cp tester.jar /out/ \
-  && cp "$(find /root/.cache/coursier -name "z3-turnkey-${Z3_TURNKEY_VERSION}.jar")" /out/com.microsoft.z3.jar
+  && mkdir /out && cp tester.jar /out/
 
 ### BUILDING PROGRAM ###
 FROM ubuntu:18.04 AS program
@@ -47,7 +46,14 @@ RUN git clone https://github.com/smack-team/smack.git /tmp/libsmack \
 ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64/
 
 # Get sugarc
-COPY --from=jars /out/com.microsoft.z3.jar /opt/z3/bin/
+RUN git clone --depth 1 --branch z3-4.8.14 https://github.com/Z3Prover/z3.git /tmp/z3-src \
+ && cd /tmp/z3-src \
+ && python3 scripts/mk_make.py --java \
+ && cd build && make -j"$(nproc)" \
+ && mkdir -p /opt/z3/bin \
+ && cp libz3.so libz3java.so com.microsoft.z3.jar /opt/z3/bin/ \
+ && rm -rf /tmp/z3-src
+ENV LD_LIBRARY_PATH=/opt/z3/bin
 RUN git clone https://github.com/appleseedlab/superc.git /superc \
   && git -C /superc checkout "${SUPERC_COMMIT}"
 ENV JAVA_DEV_ROOT=/superc
