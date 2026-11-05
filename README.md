@@ -4,20 +4,56 @@ This artifact includes the code used to run product- and transformation-based an
 
 # Prerequisites
 
+Everything runs in Docker. You do not need anything installed on your machine.
+
 - Docker
-- Java 17+
-- sbt 1.12.9+
 - GNU Parallel if running `runProduct.sh` and `runTransformation.sh`
 
 # Setup
 
-Navigate to the `sugarlyzer` directory and run `make` to build `dispatcher.jar` and `tester.jar`.
+From the repository root:
+
+```sh
+docker compose build
+```
+
+This builds four images from the one `Dockerfile`:
+
+| Image | Base | Contents |
+| --- | --- | --- |
+| `sugarlyzer-program` | Ubuntu 18.04 | Build environment for the subjects, and SugarC. BusyBox 1.28 needs this older glibc. |
+| `sugarlyzer-clang` | Ubuntu 22.04 | Clang 11 static analyzer |
+| `sugarlyzer-infer` | Ubuntu 22.04 | Infer 1.2.0 |
+| `sugarlyzer-cppcheck` | Ubuntu 22.04 | CppCheck |
+
+
+The first build will take a while. Later builds will use Docker's cache and only redo what changed. 
+After changing any code run `docker compose build` again before runnign experiments.
+For a clean rebuild: `docker compose build --no-cache`.
+
+The Tester (`tester.jar`) is compiled inside the build, so the images always contain the current code.
 
 # Usage
 
-Interact with `dispatcher.jar` to do the product-based and transformation-based analyses. Run `java -jar dispatcher.jar --help` to see the options that the application takes. Note that the VBDb benchmark is called 'varbugs' in the JAR options. The analysis will run in a combination of Docker containers. Family-based analysis is run separately; please see the top-level artifact documentation for more information.
+> [!WARNING]
+> **Runs can use a lot of RAM and Disk Space.**
 
-We have provided `runProduct.sh` and `runTransformation.sh.` These run all of the product-based and transformation-based analyses, respectively. You can run individual analyses using `java -jar dispatcher.jar <options>`.
+Note that the VBDb benchmark is called 'varbugs' in the options.
+The analysis will run in a combination of Docker containers. 
+Family-based analysis is run separately; please see the top-level artifact documentation for more information.
+
+## Running one experiment
+
+```sh
+./run.sh -t <TOOL> -p <PROGRAM> [-s STRATEGY] [-n SAMPLES] [-j JOBS] [-o OUT]
+```
+
+## Running all experiments
+
+```sh
+./runBaselines.sh JOBS SAMPLES
+./runDesugared.sh JOBS
+```
 
 # Results
 
