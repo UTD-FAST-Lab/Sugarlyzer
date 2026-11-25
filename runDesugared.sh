@@ -19,7 +19,7 @@ for i in $(seq 1 "$ITERATIONS"); do
       BASE_DIR="${RESULTS_DIR}_${t}_$p"
       printf "Running %s on %s #%d\n" "$t" "$p" "$i"
       ITERATION_DIR="$BASE_DIR/run_$i"
-      ./run.sh -t "$t" -p "$p" -s transformation -n "$2" -o "$ITERATION_DIR" -j "$JOBS" 
+      ./run.sh -t "$t" -p "$p" -s transformation -o "$ITERATION_DIR" -j "$JOBS" 
     done
   done
 done

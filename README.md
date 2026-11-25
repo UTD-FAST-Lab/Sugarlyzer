@@ -33,6 +33,17 @@ For a clean rebuild: `docker compose build --no-cache`.
 
 The Tester (`tester.jar`) is compiled inside the build, so the images always contain the current code.
 
+## Development
+
+The Scala sources are an sbt build at the repository root (`common/` and `tester/`).
+
+```sh
+sbt compile          # compile
+sbt tester/test      # unit tests (the SugarC integration test is skipped outside Docker)
+sbt tester/assembly  # build tester.jar
+docker build --target integration .  # run the integration tests against SugarC
+```
+
 # Usage
 
 > [!WARNING]

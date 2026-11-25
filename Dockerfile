@@ -1,5 +1,4 @@
 ARG SBT_VERSION=1.12.9
-ARG Z3_TURNKEY_VERSION=4.14.1
 ARG SUPERC_COMMIT=3a8c1f09c3b58c8953e524e5e4ac8bf401062140
 ARG SMACK_COMMIT=ea0e275816f44fee867ad8b5228ef8a1ebe60493
 ARG INFER_VERSION=1.2.0
@@ -7,14 +6,16 @@ ARG INFER_VERSION=1.2.0
 ### Building jars ###
 FROM eclipse-temurin:17-jdk-jammy AS jars
 ARG SBT_VERSION
-ARG Z3_TURNKEY_VERSION
 RUN apt-get update && apt-get install -y curl \
   && rm -rf /var/lib/apt/lists/* \
   && curl -fsSL https://github.com/sbt/sbt/releases/download/v${SBT_VERSION}/sbt-${SBT_VERSION}.tgz | tar -xz -C /opt
 ENV PATH=/opt/sbt/bin:$PATH
 
 WORKDIR /src
-COPY sugarlyzer/ ./
+COPY build.sbt .scalafmt.conf .scalafix.conf ./
+COPY project/build.properties project/plugins.sbt ./project/
+COPY common/ ./common/
+COPY tester/ ./tester/
 
 RUN --mount=type=cache,target=/root/.cache/coursier \
   sbt tester/assembly \
@@ -60,10 +61,20 @@ ENV JAVA_DEV_ROOT=/superc
 ENV CLASSPATH=:/superc/classes:/superc/bin/json-simple-1.1.1.jar:/superc/bin/junit.jar:/superc/bin/antlr.jar:/superc/bin/javabdd.jar:/usr/share/java/org.sat4j.core.jar:/opt/z3/bin/com.microsoft.z3.jar:/usr/share/java/json-lib.jar:/opt/z3/bin 
 RUN cd /superc && make configure && make
 
-COPY sugarlyzer/SugarlyzerConfig /SugarlyzerConfig
+COPY SugarlyzerConfig /SugarlyzerConfig
 COPY --from=jars /out/tester.jar /tester.jar
 WORKDIR /
 ENTRYPOINT ["java", "-jar", "/tester.jar"]
+
+### INTEGRATION TESTS ###
+# Runs the tester's IntegrationSuite where SugarC and /SugarlyzerConfig exist:
+#   docker build --target integration .
+FROM program AS integration
+COPY --from=jars /opt/sbt /opt/sbt
+COPY --from=jars /src /src
+ENV PATH=/opt/sbt/bin:$PATH
+WORKDIR /src
+RUN sbt "tester/testOnly sugarlyzer.tester.IntegrationSuite"
 
 
 ### RUN ANALYSIS ###
@@ -87,7 +98,7 @@ RUN git clone https://github.com/smack-team/smack.git /tmp/libsmack \
 	&& rm -rf /tmp/libsmack
 
 ENV JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64/
-COPY sugarlyzer/SugarlyzerConfig /SugarlyzerConfig
+COPY SugarlyzerConfig /SugarlyzerConfig
 COPY --from=jars /out/tester.jar /tester.jar
 WORKDIR /
 ENTRYPOINT ["java", "-jar", "/tester.jar"]

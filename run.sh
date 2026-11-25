@@ -28,8 +28,8 @@ results="$(cd "$OUT" && pwd)"
 volume="sugarlyzer_${name}"
 
 args=(--program "$PROGRAM" --tool "$TOOL" --strategy "$STRATEGY")
-if [[ $STRATEGY == "PRODUCT" ]]; then
-  args+=(--sample_size "$SAMPLE_SIZE")
+if [[ $STRATEGY == "product" ]]; then
+  args+=(--sample_size "$SAMPLES")
 fi
 
 [[ -n $JOBS ]] && args+=(--jobs "$JOBS")
