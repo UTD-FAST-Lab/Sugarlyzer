@@ -58,6 +58,11 @@ object ClangTool extends AnalysisTool {
                   filterFlags(tail)
                 case "-fno-guess-branch-probability" :: tail =>
                   filterFlags(tail)
+                // Projects built with -Werror (e.g. busybox allyesconfig) would
+                // turn clang's warnings about gcc-only flags into fatal errors
+                case flag :: tail
+                    if flag == "-Werror" || flag.startsWith("-Werror=") =>
+                  filterFlags(tail)
                 case head :: tail =>
                   head :: filterFlags(tail)
                 case Nil =>
@@ -89,7 +94,7 @@ object ClangTool extends AnalysisTool {
 
             if (proc.exitCode != 0)
               println(
-                s"Clang command failed: ${proc.out.text()}, command: ${cmd}"
+                s"Clang failed on ${cmd.file} (exit ${proc.exitCode}), command: ${cmd}"
               )
 
             (reportXMLLocation, analysisTime)

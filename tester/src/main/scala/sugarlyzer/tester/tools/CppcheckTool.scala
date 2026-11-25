@@ -61,7 +61,7 @@ object CppcheckTool extends AnalysisTool {
 
             if (proc.exitCode != 0)
               println(
-                s"Cppcheck command failed: ${proc.out.text()}, command: ${cmd}"
+                s"Cppcheck failed on ${cmd.file} (exit ${proc.exitCode}), command: ${cmd}"
               )
 
             (reportXMLLocation, analysisTime)
